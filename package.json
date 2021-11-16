@@ -1,0 +1,22 @@
+{
+  "name": "helium",
+  "version": "0.0.1",
+  "description": "A cross platform launcher - Float with all your games, all at one launcher",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DashCruft-Nation/Helium.git"
+  },
+  "author": "DashCruft-Nation",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DashCruft-Nation/Helium/issues"
+  },
+  "homepage": "https://github.com/DashCruft-Nation/Helium#readme",
+  "dependencies": {
+    "electron": "^16.0.0"
+  }
+}
