@@ -1,6 +1,6 @@
 {
   "name": "helium",
-  "version": "0.0.1",
+  "version": "0.0.11",
   "description": "A cross platform launcher - Float with all your games, all at one launcher",
   "main": "index.js",
   "scripts": {
