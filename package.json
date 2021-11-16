@@ -1,7 +1,7 @@
 {
-  "name": "virtus",
+  "name": "lazap",
   "version": "0.0.1",
-  "description": "A cross platform launcher - Float with all your games, all at one launcher",
+  "description": "Lazap, A cross platform launcher - All your games at one library",
   "main": "index.js",
   "scripts": {
     "start": "electron ."
