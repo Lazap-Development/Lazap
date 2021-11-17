@@ -5,4 +5,4 @@ Helium is a All in One Launcher, make profiles for games, organize your Library,
 
 # Support and Bugs
 While being a DashCruft Community project, we love pull requests and contributions from all around the world!
-Found a Bug or just need help with something? Join our [Discord](https://discord.gg/Dashcruft) We won't let you down!
+Found a Bug or just need help with something? Join our [Discord](https://discord.gg/Dashcruft) We won't let you down! lol
