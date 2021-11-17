@@ -1,13 +1,9 @@
-body {
-    background-color: linear-gradient(90deg, rgba(184, 47, 255, 1) 0%, rgba(193, 73, 255, 1) 50%, rgba(184, 47, 255, 1) 100%)
-}
-
 .bg {
-    background-color: rgba(193, 73, 255, 1);
+    background-color: #B53CFF;
 
     background-image: "";
-    background-size:     cover;                     
-    background-repeat:   no-repeat;
+    background-size: cover;                     
+    background-repeat: no-repeat;
     background-position: center center; 
 
     position: fixed;
@@ -19,35 +15,28 @@ body {
     min-width: 100%;
     min-height: 100%;
 
-    animation: fadeIn 1s;
-
-    backdrop-filter: blur(5px) contrast(.8);
+    animation: fadeIn 0.5s;
 }
 
 .footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
+    position: absolute; bottom: 20px; left: 0; right: 0;
     height: 90px;
-    width: 100%;
+    width: 35%; 
+    border: 4px solid #1C1C1C;
+    border-radius: 25px;
+    margin-left: auto;
+    margin-right: auto;
     background-color: #202020;
+    opacity: .98;
+    backdrop-filter: blur(2px);
     text-align: center;
-    transition: height .7s;
-    animation: fadeInUp;
-    animation-duration: .5s;
-}
 
-/*.footer:hover {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    height: 130px;
-    width: 100%;
-    color: white;
-    text-align: center;
-    animation: fadeInUp;
-    animation-duration: .5s;
-}*/
+    box-shadow: 0 1px 1px rgba(0,0,0,0.11), 
+    0 2px 2px rgba(0,0,0,0.11), 
+    0 4px 4px rgba(0,0,0,0.11), 
+    0 6px 8px rgba(0,0,0,0.11),
+    0 8px 16px rgba(0,0,0,0.11);
+}
 
 .centerize {
     height: 10vh;
@@ -56,47 +45,67 @@ body {
     align-items: center;
 }
 
+
 .steam {
     filter: invert(21%) sepia(79%) saturate(1570%) hue-rotate(186deg) brightness(97%) contrast(95%);
 
     padding-top: 9px;
     transform: scale(1);
-    transition-duration: 0.5s;
+    transition-duration: 0.2s;
+
+    filter: drop-shadow(  3.4px 3.4px 2.7px rgba(0, 0, 0, 0.09),
+    8.7px 8.7px 6.9px rgba(0, 0, 0, 0.062),
+    17.7px 17.7px 14.2px rgba(0, 0, 0, 0.05),
+    36.5px 36.5px 29.2px rgba(0, 0, 0, 0.04),
+    100px 100px 80px rgba(0, 0, 0, 0.028));
 }
 
 .steam:hover {
     padding-top: 9px;
     transform: scale(1.2);
-    transition-duration: 0.5s;
+    transition-duration: 0.3s;
     cursor: pointer;
 }
 
 .rockstar {
+    display: block;
     padding-top: 9px;
     transform: scale(1);
-    transition-duration: 0.5s;
+    transition-duration: 0.2s;
+filter: drop-shadow(  3.4px 3.4px 2.7px rgba(0, 0, 0, 0.09),
+8.7px 8.7px 6.9px rgba(0, 0, 0, 0.062),
+17.7px 17.7px 14.2px rgba(0, 0, 0, 0.05),
+36.5px 36.5px 29.2px rgba(0, 0, 0, 0.04),
+100px 100px 80px rgba(0, 0, 0, 0.028));
+
 }
 
 .rockstar:hover {
     padding-top: 9px;
     transform: scale(1.2);
-    transition-duration: 0.5s;
+    transition-duration: 0.3s;
     cursor: pointer;
 }
 
 .epic-games {
     padding-top: 9px;
     transform: scale(1);
-    transition-duration: 0.5s;
+    transition-duration: 0.2s;
+
+    transition-duration: 0.2s;
+    filter: drop-shadow(  3.4px 3.4px 2.7px rgba(0, 0, 0, 0.09),
+    8.7px 8.7px 6.9px rgba(0, 0, 0, 0.062),
+    17.7px 17.7px 14.2px rgba(0, 0, 0, 0.05),
+    36.5px 36.5px 29.2px rgba(0, 0, 0, 0.04),
+    100px 100px 80px rgba(0, 0, 0, 0.028));
 }
 
 .epic-games:hover {
     padding-top: 9px;
     transform: scale(1.2);
-    transition-duration: 0.5s;
+    transition-duration: 0.3s;
     cursor: pointer;
 }
-
 
 @keyframes fadeIn {
     0% {
