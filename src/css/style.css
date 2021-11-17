@@ -1,20 +1,109 @@
 body {
-    background-color: #292929;
+    background-color: linear-gradient(90deg, rgba(184, 47, 255, 1) 0%, rgba(193, 73, 255, 1) 50%, rgba(184, 47, 255, 1) 100%)
 }
 
-.button1 {
-    border-radius: 5px;
-    background-color: #059862;
-    border: none;
-    padding: 15px 1px;
-    text-align: center;
-    font-size: 16px;
+.bg {
+    background-color: rgba(193, 73, 255, 1);
 
+    background-image: "";
+    background-size:     cover;                     
+    background-repeat:   no-repeat;
+    background-position: center center; 
+
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 100px;
+    min-width: 100%;
+    min-height: 100%;
 
-    width: 200px;
-    height: 50px;
+    animation: fadeIn 1s;
+
+    backdrop-filter: blur(5px) contrast(.8);
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 90px;
+    width: 100%;
+    background-color: #202020;
+    text-align: center;
+    transition: height .7s;
+    animation: fadeInUp;
+    animation-duration: .5s;
+}
+
+/*.footer:hover {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 130px;
+    width: 100%;
+    color: white;
+    text-align: center;
+    animation: fadeInUp;
+    animation-duration: .5s;
+}*/
+
+.centerize {
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.steam {
+    filter: invert(21%) sepia(79%) saturate(1570%) hue-rotate(186deg) brightness(97%) contrast(95%);
+
+    padding-top: 9px;
+    transform: scale(1);
+    transition-duration: 0.5s;
+}
+
+.steam:hover {
+    padding-top: 9px;
+    transform: scale(1.2);
+    transition-duration: 0.5s;
+    cursor: pointer;
+}
+
+.rockstar {
+    padding-top: 9px;
+    transform: scale(1);
+    transition-duration: 0.5s;
+}
+
+.rockstar:hover {
+    padding-top: 9px;
+    transform: scale(1.2);
+    transition-duration: 0.5s;
+    cursor: pointer;
+}
+
+.epic-games {
+    padding-top: 9px;
+    transform: scale(1);
+    transition-duration: 0.5s;
+}
+
+.epic-games:hover {
+    padding-top: 9px;
+    transform: scale(1.2);
+    transition-duration: 0.5s;
+    cursor: pointer;
+}
+
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
