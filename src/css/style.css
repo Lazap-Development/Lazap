@@ -1,10 +1,11 @@
-.bg {
+bg {
     background-color: #B53CFF;
 
     background-image: "";
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
+    color: white;
 
     position: fixed;
     left: 0;

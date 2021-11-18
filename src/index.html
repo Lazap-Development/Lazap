@@ -8,14 +8,21 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    
+
     <link rel="preload" href="../img/rockstar-preview.jpg" as="image">
     <link rel="preload" href="../img/epic-preview.jpg" as="image">
     <link rel="preload" href="../img/steam-preview.jpg" as="image">
 </head>
+
 <body>
 
-    <div class="bg" id="backgroundId"></div>
+    <bg id="backgroundId">
+        <div style="margin-left: 10px;">
+            Could not identify operating system!
+        </div> 
+    </bg>
+
+
 
     <div class="footer" id="footerId">
         <div class="d-flex align-items-center justify-content-center" style=" height: 80px;">
@@ -36,7 +43,7 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="js/scripts.js"></script>
+    <script type="module" src="js/scripts.js"></script>
 </body>
 
 

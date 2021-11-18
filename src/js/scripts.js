@@ -13,3 +13,5 @@ document.getElementById("epic").addEventListener("mouseover", function (event) {
 document.getElementById("rockstar").addEventListener("mouseenter", function (event) {
     document.getElementById("backgroundId").style.backgroundImage = "url(../img/rockstar-preview.jpg)";
 });
+
+document.getElementById("backgroundId").innerHTML = `${window.navigator.platform}`;
