@@ -6,7 +6,6 @@ window.onload = (event) => {
     <br/>Your Personal Games library`;
 }
 
-
 // Library
 document.getElementById("library").addEventListener("mouseover", function (event) {
     document.getElementById("backgroundId").style.backgroundImage = "";
