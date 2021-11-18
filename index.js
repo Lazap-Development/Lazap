@@ -8,12 +8,14 @@ app.on('ready', () => {
         height: 600,
         resizable: true,
         transparent: true,
-        show: false
+        show: true
     });
+    mainWindow.loadFile('src/splash.html')
+
     mainWindow.once('ready-to-show', () => {
-        mainWindow.show()
+        setTimeout(() => {
+            mainWindow.loadFile('src/index.html')
+        }, 2000);
     })
-
-    mainWindow.loadFile('src/index.html')
+    
 });
-
