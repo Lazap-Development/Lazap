@@ -1,3 +1,7 @@
+body {
+    overflow: hidden;
+}
+
 bg {
     background-color: #141414;
 
@@ -40,7 +44,7 @@ footer {
 
 .text {
     position: absolute;
-    bottom: 250px;
+    bottom: 260px;
     font-size: 40px;
     font-weight: 700;
     color: white;
@@ -80,6 +84,7 @@ footer {
 }
 
 .steam {
+    margin-top: 100px;
     transform: scale(1);
     transition-duration: 0.2s;
 
@@ -132,13 +137,23 @@ footer {
     cursor: pointer;
 }
 
-@keyframes fadeIn {
+.pt-0-5 {
+    padding-top: 0.4rem !important;
+  }
+  
+.slide-top {
+    animation: slide-top 0.6s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+@keyframes slide-top {
     0% {
-        opacity: 0;
+        -webkit-transform: translateY(0px);
+        transform: translateY(0px);
     }
 
     100% {
-        opacity: 1;
+        -webkit-transform: translateY(-130px);
+        transform: translateY(-130px);
     }
 }
 
@@ -155,4 +170,3 @@ textarea,
 :focus {
     outline: none;
 }
-
