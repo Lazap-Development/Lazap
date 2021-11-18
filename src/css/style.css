@@ -1,3 +1,8 @@
+@font-face {
+    font-family: SFPro;
+    src: url("../../fonts/SFProDisplay.ttf");
+}
+
 bg {
     background-color: #B53CFF;
 
@@ -19,7 +24,7 @@ bg {
     animation: fadeIn 1s;
 }
 
-.footer {
+footer {
     position: absolute;
     bottom: 20px;
     left: 0;
@@ -39,6 +44,20 @@ bg {
         0 4px 4px rgba(0, 0, 0, 0.11),
         0 6px 8px rgba(0, 0, 0, 0.11),
         0 8px 16px rgba(0, 0, 0, 0.11);
+}
+
+.text {
+    position: absolute;
+    bottom: 250px;
+    font-size: 40px;
+    font-weight: 700;
+    color: white;
+    left: 0;
+    right: 0;
+    border-radius: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
 .centerize {
@@ -139,6 +158,10 @@ bg {
     -webkit-user-select: none;
     user-select: none;
 }
-input, button, textarea, :focus {
+
+input,
+button,
+textarea,
+:focus {
     outline: none;
 }
