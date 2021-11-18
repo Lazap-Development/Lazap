@@ -1,7 +1,5 @@
 //Webpage On Load Event
 window.onload = (event) => {
-    document.getElementById("backgroundId").style.backgroundImage = "";
-    document.getElementById("backgroundId").style.backgroundColor = "#141414";
     document.getElementById("libraytext").innerHTML = `<i class="bi bi-collection-fill" style="font-size: 80px"></i>
     <br/>Your Personal Games library`;
 }
@@ -14,7 +12,7 @@ document.getElementById("library").addEventListener("mouseover", function (event
     <br/>Your Personal Games library`;
 });
 
-        
+
 // Steam
 document.getElementById("steam").addEventListener("mouseenter", function (event) {
     document.getElementById("backgroundId").style.backgroundImage = "url(../img/steam-preview.jpg)";

@@ -1,9 +1,5 @@
-body {
-    background: '#312450'
-}
-
 bg {
-    background-color: "";
+    background-color: #141414;
 
     background-image: "";
     background-size: cover;
@@ -159,3 +155,4 @@ textarea,
 :focus {
     outline: none;
 }
+
