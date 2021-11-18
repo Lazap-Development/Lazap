@@ -1,3 +1,9 @@
+// Init with library loaded
+document.getElementById("backgroundId").style.backgroundImage = "";
+document.getElementById("backgroundId").style.backgroundColor = "#141414";
+document.getElementById("libraytext").innerHTML = `<i class="bi bi-collection-fill" style="font-size: 80px"></i>
+<br/>Your Personal Games library`;
+
 // Library
 document.getElementById("library").addEventListener("mouseover", function (event) {
     document.getElementById("backgroundId").style.backgroundImage = "";
