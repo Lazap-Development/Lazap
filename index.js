@@ -16,7 +16,8 @@ app.on('ready', () => {
         show: false,
         webPreferences: {
             devTools: false
-        }
+        },
+        vibrancy: "dark"
     });
     mainWindow.webContents.loadFile('src/splash.html')
 

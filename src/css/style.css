@@ -3,7 +3,7 @@ body {
 }
 
 bg {
-    background-color: #141414;
+    background-color: rgba(21,21,23, 0.95);
 
     background-image: "";
     background-size: cover;
@@ -20,24 +20,31 @@ bg {
     display: block;
     min-width: 100%;
     min-height: 100%;
+
+    backdrop-filter: blur(50px);
 }
 
-.bar {
+.library-selector {
     position: fixed;
     height: 100%;
     width: 90px;
-    top: 0;
+    top: 25px;
     left: 0;
-    border: 2px solid rgba(29, 29, 29, 1);
-    background-color: rgba(32, 32, 32, 0.5);
+    background-color: rgba(32,32,34, 0.5);
     text-align: center;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11),
         0 2px 2px rgba(0, 0, 0, 0.11),
         0 4px 4px rgba(0, 0, 0, 0.11),
-        0 6px 8px rgba(0, 0, 0, 0.11),
-        0 8px 16px rgba(0, 0, 0, 0.11);
+        0 6px 8px rgba(0, 0, 0, 0.11);
     
     backdrop-filter: blur(50px);
+}
+
+toolbar {
+    position: fixed;
+    background-color: rgba(43,43,43, 0.5); 
+    height: 25px;
+    width: 100%;
 }
 
 .text {
@@ -52,7 +59,7 @@ bg {
 }
 
 .library {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     filter: invert(100%) sepia(30%) saturate(48%) hue-rotate(243deg) brightness(111%) contrast(87%);
     transform: scale(1);
     transition-duration: 0.2s;
@@ -74,7 +81,7 @@ bg {
 }
 
 .line {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     filter: invert(98%) sepia(4%) saturate(3%) hue-rotate(240deg) brightness(117%) contrast(100%);
 }
 
@@ -141,13 +148,20 @@ bg {
     cursor: pointer;
 }
 
-
 :not(input):not(textarea),
 :not(input):not(textarea)::after,
 :not(input):not(textarea)::before {
     -webkit-user-select: none;
     user-select: none;
 }
+
+.control-panel-icon {
+    padding-right: -30px;
+    width: 100vw;
+    height: 100vh;
+    filter: invert(100%) sepia(100%) saturate(1%) hue-rotate(281deg) brightness(106%) contrast(102%);
+}
+
 
 input,
 button,
