@@ -13,7 +13,10 @@ app.on('ready', () => {
         minHeight: 450,
         resizable: true,
         frame: false,
-        show: false
+        show: false,
+        webPreferences: {
+            devTools: false
+        }
     });
     mainWindow.webContents.loadFile('src/splash.html')
 
@@ -23,5 +26,4 @@ app.on('ready', () => {
             mainWindow.loadFile('src/index.html')
         }, delay);
     })
-    
 });
