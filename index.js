@@ -1,6 +1,7 @@
+require('v8-compile-cache');
 const electron = require('electron');
 const app = electron.app;
-require('v8-compile-cache');
+const delay = "3000"
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
 
@@ -14,14 +15,13 @@ app.on('ready', () => {
         frame: false,
         show: false
     });
-    mainWindow.loadFile('src/splash.html')
+    mainWindow.webContents.loadFile('src/splash.html')
 
     mainWindow.once('ready-to-show', () => {
         mainWindow.show()
-        
         setTimeout(() => {
             mainWindow.loadFile('src/index.html')
-        }, 3000);
+        }, delay);
     })
     
 });

@@ -28,7 +28,7 @@ bg {
     width: 90px;
     top: 0;
     left: 0;
-    border: 3px solid rgba(29, 29, 29, 1);
+    border: 2px solid rgba(29, 29, 29, 1);
     background-color: rgba(32, 32, 32, 0.5);
     text-align: center;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11),
@@ -52,7 +52,7 @@ bg {
 }
 
 .library {
-    margin-bottom: 50px;
+    margin-bottom: 20px;
     filter: invert(100%) sepia(30%) saturate(48%) hue-rotate(243deg) brightness(111%) contrast(87%);
     transform: scale(1);
     transition-duration: 0.2s;
@@ -73,12 +73,11 @@ bg {
     cursor: pointer;
 }
 
-.line-between {
-    margin-bottom: 20px;
-    margin-top: 2000px;
-    border-bottom: 1px solid white;
-    width: 50;
+.line {
+    margin-bottom: 15px;
+    filter: invert(98%) sepia(4%) saturate(3%) hue-rotate(240deg) brightness(117%) contrast(100%);
 }
+
 
 .steam {
     margin-bottom: 25px;
