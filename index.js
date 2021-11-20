@@ -2,8 +2,7 @@ require('v8-compile-cache');
 const electron = require('electron');
 const ipcMain = require('electron').ipcMain;
 const app = electron.app;
-//const delay = "3020"
-const delay = "0"
+const delay = "3020"
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
