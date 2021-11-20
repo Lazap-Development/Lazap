@@ -25,14 +25,14 @@ app.on('ready', () => {
     });
     mainWindow.webContents.loadFile('src/splash.html')
 
-    ipcMain.once('close-window', () => {
+    ipcMain.on('close-window', () => {
         mainWindow.close();
     })
-    ipcMain.once('max_window', () => {
-        mainWindow.maximize();
+    ipcMain.on('max-window', () => {
+        mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
     })
-    ipcMain.once('min_window', () => {
-        mainWindow.minimize();
+    ipcMain.on('min-window', () => {
+        mainWindow.minimize()
     })
 
     mainWindow.once('ready-to-show', () => {
