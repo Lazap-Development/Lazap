@@ -1,12 +1,17 @@
+body {
+    overflow: hidden;
+}
+
 bg {
-    background-color: #141414;
+    background-color: rgba(21,21,23, 0.95);
 
     background-image: "";
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     color: white;
-
+    
+    text-align: right;
     position: fixed;
     left: 0;
     right: 0;
@@ -15,37 +20,39 @@ bg {
     display: block;
     min-width: 100%;
     min-height: 100%;
+
+    backdrop-filter: blur(50px);
 }
 
-footer {
-    position: absolute;
-    bottom: 20px;
+.library-selector {
+    position: fixed;
+    height: 100%;
+    width: 90px;
+    top: 25px;
     left: 0;
-    right: 0;
-    height: 90px;
-    width: 330px;
-    border: 4px solid rgba(29, 29, 29, 1);
-    border-radius: 25px;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: rgba(32, 32, 32, 1);
+    background-color: rgba(32,32,34, 0.5);
     text-align: center;
-
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11),
         0 2px 2px rgba(0, 0, 0, 0.11),
         0 4px 4px rgba(0, 0, 0, 0.11),
-        0 6px 8px rgba(0, 0, 0, 0.11),
-        0 8px 16px rgba(0, 0, 0, 0.11);
+        0 6px 8px rgba(0, 0, 0, 0.11);
+    
+    backdrop-filter: blur(50px);
+}
+
+titlebar {
+    -webkit-app-region: drag;
+    position: fixed;
+    background-color: rgba(43,43,43, 0.5); 
+    height: 25px;
+    width: 100%;
 }
 
 .text {
-    position: absolute;
-    bottom: 250px;
+    position: fixed;
     font-size: 40px;
     font-weight: 700;
     color: white;
-    left: 0;
-    right: 0;
     border-radius: 25px;
     margin-left: auto;
     margin-right: auto;
@@ -53,6 +60,7 @@ footer {
 }
 
 .library {
+    margin-bottom: 10px;
     filter: invert(100%) sepia(30%) saturate(48%) hue-rotate(243deg) brightness(111%) contrast(87%);
     transform: scale(1);
     transition-duration: 0.2s;
@@ -73,13 +81,16 @@ footer {
     cursor: pointer;
 }
 
-.vl {
-    margin-left: 20px;
-    border-left: 1px solid white;
-    height: 50px;
+.line {
+    margin-bottom: 10px;
+    filter: invert(98%) sepia(4%) saturate(3%) hue-rotate(240deg) brightness(117%) contrast(100%);
 }
 
+
 .steam {
+    margin-bottom: 25px;
+    
+    margin-top: 100px;
     transform: scale(1);
     transition-duration: 0.2s;
 
@@ -96,25 +107,10 @@ footer {
     cursor: pointer;
 }
 
-.rockstar {
-    display: block;
-    transform: scale(1);
-    transition-duration: 0.2s;
-    filter: drop-shadow(3.4px 3.4px 2.7px rgba(0, 0, 0, 0.09),
-            8.7px 8.7px 6.9px rgba(0, 0, 0, 0.062),
-            17.7px 17.7px 14.2px rgba(0, 0, 0, 0.05),
-            36.5px 36.5px 29.2px rgba(0, 0, 0, 0.04),
-            100px 100px 80px rgba(0, 0, 0, 0.028));
-
-}
-
-.rockstar:hover {
-    transform: scale(1.2);
-    transition-duration: 0.3s;
-    cursor: pointer;
-}
 
 .epic-games {
+    margin-bottom: 25px;
+
     transform: scale(1);
     transition-duration: 0.2s;
 
@@ -132,14 +128,60 @@ footer {
     cursor: pointer;
 }
 
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
 
-    100% {
-        opacity: 1;
-    }
+.rockstar {
+    margin-bottom: 25px;
+
+    display: block;
+    transform: scale(1);
+    transition-duration: 0.2s;
+    filter: drop-shadow(3.4px 3.4px 2.7px rgba(0, 0, 0, 0.09),
+            8.7px 8.7px 6.9px rgba(0, 0, 0, 0.062),
+            17.7px 17.7px 14.2px rgba(0, 0, 0, 0.05),
+            36.5px 36.5px 29.2px rgba(0, 0, 0, 0.04),
+            100px 100px 80px rgba(0, 0, 0, 0.028));
+
+}
+
+.rockstar:hover {
+    transform: scale(1.2);
+    transition-duration: 0.3s;
+    cursor: pointer;
+}
+
+.control-panel-icon {
+    position: fixed;
+    display: block;
+    filter: invert(100%) sepia(100%) saturate(1%) hue-rotate(281deg) brightness(106%) contrast(102%);
+}
+
+.game-templete {
+    position: relative;
+    height: 150px;
+    width: 120px;
+    border-radius: 16px;
+    display: block;
+
+
+    background-image: url('/pictures/heroku.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgb(201, 85, 255);
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07),
+        0 2px 4px rgba(0, 0, 0, 0.07),
+        0 4px 8px rgba(0, 0, 0, 0.07),
+        0 8px 16px rgba(0, 0, 0, 0.07),
+        0 16px 32px rgba(0, 0, 0, 0.07),
+        0 32px 64px rgba(0, 0, 0, 0.07);
+
+    -moz-transform: scale(1);
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    transition: 0.7s ease all;
+    -webkit-transition: 0.7s ease all;
+    -moz-transition: 0.7s ease all;
 }
 
 :not(input):not(textarea),
@@ -155,4 +197,3 @@ textarea,
 :focus {
     outline: none;
 }
-

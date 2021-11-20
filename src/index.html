@@ -10,46 +10,46 @@
     <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
 
-    <link rel="preload" href="../img/rockstar-preview.jpg" as="image">
-    <link rel="preload" href="../img/epic-preview.jpg" as="image">
-    <link rel="preload" href="../img/steam-preview.jpg" as="image">
-
-    <script type="module" src="js/scripts.js"></script>
+    <script type="module" src="js/listeners.js"></script>
+    <script type="text/javascript" src="js/rockstar-games.js"></script>
 </head>
 
 <body>
-    
+
     <bg id="backgroundId">
-        <div>
-            Could not identify operating system!
-        </div> 
+
     </bg>
 
-    <div class="text" id="libraytext">
-        
-    </div>
-
-    <footer id="footerId">
-        <div class="d-flex align-items-center justify-content-center" style=" height: 80px;">
+    <titlebar>
+        <div class="library-selector d-flex justify-content-between align-items-center" id="barId">
             <div class="row">
-                <div class="library col px-auto pt-2" id="library">
+                <div class="library col" id="library">
                     <img src="../img/library.svg" width="38" height="38" />
                 </div>
 
-                <div class="vl col px-auto pt-2 "></div>
-
-                <div class="steam col pt-2" id="steam">
-                    <img src="../img/xd.svg" width="38" height="38" />
+                <div class="line col">
+                    <img src="../img/horizontal-line.svg" width="38" height="38" />
                 </div>
-                <div class="epic-games col px-auto pt-2" id="epic">
+
+                <div class="steam col" id="steam">
+                    <img src="../img/steam.svg" width="38" height="38" />
+                </div>
+                <div class="epic-games col" id="epic">
                     <img src="../img/epic-games.svg" width="38" height="38" />
                 </div>
-                <div class="rockstar col px-auto pt-2" id="rockstar">
-                    <img src="../img/rockstar-games.svg" width="38" height="38" />
+                <div class="rockstar col" id="rockstar">
+                    <img src="../img/rockstar-games.svg" onclick="doitrockstar()" width="30" height="30" />
                 </div>
             </div>
         </div>
-    </footer>
+    </titlebar>
+
+    <div class="d-flex min-vh-100 justify-content-end align-items-center">
+        <div class="control-panel-icon">
+            <img src="../img/box-arrow-left.svg" width="40" height="40"/>
+        </div>
+    </div>
+    
 </body>
 
 
