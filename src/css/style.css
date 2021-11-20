@@ -3,14 +3,14 @@ body {
 }
 
 bg {
-    background-color: rgba(21,21,23, 0.95);
+    background-color: rgba(21, 21, 23, 0.95);
 
     background-image: "";
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     color: white;
-    
+
     text-align: right;
     position: fixed;
     left: 0;
@@ -24,39 +24,43 @@ bg {
     backdrop-filter: blur(50px);
 }
 
+.titlebar {
+    z-index: 1;
+    position: fixed;
+    background-color: rgba(43, 43, 43, 1);
+    height: 30px;
+    width: 100%;
+}
+
+.topbar {
+    position: fixed;
+    height: 80px;
+    width: 100%;
+    top: 25px;
+    margin-bottom: 50px;
+    left: 0;
+    background-color: rgb(32, 32, 34);
+    text-align: center;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11),
+        0 2px 2px rgba(0, 0, 0, 0.11);
+
+    backdrop-filter: blur(50px);
+}
+
 .library-selector {
     position: fixed;
     height: 100%;
     width: 90px;
     top: 25px;
     left: 0;
-    background-color: rgba(32,32,34, 0.5);
+    background-color: rgba(32, 32, 34, 0.13);
     text-align: center;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11),
         0 2px 2px rgba(0, 0, 0, 0.11),
         0 4px 4px rgba(0, 0, 0, 0.11),
         0 6px 8px rgba(0, 0, 0, 0.11);
-    
+
     backdrop-filter: blur(50px);
-}
-
-titlebar {
-    -webkit-app-region: drag;
-    position: fixed;
-    background-color: rgba(43,43,43, 0.5); 
-    height: 25px;
-    width: 100%;
-}
-
-.text {
-    position: fixed;
-    font-size: 40px;
-    font-weight: 700;
-    color: white;
-    border-radius: 25px;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
 }
 
 .library {
@@ -66,8 +70,6 @@ titlebar {
     transition-duration: 0.2s;
 
     display: block;
-    transform: scale(1);
-    transition-duration: 0.2s;
     filter: drop-shadow(3.4px 3.4px 2.7px rgba(0, 0, 0, 0.09),
             8.7px 8.7px 6.9px rgba(0, 0, 0, 0.062),
             17.7px 17.7px 14.2px rgba(0, 0, 0, 0.05),
@@ -77,8 +79,13 @@ titlebar {
 
 .library:hover {
     transform: scale(1.2);
-    transition-duration: 0.3s;
+    transition-duration: 0.2s;
     cursor: pointer;
+}
+
+.library:active {
+    transform: scale(0.9);
+    transition-duration: 0.1s;
 }
 
 .line {
@@ -86,10 +93,9 @@ titlebar {
     filter: invert(98%) sepia(4%) saturate(3%) hue-rotate(240deg) brightness(117%) contrast(100%);
 }
 
-
 .steam {
     margin-bottom: 25px;
-    
+
     margin-top: 100px;
     transform: scale(1);
     transition-duration: 0.2s;
@@ -103,10 +109,14 @@ titlebar {
 
 .steam:hover {
     transform: scale(1.2);
-    transition-duration: 0.3s;
+    transition-duration: 0.2s;
     cursor: pointer;
 }
 
+.steam:active {
+    transform: scale(0.9);
+    transition-duration: 0.1s;
+}
 
 .epic-games {
     margin-bottom: 25px;
@@ -124,16 +134,20 @@ titlebar {
 
 .epic-games:hover {
     transform: scale(1.2);
-    transition-duration: 0.3s;
+    transition-duration: 0.2s;
     cursor: pointer;
 }
 
+.epic-games:active {
+    transform: scale(0.9);
+    transition-duration: 0.1s;
+}
 
 .rockstar {
     margin-bottom: 25px;
 
     display: block;
-    transform: scale(1);
+    transform: scale(1.2);
     transition-duration: 0.2s;
     filter: drop-shadow(3.4px 3.4px 2.7px rgba(0, 0, 0, 0.09),
             8.7px 8.7px 6.9px rgba(0, 0, 0, 0.062),
@@ -144,9 +158,14 @@ titlebar {
 }
 
 .rockstar:hover {
-    transform: scale(1.2);
+    transform: scale(1.4);
     transition-duration: 0.3s;
     cursor: pointer;
+}
+
+.rockstar:active {
+    transform: scale(0.9);
+    transition-duration: 0.1s;
 }
 
 .control-panel-icon {
@@ -158,23 +177,19 @@ titlebar {
 .game-templete {
     position: relative;
     height: 150px;
-    width: 120px;
+    width: 240px;
     border-radius: 16px;
     display: block;
 
+    margin-right: 20px !important;
+    margin-bottom: 50px !important;
+    background-image: url("https://www.nintendo.com//content/dam/noa/en_US/games/switch/a/among-us-switch/among-us-switch-hero.jpg");
 
-    background-image: url('/pictures/heroku.png');
+
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     background-color: rgb(201, 85, 255);
-
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07),
-        0 2px 4px rgba(0, 0, 0, 0.07),
-        0 4px 8px rgba(0, 0, 0, 0.07),
-        0 8px 16px rgba(0, 0, 0, 0.07),
-        0 16px 32px rgba(0, 0, 0, 0.07),
-        0 32px 64px rgba(0, 0, 0, 0.07);
 
     -moz-transform: scale(1);
     -webkit-transform: scale(1);
@@ -183,6 +198,45 @@ titlebar {
     -webkit-transition: 0.7s ease all;
     -moz-transition: 0.7s ease all;
 }
+
+.game-templete-parent {
+    margin-left: 120px !important;
+    margin-top: 150px !important;
+}
+
+.titlebar-icons {
+    z-index: 1;
+    margin-right: 10px !important;
+    margin-top: 7px !important;
+}
+
+.titlebar-exit { 
+    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
+    display: block;
+}
+
+.titlebar-exit:hover { 
+    filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg) brightness(92%) contrast(94%);
+}
+
+.titlebar-max { 
+    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
+    display: block;
+}
+
+.titlebar-max:hover { 
+    filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg) brightness(102%) contrast(110%);
+}
+
+.titlebar-min { 
+    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
+    display: block;
+}
+
+.titlebar-min:hover { 
+    filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg) brightness(92%) contrast(97%);
+}
+
 
 :not(input):not(textarea),
 :not(input):not(textarea)::after,

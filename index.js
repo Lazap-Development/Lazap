@@ -1,15 +1,17 @@
 require('v8-compile-cache');
 const electron = require('electron');
+const ipcMain = require('electron').ipcMain;
 const app = electron.app;
-const delay = "3020"
-//const delay = "0"
+//const delay = "3020"
+const delay = "0"
+
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
 
 app.on('ready', () => {
     const mainWindow = new electron.BrowserWindow({
-        width: 1000,
-        height: 510,
+        width: 1050,
+        height: 580,
         minWidth: 850,
         minHeight: 450,
         resizable: true,
@@ -17,11 +19,21 @@ app.on('ready', () => {
         show: false,
         webPreferences: {
             nodeIntegration: true,
-            devTools: true,
             contextIsolation: false,
-        }
+            devTools: true,
+        },
     });
     mainWindow.webContents.loadFile('src/splash.html')
+
+    ipcMain.once('close-window', () => {
+        mainWindow.close();
+    })
+    ipcMain.once('max_window', () => {
+        mainWindow.maximize();
+    })
+    ipcMain.once('min_window', () => {
+        mainWindow.minimize();
+    })
 
     mainWindow.once('ready-to-show', () => {
         mainWindow.show()

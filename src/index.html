@@ -11,45 +11,76 @@
     <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
 
     <script type="module" src="js/listeners.js"></script>
+    <script type="text/javascript" src="js/menu.js"></script>
     <script type="text/javascript" src="js/rockstar-games.js"></script>
 </head>
 
 <body>
 
-    <bg id="backgroundId">
+    <bg></bg>
 
-    </bg>
+    <div class="titlebar">
+        <div class="titlebar-icons d-flex justify-content-end">
+            <img src="../img/circle.png" onclick="min_window()" class="titlebar-min mx-1" width="17" height="17">
+            <img src="../img/circle.png" onclick="max_window()" class="titlebar-max mx-1" width="17" height="17">
+            <img src="../img/circle.png" onclick="close_window()" class="titlebar-exit mx-1" width="17" height="17">
+        </div>
+    </div>
 
-    <titlebar>
-        <div class="library-selector d-flex justify-content-between align-items-center" id="barId">
-            <div class="row">
-                <div class="library col" id="library">
-                    <img src="../img/library.svg" width="38" height="38" />
-                </div>
+    <div class="topbar"></div>
 
-                <div class="line col">
-                    <img src="../img/horizontal-line.svg" width="38" height="38" />
-                </div>
+    <div class="library-selector d-flex justify-content-between align-items-center" id="barId">
+        <div class="row">
+            <div class="library col" id="library">
+                <img src="../img/library.svg" width="38" height="38" />
+            </div>
 
-                <div class="steam col" id="steam">
-                    <img src="../img/steam.svg" width="38" height="38" />
+            <div class="line col">
+                <img src="../img/horizontal-line.svg" width="38" height="38" />
+            </div>
+
+            <div class="steam col" id="steam">
+                <img src="../img/steam.svg" width="38" height="38" />
+            </div>
+            <div class="epic-games col" id="epic">
+                <img src="../img/epic-games.svg" width="38" height="38" />
+            </div>
+            <div class="rockstar col" id="rockstar">
+                <img src="../img/rockstar-games.svg" onclick="doitrockstar()" width="30" height="30" />
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <div class="row game-templete-parent">
+            <div class="col">
+                <div class="game-templete">
                 </div>
-                <div class="epic-games col" id="epic">
-                    <img src="../img/epic-games.svg" width="38" height="38" />
+            </div>
+            <div class="col">
+                <div class="game-templete">
                 </div>
-                <div class="rockstar col" id="rockstar">
-                    <img src="../img/rockstar-games.svg" onclick="doitrockstar()" width="30" height="30" />
+            </div>
+            <div class="col">
+                <div class="game-templete">
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="game-templete">
+                </div>
+            </div>
+            <div class="col">
+                <div class="game-templete">
+                </div>
+            </div>
+            <div class="col">
+                <div class="game-templete">
                 </div>
             </div>
         </div>
-    </titlebar>
-
-    <div class="d-flex min-vh-100 justify-content-end align-items-center">
-        <div class="control-panel-icon">
-            <img src="../img/box-arrow-left.svg" width="40" height="40"/>
-        </div>
     </div>
-    
+
 </body>
 
 
