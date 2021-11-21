@@ -2,26 +2,29 @@ require('v8-compile-cache');
 const electron = require('electron');
 const ipcMain = require('electron').ipcMain;
 const app = electron.app;
-const delay = "3020"
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
 
 app.on('ready', () => {
     const mainWindow = new electron.BrowserWindow({
-        width: 1050,
+        width: 1100,
         height: 580,
         minWidth: 850,
         minHeight: 450,
         resizable: true,
         frame: false,
         show: false,
+        transparent: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            devTools: true,
+            openDevTools: {
+                mode: 'undocked'
+            }
         },
     });
+    mainWindow.webContents.setFrameRate(60);
     mainWindow.webContents.loadFile('src/splash.html')
 
     ipcMain.on('close-window', () => {
@@ -38,6 +41,6 @@ app.on('ready', () => {
         mainWindow.show()
         setTimeout(() => {
             mainWindow.loadFile('src/index.html')
-        }, delay);
+        }, 1000);
     })
 });

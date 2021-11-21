@@ -1,15 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
+
 body {
     overflow: hidden;
 }
 
 bg {
-    background-color: rgba(21, 21, 23, 0.95);
-
-    background-image: "";
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    color: white;
+    background-color: rgba(21, 21, 23, 0.97);
 
     text-align: right;
     position: fixed;
@@ -27,40 +23,64 @@ bg {
 .titlebar {
     z-index: 1;
     position: fixed;
-    background-color: rgba(43, 43, 43, 1);
+    background-color: rgba(43, 43, 43);
     height: 30px;
     width: 100%;
 }
 
 .topbar {
-    position: fixed;
-    height: 80px;
+    background-color: rgb(70, 70, 70);
+    position: relative;
+    height: 200px;
+    width: calc(100% - 290px);
+    top: 40px;
+    margin-left: 270px !important;
+    border-radius: 10px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(50px);
+
+    display: block;
+}
+
+.topbar img {
+    border-radius: 10px;
+    background-position: center;
+    background-repeat: no-repeat;
     width: 100%;
-    top: 25px;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+.sexy-noise {
+    position: fixed;
+    height: 50px;
+    width: 250px;
+    top: 20px;
     margin-bottom: 50px;
     left: 0;
-    background-color: rgb(32, 32, 34);
+    background-color: rgba(134, 35, 233, 0.9);
     text-align: center;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11),
-        0 2px 2px rgba(0, 0, 0, 0.11);
-
     backdrop-filter: blur(50px);
 }
 
-.library-selector {
+.leftbar {
+    overflow: scroll;
+    overflow-x: hidden;
+
     position: fixed;
     height: 100%;
-    width: 90px;
+    width: 250px;
     top: 25px;
     left: 0;
-    background-color: rgba(32, 32, 34, 0.13);
+    background-color: rgba(65, 65, 71, 0.1);
     text-align: center;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11),
         0 2px 2px rgba(0, 0, 0, 0.11),
         0 4px 4px rgba(0, 0, 0, 0.11),
         0 6px 8px rgba(0, 0, 0, 0.11);
 
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(80px);
 }
 
 .library {
@@ -210,44 +230,110 @@ bg {
     margin-top: 7px !important;
 }
 
-.titlebar-exit { 
+.titlebar-exit {
     filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
     display: block;
 }
 
-.titlebar-exit:hover { 
+.titlebar-exit:hover {
     filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg) brightness(92%) contrast(94%);
 }
 
-.titlebar-max { 
+.titlebar-max {
     filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
     display: block;
 }
 
-.titlebar-max:hover { 
+.titlebar-max:hover {
     filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg) brightness(102%) contrast(110%);
 }
 
-.titlebar-min { 
+.titlebar-min {
     filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
     display: block;
 }
 
-.titlebar-min:hover { 
+.titlebar-min:hover {
     filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg) brightness(92%) contrast(97%);
 }
 
+.user-pfp {
+    margin-top: 50px;
+    border-radius: 20%;
+    box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+        0 12.5px 10px rgba(0, 0, 0, 0.06),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+
+}
+
+.username {
+    font-family: 'Comfortaa', cursive;
+    margin-top: 7px;
+    text-align: center;
+    font-size: 20px;
+    color: #c7c7c7;
+    margin-bottom: 60px;
+}
+
+.side-tab {
+    background-color: rgba(42, 42, 42, 0.513);
+    position: reletive;
+    height: 40px;
+    width: 220px;
+    border-radius: 10px;
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.side-tab img {
+    filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
+    margin-left: 15px;
+    margin-top: 7px;
+    margin-right: 5px;
+    display: inline-block;
+}
+
+.side-tab p {
+    color: #c7c7c7;
+    font-family: 'Comfortaa', cursive;
+    text-align: left;
+    width: 50%;
+    padding: 10px;
+}
+
+.category-name {
+    font-family: 'Comfortaa', cursive;
+    color: #6b6b6b;
+    margin-left: 20px;
+    margin-bottom: 2px;
+    font-size: 15px;
+}
+
+
+
+::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
 
 :not(input):not(textarea),
 :not(input):not(textarea)::after,
 :not(input):not(textarea)::before {
     -webkit-user-select: none;
     user-select: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 input,
 button,
 textarea,
+img,
 :focus {
     outline: none;
 }
