@@ -21,6 +21,9 @@ bg {
 }
 
 .titlebar {
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+    user-select: none;
     z-index: 1;
     position: fixed;
     background-color: rgba(43, 43, 43);
@@ -162,6 +165,7 @@ bg {
 }
 
 .titlebar-exit {
+    -webkit-app-region: no-drag;
     filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
     display: block;
 }
@@ -171,6 +175,7 @@ bg {
 }
 
 .titlebar-max {
+    -webkit-app-region: no-drag;
     filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
     display: block;
 }
@@ -180,6 +185,7 @@ bg {
 }
 
 .titlebar-min {
+    -webkit-app-region: no-drag;
     filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
     display: block;
 }
