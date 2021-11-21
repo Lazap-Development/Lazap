@@ -11,45 +11,99 @@
     <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
 
     <script type="module" src="js/listeners.js"></script>
+    <script type="text/javascript" src="js/menu.js"></script>
     <script type="text/javascript" src="js/rockstar-games.js"></script>
 </head>
 
 <body>
 
-    <bg id="backgroundId">
+    <bg></bg>
 
-    </bg>
-
-    <titlebar>
-        <div class="library-selector d-flex justify-content-between align-items-center" id="barId">
-            <div class="row">
-                <div class="library col" id="library">
-                    <img src="../img/library.svg" width="38" height="38" />
-                </div>
-
-                <div class="line col">
-                    <img src="../img/horizontal-line.svg" width="38" height="38" />
-                </div>
-
-                <div class="steam col" id="steam">
-                    <img src="../img/steam.svg" width="38" height="38" />
-                </div>
-                <div class="epic-games col" id="epic">
-                    <img src="../img/epic-games.svg" width="38" height="38" />
-                </div>
-                <div class="rockstar col" id="rockstar">
-                    <img src="../img/rockstar-games.svg" onclick="doitrockstar()" width="30" height="30" />
-                </div>
-            </div>
-        </div>
-    </titlebar>
-
-    <div class="d-flex min-vh-100 justify-content-end align-items-center">
-        <div class="control-panel-icon">
-            <img src="../img/box-arrow-left.svg" width="40" height="40"/>
+    <div class="titlebar">
+        <div class="titlebar-icons d-flex justify-content-end">
+            <img src="../img/circle.png" onclick="min_window()" class="titlebar-min mx-1" width="17" height="17">
+            <img src="../img/circle.png" onclick="max_window()" class="titlebar-max mx-1" width="17" height="17">
+            <img src="../img/circle.png" onclick="close_window()" class="titlebar-exit mx-1" width="17" height="17">
         </div>
     </div>
-    
+
+
+    <div class="head-pic">
+
+    </div>
+
+    <div class="sexy-noise"></div>
+
+    <div class="leftbar">
+        <div class="d-flex justify-content-center">
+            <div>
+                <img class="user-pfp" src="https://cdn.discordapp.com/avatars/633730629560958976/5c1abedd641bb81ecc381696950a0b16.png?size=1024" alt="Avatar"
+                    width="60" height="60">
+                <div class="username">DashCruft</div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center pb-3">
+            <div class="side-tab" id="home-btn">
+                <div class="side-tab-indicator" id="home-ind"></div>
+                <img src="../img/home.svg" height="25" width="25">
+                <p>Home</p>
+            </div>
+        </div>
+        
+        <div class="category-name d-flex justify-content-left">
+            Games
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="side-tab" id="recent-btn">
+                <div class=" " id="recent-ind"></div>
+                <img id="recently-btn-img" src="../img/recent.svg" height="25" width="25">
+                <p>Recent</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="side-tab" id="games-btn">
+                <div class=" " id="games-ind"></div>
+                <img id="games-btn-img" src="../img/games.svg" height="25" width="25">
+                <p>All Games</p>
+            </div>
+        </div> 
+        <div class="d-flex justify-content-center pb-3">
+            <div class="side-tab" id="favs-btn">
+                <div class=" " id="favs-ind"></div>
+                <img id="favs-btn-img" src="../img/favs.svg" height="25" width="25">
+                <p>Favourites</p>
+            </div>
+        </div>
+
+        
+
+        <div class="category-name d-flex justify-content-left">
+            Friends
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="side-tab" id="messages-btn">
+                <div class=" " id="messages-ind"></div>
+                <img src="../img/messages.svg" height="25" width="25">
+                <p>Messages</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="side-tab" id="activity-btn">
+                <div class=" " id="activity-ind"></div>
+                <img src="../img/activity.svg" height="25" width="25">
+                <p>Activity</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center pb-5 mb-3">
+            <div class="side-tab" id="friends-btn">
+                <div class=" " id="friends-ind"></div>
+                <img src="../img/friends.svg" height="25" width="25">
+                <p>All Friends</p>
+            </div>
+        </div>
+    </div>
+
 </body>
 
 
