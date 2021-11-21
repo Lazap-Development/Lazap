@@ -33,28 +33,35 @@ bg {
 
 .head-pic {
     position: relative;
-    height: 220px;
     width: calc(100% - 290px);
     top: 50px;
     margin-left: 270px !important;
     border-radius: 10px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(50px);
-    background-image: url("https://i.imgur.com/4BNG4ve.jpg");
     display: block;
 
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 
-    box-shadow: 0 1px 1px rgba(0,0,0,0.11), 
-              0 2px 2px rgba(0,0,0,0.11), 
-              0 4px 4px rgba(0,0,0,0.11), 
-              0 6px 8px rgba(0,0,0,0.11),
-              0 8px 16px rgba(0,0,0,0.11);
-
     transform: scale(1);
     transition: 0.6s ease all;
+}
+
+.head-pic img {
+    width: 100%;
+    height: auto;
+    max-height: 280px;
+    min-height: 100px;
+
+    border-radius: 10px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.11), 
+    0 2px 2px rgba(0,0,0,0.11), 
+    0 4px 4px rgba(0,0,0,0.11), 
+    0 6px 8px rgba(0,0,0,0.11),
+    0 8px 16px rgba(0,0,0,0.11);
+
+    object-fit: cover;
 }
 
 .head-pic:hover {
@@ -335,14 +342,5 @@ img,
 
     100% {
         transform: translate(1px, -2px) rotate(-1deg);
-    }
-}
-
-/**
- If client's window size is less then <value>, then do this 
-**/
-@media screen and (min-height: 700px) {
-    .head-pic {
-        height: 400px;
     }
 }

@@ -2,6 +2,7 @@ require('v8-compile-cache');
 const electron = require('electron');
 const ipcMain = require('electron').ipcMain;
 const app = electron.app;
+const os = require('os');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
@@ -13,7 +14,7 @@ app.on('ready', () => {
         minWidth: 850,
         minHeight: 450,
         resizable: true,
-        frame: false,
+        frame: findOS(),
         show: false,
         webPreferences: {
             nodeIntegration: true,
@@ -40,3 +41,14 @@ app.on('ready', () => {
         }, 0);
     })
 });
+
+function findOS() {
+    let result;
+    
+    if (os.platform() === "darwin") {
+        result = true;
+    } else {
+        result = false;
+    }
+    return result;
+}
