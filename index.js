@@ -15,13 +15,9 @@ app.on('ready', () => {
         resizable: true,
         frame: false,
         show: false,
-        transparent: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-            openDevTools: {
-                mode: 'undocked'
-            }
         },
     });
     mainWindow.webContents.setFrameRate(60);
