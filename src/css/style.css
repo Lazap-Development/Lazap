@@ -28,28 +28,34 @@ bg {
     width: 100%;
 }
 
-.topbar {
-    background-color: rgb(70, 70, 70);
+.head-pic {
     position: relative;
-    height: 200px;
+    height: 220px;
     width: calc(100% - 290px);
-    top: 40px;
+    top: 50px;
     margin-left: 270px !important;
     border-radius: 10px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(50px);
-
+    background-image: url("https://i.imgur.com/4BNG4ve.jpg");
     display: block;
-}
 
-.topbar img {
-    border-radius: 10px;
     background-position: center;
     background-repeat: no-repeat;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    overflow: hidden;
+    background-size: cover;
+
+    box-shadow: 0 1px 1px rgba(0,0,0,0.11), 
+              0 2px 2px rgba(0,0,0,0.11), 
+              0 4px 4px rgba(0,0,0,0.11), 
+              0 6px 8px rgba(0,0,0,0.11),
+              0 8px 16px rgba(0,0,0,0.11);
+
+    transform: scale(1);
+    transition: 0.6s ease all;
+}
+
+.head-pic:hover {
+    transform: scale(1.01);
 }
 
 .sexy-noise {
@@ -108,82 +114,7 @@ bg {
     transition-duration: 0.1s;
 }
 
-.line {
-    margin-bottom: 10px;
-    filter: invert(98%) sepia(4%) saturate(3%) hue-rotate(240deg) brightness(117%) contrast(100%);
-}
-
-.steam {
-    margin-bottom: 25px;
-
-    margin-top: 100px;
-    transform: scale(1);
-    transition-duration: 0.2s;
-
-    filter: drop-shadow(3.4px 3.4px 2.7px rgba(0, 0, 0, 0.09),
-            8.7px 8.7px 6.9px rgba(0, 0, 0, 0.062),
-            17.7px 17.7px 14.2px rgba(0, 0, 0, 0.05),
-            36.5px 36.5px 29.2px rgba(0, 0, 0, 0.04),
-            100px 100px 80px rgba(0, 0, 0, 0.028));
-}
-
-.steam:hover {
-    transform: scale(1.2);
-    transition-duration: 0.2s;
-    cursor: pointer;
-}
-
-.steam:active {
-    transform: scale(0.9);
-    transition-duration: 0.1s;
-}
-
-.epic-games {
-    margin-bottom: 25px;
-
-    transform: scale(1);
-    transition-duration: 0.2s;
-
-    transition-duration: 0.2s;
-    filter: drop-shadow(3.4px 3.4px 2.7px rgba(0, 0, 0, 0.09),
-            8.7px 8.7px 6.9px rgba(0, 0, 0, 0.062),
-            17.7px 17.7px 14.2px rgba(0, 0, 0, 0.05),
-            36.5px 36.5px 29.2px rgba(0, 0, 0, 0.04),
-            100px 100px 80px rgba(0, 0, 0, 0.028));
-}
-
-.epic-games:hover {
-    transform: scale(1.2);
-    transition-duration: 0.2s;
-    cursor: pointer;
-}
-
 .epic-games:active {
-    transform: scale(0.9);
-    transition-duration: 0.1s;
-}
-
-.rockstar {
-    margin-bottom: 25px;
-
-    display: block;
-    transform: scale(1.2);
-    transition-duration: 0.2s;
-    filter: drop-shadow(3.4px 3.4px 2.7px rgba(0, 0, 0, 0.09),
-            8.7px 8.7px 6.9px rgba(0, 0, 0, 0.062),
-            17.7px 17.7px 14.2px rgba(0, 0, 0, 0.05),
-            36.5px 36.5px 29.2px rgba(0, 0, 0, 0.04),
-            100px 100px 80px rgba(0, 0, 0, 0.028));
-
-}
-
-.rockstar:hover {
-    transform: scale(1.4);
-    transition-duration: 0.3s;
-    cursor: pointer;
-}
-
-.rockstar:active {
     transform: scale(0.9);
     transition-duration: 0.1s;
 }
@@ -279,7 +210,7 @@ bg {
 }
 
 .side-tab {
-    background-color: rgba(42, 42, 42, 0.513);
+    background-color: rgba(42, 42, 42, 0.5);
     position: reletive;
     height: 40px;
     width: 220px;
@@ -304,6 +235,10 @@ bg {
     padding: 10px;
 }
 
+.side-tab:hover {
+    cursor: pointer;
+}
+
 .category-name {
     font-family: 'Comfortaa', cursive;
     color: #6b6b6b;
@@ -312,7 +247,13 @@ bg {
     font-size: 15px;
 }
 
-
+.side-tab-indicator {
+    background-color: blueviolet;
+    height: 40px;
+    width: 10px;
+    border-radius: 10px 0px 0px 10px;
+    display: inline;
+}
 
 ::-webkit-scrollbar {
     width: 0;
@@ -336,4 +277,66 @@ textarea,
 img,
 :focus {
     outline: none;
+}
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
+}
+
+/**
+ If client's window size is less then <value>, then do this 
+**/
+@media screen and (min-height: 700px) {
+    .head-pic {
+        height: 400px;
+    }
 }

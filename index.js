@@ -41,6 +41,6 @@ app.on('ready', () => {
         mainWindow.show()
         setTimeout(() => {
             mainWindow.loadFile('src/index.html')
-        }, 1000);
+        }, 0);
     })
 });
