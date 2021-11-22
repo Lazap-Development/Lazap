@@ -10,7 +10,7 @@ app.commandLine.appendSwitch('no-proxy-server')
 app.on('ready', () => {
     const mainWindow = new electron.BrowserWindow({
         width: 1150,
-        height: 625,
+        height: 630,
         minWidth: 850,
         minHeight: 450,
         resizable: true,
