@@ -19,11 +19,23 @@ app.on('ready', () => {
         show: false,
         webPreferences: {
             nodeIntegration: true,
-            contextIsolation: false,
+            contextIsolation: false
         }
     });
-    mainWindow.webContents.loadFile('src/splash.html')
 
+    mainWindow.loadFile('src/index.html')
+
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.webContents.setZoomFactor(.9);
+        setTimeout(() => {
+
+            mainWindow.show()
+        }, 100);
+    });
+
+    mainWindow.webContents.on('did-finish-load', () => {
+        handleStorageAndTransportData(mainWindow);
+    });
 
     ipcMain.on('close-window', () => {
         mainWindow.close();
@@ -36,17 +48,6 @@ app.on('ready', () => {
     })
     ipcMain.on('update-profile', (e, data) => {
         editLocalStorage(data);
-    });
-
-    mainWindow.once('ready-to-show', () => {
-        mainWindow.show()
-        setTimeout(() => {
-            mainWindow.loadFile('src/index.html')
-        }, 2000);
-    });
-
-    mainWindow.webContents.on('did-finish-load', () => {
-        handleStorageAndTransportData(mainWindow);
     });
 });
 

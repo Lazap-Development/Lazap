@@ -126,7 +126,7 @@ bg {
 
 .titlebar-icons {
     z-index: 1;
-    margin-right: 10px !important;
+    margin-right: 7px !important;
     margin-top: 7px !important;
 }
 
@@ -182,14 +182,7 @@ bg {
     object-fit: cover;
 }
 
-.user-pfp label {
-    position: absolute;
-    cursor: pointer;
-    height: 70px;
-    width: 70px;
-}
-
-.img:hover {
+.user-pfp:hover img {
     background-color: rgba(0, 0, 0, .8);
     z-index: 10000;
     transition: background-color .2s ease-in-out;
@@ -197,10 +190,17 @@ bg {
     margin-bottom: 0;
 }
 
+.user-pfp label {
+    position: absolute;
+    cursor: pointer;
+    height: 70px;
+    width: 70px;
+}
+
 .username {
     font-family: 'Comfortaa', cursive;
     margin-top: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     text-align: center;
     font-size: 20px;
     color: #c7c7c7;
