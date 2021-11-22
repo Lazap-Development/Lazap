@@ -251,8 +251,8 @@ bg {
 #indicator {
     transition: 0.5s;
     position: absolute;
-    margin-top: 0.3em;
-    margin-left: 8px;
+    margin-top: 0.28em;
+
     background-color: blueviolet;
     height: 0px;
     width: 5px;

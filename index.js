@@ -19,9 +19,10 @@ app.on('ready', () => {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
-        },
+        }
     });
     mainWindow.webContents.loadFile('src/splash.html')
+
 
     ipcMain.on('close-window', () => {
         mainWindow.close();
