@@ -27,15 +27,15 @@ bg {
     z-index: 1;
     position: fixed;
     background-color: rgba(43, 43, 43);
-    height: 30px;
+    height: 35px;
     width: 100%;
 }
 
 .head-pic {
     position: relative;
-    width: calc(100% - 280px);
-    top: 45px;
-    margin-left: 265px !important;
+    width: calc(100% - 295px);
+    top: 50px;
+    margin-left: 280px !important;
     border-radius: 10px;
     backdrop-filter: blur(50px);
     display: block;
@@ -65,14 +65,14 @@ bg {
 
 .sexy-noise {
     position: fixed;
-    height: 60px;
-    width: 250px;
+    height: 80px;
+    width: 260px;
     top: 20px;
     margin-bottom: 50px;
     left: 0;
     background-color: #591BC5;
     text-align: center;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(1px);
 }
 
 .leftbar {
@@ -81,7 +81,7 @@ bg {
 
     position: fixed;
     height: 100%;
-    width: 250px;
+    width: 260px;
     top: 25px;
     left: 0;
     background-color: rgba(65, 65, 71, 0.1);
@@ -91,7 +91,7 @@ bg {
         0 4px 4px rgba(0, 0, 0, 0.11),
         0 6px 8px rgba(0, 0, 0, 0.11);
 
-    backdrop-filter: blur(40px);
+    backdrop-filter: blur(50px);
 }
 
 .game-templete {
@@ -126,8 +126,8 @@ bg {
 
 .titlebar-icons {
     z-index: 1;
-    margin-right: 7px !important;
-    margin-top: 7px !important;
+    margin-right: 8px !important;
+    margin-top: 10px !important;
 }
 
 .titlebar-exit {
@@ -162,7 +162,7 @@ bg {
 
 .user-pfp {
     position: relative;
-    margin-top: 35px;
+    margin-top: 50px;
     box-shadow:
         0 2.8px 2.2px rgba(0, 0, 0, 0.034),
         0 6.7px 5.3px rgba(0, 0, 0, 0.048),
@@ -183,10 +183,10 @@ bg {
 }
 
 .user-pfp:hover img {
-    background-color: rgba(0, 0, 0, .8);
+    background-color: rgba(129, 129, 129, 0.8);
     z-index: 10000;
     transition: background-color .2s ease-in-out;
-    border-radius: 5px;
+    border-radius: 8px;
     margin-bottom: 0;
 }
 
@@ -213,7 +213,7 @@ bg {
     background-color: rgba(30, 30, 34, 0.5);
     position: reletive;
     height: 40px;
-    width: 220px;
+    width: 230px;
     border-radius: 10px;
     display: flex;
     margin-bottom: 10px;
@@ -231,6 +231,7 @@ bg {
 .side-tab p {
     color: #c7c7c7;
     font-family: 'Comfortaa', cursive;
+    font-size: 17px;
     text-align: left;
     width: 50%;
     padding: 10px;
