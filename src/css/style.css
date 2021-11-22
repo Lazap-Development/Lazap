@@ -33,9 +33,9 @@ bg {
 
 .head-pic {
     position: relative;
-    width: calc(100% - 290px);
-    top: 50px;
-    margin-left: 270px !important;
+    width: calc(100% - 280px);
+    top: 45px;
+    margin-left: 265px !important;
     border-radius: 10px;
     backdrop-filter: blur(50px);
     display: block;
@@ -53,7 +53,6 @@ bg {
     height: auto;
     max-height: 280px;
     min-height: 100px;
-
     border-radius: 10px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.11),
         0 2px 2px rgba(0, 0, 0, 0.11),
@@ -64,20 +63,16 @@ bg {
     object-fit: cover;
 }
 
-.head-pic:hover {
-    transform: scale(1.01);
-}
-
 .sexy-noise {
     position: fixed;
-    height: 50px;
+    height: 60px;
     width: 250px;
     top: 20px;
     margin-bottom: 50px;
     left: 0;
-    background-color: rgba(134, 35, 233, 0.9);
+    background-color: rgba(134, 35, 233, 0.897);
     text-align: center;
-    backdrop-filter: blur(50px);
+    backdrop-filter: blur(10px);
 }
 
 .leftbar {
@@ -96,7 +91,7 @@ bg {
         0 4px 4px rgba(0, 0, 0, 0.11),
         0 6px 8px rgba(0, 0, 0, 0.11);
 
-    backdrop-filter: blur(80px);
+    backdrop-filter: blur(40px);
 }
 
 .library {
@@ -202,8 +197,8 @@ bg {
 }
 
 .user-pfp {
-    margin-top: 50px;
-    border-radius: 20%;
+    position: relative;
+    margin-top: 35px;
     box-shadow:
         0 2.8px 2.2px rgba(0, 0, 0, 0.034),
         0 6.7px 5.3px rgba(0, 0, 0, 0.048),
@@ -213,13 +208,41 @@ bg {
 
 }
 
+.user-pfp input {
+    display: none;
+}
+
+.user-pfp img {
+    border-radius: 20%;
+    image-rendering: auto;
+    object-fit: cover;
+}
+
+.user-pfp label {
+    position: absolute;
+    cursor: pointer;
+    height: 70px;
+    width: 70px;
+}
+
+.img:hover {
+    background-color: rgba(0, 0, 0, .8);
+    z-index: 10000;
+    transition: background-color .2s ease-in-out;
+    border-radius: 5px;
+    margin-bottom: 0;
+}
+
 .username {
     font-family: 'Comfortaa', cursive;
-    margin-top: 7px;
+    margin-top: 10px;
+    margin-bottom: 30px;
     text-align: center;
     font-size: 20px;
     color: #c7c7c7;
-    margin-bottom: 60px;
+    background-color: transparent;
+    border: transparent;
+    text-decoration: none;
 }
 
 .side-tab {
