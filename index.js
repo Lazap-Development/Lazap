@@ -15,7 +15,7 @@ app.on('ready', () => {
         minWidth: 850,
         minHeight: 450,
         resizable: true,
-        frame: findOS(),
+        frame: os.platform() === 'darwin' ? true : false,
         show: false,
         webPreferences: {
             nodeIntegration: true,
@@ -49,17 +49,6 @@ app.on('ready', () => {
         handleStorageAndTransportData(mainWindow);
     });
 });
-
-function findOS() {
-    let result;
-    
-    if (os.platform() === "darwin") {
-        result = true;
-    } else {
-        result = false;
-    }
-    return result;
-}
 
 function handleStorageAndTransportData (mainWindow) {
     fs.readdir(`${__dirname}`, (err, data) => {
