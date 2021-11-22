@@ -72,9 +72,12 @@ function handleStorageAndTransportData (mainWindow) {
                 username: "username",
                 pfp: ""
             }
-            fs.writeFileSync(`${__dirname}/storage/userprofile.json`, JSON.stringify(a));
-
-            mainWindow.webContents.send('load-profile', a);
+            fs.writeFile(`${__dirname}/storage/userprofile.json`, JSON.stringify(a), (err) => {
+                if (err) {
+                    throw err;
+                }
+                mainWindow.webContents.send('load-profile', a);
+            });
         }
     })
 }

@@ -10,7 +10,7 @@ function loadFile(event) {
     });
 }
 
-document.querySelector('#text').addEventListener('change', (e) => {  // TODO: no work
+document.querySelector('#text').addEventListener('change', (e) => {
     ipcRenderer.send('update-profile', {
         username: e.target.value,
         pfp: img
