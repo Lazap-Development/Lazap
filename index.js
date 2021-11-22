@@ -3,6 +3,7 @@ const electron = require('electron');
 const ipcMain = require('electron').ipcMain;
 const app = electron.app;
 const os = require('os');
+const fs = require('fs');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
@@ -33,13 +34,20 @@ app.on('ready', () => {
     ipcMain.on('min-window', () => {
         mainWindow.minimize()
     })
+    ipcMain.on('update-profile', (e, data) => {
+        editLocalStorage(data);
+    });
 
     mainWindow.once('ready-to-show', () => {
         mainWindow.show()
         setTimeout(() => {
             mainWindow.loadFile('src/index.html')
-        }, 0);
-    })
+        }, 2000);
+    });
+
+    mainWindow.webContents.on('did-finish-load', () => {
+        handleStorageAndTransportData(mainWindow);
+    });
 });
 
 function findOS() {
@@ -51,4 +59,41 @@ function findOS() {
         result = false;
     }
     return result;
+}
+
+function handleStorageAndTransportData (mainWindow) {
+    fs.readdir(`${__dirname}`, (err, data) => {
+        if (data.includes('storage')) {
+            const data = require(`${__dirname}/storage/userprofile.json`);
+            mainWindow.webContents.send('load-profile', data);
+        } else {
+            fs.mkdirSync(`${__dirname}/storage`);
+            const a = {
+                username: "username",
+                pfp: ""
+            }
+            fs.writeFileSync(`${__dirname}/storage/userprofile.json`, JSON.stringify(a));
+
+            mainWindow.webContents.send('load-profile', a);
+        }
+    })
+}
+
+function editLocalStorage (content) {
+    fs.readdir(`${__dirname}`, (err, data) => {
+        if (data.includes('storage')) {
+            fs.writeFile(`${__dirname}/storage/userprofile.json`, JSON.stringify(content), (err) => {
+                if (err) {
+                    throw err;
+                }
+            });
+        } else {
+            fs.mkdirSync(`${__dirname}/storage`);
+            fs.writeFile(`${__dirname}/storage/userprofile.json`, JSON.stringify(content), (err) => {
+                if (err) {
+                    throw err;
+                }
+            });
+        }
+    });
 }
