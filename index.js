@@ -21,7 +21,6 @@ app.on('ready', () => {
             contextIsolation: false,
         },
     });
-    mainWindow.webContents.setFrameRate(60);
     mainWindow.webContents.loadFile('src/splash.html')
 
     ipcMain.on('close-window', () => {
