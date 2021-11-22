@@ -1,7 +1,6 @@
 const marker = document.querySelector("#indicator");
 const items = document.querySelectorAll(".side-tab");
 
-
 items.forEach(link => {
     window.addEventListener("load", e => {
         indicator(e.target)
