@@ -2,25 +2,25 @@ require('v8-compile-cache');
 const electron = require('electron');
 const ipcMain = require('electron').ipcMain;
 const app = electron.app;
+const os = require('os');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
 
 app.on('ready', () => {
     const mainWindow = new electron.BrowserWindow({
-        width: 1100,
-        height: 580,
+        width: 1150,
+        height: 630,
         minWidth: 850,
         minHeight: 450,
         resizable: true,
-        frame: false,
+        frame: findOS(),
         show: false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
         },
     });
-    mainWindow.webContents.setFrameRate(60);
     mainWindow.webContents.loadFile('src/splash.html')
 
     ipcMain.on('close-window', () => {
@@ -37,6 +37,17 @@ app.on('ready', () => {
         mainWindow.show()
         setTimeout(() => {
             mainWindow.loadFile('src/index.html')
-        }, 0);
+        }, 2000);
     })
 });
+
+function findOS() {
+    let result;
+    
+    if (os.platform() === "darwin") {
+        result = true;
+    } else {
+        result = false;
+    }
+    return result;
+}
