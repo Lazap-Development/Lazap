@@ -27,6 +27,9 @@ app.on('ready', () => {
     mainWindow.loadFile('src/index.html')
 
     mainWindow.once('ready-to-show', () => {
+        electron.globalShortcut.register('Control+Shift+I', () => {
+            return false;
+        });
         mainWindow.webContents.setZoomFactor(.9);
         setTimeout(() => {
 
