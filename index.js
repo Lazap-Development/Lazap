@@ -19,8 +19,9 @@ app.on('ready', () => {
         show: false,
         webPreferences: {
             nodeIntegration: true,
-            contextIsolation: false
-        }
+            contextIsolation: false,
+            backgroundThrottling: false,
+        },
     });
 
     mainWindow.loadFile('src/index.html')
