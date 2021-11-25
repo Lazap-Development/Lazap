@@ -259,28 +259,31 @@ bg {
     border-radius: 10px;
     display: flex;
     margin-bottom: 10px;
-    transition: all 0.4s;
+    transition: background-color .1s;
 }
 
 .side-tab img {
     filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
     margin-left: 25px;
-    margin-top: 7px;
+    margin-top: 8px;
     margin-right: 5px;
     display: inline-block;
 }
 
 .side-tab p {
-    color: #c7c7c7;
+    color: #dadada;
     font-family: 'Comfortaa', cursive;
     font-size: 17px;
     text-align: left;
     width: 50%;
     padding: 10px;
+    
 }
 
 .side-tab:hover {
     cursor: pointer;
+    background-color: rgb(114, 38, 255);
+    transition: background-color .2s;
 }
 
 .category-name {
@@ -294,9 +297,10 @@ bg {
 #indicator {
     transition: 0.5s;
     position: absolute;
-    margin-top: 0.28em;
+    margin-top: 0.32em;
+    margin-left: 2px;
 
-    background-color: blueviolet;
+    background-color: rgb(114, 38, 255);
     height: 30px;
     width: 5px;
     border-radius: 2px;
