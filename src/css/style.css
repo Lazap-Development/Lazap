@@ -206,7 +206,7 @@ bg {
 .user-pfp {
     position: relative;
     margin-top: 55px;
-    width: 75px;
+    width: 80px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -216,7 +216,6 @@ bg {
 }
 
 .user-pfp img {
-    background-color: white;
     border-radius: 20%;
     image-rendering: auto;
     object-fit: cover;
@@ -226,6 +225,17 @@ bg {
         0px 0px 6.9px rgba(0, 0, 0, 0.276),
         0px 0px 14.2px rgba(0, 0, 0, 0.223),
         0px 0px 29.2px rgba(0, 0, 0, 0.177);
+}
+
+.user-pfp::after {
+    background-color: #fff;
+    top: 0;
+    left: 0;
+    border-radius: 20%;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: -1;
 }
 
 .user-pfp:hover img {
@@ -242,7 +252,7 @@ bg {
 
 .username {
     font-family: 'Comfortaa', cursive;
-    margin-top: 13px;
+    margin-top: 10px;
     margin-bottom: 40px;
     text-align: center;
     font-size: 22px;
@@ -254,10 +264,11 @@ bg {
 
 .side-tab {
     background-color: rgba(30, 30, 34, 0.5);
+
     height: 40px;
     width: 230px;
     border-radius: 8px;
-    
+
     display: flex;
     margin-bottom: 10px;
     transition: background-color .1s;
@@ -278,7 +289,7 @@ bg {
     text-align: left;
     width: 50%;
     padding: 10px;
-    
+
 }
 
 .side-tab:hover {

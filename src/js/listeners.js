@@ -1,6 +1,8 @@
 const marker = document.querySelector("#indicator");
 const items = document.querySelectorAll(".side-tab");
 
+
+
 items.forEach(link => link.addEventListener("click", e => {
     marker.style.top = "220px";
     marker.style.height = "0px";
