@@ -254,10 +254,10 @@ bg {
 
 .side-tab {
     background-color: rgba(30, 30, 34, 0.5);
-    position: reletive;
     height: 40px;
     width: 230px;
-    border-radius: 10px;
+    border-radius: 8px;
+    
     display: flex;
     margin-bottom: 10px;
     transition: background-color .1s;
