@@ -207,7 +207,8 @@ bg {
     position: relative;
     margin-top: 55px;
     width: 75px;
-    margin-left: 118px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .user-pfp input {
