@@ -195,6 +195,8 @@ bg {
 .user-pfp {
     position: relative;
     margin-top: 55px;
+    width: 75px;
+    margin-left: 118px;
 
 }
 
@@ -203,6 +205,7 @@ bg {
 }
 
 .user-pfp img {
+
     border-radius: 20%;
     image-rendering: auto;
     object-fit: cover;
