@@ -28,10 +28,6 @@ html * {
     -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-    overflow: hidden;
-}
-
 bg {
     background-color: #1b1d22;
 
@@ -99,6 +95,20 @@ bg {
     height: calc(100% - 90px);
     width: calc(100% - 310px);
     margin-top: 60px;
+    margin-left: 285px;
+}
+
+.homebox-more {
+    position: absolute;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    height: calc(100% - 90px);
+    width: calc(100% - 310px);
+    margin-top: 800px;
+    padding-bottom: 100px;
     margin-left: 285px;
 }
 
@@ -276,8 +286,8 @@ bg {
 .category-name {
     font-family: 'Comfortaa', cursive;
     color: #6b6b6b;
-    margin-left: 20px;
-    margin-bottom: 2px;
+    margin-left: 25px;
+    margin-bottom: 4px;
     font-size: 15px;
 }
 
