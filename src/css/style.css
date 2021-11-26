@@ -2,7 +2,7 @@
 
 @keyframes fadeInUp {
     from {
-        transform: translate3d(0, -20px, 0)
+        transform: translate3d(0, -10px, 0)
     }
 
     to {
@@ -98,18 +98,28 @@ bg {
     margin-left: 285px;
 }
 
-.homebox-more {
+.secondorybox {
     position: absolute;
 
-    display: flex;
+    display: none;
     flex-direction: column;
     flex-wrap: wrap;
 
+    background-color: #202126;
+    border-radius: 10px;
+    
     height: calc(100% - 90px);
     width: calc(100% - 310px);
-    margin-top: 800px;
-    padding-bottom: 100px;
+    margin-top: 60px;
     margin-left: 285px;
+}
+
+.secondorybox p {
+    font-family: 'Comfortaa', cursive;
+    color: rgb(197, 197, 197);
+    margin-left: 18px;
+    margin-top: 18px;
+    font-size: 20px;
 }
 
 .children {
@@ -227,20 +237,9 @@ bg {
         0px 0px 29.2px rgba(0, 0, 0, 0.177);
 }
 
-.user-pfp::after {
-    background-color: #fff;
-    top: 0;
-    left: 0;
-    border-radius: 20%;
-    bottom: 0;
-    right: 0;
-    position: absolute;
-    z-index: -1;
-}
-
 .user-pfp:hover img {
     transition: border-radius .2s ease-in-out;
-    border-radius: 8px;
+    border-radius: 6px;
 }
 
 .user-pfp label {
@@ -294,8 +293,9 @@ bg {
 
 .side-tab:hover {
     cursor: pointer;
-    background-color: rgb(114, 38, 255);
+    background-color: #843dff7e;
     transition: background-color .2s;
+    color: blue;
 }
 
 .category-name {
@@ -307,12 +307,12 @@ bg {
 }
 
 #indicator {
-    transition: 0.5s;
+    transition: 0.4s;
     position: absolute;
-    margin-top: 0.32em;
+    margin-top: 4.2px;
     margin-left: 2px;
 
-    background-color: rgb(114, 38, 255);
+    background-color: rgb(121, 52, 250);
     height: 30px;
     width: 5px;
     border-radius: 2px;
@@ -320,8 +320,8 @@ bg {
 }
 
 .fadeInUp {
-    animation-duration: 0.8s;
-    animation-delay: 0.35s;
+    animation-duration: 0.7s;
+    animation-delay: 0.25s;
     animation-fill-mode: both;
     backface-visibility: hidden;
     opacity: 0;
@@ -329,8 +329,8 @@ bg {
 }
 
 .fadeInLeft {
-    animation-duration: 0.8s;
-    animation-delay: 0.35s;
+    animation-duration: 0.7s;
+    animation-delay: 0.25s;
     animation-fill-mode: both;
     backface-visibility: hidden;
     opacity: 0;
