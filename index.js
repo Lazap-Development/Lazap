@@ -7,7 +7,6 @@ const fs = require('fs');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
-app.commandLine.appendSwitch('enable-transparent-visuals');
 
 app.on('ready', () => {
     const mainWindow = new electron.BrowserWindow({

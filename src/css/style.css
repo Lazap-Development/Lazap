@@ -304,7 +304,7 @@ bg {
 
 .side-tab:hover {
     cursor: pointer;
-    background-color: #843dff7e;
+    background-color: rgb(121, 52, 250);
     transition: background-color .2s;
     color: blue;
 }
