@@ -17,7 +17,6 @@ And if you did everything right, Lazap should start right up!
 # Help & Support
 We are here to help you if you get any problems when building Lazap, just join our [Discord](https://discord.gg/DashCruft)!<br>
 Want to help out insted of getting help? We love Pull Requests and Issue hunters! Open up a PR and fix some gears, we love the community's help 😀
-=======
 
 # License
 Lazap is licensed under the terms of [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://github.com/DashCruft-Nation/lazap/blob/main/LICENSE.md) ("CC-BY-NC-SA-4.0"). Commercial use is not allowed under this license. This includes any kind of revenue made with or based upon the software, even donations.
