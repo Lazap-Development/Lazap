@@ -2,11 +2,22 @@
 
 @keyframes fadeInUp {
     from {
-        transform: translate3d(0, -10px, 0)
+        transform: translate3d(0, -20px, 0)
     }
 
     to {
         transform: translate3d(0, 0, 0);
+        opacity: 1
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        transform: translate3d(0,10px,0)
+    }
+
+    to {
+        transform: translate3d(0,0,0);
         opacity: 1
     }
 }
@@ -301,7 +312,7 @@ bg {
 .category-name {
     font-family: 'Comfortaa', cursive;
     color: #6b6b6b;
-    margin-left: 25px;
+    margin-left: 30px;
     margin-bottom: 4px;
     font-size: 15px;
 }
@@ -326,6 +337,15 @@ bg {
     backface-visibility: hidden;
     opacity: 0;
     animation-name: fadeInUp;
+}
+
+.fadeInDown {
+    animation-duration: 0.7s;
+    animation-delay: 0.25s;
+    animation-fill-mode: both;
+    backface-visibility: hidden;
+    opacity: 0;
+    animation-name: fadeInDown;
 }
 
 .fadeInLeft {
