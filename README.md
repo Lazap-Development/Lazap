@@ -1,5 +1,5 @@
 # Lazap Launcher
-<img src = "https://img.shields.io/badge/Made%20Using-JavaScript%20%26%20%E2%9D%A4-green"> [<img src = "https://discordapp.com/api/guilds/644764850706448384/embed.png">](https://discord.gg/DashCruft)<br>
+<img src = "https://img.shields.io/badge/Made%20Using-JavaScript%20%26%20%E2%9D%A4-green"> [<img src = "https://discordapp.com/api/guilds/644764850706448384/embed.png">](https://discord.gg/DashCruft)<br><br>
 The new face of Open Source Game Launchers, Lazap unites all your games together in one place! Whether it be Linux, Windows or MacOS, we got you covered. Lazap can connect with other proprietary game launchers such as Rockstar Games Launcher, Epic Games Launcher and Steam.<br> 
 Our team of Developers make sure that Lazap is customizable for the user's need - meaning, custom JavaScript & CSS scripts, games outside the launchers we support and much more!
 
