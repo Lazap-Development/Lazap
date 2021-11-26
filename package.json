@@ -10,13 +10,17 @@
     "type": "git",
     "url": "git+https://github.com/DashCruft-Nation/Helium.git"
   },
-  "author": "DashCruft-Nation",
+  "author": "DashCruft",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/DashCruft-Nation/Helium/issues"
   },
   "homepage": "https://github.com/DashCruft-Nation/Helium#readme",
   "dependencies": {
-    "electron": "^16.0.0"
+    "bootstrap": "^5.1.3",
+    "bootstrap-icons": "^1.7.1",
+    "electron": "^16.0.0",
+    "open-term": "^2.0.4",
+    "v8-compile-cache": "^2.3.0"
   }
 }

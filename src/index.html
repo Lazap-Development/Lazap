@@ -6,31 +6,126 @@
 
 <head>
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script async type="module" src="js/listeners.js"></script>
+    <script async type="text/javascript" src="js/titlebar.js"></script>
+    <script async type="text/javascript" src="js/functions.js"></script>
 </head>
+
 <body>
 
-    <div class="bg" id="backgroundId"></div>
+    <bg></bg>
 
-    <div class="footer" id="footerId">
-        <div class="d-flex align-items-center justify-content-center" style=" height: 80px;">
-            <div class="row">
-                <div class="steam col px-5" id="steam">
-                    <img src="../img/steam.svg" width="40" height="40" />
-                </div>
-                <div class="epic-games col px-5" id="epic">
-                    <img src="../img/Epic-Games.svg" width="40" height="40" />
-                </div>
-                <div class="rockstar col px-5" id="rockstar">
-                    <img src="../img/rockstar-games.svg" width="40" height="40" />
-                </div>
+    <div class="titlebar">
+        <div class="titlebar-icons d-flex justify-content-end">
+            <img src="../img/circle.png" onclick="min_window()" class="titlebar-min mx-1" width="19" height="19">
+            <img src="../img/circle.png" onclick="max_window()" class="titlebar-max mx-1" width="19" height="19">
+            <img src="../img/circle.png" onclick="close_window()" class="titlebar-exit mx-1" width="19" height="19">
+        </div>
+    </div>
+
+    <div class="homebox" id="home">
+        <div class="children fadeInUp">
+            <img class="head-pic"
+                src="https://www.powerpyx.com/wp-content/uploads/gta-3-definitive-edition-wallpaper.jpg" >
+
+        </div>
+        <div class="children fadeInDown">
+            <div class="jump-back">
+                <p>Most Played Games</p>
+            </div>
+        </div>
+        <div class="children fadeInLeft">
+            <div class="online-friends">
+                <p>Online Friends</p>
             </div>
         </div>
     </div>
 
-    <script type="text/javascript" src="js/scripts.js"></script>
+    <div class="secondorybox" id="recent">
+        <p>Recently Played</p>
+    </div>
+
+    <div class="secondorybox" id="games">
+        <p>All Games</p>
+    </div>
+
+    <div class="secondorybox" id="favs">
+        <p>Favourites</p>
+    </div>
+
+    <div class="sexy-noise"></div>
+
+    <div class="leftbar">
+        <div class="d-flex justify-content-center">
+            <div>
+                <div class="user-pfp">
+                    <label for="file"></label>
+                    <input id="file" type="file" accept="image/*" onchange="loadFile(event)" />
+                    <img src="https://cdn.discordapp.com/avatars/633730629560958976/5c1abedd641bb81ecc381696950a0b16.png?size=1024"
+                        alt="Avatar" width="80" height="80" id="output">
+                </div>
+                <input class="username" id="text" type="text" value="DashCruft" spellcheck="false" maxlength="12" />
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center pb-2">
+            <div class="side-tab" id="home-btn">
+                <div id="indicator"></div>
+                <img src="../img/home.svg" height="25" width="25">
+                <p>Home</p>
+            </div>
+        </div>
+
+        <div class="category-name d-flex justify-content-left">
+            Games
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="side-tab" id="recent-btn">
+                <img id="recently-btn-img" src="../img/recent.svg" height="25" width="25">
+                <p>Recent</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="side-tab" id="games-btn">
+                <img id="games-btn-img" src="../img/games.svg" height="25" width="25">
+                <p>All Games</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center pb-2">
+            <div class="side-tab" id="favs-btn">
+                <img id="favs-btn-img" src="../img/favs.svg" height="25" width="25">
+                <p>Favourites</p>
+            </div>
+        </div>
+
+
+
+        <div class="category-name d-flex justify-content-left">
+            Friends
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="side-tab" id="messages-btn">
+                <img src="../img/messages.svg" height="25" width="25">
+                <p>Messages</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="side-tab" id="activity-btn">
+                <img src="../img/activity.svg" height="25" width="25">
+                <p>Activity</p>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center pb-5 mb-3">
+            <div class="side-tab" id="friends-btn">
+                <img src="../img/friends.svg" height="25" width="25">
+                <p>All Friends</p>
+            </div>
+        </div>
+    </div>
 </body>
 
 
