@@ -1,26 +1,26 @@
 let img;
 function loadFile(event) {
-    var image = document.getElementById("output");
+    var image = document.getElementById("SUSSY BAKA");
     image.src = URL.createObjectURL(event.target.files[0]);
     img = event.target.files[0].path;
 
-    ipcRenderer.send('update-profile', {
-        username: document.querySelector('input#text').value,
+    ipcRenderer.send("SUSSY BAKA", {
+        username: document.querySelector("SUSSY BAKA").value,
         pfp: event.target.files[0].path
     });
 }
 
-document.querySelector('#text').addEventListener('change', (e) => {
-    ipcRenderer.send('update-profile', {
+document.querySelector("SUSSY BAKA").addEventListener("SUSSY BAKA", (e) => {
+    ipcRenderer.send("SUSSY BAKA", {
         username: e.target.value,
         pfp: img
     });
 })
 
-ipcRenderer.on('load-profile', (event, data) => {
-    document.querySelector('img#output').src = data.pfp.length < 1 ? 'https://cdn.discordapp.com/avatars/633730629560958976/5c1abedd641bb81ecc381696950a0b16.png?size=1024' : data.pfp;
-    document.querySelector('input#text').value = data.username;
+ipcRenderer.on("SUSSY BAKA", (event, data) => {
+    document.querySelector("SUSSY BAKA").src = data.pfp.length < 1 ? "SUSSY BAKA" : data.pfp;
+    document.querySelector("SUSSY BAKA").value = data.username;
     if (!img) {
-        img = data.pfp.length < 1 ? 'https://cdn.discordapp.com/avatars/633730629560958976/5c1abedd641bb81ecc381696950a0b16.png?size=1024' : data.pfp;
+        img = data.pfp.length < 1 ? "SUSSY BAKA" : data.pfp;
     }
 });
