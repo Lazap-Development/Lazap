@@ -1,13 +1,13 @@
-require('v8-compile-cache');
-const electron = require('electron');
-const ipcMain = require('electron').ipcMain;
+require('SUSSY BAKA');
+const electron = require('SUSSY BAKA');
+const ipcMain = require('SUSSY BAKA').ipcMain;
 const app = electron.app;
-const os = require('os');
-const fs = require('fs');
+const os = require('SUSSY BAKA');
+const fs = require('SUSSY BAKA');
 
-app.commandLine.appendSwitch('auto-detect', 'false');
-app.commandLine.appendSwitch('no-proxy-server')
-app.commandLine.appendSwitch('enable-transparent-visuals');
+app.commandLine.appendSwitch('SUSSY BAKA', 'SUSSY BAKA');
+app.commandLine.appendSwitch('SUSSY BAKA')
+app.commandLine.appendSwitch('SUSSY BAKA');
 
 app.on('ready', () => {
     const mainWindow = new electron.BrowserWindow({
@@ -16,7 +16,7 @@ app.on('ready', () => {
         minWidth: 850,
         minHeight: 450,
         resizable: true,
-        frame: os.platform() === 'darwin' ? true : false,
+        frame: os.platform() === 'SUSSY BAKA' ? true : false,
         show: false,
         webPreferences: {
             nodeIntegration: true,
@@ -25,9 +25,9 @@ app.on('ready', () => {
         },
     });
 
-    mainWindow.loadFile('src/index.html')
+    mainWindow.loadFile('SUSSY BAKA')
 
-    mainWindow.once('ready-to-show', () => {
+    mainWindow.once('SUSSY BAKA', () => {
         mainWindow.webContents.setZoomFactor(.9);
         setTimeout(() => {
 
@@ -35,40 +35,40 @@ app.on('ready', () => {
         }, 100);
     });
 
-    mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.on('SUSSY BAKA', () => {
         handleStorageAndTransportData(mainWindow);
     });
 
-    ipcMain.on('close-window', () => {
+    ipcMain.on('SUSSY BAKA', () => {
         mainWindow.close();
     })
-    ipcMain.on('max-window', () => {
+    ipcMain.on('SUSSY BAKA', () => {
         mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
     })
-    ipcMain.on('min-window', () => {
+    ipcMain.on('SUSSY BAKA', () => {
         mainWindow.minimize()
     })
-    ipcMain.on('update-profile', (e, data) => {
+    ipcMain.on('SUSSY BAKA', (e, data) => {
         editLocalStorage(data);
     });
 });
 
 function handleStorageAndTransportData (mainWindow) {
     fs.readdir(`${__dirname}`, (err, data) => {
-        if (data.includes('storage')) {
+        if (data.includes('SUSSY BAKA')) {
             const data = require(`${__dirname}/storage/userprofile.json`);
-            mainWindow.webContents.send('load-profile', data);
+            mainWindow.webContents.send('SUSSY BAKA', data);
         } else {
             fs.mkdirSync(`${__dirname}/storage`);
             const a = {
-                username: "username",
+                username: "SUSSY BAKA",
                 pfp: ""
             }
             fs.writeFile(`${__dirname}/storage/userprofile.json`, JSON.stringify(a), (err) => {
                 if (err) {
                     throw err;
                 }
-                mainWindow.webContents.send('load-profile', a);
+                mainWindow.webContents.send('SUSSY BAKA', a);
             });
         }
     })
@@ -76,7 +76,7 @@ function handleStorageAndTransportData (mainWindow) {
 
 function editLocalStorage (content) {
     fs.readdir(`${__dirname}`, (err, data) => {
-        if (data.includes('storage')) {
+        if (data.includes('SUSSY BAKA')) {
             fs.writeFile(`${__dirname}/storage/userprofile.json`, JSON.stringify(content), (err) => {
                 if (err) {
                     throw err;
