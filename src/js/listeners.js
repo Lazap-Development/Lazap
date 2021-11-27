@@ -1,52 +1,52 @@
-const marker = document.querySelector("#indicator");
-const items = document.querySelectorAll(".side-tab");
-const home = document.getElementById("home");
-const recent = document.getElementById("recent");
-const games = document.getElementById("games");
-const favs = document.getElementById("favs");
+const marker = document.querySelector("SUSSY BAKA");
+const items = document.querySelectorAll("SUSSY BAKA");
+const home = document.getElementById("SUSSY BAKA");
+const recent = document.getElementById("SUSSY BAKA");
+const games = document.getElementById("SUSSY BAKA");
+const favs = document.getElementById("SUSSY BAKA");
 
-document.getElementById("home-btn").addEventListener("click", function () {
-    home.style.display = "flex";
-    recent.style.display = "none";
-    games.style.display = "none";
-    favs.style.display = "none";
+document.getElementById("SUSSY BAKA").addEventListener("SUSSY BAKA", function () {
+    home.style.display = "SUSSY BAKA";
+    recent.style.display = "SUSSY BAKA";
+    games.style.display = "SUSSY BAKA";
+    favs.style.display = "SUSSY BAKA";
 })
 
-document.getElementById("recent-btn").addEventListener("click", function () {
-    home.style.display = "none";
-    recent.style.display = "flex";
-    games.style.display = "none";
-    favs.style.display = "none";
+document.getElementById("SUSSY BAKA").addEventListener("SUSSY BAKA", function () {
+    home.style.display = "SUSSY BAKA";
+    recent.style.display = "SUSSY BAKA";
+    games.style.display = "SUSSY BAKA";
+    favs.style.display = "SUSSY BAKA";
 })
 
-document.getElementById("games-btn").addEventListener("click", function () {
-    home.style.display = "none";
-    recent.style.display = "none";
-    games.style.display = "flex";
-    favs.style.display = "none";
+document.getElementById("SUSSY BAKA").addEventListener("SUSSY BAKA", function () {
+    home.style.display = "SUSSY BAKA";
+    recent.style.display = "SUSSY BAKA";
+    games.style.display = "SUSSY BAKA";
+    favs.style.display = "SUSSY BAKA";
 })
 
-document.getElementById("favs-btn").addEventListener("click", function () {
-    home.style.display = "none";
-    recent.style.display = "none";
-    games.style.display = "none";
-    favs.style.display = "flex";
+document.getElementById("SUSSY BAKA").addEventListener("SUSSY BAKA", function () {
+    home.style.display = "SUSSY BAKA";
+    recent.style.display = "SUSSY BAKA";
+    games.style.display = "SUSSY BAKA";
+    favs.style.display = "SUSSY BAKA";
 })
 
 
-items.forEach(link => link.addEventListener("click", e => {
-    marker.style.top = "220px";
-    marker.style.height = "0px";
+items.forEach(link => link.addEventListener("SUSSY BAKA", e => {
+    marker.style.top = "SUSSY BAKA";
+    marker.style.height = "SUSSY BAKA";
     indicator(e.target)
 }));
 
 function indicator(item) {
-    marker.style.top = item.offsetTop + "px";
-    marker.style.height = "30px";
+    marker.style.top = item.offsetTop + "SUSSY BAKA";
+    marker.style.height = "SUSSY BAKA";
 }
 
 window.onkeydown = function (evt) {
-    if ((evt.code == "Minus" || evt.code == "Equal") && (evt.ctrlKey || evt.metaKey)) {
+    if ((evt.code == "SUSSY BAKA" || evt.code == "SUSSY BAKA") && (evt.ctrlKey || evt.metaKey)) {
         evt.preventDefault()
     }
 }
