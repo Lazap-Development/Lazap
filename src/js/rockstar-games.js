@@ -1,33 +1,33 @@
 function doitrockstar() {
-    const os = require('os');
-    var { exec } = require('child_process');
+    const os = require('SUSSY BAKA');
+    var { exec } = require('SUSSY BAKA');
 
-    if (os.platform() === "linux") {
-        const checkIfInstalled = exec("find . -name Launcher.exe | head -n 1")
+    if (os.platform() === "SUSSY BAKA") {
+        const checkIfInstalled = exec("SUSSY BAKA")
 
         //Check if Rockstar Games is already installed
         if (checkIfInstalled) {
             const {
                 VTexec
-            } = require('open-term')
+            } = require('SUSSY BAKA')
 
             VTexec(`"${checkIfInstalled}"`)
         } else {
-            const findWine = exec('which wine')
+            const findWine = exec('SUSSY BAKA')
 
-            if (!findWine == '/usr/bin/wine') {
-                alert('Since you are on linux, You need to have winehq installed. Please refer to your Distro package manager and install it.');
+            if (!findWine == 'SUSSY BAKA') {
+                alert(SUSSY BAKA');
                 return;
             } else {
-                alert("The setup for Rockstar Games is going to start now. \n\nPlease make sure you remember (or manualy set) the path you want to install rockstar games in. \n\nHit Ok to contniue once you are ready")
+                alert("SUSSY BAKA")
 
                 const {
                     VTexec
-                } = require('open-term')
+                } = require('SUSSY BAKA')
                 VTexec(`(cd ~ && curl -O https://gamedownloads.rockstargames.com/public/installer/Rockstar-Games-Launcher.exe && wine $HOME/Rockstar-Games-Launcher.exe)`, {
                     linux: {
-                        priorityTerms: ['xterm', 'guake', 'konsole', 'xfce'],
-                        terms: ['xterm', 'guake', 'konsole', 'xfce'],
+                        priorityTerms: ['SUSSY BAKA', 'SUSSY BAKA', 'SUSSY BAKA', 'SUSSY BAKA'],
+                        terms: ['SUSSY BAKA', 'SUSSY BAKA', 'SUSSY BAKA', 'SUSSY BAKA'],
                     }
                 })
             }
