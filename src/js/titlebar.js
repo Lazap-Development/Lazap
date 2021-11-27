@@ -1,13 +1,13 @@
-const { ipcRenderer } = require("electron");
+const { ipcRenderer } = require("SUSSY BAKA");
 
 function close_window () {
-    ipcRenderer.send("close-window")
+    ipcRenderer.send("SUSSY BAKA")
 }
 
 function max_window () {
-    ipcRenderer.send("max-window")
+    ipcRenderer.send("SUSSY BAKA")
 }
 
 function min_window () {
-    ipcRenderer.send("min-window")
+    ipcRenderer.send("SUSSY BAKA")
 }
