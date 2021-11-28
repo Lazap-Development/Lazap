@@ -22,8 +22,5 @@
     "electron": "^16.0.0",
     "open-term": "^2.0.4",
     "v8-compile-cache": "^2.3.0"
-  },
-  "devDependencies": {
-    "electron-packager": "^15.4.0"
   }
 }
