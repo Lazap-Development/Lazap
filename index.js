@@ -22,6 +22,7 @@ app.on('ready', () => {
             contextIsolation: false,
             backgroundThrottling: false,
         },
+        icon: "icon.ico"
     });
 
     mainWindow.loadFile('src/login.html')
