@@ -7,7 +7,6 @@ const fs = require('fs');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
-app.commandLine.appendSwitch('enable-transparent-visuals');
 
 app.on('ready', () => {
     const mainWindow = new electron.BrowserWindow({
@@ -25,7 +24,7 @@ app.on('ready', () => {
         },
     });
 
-    mainWindow.loadFile('src/index.html')
+    mainWindow.loadFile('src/login.html')
 
     mainWindow.once('ready-to-show', () => {
         mainWindow.webContents.setZoomFactor(.9);
@@ -39,6 +38,10 @@ app.on('ready', () => {
         handleStorageAndTransportData(mainWindow);
     });
 
+    ipcMain.on('load-main', () => {
+        mainWindow.loadFile('src/index.html')
+    })
+    
     ipcMain.on('close-window', () => {
         mainWindow.close();
     })

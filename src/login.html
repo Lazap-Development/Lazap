@@ -2,23 +2,64 @@
 <html lang="en">
 <meta charset="UTF-8">
 
-<title>Lazap</title>
-
 <head>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
-
-    <script async type="module" src="js/listeners.js"></script>
-    <script async type="text/javascript" src="js/titlebar.js"></script>
-    <script async type="text/javascript" src="js/functions.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <script async type="module" src="js/login/listener.js"></script>
+    <script async type="text/javascript" src="js/login/ipc.js"></script>
 </head>
 
 <body>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <div class="leftsection">
+                <h1>Create Account</h1>
+                <input type="text" placeholder="Name" />
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <button>Sign Up</button>
+                <div onclick="load_main()">
+                    <button class="ghost2">Ignore & Continue</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-container sign-in-container">
+            <div class="leftsection">
+                <h1>Sign in</h1>
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <a>Forgot your password?</a>
+                <button>Sign In</button>
 
-    <bg></bg>
-
+                <div onclick="load_main()">
+                    <button class="ghost2">Ignore & Continue</button>
+                </div>
+            </div>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1 class="mt-4">Dear, User!</h1>
+                    <p>
+                        We believe and respect complete privacy. We do not sell your data!
+                        It is completely your choice to sign up or login. <br><br>
+                        If you do not login or sign up, You will not have access to some integerated features in this launcher. <br><br><br>
+                        - Lazap Development Team
+                    </p>
+                    <button class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1 class="mt-4">Welcome Back! </h1>
+                    <p>
+                        We believe and respect complete privacy. We do not sell your data!
+                        It is completely your choice to sign up or login. <br><br>
+                        If you do not login or sign up, You will not have access to some integerated features in this launcher. <br><br><br>
+                        - Lazap Development Team
+                    </p>
+                    <button class="ghost" id="signUp">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 
