@@ -1,5 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
 
+@keyframes fadeInUp {
+    from {
+        transform: translate3d(0, -20px, 0)
+    }
+
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1
+    }
+}
+
 * {
     box-sizing: border-box;
     overflow: hidden;
@@ -233,3 +244,11 @@ input:focus {
     margin-top: 20px !important;
 }
   
+.fadeInUp {
+    animation-duration: 0.7s;
+    animation-delay: 0.2s;
+    animation-fill-mode: both;
+    backface-visibility: hidden;
+    opacity: 0;
+    animation-name: fadeInUp;
+}
