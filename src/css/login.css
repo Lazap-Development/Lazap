@@ -18,6 +18,9 @@
 
 body {
     background: #1b1d22;
+}
+
+.bg {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -25,6 +28,57 @@ body {
     font-family: 'Comfortaa', cursive;
     height: 100vh;
     margin: -20px 0 50px;
+}
+
+.titlebar {
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+    user-select: none;
+
+    border-radius: 10px;
+    background-color: rgba(43, 43, 43);
+    height: 35px;
+    width: 100%;
+    flex: auto;
+}
+
+.titlebar-icons {
+
+    margin-right: 8px !important;
+    margin-top: 8px !important;
+
+    display: flex !important;
+    justify-content: flex-end;
+}
+
+.titlebar-exit {
+    -webkit-app-region: no-drag;
+    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
+    display: block;
+}
+
+.titlebar-exit:hover {
+    filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg) brightness(92%) contrast(94%);
+}
+
+.titlebar-max {
+    -webkit-app-region: no-drag;
+    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
+    display: block;
+}
+
+.titlebar-max:hover {
+    filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg) brightness(102%) contrast(110%);
+}
+
+.titlebar-min {
+    -webkit-app-region: no-drag;
+    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
+    display: block;
+}
+
+.titlebar-min:hover {
+    filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg) brightness(92%) contrast(97%);
 }
 
 h1 {
@@ -116,7 +170,7 @@ input:focus {
 }
 
 .container {
-    margin-top: 40px;
+    margin-bottom: 20px;
     -moz-border-radius: 20px;
     -webkit-border-radius: 20px;
     border-radius: 20px;
@@ -243,7 +297,12 @@ input:focus {
 .mt-4 {
     margin-top: 20px !important;
 }
-  
+
+.mx-1 {
+    margin-right: 0.25rem !important;
+  margin-left: 0.25rem !important;
+}
+
 .fadeInUp {
     animation-duration: 0.7s;
     animation-delay: 0.2s;
