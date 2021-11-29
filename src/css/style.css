@@ -2,7 +2,7 @@
 
 @keyframes fadeInUp {
     from {
-        transform: translate3d(0, -20px, 0)
+        transform: translate3d(0, -10px, 0)
     }
 
     to {
@@ -24,18 +24,18 @@
 
 @keyframes fadeInLeft {
     0% {
-        opacity: 0;
-        transform: translateX(20px);
+        transform: translateX(20px, 0);
     }
 
     100% {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateX(0, 0);
     }
 }
 
 body {
-    background: #1b1d22;
+    background: #1b1d22; 
+    overflow: hidden;
 }
 
 .bg {
@@ -209,20 +209,21 @@ body {
 .leftbar {
     background-color: #202126;
     border-radius: 15px;
-    position: relative;
-    height: 100%;
+    position: absolute;
+    height: calc(100% - 71px);
+    max-height: 100%;
     width: 270px;
     top: 25px;
-    margin-top: 8px;
-    margin-bottom: 65px;
+    margin-top: 30px;
     margin-right: 100%;
-    margin-left: 280px;
+    margin-left: 300px;
     text-align: center;
+    overflow-y: auto;
 }
 
 .user-pfp {
     position: relative;
-    margin-top: 55px;
+    margin-top: 50px;
     width: 80px;
     margin-left: auto;
     margin-right: auto;
@@ -353,11 +354,21 @@ body {
 .d-flex {
     display:flex !important;
 }
+
 .justify-content-start {
     justify-content:flex-start !important;
 }
+
 .justify-content-center {
     justify-content:center !important;
+}
+
+.pb-2 {
+    padding-bottom:.4rem!important
+}
+
+.pb-5 {
+    padding-bottom:2rem!important
 }
 
 ::-webkit-scrollbar {

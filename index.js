@@ -12,8 +12,8 @@ app.on('ready', () => {
     const mainWindow = new electron.BrowserWindow({
         width: 1150,
         height: 630,
-        minWidth: 850,
-        minHeight: 450,
+        minWidth: 950,
+        minHeight: 500,
         resizable: true,
         frame: os.platform() === 'darwin' ? true : false,
         show: false,
