@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap');
+@font-face {
+    font-family: Comfortaa;
+    src: url('../../fonts/Comfortaa-SemiBold.ttf') format('truetype');
+}
 
 @keyframes fadeInUp {
     from {
@@ -25,7 +28,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    font-family: 'Comfortaa', cursive;
+    font-family: Comfortaa;
     height: 100vh;
     margin: -20px 0 50px;
 }
@@ -161,7 +164,7 @@ input {
     padding: 12px 15px;
     margin: 8px 0;
     width: 100%;
-    font-family: 'Comfortaa', cursive;
+    font-family: Comfortaa;
 }
 
 

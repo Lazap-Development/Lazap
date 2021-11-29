@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
+@font-face {
+    font-family: Comfortaa;
+    src: url('../../fonts/Comfortaa-Medium.ttf') format('truetype');
+}
 
 @keyframes fadeInUp {
     from {
@@ -36,6 +39,7 @@
 body {
     background: #1b1d22; 
     overflow: hidden;
+    font-family: Comfortaa;
 }
 
 .bg {
@@ -43,7 +47,6 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    font-family: 'Comfortaa', cursive;
     height: 100vh;
     margin: -20px 0 50px;
 }
@@ -135,7 +138,6 @@ body {
 }
 
 .secondorybox p {
-    font-family: 'Comfortaa', cursive;
     color: rgb(197, 197, 197);
     margin-left: 18px;
     margin-top: 18px;
@@ -182,7 +184,6 @@ body {
 }
 
 .jump-back p {
-    font-family: 'Comfortaa', cursive;
     color: rgb(197, 197, 197);
     margin-left: 18px;
     margin-top: 18px;
@@ -198,7 +199,6 @@ body {
 }
 
 .online-friends p {
-    font-family: 'Comfortaa', cursive;
     color: rgb(197, 197, 197);
     margin-left: 18px;
     margin-top: 18px;
@@ -258,11 +258,11 @@ body {
 }
 
 .username {
-    font-family: 'Comfortaa', cursive;
     margin-top: 10px;
     margin-bottom: 40px;
     text-align: center;
     font-size: 22px;
+    font-family: Comfortaa;
     color: #b9b9b9;
     background-color: transparent;
     border: transparent;
@@ -297,15 +297,13 @@ body {
 
 .side-tab-text {
     color: #dadada;
-    font-family: 'Comfortaa', cursive;
     font-size: 18px;
     margin-left: 20px;
     padding-top: 12px;
 }
 
 .category-name {
-    font-family: 'Comfortaa', cursive;
-    color: #6b6b6b;
+    color: #7a7a7a;
     margin-left: 30px;
     margin-bottom: 4px;
     font-size: 15px;
