@@ -24,6 +24,9 @@ document.getElementById("games-btn").addEventListener("click", function () {
     recent.style.display = "none";
     games.style.display = "flex";
     favs.style.display = "none";
+
+    document.querySelector('div#games')
+    require('./js/launchers/find-games.js').loadGames();
 })
 
 document.getElementById("favs-btn").addEventListener("click", function () {
