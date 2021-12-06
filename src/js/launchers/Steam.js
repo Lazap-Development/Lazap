@@ -23,7 +23,6 @@ async function getSteamLocation(os = process.platform, checkForSteam = true) {
 
 		registry_res = stdout; // \r\nHKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Valve\\Steam\r\n    InstallPath    REG_SZ    C:\\Program Files (x86)\\Steam\r\n\r\n
 	}
-	console.log(registry_res)
 	launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 	if (checkForSteam && !isLauncherInstalled(launcher_location)) return false;
 	return launcher_location;

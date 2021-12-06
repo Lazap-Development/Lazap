@@ -25,6 +25,7 @@ document.getElementById("games-btn").addEventListener("click", function () {
     games.style.display = "flex";
     favs.style.display = "none";
 
+    document.querySelector('div#games')
     require('./js/launchers/find-games.js').loadGames();
 })
 

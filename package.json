@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/DashCruft-Nation/lazap#readme",
   "dependencies": {
-    "bootstrap": "^5.1.3",
     "bootstrap-icons": "^1.7.1",
     "electron": "^16.0.0",
     "open-term": "^2.0.4",
