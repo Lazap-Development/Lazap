@@ -36,7 +36,7 @@ async function getInstalledGames() {
 	const path = await getSteamLocation()
 	if (!path) return [];
 	const acf_basePath = `${path}\\steamapps`;
-	const acf_files = fs.readdirSync(acf_basePath).filter(x => x.split('.')[1].toLowerCase() === 'acf').map(x => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
+	const acf_files = fs.readdirSync(acf_basePath).filter(x => x.split('.')[1] === 'acf').map(x => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
 
 	return acf_files;
 }

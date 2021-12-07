@@ -11,17 +11,24 @@ exec = promisify(exec);
 async function getInstalledGames(os = process.platform) {
     let launcher_location;
     if (os === 'win32') {
-        const { stdout, err } = await exec('Reg query HKEY_CLASSES_ROOT\\riotclient\\DefaultIcon');
-        if (err) {
+        let { stdout, error } = await exec('Reg query HKEY_CLASSES_ROOT\\riotclient\\DefaultIcon').catch((e) => {
+            launcher_location = null;
+            return { error: e };
+        });
+
+        if (!stdout) return;
+
+        if (error) {
             console.error('There was an error while trying to find Riot Games: \n' + require('util').inspect(err, { depth: 1 }));
             alert('There was an error while finding Riot Games.');
+            return [];
         }
         launcher_location = stdout.split('"')[1];
     }
     return [await parseGameObject(launcher_location)];
 }
 
-async function parseGameObject(path){
+async function parseGameObject(path) {
     const Executable = 'RiotClientServices.exe';
     const Location = path.slice(0, -22);
     const Args = ["--launch-product=valorant", "--launch-patchline=live"];
