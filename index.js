@@ -4,6 +4,7 @@ const ipcMain = require('electron').ipcMain;
 const app = electron.app;
 const os = require('os');
 const fs = require('fs');
+const axios = require('axios').default;
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
@@ -55,6 +56,9 @@ app.on('ready', () => {
     ipcMain.on('update-profile', (e, data) => {
         editLocalStorage(data);
     });
+    ipcMain.on('signup-request', async (e, data) => {
+        mainWindow.webContents.send('singup-response', await handleSingup(data));
+    });
 });
 
 function handleStorageAndTransportData (mainWindow) {
@@ -95,4 +99,12 @@ function editLocalStorage (content) {
             });
         }
     });
+}
+
+async function handleSingup (data) {
+    let deniedCode;
+    const res = await axios.post('http://localhost:3000/accounts/add-account', data).catch(e => {
+        deniedCode = e.response.status
+    });
+    return res ? res.status : deniedCode;
 }
