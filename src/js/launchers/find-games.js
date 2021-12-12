@@ -5,8 +5,8 @@ const EpicGames = require(__dirname + '\\EpicGames.js');
 const RiotGames = require(__dirname + '\\RiotGames.js');
 
 async function loadGames() {
-	const gamesElement = document.querySelector("div#games");
-	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames(), ...(await RiotGames.getInstalledGames())];
+	const gamesElement = document.querySelector("div#gamesList");
+	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames()];
 	const gamesNotFound = document.createElement('p')
 	gamesNotFound.textContent = 'Unable to detect games in your computer.';
 
@@ -19,17 +19,24 @@ async function loadGames() {
 	games.forEach((game) => {
 		const gameElement = document.createElement('div');
 		gameElement.id = 'game-div-' + game.DisplayName.replace(' ', '_');
-		gameElement.textContent = game.DisplayName;
+		gameElement.className += "gamebox";
+		gameElement.style.diplay = "table"
 		gamesElement.appendChild(gameElement);
+		
+		const gameBanner = document.createElement('img');
+		gameBanner.setAttribute("src", `https://media-rockstargames-com.akamaized.net/tina-uploads/posts/51ko98182a41o9/ab7005bb38c318984e3003cdef14fee88ef1c014.jpg`);
+		gameBanner.className += "head-pic";
+		gameElement.appendChild(gameBanner);
 
-		const playbtn = document.createElement('button');
+		const gameText = document.createElement('span');
+		gameText.innerHTML = game.DisplayName.slice(0, 20);
+		gameElement.appendChild(gameText);
 
-		playbtn.addEventListener("click", () => {
+		gameBanner.addEventListener("click", () => {
 			runCommand(`${game.Location}\\${game.Executable}`, game.Args);
 		});
 
-		playbtn.textContent = 'Play';
-		gameElement.appendChild(playbtn);
+
 	});
 }
 
@@ -39,7 +46,6 @@ async function runCommand(command, args) {
 	let res = await promisify(execFile)(command, args);
 	return res;
 }
-
 module.exports = {
 	loadGames,
 };
