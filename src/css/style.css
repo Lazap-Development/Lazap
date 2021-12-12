@@ -233,17 +233,7 @@ body {
     display: none;
 }
 
-.user-pfp img {
-    border-radius: 20%;
-    image-rendering: auto;
-    object-fit: cover;
-    transition: border-radius .2s ease-in-out;
-    box-shadow:
-        0px 0px 2.7px rgba(0, 0, 0, 0.4),
-        0px 0px 6.9px rgba(0, 0, 0, 0.276),
-        0px 0px 14.2px rgba(0, 0, 0, 0.223),
-        0px 0px 29.2px rgba(0, 0, 0, 0.177);
-}
+
 
 .user-pfp:hover img {
     transition: border-radius .2s ease-in-out;
@@ -322,6 +312,41 @@ body {
     display: inline;
 }
 
+#gamesList {
+    position: relative;
+    margin-left: 50px;
+}
+
+.gamebox {
+    width: 270px;
+    height: 170px;
+    margin-right: 32px;
+    margin-top: 30px;
+    text-align: center;
+    display: inline-block;
+  
+}
+.gamebox img {
+    border-radius: 6%;
+    image-rendering: auto;
+    object-fit: cover;
+    -webkit-mask-image:-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+}
+.gamebox img:hover {
+    cursor: pointer;
+}
+
+.gamebox span {
+    position: absolute;
+    margin-top: -28px;
+    margin-left: 10px;
+    size: 20px;
+    color: #d3d3d3;
+    display: block;
+}
+
+
 .fadeInUp {
     animation-duration: 0.7s;
     animation-delay: 0.25s;
@@ -333,7 +358,7 @@ body {
 
 .fadeInDown {
     animation-duration: 0.7s;
-    animation-delay: 0.25s;
+    animation-delay: 0.2s;
     animation-fill-mode: both;
     backface-visibility: hidden;
     opacity: 0;
