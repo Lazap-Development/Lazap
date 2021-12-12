@@ -57,7 +57,10 @@ app.on('ready', () => {
         editLocalStorage(data);
     });
     ipcMain.on('signup-request', async (e, data) => {
-        mainWindow.webContents.send('singup-response', await handleSingup(data));
+        mainWindow.webContents.send('signup-response', await handleSignup(data));
+    });
+    ipcMain.on('signin-request', async (e, data) => {
+        mainWindow.webContents.send('signin-response', await handleSignin(data));
     });
 });
 
@@ -101,10 +104,37 @@ function editLocalStorage (content) {
     });
 }
 
-async function handleSingup (data) {
+async function handleSignup (data) {
     let deniedCode;
     const res = await axios.post('http://localhost:3000/accounts/add-account', data).catch(e => {
         deniedCode = e.response.status
     });
     return res ? res.status : deniedCode;
+}
+
+async function handleSignin (data) {
+    let deniedCode;
+    const res = await axios.post('http://localhost:3000/accounts/login', data).catch(e => {
+        deniedCode = e.response.status;
+    });
+
+    if (res) {
+        // console.log(res.data);
+        fs.readdir(`${__dirname}`, (err, data) => {
+            if (data.includes('storage')) {
+                const json = require(`${__dirname}/storage/userprofile.json`);
+                json['token'] = res.data;
+                editLocalStorage(JSON.stringify(json));
+            } else {
+                editLocalStorage(JSON.stringify({
+                    token: res.data
+                }));
+            }
+        });
+
+        return res.status;
+    } else {
+        return deniedCode;
+    }
+
 }
