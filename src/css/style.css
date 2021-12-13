@@ -233,7 +233,10 @@ body {
     display: none;
 }
 
-
+.user-pfp img {
+    transition: border-radius .2s ease-in-out;
+    border-radius: 17%;
+}
 
 .user-pfp:hover img {
     transition: border-radius .2s ease-in-out;
