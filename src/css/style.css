@@ -224,7 +224,7 @@ body {
 .user-pfp {
     position: relative;
     margin-top: 50px;
-    width: 80px;
+    width: 100px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -236,6 +236,8 @@ body {
 .user-pfp img {
     transition: border-radius .2s ease-in-out;
     border-radius: 17%;
+    image-rendering: auto;
+    object-fit: cover;
 }
 
 .user-pfp:hover img {
