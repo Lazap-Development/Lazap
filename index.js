@@ -16,6 +16,7 @@ app.on('ready', () => {
         resizable: true,
         frame: false,
         show: false,
+        title: "Lazap",
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,

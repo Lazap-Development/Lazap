@@ -7,11 +7,16 @@ const RiotGames = require('./RiotGames.js');
 async function loadGames() {
 	const gamesElement = document.querySelector("div#gamesList");
 	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames()];
-	const gamesNotFound = document.createElement('p')
-	gamesNotFound.textContent = 'Unable to detect games in your computer.';
 
 	if (games.length == 0) {
-		return gamesElement.appendChild(gamesNotFound);
+		var exists = document.getElementsByClassName('notFound')
+
+		if (exists.length == 0) {
+			const gamesNotFound = document.createElement('div')
+			gamesNotFound.className = 'notFound';
+			gamesNotFound.textContent = 'Unable to detect games in your computer!';
+			return gamesElement.appendChild(gamesNotFound);
+		}
 	}
 
 	if (gamesElement.children.length > 1) return;

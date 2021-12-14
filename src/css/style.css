@@ -399,6 +399,15 @@ body {
     padding-bottom:2rem!important
 }
 
+.notFound {
+    position: relative;
+    text-align: center;
+    margin-top: 25%;
+    color: rgb(197, 197, 197);
+
+    font-size: 22px;
+}
+
 ::-webkit-scrollbar {
     width: 0;
     background: transparent;
