@@ -1,14 +1,14 @@
-const marker = document.querySelector("#indicator");
+const marker = document.getElementById("indicator");
 const items = document.querySelectorAll(".side-tab");
-const home = document.querySelector("#home");
-const recent = document.querySelector("#recent");
-const games = document.querySelector("#games");
-const favs = document.querySelector("#favs");
-const friends = document.querySelector("#friends");
-const messages = document.querySelector("#messages");
-const activity = document.querySelector("#activity");
+const home = document.getElementById("home");
+const recent = document.getElementById("recent");
+const games = document.getElementById("games");
+const favs = document.getElementById("favs");
+const friends = document.getElementById("friends");
+const messages = document.getElementById("messages");
+const activity = document.getElementById("activity");
 
-document.querySelector("#home-btn").addEventListener("click", function () {
+document.getElementById("home-btn").addEventListener("click", function () {
     home.style.display = "flex";
     recent.style.display = "none";
     games.style.display = "none";
@@ -18,7 +18,7 @@ document.querySelector("#home-btn").addEventListener("click", function () {
     activity.style.display = "none";
 })
 
-document.querySelector("#recent-btn").addEventListener("click", function () {
+document.getElementById("recent-btn").addEventListener("click", function () {
     home.style.display = "none";
     recent.style.display = "flex";
     games.style.display = "none";
@@ -28,7 +28,7 @@ document.querySelector("#recent-btn").addEventListener("click", function () {
     activity.style.display = "none";
 })
 
-document.querySelector("#games-btn").addEventListener("click", function () {
+document.getElementById("games-btn").addEventListener("click", function () {
     home.style.display = "none";
     recent.style.display = "none";
     games.style.display = "flex";
@@ -41,7 +41,7 @@ document.querySelector("#games-btn").addEventListener("click", function () {
     require('./js/launchers/find-games.js').loadGames();
 })
 
-document.querySelector("#favs-btn").addEventListener("click", function () {
+document.getElementById("favs-btn").addEventListener("click", function () {
     home.style.display = "none";
     recent.style.display = "none";
     games.style.display = "none";
@@ -51,7 +51,7 @@ document.querySelector("#favs-btn").addEventListener("click", function () {
     friends.style.display = "none";
 })
 
-document.querySelector("#messages-btn").addEventListener("click", function () {
+document.getElementById("messages-btn").addEventListener("click", function () {
     home.style.display = "none";
     recent.style.display = "none";
     games.style.display = "none";
@@ -61,7 +61,7 @@ document.querySelector("#messages-btn").addEventListener("click", function () {
     friends.style.display = "none";
 })
 
-document.querySelector("#activity-btn").addEventListener("click", function () {
+document.getElementById("activity-btn").addEventListener("click", function () {
     home.style.display = "none";
     recent.style.display = "none";
     games.style.display = "none";
@@ -71,7 +71,7 @@ document.querySelector("#activity-btn").addEventListener("click", function () {
     friends.style.display = "none";
 })
 
-document.querySelector("#friends-btn").addEventListener("click", function () {
+document.getElementById("friends-btn").addEventListener("click", function () {
     home.style.display = "none";
     recent.style.display = "none";
     games.style.display = "none";

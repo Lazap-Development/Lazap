@@ -1,7 +1,7 @@
 let img;
 
 function loadFile(event) {
-    var image = document.querySelector("#output");
+    var image = document.getElementById("output");
     image.src = URL.createObjectURL(event.target.files[0]);
     img = event.target.files[0].path;
 
@@ -11,7 +11,7 @@ function loadFile(event) {
     });
 }
 
-document.querySelector('#text').addEventListener('change', (e) => {
+document.getElementById('text').addEventListener('change', (e) => {
     ipcRenderer.send('update-profile', {
         username: e.target.value,
         pfp: img
