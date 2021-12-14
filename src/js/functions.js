@@ -1,7 +1,7 @@
 let img;
 
 function loadFile(event) {
-    var image = document.getElementById("output");
+    var image = document.querySelector("#output");
     image.src = URL.createObjectURL(event.target.files[0]);
     img = event.target.files[0].path;
 
