@@ -27,7 +27,6 @@ async function getSteamLocation(os = process.platform, checkForSteam = true) {
 		
 		if (error) {
 			console.error(`Error while loading Steam Games! \n${require('util').inspect(error, { depth: 1 })}`)
-			return alert(`An error occured while loading Steam Games!`);
 		} else {
 			registry_res = stdout; // \r\nHKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Valve\\Steam\r\n    InstallPath    REG_SZ    C:\\Program Files (x86)\\Steam\r\n\r\n
 			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();

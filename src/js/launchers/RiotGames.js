@@ -20,7 +20,6 @@ async function getInstalledGames(os = process.platform) {
 
         if (error) {
             console.error('There was an error while trying to find Riot Games: \n' + require('util').inspect(err, { depth: 1 }));
-            alert('There was an error while finding Riot Games.');
             return [];
         }
         launcher_location = stdout.split('"')[1];
