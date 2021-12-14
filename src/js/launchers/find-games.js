@@ -1,8 +1,8 @@
 console.log('OS:', process.platform, 'Arch:', process.arch);
 
-const Steam = require(__dirname + '\\Steam.js');
-const EpicGames = require(__dirname + '\\EpicGames.js');
-const RiotGames = require(__dirname + '\\RiotGames.js');
+const Steam = require('./Steam.js');
+const EpicGames = require('./EpicGames.js');
+const RiotGames = require('./RiotGames.js');
 
 async function loadGames() {
 	const gamesElement = document.querySelector("div#gamesList");
