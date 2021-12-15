@@ -1,4 +1,4 @@
-const marker = document.querySelector("#indicator");
+const marker = document.getElementById("indicator");
 const items = document.querySelectorAll(".side-tab");
 const home = document.getElementById("home");
 const recent = document.getElementById("recent");

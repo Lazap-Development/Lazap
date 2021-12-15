@@ -88,6 +88,7 @@ h1 {
     font-weight: bold;
     margin: 0;
     margin-bottom: 20px;
+    margin-top: 10px
 }
 
 h2 {
@@ -110,38 +111,47 @@ span {
 
 a {
     color: #333;
-    font-size: 14px;
+    font-size: 15px;
     text-decoration: none;
-    margin: 15px;
-    margin-bottom: 20px;
+    margin: 25px;
+    margin-bottom: 11px;
 }
 
 button {
-    margin-top: 20px;
+    margin-top: 15px;
     border-radius: 10px;
     border: none;
     background-color: #7F00FF;
     color: #FFFFFF;
     font-size: 12px;
-    font-weight: bold;
+
     padding: 12px 45px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    transition: transform 80ms ease-in;
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
+    font-weight: bold;
+    font-family: Comfortaa;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
 
 button.ghost {
     background-color: transparent;
     border-color: #FFFFFF;
-    margin-top: 2px;
     font-size: 14px;
 }
 
 button.ghost2 {
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 18px;
     color: black;
+    font-weight: bolder;
     background-color: transparent;
     border-color: #FFFFFF;
 }

@@ -12,7 +12,7 @@ function loadFile(event) {
     });
 }
 
-document.querySelector('#text').addEventListener('change', (e) => {
+document.getElementById('text').addEventListener('change', (e) => {
     ipcRenderer.send('update-profile', {
         username: e.target.value,
         pfp: img

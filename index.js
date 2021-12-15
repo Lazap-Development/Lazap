@@ -2,29 +2,29 @@ require('v8-compile-cache');
 const electron = require('electron');
 const ipcMain = require('electron').ipcMain;
 const app = electron.app;
-const os = require('os');
 const fs = require('fs');
 const axios = require('axios').default;
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
 
-app.on('ready', async () => {
-	const mainWindow = new electron.BrowserWindow({
-		width: 1150,
-		height: 630,
-		minWidth: 950,
-		minHeight: 500,
-		resizable: true,
-		frame: os.platform() === 'darwin' ? true : false,
-		show: false,
-		webPreferences: {
-			nodeIntegration: true,
-			contextIsolation: false,
-			backgroundThrottling: false,
-		},
-		icon: "icon.ico",
-	});
+app.on('ready', () => {
+    const mainWindow = new electron.BrowserWindow({
+        width: 1150,
+        height: 630,
+        minWidth: 950,
+        minHeight: 500,
+        resizable: true,
+        frame: false,
+        show: false,
+        title: "Lazap",
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            backgroundThrottling: false,
+        },
+        icon: "icon.ico"
+    });
 	mainWindow.loadFile('src/login.html');
 
 	mainWindow.once('ready-to-show', () => {
