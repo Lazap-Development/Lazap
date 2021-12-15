@@ -14,6 +14,18 @@
     }
 }
 
+@keyframes fadeInDown {
+    from {
+        transform: translate3d(0, 10px, 0)
+    }
+
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1
+    }
+}
+
+
 * {
     box-sizing: border-box;
     overflow: hidden;
@@ -152,6 +164,10 @@ button.ghost2 {
     font-weight: bolder;
     background-color: transparent;
     border-color: #FFFFFF;
+}
+
+button.ignore {
+    margin-top: -2px;
 }
 
 .leftsection {
@@ -321,4 +337,13 @@ input:focus {
     backface-visibility: hidden;
     opacity: 0;
     animation-name: fadeInUp;
+}
+
+.fadeInDown {
+    animation-duration: 0.7s;
+    animation-delay: 0.2s;
+    animation-fill-mode: both;
+    backface-visibility: hidden;
+    opacity: 0;
+    animation-name: fadeInDown;
 }
