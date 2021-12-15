@@ -22,12 +22,12 @@ document.querySelector('#container > div.form-container.sign-up-container > div 
     const email = document.querySelector('#container > div.form-container.sign-up-container > div > input[type=email]:nth-child(3)');
     const pass = document.querySelector('#container > div.form-container.sign-up-container > div > input[type=password]:nth-child(4)');
 
-    if (name.value.length < 2) {  // TODO: handle this all better
+    if (name.value.length < 4) {  // TODO: handle this all better
         return alert('Name should have atleast 2 or more characters');
     } else if (email.value.length < 2) {
         return alert('Email should have atleast 2 or more characters');
-    } else if (pass.value.length < 2) {
-        return alert('Password should have atleast 2 or more characters');
+    } else if (pass.value.length < 6) {
+        return alert('Password should have atleast 6 or more characters');
     }
 
     ipcRenderer.send('signup-request', {
@@ -55,10 +55,10 @@ document.querySelector('#container > div.form-container.sign-in-container > div 
     const username = document.querySelector('#container > div.form-container.sign-in-container > div > input[type=text]:nth-child(2)');
     const pass = document.querySelector('#container > div.form-container.sign-in-container > div > input[type=password]:nth-child(3)');
 
-    if (username.value.length < 2) {   // TODO: handle this better
-        return alert('Email should have atleast 2 or more characters');
-    } else if (pass.value.length < 2) {
-        return alert('Password should have atleast 2 or more characters');
+    if (username.value.length < 4) {   // TODO: handle this better
+        return alert('Email should have atleast 4 or more characters');
+    } else if (pass.value.length < 6) {
+        return alert('Password should have atleast 6 or more characters');
     }
 
     ipcRenderer.send('signin-request', {
