@@ -65,7 +65,6 @@ document.querySelector('#container > div.form-container.sign-in-container > div 
         mail: email.value,
         pass: pass.value
     });
-    // e.target.disabled = true;
 });
 
 
@@ -74,6 +73,7 @@ ipcRenderer.on('signin-response', (event, code) => {
         window.alert('Singin successful!');
         // const container = document.getElementById('container');
         // container.classList.remove("right-panel-active");
+        ipcRenderer.send("load-main");
     } else if (code === 401) {
         window.alert('There was an error singing you in');
     } else if (code === 402) {
@@ -81,4 +81,45 @@ ipcRenderer.on('signin-response', (event, code) => {
     } else if (code === 403) {
         window.alert('Wrong password!');
     }
+    else {
+        window.alert('Something went wrong while trying to login!\n\nPossible issues: You are not connected to internet, API was offline, API returned unexpected error(in which case you should consider updating the launcher)');
+    }
 });
+
+ipcRenderer.on('alert', (e, msg) => {
+    alert(msg);
+});
+
+ipcRenderer.on('replace-ignore-and-continue', () => {
+    document.querySelectorAll('button.ghost2').forEach((btn) => btn.textContent = 'Back To Launcher');
+});
+
+ipcRenderer.on('check-if-logged-in', async () => {
+    const loggedIn = await identify();
+    console.log(loggedIn);
+
+    if (loggedIn.status === 'SUCCESS') {
+        ipcRenderer.send('load-custom', 'src/index.html');
+    }
+    else {
+        alert('Something went wrong while trying to login!');
+    }
+});
+
+const axios = require('axios').default;
+const fs = require('fs');
+async function identify() {
+    let res;
+
+    if (!fs.existsSync(__dirname.split('\\').slice(0, -1).join('\\') + '\\storage\\userprofile.json')) return { status: 'ACCOUNT_NOT_FOUND', data: null };
+    const { token } = JSON.parse(fs.readFileSync(__dirname.split('\\').slice(0, -1).join('\\') + '\\storage\\userprofile.json').toString());
+    res = await axios.post('http://localhost:3000/accounts/identify', { token }).catch((e) => e.response?.status || 0);
+
+    const errcodes = {
+        401: 'INVALID_BODY',
+        402: 'ACCOUNT_NOT_FOUND',
+        200: 'SUCCESS',
+        0: 'OFFLINE/API_DOWN'
+    };
+    return { data: res.data, status: errcodes[res.request?.res.statusCode] || 'OFFLINE/API_DOWN' };
+}

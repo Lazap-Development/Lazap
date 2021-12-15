@@ -29,14 +29,12 @@ async function loadGames() {
 		gameElement.appendChild(gameBanner);
 
 		const gameText = document.createElement('span');
-		gameText.innerHTML = game.DisplayName.slice(0, 20);
+		gameText.innerHTML = game.DisplayName.slice(0, 17) + (game.DisplayName.length > 17 ? '...' : '');
 		gameElement.appendChild(gameText);
 
 		gameBanner.addEventListener("click", () => {
 			runCommand(`${game.Location}\\${game.Executable}`, game.Args);
 		});
-
-
 	});
 }
 

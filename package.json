@@ -4,7 +4,9 @@
   "description": "Lazap, A cross platform launcher - All your games at one library",
   "main": "index.js",
   "scripts": {
-    "start": "electron ."
+    "setup": "npm i --save",
+    "start": "electron .",
+    "setup:local-api": "git clone https://github.com/DashCruft-Nation/lazap-api.git api && cd api && npm i"
   },
   "repository": {
     "type": "git",
@@ -18,7 +20,7 @@
   "homepage": "https://github.com/DashCruft-Nation/lazap#readme",
   "dependencies": {
     "axios": "^0.24.0",
-    "bootstrap-icons": "^1.7.1",
+    "bootstrap-icons": "^1.7.2",
     "electron": "^16.0.4",
     "open-term": "^2.0.4",
     "v8-compile-cache": "^2.3.0"
