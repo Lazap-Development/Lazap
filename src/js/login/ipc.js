@@ -52,17 +52,17 @@ ipcRenderer.on('signup-response', (event, code) => {
 
 // handle singin
 document.querySelector('#container > div.form-container.sign-in-container > div > button').addEventListener('click', (e) => {
-    const email = document.querySelector('#container > div.form-container.sign-in-container > div > input[type=email]:nth-child(2)');
+    const username = document.querySelector('#container > div.form-container.sign-in-container > div > input[type=text]:nth-child(2)');
     const pass = document.querySelector('#container > div.form-container.sign-in-container > div > input[type=password]:nth-child(3)');
 
-    if (email.value.length < 2) {   // TODO: handle this better
+    if (username.value.length < 2) {   // TODO: handle this better
         return alert('Email should have atleast 2 or more characters');
     } else if (pass.value.length < 2) {
         return alert('Password should have atleast 2 or more characters');
     }
 
     ipcRenderer.send('signin-request', {
-        mail: email.value,
+        username: username.value,
         pass: pass.value
     });
 });
@@ -90,36 +90,19 @@ ipcRenderer.on('alert', (e, msg) => {
     alert(msg);
 });
 
+/* For re-naming all "Ignore" buttons
 ipcRenderer.on('replace-ignore-and-continue', () => {
     document.querySelectorAll('button.ghost2').forEach((btn) => btn.textContent = 'Back To Launcher');
 });
+*/
 
-ipcRenderer.on('check-if-logged-in', async () => {
-    const loggedIn = await identify();
-    console.log(loggedIn);
+ipcRenderer.on('check-if-logged-in', async (e, r) => {
+    const loggedIn = r;
 
     if (loggedIn.status === 'SUCCESS') {
-        ipcRenderer.send('load-custom', 'src/index.html');
+        ipcRenderer.send('load-main', r);
     }
     else {
         alert('Something went wrong while trying to login!');
     }
 });
-
-const axios = require('axios').default;
-const fs = require('fs');
-async function identify() {
-    let res;
-
-    if (!fs.existsSync(__dirname.split('\\').slice(0, -1).join('\\') + '\\storage\\userprofile.json')) return { status: 'ACCOUNT_NOT_FOUND', data: null };
-    const { token } = JSON.parse(fs.readFileSync(__dirname.split('\\').slice(0, -1).join('\\') + '\\storage\\userprofile.json').toString());
-    res = await axios.post('http://localhost:3000/accounts/identify', { token }).catch((e) => e.response?.status || 0);
-
-    const errcodes = {
-        401: 'INVALID_BODY',
-        402: 'ACCOUNT_NOT_FOUND',
-        200: 'SUCCESS',
-        0: 'OFFLINE/API_DOWN'
-    };
-    return { data: res.data, status: errcodes[res.request?.res.statusCode] || 'OFFLINE/API_DOWN' };
-}

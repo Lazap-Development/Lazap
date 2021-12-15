@@ -26,16 +26,13 @@ ipcRenderer.on('load-profile', (event, data) => {
         img = data.pfp.length < 1 ? 'https://cdn.discordapp.com/avatars/633730629560958976/5c1abedd641bb81ecc381696950a0b16.png?size=1024' : data.pfp;
     }
 });
-const axios = require('axios').default;
-const fs = require('fs');
 
-async function loggedIn() {
+ipcRenderer.on('check-for-login', async (e, r) => {
     const loggedInDiv = document.querySelector('div#loggedIn');
     loggedInDiv.addEventListener('click', () => {
         ipcRenderer.send('load-login');
     });
-
-    const res = await identify();
+    const res = r;
     if (res.status === 'SUCCESS') {
         loggedInDiv.textContent = 'You are logged in!';
     }
@@ -44,21 +41,4 @@ async function loggedIn() {
     }
 
     loggedInDiv.textContent += `\n Click here to login in ${loggedInDiv.textContent.includes('not') ? '' : 'from different account'}`;
-}
-loggedIn();
-
-async function identify() {
-    let res;
-
-    if (!fs.existsSync(__dirname.split('\\').slice(0, -1).join('\\') + '\\storage\\userprofile.json')) return { status: 'ACCOUNT_NOT_FOUND', data: null };
-    const { token } = JSON.parse(fs.readFileSync(__dirname.split('\\').slice(0, -1).join('\\') + '\\storage\\userprofile.json').toString());
-    res = await axios.post('http://localhost:3000/accounts/identify', { token }).catch((e) => e.response?.status || 0);
-
-    const errcodes = {
-        401: 'INVALID_BODY',
-        402: 'ACCOUNT_NOT_FOUND',
-        200: 'SUCCESS',
-        0: 'OFFLINE/API_DOWN'
-    };
-    return { data: res.data, status: errcodes[res.request?.res.statusCode] || 'OFFLINE/API_DOWN' };
-}
+});

@@ -4,7 +4,7 @@
   "description": "Lazap, A cross platform launcher - All your games at one library",
   "main": "index.js",
   "scripts": {
-    "setup": "npm i --save",
+    "setup": "npm i --production --save",
     "start": "electron .",
     "setup:local-api": "git clone https://github.com/DashCruft-Nation/lazap-api.git api && cd api && npm i"
   },
@@ -24,5 +24,8 @@
     "electron": "^16.0.4",
     "open-term": "^2.0.4",
     "v8-compile-cache": "^2.3.0"
+  },
+  "devDependencies": {
+    "electron-packager": "^15.4.0"
   }
 }
