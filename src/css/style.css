@@ -325,21 +325,31 @@ body {
 }
 
 #gamesList {
-    position: relative;
-    margin-left: 50px;
+    position: absolute;
+    padding-left: 50px;
+    overflow-y: auto;
+    height: 91%;
+    width: 99%;
+    margin-top: 80px;
 }
 
 .gamebox {
-    width: 270px;
-    height: 170px;
-    margin-right: 32px;
-    margin-top: 30px;
+    margin-right: 50px;
+    margin-bottom: 30px;
     text-align: center;
     display: inline-block;
-  
+    border-radius: 5%;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
+
+.gamebox:hover {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
 .gamebox img {
-    border-radius: 6%;
+    width: 400px;
+    height: 200px;
+    border-radius: 5%;
     image-rendering: auto;
     object-fit: cover;
     -webkit-mask-image:-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
@@ -353,7 +363,7 @@ body {
     position: absolute;
     margin-top: -28px;
     margin-left: 10px;
-    size: 20px;
+    font-size: 16px;
     color: #d3d3d3;
     display: block;
 }
