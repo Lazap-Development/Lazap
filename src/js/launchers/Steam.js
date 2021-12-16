@@ -67,7 +67,7 @@ function parseGameObject(acf_object = {}) {
 		BytesDownloaded: Size,
 	} = acf_object;
 
-	Executable = Executable.split('\\')[-1];
+	Executable = Executable.split('\\')[Executable.split('\\').length - 1];
 	Location = Location.split('\\').slice(0, -1).join('\\');
 	Size = parseInt(Size);
 
