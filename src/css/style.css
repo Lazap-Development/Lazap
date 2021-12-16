@@ -218,13 +218,13 @@ body {
     margin-right: 100%;
     margin-left: 300px;
     text-align: center;
-    overflow-y: auto;
+
 }
 
 .user-pfp {
     position: relative;
     margin-top: 50px;
-    width: 80px;
+    width: 100px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -233,7 +233,12 @@ body {
     display: none;
 }
 
-
+.user-pfp img {
+    transition: border-radius .2s ease-in-out;
+    border-radius: 17%;
+    image-rendering: auto;
+    object-fit: cover;
+}
 
 .user-pfp:hover img {
     transition: border-radius .2s ease-in-out;
@@ -257,6 +262,13 @@ body {
     background-color: transparent;
     border: transparent;
     text-decoration: none;
+}
+
+.side-tabs {
+    margin-left: 20px;
+    position: absolute;
+    height: 62%;
+    overflow-y:scroll;
 }
 
 .side-tab {
@@ -294,7 +306,7 @@ body {
 
 .category-name {
     color: #7a7a7a;
-    margin-left: 30px;
+    margin-left: 10px;
     margin-bottom: 4px;
     font-size: 15px;
 }
@@ -392,6 +404,15 @@ body {
 
 .pb-5 {
     padding-bottom:2rem!important
+}
+
+.notFound {
+    position: relative;
+    text-align: center;
+    margin-top: 25%;
+    color: rgb(197, 197, 197);
+
+    font-size: 22px;
 }
 
 ::-webkit-scrollbar {

@@ -1,4 +1,4 @@
-const marker = document.querySelector("#indicator");
+const marker = document.getElementById("indicator");
 const items = document.querySelectorAll(".side-tab");
 const home = document.getElementById("home");
 const recent = document.getElementById("recent");
@@ -82,7 +82,7 @@ document.getElementById("friends-btn").addEventListener("click", function () {
 })
 
 items.forEach(link => link.addEventListener("click", e => {
-    marker.style.top = "220px";
+    marker.style.top = "0";
     marker.style.height = "0px";
     indicator(e.target)
 }));

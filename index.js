@@ -2,7 +2,6 @@ require('v8-compile-cache');
 const electron = require('electron');
 const ipcMain = require('electron').ipcMain;
 const app = electron.app;
-const os = require('os');
 const fs = require('fs');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
@@ -15,8 +14,9 @@ app.on('ready', () => {
         minWidth: 950,
         minHeight: 500,
         resizable: true,
-        frame: os.platform() === 'darwin' ? true : false,
+        frame: false,
         show: false,
+        title: "Lazap",
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,

@@ -23,26 +23,20 @@
             <div class="form-container sign-up-container">
                 <div class="leftsection">
                     <h1>Create Account</h1>
-                    <input type="text" placeholder="Name" />
+                    <input type="text" placeholder="Username" />
                     <input type="email" placeholder="Email" />
                     <input type="password" placeholder="Password" />
-                    <button>Sign Up</button>
-                    <div onclick="load_main()">
-                        <button class="ghost2">Ignore & Continue</button>
-                    </div>
+                    <button onclick="load_main()">Sign Up</button>
                 </div>
             </div>
             <div class="form-container sign-in-container">
                 <div class="leftsection">
                     <h1>Sign in</h1>
-                    <input type="email" placeholder="Email" />
+                    <input type="text" placeholder="Username" />
                     <input type="password" placeholder="Password" />
+                    <button onclick="load_main()">Sign In</button>
                     <a>Forgot your password?</a>
-                    <button>Sign In</button>
-
-                    <div onclick="load_main()">
-                        <button class="ghost2">Ignore & Continue</button>
-                    </div>
+                    
                 </div>
             </div>
             <div class="overlay-container">
@@ -56,7 +50,7 @@
                             this launcher. <br><br><br>
                             - Lazap Development Team
                         </p>
-                        <button class="ghost" id="signIn">Sign In</button>
+                        <button id="signIn">Sign In</button>
                     </div>
                     <div class="overlay-panel overlay-right">
                         <h1 class="mt-4">Welcome Back! </h1>
@@ -67,11 +61,14 @@
                             this launcher. <br><br><br>
                             - Lazap Development Team
                         </p>
-                        <button class="ghost" id="signUp">Sign Up</button>
+                        <button id="signUp">Sign Up</button>
                     </div>
                 </div>
             </div>
         </div>
+        <button onclick="load_main()" class="fadeInDown ignore">
+            Continue and Ignore
+        </button>
     </div>
 </body>
 

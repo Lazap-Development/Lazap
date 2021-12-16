@@ -14,6 +14,18 @@
     }
 }
 
+@keyframes fadeInDown {
+    from {
+        transform: translate3d(0, 10px, 0)
+    }
+
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1
+    }
+}
+
+
 * {
     box-sizing: border-box;
     overflow: hidden;
@@ -88,6 +100,7 @@ h1 {
     font-weight: bold;
     margin: 0;
     margin-bottom: 20px;
+    margin-top: 10px
 }
 
 h2 {
@@ -110,40 +123,51 @@ span {
 
 a {
     color: #333;
-    font-size: 14px;
+    font-size: 15px;
     text-decoration: none;
-    margin: 15px;
-    margin-bottom: 20px;
+    margin: 25px;
+    margin-bottom: 11px;
 }
 
 button {
-    margin-top: 20px;
+    margin-top: 15px;
     border-radius: 10px;
     border: none;
     background-color: #7F00FF;
     color: #FFFFFF;
     font-size: 12px;
-    font-weight: bold;
+
     padding: 12px 45px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    transition: transform 80ms ease-in;
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
+    font-weight: bold;
+    font-family: Comfortaa;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 button.ghost {
     background-color: transparent;
     border-color: #FFFFFF;
-    margin-top: 2px;
     font-size: 14px;
 }
 
 button.ghost2 {
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 18px;
     color: black;
+    font-weight: bolder;
     background-color: transparent;
     border-color: #FFFFFF;
+}
+
+button.ignore {
+    margin-top: -2px;
 }
 
 .leftsection {
@@ -313,4 +337,13 @@ input:focus {
     backface-visibility: hidden;
     opacity: 0;
     animation-name: fadeInUp;
+}
+
+.fadeInDown {
+    animation-duration: 0.7s;
+    animation-delay: 0.2s;
+    animation-fill-mode: both;
+    backface-visibility: hidden;
+    opacity: 0;
+    animation-name: fadeInDown;
 }
