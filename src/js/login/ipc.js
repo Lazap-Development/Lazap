@@ -48,6 +48,9 @@ ipcRenderer.on('signup-response', (event, code) => {
     } else if (code === 403) {
         window.alert('An account with the same email already exists! Head to signin');
     }
+    else {
+        window.alert('Something went wrong while trying to create an account!\n\nPossible Issues: You are offline, API was down, Unable to reach the API')
+    }
 });
 
 // handle singin
@@ -90,11 +93,9 @@ ipcRenderer.on('alert', (e, msg) => {
     alert(msg);
 });
 
-/* For re-naming all "Ignore" buttons
 ipcRenderer.on('replace-ignore-and-continue', () => {
-    document.querySelectorAll('button.ghost2').forEach((btn) => btn.textContent = 'Back To Launcher');
+    document.querySelector('button.ignore').textContent = 'Back To Launcher';
 });
-*/
 
 ipcRenderer.on('check-if-logged-in', async (e, r) => {
     const loggedIn = r;

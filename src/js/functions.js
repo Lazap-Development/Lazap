@@ -28,6 +28,7 @@ ipcRenderer.on('load-profile', (event, data) => {
 });
 
 ipcRenderer.on('check-for-login', async (e, r) => {
+    console.log('e')
     const loggedInDiv = document.querySelector('div#loggedIn');
     loggedInDiv.addEventListener('click', () => {
         ipcRenderer.send('load-login');

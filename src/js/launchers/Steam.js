@@ -20,13 +20,16 @@ async function getSteamLocation(os = process.platform, checkForSteam = true) {
 		let {
 			stdout,
 			error
-		} = await exec(`Reg Query "HKEY_LOCAL_MACHINE\\SOFTWARE\\${process.arch === 'x64' ? 'Wow6432Node\\' : ''}Valve\\Steam" /v InstallPath`).catch(() => {
-			console.info('Steam not found!');
-			return { error: 'NOT_FOUND' };
-		});
+		} = await exec(`Reg Query "HKEY_LOCAL_MACHINE\\SOFTWARE\\${process.arch === 'x64' ? 'Wow6432Node\\' : ''}Valve\\Steam" /v InstallPath`).catch((e) => {
+            launcher_location = null;
+            return { error: e };
+        });
+		
 		if (error) {
-			console.error(`Error while loading steam games: \n${require('util').inspect(err, { depth: 1 })}`)
-			alert(`An error occured while loading steam games.`);
+			console.error(`Error while loading Steam Games! \n${require('util').inspect(error, { depth: 1 })}`)
+		} else {
+			registry_res = stdout; // \r\nHKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Valve\\Steam\r\n    InstallPath    REG_SZ    C:\\Program Files (x86)\\Steam\r\n\r\n
+			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 		}
 	}
 	if (checkForSteam && !isLauncherInstalled(launcher_location)) return false;

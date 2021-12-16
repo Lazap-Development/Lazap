@@ -218,7 +218,7 @@ body {
     margin-right: 100%;
     margin-left: 300px;
     text-align: center;
-    overflow-y: auto;
+
 }
 
 .user-pfp {
@@ -264,6 +264,13 @@ body {
     text-decoration: none;
 }
 
+.side-tabs {
+    margin-left: 20px;
+    position: absolute;
+    height: 62%;
+    overflow-y:scroll;
+}
+
 .side-tab {
     background-color: rgba(30, 30, 34, 0.5);
 
@@ -299,7 +306,7 @@ body {
 
 .category-name {
     color: #7a7a7a;
-    margin-left: 30px;
+    margin-left: 10px;
     margin-bottom: 4px;
     font-size: 15px;
 }

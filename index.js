@@ -18,7 +18,7 @@ app.on('ready', () => {
 		frame: false,
 		show: false,
 		title: "Lazap",
-		opacity: fs.existsSync(__dirname + '\\storage\\launcherprofile.json') ? require('./storage/launcherprofile.json')?.opacity : .89,
+		opacity: fs.existsSync(__dirname + '\\storage\\launcherprofile.json') ? require('./storage/launcherprofile.json')?.opacity / 100 : .89,
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
@@ -125,7 +125,7 @@ function editLocalStorage(content) {
 async function handleSignup(data) {
 	let deniedCode;
 	const res = await axios.post('http://localhost:3000/accounts/add-account', data).catch(e => {
-		deniedCode = e.response.status
+		deniedCode = e.response?.status
 	});
 	return res ? res.status : deniedCode;
 }
