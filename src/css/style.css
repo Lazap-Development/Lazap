@@ -267,8 +267,8 @@ body {
 .side-tabs {
     margin-left: 20px;
     position: absolute;
-    height: 62%;
-    overflow-y:scroll;
+    height: 65%;
+    overflow-y: auto;
 }
 
 .side-tab {
@@ -326,20 +326,26 @@ body {
 
 #gamesList {
     position: absolute;
-    padding-left: 50px;
     overflow-y: auto;
-    height: 91%;
-    width: 99%;
+    height: 85%;
     margin-top: 80px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: center;
+    justify-content: center;
+    
 }
 
 .gamebox {
-    margin-right: 50px;
+    position: relative;
     margin-bottom: 30px;
     text-align: center;
     display: inline-block;
     border-radius: 5%;
     transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    margin-right: 30px;
+    margin-left: 20px;
 }
 
 .gamebox:hover {
@@ -347,8 +353,10 @@ body {
 }
 
 .gamebox img {
-    width: 400px;
-    height: 200px;
+    height: auto; 
+    width: auto; 
+    max-width: 400px; 
+    max-height: 300px;
     border-radius: 5%;
     image-rendering: auto;
     object-fit: cover;
