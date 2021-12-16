@@ -267,7 +267,7 @@ body {
 .side-tabs {
     margin-left: 20px;
     position: absolute;
-    height: 65%;
+    height: calc(100% - 230px);
     overflow-y: auto;
 }
 
@@ -283,6 +283,12 @@ body {
     transition: background-color .1s;
 }
 
+.side-tab:hover {
+    cursor: pointer;
+    background-color: rgb(121, 52, 250);
+    transition: background-color .2s;
+}
+
 .side-tab img {
     filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
     margin-left: 25px;
@@ -291,13 +297,7 @@ body {
     display: inline-block;
 }
 
-.side-tab:hover {
-    cursor: pointer;
-    background-color: rgb(121, 52, 250);
-    transition: background-color .2s;
-}
-
-.side-tab-text {
+.side-tab .side-tab-text {
     color: #dadada;
     font-size: 18px;
     margin-left: 20px;
@@ -327,6 +327,7 @@ body {
 #gamesList {
     position: absolute;
     overflow-y: auto;
+    width: 98%;
     height: 85%;
     margin-top: 80px;
     display: flex;
@@ -420,17 +421,9 @@ body {
     padding-bottom:.4rem!important
 }
 
+
 .pb-5 {
     padding-bottom:2rem!important
-}
-
-.notFound {
-    position: relative;
-    text-align: center;
-    margin-top: 25%;
-    color: rgb(197, 197, 197);
-
-    font-size: 22px;
 }
 
 ::-webkit-scrollbar {

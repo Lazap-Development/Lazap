@@ -12,7 +12,7 @@ app.on('ready', () => {
         width: 1150,
         height: 630,
         minWidth: 950,
-        minHeight: 500,
+        minHeight: 550,
         resizable: true,
         frame: false,
         show: false,

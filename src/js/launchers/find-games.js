@@ -8,6 +8,7 @@ async function loadGames() {
 	const gamesElement = document.querySelector("div#gamesList");
 	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames()];
 
+	/*
 	if (games.length == 0) {
 		var exists = document.getElementsByClassName('notFound')
 
@@ -18,6 +19,7 @@ async function loadGames() {
 			return gamesElement.appendChild(gamesNotFound);
 		}
 	}
+	*/
 
 	if (gamesElement.children.length > 1) return;
 
