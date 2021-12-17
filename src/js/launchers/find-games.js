@@ -31,8 +31,7 @@ async function loadGames() {
 		gamesElement.appendChild(gameElement);
 
 		const gameBanner = document.createElement('img');
-		gameBanner.setAttribute("src", 'https://media-rockstargames-com.akamaized.net/tina-uploads/posts/51ko98182a41o9/ab7005bb38c318984e3003cdef14fee88ef1c014.jpg');
-		gameBanner.className += "head-pic";
+		gameBanner.setAttribute("src", `https://www.powerpyx.com/wp-content/uploads/gta-3-definitive-edition-wallpaper.jpg`);
 		gameElement.appendChild(gameBanner);
 
 		const gameText = document.createElement('span');

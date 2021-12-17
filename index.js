@@ -9,22 +9,22 @@ app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
 
 app.on('ready', () => {
-	const mainWindow = new electron.BrowserWindow({
-		width: 1150,
-		height: 630,
-		minWidth: 950,
-		minHeight: 500,
-		resizable: true,
-		frame: false,
-		show: false,
-		title: "Lazap",
-		webPreferences: {
-			nodeIntegration: true,
-			contextIsolation: false,
-			backgroundThrottling: false,
-		},
-		icon: "icon.ico"
-	});
+    const mainWindow = new electron.BrowserWindow({
+        width: 1150,
+        height: 630,
+        minWidth: 950,
+        minHeight: 550,
+        resizable: true,
+        frame: false,
+        show: false,
+        title: "Lazap",
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+            backgroundThrottling: false,
+        },
+        icon: "icon.ico"
+    });
 
 	mainWindow.loadFile('src/login.html')
 
