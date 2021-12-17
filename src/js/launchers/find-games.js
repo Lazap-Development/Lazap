@@ -1,5 +1,5 @@
 console.log('OS:', process.platform, 'Arch:', process.arch);
-
+const { ipcRenderer } = require('electron');
 const Steam = require('./Steam.js');
 const EpicGames = require('./EpicGames.js');
 const RiotGames = require('./RiotGames.js');
@@ -8,6 +8,7 @@ async function loadGames() {
 	const gamesElement = document.querySelector("div#gamesList");
 	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames()];
 
+	/*
 	if (games.length == 0) {
 		var exists = document.getElementsByClassName('notFound')
 
@@ -18,6 +19,7 @@ async function loadGames() {
 			return gamesElement.appendChild(gamesNotFound);
 		}
 	}
+	*/
 
 	if (gamesElement.children.length > 1) return;
 
@@ -27,20 +29,28 @@ async function loadGames() {
 		gameElement.className += "gamebox";
 		gameElement.style.diplay = "table"
 		gamesElement.appendChild(gameElement);
-		
+
 		const gameBanner = document.createElement('img');
-		gameBanner.setAttribute("src", `https://media-rockstargames-com.akamaized.net/tina-uploads/posts/51ko98182a41o9/ab7005bb38c318984e3003cdef14fee88ef1c014.jpg`);
+		gameBanner.setAttribute("src", 'https://media-rockstargames-com.akamaized.net/tina-uploads/posts/51ko98182a41o9/ab7005bb38c318984e3003cdef14fee88ef1c014.jpg');
 		gameBanner.className += "head-pic";
 		gameElement.appendChild(gameBanner);
 
 		const gameText = document.createElement('span');
-		gameText.innerHTML = game.DisplayName.slice(0, 17) + (game.DisplayName.length > 17 ? '...' : '');
+		if (game.DisplayName.length > 25) {
+			gameText.innerHTML = game.DisplayName.slice(0, 25);
+			gameText.innerHTML += `...`;
+		} else {
+			gameText.innerHTML = game.DisplayName
+		}
 		gameElement.appendChild(gameText);
+		
 
 		gameBanner.addEventListener("click", () => {
 			runCommand(`${game.Location}\\${game.Executable}`, game.Args);
 		});
 	});
+
+	ipcRenderer.send('load-banners-request', games.map(x => { return { name: x.DisplayName, id: x.GameID }; }));
 }
 
 async function runCommand(command, args) {
