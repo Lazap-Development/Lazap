@@ -133,16 +133,16 @@ button {
     margin-top: 15px;
     border-radius: 10px;
     border: none;
-    background-color: #7F00FF;
+    background-color: #9f40ff;
     color: #FFFFFF;
-    font-size: 12px;
-
-    padding: 12px 45px;
+    font-size: 14px;
+    vertical-align: middle;
+    padding: 11px 45px;
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
-    font-weight: bold;
+    font-weight: bolder;
     font-family: Comfortaa;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -167,7 +167,15 @@ button.ghost2 {
 }
 
 button.ignore {
-    margin-top: -2px;
+    margin-top: -15px;
+    background-color: rgb(45, 119, 255);
+    border-radius: 20px 20px 0px 0px;
+}
+
+button.ignore:hover {
+    margin-top: -15px;
+    background-color: rgb(21, 103, 255);
+    border-radius: 20px 20px 0px 0px;
 }
 
 .leftsection {
