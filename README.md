@@ -9,6 +9,7 @@ NOTE: Make sure you have [Node.js](https://nodejs.org/en/download/) installed
 ```
 git clone https://github.com/DashCruft-Nation/lazap.git
 cd lazap
+git switch nightly
 npm i
 npm start
 ```
