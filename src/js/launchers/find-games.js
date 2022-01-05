@@ -21,7 +21,7 @@ async function loadGames() {
 	}
 	*/
 
-	if (gamesElement.children.length > 1) return;
+	if (gamesElement.children.length >= 1) return;
 
 	games.forEach((game) => {
 		const gameElement = document.createElement('div');
@@ -32,6 +32,8 @@ async function loadGames() {
 
 		const gameBanner = document.createElement('img');
 		gameBanner.setAttribute("src", `https://www.powerpyx.com/wp-content/uploads/gta-3-definitive-edition-wallpaper.jpg`);
+		gameBanner.height = 500;
+		gameBanner.width = 500;
 		gameElement.appendChild(gameBanner);
 
 		const gameText = document.createElement('span');

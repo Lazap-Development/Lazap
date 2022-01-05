@@ -59,9 +59,9 @@ app.on('ready', () => {
 	ipcMain.on('load-banners-request', async (e, r) => {
 		const res = fetch_banner(r);
 		res.forEach(async (url, i) => {
-			const banner_res = await url;
+			let banner_res = await url;
 			mainWindow.webContents.executeJavaScript(`
-			const banner_res = \'${banner_res}\';
+			let banner_res = \'${banner_res}\';
 			const gameElement = document.querySelector(\'div#gamesList > div:nth-child(${i + 1})\');
 			gameElement.firstElementChild.setAttribute(\'src\', banner_res);
 			`);
@@ -116,7 +116,7 @@ function fetch_banner(data) {
 			banner_res = `https://media-rockstargames-com.akamaized.net/tina-uploads/posts/51ko98182a41o9/ab7005bb38c318984e3003cdef14fee88ef1c014.jpg`;
 		}
 		else {
-			banner_res = banner_res.data
+			banner_res = banner_res.data;
 		}
 		return banner_res;
 	});
