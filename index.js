@@ -56,17 +56,17 @@ app.on('ready', () => {
 	ipcMain.on('update-profile', (e, data) => {
 		editLocalStorage(data);
 	});
-	ipcMain.on('load-banners-request', async (e, r) => {
-		const res = fetch_banner(r);
-		res.forEach(async (url, i) => {
-			let banner_res = await url;
-			mainWindow.webContents.executeJavaScript(`
-			let banner_res = \'${banner_res}\';
-			const gameElement = document.querySelector(\'div#gamesList > div:nth-child(${i + 1})\');
-			gameElement.firstElementChild.setAttribute(\'src\', banner_res);
-			`);
-		});
-	});
+	// ipcMain.on('load-banners-request', async (e, r) => {
+	// 	const res = fetch_banner(r);
+	// 	res.forEach(async (url, i) => {
+	// 		let banner_res = await url;
+	// 		mainWindow.webContents.executeJavaScript(`
+	// 		let banner_res = \'${banner_res}\';
+	// 		const gameElement = document.querySelector(\'div#gamesList > div:nth-child(${i + 1})\');
+	// 		gameElement.firstElementChild.setAttribute(\'src\', banner_res);
+	// 		`);
+	// 	});
+	// });
 });
 
 function handleStorageAndTransportData(mainWindow) {
@@ -109,15 +109,15 @@ function editLocalStorage(content) {
 	});
 }
 
-function fetch_banner(data) {
-	return data.map(async (r) => {
-		let banner_res = await axios.post('http://localhost:3000/games/banner', r).catch(() => 0);
-		if (!isNaN(banner_res)) {
-			banner_res = `https://media-rockstargames-com.akamaized.net/tina-uploads/posts/51ko98182a41o9/ab7005bb38c318984e3003cdef14fee88ef1c014.jpg`;
-		}
-		else {
-			banner_res = banner_res.data;
-		}
-		return banner_res;
-	});
-}
+// function fetch_banner(data) {
+// 	return data.map(async (r) => {
+// 		let banner_res = await axios.post('http://localhost:3000/games/banner', r).catch(() => 0);
+// 		if (!isNaN(banner_res)) {
+// 			banner_res = `https://media-rockstargames-com.akamaized.net/tina-uploads/posts/51ko98182a41o9/ab7005bb38c318984e3003cdef14fee88ef1c014.jpg`;
+// 		}
+// 		else {
+// 			banner_res = banner_res.data;
+// 		}
+// 		return banner_res;
+// 	});
+// }
