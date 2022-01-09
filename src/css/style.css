@@ -235,7 +235,7 @@ body {
 
 .user-pfp img {
     transition: border-radius .2s ease-in-out;
-    border-radius: 17%;
+    border-radius: 18px;
     image-rendering: auto;
     object-fit: cover;
 }
@@ -343,7 +343,7 @@ body {
     margin-bottom: 30px;
     text-align: center;
     display: inline-block;
-    border-radius: 5%;
+    border-radius: 12px;
     transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     margin-right: 30px;
     margin-left: 20px;
@@ -358,7 +358,7 @@ body {
     width: auto; 
     max-width: 400px; 
     max-height: 300px;
-    border-radius: 5%;
+    border-radius: 12px;
     image-rendering: auto;
     object-fit: cover;
     -webkit-mask-image:-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
