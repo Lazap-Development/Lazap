@@ -4,9 +4,10 @@ const Steam = require('./Steam.js');
 const EpicGames = require('./EpicGames.js');
 const RiotGames = require('./RiotGames.js');
 
+let games;
+
 async function loadGames() {
-	const gamesElement = document.querySelector("div#gamesList");
-	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames()];
+	games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames()];
 
 	/*
 	if (games.length == 0) {
@@ -21,7 +22,12 @@ async function loadGames() {
 	}
 	*/
 
-	if (gamesElement.children.length >= 1) return;
+	// ipcRenderer.send('load-banners-request', games.map(x => { return { name: x.DisplayName, id: x.GameID }; }));
+}
+
+async function addGames() {
+    const gamesElement = document.querySelector("div#gamesList");
+    if (gamesElement.children.length >= 1) return;
 
 	games.forEach((game) => {
         console.log(game);
@@ -56,8 +62,6 @@ async function loadGames() {
 			runCommand(`${game.Location}\\${game.Executable}`, game.Args);
 		});
 	});
-
-	// ipcRenderer.send('load-banners-request', games.map(x => { return { name: x.DisplayName, id: x.GameID }; }));
 }
 
 async function runCommand(command, args) {
@@ -68,4 +72,5 @@ async function runCommand(command, args) {
 }
 module.exports = {
 	loadGames,
+    addGames
 };
