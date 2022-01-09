@@ -19,6 +19,7 @@
   "dependencies": {
     "axios": "^0.24.0",
     "bootstrap-icons": "^1.7.1",
+    "deepmerge": "^4.2.2",
     "electron": "^16.0.4",
     "open-term": "^2.0.4",
     "v8-compile-cache": "^2.3.0"

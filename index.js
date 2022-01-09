@@ -4,6 +4,8 @@ const ipcMain = require('electron').ipcMain;
 const app = electron.app;
 const fs = require('fs');
 const axios = require('axios');
+const os = require('os')
+const merge = require('deepmerge')
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
@@ -73,12 +75,22 @@ function handleStorageAndTransportData(mainWindow) {
 	fs.readdir(`${__dirname}`, (err, data) => {
 		if (data.includes('storage')) {
 			const data = require(`${__dirname}/storage/userprofile.json`);
-			mainWindow.webContents.send('load-profile', data);
+            if (data.pfp !== 'default' && !fs.existsSync(data.pfp)) {
+                const merged = merge(data, { pfp: 'default' })
+                fs.writeFile(`${__dirname}/storage/userprofile.json`, JSON.stringify(merged), (err) => {
+                    if (err) {
+                        throw err;
+                    }
+                });
+                mainWindow.webContents.send('load-profile', merged);
+            } else {
+                mainWindow.webContents.send('load-profile', data);
+            }
 		} else {
 			fs.mkdirSync(`${__dirname}/storage`);
 			const a = {
-				username: "username",
-				pfp: ""
+				username: os.userInfo().username,
+				pfp: "default"
 			}
 			fs.writeFile(`${__dirname}/storage/userprofile.json`, JSON.stringify(a), (err) => {
 				if (err) {
