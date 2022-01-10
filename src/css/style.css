@@ -36,6 +36,17 @@
     }
 }
 
+@keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
 body {
     background: #1b1d22; 
     overflow: hidden;
@@ -50,6 +61,34 @@ body {
     height: 100vh;
     margin: -20px 0 50px;
 }
+
+/* .titlebar {
+    overflow: hidden;
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+    user-select: none;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    z-index: 9;
+}
+
+.titlebar-bg {
+    display: flex;
+    border-radius: 10px;
+    background-color: rgba(43, 43, 43);
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 30px;
+    margin: 8px;
+    padding: 4px 8px;
+} */
+
 
 .titlebar {
     overflow: hidden;
@@ -71,6 +110,10 @@ body {
 
     display: flex !important;
     justify-content: flex-end;
+}
+
+.titlebar-icons {
+    display: flex
 }
 
 .titlebar-exit {
@@ -218,7 +261,6 @@ body {
     margin-right: 100%;
     margin-left: 300px;
     text-align: center;
-
 }
 
 .user-pfp {
@@ -235,7 +277,7 @@ body {
 
 .user-pfp img {
     transition: border-radius .2s ease-in-out;
-    border-radius: 17%;
+    border-radius: 18px;
     image-rendering: auto;
     object-fit: cover;
 }
@@ -343,7 +385,7 @@ body {
     margin-bottom: 30px;
     text-align: center;
     display: inline-block;
-    border-radius: 5%;
+    border-radius: 12px;
     transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     margin-right: 30px;
     margin-left: 20px;
@@ -358,7 +400,7 @@ body {
     width: auto; 
     max-width: 400px; 
     max-height: 300px;
-    border-radius: 5%;
+    border-radius: 12px;
     image-rendering: auto;
     object-fit: cover;
     -webkit-mask-image:-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
@@ -448,4 +490,32 @@ textarea,
 img,
 :focus {
     outline: none;
+}
+
+#loading-overlay {
+    cursor: default !important;
+    overflow: hidden;
+    transition: visibility 0s .5s, opacity .5s linear;
+    visibility: visible;
+    opacity: 1;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    background: #202126
+}
+
+.loading-spinner {
+    animation: spinner 1s infinite linear;
+    width: 36px;
+}
+
+.spinner-content {
+    text-align: center;
+    color: #dadada;
 }

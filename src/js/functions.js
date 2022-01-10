@@ -19,9 +19,7 @@ document.getElementById('text').addEventListener('change', (e) => {
 })
 
 ipcRenderer.on('load-profile', (event, data) => {
-    document.querySelector('img#output').src = data.pfp.length < 1 ? 'https://cdn.discordapp.com/avatars/633730629560958976/5c1abedd641bb81ecc381696950a0b16.png?size=1024' : data.pfp;
+    document.querySelector('img#output').src = data.pfp === 'default' ? '../img/default-profile.svg' : data.pfp;
     document.querySelector('input#text').value = data.username;
-    if (!img) {
-        img = data.pfp.length < 1 ? 'https://cdn.discordapp.com/avatars/633730629560958976/5c1abedd641bb81ecc381696950a0b16.png?size=1024' : data.pfp;
-    }
+    if (!img) img = 'default'
 });

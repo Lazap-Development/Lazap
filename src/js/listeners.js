@@ -8,6 +8,12 @@ const friends = document.getElementById("friends");
 const messages = document.getElementById("messages");
 const activity = document.getElementById("activity");
 
+window.onload = async function() {
+    await require('./js/launchers/find-games.js').loadGames();
+    document.querySelector('#loading-overlay').style.opacity = '0';
+    document.querySelector('#loading-overlay').style.visibility = 'hidden';
+};
+
 document.getElementById("home-btn").addEventListener("click", function () {
     home.style.display = "flex";
     recent.style.display = "none";
@@ -38,7 +44,7 @@ document.getElementById("games-btn").addEventListener("click", function () {
     activity.style.display = "none";
 
     document.querySelector('div#games')
-    require('./js/launchers/find-games.js').loadGames();
+    require('./js/launchers/find-games.js').addGames();
 })
 
 document.getElementById("favs-btn").addEventListener("click", function () {

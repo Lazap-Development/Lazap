@@ -4,9 +4,10 @@ const Steam = require('./Steam.js');
 const EpicGames = require('./EpicGames.js');
 const RiotGames = require('./RiotGames.js');
 
+let games;
+
 async function loadGames() {
-	const gamesElement = document.querySelector("div#gamesList");
-	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames()];
+	games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames()];
 
 	/*
 	if (games.length == 0) {
@@ -21,9 +22,15 @@ async function loadGames() {
 	}
 	*/
 
-	if (gamesElement.children.length >= 1) return;
+	// ipcRenderer.send('load-banners-request', games.map(x => { return { name: x.DisplayName, id: x.GameID }; }));
+}
+
+async function addGames() {
+    const gamesElement = document.querySelector("div#gamesList");
+    if (gamesElement.children.length >= 1) return;
 
 	games.forEach((game) => {
+        console.log(game);
 		const gameElement = document.createElement('div');
 		gameElement.id = 'game-div-' + game.DisplayName.replace(' ', '_');
 		gameElement.className += "gamebox";
@@ -31,7 +38,12 @@ async function loadGames() {
 		gamesElement.appendChild(gameElement);
 
 		const gameBanner = document.createElement('img');
-		gameBanner.setAttribute("src", `https://www.powerpyx.com/wp-content/uploads/gta-3-definitive-edition-wallpaper.jpg`);
+        if (game.LauncherName === 'Steam') {
+            gameBanner.setAttribute("src", `https://cdn.akamai.steamstatic.com/steam/apps/${game.GameID}/header.jpg`);
+        } else {
+            gameBanner.setAttribute("src", `https://www.powerpyx.com/wp-content/uploads/gta-3-definitive-edition-wallpaper.jpg`);
+        }
+		
 		gameBanner.height = 500;
 		gameBanner.width = 500;
 		gameElement.appendChild(gameBanner);
@@ -50,8 +62,6 @@ async function loadGames() {
 			runCommand(`${game.Location}\\${game.Executable}`, game.Args);
 		});
 	});
-
-	ipcRenderer.send('load-banners-request', games.map(x => { return { name: x.DisplayName, id: x.GameID }; }));
 }
 
 async function runCommand(command, args) {
@@ -62,4 +72,5 @@ async function runCommand(command, args) {
 }
 module.exports = {
 	loadGames,
+    addGames
 };
