@@ -67,6 +67,10 @@ body {
 }
 
 .titlebar-exit {
+    -moz-border-radius: 50px/50px;
+    -webkit-border-radius: 50px 50px;
+    border-radius: 50px/50px;
+    border: solid 10px;
     -webkit-app-region: no-drag;
     filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
     display: block;
@@ -77,6 +81,10 @@ body {
 }
 
 .titlebar-max {
+    -moz-border-radius: 50px/50px;
+    -webkit-border-radius: 50px 50px;
+    border-radius: 50px/50px;
+    border: solid 10px;
     -webkit-app-region: no-drag;
     filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
     display: block;
@@ -87,6 +95,10 @@ body {
 }
 
 .titlebar-min {
+    -moz-border-radius: 50px/50px;
+    -webkit-border-radius: 50px 50px;
+    border-radius: 50px/50px;
+    border: solid 10px;
     -webkit-app-region: no-drag;
     filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
     display: block;
