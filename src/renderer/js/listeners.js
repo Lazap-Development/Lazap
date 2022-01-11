@@ -104,7 +104,10 @@ function indicator(item) {
 }
 
 window.onkeydown = function (evt) {
-    if ((evt.code == 'Minus' || evt.code == 'Equal') && (evt.ctrlKey || evt.metaKey)) {
+    if (
+        (evt.code == 'Minus' || evt.code == 'Equal') &&
+        (evt.ctrlKey || evt.metaKey)
+    ) {
         evt.preventDefault();
     }
 };

@@ -1,27 +1,37 @@
 {
-  "name": "lazap",
-  "version": "0.0.1",
-  "description": "Lazap, A cross platform launcher - All your games at one library",
-  "main": "index.js",
-  "scripts": {
-    "start": "electron ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DashCruft-Nation/lazap.git"
-  },
-  "author": "DashCruft",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/DashCruft-Nation/lazap/issues"
-  },
-  "homepage": "https://github.com/DashCruft-Nation/lazap#readme",
-  "dependencies": {
-    "axios": "^0.24.0",
-    "bootstrap-icons": "^1.7.1",
-    "deepmerge": "^4.2.2",
-    "electron": "^16.0.4",
-    "open-term": "^2.0.4",
-    "v8-compile-cache": "^2.3.0"
-  }
+    "name": "lazap",
+    "version": "0.0.1",
+    "description": "Lazap, A cross platform launcher - All your games at one library",
+    "main": "src/main/index.js",
+    "scripts": {
+        "start": "electron .",
+        "lint": "prettier --write \"src/**/*.js\" \"src/**/*.css\" \"src/**/*.html\"",
+        "prepare": "husky install"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/DashCruft-Nation/lazap.git"
+    },
+    "author": "DashCruft",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/DashCruft-Nation/lazap/issues"
+    },
+    "homepage": "https://github.com/DashCruft-Nation/lazap#readme",
+    "dependencies": {
+        "axios": "^0.24.0",
+        "bootstrap-icons": "^1.7.1",
+        "deepmerge": "^4.2.2",
+        "electron": "^16.0.4",
+        "open-term": "^2.0.4",
+        "v8-compile-cache": "^2.3.0"
+    },
+    "devDependencies": {
+        "husky": "^7.0.4",
+        "lint-staged": "^12.1.7",
+        "prettier": "^2.5.1"
+    },
+    "lint-staged": {
+        "*.{js,css,md}": "prettier --write"
+    }
 }
