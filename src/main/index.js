@@ -13,6 +13,8 @@ const CFG_PATH = path.join(STORAGE_PATH, 'userprofile.json');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
+app.commandLine.appendSwitch('high-dpi-support', 1)
+app.commandLine.appendSwitch('force-device-scale-factor', 1)
 
 app.on('ready', () => {
     const mainWindow = new electron.BrowserWindow({

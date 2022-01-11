@@ -124,6 +124,7 @@ body {
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
     display: block;
+
 }
 
 .titlebar-min:hover {
@@ -245,6 +246,7 @@ body {
     margin-right: 100%;
     margin-left: 300px;
     text-align: center;
+    box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
 }
 
 .user-pfp {
