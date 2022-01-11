@@ -21,5 +21,5 @@ document.getElementById('text').addEventListener('change', (e) => {
 ipcRenderer.on('load-profile', (event, data) => {
     document.querySelector('img#output').src = data.pfp === 'default' ? '../img/default-profile.svg' : data.pfp;
     document.querySelector('input#text').value = data.username;
-    if (!img) img = 'default'
+    if (!img) img = data.pfp;
 });

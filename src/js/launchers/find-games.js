@@ -3,11 +3,10 @@ const { ipcRenderer } = require('electron');
 const Steam = require('./Steam.js');
 const EpicGames = require('./EpicGames.js');
 const RiotGames = require('./RiotGames.js');
-
-let games;
+const fs = require('fs');
 
 async function loadGames() {
-	games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames()];
+	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames(), ...(await RiotGames.getInstalledGames())];
 
 	/*
 	if (games.length == 0) {
@@ -22,15 +21,10 @@ async function loadGames() {
 	}
 	*/
 
-	// ipcRenderer.send('load-banners-request', games.map(x => { return { name: x.DisplayName, id: x.GameID }; }));
-}
+	const gamesElement = document.querySelector("div#gamesList");
+	if (gamesElement.children.length >= 1) return;
 
-async function addGames() {
-    const gamesElement = document.querySelector("div#gamesList");
-    if (gamesElement.children.length >= 1) return;
-
-	games.forEach((game) => {
-        console.log(game);
+	const uncachedGames = games.map((game) => {
 		const gameElement = document.createElement('div');
 		gameElement.id = 'game-div-' + game.DisplayName.replace(' ', '_');
 		gameElement.className += "gamebox";
@@ -38,12 +32,18 @@ async function addGames() {
 		gamesElement.appendChild(gameElement);
 
 		const gameBanner = document.createElement('img');
-        if (game.LauncherName === 'Steam') {
-            gameBanner.setAttribute("src", `https://cdn.akamai.steamstatic.com/steam/apps/${game.GameID}/header.jpg`);
-        } else {
-            gameBanner.setAttribute("src", `https://www.powerpyx.com/wp-content/uploads/gta-3-definitive-edition-wallpaper.jpg`);
-        }
-		
+
+		let banner;
+		if (fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Images')) {
+			const dirs = fs.readdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Images');
+			const img = dirs.find(x => x.split('.')[0] === game.DisplayName);
+			banner = img ? `../storage/Cache/Games/Images/${img}` : '../icon.ico';
+		}
+		else {
+			banner = '../icon.ico';
+		}
+		gameBanner.setAttribute("src", banner);
+		gameBanner.style = 'opacity: 0.2;';
 		gameBanner.height = 500;
 		gameBanner.width = 500;
 		gameElement.appendChild(gameBanner);
@@ -53,15 +53,20 @@ async function addGames() {
 			gameText.innerHTML = game.DisplayName.slice(0, 25);
 			gameText.innerHTML += `...`;
 		} else {
-			gameText.innerHTML = game.DisplayName
+			gameText.innerHTML = game.DisplayName;
 		}
 		gameElement.appendChild(gameText);
-		
 
 		gameBanner.addEventListener("click", () => {
 			runCommand(`${game.Location}\\${game.Executable}`, game.Args);
 		});
-	});
+
+		game.Banner = banner;
+		return game;
+	}).filter((x) => x.Banner === '../icon.ico');
+
+	document.querySelector('#game-loading-overlay').style.opacity = '0.9';
+	ipcRenderer.send('load-banners-request', uncachedGames);
 }
 
 async function runCommand(command, args) {
@@ -72,5 +77,4 @@ async function runCommand(command, args) {
 }
 module.exports = {
 	loadGames,
-    addGames
 };

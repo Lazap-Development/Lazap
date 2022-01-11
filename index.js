@@ -3,30 +3,29 @@ const electron = require('electron');
 const ipcMain = require('electron').ipcMain;
 const app = electron.app;
 const fs = require('fs');
-const axios = require('axios');
-const os = require('os')
-const merge = require('deepmerge')
-
+const axios = require('axios').default;
+const os = require('os');
+const merge = require('deepmerge');
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server')
 
 app.on('ready', () => {
-    const mainWindow = new electron.BrowserWindow({
-        width: 1150,
-        height: 630,
-        minWidth: 950,
-        minHeight: 550,
-        resizable: true,
-        frame: false,
-        show: false,
-        title: "Lazap",
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-            backgroundThrottling: false,
-        },
-        icon: "icon.ico"
-    });
+	const mainWindow = new electron.BrowserWindow({
+		width: 1150,
+		height: 630,
+		minWidth: 950,
+		minHeight: 550,
+		resizable: true,
+		frame: false,
+		show: false,
+		title: "Lazap",
+		webPreferences: {
+			nodeIntegration: true,
+			contextIsolation: false,
+			backgroundThrottling: false,
+		},
+		icon: "icon.ico",
+	});
 
 	mainWindow.loadFile('src/login.html')
 
@@ -58,48 +57,65 @@ app.on('ready', () => {
 	ipcMain.on('update-profile', (e, data) => {
 		editLocalStorage(data);
 	});
-	// ipcMain.on('load-banners-request', async (e, r) => {
-	// 	const res = fetch_banner(r);
-	// 	res.forEach(async (url, i) => {
-	// 		let banner_res = await url;
-	// 		mainWindow.webContents.executeJavaScript(`
-	// 		let banner_res = \'${banner_res}\';
-	// 		const gameElement = document.querySelector(\'div#gamesList > div:nth-child(${i + 1})\');
-	// 		gameElement.firstElementChild.setAttribute(\'src\', banner_res);
-	// 		`);
-	// 	});
-	// });
+	ipcMain.on('load-banners-request', async (e, r) => {
+		const res = fetch_banner(r);
+		res.forEach(async (url, i) => {
+			mainWindow.webContents.executeJavaScript(`
+	 		var banner_res = \'${await url}\';
+			console.log(banner_res, ${i});
+	 		var gameElement = document.querySelector(\'div#gamesList > div:nth-child(${i + 1})\');
+	 		gameElement.firstElementChild.setAttribute(\'src\', banner_res);
+			gameElement.firstElementChild.addEventListener("load", () => {
+				setTimeout(() => {
+					gameElement.firstElementChild.style = \`opacity: 1;\`;
+				}, 200);
+			});
+			`);
+		});
+		mainWindow.webContents.send('load-banners-response');
+	});
 });
 
 function handleStorageAndTransportData(mainWindow) {
-	fs.readdir(`${__dirname}`, (err, data) => {
-		if (data.includes('storage')) {
-			const data = require(`${__dirname}/storage/userprofile.json`);
-            if (data.pfp !== 'default' && !fs.existsSync(data.pfp)) {
-                const merged = merge(data, { pfp: 'default' })
-                fs.writeFile(`${__dirname}/storage/userprofile.json`, JSON.stringify(merged), (err) => {
-                    if (err) {
-                        throw err;
-                    }
-                });
-                mainWindow.webContents.send('load-profile', merged);
-            } else {
-                mainWindow.webContents.send('load-profile', data);
-            }
-		} else {
-			fs.mkdirSync(`${__dirname}/storage`);
-			const a = {
-				username: os.userInfo().username,
-				pfp: "default"
-			}
-			fs.writeFile(`${__dirname}/storage/userprofile.json`, JSON.stringify(a), (err) => {
-				if (err) {
-					throw err;
-				}
-				mainWindow.webContents.send('load-profile', a);
-			});
-		}
-	})
+	if (!fs.existsSync(__dirname + '\\storage')) {
+		fs.mkdirSync(__dirname + '\\storage');
+		fs.mkdirSync(__dirname + '\\storage\\Settings');
+		fs.mkdirSync(__dirname + '\\storage\\Cache');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
+		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', '{}');
+	}
+	if (!fs.existsSync(__dirname + '\\storage\\Settings')) {
+		fs.mkdirSync(__dirname + '\\storage\\Settings');
+		fs.writeFileSync(__dirname+ '\\storage\\Settings\\userprofile.json', '{}');
+	}
+	if (!fs.existsSync(__dirname + '\\storage\\Cache')) {
+		fs.mkdirSync(__dirname + '\\storage\\Cache');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
+	}
+	if (!fs.existsSync(__dirname + '\\storage\\Cache\\Games')) {
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
+	}
+	if (!fs.existsSync(__dirname + '\\storage\\Cache\\Games\\Images')) {
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
+	}
+
+	let LauncherData = require(`${__dirname}\\storage\\Settings\\userprofile.json`);
+	if (!Object.keys(LauncherData).length) {
+		console.log('e')
+		LauncherData = {
+			username: os.userInfo().username,
+			pfp: 'default',
+		};
+		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(LauncherData));
+	}
+	else {
+		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(LauncherData));
+	}
+
+	mainWindow.webContents.send('load-profile', LauncherData);
 }
 
 function editLocalStorage(content) {
@@ -121,15 +137,30 @@ function editLocalStorage(content) {
 	});
 }
 
-// function fetch_banner(data) {
-// 	return data.map(async (r) => {
-// 		let banner_res = await axios.post('http://localhost:3000/games/banner', r).catch(() => 0);
-// 		if (!isNaN(banner_res)) {
-// 			banner_res = `https://media-rockstargames-com.akamaized.net/tina-uploads/posts/51ko98182a41o9/ab7005bb38c318984e3003cdef14fee88ef1c014.jpg`;
-// 		}
-// 		else {
-// 			banner_res = banner_res.data;
-// 		}
-// 		return banner_res;
-// 	});
-// }
+function fetch_banner(data) {
+	const res = data.map(async (r) => {
+		let banner_res = await axios.post('http://localhost:3000/games/banner', r).catch(() => 0);
+		if (!isNaN(banner_res)) {
+			banner_res = `../icon.ico`;
+		}
+		else {
+			banner_res = banner_res.data;
+		}
+		return banner_res;
+	});
+	cacheBanners(data, res);
+	return res;
+}
+
+function cacheBanners(data, res) {
+	res.filter(async (x) => (await x).startsWith('http')).forEach(async (x, i) => {
+		console.log(await x);
+		axios({
+			url: await x,
+			method: 'GET',
+			responseType: 'stream',
+		}).then(async (res) => {
+			res.data.pipe(fs.createWriteStream(__dirname + `\\storage\\Cache\\Games\\Images\\${data[i].DisplayName}.${(await x).split('.')[(await x).split('.').length - 1].slice(0, 3) ?? 'jpg'}`));
+		})
+	});
+}

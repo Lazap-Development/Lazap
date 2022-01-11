@@ -472,7 +472,7 @@ img,
     outline: none;
 }
 
-#loading-overlay {
+#main-loading-overlay {
     cursor: default !important;
     overflow: hidden;
     transition: visibility 0s .5s, opacity .5s linear;
@@ -498,4 +498,23 @@ img,
 .spinner-content {
     text-align: center;
     color: #dadada;
+}
+
+#game-loading-overlay {
+    cursor: default !important;
+    overflow: hidden;
+    transition: visibility 0s .5s, opacity .5s linear;
+    visibility: visible;
+    opacity: 1;
+    display: flex;
+    border-radius: inherit;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+    position: absolute;
+    top: inherit;
+    left: inherit;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    background: #202126
 }
