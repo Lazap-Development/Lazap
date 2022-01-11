@@ -102,12 +102,3 @@ function indicator(item) {
     marker.style.top = item.offsetTop + 'px';
     marker.style.height = '30px';
 }
-
-window.onkeydown = function (evt) {
-    if (
-        (evt.code == 'Minus' || evt.code == 'Equal') &&
-        (evt.ctrlKey || evt.metaKey)
-    ) {
-        evt.preventDefault();
-    }
-};
