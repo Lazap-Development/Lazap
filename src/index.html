@@ -7,15 +7,21 @@
 
     <script async type="module" src="js/listeners.js"></script>
     <script async type="text/javascript" src="js/ipc.js"></script>
-    <!--    <script async type="text/javascript" src="js/functions.js"></script>-->
 </head>
 
 <body>
     <div class="titlebar">
         <div class="titlebar-icons">
-            <img src="../img/circle.png" onclick="min_window()" class="titlebar-min mx-1" width="19" height="19">
-            <img src="../img/circle.png" onclick="max_window()" class="titlebar-max mx-1" width="19" height="19">
-            <img src="../img/circle.png" onclick="close_window()" class="titlebar-exit mx-1" width="19" height="19">
+            <div onclick="min_window()" class="titlebar-min mx-1"></div>
+            <div onclick="max_window()" class="titlebar-max mx-1"></div>
+            <div onclick="close_window()" class="titlebar-exit mx-1"></div>
+        </div>
+    </div>
+
+    <div id="loading-overlay">
+        <div class="spinner-content">
+            <img src="../img/spinner.svg" alt="Loading..." class="loading-spinner">
+            <p class="fadeInDown">Loading your favorite games...</p>
         </div>
     </div>
 
