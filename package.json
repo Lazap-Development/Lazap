@@ -5,7 +5,7 @@
     "main": "src/main/index.js",
     "scripts": {
         "start": "electron .",
-        "lint": "prettier --write \"src/**/*.js\" \"src/**/*.css\" \"src/**/*.html\"",
+        "lint": "lint-staged",
         "prepare": "husky install"
     },
     "repository": {
@@ -32,6 +32,6 @@
         "prettier": "^2.5.1"
     },
     "lint-staged": {
-        "*.{js,css,md}": "prettier --write"
+        "*.{js,css,html}": "prettier --write"
     }
 }
