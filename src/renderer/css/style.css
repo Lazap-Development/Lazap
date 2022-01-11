@@ -1,27 +1,27 @@
 @font-face {
     font-family: Comfortaa;
-    src: url('../../fonts/Comfortaa-Medium.ttf') format('truetype');
+    src: url('../../assets/fonts/Comfortaa-Medium.ttf') format('truetype');
 }
 
 @keyframes fadeInUp {
     from {
-        transform: translate3d(0, -10px, 0)
+        transform: translate3d(0, -10px, 0);
     }
 
     to {
         transform: translate3d(0, 0, 0);
-        opacity: 1
+        opacity: 1;
     }
 }
 
 @keyframes fadeInDown {
     from {
-        transform: translate3d(0, 10px, 0)
+        transform: translate3d(0, 10px, 0);
     }
 
     to {
         transform: translate3d(0, 0, 0);
-        opacity: 1
+        opacity: 1;
     }
 }
 
@@ -48,7 +48,7 @@
 }
 
 body {
-    background: #1b1d22; 
+    background: #1b1d22;
     overflow: hidden;
     font-family: Comfortaa;
 }
@@ -73,7 +73,6 @@ body {
     height: 35px;
     width: 100%;
     flex: auto;
-
 }
 
 .titlebar-icons {
@@ -90,12 +89,14 @@ body {
     border-radius: 50px/50px;
     border: solid 9px;
     -webkit-app-region: no-drag;
-    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
+    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg)
+        brightness(93%) contrast(90%);
     display: block;
 }
 
 .titlebar-exit:hover {
-    filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg) brightness(92%) contrast(94%);
+    filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg)
+        brightness(92%) contrast(94%);
 }
 
 .titlebar-max {
@@ -104,12 +105,14 @@ body {
     border-radius: 50px/50px;
     border: solid 9px;
     -webkit-app-region: no-drag;
-    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
+    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg)
+        brightness(93%) contrast(90%);
     display: block;
 }
 
 .titlebar-max:hover {
-    filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg) brightness(102%) contrast(110%);
+    filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg)
+        brightness(102%) contrast(110%);
 }
 
 .titlebar-min {
@@ -118,12 +121,14 @@ body {
     border-radius: 50px/50px;
     border: solid 9px;
     -webkit-app-region: no-drag;
-    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
+    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg)
+        brightness(93%) contrast(90%);
     display: block;
 }
 
 .titlebar-min:hover {
-    filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg) brightness(92%) contrast(97%);
+    filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg)
+        brightness(92%) contrast(97%);
 }
 
 .mx-1 {
@@ -228,7 +233,6 @@ body {
     font-size: 16px;
 }
 
-
 .leftbar {
     background-color: #202126;
     border-radius: 15px;
@@ -256,14 +260,14 @@ body {
 }
 
 .user-pfp img {
-    transition: border-radius .2s ease-in-out;
+    transition: border-radius 0.2s ease-in-out;
     border-radius: 18px;
     image-rendering: auto;
     object-fit: cover;
 }
 
 .user-pfp:hover img {
-    transition: border-radius .2s ease-in-out;
+    transition: border-radius 0.2s ease-in-out;
     border-radius: 6px;
 }
 
@@ -302,17 +306,18 @@ body {
 
     display: flex;
     margin-bottom: 10px;
-    transition: background-color .1s;
+    transition: background-color 0.1s;
 }
 
 .side-tab:hover {
     cursor: pointer;
     background-color: rgb(121, 52, 250);
-    transition: background-color .2s;
+    transition: background-color 0.2s;
 }
 
 .side-tab img {
-    filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
+    filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg)
+        brightness(108%) contrast(108%);
     margin-left: 25px;
     margin-top: 8px;
     margin-right: 5px;
@@ -357,7 +362,6 @@ body {
     align-content: flex-start;
     align-items: center;
     justify-content: center;
-    
 }
 
 .gamebox {
@@ -376,15 +380,21 @@ body {
 }
 
 .gamebox img {
-    height: auto; 
-    width: auto; 
-    max-width: 400px; 
+    height: auto;
+    width: auto;
+    max-width: 400px;
     max-height: 300px;
     border-radius: 12px;
     image-rendering: auto;
     object-fit: cover;
-    -webkit-mask-image:-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+    -webkit-mask-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        from(rgba(0, 0, 0, 1)),
+        to(rgba(0, 0, 0, 0))
+    );
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
 }
 .gamebox img:hover {
     cursor: pointer;
@@ -398,7 +408,6 @@ body {
     color: #d3d3d3;
     display: block;
 }
-
 
 .fadeInUp {
     animation-duration: 0.7s;
@@ -428,24 +437,23 @@ body {
 }
 
 .d-flex {
-    display:flex !important;
+    display: flex !important;
 }
 
 .justify-content-start {
-    justify-content:flex-start !important;
+    justify-content: flex-start !important;
 }
 
 .justify-content-center {
-    justify-content:center !important;
+    justify-content: center !important;
 }
 
 .pb-2 {
-    padding-bottom:.4rem!important
+    padding-bottom: 0.4rem !important;
 }
 
-
 .pb-5 {
-    padding-bottom:2rem!important
+    padding-bottom: 2rem !important;
 }
 
 ::-webkit-scrollbar {
@@ -475,7 +483,7 @@ img,
 #loading-overlay {
     cursor: default !important;
     overflow: hidden;
-    transition: visibility 0s .5s, opacity .5s linear;
+    transition: visibility 0s 0.5s, opacity 0.5s linear;
     visibility: visible;
     opacity: 1;
     display: flex;
@@ -487,7 +495,7 @@ img,
     align-items: center;
     justify-content: center;
     z-index: 1;
-    background: #202126
+    background: #202126;
 }
 
 .loading-spinner {

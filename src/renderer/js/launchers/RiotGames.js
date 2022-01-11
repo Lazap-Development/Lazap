@@ -11,7 +11,9 @@ exec = promisify(exec);
 async function getInstalledGames(os = process.platform) {
     let launcher_location;
     if (os === 'win32') {
-        let { stdout, error } = await exec('Reg query HKEY_CLASSES_ROOT\\riotclient\\DefaultIcon').catch(() => {
+        let { stdout, error } = await exec(
+            'Reg query HKEY_CLASSES_ROOT\\riotclient\\DefaultIcon'
+        ).catch(() => {
             launcher_location = null;
             return { error: 'NOT_FOUND' };
         });
@@ -19,7 +21,10 @@ async function getInstalledGames(os = process.platform) {
         if (!stdout) return [];
 
         if (error) {
-            console.error('There was an error while trying to find Riot Games: \n' + require('util').inspect(err, { depth: 1 }));
+            console.error(
+                'There was an error while trying to find Riot Games: \n' +
+                    require('util').inspect(err, { depth: 1 })
+            );
             return [];
         }
         launcher_location = stdout.split('"')[1];
@@ -30,9 +35,10 @@ async function getInstalledGames(os = process.platform) {
 async function parseGameObject(path) {
     const Executable = 'RiotClientServices.exe';
     const Location = path.slice(0, -22);
-    const Args = ["--launch-product=valorant", "--launch-patchline=live"];
+    const Args = ['--launch-product=valorant', '--launch-patchline=live'];
     const DisplayName = 'Valorant';
-    const Size = await promisify(fs.stat)(Location.slice(0, -12) + 'VALORANT').size;
+    const Size = await promisify(fs.stat)(Location.slice(0, -12) + 'VALORANT')
+        .size;
 
     return {
         Executable,

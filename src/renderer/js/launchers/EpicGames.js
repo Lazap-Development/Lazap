@@ -6,14 +6,27 @@ const fs = require('fs');
 function getInstalledGames(os = process.platform) {
     if (os === 'win32') {
         if (!isLauncherInstalled()) return [];
-        const games = fs.readdirSync('C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests').filter(x => x.split('.')[1]?.toLowerCase() === 'item').map(x => JSON.parse(fs.readFileSync(`C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests\\${x}`)));
+        const games = fs
+            .readdirSync(
+                'C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests'
+            )
+            .filter((x) => x.split('.')[1]?.toLowerCase() === 'item')
+            .map((x) =>
+                JSON.parse(
+                    fs.readFileSync(
+                        `C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests\\${x}`
+                    )
+                )
+            );
 
-        return games.map(x => parseGameObject(x));
+        return games.map((x) => parseGameObject(x));
     }
 }
 
-function isLauncherInstalled(path = 'C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests') {
-	return fs.existsSync(path);
+function isLauncherInstalled(
+    path = 'C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests'
+) {
+    return fs.existsSync(path);
 }
 /* Game Object Example
 {
