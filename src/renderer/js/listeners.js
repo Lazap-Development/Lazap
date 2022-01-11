@@ -1,5 +1,5 @@
 const marker = document.getElementById('indicator');
-const items = document.querySelectorAll('.side-tab');
+const items = document.getElementById('side-tab');
 const home = document.getElementById('home');
 const recent = document.getElementById('recent');
 const games = document.getElementById('games');
@@ -12,8 +12,8 @@ window.onload = async function () {
     // Timeout to prevent visual bugs at loading overlay
     setTimeout(async () => {
         await require('./js/launchers/find-games.js').loadGames();
-        document.querySelector('#loading-overlay').style.opacity = '0';
-        document.querySelector('#loading-overlay').style.visibility = 'hidden';
+        document.getElementById('loading-overlay').style.opacity = '0';
+        document.getElementById('loading-overlay').style.visibility = 'hidden';
     }, 200);
 };
 
