@@ -4,6 +4,9 @@ const Steam = require('./Steam.js');
 const EpicGames = require('./EpicGames.js');
 const RiotGames = require('./RiotGames.js');
 const fs = require('fs');
+const games_blacklist = [
+	'228980', // Steamworks Common Redistributables
+];
 
 async function loadGames() {
 	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames(), ...(await RiotGames.getInstalledGames())];
@@ -21,14 +24,16 @@ async function loadGames() {
 	}
 	*/
 
-	const gamesElement = document.querySelector("div#gamesList");
+	const gamesElement = document.querySelector('div#gamesList');
 	if (gamesElement.children.length >= 1) return;
 
 	const uncachedGames = games.map((game) => {
+		if (games_blacklist.includes(game.GameID)) return;
+
 		const gameElement = document.createElement('div');
 		gameElement.id = 'game-div-' + game.DisplayName.replace(' ', '_');
-		gameElement.className += "gamebox";
-		gameElement.style.diplay = "table"
+		gameElement.className += 'gamebox';
+		gameElement.style.diplay = 'table';
 		gamesElement.appendChild(gameElement);
 
 		const gameBanner = document.createElement('img');
@@ -42,7 +47,7 @@ async function loadGames() {
 		else {
 			banner = '../icon.ico';
 		}
-		gameBanner.setAttribute("src", banner);
+		gameBanner.setAttribute('src', banner);
 		gameBanner.style = 'opacity: 0.2;';
 		gameBanner.height = 500;
 		gameBanner.width = 500;
@@ -51,13 +56,14 @@ async function loadGames() {
 		const gameText = document.createElement('span');
 		if (game.DisplayName.length > 25) {
 			gameText.innerHTML = game.DisplayName.slice(0, 25);
-			gameText.innerHTML += `...`;
-		} else {
+			gameText.innerHTML += '...';
+		}
+		else {
 			gameText.innerHTML = game.DisplayName;
 		}
 		gameElement.appendChild(gameText);
 
-		gameBanner.addEventListener("click", () => {
+		gameBanner.addEventListener('click', () => {
 			runCommand(`${game.Location}\\${game.Executable}`, game.Args);
 		});
 
@@ -72,7 +78,7 @@ async function loadGames() {
 async function runCommand(command, args) {
 	const { execFile } = require('child_process');
 	const { promisify } = require('util');
-	let res = await promisify(execFile)(command, args);
+	const res = await promisify(execFile)(command, args);
 	return res;
 }
 module.exports = {

@@ -5,9 +5,11 @@ const app = electron.app;
 const fs = require('fs');
 const axios = require('axios').default;
 const os = require('os');
-const merge = require('deepmerge');
+
 app.commandLine.appendSwitch('auto-detect', 'false');
-app.commandLine.appendSwitch('no-proxy-server')
+app.commandLine.appendSwitch('no-proxy-server');
+app.commandLine.appendSwitch('high-dpi-support', 1);
+app.commandLine.appendSwitch('force-device-scale-factor', 1);
 
 app.on('ready', () => {
 	const mainWindow = new electron.BrowserWindow({
@@ -18,22 +20,22 @@ app.on('ready', () => {
 		resizable: true,
 		frame: false,
 		show: false,
-		title: "Lazap",
+		title: 'Lazap',
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
 			backgroundThrottling: false,
 		},
-		icon: "icon.ico",
+		icon: 'icon.ico',
 	});
 
-	mainWindow.loadFile('src/login.html')
+	mainWindow.loadFile('src/login.html');
 
 	mainWindow.once('ready-to-show', () => {
-		mainWindow.webContents.setZoomFactor(.9);
+		mainWindow.webContents.setZoomFactor(0.9);
 		setTimeout(() => {
 
-			mainWindow.show()
+			mainWindow.show();
 		}, 100);
 	});
 
@@ -42,18 +44,18 @@ app.on('ready', () => {
 	});
 
 	ipcMain.on('load-main', () => {
-		mainWindow.loadFile('src/index.html')
-	})
+		mainWindow.loadFile('src/index.html');
+	});
 
 	ipcMain.on('close-window', () => {
 		mainWindow.close();
-	})
+	});
 	ipcMain.on('max-window', () => {
 		mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
-	})
+	});
 	ipcMain.on('min-window', () => {
-		mainWindow.minimize()
-	})
+		mainWindow.minimize();
+	});
 	ipcMain.on('update-profile', (e, data) => {
 		editLocalStorage(data);
 	});
@@ -61,10 +63,10 @@ app.on('ready', () => {
 		const res = fetch_banner(r);
 		res.forEach(async (url, i) => {
 			mainWindow.webContents.executeJavaScript(`
-	 		var banner_res = \'${await url}\';
+	 		var banner_res = '${await url}';
 			console.log(banner_res, ${i});
-	 		var gameElement = document.querySelector(\'div#gamesList > div:nth-child(${i + 1})\');
-	 		gameElement.firstElementChild.setAttribute(\'src\', banner_res);
+	 		var gameElement = document.querySelector('div#gamesList > div:nth-child(${i + 1})');
+	 		gameElement.firstElementChild.setAttribute('src', banner_res);
 			gameElement.firstElementChild.addEventListener("load", () => {
 				setTimeout(() => {
 					gameElement.firstElementChild.style = \`opacity: 1;\`;
@@ -87,7 +89,7 @@ function handleStorageAndTransportData(mainWindow) {
 	}
 	if (!fs.existsSync(__dirname + '\\storage\\Settings')) {
 		fs.mkdirSync(__dirname + '\\storage\\Settings');
-		fs.writeFileSync(__dirname+ '\\storage\\Settings\\userprofile.json', '{}');
+		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', '{}');
 	}
 	if (!fs.existsSync(__dirname + '\\storage\\Cache')) {
 		fs.mkdirSync(__dirname + '\\storage\\Cache');
@@ -104,7 +106,7 @@ function handleStorageAndTransportData(mainWindow) {
 
 	let LauncherData = require(`${__dirname}\\storage\\Settings\\userprofile.json`);
 	if (!Object.keys(LauncherData).length) {
-		console.log('e')
+		console.log('e');
 		LauncherData = {
 			username: os.userInfo().username,
 			pfp: 'default',
@@ -112,6 +114,9 @@ function handleStorageAndTransportData(mainWindow) {
 		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(LauncherData));
 	}
 	else {
+		if (LauncherData.pfp !== 'default' && !fs.existsSync(LauncherData.pfp)) {
+			LauncherData.pfp = 'default';
+		}
 		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(LauncherData));
 	}
 
@@ -119,21 +124,11 @@ function handleStorageAndTransportData(mainWindow) {
 }
 
 function editLocalStorage(content) {
-	fs.readdir(`${__dirname}`, (err, data) => {
-		if (data.includes('storage')) {
-			fs.writeFile(`${__dirname}/storage/userprofile.json`, JSON.stringify(content), (err) => {
-				if (err) {
-					throw err;
-				}
-			});
-		} else {
-			fs.mkdirSync(`${__dirname}/storage`);
-			fs.writeFile(`${__dirname}/storage/userprofile.json`, JSON.stringify(content), (err) => {
-				if (err) {
-					throw err;
-				}
-			});
-		}
+	if (!fs.existsSync(__dirname + '\\storage')) {
+		fs.mkdirSync(__dirname + '\\storage');
+	}
+	fs.writeFile(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(content), (err) => {
+		if (err) throw err;
 	});
 }
 
@@ -141,7 +136,7 @@ function fetch_banner(data) {
 	const res = data.map(async (r) => {
 		let banner_res = await axios.post('http://localhost:3000/games/banner', r).catch(() => 0);
 		if (!isNaN(banner_res)) {
-			banner_res = `../icon.ico`;
+			banner_res = '../icon.ico';
 		}
 		else {
 			banner_res = banner_res.data;
@@ -159,8 +154,8 @@ function cacheBanners(data, res) {
 			url: await x,
 			method: 'GET',
 			responseType: 'stream',
-		}).then(async (res) => {
-			res.data.pipe(fs.createWriteStream(__dirname + `\\storage\\Cache\\Games\\Images\\${data[i].DisplayName}.${(await x).split('.')[(await x).split('.').length - 1].slice(0, 3) ?? 'jpg'}`));
-		})
+		}).then(async (response) => {
+			response.data.pipe(fs.createWriteStream(__dirname + `\\storage\\Cache\\Games\\Images\\${data[i].DisplayName}.${(await x).split('.')[(await x).split('.').length - 1].slice(0, 3) ?? 'jpg'}`));
+		});
 	});
 }
