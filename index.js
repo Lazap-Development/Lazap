@@ -3,137 +3,159 @@ const electron = require('electron');
 const ipcMain = require('electron').ipcMain;
 const app = electron.app;
 const fs = require('fs');
-const path = require('path');
+const axios = require('axios').default;
 const os = require('os');
-const merge = require('deepmerge');
-const axios = require('axios');
-
-const STORAGE_PATH = path.join(__dirname, './storage');
-const CFG_PATH = path.join(STORAGE_PATH, 'userprofile.json');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
-app.commandLine.appendSwitch('high-dpi-support', 1)
-app.commandLine.appendSwitch('force-device-scale-factor', 1)
+app.commandLine.appendSwitch('high-dpi-support', 1);
+app.commandLine.appendSwitch('force-device-scale-factor', 1);
 
 app.on('ready', () => {
-    const mainWindow = new electron.BrowserWindow({
-        width: 1150,
-        height: 630,
-        minWidth: 950,
-        minHeight: 550,
-        resizable: true,
-        frame: false,
-        show: false,
-        title: 'Lazap',
-        webPreferences: {
-            nodeIntegration: true,
-            contextIsolation: false,
-            backgroundThrottling: false,
-        },
-        icon: path.join(__dirname, './icon.ico'),
-    });
+	const mainWindow = new electron.BrowserWindow({
+		width: 1150,
+		height: 630,
+		minWidth: 950,
+		minHeight: 550,
+		resizable: true,
+		frame: false,
+		show: false,
+		title: 'Lazap',
+		webPreferences: {
+			nodeIntegration: true,
+			contextIsolation: false,
+			backgroundThrottling: false,
+		},
+		icon: 'icon.ico',
+	});
 
-    mainWindow.loadFile(path.join(__dirname, './src/login.html'));
+	mainWindow.loadFile('src/login.html');
 
-    mainWindow.once('ready-to-show', () => {
-        mainWindow.webContents.setZoomFactor(0.9);
-        setTimeout(() => {
-            mainWindow.show();
-        }, 100);
-    });
+	mainWindow.once('ready-to-show', () => {
+		mainWindow.webContents.setZoomFactor(0.9);
+		setTimeout(() => {
 
-    mainWindow.webContents.on('did-finish-load', () => {
-        mainWindow.webContents.setZoomFactor(0.9);
-        handleStorageAndTransportData(mainWindow);
-    });
+			mainWindow.show();
+		}, 100);
+	});
 
-    ipcMain.on('load-main', () => {
-        mainWindow.loadFile(path.join(__dirname, './src/index.html'));
-    });
+	mainWindow.webContents.on('did-finish-load', () => {
+		handleStorageAndTransportData(mainWindow);
+	});
 
-    ipcMain.on('close-window', () => {
-        mainWindow.close();
-    });
+	ipcMain.on('load-main', () => {
+		mainWindow.loadFile('src/index.html');
+	});
 
-    ipcMain.on('max-window', () => {
-        mainWindow.isMaximized()
-            ? mainWindow.unmaximize()
-            : mainWindow.maximize();
-    });
-
-    ipcMain.on('min-window', () => {
-        mainWindow.minimize();
-    });
-
-    ipcMain.on('update-profile', (e, data) => {
-        editLocalStorage(data);
-    });
-    // ipcMain.on('load-banners-request', async (e, r) => {
-    // 	const res = fetch_banner(r);
-    // 	res.forEach(async (url, i) => {
-    // 		let banner_res = await url;
-    // 		mainWindow.webContents.executeJavaScript(`
-    // 		let banner_res = \'${banner_res}\';
-    // 		const gameElement = document.querySelector(\'div#gamesList > div:nth-child(${i + 1})\');
-    // 		gameElement.firstElementChild.setAttribute(\'src\', banner_res);
-    // 		`);
-    // 	});
-    // });
+	ipcMain.on('close-window', () => {
+		mainWindow.close();
+	});
+	ipcMain.on('max-window', () => {
+		mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
+	});
+	ipcMain.on('min-window', () => {
+		mainWindow.minimize();
+	});
+	ipcMain.on('update-profile', (e, data) => {
+		editLocalStorage(data);
+	});
+	ipcMain.on('load-banners-request', async (e, r) => {
+		const res = fetch_banner(r);
+		res.forEach(async (url, i) => {
+			mainWindow.webContents.executeJavaScript(`
+	 		var banner_res = '${await url}';
+			console.log(banner_res, ${i});
+	 		var gameElement = document.querySelector('div#gamesList > div:nth-child(${i + 1})');
+	 		gameElement.firstElementChild.setAttribute('src', banner_res);
+			gameElement.firstElementChild.addEventListener("load", () => {
+				setTimeout(() => {
+					gameElement.firstElementChild.style = \`opacity: 1;\`;
+				}, 200);
+			});
+			`);
+		});
+		mainWindow.webContents.send('load-banners-response');
+	});
 });
 
 function handleStorageAndTransportData(mainWindow) {
-    if (fs.existsSync(STORAGE_PATH)) {
-        const data = require(CFG_PATH);
+	if (!fs.existsSync(__dirname + '\\storage')) {
+		fs.mkdirSync(__dirname + '\\storage');
+		fs.mkdirSync(__dirname + '\\storage\\Settings');
+		fs.mkdirSync(__dirname + '\\storage\\Cache');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
+		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', '{}');
+	}
+	if (!fs.existsSync(__dirname + '\\storage\\Settings')) {
+		fs.mkdirSync(__dirname + '\\storage\\Settings');
+		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', '{}');
+	}
+	if (!fs.existsSync(__dirname + '\\storage\\Cache')) {
+		fs.mkdirSync(__dirname + '\\storage\\Cache');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
+	}
+	if (!fs.existsSync(__dirname + '\\storage\\Cache\\Games')) {
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
+	}
+	if (!fs.existsSync(__dirname + '\\storage\\Cache\\Games\\Images')) {
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
+	}
 
-        // If pfp is not a valid image, reset to default
-        if (data.pfp !== 'default' && !fs.existsSync(data.pfp)) {
-            console.log('e');
-            const merged = merge(data, { pfp: 'default' });
-            fs.writeFile(CFG_PATH, JSON.stringify(merged), (err) => {
-                if (err) throw err;
-                mainWindow.webContents.send('load-profile', merged);
-            });
-        } else {
-            mainWindow.webContents.send('load-profile', data);
-        }
-    } else {
-        fs.mkdirSync(STORAGE_PATH);
+	let LauncherData = require(`${__dirname}\\storage\\Settings\\userprofile.json`);
+	if (!Object.keys(LauncherData).length) {
+		console.log('e');
+		LauncherData = {
+			username: os.userInfo().username,
+			pfp: 'default',
+		};
+		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(LauncherData));
+	}
+	else {
+		if (LauncherData.pfp !== 'default' && !fs.existsSync(LauncherData.pfp)) {
+			LauncherData.pfp = 'default';
+		}
+		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(LauncherData));
+	}
 
-        const defaultCFG = {
-            username: os.userInfo().username,
-            pfp: 'default',
-        };
-
-        fs.writeFile(CFG_PATH, JSON.stringify(defaultCFG), (err) => {
-            if (err) throw err;
-            mainWindow.webContents.send('load-profile', defaultCFG);
-        });
-    }
+	mainWindow.webContents.send('load-profile', LauncherData);
 }
 
 function editLocalStorage(content) {
-    if (fs.existsSync(STORAGE_PATH)) {
-        fs.writeFile(CFG_PATH, JSON.stringify(content), (err) => {
-            if (err) throw err;
-        });
-    } else {
-        fs.mkdirSync(STORAGE_PATH);
-        fs.writeFile(CFG_PATH, JSON.stringify(content), (err) => {
-            if (err) throw err;
-        });
-    }
+	if (!fs.existsSync(__dirname + '\\storage')) {
+		fs.mkdirSync(__dirname + '\\storage');
+	}
+	fs.writeFile(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(content), (err) => {
+		if (err) throw err;
+	});
 }
 
-// function fetch_banner(data) {
-// 	return data.map(async (r) => {
-// 		let banner_res = await axios.post('http://localhost:3000/games/banner', r).catch(() => 0);
-// 		if (!isNaN(banner_res)) {
-// 			banner_res = `https://media-rockstargames-com.akamaized.net/tina-uploads/posts/51ko98182a41o9/ab7005bb38c318984e3003cdef14fee88ef1c014.jpg`;
-// 		}
-// 		else {
-// 			banner_res = banner_res.data;
-// 		}
-// 		return banner_res;
-// 	});
-// }
+function fetch_banner(data) {
+	const res = data.map(async (r) => {
+		let banner_res = await axios.post('http://localhost:3000/games/banner', r).catch(() => 0);
+		if (!isNaN(banner_res)) {
+			banner_res = '../icon.ico';
+		}
+		else {
+			banner_res = banner_res.data;
+		}
+		return banner_res;
+	});
+	cacheBanners(data, res);
+	return res;
+}
+
+function cacheBanners(data, res) {
+	res.filter(async (x) => (await x).startsWith('http')).forEach(async (x, i) => {
+		console.log(await x);
+		axios({
+			url: await x,
+			method: 'GET',
+			responseType: 'stream',
+		}).then(async (response) => {
+			response.data.pipe(fs.createWriteStream(__dirname + `\\storage\\Cache\\Games\\Images\\${data[i].DisplayName}.${(await x).split('.')[(await x).split('.').length - 1].slice(0, 3) ?? 'jpg'}`));
+		});
+	});
+}

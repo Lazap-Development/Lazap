@@ -26,7 +26,8 @@
     },
     "devDependencies": {
         "lint-staged": "^12.1.7",
-        "prettier": "^2.5.1"
+        "prettier": "^2.5.1",
+        "eslint": "8.6.0" 
     },
     "lint-staged": {
         "*.{js,css,html}": "prettier --write"
