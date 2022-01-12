@@ -4,9 +4,7 @@
     "description": "Lazap, A cross platform launcher - All your games at one library",
     "main": "src/main/index.js",
     "scripts": {
-        "start": "electron .",
-        "lint": "lint-staged",
-        "prepare": "husky install"
+        "start": "electron ."
     },
     "repository": {
         "type": "git",

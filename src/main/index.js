@@ -37,14 +37,14 @@ app.on('ready', () => {
     mainWindow.loadFile(path.join(__dirname, '../renderer/login.html'));
 
     mainWindow.once('ready-to-show', () => {
-        mainWindow.webContents.setZoomFactor(0.85);
+        mainWindow.webContents.setZoomFactor(0.9);
         setTimeout(() => {
             mainWindow.show();
         }, 100);
     });
 
     mainWindow.webContents.on('did-finish-load', () => {
-        mainWindow.webContents.setZoomFactor(0.85);
+        mainWindow.webContents.setZoomFactor(0.9);
         handleStorageAndTransportData(mainWindow);
     });
 

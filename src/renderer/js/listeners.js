@@ -1,5 +1,5 @@
 const marker = document.getElementById('indicator');
-const items = document.getElementById('side-tab');
+const items = document.querySelectorAll('.side-tab');
 const home = document.getElementById('home');
 const recent = document.getElementById('recent');
 const games = document.getElementById('games');
