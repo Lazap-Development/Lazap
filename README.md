@@ -11,17 +11,20 @@
   All your games at one library with a modernish look and experience.
 </p>
 
-<div align="center">
-<img align="center" src = "https://img.shields.io/badge/Made%20Using-JavaScript%20%26%20%E2%9D%A4-green"> 
-[<img align="center" src="https://discordapp.com/api/guilds/644764850706448384/embed.png">](https://dashcruft.com/discord)
+<p align="center">
+  <img src="https://img.shields.io/badge/Made%20Using-JavaScript%20%26%20%E2%9D%A4-green">
+  <a href="https://dashcruft.com/discord">
+    <img src="https://discordapp.com/api/guilds/644764850706448384/embed.png">
+  </a>
+</p>
 
-</div><br><br>
-The new face of Open Source Game Launchers, Lazap unites all your games together in one place! Whether it be Linux, Windows or MacOS, we got you covered. Lazap can connect with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam.<br> 
-Our team of Developers make sure that Lazap is customizable for the user's need - meaning, custom JavaScript & CSS scripts, games outside the launchers we support and much more!
+<br>
 
-# Building Lazap
-Now this is some real easy stuff! Just run these commands in order and you should be good to go:<br>
-NOTE: Make sure you have [Node.js](https://nodejs.org/en/download/) installed
+**The new face of Open Source Game Launchers**, Lazap unites all your games together in one place! Whether it be Linux, Windows or MacOS, we got you covered. Lazap can connect with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam. Our team of Developers make sure that Lazap is customizable, Meet up the user's need and have a glancing & modernish look - meaning, custom JavaScript & CSS scripts, games outside the launchers we support and much more!
+
+# Building Lazap (Developers)
+Building Lazap is very simple. Simply run these commands in order and you should be good to go:<br>
+__NOTE:__ Make sure you have [Node.js](https://nodejs.org/en/download/) and [git](https://git-scm.com/) installed
 ```
 git clone https://github.com/DashCruft-Nation/lazap.git
 cd lazap
