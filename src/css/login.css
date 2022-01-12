@@ -1,6 +1,6 @@
 @font-face {
     font-family: Comfortaa;
-    src: url('../../assets/fonts/Comfortaa-SemiBold.ttf') format('truetype');
+    src: url('../../fonts/Comfortaa-SemiBold.ttf') format('truetype');
 }
 
 @keyframes fadeInUp {

@@ -8,7 +8,7 @@ const os = require('os');
 const merge = require('deepmerge');
 const axios = require('axios');
 
-const STORAGE_PATH = path.join(__dirname, '../../storage');
+const STORAGE_PATH = path.join(__dirname, './storage');
 const CFG_PATH = path.join(STORAGE_PATH, 'userprofile.json');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
@@ -31,10 +31,10 @@ app.on('ready', () => {
             contextIsolation: false,
             backgroundThrottling: false,
         },
-        icon: path.join(__dirname, '../assets/img/icon.ico'),
+        icon: path.join(__dirname, './icon.ico'),
     });
 
-    mainWindow.loadFile(path.join(__dirname, '../renderer/login.html'));
+    mainWindow.loadFile(path.join(__dirname, './src/login.html'));
 
     mainWindow.once('ready-to-show', () => {
         mainWindow.webContents.setZoomFactor(0.9);
@@ -49,7 +49,7 @@ app.on('ready', () => {
     });
 
     ipcMain.on('load-main', () => {
-        mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+        mainWindow.loadFile(path.join(__dirname, './src/index.html'));
     });
 
     ipcMain.on('close-window', () => {
@@ -88,6 +88,7 @@ function handleStorageAndTransportData(mainWindow) {
 
         // If pfp is not a valid image, reset to default
         if (data.pfp !== 'default' && !fs.existsSync(data.pfp)) {
+            console.log('e');
             const merged = merge(data, { pfp: 'default' });
             fs.writeFile(CFG_PATH, JSON.stringify(merged), (err) => {
                 if (err) throw err;

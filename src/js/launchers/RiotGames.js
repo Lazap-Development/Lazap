@@ -29,6 +29,7 @@ async function getInstalledGames(os = process.platform) {
         }
         launcher_location = stdout.split('"')[1];
     }
+    if (!fs.existsSync(launcher_location)) return [];
     return [await parseGameObject(launcher_location)];
 }
 

@@ -1,5 +1,5 @@
 let img;
-const usernameElementId = document.getElementById('input#text');
+
 
 function loadFile(event) {
     var image = document.getElementById('output');
@@ -7,7 +7,7 @@ function loadFile(event) {
     img = event.target.files[0].path;
 
     ipcRenderer.send('update-profile', {
-        username: usernameElementId.value,
+        username: document.getElementById('text').value,
         pfp: event.target.files[0].path,
     });
 }
@@ -20,8 +20,7 @@ document.getElementById('text').addEventListener('change', (e) => {
 });
 
 ipcRenderer.on('load-profile', (event, data) => {
-    document.getElementById('output').src =
-    data.pfp === 'default' ? '../assets/img/default-profile.svg' : data.pfp;
-    usernameElementId.value = data.username;
-    if (!img) img = 'default';
+    document.getElementById('output').src = data.pfp === 'default' ? '../img/default-profile.svg' : data.pfp;
+    document.getElementById('text').value = data.username;
+    if (!img) img = data.pfp;
 });

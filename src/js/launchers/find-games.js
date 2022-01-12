@@ -16,6 +16,7 @@ async function loadGames() {
     games = [
         ...(await Steam.getInstalledGames()),
         ...EpicGames.getInstalledGames(),
+        ...(await RiotGames.getInstalledGames()),
     ];
 
     /*
