@@ -106,14 +106,12 @@ function handleStorageAndTransportData(mainWindow) {
 
 	let LauncherData = require(`${__dirname}\\storage\\Settings\\userprofile.json`);
 	if (!Object.keys(LauncherData).length) {
-		console.log('e');
 		LauncherData = {
 			username: os.userInfo().username,
 			pfp: 'default',
 		};
 		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(LauncherData));
-	}
-	else {
+	} else {
 		if (LauncherData.pfp !== 'default' && !fs.existsSync(LauncherData.pfp)) {
 			LauncherData.pfp = 'default';
 		}
@@ -137,8 +135,7 @@ function fetch_banner(data) {
 		let banner_res = await axios.post('http://localhost:3000/games/banner', r).catch(() => 0);
 		if (!isNaN(banner_res)) {
 			banner_res = '../icon.ico';
-		}
-		else {
+		} else {
 			banner_res = banner_res.data;
 		}
 		return banner_res;

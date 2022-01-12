@@ -76,8 +76,8 @@ body {
 }
 
 .titlebar-icons {
-    margin-right: 8px !important;
-    margin-top: 8px;
+    margin-right: 6px !important;
+    margin-top: 9px;
 
     display: flex !important;
     justify-content: space-between;
@@ -87,8 +87,8 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
     display: block;
@@ -103,8 +103,8 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
     display: block;
@@ -119,8 +119,8 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
     display: block;
@@ -133,9 +133,16 @@ body {
 }
 
 .titlebar-settings {
+    -webkit-app-region: no-drag;
+    display: block;
     height: 20px;
     width: 20px;
-    margin-left: 2px;
+    margin-left: 14px;
+    align-items: flex-start;
+}
+
+.titlebar-settings:hover {
+    cursor: pointer;
 }
 
 .mx-1 {

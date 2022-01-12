@@ -58,8 +58,8 @@ body {
 }
 
 .titlebar-icons {
-    margin-right: 8px !important;
-    margin-top: 8px !important;
+    margin-right: 6px !important;
+    margin-top: 9px !important;
 
     display: flex !important;
     justify-content: flex-end;
@@ -69,8 +69,8 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
     display: block;
@@ -85,8 +85,8 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
     display: block;
@@ -101,8 +101,8 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
     display: block;

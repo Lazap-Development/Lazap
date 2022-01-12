@@ -4,7 +4,7 @@
     "description": "Lazap, A cross platform launcher - All your games at one library",
     "main": "./index.js",
     "scripts": {
-        "start": "electron ."
+        "start": "electron . --disable-software-rasterizer"
     },
     "repository": {
         "type": "git",
@@ -25,11 +25,6 @@
         "v8-compile-cache": "^2.3.0"
     },
     "devDependencies": {
-        "lint-staged": "^12.1.7",
-        "prettier": "^2.5.1",
-        "eslint": "8.6.0" 
-    },
-    "lint-staged": {
-        "*.{js,css,html}": "prettier --write"
+        "eslint": "8.6.0"
     }
 }
