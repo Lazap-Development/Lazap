@@ -77,10 +77,10 @@ body {
 
 .titlebar-icons {
     margin-right: 8px !important;
-    margin-top: 8px !important;
+    margin-top: 8px;
 
     display: flex !important;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 .titlebar-exit {
@@ -132,9 +132,15 @@ body {
         brightness(92%) contrast(97%);
 }
 
+.titlebar-settings {
+    height: 20px;
+    width: 20px;
+    margin-left: 2px;
+}
+
 .mx-1 {
     margin-right: 0.25rem !important;
-    margin-left: 0.25rem !important;
+    margin-left: 0.25rem;
 }
 
 .homebox {
@@ -382,9 +388,9 @@ body {
 }
 
 .gamebox img {
-    height: auto;
-    width: auto;
-    max-width: 400px;
+    height: 300px;
+    width: 200px;
+    max-width: 200px;
     max-height: 300px;
     border-radius: 12px;
     image-rendering: auto;
