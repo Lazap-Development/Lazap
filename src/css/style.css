@@ -5,23 +5,23 @@
 
 @keyframes fadeInUp {
     from {
-        transform: translate3d(0, -10px, 0)
+        transform: translate3d(0, -10px, 0);
     }
 
     to {
         transform: translate3d(0, 0, 0);
-        opacity: 1
+        opacity: 1;
     }
 }
 
 @keyframes fadeInDown {
     from {
-        transform: translate3d(0, 10px, 0)
+        transform: translate3d(0, 10px, 0);
     }
 
     to {
         transform: translate3d(0, 0, 0);
-        opacity: 1
+        opacity: 1;
     }
 }
 
@@ -36,8 +36,19 @@
     }
 }
 
+@keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
 body {
-    background: #1b1d22; 
+    background: #1b1d22;
     overflow: hidden;
     font-family: Comfortaa;
 }
@@ -62,50 +73,81 @@ body {
     height: 35px;
     width: 100%;
     flex: auto;
-
 }
 
 .titlebar-icons {
-    margin-right: 8px !important;
-    margin-top: 8px !important;
+    margin-right: 6px !important;
+    margin-top: 9px;
 
     display: flex !important;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 .titlebar-exit {
+    -moz-border-radius: 50px/50px;
+    -webkit-border-radius: 50px 50px;
+    border-radius: 50px/50px;
+    height: 18px;
+    width: 18px;
+    background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
-    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
     display: block;
 }
 
 .titlebar-exit:hover {
-    filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg) brightness(92%) contrast(94%);
+    filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg)
+        brightness(92%) contrast(94%);
 }
 
 .titlebar-max {
+    -moz-border-radius: 50px/50px;
+    -webkit-border-radius: 50px 50px;
+    border-radius: 50px/50px;
+    height: 18px;
+    width: 18px;
+    background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
-    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
     display: block;
 }
 
 .titlebar-max:hover {
-    filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg) brightness(102%) contrast(110%);
+    filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg)
+        brightness(102%) contrast(110%);
 }
 
 .titlebar-min {
+    -moz-border-radius: 50px/50px;
+    -webkit-border-radius: 50px 50px;
+    border-radius: 50px/50px;
+    height: 18px;
+    width: 18px;
+    background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
-    filter: invert(26%) sepia(0%) saturate(393%) hue-rotate(183deg) brightness(93%) contrast(90%);
     display: block;
+
 }
 
 .titlebar-min:hover {
-    filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg) brightness(92%) contrast(97%);
+    filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg)
+        brightness(92%) contrast(97%);
+}
+
+.titlebar-settings {
+    -webkit-app-region: no-drag;
+    display: block;
+    height: 20px;
+    width: 20px;
+    margin-left: 14px;
+    align-items: flex-start;
+}
+
+.titlebar-settings:hover {
+    cursor: pointer;
 }
 
 .mx-1 {
     margin-right: 0.25rem !important;
-    margin-left: 0.25rem !important;
+    margin-left: 0.25rem;
 }
 
 .homebox {
@@ -205,7 +247,6 @@ body {
     font-size: 16px;
 }
 
-
 .leftbar {
     background-color: #202126;
     border-radius: 15px;
@@ -218,7 +259,7 @@ body {
     margin-right: 100%;
     margin-left: 300px;
     text-align: center;
-
+    box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
 }
 
 .user-pfp {
@@ -234,14 +275,14 @@ body {
 }
 
 .user-pfp img {
-    transition: border-radius .2s ease-in-out;
-    border-radius: 17%;
+    transition: border-radius 0.2s ease-in-out;
+    border-radius: 18px;
     image-rendering: auto;
     object-fit: cover;
 }
 
 .user-pfp:hover img {
-    transition: border-radius .2s ease-in-out;
+    transition: border-radius 0.2s ease-in-out;
     border-radius: 6px;
 }
 
@@ -267,8 +308,8 @@ body {
 .side-tabs {
     margin-left: 20px;
     position: absolute;
-    height: 62%;
-    overflow-y:scroll;
+    height: calc(100% - 230px);
+    overflow-y: auto;
 }
 
 .side-tab {
@@ -280,24 +321,25 @@ body {
 
     display: flex;
     margin-bottom: 10px;
-    transition: background-color .1s;
+    transition: background-color 0.1s;
+}
+
+.side-tab:hover {
+    cursor: pointer;
+    background-color: rgb(121, 52, 250);
+    transition: background-color 0.2s;
 }
 
 .side-tab img {
-    filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
+    filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg)
+        brightness(108%) contrast(108%);
     margin-left: 25px;
     margin-top: 8px;
     margin-right: 5px;
     display: inline-block;
 }
 
-.side-tab:hover {
-    cursor: pointer;
-    background-color: rgb(121, 52, 250);
-    transition: background-color .2s;
-}
-
-.side-tab-text {
+.side-tab .side-tab-text {
     color: #dadada;
     font-size: 18px;
     margin-left: 20px;
@@ -325,25 +367,49 @@ body {
 }
 
 #gamesList {
-    position: relative;
-    margin-left: 50px;
+    position: absolute;
+    overflow-y: auto;
+    width: 98%;
+    height: 85%;
+    margin-top: 80px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: center;
+    justify-content: center;
 }
 
 .gamebox {
-    width: 270px;
-    height: 170px;
-    margin-right: 32px;
-    margin-top: 30px;
+    position: relative;
+    margin-bottom: 30px;
     text-align: center;
     display: inline-block;
-  
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    margin-right: 30px;
+    margin-left: 20px;
 }
+
+.gamebox:hover {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
 .gamebox img {
-    border-radius: 6%;
+    height: 300px;
+    width: 200px;
+    max-width: 200px;
+    max-height: 300px;
+    border-radius: 12px;
     image-rendering: auto;
     object-fit: cover;
-    -webkit-mask-image:-webkit-gradient(linear, left top, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
-      mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
+    -webkit-mask-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        from(rgba(0, 0, 0, 1)),
+        to(rgba(0, 0, 0, 0))
+    );
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
 }
 .gamebox img:hover {
     cursor: pointer;
@@ -353,11 +419,10 @@ body {
     position: absolute;
     margin-top: -28px;
     margin-left: 10px;
-    size: 20px;
+    font-size: 16px;
     color: #d3d3d3;
     display: block;
 }
-
 
 .fadeInUp {
     animation-duration: 0.7s;
@@ -387,23 +452,23 @@ body {
 }
 
 .d-flex {
-    display:flex !important;
+    display: flex !important;
 }
 
 .justify-content-start {
-    justify-content:flex-start !important;
+    justify-content: flex-start !important;
 }
 
 .justify-content-center {
-    justify-content:center !important;
+    justify-content: center !important;
 }
 
 .pb-2 {
-    padding-bottom:.4rem!important
+    padding-bottom: 0.4rem !important;
 }
 
 .pb-5 {
-    padding-bottom:2rem!important
+    padding-bottom: 2rem !important;
 }
 
 .notFound {
@@ -437,4 +502,51 @@ textarea,
 img,
 :focus {
     outline: none;
+}
+
+#main-loading-overlay {
+    cursor: default !important;
+    overflow: hidden;
+    transition: visibility 0s 0.5s, opacity 0.5s linear;
+    visibility: visible;
+    opacity: 1;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    background: #202126;
+}
+
+.loading-spinner {
+    animation: spinner 1s infinite linear;
+    width: 36px;
+}
+
+.spinner-content {
+    text-align: center;
+    color: #dadada;
+}
+
+#game-loading-overlay {
+    cursor: default !important;
+    overflow: hidden;
+    transition: visibility 0s .5s, opacity .5s linear;
+    visibility: visible;
+    opacity: 1;
+    display: flex;
+    border-radius: inherit;
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+    position: absolute;
+    top: inherit;
+    left: inherit;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    background: #202126
 }

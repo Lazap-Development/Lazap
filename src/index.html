@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta charset="UTF-8">
 
 <head>
     <link rel="stylesheet" type="text/css" href="css/style.css">
-
+    <meta charset="UTF-8">
     <script async type="module" src="js/listeners.js"></script>
     <script async type="text/javascript" src="js/ipc.js"></script>
-    <!--    <script async type="text/javascript" src="js/functions.js"></script>-->
 </head>
 
 <body>
     <div class="titlebar">
-        <div class="titlebar-icons">
-            <img src="../img/circle.png" onclick="min_window()" class="titlebar-min mx-1" width="19" height="19">
-            <img src="../img/circle.png" onclick="max_window()" class="titlebar-max mx-1" width="19" height="19">
-            <img src="../img/circle.png" onclick="close_window()" class="titlebar-exit mx-1" width="19" height="19">
+        <div style="justify-content: space-between;" class="titlebar-icons">
+            <img class="titlebar-settings" src="../img/settings.svg">
+            <div style="margin-top: 0px;" class="titlebar-icons">
+                <div onclick="min_window()" class="titlebar-min mx-1"></div>
+                <div onclick="max_window()" class="titlebar-max mx-1"></div>
+                <div onclick="close_window()" class="titlebar-exit mx-1"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-loading-overlay">
+        <div class="spinner-content">
+            <img src="../img/spinner.svg" alt="Loading..." class="loading-spinner">
+            <p class="fadeInDown">Loading the launcher...</p>
         </div>
     </div>
 
@@ -44,6 +52,12 @@
 
         <div class="secondorybox" id="games">
             <p>All Games</p>
+            <div id="game-loading-overlay">
+                <div class="spinner-content">
+                    <img src="../img/spinner.svg" alt="Loading..." class="loading-spinner">
+                    <p class="fadeInDown">Loading your games...</p>
+                </div>
+            </div>
             <div id="gamesList" class="fadeInDown">
 
             </div>
@@ -141,7 +155,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-center pb-5">
+                <div class="d-flex justify-content-center">
                     <div class="side-tab" id="friends-btn">
                         <img src="../img/friends.svg" height="25" width="25">
                         <div class="side-tab-text">

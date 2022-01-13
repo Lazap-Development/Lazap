@@ -1,45 +1,45 @@
+/* eslint-disable no-undef */
 let img;
 
+// eslint-disable-next-line no-unused-vars
 function loadFile(event) {
-    console.log(event)
-    var image = document.getElementById("output");
-    image.src = URL.createObjectURL(event.target.files[0]);
-    img = event.target.files[0].path;
+	const image = document.getElementById('output');
+	image.src = URL.createObjectURL(event.target.files[0]);
+	img = event.target.files[0].path;
 
-    ipcRenderer.send('update-profile', {
-        username: document.querySelector('input#text').value,
-        pfp: event.target.files[0].path
-    });
+	ipcRenderer.send('update-profile', {
+		username: document.getElementById('text').value,
+		pfp: event.target.files[0].path,
+	});
 }
 
 document.getElementById('text').addEventListener('change', (e) => {
-    ipcRenderer.send('update-profile', {
-        username: e.target.value,
-        pfp: img
-    });
-})
-
-ipcRenderer.on('load-profile', (event, data) => {
-    document.querySelector('img#output').src = data.pfp.length < 1 ? 'https://cdn.discordapp.com/avatars/633730629560958976/5c1abedd641bb81ecc381696950a0b16.png?size=1024' : data.pfp;
-    document.querySelector('input#text').value = data.username;
-    if (!img) {
-        img = data.pfp.length < 1 ? 'https://cdn.discordapp.com/avatars/633730629560958976/5c1abedd641bb81ecc381696950a0b16.png?size=1024' : data.pfp;
-    }
+	ipcRenderer.send('update-profile', {
+		username: e.target.value,
+		pfp: img,
+	});
 });
 
-ipcRenderer.on('check-for-login', async (e, r) => {
-    console.log('e')
-    const loggedInDiv = document.querySelector('div#loggedIn');
-    loggedInDiv.addEventListener('click', () => {
-        ipcRenderer.send('load-login');
-    });
-    const res = r;
-    if (res.status === 'SUCCESS') {
-        loggedInDiv.textContent = 'You are logged in!';
-    }
-    else {
-        loggedInDiv.textContent = 'You are not logged in!';
-    }
+ipcRenderer.on('load-profile', (event, data) => {
+	document.getElementById('output').src = data.pfp === 'default' ? '../img/default-profile.svg' : data.pfp;
+	document.getElementById('text').value = data.username;
+	if (!img) img = data.pfp;
+});
 
-    loggedInDiv.textContent += `\n Click here to login in ${loggedInDiv.textContent.includes('not') ? '' : 'from different account'}`;
+
+ipcRenderer.on('check-for-login', async (e, r) => {
+	console.log('e');
+	const loggedInDiv = document.querySelector('div#loggedIn');
+	loggedInDiv.addEventListener('click', () => {
+		ipcRenderer.send('load-login');
+	});
+	const res = r;
+	if (res.status === 'SUCCESS') {
+		loggedInDiv.textContent = 'You are logged in!';
+	}
+	else {
+		loggedInDiv.textContent = 'You are not logged in!';
+	}
+
+	loggedInDiv.textContent += `\n Click here to login in ${loggedInDiv.textContent.includes('not') ? '' : 'from different account'}`;
 });
