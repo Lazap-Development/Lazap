@@ -9,9 +9,13 @@
 </head>
 
 <body>
+    <div class="settings-background fadeInDown" id="settings-backblur"></div>
+    <div class="settings" id="settings-popup"></div>
+
     <div class="titlebar">
         <div style="justify-content: space-between;" class="titlebar-icons">
-            <img class="titlebar-settings" src="../img/settings.svg">
+            <img class="titlebar-settings" src="../img/settings.svg" id="settings-btn">
+            
             <div style="margin-top: 0px;" class="titlebar-icons">
                 <div onclick="min_window()" class="titlebar-min mx-1"></div>
                 <div onclick="max_window()" class="titlebar-max mx-1"></div>

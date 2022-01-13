@@ -7,6 +7,8 @@ const favs = document.getElementById('favs');
 const friends = document.getElementById('friends');
 const messages = document.getElementById('messages');
 const activity = document.getElementById('activity');
+const settings = document.getElementById('settings-popup');
+const settingsbackblur = document.getElementById('settings-backblur');
 
 window.onload = async function() {
 	await require('./js/launchers/find-games.js').loadGames();
@@ -82,6 +84,17 @@ document.getElementById('friends-btn').addEventListener('click', function() {
 	messages.style.display = 'none';
 	activity.style.display = 'none';
 	friends.style.display = 'flex';
+});
+
+document.getElementById('settings-btn').addEventListener('click', function() {
+	settings.style.display = 'flex';
+	settingsbackblur.style.display = "flex"
+	
+});
+
+settingsbackblur.addEventListener('click', function() {
+	settings.style.display = 'none';
+	settingsbackblur.style.display = 'none';
 });
 
 items.forEach((link) =>
