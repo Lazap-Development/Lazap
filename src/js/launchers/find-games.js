@@ -31,7 +31,7 @@ async function loadGames() {
 		if (games_blacklist.includes(game.GameID)) return;
 
 		const gameElement = document.createElement('div');
-		gameElement.id = 'game-div-' + game.DisplayName.replace(' ', '_');
+		gameElement.id = 'game-div-' + game.DisplayName.replaceAll(' ', '_');
 		gameElement.className += 'gamebox';
 		gameElement.style.diplay = 'table';
 		gamesElement.appendChild(gameElement);

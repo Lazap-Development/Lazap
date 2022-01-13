@@ -5,6 +5,7 @@ const app = electron.app;
 const fs = require('fs');
 const axios = require('axios').default;
 const os = require('os');
+const { JSDOM } = require('jsdom');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
@@ -63,16 +64,10 @@ app.on('ready', () => {
 		const res = fetch_banner(r);
 		res.forEach(async (url, i) => {
 			mainWindow.webContents.executeJavaScript(`
-	 		var banner_res = '${await url}';
-			console.log(banner_res, ${i});
-	 		var gameElement = document.querySelector('div#gamesList > div:nth-child(${i + 1})');
-	 		gameElement.firstElementChild.setAttribute('src', banner_res);
-			gameElement.firstElementChild.addEventListener("load", () => {
-				setTimeout(() => {
-					gameElement.firstElementChild.style = \`opacity: 1;\`;
-				}, 200);
-			});
-			`);
+			var banner_res = '${await url}';
+			var gameElement = document.getElementById('game-div-${r[i].DisplayName.replaceAll(' ', '_')}');
+			gameElement.firstElementChild.setAttribute('src', banner_res);
+		   `);
 		});
 		mainWindow.webContents.send('load-banners-response');
 	});
@@ -111,7 +106,8 @@ function handleStorageAndTransportData(mainWindow) {
 			pfp: 'default',
 		};
 		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(LauncherData));
-	} else {
+	}
+	else {
 		if (LauncherData.pfp !== 'default' && !fs.existsSync(LauncherData.pfp)) {
 			LauncherData.pfp = 'default';
 		}
@@ -131,6 +127,45 @@ function editLocalStorage(content) {
 }
 
 function fetch_banner(data) {
+	const arr = [];
+	for (let i = 0; i < data.length; i++) {
+		arr.push(new Promise((resolve, reject) => {
+			switch (data[i].LauncherName) {
+			case 'EpicGames': {
+				axios({
+					url: `https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(data[i].DisplayName)}&sortBy=releaseDate&sortDir=DESC&count=5`,
+					method: 'GET',
+					responseType: 'arraybuffer',
+				}).then(response => {
+					const dom = new JSDOM(response.data);
+					const element = dom.window.document.querySelector(`#dieselReactWrapper > div > div > main > div > div > div > div > div > section > div > section > div > section > section > ul > li > div > div > div > a > div > div > div > div > div > img[alt="${data[i].DisplayName}"]`);
+					resolve(element.getAttribute('data-image'));
+				}).catch((err) => {
+					console.log(err);
+					reject('UNABLE_TO_GET_DATA');
+				});
+				break;
+			}
+			case 'Steam': {
+				resolve(`https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/header.jpg`);
+				break;
+			}
+			case 'RiotGames': {
+				switch (data[i].GameID) {
+				case 'Valorant': {
+					resolve('https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png');
+					break;
+				}
+				}
+				break;
+			}
+			}
+		}));
+	}
+
+	cacheBanners(data, arr);
+	return arr;
+	/*
 	const res = data.map(async (r) => {
 		let banner_res = await axios.post('http://localhost:3000/games/banner', r).catch(() => 0);
 		if (!isNaN(banner_res)) {
@@ -142,11 +177,11 @@ function fetch_banner(data) {
 	});
 	cacheBanners(data, res);
 	return res;
+	*/
 }
 
 function cacheBanners(data, res) {
 	res.filter(async (x) => (await x).startsWith('http')).forEach(async (x, i) => {
-		console.log(await x);
 		axios({
 			url: await x,
 			method: 'GET',

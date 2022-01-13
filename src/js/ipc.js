@@ -34,7 +34,7 @@ ipcRenderer.on('load-banners-response', () => {
 	if (!games.length) {
 		gamesList.forEach((gameElement) => {
 			setTimeout(() => {
-				gameElement.firstElementChild.style = 'opacity: 1;';
+				gameElement.firstElementChild.style.opacity = '1';
 			}, 200);
 		});
 		document.getElementById('game-loading-overlay').style.opacity = '0';
@@ -47,6 +47,10 @@ ipcRenderer.on('load-banners-response', () => {
 			if ((loaded / 2) == total) {
 				document.getElementById('game-loading-overlay').style.opacity = '0';
 				document.getElementById('game-loading-overlay').style.visibility = 'hidden';
+				setTimeout(() =>
+					// eslint-disable-next-line max-nested-callbacks
+					gamesList.forEach((gameElement) => gameElement.firstElementChild.style.opacity = '1'), 200,
+				);
 			}
 		});
 	});
