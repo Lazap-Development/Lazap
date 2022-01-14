@@ -99,7 +99,7 @@ function handleStorageAndTransportData(mainWindow) {
 		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(LauncherData));
 	}
 
-	mainWindow.webContents.send('load-profile', LauncherData, time);
+	mainWindow.webContents.send('load-profile', LauncherData);
 }
 
 function editLocalStorage(content) {

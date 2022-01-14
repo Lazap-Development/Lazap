@@ -88,8 +88,8 @@ document.getElementById('friends-btn').addEventListener('click', function() {
 });
 
 document.getElementById('settings-btn').addEventListener('click', function() {
-	settings.style.display = 'flex';
 	settingsbackblur.style.display = 'flex';
+	settings.style.display = 'flex';
 });
 
 settingsbackblur.addEventListener('click', function() {
