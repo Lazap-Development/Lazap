@@ -77,26 +77,11 @@ function handleStorageAndTransportData(mainWindow) {
 	if (!fs.existsSync(__dirname + '\\storage')) {
 		fs.mkdirSync(__dirname + '\\storage');
 		fs.mkdirSync(__dirname + '\\storage\\Settings');
-		fs.mkdirSync(__dirname + '\\storage\\Cache');
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
 		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', '{}');
 	}
 	if (!fs.existsSync(__dirname + '\\storage\\Settings')) {
 		fs.mkdirSync(__dirname + '\\storage\\Settings');
 		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', '{}');
-	}
-	if (!fs.existsSync(__dirname + '\\storage\\Cache')) {
-		fs.mkdirSync(__dirname + '\\storage\\Cache');
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
-	}
-	if (!fs.existsSync(__dirname + '\\storage\\Cache\\Games')) {
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
-	}
-	if (!fs.existsSync(__dirname + '\\storage\\Cache\\Games\\Images')) {
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
 	}
 
 	let LauncherData = require(`${__dirname}\\storage\\Settings\\userprofile.json`);
@@ -114,7 +99,7 @@ function handleStorageAndTransportData(mainWindow) {
 		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(LauncherData));
 	}
 
-	mainWindow.webContents.send('load-profile', LauncherData);
+	mainWindow.webContents.send('load-profile', LauncherData, time);
 }
 
 function editLocalStorage(content) {
@@ -181,6 +166,25 @@ function fetch_banner(data) {
 }
 
 function cacheBanners(data, res) {
+	if (!fs.existsSync(__dirname + '\\storage')) {
+		fs.mkdirSync(__dirname + '\\storage');
+		fs.mkdirSync(__dirname + '\\storage\\Cache');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
+	}
+	if (!fs.existsSync(__dirname + '\\storage\\Cache')) {
+		fs.mkdirSync(__dirname + '\\storage\\Cache');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
+	}
+	if (!fs.existsSync(__dirname + '\\storage\\Cache\\Games')) {
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
+	}
+	if (!fs.existsSync(__dirname + '\\storage\\Cache\\Games\\Images')) {
+		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
+	}
+
 	res.filter(async (x) => (await x).startsWith('http')).forEach(async (x, i) => {
 		axios({
 			url: await x,

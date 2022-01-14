@@ -11,7 +11,6 @@ const settings = document.getElementById('settings-popup');
 const settingsbackblur = document.getElementById('settings-backblur');
 
 window.onload = async function() {
-	await require('./js/launchers/find-games.js').loadGames();
 	document.getElementById('main-loading-overlay').style.opacity = '0';
 	document.getElementById('main-loading-overlay').style.visibility = 'hidden';
 };
@@ -44,6 +43,8 @@ document.getElementById('games-btn').addEventListener('click', function() {
 	friends.style.display = 'none';
 	messages.style.display = 'none';
 	activity.style.display = 'none';
+
+	require('./js/launchers/find-games.js').loadGames();
 });
 
 document.getElementById('favs-btn').addEventListener('click', function() {
@@ -88,8 +89,7 @@ document.getElementById('friends-btn').addEventListener('click', function() {
 
 document.getElementById('settings-btn').addEventListener('click', function() {
 	settings.style.display = 'flex';
-	settingsbackblur.style.display = "flex"
-	
+	settingsbackblur.style.display = 'flex';
 });
 
 settingsbackblur.addEventListener('click', function() {
