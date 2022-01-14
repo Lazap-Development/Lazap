@@ -28,7 +28,7 @@ async function loadGames() {
 	if (gamesElement.children.length >= 1) return;
 
 	const uncachedGames = games.map((game) => {
-		if (games_blacklist.includes(game.GameID)) return;
+		if (games_blacklist.includes(game.GameID)) return {};
 
 		const gameElement = document.createElement('div');
 		gameElement.id = 'game-div-' + game.DisplayName.replaceAll(' ', '_');
