@@ -9,13 +9,20 @@
 </head>
 
 <body>
-    <div class="settings-background fadeInDown" id="settings-backblur"></div>
-    <div class="settings" id="settings-popup"></div>
+    <div class="settings-background fadeInDownNoDelay" id="settings-backblur"></div>
+    <div class="settings fadeInDown" id="settings-popup">
+        <h1>
+            Settings
+        </h1>
+    </div>
 
     <div class="titlebar">
         <div style="justify-content: space-between;" class="titlebar-icons">
-            <img class="titlebar-settings" src="../img/settings.svg" id="settings-btn">
-            
+            <div class="titlebar-options">
+                <img class="titlebar-settings" src="../img/settings.svg" id="settings-btn">
+                <img class="titlebar-account" src="../img/account.svg" id="account-btn">
+            </div>
+
             <div style="margin-top: 0px;" class="titlebar-icons">
                 <div onclick="min_window()" class="titlebar-min mx-1"></div>
                 <div onclick="max_window()" class="titlebar-max mx-1"></div>
@@ -35,7 +42,7 @@
         <div class="homebox" id="home">
             <div class="children fadeInUp">
                 <img class="head-pic"
-                    src="https://www.powerpyx.com/wp-content/uploads/gta-3-definitive-edition-wallpaper.jpg">
+                    src="../img/gta-3-definitive-edition-wallpaper.jpg">
 
             </div>
             <div class="children fadeInDown">
@@ -84,13 +91,13 @@
         </div>
 
         <div class="leftbar">
+            <div class="leftbar-overlay"></div>
             <div class="d-flex justify-content-center">
                 <div>
                     <div class="user-pfp">
                         <label for="file"></label>
                         <input id="file" type="file" accept="image/*" onchange="loadFile(event)" />
-                        <img src="https://cdn.discordapp.com/avatars/633730629560958976/5c1abedd641bb81ecc381696950a0b16.png?size=1024"
-                            alt="Avatar" width="80" height="80" id="output">
+                        <img src="../img/default-profile.svg" alt="Avatar" width="80" height="80" id="output">
                     </div>
                     <input class="username" id="text" type="text" value="DashCruft" spellcheck="false" maxlength="12" />
                     <div id="loggedIn">

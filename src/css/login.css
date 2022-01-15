@@ -1,3 +1,8 @@
+::selection {
+    color: black;
+    background: skyblue;
+}
+
 @font-face {
     font-family: Comfortaa;
     src: url('../../fonts/Comfortaa-SemiBold.ttf') format('truetype');
@@ -25,17 +30,15 @@
     }
 }
 
-@keyframes fadeInDown {
+@keyframes fade {
     from {
-        transform: translate3d(0, 10px, 0)
+        opacity: 0;
     }
 
     to {
-        transform: translate3d(0, 0, 0);
-        opacity: 1
+        opacity: 1;
     }
 }
-
 
 * {
     box-sizing: border-box;
@@ -63,7 +66,6 @@ body {
     user-select: none;
 
     border-radius: 10px;
-    background-color: rgba(43, 43, 43);
     height: 35px;
     width: 100%;
     flex: auto;
@@ -81,23 +83,22 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 18px;
-    width: 18px;
+    height: 19px;
+    width: 19px;
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
     display: block;
 }
 
 .titlebar-exit:hover {
-    filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg)
-        brightness(92%) contrast(94%);
+    filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg) brightness(92%) contrast(94%);
 }
 
 .titlebar-max {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 18px;
+    height: 19px;
     width: 18px;
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
@@ -105,24 +106,22 @@ body {
 }
 
 .titlebar-max:hover {
-    filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg)
-        brightness(102%) contrast(110%);
+    filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg) brightness(102%) contrast(110%);
 }
 
 .titlebar-min {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 18px;
-    width: 18px;
+    height: 19px;
+    width: 19px;
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
     display: block;
 }
 
 .titlebar-min:hover {
-    filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg)
-        brightness(92%) contrast(97%);
+    filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg) brightness(92%) contrast(97%);
 }
 
 h1 {
@@ -130,6 +129,8 @@ h1 {
     margin: 0;
     margin-bottom: 20px;
     margin-top: 10px;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 h2 {
@@ -144,6 +145,8 @@ p {
     margin: 20px 0 30px;
     margin-left: 20px;
     margin-right: 20px;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 span {
@@ -156,6 +159,8 @@ a {
     text-decoration: none;
     margin: 25px;
     margin-bottom: 11px;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 button {
@@ -174,6 +179,8 @@ button {
     font-weight: bolder;
     font-family: Comfortaa;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 button:hover {
@@ -230,6 +237,8 @@ input {
     margin: 8px 0;
     width: 100%;
     font-family: Comfortaa;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 input:focus {
@@ -281,6 +290,7 @@ input:focus {
 }
 
 @keyframes show {
+
     0%,
     49.99% {
         opacity: 0;
@@ -370,7 +380,7 @@ input:focus {
 
 .fadeInUp {
     animation-duration: 0.7s;
-    animation-delay: 0.2s;
+    animation-delay: 0.1s;
     animation-fill-mode: both;
     backface-visibility: hidden;
     opacity: 0;
@@ -379,9 +389,46 @@ input:focus {
 
 .fadeInDown {
     animation-duration: 0.7s;
-    animation-delay: 0.2s;
+    animation-delay: 0.1s;
     animation-fill-mode: both;
     backface-visibility: hidden;
     opacity: 0;
     animation-name: fadeInDown;
+}
+
+.line {
+    position: relative;
+    color: rgb(212, 212, 212);
+    margin: 10px auto;
+    border-right: 2px solid rgba(255, 255, 255, .75);
+
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    transform: translateY(-50%);
+}
+
+.typewriter {
+    animation: typewriter 2.5s steps(44) 0s 1 normal both,
+        blinkTextCursor 500ms steps(44) infinite normal;
+}
+
+@keyframes typewriter {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 30em;
+    }
+}
+
+@keyframes blinkTextCursor {
+    from {
+        border-right-color: rgba(255, 255, 255, .75);
+    }
+
+    to {
+        border-right-color: transparent;
+    }
 }

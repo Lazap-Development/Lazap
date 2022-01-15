@@ -25,7 +25,12 @@ async function loadGames() {
 	*/
 
 	const gamesElement = document.querySelector('div#gamesList');
-	if (gamesElement.children.length >= 1) return;
+
+	if (gamesElement.children.length >= 1) {
+		document.querySelector('.leftbar-overlay').style.opacity = '0';
+		document.querySelector('.leftbar-overlay').style.visibility = 'hidden';
+		return;
+	}
 
 	const uncachedGames = games.map((game) => {
 		if (games_blacklist.includes(game.GameID)) return {};
@@ -71,7 +76,6 @@ async function loadGames() {
 		return game;
 	}).filter((x) => x.Banner === '../icon.ico');
 
-	document.querySelector('#game-loading-overlay').style.opacity = '0.9';
 	ipcRenderer.send('load-banners-request', uncachedGames);
 }
 

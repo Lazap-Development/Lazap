@@ -11,10 +11,17 @@ const settings = document.getElementById('settings-popup');
 const settingsbackblur = document.getElementById('settings-backblur');
 
 window.onload = async function() {
-	await require('./js/launchers/find-games.js').loadGames();
 	document.getElementById('main-loading-overlay').style.opacity = '0';
 	document.getElementById('main-loading-overlay').style.visibility = 'hidden';
 };
+
+items.forEach((link) =>
+	link.addEventListener('click', (e) => {
+		marker.style.top = '0';
+		marker.style.height = '0px';
+		indicator(e.target);
+	}),
+);
 
 document.getElementById('home-btn').addEventListener('click', function() {
 	home.style.display = 'flex';
@@ -44,6 +51,14 @@ document.getElementById('games-btn').addEventListener('click', function() {
 	friends.style.display = 'none';
 	messages.style.display = 'none';
 	activity.style.display = 'none';
+
+	if (document.getElementById('game-loading-overlay').style.opacity !== '0') {
+		document.querySelector('.leftbar-overlay').style.opacity = '0.7';
+		document.querySelector('.leftbar-overlay').style.visibility = 'visible';
+	}
+	setTimeout(async () => {
+		await require('./js/launchers/find-games.js').loadGames();
+	}, 400);
 });
 
 document.getElementById('favs-btn').addEventListener('click', function() {
@@ -87,9 +102,8 @@ document.getElementById('friends-btn').addEventListener('click', function() {
 });
 
 document.getElementById('settings-btn').addEventListener('click', function() {
+	settingsbackblur.style.display = 'flex';
 	settings.style.display = 'flex';
-	settingsbackblur.style.display = "flex"
-	
 });
 
 settingsbackblur.addEventListener('click', function() {
