@@ -15,6 +15,14 @@ window.onload = async function() {
 	document.getElementById('main-loading-overlay').style.visibility = 'hidden';
 };
 
+items.forEach((link) =>
+	link.addEventListener('click', (e) => {
+		marker.style.top = '0';
+		marker.style.height = '0px';
+		indicator(e.target);
+	}),
+);
+
 document.getElementById('home-btn').addEventListener('click', function() {
 	home.style.display = 'flex';
 	recent.style.display = 'none';
@@ -44,7 +52,13 @@ document.getElementById('games-btn').addEventListener('click', function() {
 	messages.style.display = 'none';
 	activity.style.display = 'none';
 
-	require('./js/launchers/find-games.js').loadGames();
+	if (document.getElementById('game-loading-overlay').style.opacity !== '0') {
+		document.querySelector('.leftbar-overlay').style.opacity = '0.7';
+		document.querySelector('.leftbar-overlay').style.visibility = 'visible';
+	}
+	setTimeout(async () => {
+		await require('./js/launchers/find-games.js').loadGames();
+	}, 400);
 });
 
 document.getElementById('favs-btn').addEventListener('click', function() {

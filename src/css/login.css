@@ -1,3 +1,8 @@
+::selection {
+    color: black;
+    background: skyblue;
+}
+
 @font-face {
     font-family: Comfortaa;
     src: url('../../fonts/Comfortaa-SemiBold.ttf') format('truetype');
@@ -124,6 +129,8 @@ h1 {
     margin: 0;
     margin-bottom: 20px;
     margin-top: 10px;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 h2 {
@@ -138,6 +145,8 @@ p {
     margin: 20px 0 30px;
     margin-left: 20px;
     margin-right: 20px;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 span {
@@ -150,6 +159,8 @@ a {
     text-decoration: none;
     margin: 25px;
     margin-bottom: 11px;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 button {
@@ -168,6 +179,8 @@ button {
     font-weight: bolder;
     font-family: Comfortaa;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 button:hover {
@@ -220,6 +233,8 @@ input {
     margin: 8px 0;
     width: 100%;
     font-family: Comfortaa;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 input:focus {

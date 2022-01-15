@@ -39,6 +39,8 @@ ipcRenderer.on('load-banners-response', () => {
 		});
 		document.getElementById('game-loading-overlay').style.opacity = '0';
 		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
+		document.querySelector('.leftbar-overlay').style.opacity = '0';
+		document.querySelector('.leftbar-overlay').style.visibility = 'hidden';
 		return;
 	}
 	games.forEach((game) => {
@@ -47,6 +49,8 @@ ipcRenderer.on('load-banners-response', () => {
 			if ((loaded / 2) == total) {
 				document.getElementById('game-loading-overlay').style.opacity = '0';
 				document.getElementById('game-loading-overlay').style.visibility = 'hidden';
+				document.querySelector('.leftbar-overlay').style.opacity = '0';
+				document.querySelector('.leftbar-overlay').style.visibility = 'hidden';
 				setTimeout(() =>
 					// eslint-disable-next-line max-nested-callbacks
 					gamesList.forEach((gameElement) => gameElement.firstElementChild.style.opacity = '1'), 200,

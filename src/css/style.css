@@ -1,3 +1,9 @@
+::selection {
+    color: inherit;
+    background: #2e3038;
+    border-radius: 10px;
+}
+
 @font-face {
     font-family: Comfortaa;
     src: url('../../fonts/Comfortaa-Medium.ttf') format('truetype');
@@ -636,4 +642,16 @@ img,
     justify-content: center;
     z-index: 1;
     background: #202126
+}
+
+.leftbar-overlay {
+    position: absolute;
+    display: flex;
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
+    border-radius: inherit;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1;
+    background: inherit;
 }
