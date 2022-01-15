@@ -6,6 +6,9 @@ fnScript.type = 'text/javascript';
 fnScript.src = 'js/functions.js';
 document.querySelector('head').appendChild(fnScript);
 
+const account = document.getElementById('account-btn');
+let loggedin;
+
 // eslint-disable-next-line no-unused-vars
 function close_window() {
 	ipcRenderer.send('close-window');
@@ -20,6 +23,27 @@ function max_window() {
 function min_window() {
 	ipcRenderer.send('min-window');
 }
+
+ipcRenderer.on('check-for-login', async (e, r) => {
+	const res = r;
+	if (res.status === 'SUCCESS') {
+		loggedin = true;
+	}
+	else {
+		loggedin = false;
+	}
+});
+
+account.addEventListener('mouseover', () => {
+	if (loggedin === true) {
+		account.style['filter'] = 'invert(17%) sepia(86%) saturate(3285%) hue-rotate(239deg) brightness(85%) contrast(101%)';
+	}
+	else if (loggedin === false) {
+		account.style['filter'] = 'invert(19%) sepia(87%) saturate(4716%) hue-rotate(355deg) brightness(99%) contrast(104%)';
+	}
+});
+account.addEventListener('mouseout', () => account.style['filter'] = 'none');
+account.addEventListener('click', () => ipcRenderer.send('load-login'));
 
 ipcRenderer.on('load-banners-response', () => {
 	const gamesList = document.querySelectorAll('#gamesList > div');

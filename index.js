@@ -42,8 +42,8 @@ app.on('ready', () => {
 
 	mainWindow.webContents.on('did-finish-load', async () => {
 		// Checking for auto-login
-		if (fs.existsSync(__dirname + '\\storage\\userprofile.js')) {
-			if (require('./storage/userprofile.json').token) {
+		if (fs.existsSync(__dirname + '\\storage\\Settings\\userprofile.js')) {
+			if (require('./storage/Settings/userprofile.json').token) {
 				mainWindow.webContents.send('check-if-logged-in', await identify());
 			}
 			else {
@@ -87,6 +87,9 @@ app.on('ready', () => {
 	});
 	ipcMain.on('signin-request', async (e, data) => {
 		mainWindow.webContents.send('signin-response', await handleSignin(data));
+	});
+	ipcMain.on('login-identify', async () => {
+		mainWindow.webContents.send('login-identify-response', await identify());
 	});
 	ipcMain.on('load-banners-request', async (e, r) => {
 		const res = fetch_banner(r);
@@ -240,8 +243,8 @@ async function handleSignin(data) {
 
 	if (res) {
 		// console.log(res.data);
-		if (fs.existsSync(__dirname + '\\storage\\userprofile.json')) {
-			const json = require(`${__dirname}/storage/userprofile.json`);
+		if (fs.existsSync(__dirname + '\\storage\\Settings\\userprofile.json')) {
+			const json = require(`${__dirname}/storage/Settings/userprofile.json`);
 			json['token'] = res.data;
 			json['password'] = data.pass;
 			json['username'] = data.username;
@@ -261,8 +264,8 @@ async function handleSignin(data) {
 }
 
 async function identify() {
-	if (!fs.existsSync(__dirname + '\\storage\\userprofile.json')) return { status: 'ACCOUNT_NOT_FOUND', data: null };
-	const { token, password, username } = JSON.parse(fs.readFileSync(__dirname + '\\storage\\userprofile.json').toString());
+	if (!fs.existsSync(__dirname + '\\storage\\Settings\\userprofile.json')) return { status: 'ACCOUNT_NOT_FOUND', data: null };
+	const { token, password, username } = JSON.parse(fs.readFileSync(__dirname + '\\storage\\Settings\\userprofile.json').toString());
 	const res = await axios.post('http://localhost:3000/accounts/identify', { token, pass: password, name: username }).catch((e) => e.response?.status || 0);
 
 	const errcodes = {

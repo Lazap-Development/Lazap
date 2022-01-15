@@ -25,21 +25,3 @@ ipcRenderer.on('load-profile', (event, data) => {
 	document.getElementById('text').value = data.username;
 	if (!img) img = data.pfp;
 });
-
-
-ipcRenderer.on('check-for-login', async (e, r) => {
-	console.log('e');
-	const loggedInDiv = document.querySelector('div#loggedIn');
-	loggedInDiv.addEventListener('click', () => {
-		ipcRenderer.send('load-login');
-	});
-	const res = r;
-	if (res.status === 'SUCCESS') {
-		loggedInDiv.textContent = 'You are logged in!';
-	}
-	else {
-		loggedInDiv.textContent = 'You are not logged in!';
-	}
-
-	loggedInDiv.textContent += `\n Click here to login in ${loggedInDiv.textContent.includes('not') ? '' : 'from different account'}`;
-});

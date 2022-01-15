@@ -664,3 +664,16 @@ img,
     z-index: 1;
     background: inherit;
 }
+
+.alert-box {
+    position: absolute;
+    display: flex;
+    height: 100px;
+    width: 300px;
+    border-radius: 10px;
+    opacity: 0;
+    margin-left: calc(50% - 150px);
+    margin-top: -120px;
+    background-color: #9521f3;
+    z-index: 1;
+}
