@@ -25,6 +25,16 @@
     }
 }
 
+@keyframes fade {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 * {
     box-sizing: border-box;
     overflow: hidden;
@@ -51,7 +61,6 @@ body {
     user-select: none;
 
     border-radius: 10px;
-    background-color: rgba(43, 43, 43);
     height: 35px;
     width: 100%;
     flex: auto;
@@ -69,23 +78,22 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 18px;
-    width: 18px;
+    height: 19px;
+    width: 19px;
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
     display: block;
 }
 
 .titlebar-exit:hover {
-    filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg)
-        brightness(92%) contrast(94%);
+    filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg) brightness(92%) contrast(94%);
 }
 
 .titlebar-max {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 18px;
+    height: 19px;
     width: 18px;
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
@@ -93,24 +101,22 @@ body {
 }
 
 .titlebar-max:hover {
-    filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg)
-        brightness(102%) contrast(110%);
+    filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg) brightness(102%) contrast(110%);
 }
 
 .titlebar-min {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 18px;
-    width: 18px;
+    height: 19px;
+    width: 19px;
     background-color: rgb(56, 56, 56);
     -webkit-app-region: no-drag;
     display: block;
 }
 
 .titlebar-min:hover {
-    filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg)
-        brightness(92%) contrast(97%);
+    filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg) brightness(92%) contrast(97%);
 }
 
 h1 {
@@ -265,6 +271,7 @@ input:focus {
 }
 
 @keyframes show {
+
     0%,
     49.99% {
         opacity: 0;
@@ -354,7 +361,7 @@ input:focus {
 
 .fadeInUp {
     animation-duration: 0.7s;
-    animation-delay: 0.2s;
+    animation-delay: 0.1s;
     animation-fill-mode: both;
     backface-visibility: hidden;
     opacity: 0;
@@ -363,9 +370,46 @@ input:focus {
 
 .fadeInDown {
     animation-duration: 0.7s;
-    animation-delay: 0.2s;
+    animation-delay: 0.1s;
     animation-fill-mode: both;
     backface-visibility: hidden;
     opacity: 0;
     animation-name: fadeInDown;
+}
+
+.line {
+    position: relative;
+    color: rgb(212, 212, 212);
+    margin: 10px auto;
+    border-right: 2px solid rgba(255, 255, 255, .75);
+
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    transform: translateY(-50%);
+}
+
+.typewriter {
+    animation: typewriter 2.5s steps(44) 0s 1 normal both,
+        blinkTextCursor 500ms steps(44) infinite normal;
+}
+
+@keyframes typewriter {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 30em;
+    }
+}
+
+@keyframes blinkTextCursor {
+    from {
+        border-right-color: rgba(255, 255, 255, .75);
+    }
+
+    to {
+        border-right-color: transparent;
+    }
 }

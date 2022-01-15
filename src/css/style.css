@@ -97,7 +97,7 @@ body {
     user-select: none;
 
     border-radius: 10px;
-    background-color: rgba(43, 43, 43);
+    background-color: #202126;
     height: 35px;
     width: 100%;
     flex: auto;
@@ -122,9 +122,9 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 18px;
-    width: 18px;
-    background-color: rgb(56, 56, 56);
+    height: 19px;
+    width: 19px;
+    background-color: rgb(70, 70, 70);
     -webkit-app-region: no-drag;
     display: block;
 }
@@ -137,9 +137,9 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 18px;
-    width: 18px;
-    background-color: rgb(56, 56, 56);
+    height: 19px;
+    width: 19px;
+    background-color: rgb(70, 70, 70);
     -webkit-app-region: no-drag;
     display: block;
 }
@@ -152,9 +152,9 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 18px;
-    width: 18px;
-    background-color: rgb(56, 56, 56);
+    height: 19px;
+    width: 19px;
+    background-color: rgb(70, 70, 70);
     -webkit-app-region: no-drag;
     display: block;
 
