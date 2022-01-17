@@ -6,11 +6,15 @@ const fs = require('fs');
 const axios = require('axios').default;
 const os = require('os');
 const { JSDOM } = require('jsdom');
+const rpc = require('discord-rpc');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
 app.commandLine.appendSwitch('high-dpi-support', 1);
 app.commandLine.appendSwitch('force-device-scale-factor', 1);
+
+const rpcClient = new rpc.Client({transport: 'ipc'});
+rpcClient.login({clientId: '932504287337148417'});
 
 app.on('ready', () => {
 	const mainWindow = new electron.BrowserWindow({
@@ -51,6 +55,10 @@ app.on('ready', () => {
 			}
 		}
 		handleStorageAndTransportData(mainWindow);
+		updateRPC({						// TODO: add img
+			details: 'Browsing games',
+			startTimestamp: Date.now(),
+		});
 	});
 
 	ipcMain.on('load-main', (e, data) => {
@@ -276,4 +284,8 @@ async function identify() {
 	};
 
 	return { data: res.data, status: errcodes[res.request?.res.statusCode] || 'OFFLINE/API_DOWN' };
+}
+
+function updateRPC(data) {
+	rpcClient.setActivity(data).catch(err => console.log(err));
 }
