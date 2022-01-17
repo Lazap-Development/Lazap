@@ -69,7 +69,16 @@ async function loadGames() {
 		gameElement.appendChild(gameText);
 
 		gameBanner.addEventListener('click', () => {
-			runCommand(`${game.Location}\\${game.Executable}`, game.Args);
+			switch (game.LauncherName) {
+			case 'Steam': {
+				window.open('steam://rungameid/302380', '', 'show=false').close();
+				break;
+			}
+			default: {
+				runCommand(`${game.Location}\\${game.Executable}`, game.Args);
+				break;
+			}
+			}
 		});
 
 		game.Banner = banner;
