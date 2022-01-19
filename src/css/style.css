@@ -128,8 +128,8 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 19px;
-    width: 19px;
+    height: 18px;
+    width: 18px;
     background-color: rgb(70, 70, 70);
     -webkit-app-region: no-drag;
     display: block;
@@ -143,8 +143,8 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 19px;
-    width: 19px;
+    height: 18px;
+    width: 18px;
     background-color: rgb(70, 70, 70);
     -webkit-app-region: no-drag;
     display: block;
@@ -158,8 +158,8 @@ body {
     -moz-border-radius: 50px/50px;
     -webkit-border-radius: 50px 50px;
     border-radius: 50px/50px;
-    height: 19px;
-    width: 19px;
+    height: 18px;
+    width: 18px;
     background-color: rgb(70, 70, 70);
     -webkit-app-region: no-drag;
     display: block;
@@ -408,7 +408,7 @@ body {
 }
 
 #indicator {
-    transition: 0.4s;
+    transition: 0.35s;
     position: absolute;
     margin-top: 4.2px;
     margin-left: 2px;
@@ -654,4 +654,40 @@ img,
     visibility: hidden;
     z-index: 1;
     background: inherit;
+}
+
+.search-bar {
+    margin-left: auto;
+    margin-right: 110px;
+    margin-top: -40px;
+    height: 40px;
+    display: flex;
+    width: 100%;
+    max-width: 350px;
+    padding-left: 16px;
+    border-radius: 4px;
+    display:inline;
+}
+.search-bar input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: #191a1d;
+    border-radius: 6px;
+    font-family: Comfortaa;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 0 20px 0 40px;
+    box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.2);
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56.966 56.966' fill='%23717790c7'%3e%3cpath d='M55.146 51.887L41.588 37.786A22.926 22.926 0 0046.984 23c0-12.682-10.318-23-23-23s-23 10.318-23 23 10.318 23 23 23c4.761 0 9.298-1.436 13.177-4.162l13.661 14.208c.571.593 1.339.92 2.162.92.779 0 1.518-.297 2.079-.837a3.004 3.004 0 00.083-4.242zM23.984 6c9.374 0 17 7.626 17 17s-7.626 17-17 17-17-7.626-17-17 7.626-17 17-17z'/%3e%3c/svg%3e");
+    background-size: 14px;
+    background-repeat: no-repeat;
+    background-position: 16px 48%;
+    color: #f9fafb;
+}
+.search-bar input::placeholder {
+    font-family: Comfortaa;
+    color: rgb(113 119 144 / 78%);
+    font-size: 15px;
+    font-weight: 500;
 }
