@@ -9,8 +9,6 @@ const { JSDOM } = require('jsdom');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
-app.commandLine.appendSwitch('high-dpi-support', 1);
-app.commandLine.appendSwitch('force-device-scale-factor', 1);
 
 app.on('ready', () => {
 	const mainWindow = new electron.BrowserWindow({
@@ -23,6 +21,7 @@ app.on('ready', () => {
 		show: false,
 		title: 'Lazap',
 		webPreferences: {
+			zoomFactor: 0.9,
 			nodeIntegration: true,
 			contextIsolation: false,
 			backgroundThrottling: false,
@@ -33,9 +32,7 @@ app.on('ready', () => {
 	mainWindow.loadFile('src/login.html');
 
 	mainWindow.once('ready-to-show', () => {
-		mainWindow.webContents.setZoomFactor(0.9);
 		setTimeout(() => {
-
 			mainWindow.show();
 		}, 100);
 	});
