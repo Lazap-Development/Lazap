@@ -5,7 +5,7 @@
     "main": "./index.js",
     "scripts": {
         "start": "electron .",
-        "build": "rmdir /s /q dist && electron-builder build"
+        "build": "IF exist 'dist' ( rmdir /s /q dist && electron-builder build ) ELSE ( electron-builder build )"
     },
     "build": {
         "productName": "Lazap",
