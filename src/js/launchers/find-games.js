@@ -71,11 +71,11 @@ async function loadGames() {
 		gameBanner.addEventListener('click', () => {
 			switch (game.LauncherName) {
 			case 'Steam': {
-				window.open('steam://rungameid/302380', '', 'show=false').close();
+				window.open(`steam://rungameid/${game.GameID}`, '', 'show=false').close();
 				break;
 			}
 			default: {
-				runCommand(`${game.Location}\\${game.Executable}`, game.Args);
+				runCommand(`${game.Location}/${game.Executable}`, game.Args);
 				break;
 			}
 			}
