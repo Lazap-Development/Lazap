@@ -56,6 +56,7 @@ app.on('ready', () => {
 		updateRPC({						// TODO: add img
 			details: 'Browsing games',
 			startTimestamp: Date.now(),
+			largeImageKey: 'lazap'
 		});
 	});
 
