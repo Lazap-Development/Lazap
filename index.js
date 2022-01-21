@@ -6,9 +6,13 @@ const fs = require('fs');
 const axios = require('axios').default;
 const os = require('os');
 const { JSDOM } = require('jsdom');
+const rpc = require('discord-rpc');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
+
+const rpcClient = new rpc.Client({transport: 'ipc'});
+rpcClient.login({clientId: '932504287337148417'});
 
 app.on('ready', () => {
 	const mainWindow = new electron.BrowserWindow({
@@ -37,14 +41,40 @@ app.on('ready', () => {
 		}, 100);
 	});
 
+	mainWindow.webContents.on('did-finish-load', async () => {
+		// Checking for auto-login
+		if (fs.existsSync(__dirname + '\\storage\\Settings\\userprofile.js')) {
+			if (require('./storage/Settings/userprofile.json').token) {
+				mainWindow.webContents.send('check-if-logged-in', await identify());
+			}
+			else {
+				return;
+			}
+		}
+		handleStorageAndTransportData(mainWindow);
+		updateRPC({						// TODO: add img
+			details: 'Browsing games',
+			startTimestamp: Date.now(),
+		});
+	});
+
+	ipcMain.on('load-main', (e, data) => {
+		mainWindow.loadFile('src/index.html');
+		setTimeout(async () => mainWindow.webContents.send('check-for-login', data || await identify()), 2000);
+	});
+	ipcMain.on('load-custom', (e, str) => {
+		mainWindow.loadFile(str);
+	});
+	ipcMain.on('load-login', async () => {
+		mainWindow.loadFile('src/login.html');
+		mainWindow.webContents.once('did-finish-load', () => mainWindow.webContents.send('replace-ignore-and-continue'));
+	});
 	mainWindow.webContents.on('did-finish-load', () => {
 		handleStorageAndTransportData(mainWindow);
 	});
-
 	ipcMain.on('load-main', () => {
 		mainWindow.loadFile('src/index.html');
 	});
-
 	ipcMain.on('close-window', () => {
 		mainWindow.close();
 	});
@@ -56,6 +86,15 @@ app.on('ready', () => {
 	});
 	ipcMain.on('update-profile', (e, data) => {
 		editLocalStorage(data);
+	});
+	ipcMain.on('signup-request', async (e, data) => {
+		mainWindow.webContents.send('signup-response', await handleSignup(data));
+	});
+	ipcMain.on('signin-request', async (e, data) => {
+		mainWindow.webContents.send('signin-response', await handleSignin(data));
+	});
+	ipcMain.on('login-identify', async () => {
+		mainWindow.webContents.send('login-identify-response', await identify());
 	});
 	ipcMain.on('load-banners-request', async (e, r) => {
 		const res = fetch_banner(r);
@@ -191,4 +230,59 @@ function cacheBanners(data, res) {
 			response.data.pipe(fs.createWriteStream(__dirname + `\\storage\\Cache\\Games\\Images\\${data[i].DisplayName}.${(await x).split('.')[(await x).split('.').length - 1].slice(0, 3) ?? 'jpg'}`));
 		});
 	});
+}
+
+async function handleSignup(data) {
+	let deniedCode;
+	const res = await axios.post('http://localhost:3000/accounts/add-account', data).catch(e => {
+		deniedCode = e.response?.status;
+	});
+	return res ? res.status : deniedCode;
+}
+
+async function handleSignin(data) {
+	let deniedCode;
+	const res = await axios.post('http://localhost:3000/accounts/login', data).catch(e => {
+		deniedCode = e.response?.status;
+	});
+
+	if (res) {
+		// console.log(res.data);
+		if (fs.existsSync(__dirname + '\\storage\\Settings\\userprofile.json')) {
+			const json = require(`${__dirname}/storage/Settings/userprofile.json`);
+			json['token'] = res.data;
+			json['password'] = data.pass;
+			json['username'] = data.username;
+			editLocalStorage(json);
+		}
+		else {
+			editLocalStorage({
+				token: res.data,
+			});
+		}
+
+		return res.status;
+	}
+	else {
+		return deniedCode || null;
+	}
+}
+
+async function identify() {
+	if (!fs.existsSync(__dirname + '\\storage\\Settings\\userprofile.json')) return { status: 'ACCOUNT_NOT_FOUND', data: null };
+	const { token, password, username } = JSON.parse(fs.readFileSync(__dirname + '\\storage\\Settings\\userprofile.json').toString());
+	const res = await axios.post('http://localhost:3000/accounts/identify', { token, pass: password, name: username }).catch((e) => e.response?.status || 0);
+
+	const errcodes = {
+		401: 'INVALID_BODY',
+		402: 'ACCOUNT_NOT_FOUND',
+		200: 'SUCCESS',
+		0: 'OFFLINE/API_DOWN',
+	};
+
+	return { data: res.data, status: errcodes[res.request?.res.statusCode] || 'OFFLINE/API_DOWN' };
+}
+
+function updateRPC(data) {
+	rpcClient.setActivity(data).catch(err => console.log(err));
 }

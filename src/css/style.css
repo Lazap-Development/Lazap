@@ -541,6 +541,15 @@ foot {
     padding-bottom: 2rem !important;
 }
 
+.notFound {
+    position: relative;
+    text-align: center;
+    margin-top: 25%;
+    color: rgb(197, 197, 197);
+
+    font-size: 22px;
+}
+
 ::-webkit-scrollbar {
     width: 0;
     background: transparent;
@@ -579,7 +588,7 @@ img,
     left: 0;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    z-index: 5;
     background: #202126;
 }
 
@@ -664,6 +673,89 @@ img,
     z-index: 1;
     background: inherit;
 }
+
+
+.alert-box {
+    position: absolute;
+    display: flex;
+    height: 100px;
+    width: 300px;
+    border-radius: 10px;
+    border-color: red;
+    opacity: 1;
+    margin-left: calc(50% - 150px);
+    margin-top: 40px;
+    background-color: none;
+    backdrop-filter: blur(6px);
+    z-index: 3;
+}
+
+.alert-box-container {
+    margin-top: 10px;
+    margin-left: 12px;
+    height: -webkit-fill-available;
+    width: -webkit-fill-available;
+    display: inline-flex;
+}
+
+.alert-box-bg {
+    background-color: #17181c;
+    height: 100px;
+    width: 300px;
+    border-radius: 10px;
+    opacity: 0.8;
+    margin-left: calc(50% - 150px);
+    margin-top: 40px;
+    z-index: 2 !important;
+}
+
+.alert-box-title {
+    display: block;
+    margin-top: 3px;
+    margin-left: 6px;
+    margin-block-end: 0px;
+    color: rgb(197, 197, 197);
+    font-size: 20px;
+}
+
+.alert-box-exclamation {
+    height: 25px;
+    width: 25px;
+    display: flex;
+    filter: invert(12%) sepia(78%) saturate(4656%) hue-rotate(1deg) brightness(108%) contrast(128%);
+}
+
+.alert-box-cross {
+    margin-top: 2px;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    transition: 0.3s;
+    position: absolute;
+    margin-left: calc(100% - 39px)
+}
+.alert-box-cross:hover {
+    filter: invert(21%) sepia(70%) saturate(3776%) hue-rotate(255deg) brightness(97%) contrast(101%);
+}
+
+.alert-box-divider {
+    align-self: baseline;
+    height: 0px;
+    width: calc(100% - 14px);
+    margin-top: 11%;
+    margin-left: -80px;
+}
+
+.alert-box-message {
+    color: rgb(197, 197, 197);
+    align-self: flex-end;
+    font-size: 13px;
+    margin-block-end: 0;
+    margin-block-start: 0;
+    position: fixed;
+    height: 45px;
+    width: 275px;
+    text-align: center;
 
 .search-bar {
     margin-left: auto;

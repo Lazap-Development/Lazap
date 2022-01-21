@@ -214,6 +214,10 @@ button.ignore:hover {
     border-radius: 20px 20px 0px 0px;
 }
 
+button.ignore {
+    margin-top: -2px;
+}
+
 .leftsection {
     background-color: #ffffff;
     display: flex;

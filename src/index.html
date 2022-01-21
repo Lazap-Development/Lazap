@@ -9,6 +9,19 @@
 </head>
 
 <body>
+    <div class="alert-box">
+        <div class="alert-box-container">
+            <img class="alert-box-exclamation" src="../img/triangle.svg">
+            <p class="alert-box-title">Alert</p>
+            <span class="alert-box-cross">&times;</span>
+            <hr class="alert-box-divider">
+            <div class="alert-box-message" style="align-items: center;">
+                <p class=alert-box-message>The Launcher Loaded 😱</p>
+            </div>
+        </div>
+    </div>
+    <div class="alert-box-bg alert-box"></div>
+
     <div class="settings-background fadeInDownNoDelay" id="settings-backblur"></div>
     <div class="settings fadeInDown" id="settings-popup">
         <h1>
@@ -26,7 +39,6 @@
                 <img class="titlebar-settings" src="../img/settings.svg" id="settings-btn">
                 <img class="titlebar-account" src="../img/account.svg" id="account-btn">
             </div>
-
             <div style="margin-top: 0px;" class="titlebar-icons">
                 <div onclick="min_window()" class="titlebar-min mx-1"></div>
                 <div onclick="max_window()" class="titlebar-max mx-1"></div>
@@ -46,7 +58,6 @@
         <div class="homebox" id="home">
             <div class="children fadeInUp">
                 <img class="head-pic" src="../img/gta-3-definitive-edition-wallpaper.jpg">
-
             </div>
             <div class="children fadeInDown">
                 <div class="jump-back">

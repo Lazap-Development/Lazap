@@ -7,7 +7,9 @@ module.exports = {
 	isLauncherInstalled,
 };
 
-let { exec } = require('child_process');
+let {
+	exec,
+} = require('child_process');
 const util = require('util');
 exec = util.promisify(exec);
 const fs = require('fs');
