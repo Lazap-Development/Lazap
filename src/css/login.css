@@ -209,9 +209,8 @@ button.ignore {
 }
 
 button.ignore:hover {
-    margin-top: -15px;
     background-color: rgb(21, 103, 255);
-    border-radius: 20px 20px 0px 0px;
+    border-radius: 15px 15px 0px 0px;
 }
 
 button.ignore {
