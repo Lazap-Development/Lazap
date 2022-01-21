@@ -22,7 +22,7 @@
 
 **The new face of Open Source Game Launchers**, Lazap unites all your games together in one place! Whether it be Linux, Windows or MacOS, we got you covered. Lazap can connect with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam. Our team of Developers make sure that Lazap is customizable, Meet up the user's need and have a glancing & modernish look - meaning, custom JavaScript & CSS scripts, games outside the launchers we support and much more!
 
-# Building Lazap (Developers)
+# Building Lazap (Developers & Contributers)
 Building Lazap is very simple. Simply run these commands in order and you should be good to go:<br>
 __NOTE:__ Make sure you have [Node.js](https://nodejs.org/en/download/) and [git](https://git-scm.com/) installed
 ```
@@ -33,6 +33,12 @@ npm i
 npm start
 ```
 And if you did everything right, Lazap should start right up!
+
+After doing those, if you would like to have the `exe` file (and the installable), rather then running a cmd each time, simply run the following:
+```
+npm run build
+```
+Then you should see a new directory named `dist`. Open it up and you can easily figure everything out yourself.
 
 # Help & Support
 We are here to help you if you get any problems when building Lazap, just join our [Discord](https://discord.gg/DashCruft)!<br><br>

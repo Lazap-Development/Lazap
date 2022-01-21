@@ -10,8 +10,6 @@ const rpc = require('discord-rpc');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
-app.commandLine.appendSwitch('high-dpi-support', 1);
-app.commandLine.appendSwitch('force-device-scale-factor', 1);
 
 const rpcClient = new rpc.Client({transport: 'ipc'});
 rpcClient.login({clientId: '932504287337148417'});
@@ -27,6 +25,7 @@ app.on('ready', () => {
 		show: false,
 		title: 'Lazap',
 		webPreferences: {
+			zoomFactor: 0.9,
 			nodeIntegration: true,
 			contextIsolation: false,
 			backgroundThrottling: false,
@@ -37,9 +36,7 @@ app.on('ready', () => {
 	mainWindow.loadFile('src/login.html');
 
 	mainWindow.once('ready-to-show', () => {
-		mainWindow.webContents.setZoomFactor(0.9);
 		setTimeout(() => {
-
 			mainWindow.show();
 		}, 100);
 	});

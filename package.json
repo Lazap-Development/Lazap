@@ -4,7 +4,14 @@
     "description": "Lazap, A cross platform launcher - All your games at one library",
     "main": "./index.js",
     "scripts": {
-        "start": "electron ."
+        "start": "electron .",
+        "build": "IF exist 'dist' ( rmdir /s /q dist && electron-builder build ) ELSE ( electron-builder build )"
+    },
+    "build": {
+        "productName": "Lazap",
+        "nsis": {
+            "uninstallDisplayName": "LazapUninstaller"
+        }
     },
     "repository": {
         "type": "git",
@@ -21,12 +28,13 @@
         "bootstrap-icons": "^1.7.1",
         "deepmerge": "^4.2.2",
         "discord-rpc": "^4.0.1",
-        "electron": "^16.0.4",
         "jsdom": "^19.0.0",
         "open-term": "^2.0.4",
         "v8-compile-cache": "^2.3.0"
     },
     "devDependencies": {
-        "eslint": "8.6.0"
+        "eslint": "8.6.0",
+        "electron": "^16.0.4",
+        "electron-builder": "^22.14.5"
     }
 }
