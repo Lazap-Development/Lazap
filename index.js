@@ -53,7 +53,7 @@ app.on('ready', () => {
 			}
 		}
 		handleStorageAndTransportData(mainWindow);
-		updateRPC({						// TODO: add img
+		updateRPC({
 			details: 'Browsing games',
 			startTimestamp: Date.now(),
 			largeImageKey: 'lazap',
@@ -150,7 +150,7 @@ function editLocalStorage(content) {
 }
 
 function fetch_banner(data) {
-	const arr = [];
+	let arr = [];
 	for (let i = 0; i < data.length; i++) {
 		arr.push(new Promise((resolve, reject) => {
 			switch (data[i].LauncherName) {
@@ -161,11 +161,22 @@ function fetch_banner(data) {
 					responseType: 'arraybuffer',
 				}).then(response => {
 					const dom = new JSDOM(response.data);
-					const element = dom.window.document.querySelector(`#dieselReactWrapper > div > div > main > div > div > div > div > div > section > div > section > div > section > section > ul > li > div > div > div > a > div > div > div > div > div > img[alt="${data[i].DisplayName}"]`);
-					resolve(element.getAttribute('data-image'));
+					const elements = dom.window.document.querySelectorAll('#dieselReactWrapper > div > div > main > div > div > div > div > div > section > div > section > div > section > section > ul > li > div > div > div > a > div > div > div > div > div > img[alt]');
+					let index;
+					elements.forEach((element, _index) => {
+						if (typeof index === 'number') return;
+						if (element.getAttribute('alt') === data[i].DisplayName) {
+							index = _index;
+						}
+						else if (element.getAttribute('alt').includes(data[i].DisplayName)) {
+							index = _index;
+						}
+					});
+					const element = elements.item(index) ?? elements.item(0);
+					resolve(element?.getAttribute('data-image') ?? '../icon.ico');
 				}).catch((err) => {
 					console.log(err);
-					reject('UNABLE_TO_GET_DATA');
+					resolve('../icon.ico');
 				});
 				break;
 			}
@@ -186,6 +197,7 @@ function fetch_banner(data) {
 		}));
 	}
 
+	arr = arr.map(async x => await x);
 	cacheBanners(data, arr);
 	return arr;
 	/*
@@ -229,7 +241,7 @@ function cacheBanners(data, res) {
 			method: 'GET',
 			responseType: 'stream',
 		}).then(async (response) => {
-			response.data.pipe(fs.createWriteStream(__dirname + `\\storage\\Cache\\Games\\Images\\${data[i].DisplayName}.${(await x).split('.')[(await x).split('.').length - 1].slice(0, 3) ?? 'jpg'}`));
+			response.data.pipe(fs.createWriteStream(__dirname + `\\storage\\Cache\\Games\\Images\\${data[i].DisplayName}.png`));
 		});
 	});
 }

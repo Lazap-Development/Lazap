@@ -55,7 +55,7 @@ ipcRenderer.on('load-banners-response', () => {
 	}
 	const total = games.length;
 	let loaded = 0;
-	if (!games.length) {
+	if (games.length === 0) {
 		gamesList.forEach((gameElement) => {
 			setTimeout(() => {
 				gameElement.firstElementChild.style.opacity = '1';
@@ -69,12 +69,16 @@ ipcRenderer.on('load-banners-response', () => {
 	}
 	games.forEach((game) => {
 		game.addEventListener('load', () => {
-			loaded++;
-			if ((loaded / 2) == total) {
-				document.getElementById('game-loading-overlay').style.opacity = '0';
-				document.getElementById('game-loading-overlay').style.visibility = 'hidden';
-				document.querySelector('.leftbar-overlay').style.opacity = '0';
-				document.querySelector('.leftbar-overlay').style.visibility = 'hidden';
+			if (game.getAttribute('src') !== '../icon.ico') {
+				loaded++;
+			}
+			if (loaded == total) {
+				setTimeout(() => {
+					document.getElementById('game-loading-overlay').style.opacity = '0';
+					document.getElementById('game-loading-overlay').style.visibility = 'hidden';
+					document.querySelector('.leftbar-overlay').style.opacity = '0';
+					document.querySelector('.leftbar-overlay').style.visibility = 'hidden';
+				}, 100);
 				setTimeout(() =>
 					// eslint-disable-next-line max-nested-callbacks
 					gamesList.forEach((gameElement) => gameElement.firstElementChild.style.opacity = '1'), 200,
