@@ -29,6 +29,7 @@
         "deepmerge": "^4.2.2",
         "discord-rpc": "^4.0.1",
         "jsdom": "^19.0.0",
+        "md5": "^2.3.0",
         "open-term": "^2.0.4",
         "v8-compile-cache": "^2.3.0"
     },
