@@ -75,7 +75,7 @@ async function loadGames() {
 				break;
 			}
 			case 'EpicGames': {
-				window.open(`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`);
+				window.open(`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, '', 'show=false').close();
 				break;
 			}
 			default: {

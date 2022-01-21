@@ -619,8 +619,9 @@ img,
     background-color: #0f10136e;
     animation-duration: 0.5s;
     backdrop-filter: blur(10px);
-
     display: none;
+    margin-top: -10px;
+    margin-left: -10px;
 }
 
 .settings {
@@ -693,7 +694,7 @@ img,
     background-color: #1a1a1aaf;
     opacity: 1;
     margin-left: calc(50% - 150px);
-    margin-top: 40px;
+    margin-top: -120px;
     background-color: none;
     backdrop-filter: blur(6px);
     z-index: 3;

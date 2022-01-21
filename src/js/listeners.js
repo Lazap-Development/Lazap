@@ -14,7 +14,7 @@ const alertboxcross = document.getElementById('alertboxexit');
 
 alertboxcross.addEventListener('click', function() {
 	alertbox.style.display = 'none';
-})
+});
 
 window.onload = async function() {
 	document.getElementById('main-loading-overlay').style.opacity = '0';

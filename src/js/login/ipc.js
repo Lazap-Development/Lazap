@@ -18,19 +18,19 @@ function min_window() {
 }
 
 // handle singup
-document.querySelector('#container > div.form-container.sign-up-container > div > button').addEventListener('click', (e) => {
+document.querySelector('#container > div.form-container.sign-up-container > div > button').addEventListener('click', () => {
 	const name = document.querySelector('#container > div.form-container.sign-up-container > div > input[type=text]:nth-child(2)');
 	const email = document.querySelector('#container > div.form-container.sign-up-container > div > input[type=email]:nth-child(3)');
 	const pass = document.querySelector('#container > div.form-container.sign-up-container > div > input[type=password]:nth-child(4)');
 
 	if (name.value.length < 4) { // TODO: handle this all better
-		return alert('Name should have atleast 2 or more characters');
+		return ipcRenderer.emit('alert', null, 'Name should have atleast 2 or more characters');
 	}
 	else if (email.value.length < 2) {
-		return alert('Email should have atleast 2 or more characters');
+		return ipcRenderer.emit('alert', null, 'Email should have atleast 2 or more characters');
 	}
 	else if (pass.value.length < 6) {
-		return alert('Password should have atleast 6 or more characters');
+		return ipcRenderer.emit('alert', null, 'Password should have atleast 6 or more characters');
 	}
 
 	ipcRenderer.send('signup-request', {
@@ -43,31 +43,31 @@ document.querySelector('#container > div.form-container.sign-up-container > div 
 
 ipcRenderer.on('signup-response', (event, code) => {
 	if (code === 200) {
-		window.alert('Account made successfully! redirecting to signin...');
+		ipcRenderer.emit('alert', null, 'Account made successfully! redirecting to signin...');
 		const container = document.getElementById('container');
 		container.classList.remove('right-panel-active');
 	}
 	else if (code === 401) {
-		window.alert('There was an error making your account'); // ? idk what to put here, change it later ig
+		ipcRenderer.emit('alert', null, 'There was an error making your account'); // ? idk what to put here, change it later ig
 	}
 	else if (code === 403) {
-		window.alert('An account with the same email already exists! Head to signin');
+		ipcRenderer.emit('alert', null, 'An account with the same email already exists! Head to signin');
 	}
 	else {
-		window.alert('Something went wrong while trying to create an account!\n\nPossible Issues: You are offline, API was down, Unable to reach the API');
+		ipcRenderer.emit('alert', null, 'Something went wrong while trying to create an account!\n\nPossible Issues: You are offline, API was down, Unable to reach the API');
 	}
 });
 
 // handle singin
-document.querySelector('#container > div.form-container.sign-in-container > div > button').addEventListener('click', (e) => {
+document.querySelector('#container > div.form-container.sign-in-container > div > button').addEventListener('click', () => {
 	const username = document.querySelector('#container > div.form-container.sign-in-container > div > input[type=text]:nth-child(2)');
 	const pass = document.querySelector('#container > div.form-container.sign-in-container > div > input[type=password]:nth-child(3)');
 
 	if (username.value.length < 4) { // TODO: handle this better
-		return alert('Email should have atleast 4 or more characters');
+		return ipcRenderer.emit('alert', null, 'Email should have atleast 4 or more characters');
 	}
 	else if (pass.value.length < 6) {
-		return alert('Password should have atleast 6 or more characters');
+		return ipcRenderer.emit('alert', null, 'Password should have atleast 6 or more characters');
 	}
 
 	ipcRenderer.send('signin-request', {
@@ -79,27 +79,29 @@ document.querySelector('#container > div.form-container.sign-in-container > div 
 
 ipcRenderer.on('signin-response', (event, code) => {
 	if (code === 200) {
-		window.alert('Singin successful!');
+		ipcRenderer.emit('alert', null, 'Sign-in successful!');
 		// const container = document.getElementById('container');
 		// container.classList.remove("right-panel-active");
 		ipcRenderer.send('load-main');
 	}
 	else if (code === 401) {
-		window.alert('There was an error singing you in');
+		ipcRenderer.emit('alert', null, 'There was an error signing you in');
 	}
 	else if (code === 402) {
-		window.alert('An account with that email does\'nt even exists! Make sure that you typed in the correct email');
+		ipcRenderer.emit('alert', null, 'An account with that email does\'nt even exists! Make sure that you typed in the correct email');
 	}
 	else if (code === 403) {
-		window.alert('Wrong password!');
+		ipcRenderer.emit('alert', null, 'Wrong password!');
 	}
 	else {
-		window.alert('Something went wrong while trying to login!\n\nPossible issues: You are not connected to internet, API was offline, API returned unexpected error(in which case you should consider updating the launcher)');
+		ipcRenderer.emit('alert', null, 'Something went wrong while trying to login!\n\nPossible issues: You are not connected to internet, API was offline, API returned unexpected error(in which case you should consider updating the launcher)');
 	}
 });
 
 ipcRenderer.on('alert', (e, msg) => {
-	alert(msg);
+	const alert = document.querySelector('.alert-box');
+	alert.firstElementChild.lastElementChild.firstElementChild.textContent = msg;
+	alert.style.display = 'flex';
 });
 
 ipcRenderer.on('replace-ignore-and-continue', () => {
@@ -113,6 +115,6 @@ ipcRenderer.on('check-if-logged-in', async (e, r) => {
 		ipcRenderer.send('load-main', r);
 	}
 	else {
-		alert('Something went wrong while trying to login!');
+		ipcRenderer.emit('alert', null, 'Something went wrong while trying to login!');
 	}
 });

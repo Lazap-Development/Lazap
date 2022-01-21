@@ -38,7 +38,7 @@ account.addEventListener('mouseover', () => {
 	if (loggedin === true) {
 		account.style['filter'] = 'invert(17%) sepia(86%) saturate(3285%) hue-rotate(239deg) brightness(85%) contrast(101%)';
 	}
-	else if (loggedin === false) {
+	else {
 		account.style['filter'] = 'invert(19%) sepia(87%) saturate(4716%) hue-rotate(355deg) brightness(99%) contrast(104%)';
 	}
 });
