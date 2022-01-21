@@ -9,6 +9,12 @@ const messages = document.getElementById('messages');
 const activity = document.getElementById('activity');
 const settings = document.getElementById('settings-popup');
 const settingsbackblur = document.getElementById('settings-backblur');
+const alertbox = document.getElementById('alertbox');
+const alertboxcross = document.getElementById('alertboxexit');
+
+alertboxcross.addEventListener('click', function() {
+	alertbox.style.display = 'none';
+})
 
 window.onload = async function() {
 	document.getElementById('main-loading-overlay').style.opacity = '0';
@@ -110,6 +116,7 @@ settingsbackblur.addEventListener('click', function() {
 	settings.style.display = 'none';
 	settingsbackblur.style.display = 'none';
 });
+
 
 items.forEach((link) =>
 	link.addEventListener('click', (e) => {
