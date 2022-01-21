@@ -433,8 +433,8 @@ foot {
     position: absolute;
     overflow-y: auto;
     width: 98%;
-    height: 85%;
-    margin-top: 80px;
+    height: 82%;
+    margin-top: 100px;
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
