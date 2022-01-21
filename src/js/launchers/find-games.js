@@ -74,6 +74,10 @@ async function loadGames() {
 				window.open(`steam://rungameid/${game.GameID}`, '', 'show=false').close();
 				break;
 			}
+			case 'EpicGames': {
+				window.open(`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`);
+				break;
+			}
 			default: {
 				runCommand(`${game.Location}/${game.Executable}`, game.Args);
 				break;
