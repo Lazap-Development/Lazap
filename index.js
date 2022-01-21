@@ -7,6 +7,7 @@ const axios = require('axios').default;
 const os = require('os');
 const { JSDOM } = require('jsdom');
 const rpc = require('discord-rpc');
+const md5 = require('md5');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
@@ -241,7 +242,7 @@ function cacheBanners(data, res) {
 			method: 'GET',
 			responseType: 'stream',
 		}).then(async (response) => {
-			response.data.pipe(fs.createWriteStream(__dirname + `\\storage\\Cache\\Games\\Images\\${data[i].DisplayName}.png`));
+			response.data.pipe(fs.createWriteStream(__dirname + `\\storage\\Cache\\Games\\Images\\${md5(data[i].DisplayName)}.png`));
 		});
 	});
 }

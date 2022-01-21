@@ -4,6 +4,7 @@ const Steam = require('./Steam.js');
 const EpicGames = require('./EpicGames.js');
 const RiotGames = require('./RiotGames.js');
 const fs = require('fs');
+const md5 = require('md5');
 const games_blacklist = [
 	'228980', // Steamworks Common Redistributables
 ];
@@ -47,7 +48,7 @@ async function loadGames() {
 		if (fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Images')) {
 			const dirs = fs.readdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Images');
 			const img = dirs.find(x => x.split('.')[0] === game.DisplayName);
-			banner = img ? `../storage/Cache/Games/Images/${img}` : '../icon.ico';
+			banner = img ? `../storage/Cache/Games/Images/${md5(img)}` : '../icon.ico';
 		}
 		else {
 			banner = '../icon.ico';
