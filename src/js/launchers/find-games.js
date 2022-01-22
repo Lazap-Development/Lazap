@@ -47,8 +47,8 @@ async function loadGames() {
 		let banner;
 		if (fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Images')) {
 			const dirs = fs.readdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Images');
-			const img = dirs.find(x => x.split('.')[0] === game.DisplayName);
-			banner = img ? `../storage/Cache/Games/Images/${md5(img)}` : '../icon.ico';
+			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
+			banner = img ? `../storage/Cache/Games/Images/${img}` : '../icon.ico';
 		}
 		else {
 			banner = '../icon.ico';

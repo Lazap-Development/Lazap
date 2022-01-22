@@ -419,11 +419,11 @@ foot {
 #indicator {
     transition: 0.35s;
     position: absolute;
-    margin-top: 4.2px;
+    margin-top: 5.2px;
     margin-left: 2px;
 
     background-color: rgb(121, 52, 250);
-    height: 30px;
+    height: 32px;
     width: 5px;
     border-radius: 2px;
     display: inline;

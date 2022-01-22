@@ -493,7 +493,7 @@ input:focus {
     height: 0px;
     width: calc(100% - 14px);
     margin-top: 11%;
-    margin-left: -80px;
+    margin-left: -100px;
 }
 
 .alert-box-message {
@@ -509,4 +509,10 @@ input:focus {
     margin-right: 0px;
     text-align: center;
     font-family: Comfortaa;
+    overflow-y: auto; /* TODO - Make the scroll speed slower */
+    user-select: text;
+    -webkit-user-select: text;
+}
+.alert-box-message::-webkit-scrollbar {
+    display: none;
 }
