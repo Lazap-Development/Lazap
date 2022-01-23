@@ -432,9 +432,9 @@ foot {
 #gamesList {
     position: absolute;
     overflow-y: auto;
-    width: 98%;
+    width: 99%;
     height: 82%;
-    margin-top: 100px;
+    margin-top: 110px;
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
@@ -449,8 +449,10 @@ foot {
     display: inline-block;
     border-radius: 12px;
     transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-    margin-right: 30px;
+    margin-right: 10px;
     margin-left: 20px;
+    width: 270px;
+
 }
 
 .gamebox:hover {
@@ -458,10 +460,8 @@ foot {
 }
 
 .gamebox img {
-    height: 300px;
-    width: 200px;
-    max-width: 200px;
-    max-height: 300px;
+    height: 200px;
+    width: 270px;
     border-radius: 12px;
     image-rendering: auto;
     object-fit: cover;
