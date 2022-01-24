@@ -13,14 +13,30 @@ function loadFile(event) {
 	});
 }
 
-const searchbar = document.querySelector('div.search-bar > input[type="text"]');
-// eslint-disable-next-line no-unused-vars
-searchbar.addEventListener('keyup', () => {
-	const query = searchbar.value;
-	const allGames = document.querySelectorAll('#gamesList > div[id^="game-div"]');
+const searchbars = document.querySelectorAll('div.search-bar > input[type="text"]');
+
+searchbars.item(0).addEventListener('keyup', () => {
+	const query = searchbars.item(0).value;
+	const allGames = document.querySelectorAll('#allGamesList > div[id^="game-div"]');
 
 	allGames.forEach((game) => {
-		if (game.id.split('-').slice(2).join('-').replaceAll('_', ' ').match(new RegExp(`${query}`, 'gi'))) {
+		if (game.id.split('-').slice(2).join('-').match(new RegExp(`${query}`, 'gi'))) {
+			game.style.display = 'block';
+		}
+		else if (query.length === 0) {
+			game.style.display = 'block';
+		}
+		else {
+			game.style.display = 'none';
+		}
+	});
+});
+searchbars.item(1).addEventListener('keyup', () => {
+	const query = searchbars.item(1).value;
+	const allGames = document.querySelectorAll('#favGamesList > div[id^="game-div"]');
+
+	allGames.forEach((game) => {
+		if (game.id.split('-').slice(2).join('-').match(new RegExp(`${query}`, 'gi'))) {
 			game.style.display = 'block';
 		}
 		else if (query.length === 0) {

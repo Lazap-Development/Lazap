@@ -46,7 +46,7 @@ account.addEventListener('mouseout', () => account.style['filter'] = 'none');
 account.addEventListener('click', () => ipcRenderer.send('load-login'));
 
 ipcRenderer.on('load-banners-response', () => {
-	const gamesList = document.querySelectorAll('#gamesList > div');
+	const gamesList = document.querySelectorAll('#allGamesList > div');
 	const games = [];
 	for (let i = 0; i < gamesList.length; i++) {
 		if (gamesList.item(i).firstElementChild.getAttribute('src') === '../icon.ico') {

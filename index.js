@@ -104,7 +104,7 @@ app.on('ready', () => {
 		res.forEach(async (url, i) => {
 			mainWindow.webContents.executeJavaScript(`
 			var banner_res = '${await url}';
-			var gameElement = document.getElementById('game-div-${r[i].DisplayName.replaceAll(' ', '_')}');
+			var gameElement = document.getElementById('game-div-${r[i].DisplayName}');
 			gameElement.firstElementChild.setAttribute('src', banner_res);
 		   `);
 		});
@@ -153,7 +153,7 @@ function editLocalStorage(content) {
 function fetch_banner(data) {
 	let arr = [];
 	for (let i = 0; i < data.length; i++) {
-		arr.push(new Promise((resolve, reject) => {
+		arr.push(new Promise((resolve) => {
 			switch (data[i].LauncherName) {
 			case 'EpicGames': {
 				axios({

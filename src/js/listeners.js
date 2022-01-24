@@ -47,6 +47,10 @@ document.getElementById('recent-btn').addEventListener('click', function() {
 	friends.style.display = 'none';
 	messages.style.display = 'none';
 	activity.style.display = 'none';
+
+	setTimeout(async () => {
+		await require('./js/launchers/find-games.js').loadRecentGames();
+	}, 400);
 });
 
 document.getElementById('games-btn').addEventListener('click', function() {
@@ -63,7 +67,7 @@ document.getElementById('games-btn').addEventListener('click', function() {
 		document.querySelector('.leftbar-overlay').style.visibility = 'visible';
 	}
 	setTimeout(async () => {
-		await require('./js/launchers/find-games.js').loadGames();
+		await require('./js/launchers/find-games.js').loadAllGames();
 	}, 400);
 });
 
@@ -75,6 +79,10 @@ document.getElementById('favs-btn').addEventListener('click', function() {
 	messages.style.display = 'none';
 	activity.style.display = 'none';
 	friends.style.display = 'none';
+
+	setTimeout(async () => {
+		await require('./js/launchers/find-games.js').loadFavouriteGames();
+	}, 400);
 });
 
 document.getElementById('messages-btn').addEventListener('click', function() {

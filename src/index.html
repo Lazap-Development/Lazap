@@ -73,11 +73,19 @@
         </div>
 
         <div class="secondorybox" id="recent">
+            <div id="recent-loading-overlay" class="game-loading-overlay">
+                <div class="spinner-content">
+                    <img src="../img/spinner.svg" alt="Loading..." class="loading-spinner">
+                    <p class="fadeInDown">Loading your games...</p>
+                </div>
+            </div>
             <p>Recently Played</p>
+            <div id="recentGamesList" class="fadeInDown gamesList">
+            </div>
         </div>
 
         <div class="secondorybox" id="games">
-            <div id="game-loading-overlay">
+            <div id="game-loading-overlay" class="game-loading-overlay">
                 <div class="spinner-content">
                     <img src="../img/spinner.svg" alt="Loading..." class="loading-spinner">
                     <p class="fadeInDown">Loading your games...</p>
@@ -87,12 +95,23 @@
             <div class="search-bar">
                 <input type="text" placeholder="Search">
             </div>
-            <div id="gamesList" class="fadeInDown">
+            <div id="allGamesList" class="fadeInDown gamesList">
             </div>
         </div>
 
         <div class="secondorybox" id="favs">
-            <p>Favourites</p>
+            <div id="favs-loading-overlay" class="game-loading-overlay">
+                <div class="spinner-content">
+                    <img src="../img/spinner.svg" alt="Loading..." class="loading-spinner">
+                    <p class="fadeInDown">Loading your games...</p>
+                </div>
+            </div>
+            <p>Favourite Games</p>
+            <div class="search-bar">
+                <input type="text" placeholder="Search">
+            </div>
+            <div id="favGamesList" class="fadeInDown gamesList">
+            </div>
         </div>
 
         <div class="secondorybox" id="messages">
