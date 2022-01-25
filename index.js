@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 require('v8-compile-cache');
 const electron = require('electron');
 const ipcMain = require('electron').ipcMain;
@@ -11,7 +12,7 @@ const md5 = require('md5');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
-const gotTheLock = app.requestSingleInstanceLock()
+const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) return app.quit();
 
 const rpcClient = new rpc.Client({ transport: 'ipc' });
@@ -31,7 +32,7 @@ app.on('ready', () => {
 			nodeIntegration: true,
 			contextIsolation: false,
 			backgroundThrottling: false,
-			zoomFactor: 0.9
+			zoomFactor: 0.9,
 		},
 		icon: 'icon.ico',
 	});
@@ -54,7 +55,7 @@ app.on('ready', () => {
 		}
 		handleStorageAndTransportData(mainWindow);
 		updateRPC({
-			details: 'Browsing games',
+			details: 'On Main Screen',
 			startTimestamp: Date.now(),
 			largeImageKey: 'lazap',
 		});
@@ -109,6 +110,7 @@ app.on('ready', () => {
 		});
 		mainWindow.webContents.send('load-banners-response');
 	});
+	ipcMain.on('rpcUpdate', (e, d) => updateRPC(d));
 });
 
 function handleStorageAndTransportData(mainWindow) {
@@ -175,7 +177,7 @@ function fetch_banner(data) {
 						const element = elements.item(index) ?? elements.item(0);
 						resolve(element?.getAttribute('data-image') ?? '../icon.ico');
 					}).catch((err) => {
-						console.log(err);
+						console.warn('[BANNER]', err);
 						resolve('../icon.ico');
 					});
 					break;
@@ -191,7 +193,6 @@ function fetch_banner(data) {
 							break;
 						}
 					}
-					break;
 				}
 			}
 		}));
@@ -298,5 +299,5 @@ async function identify() {
 }
 
 function updateRPC(data) {
-	rpcClient.setActivity(data).catch(err => console.log(err));
+	rpcClient.setActivity(data).catch(err => console.warn('[RPC]', err));
 }

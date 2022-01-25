@@ -1,3 +1,5 @@
+const { ipcRenderer } = require('electron');
+
 const marker = document.getElementById('indicator');
 const items = document.querySelectorAll('.side-tab');
 const home = document.getElementById('home');
@@ -37,6 +39,15 @@ document.getElementById('home-btn').addEventListener('click', function() {
 	friends.style.display = 'none';
 	messages.style.display = 'none';
 	activity.style.display = 'none';
+
+	ipcRenderer.send('rpcUpdate', {
+		details: 'On Main Screen',
+		startTimestamp: Date.now(),
+		largeImageKey: 'lazap',
+		smallImageKey: 'home',
+		largeImageText: 'Lazap',
+		smallImageText: 'Home Screen',
+	});
 });
 
 document.getElementById('recent-btn').addEventListener('click', function() {
@@ -47,6 +58,15 @@ document.getElementById('recent-btn').addEventListener('click', function() {
 	friends.style.display = 'none';
 	messages.style.display = 'none';
 	activity.style.display = 'none';
+
+	ipcRenderer.send('rpcUpdate', {
+		details: 'Browsing Recently Played',
+		startTimestamp: Date.now(),
+		largeImageKey: 'lazap',
+		smallImageKey: 'recent',
+		largeImageText: 'Lazap',
+		smallImageText: 'Recently Played',
+	});
 
 	setTimeout(async () => {
 		await require('./js/launchers/find-games.js').loadRecentGames();
@@ -61,6 +81,15 @@ document.getElementById('games-btn').addEventListener('click', function() {
 	friends.style.display = 'none';
 	messages.style.display = 'none';
 	activity.style.display = 'none';
+
+	ipcRenderer.send('rpcUpdate', {
+		details: 'Browsing All Games',
+		startTimestamp: Date.now(),
+		largeImageKey: 'lazap',
+		smallImageKey: 'games',
+		largeImageText: 'Lazap',
+		smallImageText: 'All Games',
+	});
 
 	if (document.getElementById('game-loading-overlay').style.opacity !== '0') {
 		document.querySelector('.leftbar-overlay').style.opacity = '0.7';
@@ -79,6 +108,15 @@ document.getElementById('favs-btn').addEventListener('click', function() {
 	messages.style.display = 'none';
 	activity.style.display = 'none';
 	friends.style.display = 'none';
+
+	ipcRenderer.send('rpcUpdate', {
+		details: 'Browsing Favourite Games',
+		startTimestamp: Date.now(),
+		largeImageKey: 'lazap',
+		smallImageKey: 'favs',
+		largeImageText: 'Lazap',
+		smallImageText: 'Favourites',
+	});
 
 	setTimeout(async () => {
 		await require('./js/launchers/find-games.js').loadFavouriteGames();

@@ -1,4 +1,4 @@
-console.log('OS:', process.platform, 'Arch:', process.arch);
+console.info('OS:', process.platform, 'Arch:', process.arch);
 const { ipcRenderer } = require('electron');
 const Steam = require('./Steam.js');
 const EpicGames = require('./EpicGames.js');
