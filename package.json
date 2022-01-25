@@ -10,7 +10,7 @@
     "build": {
         "productName": "Lazap",
         "nsis": {
-            "uninstallDisplayName": "LazapUninstaller"
+            "uninstallDisplayName": "Lazap"
         }
     },
     "repository": {
