@@ -158,7 +158,7 @@ function fetch_banner(data) {
 			switch (data[i].LauncherName) {
 				case 'EpicGames': {
 					axios({
-						url: `https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(data[i].DisplayName)}&sortBy=releaseDate&sortDir=DESC&count=5`,
+						url: `https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(data[i].DisplayName)}&sortBy=releaseDate&sortDir=DESC&count=5&category=Game&start=0`,
 						method: 'GET',
 						responseType: 'arraybuffer',
 					}).then(response => {
@@ -194,12 +194,56 @@ function fetch_banner(data) {
 						}
 					}
 				}
+				break;
+				case 'Uplay': {
+					let ubisoftified = data[i].DisplayName.replaceAll('_', ' ');
+					if (data[i].DisplayName.replaceAll('_', ' ').match(/\d$/ig) && !data[i].DisplayName.replaceAll('_', ' ').replaceAll('\\d', '').endsWith(' ')) {
+						const numlength = ubisoftified.split('').reverse().join('').match(/\d/ig)[0].length;
+						ubisoftified = ubisoftified.slice(0, ubisoftified.length - numlength) + ' ' + ubisoftified.slice(ubisoftified.length - numlength);
+					}
+					console.log(ubisoftified);
+					/* Use Epic Games to get banners of Uplay Games for now, unless new alternative found */
+					axios({
+						url: `https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(ubisoftified)}&sortBy=releaseDate&sortDir=DESC&count=5&category=Game&start=0`,
+						method: 'GET',
+						responseType: 'arraybuffer',
+					}).then(response => {
+						const dom = new JSDOM(response.data);
+						const elements = dom.window.document.querySelectorAll('#dieselReactWrapper > div > div > main > div > div > div > div > div > section > div > section > div > section > section > ul > li > div > div > div > a > div > div > div > div > div > img[alt]');
+						let index;
+						elements.forEach((element, _index) => {
+							const name = element.getAttribute('alt').split(' ').map(x => x.toLowerCase()).includes('edition') ? element.getAttribute('alt').split(' ').slice(0, element.getAttribute('alt').split(' ').length - element.getAttribute('alt').split(' ').reverse().findIndex(x => x.toLowerCase() === 'edition') - 2).join(' ') : element.getAttribute('alt');
+							if (typeof index === 'number') return;
+
+							const matched = name.toLowerCase().split('').map((str, _i) =>
+								str === ubisoftified.toLowerCase().split('')[_i],
+							).filter(x => x === true).length;
+
+							// This makes it prioritize results that matched 100%, 90%, 75%
+							if (((matched / name.length) * 100) === 100 && ubisoftified.toLowerCase() === name.toLowerCase()) {
+								index = _index;
+							}
+							else if (((matched / name.length) * 100) > 90 && ((matched / name.length) * 100) !== 100) {
+								index = _index;
+							}
+							else if (((matched / name.length) * 100) > 75 && !((matched / name.length) * 100) > 90) {
+								index = _index;
+							}
+						});
+						const element = elements.item(index) ?? elements.item(0);
+						resolve(element?.getAttribute('data-image') ?? '../icon.ico');
+					}).catch((err) => {
+						console.warn('[BANNER]', err);
+						resolve('../icon.ico');
+					});
+					break;
+				}
 			}
 		}));
 	}
 
 	arr = arr.map(async x => await x);
-	cacheBanners(data, arr);
+	cacheBanners(data, arr.filter(async x => (await x) !== '../icon.ico'));
 	return arr;
 	/*
 	const res = data.map(async (r) => {
@@ -243,7 +287,7 @@ function cacheBanners(data, res) {
 			responseType: 'stream',
 		}).then(async (response) => {
 			response.data.pipe(fs.createWriteStream(__dirname + `\\storage\\Cache\\Games\\Images\\${md5(data[i].DisplayName)}.png`));
-		});
+		}).catch(() => '');
 	});
 }
 

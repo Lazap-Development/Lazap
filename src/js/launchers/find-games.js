@@ -3,6 +3,7 @@ const { ipcRenderer } = require('electron');
 const Steam = require('./Steam.js');
 const EpicGames = require('./EpicGames.js');
 const RiotGames = require('./RiotGames.js');
+const Uplay = require('./Uplay.js');
 const fs = require('fs');
 const md5 = require('md5');
 const games_blacklist = [
@@ -10,7 +11,7 @@ const games_blacklist = [
 ];
 
 async function loadAllGames() {
-	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames(), ...(await RiotGames.getInstalledGames())];
+	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames(), ...(await RiotGames.getInstalledGames()), ...(await Uplay.getInstalledGames())];
 
 	/*
 	if (games.length == 0) {
@@ -79,6 +80,10 @@ async function loadAllGames() {
 			}
 			case 'EpicGames': {
 				window.open(`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, '', 'show=false').close();
+				break;
+			}
+			case 'Uplay': {
+				window.open(`uplay://launch/${game.GameID}/0`, '', 'show=false').close();
 				break;
 			}
 			default: {
@@ -259,8 +264,23 @@ async function runCommand(command, args) {
 	const res = await promisify(execFile)(command, args);
 	return res;
 }
+function checkDirs() {
+	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage')) {
+		fs.mkdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage');
+		fs.mkdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache');
+		fs.mkdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games');
+	}
+	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache')) {
+		fs.mkdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache');
+		fs.mkdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games');
+	}
+	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games')) {
+		fs.mkdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games');
+	}
+}
 function saveGames(games) {
 	let Data;
+	checkDirs();
 	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
 		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
 		Data = {
@@ -280,6 +300,7 @@ function saveGames(games) {
 }
 function addLaunch(GameID, LauncherName) {
 	let Data;
+	checkDirs();
 	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
 		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
 		Data = {
@@ -297,6 +318,7 @@ function addLaunch(GameID, LauncherName) {
 }
 function toggleFavourite(GameID, LauncherName) {
 	let Data;
+	checkDirs();
 	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
 		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
 		Data = {
@@ -314,6 +336,7 @@ function toggleFavourite(GameID, LauncherName) {
 }
 function setLastLaunch(GameID, LauncherName) {
 	let Data;
+	checkDirs();
 	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
 		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
 		Data = {

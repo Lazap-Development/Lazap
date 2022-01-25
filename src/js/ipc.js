@@ -69,9 +69,9 @@ ipcRenderer.on('load-banners-response', () => {
 	}
 	games.forEach((game) => {
 		game.addEventListener('load', () => {
-			if (game.getAttribute('src') !== '../icon.ico') {
-				loaded++;
-			}
+			// if (game.getAttribute('src') !== '../icon.ico') {
+			loaded++;
+			// }
 			if (loaded == total) {
 				setTimeout(() => {
 					document.getElementById('game-loading-overlay').style.opacity = '0';
