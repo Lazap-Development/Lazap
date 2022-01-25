@@ -37,7 +37,13 @@ app.on('ready', () => {
 		icon: 'icon.ico',
 	});
 
-	mainWindow.loadFile('src/login.html');
+	mainWindow.loadFile(
+		fs.existsSync(__dirname + '\\storage\\Settings\\LauncherData.json')
+		? require(__dirname + '\\storage\\Settings\\LauncherData.json')?.skipLogin
+			? 'src/index.html'
+			: 'src/login.html'
+		: 'src/login.html',
+	);
 
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show();
@@ -45,6 +51,7 @@ app.on('ready', () => {
 
 	mainWindow.webContents.on('did-finish-load', async () => {
 		// Checking for auto-login
+		/*
 		if (fs.existsSync(__dirname + '\\storage\\Settings\\userprofile.js')) {
 			if (require('./storage/Settings/userprofile.json').token) {
 				mainWindow.webContents.send('check-if-logged-in', await identify());
@@ -53,6 +60,7 @@ app.on('ready', () => {
 				return;
 			}
 		}
+		*/
 		handleStorageAndTransportData(mainWindow);
 		updateRPC({
 			details: 'On Main Screen',
@@ -61,9 +69,9 @@ app.on('ready', () => {
 		});
 	});
 
-	ipcMain.on('load-main', (e, data) => {
+	ipcMain.on('load-main', () => {
 		mainWindow.loadFile('src/index.html');
-		setTimeout(async () => mainWindow.webContents.send('check-for-login', data || await identify()), 2000);
+		// setTimeout(async () => mainWindow.webContents.send('check-for-login', data || await identify()), 2000);
 	});
 	ipcMain.on('load-custom', (e, str) => {
 		mainWindow.loadFile(str);
@@ -118,10 +126,12 @@ function handleStorageAndTransportData(mainWindow) {
 		fs.mkdirSync(__dirname + '\\storage');
 		fs.mkdirSync(__dirname + '\\storage\\Settings');
 		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', '{}');
+		fs.writeFileSync(__dirname + '\\storage\\Settings\\LauncherData.json', '{"skipLogin":true}');
 	}
 	if (!fs.existsSync(__dirname + '\\storage\\Settings')) {
 		fs.mkdirSync(__dirname + '\\storage\\Settings');
 		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', '{}');
+		fs.writeFileSync(__dirname + '\\storage\\Settings\\LauncherData.json', '{"skipLogin":true}');
 	}
 
 	let LauncherData = require(`${__dirname}\\storage\\Settings\\userprofile.json`);
@@ -193,15 +203,15 @@ function fetch_banner(data) {
 							break;
 						}
 					}
+					break;
 				}
-				break;
 				case 'Uplay': {
 					let ubisoftified = data[i].DisplayName.replaceAll('_', ' ');
 					if (data[i].DisplayName.replaceAll('_', ' ').match(/\d$/ig) && !data[i].DisplayName.replaceAll('_', ' ').replaceAll('\\d', '').endsWith(' ')) {
 						const numlength = ubisoftified.split('').reverse().join('').match(/\d/ig)[0].length;
 						ubisoftified = ubisoftified.slice(0, ubisoftified.length - numlength) + ' ' + ubisoftified.slice(ubisoftified.length - numlength);
 					}
-					console.log(ubisoftified);
+
 					/* Use Epic Games to get banners of Uplay Games for now, unless new alternative found */
 					axios({
 						url: `https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(ubisoftified)}&sortBy=releaseDate&sortDir=DESC&count=5&category=Game&start=0`,
@@ -236,6 +246,10 @@ function fetch_banner(data) {
 						console.warn('[BANNER]', err);
 						resolve('../icon.ico');
 					});
+					break;
+				}
+				case 'Minecraft': {
+					resolve('https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png');
 					break;
 				}
 			}

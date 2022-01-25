@@ -4,6 +4,7 @@ const Steam = require('./Steam.js');
 const EpicGames = require('./EpicGames.js');
 const RiotGames = require('./RiotGames.js');
 const Uplay = require('./Uplay.js');
+const Minecraft = require('./Minecraft.js');
 const fs = require('fs');
 const md5 = require('md5');
 const games_blacklist = [
@@ -11,7 +12,7 @@ const games_blacklist = [
 ];
 
 async function loadAllGames() {
-	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames(), ...(await RiotGames.getInstalledGames()), ...(await Uplay.getInstalledGames())];
+	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames(), ...(await RiotGames.getInstalledGames()), ...(await Uplay.getInstalledGames()), ...(await Minecraft.getInstalledGames())];
 
 	/*
 	if (games.length == 0) {
@@ -165,6 +166,10 @@ function loadFavouriteGames() {
 				window.open(`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, '', 'show=false').close();
 				break;
 			}
+			case 'Uplay': {
+				window.open(`uplay://launch/${game.GameID}/0`, '', 'show=false').close();
+				break;
+			}
 			default: {
 				runCommand(`${game.Location}/${game.Executable}`, game.Args);
 				break;
@@ -242,6 +247,10 @@ function loadRecentGames() {
 			}
 			case 'EpicGames': {
 				window.open(`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, '', 'show=false').close();
+				break;
+			}
+			case 'Uplay': {
+				window.open(`uplay://launch/${game.GameID}/0`, '', 'show=false').close();
 				break;
 			}
 			default: {
