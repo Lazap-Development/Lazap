@@ -11,6 +11,8 @@ const md5 = require('md5');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) return app.quit();
 
 const rpcClient = new rpc.Client({ transport: 'ipc' });
 rpcClient.login({ clientId: '932504287337148417' });
