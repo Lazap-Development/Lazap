@@ -31,6 +31,7 @@ app.on('ready', () => {
 			nodeIntegration: true,
 			contextIsolation: false,
 			backgroundThrottling: false,
+			zoomFactor: 0.9
 		},
 		icon: 'icon.ico',
 	});
@@ -38,11 +39,7 @@ app.on('ready', () => {
 	mainWindow.loadFile('src/login.html');
 
 	mainWindow.once('ready-to-show', () => {
-		mainWindow.webContents.setZoomFactor(0.9);
-		setTimeout(() => {
-
-			mainWindow.show();
-		}, 100);
+		mainWindow.show();
 	});
 
 	mainWindow.webContents.on('did-finish-load', async () => {
@@ -157,45 +154,45 @@ function fetch_banner(data) {
 	for (let i = 0; i < data.length; i++) {
 		arr.push(new Promise((resolve) => {
 			switch (data[i].LauncherName) {
-			case 'EpicGames': {
-				axios({
-					url: `https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(data[i].DisplayName)}&sortBy=releaseDate&sortDir=DESC&count=5`,
-					method: 'GET',
-					responseType: 'arraybuffer',
-				}).then(response => {
-					const dom = new JSDOM(response.data);
-					const elements = dom.window.document.querySelectorAll('#dieselReactWrapper > div > div > main > div > div > div > div > div > section > div > section > div > section > section > ul > li > div > div > div > a > div > div > div > div > div > img[alt]');
-					let index;
-					elements.forEach((element, _index) => {
-						if (typeof index === 'number') return;
-						if (element.getAttribute('alt') === data[i].DisplayName) {
-							index = _index;
-						}
-						else if (element.getAttribute('alt').includes(data[i].DisplayName)) {
-							index = _index;
-						}
+				case 'EpicGames': {
+					axios({
+						url: `https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(data[i].DisplayName)}&sortBy=releaseDate&sortDir=DESC&count=5`,
+						method: 'GET',
+						responseType: 'arraybuffer',
+					}).then(response => {
+						const dom = new JSDOM(response.data);
+						const elements = dom.window.document.querySelectorAll('#dieselReactWrapper > div > div > main > div > div > div > div > div > section > div > section > div > section > section > ul > li > div > div > div > a > div > div > div > div > div > img[alt]');
+						let index;
+						elements.forEach((element, _index) => {
+							if (typeof index === 'number') return;
+							if (element.getAttribute('alt') === data[i].DisplayName) {
+								index = _index;
+							}
+							else if (element.getAttribute('alt').includes(data[i].DisplayName)) {
+								index = _index;
+							}
+						});
+						const element = elements.item(index) ?? elements.item(0);
+						resolve(element?.getAttribute('data-image') ?? '../icon.ico');
+					}).catch((err) => {
+						console.log(err);
+						resolve('../icon.ico');
 					});
-					const element = elements.item(index) ?? elements.item(0);
-					resolve(element?.getAttribute('data-image') ?? '../icon.ico');
-				}).catch((err) => {
-					console.log(err);
-					resolve('../icon.ico');
-				});
-				break;
-			}
-			case 'Steam': {
-				resolve(`https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/header.jpg`);
-				break;
-			}
-			case 'RiotGames': {
-				switch (data[i].GameID) {
-				case 'Valorant': {
-					resolve('https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png');
 					break;
 				}
+				case 'Steam': {
+					resolve(`https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/header.jpg`);
+					break;
 				}
-				break;
-			}
+				case 'RiotGames': {
+					switch (data[i].GameID) {
+						case 'Valorant': {
+							resolve('https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png');
+							break;
+						}
+					}
+					break;
+				}
 			}
 		}));
 	}
