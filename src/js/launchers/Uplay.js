@@ -30,12 +30,17 @@ async function getInstalledGames() {
 	if (!path) return [];
 	const dataPath = `${path}\\data`;
 	const games = fs.readdirSync(dataPath).filter(x => !isNaN(x));
-	return Promise.all(games.map(x => parseGameObject(x)));
+	return (await Promise.all(games.map(x => parseGameObject(x)))).filter(x => x?.GameID);
 }
 
 async function parseGameObject(GameID) {
-	const { stdout: registry_res, error } = await exec(`Reg Query "HKEY_LOCAL_MACHINE\\SOFTWARE\\${process.arch === 'x64' ? 'Wow6432Node\\' : ''}Ubisoft\\Launcher\\Installs\\${GameID}" /v InstallDir`);
-	if (error) return;
+	const { stdout: registry_res, error } = await exec(`Reg Query "HKEY_LOCAL_MACHINE\\SOFTWARE\\${process.arch === 'x64' ? 'Wow6432Node\\' : ''}Ubisoft\\Launcher\\Installs\\${GameID}" /v InstallDir`).catch(() => {
+		return { error: 'NOT_FOUND' };
+	});
+	if (error) {
+		console.error(error);
+		return;
+	}
 	const Location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 	const Executable = null;
 	const DisplayName = Location.split('/').slice(-2)[0];
