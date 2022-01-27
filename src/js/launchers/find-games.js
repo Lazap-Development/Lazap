@@ -5,6 +5,7 @@ const EpicGames = require('./EpicGames.js');
 const RiotGames = require('./RiotGames.js');
 const Uplay = require('./Uplay.js');
 const Minecraft = require('./Minecraft.js');
+const FiveM = require('./FiveM.js');
 const fs = require('fs');
 const md5 = require('md5');
 const games_blacklist = [
@@ -12,8 +13,13 @@ const games_blacklist = [
 ];
 
 async function loadAllGames() {
-	const games = [...(await Steam.getInstalledGames()), ...EpicGames.getInstalledGames(), ...(await RiotGames.getInstalledGames()), ...(await Uplay.getInstalledGames()), ...(await Minecraft.getInstalledGames())];
-
+	const games = [...(await Steam.getInstalledGames()), 
+					...(await Uplay.getInstalledGames()), 
+					...EpicGames.getInstalledGames(),
+		 			...(await RiotGames.getInstalledGames()), 
+		 			...(await Minecraft.getInstalledGames()),
+					...(await FiveM.getInstalledGames()),
+				];
 	/*
 	if (games.length == 0) {
 		var exists = document.getElementsByClassName('notFound')
