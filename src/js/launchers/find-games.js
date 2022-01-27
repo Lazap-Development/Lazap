@@ -274,9 +274,8 @@ function loadRecentGames() {
 }
 
 async function runCommand(command, args) {
-	const { execFile } = require('child_process');
-	const { promisify } = require('util');
-	const res = await promisify(execFile)(command, args);
+	const { spawn } = require('child_process');
+	const res = spawn('C:/Program Files (x86)/Minecraft Launcher/MinecraftLauncher.exe', args, { detached: true });
 	return res;
 }
 function checkDirs() {
