@@ -252,6 +252,10 @@ function fetch_banner(data) {
 					resolve('https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png');
 					break;
 				}
+				case 'FiveM': {
+					resolve('https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png');
+					break;
+				}
 			}
 		}));
 	}
