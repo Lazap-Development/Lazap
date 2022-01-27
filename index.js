@@ -256,6 +256,10 @@ function fetch_banner(data) {
 					resolve('https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png');
 					break;
 				}
+				case 'Lunar': {
+					resolve('https://www.lunarclient.com/assets/img/default-twitter-icon.webp');
+					break;
+				}
 			}
 		}));
 	}

@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-unused-vars
-function doitrockstar() {
-	const os = require('os');
-	const { exec } = require('child_process');
+const { exec } = require('child_process');
+const pexec = require('util').promisify(exec);
 
-	if (os.platform() === 'linux') {
+async function getInstalledGames(os = process.platform) {
+	if (os === 'linux') {
 		const checkIfInstalled = exec('find . -name Launcher.exe | head -n 1');
 
 		// Check if Rockstar Games is already installed
@@ -44,7 +44,7 @@ function doitrockstar() {
 			}
 		}
 	}
-	else if (os.platform() === 'win32') {
-		console.log('You are on windows!');
+	else if (os === 'win32') {
+		let allGames = (await pexec('Reg query "HKEY_LOCAL_MACHINE\\SOFTWARE\\Rockstar Games" /s')).stdout?.split('\n');
 	}
 }
