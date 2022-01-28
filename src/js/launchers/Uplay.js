@@ -30,7 +30,7 @@ async function getInstalledGames() {
 	if (!path) return [];
 	const dataPath = `${path}\\data`;
 	const games = fs.readdirSync(dataPath).filter(x => !isNaN(x));
-	return (await Promise.all(games.map(x => parseGameObject(x)))).filter(x => x?.GameID);
+	return (await Promise.all(games.map(x => parseGameObject(x)))).filter(x => typeof x === 'object' && x !== null);
 }
 
 async function parseGameObject(GameID) {
@@ -42,10 +42,18 @@ async function parseGameObject(GameID) {
 		return;
 	}
 	const Location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
-	if (!fs.existsSync(Location)) return;
+	if (!fs.existsSync(Location)) return console.log(Location, registry_res);
 	const Executable = null;
 	const DisplayName = Location.split('/').slice(-2)[0];
 	const Size = fs.statSync(Location).size;
+	console.log({
+		Executable,
+		Location,
+		DisplayName,
+		GameID,
+		Size,
+		LauncherName: 'Uplay',
+	});
 	return {
 		Executable,
 		Location,

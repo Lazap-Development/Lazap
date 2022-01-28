@@ -11,15 +11,23 @@ const md5 = require('md5');
 const games_blacklist = [
 	'228980', // Steamworks Common Redistributables
 ];
+const processes = new Map();
 
 async function loadAllGames() {
-	const games = [...(await Steam.getInstalledGames()), 
-					...(await Uplay.getInstalledGames()), 
-					...EpicGames.getInstalledGames(),
-		 			...(await RiotGames.getInstalledGames()), 
-		 			...(await Minecraft.getInstalledGames()),
-					...(await FiveM.getInstalledGames()),
-				];
+	const gamesElement = document.querySelector('div#allGamesList');
+
+	if (gamesElement.children.length >= 1) {
+		return;
+	}
+
+	const games = [
+		...(await Steam.getInstalledGames()),
+		...(await Uplay.getInstalledGames()),
+		...EpicGames.getInstalledGames(),
+		...(await RiotGames.getInstalledGames()),
+		...(await Minecraft.getInstalledGames()),
+		...(await FiveM.getInstalledGames()),
+	];
 	/*
 	if (games.length == 0) {
 		var exists = document.getElementsByClassName('notFound')
@@ -32,14 +40,6 @@ async function loadAllGames() {
 		}
 	}
 	*/
-
-	const gamesElement = document.querySelector('div#allGamesList');
-
-	if (gamesElement.children.length >= 1) {
-		document.querySelector('.leftbar-overlay').style.opacity = '0';
-		document.querySelector('.leftbar-overlay').style.visibility = 'hidden';
-		return;
-	}
 
 	const uncachedGames = games.map((game) => {
 		if (games_blacklist.includes(game.GameID)) return {};
@@ -77,28 +77,7 @@ async function loadAllGames() {
 		}
 		gameElement.appendChild(gameText);
 
-		gameBanner.addEventListener('click', () => {
-			addLaunch(game.GameID, game.LauncherName);
-			setLastLaunch(game.GameID, game.LauncherName);
-			switch (game.LauncherName) {
-			case 'Steam': {
-				window.open(`steam://rungameid/${game.GameID}`, '', 'show=false').close();
-				break;
-			}
-			case 'EpicGames': {
-				window.open(`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, '', 'show=false').close();
-				break;
-			}
-			case 'Uplay': {
-				window.open(`uplay://launch/${game.GameID}/0`, '', 'show=false').close();
-				break;
-			}
-			default: {
-				runCommand(`${game.Location}/${game.Executable}`, game.Args);
-				break;
-			}
-			}
-		});
+		gameBanner.addEventListener('click', handleLaunch.bind(null, game));
 
 		game.Banner = banner;
 		return game;
@@ -119,7 +98,7 @@ function loadFavouriteGames() {
 		Data = require('../../../storage/Cache/Games/Data.json');
 	}
 
-	if (document.querySelector('.leftbar-overlay').style.opacity === '1') loadAllGames();
+	if (document.querySelector('#game-loading-overlay').style.opacity === '1') loadAllGames();
 
 	const games = Data.Games.filter(x => x.Favourite);
 	const gamesElement = document.querySelector('div#favGamesList');
@@ -160,28 +139,7 @@ function loadFavouriteGames() {
 		}
 		gameElement.appendChild(gameText);
 
-		gameBanner.addEventListener('click', () => {
-			addLaunch(game.GameID, game.LauncherName);
-			setLastLaunch(game.GameID, game.LauncherName);
-			switch (game.LauncherName) {
-			case 'Steam': {
-				window.open(`steam://rungameid/${game.GameID}`, '', 'show=false').close();
-				break;
-			}
-			case 'EpicGames': {
-				window.open(`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, '', 'show=false').close();
-				break;
-			}
-			case 'Uplay': {
-				window.open(`uplay://launch/${game.GameID}/0`, '', 'show=false').close();
-				break;
-			}
-			default: {
-				runCommand(`${game.Location}/${game.Executable}`, game.Args);
-				break;
-			}
-			}
-		});
+		gameBanner.addEventListener('click', () => handleLaunch(game));
 
 		game.Banner = banner;
 		return game;
@@ -202,7 +160,7 @@ function loadRecentGames() {
 		Data = require('../../../storage/Cache/Games/Data.json');
 	}
 
-	if (document.querySelector('.leftbar-overlay').style.opacity === '1') loadAllGames();
+	if (document.querySelector('#game-loading-overlay').style.opacity === '1') loadAllGames();
 
 	const games = Data.Games.filter(x => x.LastLaunch);
 	const gamesElement = document.querySelector('div#recentGamesList');
@@ -243,28 +201,7 @@ function loadRecentGames() {
 		}
 		gameElement.appendChild(gameText);
 
-		gameBanner.addEventListener('click', () => {
-			addLaunch(game.GameID, game.LauncherName);
-			setLastLaunch(game.GameID, game.LauncherName);
-			switch (game.LauncherName) {
-			case 'Steam': {
-				window.open(`steam://rungameid/${game.GameID}`, '', 'show=false').close();
-				break;
-			}
-			case 'EpicGames': {
-				window.open(`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, '', 'show=false').close();
-				break;
-			}
-			case 'Uplay': {
-				window.open(`uplay://launch/${game.GameID}/0`, '', 'show=false').close();
-				break;
-			}
-			default: {
-				runCommand(`${game.Location}/${game.Executable}`, game.Args);
-				break;
-			}
-			}
-		});
+		gameBanner.addEventListener('click', handleLaunch.bind(game));
 
 		game.Banner = banner;
 		return game;
@@ -273,9 +210,14 @@ function loadRecentGames() {
 	document.querySelector('div#recent > div#recent-loading-overlay').style.visibility = 'hidden';
 }
 
-async function runCommand(command, args) {
+function runCommand(command, args, id, force = false) {
 	const { spawn } = require('child_process');
-	const res = spawn('C:/Program Files (x86)/Minecraft Launcher/MinecraftLauncher.exe', args, { detached: true });
+	if (processes.get(id) && !force) return 'RUNNING_ALREADY';
+	const res = spawn(`${command}`, args, { detached: true, shell: true });
+	res.on('error', (error) => console.log('[PROC] Error on process', id, ':', error));
+	res.on('exit', (code, signal) => console.log('[PROC] Exited on process', id, 'with code', code, 'and signal', signal));
+	res.on('spawn', () => console.log('[PROC] Started process with id', id));
+	processes.set(id, res);
 	return res;
 }
 function checkDirs() {
@@ -365,6 +307,35 @@ function setLastLaunch(GameID, LauncherName) {
 	Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).LastLaunch = Date.now();
 
 	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data));
+}
+function handleLaunch(game) {
+	addLaunch(game.GameID, game.LauncherName);
+	setLastLaunch(game.GameID, game.LauncherName);
+	let res;
+	switch (game.LauncherName) {
+	case 'Steam': {
+		res = runCommand('start', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
+		break;
+	}
+	case 'EpicGames': {
+		res = runCommand('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, '--wait'], game.GameID);
+		break;
+	}
+	case 'Uplay': {
+		res = runCommand('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
+		break;
+	}
+	default: {
+		res = runCommand(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+		break;
+	}
+	}
+	if (res == 'RUNNING_ALREADY') {
+		document.querySelector('.alert-box-message').textContent = `${game.DisplayName} is already running!`;
+		document.querySelector('.alert-box').style.marginTop = '40px';
+		document.querySelector('.alert-box').style.visibility = 'visible';
+		return document.querySelector('.alert-box').style.opacity = '1';
+	}
 }
 module.exports = {
 	loadAllGames,

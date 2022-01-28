@@ -91,10 +91,6 @@ document.getElementById('games-btn').addEventListener('click', function() {
 		smallImageText: 'All Games',
 	});
 
-	if (document.getElementById('game-loading-overlay').style.opacity !== '0') {
-		document.querySelector('.leftbar-overlay').style.opacity = '0.7';
-		document.querySelector('.leftbar-overlay').style.visibility = 'visible';
-	}
 	setTimeout(async () => {
 		await require('./js/launchers/find-games.js').loadAllGames();
 	}, 400);
