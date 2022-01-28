@@ -252,7 +252,7 @@ function saveGames(games) {
 	Data.Games = Data.Games.filter(x => GameIDs.includes(x.GameID));
 	const StoredGameIDs = Data.Games.map(x => x.GameID);
 	Data.Games.push(...games.filter(x => !StoredGameIDs.includes(x.GameID)));
-	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data));
+	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data, null, 2));
 }
 function addLaunch(GameID, LauncherName) {
 	let Data;
@@ -270,7 +270,7 @@ function addLaunch(GameID, LauncherName) {
 	if (!Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches) Data.Games.find(x => x.GameID === GameID).Launches = 0;
 	Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches++;
 
-	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data));
+	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data, null, 2));
 }
 function toggleFavourite(GameID, LauncherName) {
 	let Data;
@@ -288,7 +288,7 @@ function toggleFavourite(GameID, LauncherName) {
 	if (!Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite) Data.Games.find(x => x.GameID === GameID).Favourite = false;
 	Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite = !Data.Games.find(x => x.GameID === GameID).Favourite;
 
-	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data));
+	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data, null, 2));
 }
 function setLastLaunch(GameID, LauncherName) {
 	let Data;
@@ -306,7 +306,7 @@ function setLastLaunch(GameID, LauncherName) {
 	if (!Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite) Data.Games.find(x => x.GameID === GameID).LastLaunch = Date.now();
 	Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).LastLaunch = Date.now();
 
-	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data));
+	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data, null, 2));
 }
 function handleLaunch(game) {
 	addLaunch(game.GameID, game.LauncherName);
