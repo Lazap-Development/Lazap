@@ -35,13 +35,14 @@ async function getInstalledGames() {
 
 async function parseGameObject(GameID) {
 	const { stdout: registry_res, error } = await exec(`Reg Query "HKEY_LOCAL_MACHINE\\SOFTWARE\\${process.arch === 'x64' ? 'Wow6432Node\\' : ''}Ubisoft\\Launcher\\Installs\\${GameID}" /v InstallDir`).catch(() => {
-		return { error: 'NOT_FOUND' };
+		return { error: `${GameID} NOT_FOUND` };
 	});
 	if (error) {
 		console.error(error);
 		return;
 	}
 	const Location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
+	if (!fs.existsSync(Location)) return;
 	const Executable = null;
 	const DisplayName = Location.split('/').slice(-2)[0];
 	const Size = fs.statSync(Location).size;
