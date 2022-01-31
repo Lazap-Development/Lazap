@@ -25,23 +25,6 @@
             }
         }
     },
-    "build:dev": {
-        "productName": "Lazap",
-        "forceCodeSigning": true,
-        "nsis": {
-            "license": "./LICENSE.md",
-            "runAfterFinish": false,
-            "uninstallDisplayName": "Lazap",
-            "oneClick": false,
-            "perMachine": false,
-            "publish": {
-                "provider": "github",
-                "releaseType": "draft",
-                "repo": "lazap",
-                "owner": "LegItMate"
-            }
-        }
-    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/DashCruft-Nation/lazap.git"
