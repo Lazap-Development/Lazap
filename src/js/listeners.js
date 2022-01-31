@@ -161,7 +161,7 @@ settingsbackblur.addEventListener('click', function() {
 });
 
 document.querySelector('.titlebar-settings').addEventListener('click', () => {
-	const Data = JSON.parse(fs.readFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Settings\\LauncherData.json'));
+	const Data = JSON.parse(fs.readFileSync(__dirname.split('\\').slice(0, -1).join('\\') + '\\storage\\Settings\\LauncherData.json'));
 	document.querySelectorAll('input[id^=setting-]').forEach((input) => {
 		input.checked = Data[input.id.split('-')[1]] ? true : false;
 	});

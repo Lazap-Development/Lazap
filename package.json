@@ -9,7 +9,23 @@
         "build:dev": "IF exist \"dist\" ( rmdir /s /q dist && electron-builder build --dir ) ELSE ( electron-builder build --dir )"
     },
     "build": {
-
+        "productName": "Lazap",
+        "forceCodeSigning": false,
+        "nsis": {
+            "license": "./LICENSE.md",
+            "runAfterFinish": false,
+            "uninstallDisplayName": "Lazap",
+            "oneClick": false,
+            "perMachine": false,
+            "publish": {
+                "provider": "github",
+                "releaseType": "draft",
+                "repo": "lazap",
+                "owner": "LegItMate"
+            }
+        }
+    },
+    "build:dev": {
         "productName": "Lazap",
         "forceCodeSigning": true,
         "nsis": {
