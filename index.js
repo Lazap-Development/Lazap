@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 require('v8-compile-cache');
 const electron = require('electron');
-const ipcMain = require('electron').ipcMain;
+const { ipcMain } = require('electron');
 const app = electron.app;
 const fs = require('fs');
 const axios = require('axios').default;
@@ -9,6 +9,7 @@ const os = require('os');
 const { JSDOM } = require('jsdom');
 const rpc = require('discord-rpc');
 const md5 = require('md5');
+const CONSTANTS = require('./Constants.json');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
@@ -17,6 +18,8 @@ if (!gotTheLock) return app.quit();
 
 const rpcClient = new rpc.Client({ transport: 'ipc' });
 rpcClient.login({ clientId: '932504287337148417' });
+
+handleHardwareAcceleration();
 
 app.on('ready', () => {
 	const mainWindow = new electron.BrowserWindow({
@@ -36,13 +39,14 @@ app.on('ready', () => {
 		},
 		icon: 'icon.ico',
 	});
+	require('./updater.js')(mainWindow);
 
 	mainWindow.loadFile(
-		fs.existsSync(__dirname + '\\storage\\Settings\\LauncherData.json')
-		? require(__dirname + '\\storage\\Settings\\LauncherData.json')?.skipLogin
-			? 'src/index.html'
-			: 'src/login.html'
-		: 'src/login.html',
+		fs.existsSync('./storage/Settings/LauncherData.json')
+			? JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.skipLogin
+				? 'src/index.html'
+				: 'src/login.html'
+			: 'src/login.html',
 	);
 
 	mainWindow.once('ready-to-show', () => {
@@ -119,44 +123,43 @@ app.on('ready', () => {
 		mainWindow.webContents.send('load-banners-response');
 	});
 	ipcMain.on('rpcUpdate', (e, d) => updateRPC(d));
+	ipcMain.on('setLaunchOnStartup', (e, bool) => app.setLoginItemSettings({ 'openAtLogin': bool, 'enabled': bool }));
+});
+
+ipcMain.on('updateSetting', (e, key, bool) => {
+	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json');
+	const LauncherData = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
+	console.log(LauncherData);
+	LauncherData[key] = bool;
+	console.log(LauncherData);
+	fs.writeFileSync('./storage/Settings/LauncherData.json', JSON.stringify(LauncherData));
 });
 
 function handleStorageAndTransportData(mainWindow) {
-	if (!fs.existsSync(__dirname + '\\storage')) {
-		fs.mkdirSync(__dirname + '\\storage');
-		fs.mkdirSync(__dirname + '\\storage\\Settings');
-		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', '{}');
-		fs.writeFileSync(__dirname + '\\storage\\Settings\\LauncherData.json', '{"skipLogin":true}');
-	}
-	if (!fs.existsSync(__dirname + '\\storage\\Settings')) {
-		fs.mkdirSync(__dirname + '\\storage\\Settings');
-		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', '{}');
-		fs.writeFileSync(__dirname + '\\storage\\Settings\\LauncherData.json', '{"skipLogin":true}');
-	}
+	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData));
+	checkForDirAndCreate(__dirname + '/storage/Settings/userprofile.json', '{}');
 
-	let LauncherData = require(`${__dirname}\\storage\\Settings\\userprofile.json`);
+	let LauncherData = JSON.parse(fs.readFileSync('./storage/Settings/userprofile.json').toString());
 	if (!Object.keys(LauncherData).length) {
 		LauncherData = {
 			username: os.userInfo().username,
 			pfp: 'default',
 		};
-		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(LauncherData));
+		fs.writeFileSync('./storage/Settings/userprofile.json', JSON.stringify(LauncherData));
 	}
 	else {
 		if (LauncherData.pfp !== 'default' && !fs.existsSync(LauncherData.pfp)) {
 			LauncherData.pfp = 'default';
 		}
-		fs.writeFileSync(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(LauncherData));
+		fs.writeFileSync('./storage/Settings/userprofile.json', JSON.stringify(LauncherData));
 	}
 
 	mainWindow.webContents.send('load-profile', LauncherData);
 }
 
 function editLocalStorage(content) {
-	if (!fs.existsSync(__dirname + '\\storage')) {
-		fs.mkdirSync(__dirname + '\\storage');
-	}
-	fs.writeFile(__dirname + '\\storage\\Settings\\userprofile.json', JSON.stringify(content), (err) => {
+	checkForDirAndCreate(__dirname + '/storage/Settings/userprofile.json', '{}');
+	fs.writeFile('./storage/Settings/userprofile.json', JSON.stringify(content), (err) => {
 		if (err) throw err;
 	});
 }
@@ -283,24 +286,7 @@ function fetch_banner(data) {
 }
 
 function cacheBanners(data, res) {
-	if (!fs.existsSync(__dirname + '\\storage')) {
-		fs.mkdirSync(__dirname + '\\storage');
-		fs.mkdirSync(__dirname + '\\storage\\Cache');
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
-	}
-	if (!fs.existsSync(__dirname + '\\storage\\Cache')) {
-		fs.mkdirSync(__dirname + '\\storage\\Cache');
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
-	}
-	if (!fs.existsSync(__dirname + '\\storage\\Cache\\Games')) {
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games');
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
-	}
-	if (!fs.existsSync(__dirname + '\\storage\\Cache\\Games\\Images')) {
-		fs.mkdirSync(__dirname + '\\storage\\Cache\\Games\\Images');
-	}
+	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
 
 	res.filter(async (x) => (await x).startsWith('http')).forEach(async (x, i) => {
 		axios({
@@ -308,7 +294,7 @@ function cacheBanners(data, res) {
 			method: 'GET',
 			responseType: 'stream',
 		}).then(async (response) => {
-			response.data.pipe(fs.createWriteStream(__dirname + `\\storage\\Cache\\Games\\Images\\${md5(data[i].DisplayName)}.png`));
+			response.data.pipe(fs.createWriteStream(`./storage/Cache/Games/Images/${md5(data[i].DisplayName)}.png`));
 		}).catch(() => '');
 	});
 }
@@ -329,8 +315,8 @@ async function handleSignin(data) {
 
 	if (res) {
 		// console.log(res.data);
-		if (fs.existsSync(__dirname + '\\storage\\Settings\\userprofile.json')) {
-			const json = require(`${__dirname}/storage/Settings/userprofile.json`);
+		if (fs.existsSync('./storage/Settings/userprofile.json')) {
+			const json = JSON.parse(fs.readFileSync('./storage/Settings/userprofile.json').toString());
 			json['token'] = res.data;
 			json['password'] = data.pass;
 			json['username'] = data.username;
@@ -350,8 +336,8 @@ async function handleSignin(data) {
 }
 
 async function identify() {
-	if (!fs.existsSync(__dirname + '\\storage\\Settings\\userprofile.json')) return { status: 'ACCOUNT_NOT_FOUND', data: null };
-	const { token, password, username } = JSON.parse(fs.readFileSync(__dirname + '\\storage\\Settings\\userprofile.json').toString());
+	if (!fs.existsSync('./storage/Settings/userprofile.json')) return { status: 'ACCOUNT_NOT_FOUND', data: null };
+	const { token, password, username } = JSON.parse(fs.readFileSync('./storage/Settings/userprofile.json').toString());
 	const res = await axios.post('http://localhost:3000/accounts/identify', { token, pass: password, name: username }).catch((e) => e.response?.status || 0);
 
 	const errcodes = {
@@ -365,5 +351,32 @@ async function identify() {
 }
 
 function updateRPC(data) {
+	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData));
+	const LauncherData = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
+	if (LauncherData.enableRPC !== true) return 'DISABLED';
 	rpcClient.setActivity(data).catch(err => console.warn('[RPC]', err));
+}
+
+function checkForDirAndCreate(dir, fileContent = '') {
+	if (fs.existsSync(dir.split(__dirname)[1])) return true;
+	dir.split(__dirname)[1].split('/').slice(1).forEach((name, i, arr) => {
+		dir = dir.replaceAll('\\', '/');
+		if (!fs.existsSync(`./${arr.slice(0, i + 1).join('/')}`)) {
+			if (name.split('.')[1]) {
+				fs.writeFileSync(`./${arr.slice(0, i + 1).join('/')}`, fileContent);
+				return;
+			}
+			else {
+				fs.mkdirSync(`./${arr.slice(0, i + 1).join('/')}`);
+			}
+		}
+	});
+}
+
+async function handleHardwareAcceleration() {
+	// fs.readFileSync('./storage/Settings/LauncherData.json').toString();
+	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData));
+	if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.disableHardwareAcceleration === true) {
+		app.disableHardwareAcceleration();
+	}
 }

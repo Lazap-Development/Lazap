@@ -200,6 +200,22 @@ body {
     filter: invert(36%) sepia(89%) saturate(4522%) hue-rotate(225deg) brightness(99%) contrast(99%);
 }
 
+.titlebar-update {
+    -webkit-app-region: no-drag;
+    display: none;
+    height: 18px;
+    width: 18px;
+    margin-top: 1px;
+    margin-left: 13px;
+    align-items: flex-start;
+    src: url('../../img/download.svg');
+}
+
+.titlebar-update:hover {
+    cursor: pointer;
+    filter: invert(65%) sepia(56%) saturate(4278%) hue-rotate(79deg) brightness(118%) contrast(130%);
+}
+
 .mx-1 {
     margin-right: 0.25rem !important;
     margin-left: 0.25rem;
@@ -807,8 +823,6 @@ img,
 }
 
 .switch {
-
-    
     --line: #505162;
     --dot: #f7f8ff;
     --circle: #9ea0be;
@@ -817,7 +831,6 @@ img,
     cursor: pointer;
 }
 .switch input {
-
     display: none;
 }
 .switch input + div {

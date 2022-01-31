@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const fs = require('fs');
 
 const marker = document.getElementById('indicator');
 const items = document.querySelectorAll('.side-tab');
@@ -159,6 +160,17 @@ settingsbackblur.addEventListener('click', function() {
 	settingsbackblur.style.display = 'none';
 });
 
+document.querySelector('.titlebar-settings').addEventListener('click', () => {
+	const Data = JSON.parse(fs.readFileSync('../../storage/Settings/LauncherData.json'));
+	document.querySelectorAll('input[id^=setting-]').forEach((input) => {
+		input.checked = Data[input.id.split('-')[1]] ? true : false;
+	});
+});
+document.querySelectorAll('input[id^=setting-]').forEach((input) => {
+	input.addEventListener('change', () => {
+		ipcRenderer.send('updateSetting', input.id.split('-')[1], document.querySelector(`input[id=${input.id}]`).checked);
+	});
+});
 
 items.forEach((link) =>
 	link.addEventListener('click', (e) => {

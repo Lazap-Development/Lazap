@@ -21,7 +21,7 @@ async function getMinecraftLauncher() {
 			DisplayName: 'Minecraft Launcher',
 			LauncherName: 'Minecraft',
 			GameID: 'Minecraft',
-			Size: fs.statSync(Location),
+			Size: fs.statSync(Location).size,
 			Location,
 			Executable,
 			Args: [],
@@ -36,7 +36,7 @@ async function getMinecraftLauncher() {
 			DisplayName: 'Minecraft Launcher',
 			LauncherName: 'Minecraft',
 			GameID: 'Minecraft',
-			Size: fs.statSync(Location),
+			Size: fs.statSync(Location).size,
 			Location,
 			Executable,
 			Args: [Args],
@@ -45,15 +45,15 @@ async function getMinecraftLauncher() {
 }
 
 async function getLunarClient() {
-	const isLunarInstalled = fs.existsSync('C:\\Users\\sunil\\.lunarclient');
+	const isLunarInstalled = fs.existsSync(`C:\\Users\\${require('os').userInfo().username}\\.lunarclient`);
 	if (!isLunarInstalled) return [];
-	const Location = 'C:\\Users\\sunil\\AppData\\Local\\Programs\\lunarclient';
+	const Location = `C:\\Users\\${require('os').userInfo().username}\\AppData\\Local\\Programs\\lunarclient`;
 	const Executable = 'Lunar Client.exe';
 	return [{
 		DisplayName: 'Lunar Client',
 		LauncherName: 'Lunar',
 		GameID: 'Lunar',
-		Size: fs.statSync(Location),
+		Size: fs.statSync(Location).size,
 		Location,
 		Executable,
 		Args: [],

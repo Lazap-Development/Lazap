@@ -34,6 +34,11 @@ ipcRenderer.on('check-for-login', async (e, r) => {
 	}
 });
 
+ipcRenderer.on('handle-update-available', () => {
+	document.querySelector('img.titlebar-update#update-btn').style.display = 'block';
+});
+document.querySelector('img.titlebar-update#update-btn').addEventListener('click', () => ipcRenderer.send('handle-update-install'));
+
 account.addEventListener('mouseover', () => {
 	if (loggedin === true) {
 		account.style['filter'] = 'invert(17%) sepia(86%) saturate(3285%) hue-rotate(239deg) brightness(85%) contrast(101%)';

@@ -31,9 +31,9 @@
             </h1>
 
             <div>
-                <p>Discord RPC</p>
+                <p>Discord Rich Presence</p>
                 <label class="switch">
-                    <input type="checkbox">
+                    <input type="checkbox" id="setting-enableRPC">
                     <div>
                         <span></span>
                     </div>
@@ -43,7 +43,7 @@
             <div>
                 <p>Launch on Startup</p>
                 <label class="switch">
-                    <input type="checkbox">
+                    <input type="checkbox" id="setting-launchOnStartup">
                     <div>
                         <span></span>
                     </div>
@@ -53,7 +53,7 @@
             <div>
                 <p>Check for Updates</p>
                 <label class="switch">
-                    <input type="checkbox">
+                    <input type="checkbox" id="setting-checkForUpdates">
                     <div>
                         <span></span>
                     </div>
@@ -63,7 +63,7 @@
             <div>
                 <p>Disable Hard-Acceleration</p>
                 <label class="switch">
-                    <input type="checkbox">
+                    <input type="checkbox" id="setting-disableHardwareAcceleration">
                     <div>
                         <span></span>
                     </div>
@@ -81,6 +81,7 @@
             <div class="titlebar-options">
                 <img class="titlebar-settings" src="../img/settings.svg" id="settings-btn">
                 <img class="titlebar-account" src="../img/account.svg" id="account-btn">
+                <img class="titlebar-update" src="../img/download.svg" id="update-btn">
             </div>
             <div style="margin-top: 0px;" class="titlebar-icons">
                 <div onclick="min_window()" class="titlebar-min mx-1"></div>

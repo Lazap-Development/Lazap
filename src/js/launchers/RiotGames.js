@@ -30,7 +30,7 @@ async function getInstalledGames(os = process.platform) {
 		launcher_location = stdout.split('"')[1];
 	}
 	if (!fs.existsSync(launcher_location)) return [];
-	return [await parseGameObject(launcher_location)];
+	return [await parseGameObject(launcher_location)].filter(x => typeof x === 'object' && x !== null);
 }
 
 async function parseGameObject(path) {
@@ -38,8 +38,8 @@ async function parseGameObject(path) {
 	const Location = path.slice(0, -22);
 	const Args = ['--launch-product=valorant', '--launch-patchline=live'];
 	const DisplayName = 'Valorant';
-	const Size = await promisify(fs.stat)(Location.slice(0, -12) + 'VALORANT')
-		.size;
+	if (!fs.existsSync(Location.slice(0, -12) + 'VALORANT')) return;
+	const Size = fs.statSync(Location.slice(0, -12) + 'VALORANT').size;
 
 	return {
 		Executable,

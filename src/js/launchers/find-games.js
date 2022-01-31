@@ -237,8 +237,8 @@ function checkDirs() {
 function saveGames(games) {
 	let Data;
 	checkDirs();
-	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
-		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
+	if (!fs.existsSync('../../../storage/Cache/Games/Data.json')) {
+		fs.writeFileSync('../../../storage/Cache/Games/Data.json', '{\n\n}');
 		Data = {
 			Games: [],
 		};

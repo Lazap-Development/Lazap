@@ -133,3 +133,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# electron-builder & electron-updater configuration files
+dev-app-update.yml
+electron-builder.env
+
+*.pfx
