@@ -124,6 +124,10 @@ app.on('ready', () => {
 	});
 	ipcMain.on('rpcUpdate', (e, d) => updateRPC(d));
 	ipcMain.on('setLaunchOnStartup', (e, bool) => app.setLoginItemSettings({ 'openAtLogin': bool, 'enabled': bool }));
+	ipcMain.on('restart', async () => {
+		app.relaunch()
+		app.exit()
+	});
 });
 
 ipcMain.on('updateSetting', (e, key, bool) => {
