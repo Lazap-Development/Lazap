@@ -1,6 +1,6 @@
 {
     "name": "lazap",
-    "version": "0.0.0-alpha",
+    "version": "0.0.1-alpha",
     "description": "A cross platform launcher - All your games at one library",
     "main": "./index.js",
     "scripts": {
@@ -10,6 +10,17 @@
         "publish:draft": "echo Make sure to change the publish settings if you are testing! && pause && IF exist \"dist\" ( rmdir /s /q dist && electron-builder build -p onTagOrDraft ) ELSE ( electron-builder build -p onTagOrDraft )"
     },
     "build": {
+        "files": [
+            "**/*",
+            "!electron-builder.env",
+            "!.env",
+            "!storage",
+            "!README.md",
+            "!dev-app-update.yml",
+            "!.gitignore",
+            "!.eslintrc.json",
+            "!Lazap Development.pfx"
+        ],
         "productName": "Lazap",
         "forceCodeSigning": false,
         "nsis": {
