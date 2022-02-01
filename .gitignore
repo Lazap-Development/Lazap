@@ -135,7 +135,6 @@ dist
 .pnp.*
 
 # electron-builder & electron-updater configuration files
-dev-app-update.yml
 electron-builder.env
 
 *.pfx
