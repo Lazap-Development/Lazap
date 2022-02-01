@@ -1,6 +1,6 @@
 {
     "name": "lazap",
-    "version": "0.0.1-alpha",
+    "version": "0.0.0-alpha",
     "description": "A cross platform launcher - All your games at one library",
     "main": "./index.js",
     "scripts": {
@@ -16,6 +16,7 @@
             "!.env",
             "!storage",
             "!README.md",
+            "!dist",
             "!dev-app-update.yml",
             "!.gitignore",
             "!.eslintrc.json",
@@ -41,7 +42,7 @@
         "type": "git",
         "url": "git+https://github.com/Lazap-Development/lazap.git"
     },
-    "author": "Lazap Development",
+    "author": "Lazap Development ",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/Lazap-Development/lazap/issues"

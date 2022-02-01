@@ -9,7 +9,7 @@ let mainWindow;
 autoUpdater.logger = logger;
 
 // Configuration
-autoUpdater.autoInstallOnAppQuit = true;
+autoUpdater.autoInstallOnAppQuit = false;
 autoUpdater.autoDownload = false;
 autoUpdater.checkForUpdatesAndNotify();
 setInterval(() => {
@@ -47,7 +47,7 @@ autoUpdater.on('update-downloaded', (info) => {
 });
 
 ipcMain.on('handle-update-install', () => {
-	autoUpdater.quitAndInstall();
+	autoUpdater.quitAndInstall(false, true);
 });
 
 function getAutoUpdateSetting() {

@@ -3,8 +3,8 @@
         "owner": "Lazap-Development",
         "repo": "lazap"
     },
-    "userprofilePath": "/storage/Settings/userprofile.json",
-    "launcherdataPath": "/storage/Settings/LauncherData.json",
+    "GAMES_DATA_BASE_PATH": "./storage/Cache/Games",
+    "GAME_BANNERS_BASE_PATH": "./storage/Cache/Games/Images",
     "defaultLauncherData": {
         "enableRPC": true,
         "launchOnStartup": false,

@@ -164,12 +164,10 @@ document.querySelector('.titlebar-settings').addEventListener('click', () => {
 	const Data = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
 	document.querySelectorAll('input[id^=setting-]').forEach((input) => {
 		input.checked = Data[input.id.split('-')[1]] ? true : false;
-		console.log(input.id, Data[input.id.split('-')[1]], input.checked);
 	});
 });
 document.querySelectorAll('input[id^=setting-]').forEach((input) => {
 	input.addEventListener('change', () => {
-		console.log(input.checked);
 		ipcRenderer.send('updateSetting', input.id.split('-')[1], document.querySelector(`input[id=${input.id}]`).checked);
 	});
 });

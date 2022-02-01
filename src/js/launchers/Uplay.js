@@ -46,14 +46,6 @@ async function parseGameObject(GameID) {
 	const Executable = null;
 	const DisplayName = Location.split('/').slice(-2)[0];
 	const Size = fs.statSync(Location).size;
-	console.log({
-		Executable,
-		Location,
-		DisplayName,
-		GameID,
-		Size,
-		LauncherName: 'Uplay',
-	});
 	return {
 		Executable,
 		Location,
