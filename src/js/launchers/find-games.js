@@ -88,6 +88,7 @@ async function loadAllGames() {
 }
 function loadFavouriteGames() {
 	let Data;
+	checkDirs();
 	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
 		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
 		Data = {
@@ -150,6 +151,7 @@ function loadFavouriteGames() {
 
 function loadRecentGames() {
 	let Data;
+	checkDirs();
 	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
 		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
 		Data = {

@@ -49,7 +49,7 @@ app.on('ready', () => {
 			: 'src/login.html',
 	);
 
-	mainWindow.once('ready-to-show', () => {
+	mainWindow.once('ready-to-show', async () => {
 		mainWindow.show();
 	});
 
@@ -66,11 +66,13 @@ app.on('ready', () => {
 		}
 		*/
 		handleStorageAndTransportData(mainWindow);
-		updateRPC({
-			details: 'On Main Screen',
-			startTimestamp: Date.now(),
-			largeImageKey: 'lazap',
-		});
+		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.enableRPC) {
+			updateRPC({
+				details: 'On Main Screen',
+				startTimestamp: Date.now(),
+				largeImageKey: 'lazap',
+			});
+		}
 	});
 
 	ipcMain.on('load-main', () => {
@@ -121,22 +123,34 @@ app.on('ready', () => {
 		   `);
 		});
 		mainWindow.webContents.send('load-banners-response');
+		mainWindow.webContents.send('load-main-banner');
 	});
 	ipcMain.on('rpcUpdate', (e, d) => updateRPC(d));
 	ipcMain.on('setLaunchOnStartup', (e, bool) => app.setLoginItemSettings({ 'openAtLogin': bool, 'enabled': bool }));
 	ipcMain.on('restart', async () => {
-		app.relaunch()
-		app.exit()
+		app.relaunch();
+		app.exit();
 	});
 });
 
 ipcMain.on('updateSetting', (e, key, bool) => {
+	const requireRestart = ['disableHardwareAcceleration'];
 	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json');
 	const LauncherData = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
-	console.log(LauncherData);
 	LauncherData[key] = bool;
-	console.log(LauncherData);
 	fs.writeFileSync('./storage/Settings/LauncherData.json', JSON.stringify(LauncherData));
+	if(requireRestart.includes(key)) ipcMain.emit('restart');
+
+	switch (key) {
+		case 'enableRPC': {
+			updateRPC(bool ? { details: 'On Main Screen', startTimestamp: Date.now(), largeImageKey: 'lazap' } : undefined);
+			break;
+		}
+		case 'launchOnStartup': {
+			ipcMain.emit('rpcUpdate', bool);
+			break;
+		}
+	}
 });
 
 function handleStorageAndTransportData(mainWindow) {
@@ -357,7 +371,11 @@ async function identify() {
 function updateRPC(data) {
 	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData));
 	const LauncherData = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
-	if (LauncherData.enableRPC !== true) return 'DISABLED';
+	if (LauncherData.enableRPC !== true && typeof data === 'object' && data !== null) return 'DISABLED';
+	if (!data) {
+		rpcClient.clearActivity();
+		return;
+	}
 	rpcClient.setActivity(data).catch(err => console.warn('[RPC]', err));
 }
 

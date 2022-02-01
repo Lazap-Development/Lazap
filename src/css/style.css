@@ -208,7 +208,6 @@ body {
     margin-top: 1px;
     margin-left: 13px;
     align-items: flex-start;
-    src: url('../../img/download.svg');
 }
 
 .titlebar-update:hover {
@@ -276,15 +275,14 @@ body {
 }
 
 .head-pic {
-    width: 100%;
+    width: 200%;
     height: 100%;
-    overflow: hidden;
+    overflow: unset;
     position: relative;
     object-fit: cover;
-    flex-shrink: 0;
+    flex-shrink: 10;
     min-width: calc(100% - 900px);
     min-height: 100%;
-
     border-radius: 10px;
 }
 

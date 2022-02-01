@@ -26,7 +26,7 @@
 Building Lazap is very simple. Simply run these commands in order and you should be good to go:<br>
 __NOTE:__ Make sure you have [Node.js](https://nodejs.org/en/download/) and [git](https://git-scm.com/) installed
 ```
-git clone https://github.com/DashCruft-Nation/lazap.git
+git clone https://github.com/Lazap-Development/lazap.git
 cd lazap
 git switch nightly
 npm i
@@ -45,7 +45,7 @@ We are here to help you if you get any problems when building Lazap, just join o
 **Want to help out insted of getting help?** We love Pull Requests and Issue hunters! Open up a PR and fix some gears, we would love the community's help to improve lazap and make it more user friendly! 😀
 
 # License
-Lazap is licensed under the terms of [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://github.com/DashCruft-Nation/lazap/blob/main/LICENSE.md) ("CC-BY-NC-SA-4.0"). Commercial use is not allowed under this license. This includes any kind of revenue made with or based upon the software, even donations.
+Lazap is licensed under the terms of [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://github.com/Lazap-Development/lazap/blob/main/LICENSE.md) ("CC-BY-NC-SA-4.0"). Commercial use is not allowed under this license. This includes any kind of revenue made with or based upon the software, even donations.
 
 The CC-BY-NC-SA-4.0 allows you to:
 - [x] **Share** -- copy and redistribute the material in any medium or format

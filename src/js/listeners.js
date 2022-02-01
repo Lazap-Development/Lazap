@@ -169,7 +169,6 @@ document.querySelector('.titlebar-settings').addEventListener('click', () => {
 document.querySelectorAll('input[id^=setting-]').forEach((input) => {
 	input.addEventListener('change', () => {
 		ipcRenderer.send('updateSetting', input.id.split('-')[1], document.querySelector(`input[id=${input.id}]`).checked);
-		ipcRenderer.send('restart');
 	});
 });
 
