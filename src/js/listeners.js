@@ -161,7 +161,7 @@ settingsbackblur.addEventListener('click', function() {
 });
 
 document.querySelector('.titlebar-settings').addEventListener('click', () => {
-	const Data = JSON.parse(fs.readFileSync(__dirname.split('\\').slice(0, -1).join('\\') + '\\storage\\Settings\\LauncherData.json'));
+	const Data = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
 	document.querySelectorAll('input[id^=setting-]').forEach((input) => {
 		input.checked = Data[input.id.split('-')[1]] ? true : false;
 	});
@@ -169,7 +169,6 @@ document.querySelector('.titlebar-settings').addEventListener('click', () => {
 document.querySelectorAll('input[id^=setting-]').forEach((input) => {
 	input.addEventListener('change', () => {
 		ipcRenderer.send('updateSetting', input.id.split('-')[1], document.querySelector(`input[id=${input.id}]`).checked);
-		ipcRenderer.send('restart');
 	});
 });
 

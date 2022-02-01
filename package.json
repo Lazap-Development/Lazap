@@ -6,9 +6,22 @@
     "scripts": {
         "start": "electron .",
         "build": "IF exist \"dist\" ( rmdir /s /q dist && electron-builder build ) ELSE ( electron-builder build )",
-        "build:dev": "IF exist \"dist\" ( rmdir /s /q dist && electron-builder build --dir ) ELSE ( electron-builder build --dir )"
+        "build:dev": "IF exist \"dist\" ( rmdir /s /q dist && electron-builder build --dir ) ELSE ( electron-builder build --dir )",
+        "publish:draft": "echo Make sure to change the publish settings if you are testing! && pause && IF exist \"dist\" ( rmdir /s /q dist && electron-builder build -p onTagOrDraft ) ELSE ( electron-builder build -p onTagOrDraft )"
     },
     "build": {
+        "files": [
+            "**/*",
+            "!electron-builder.env",
+            "!.env",
+            "!storage",
+            "!README.md",
+            "!dist",
+            "!dev-app-update.yml",
+            "!.gitignore",
+            "!.eslintrc.json",
+            "!Lazap Development.pfx"
+        ],
         "productName": "Lazap",
         "forceCodeSigning": false,
         "nsis": {
@@ -27,14 +40,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/DashCruft-Nation/lazap.git"
+        "url": "git+https://github.com/Lazap-Development/lazap.git"
     },
-    "author": "Lazap Development",
+    "author": "Lazap Development ",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/DashCruft-Nation/lazap/issues"
+        "url": "https://github.com/Lazap-Development/lazap/issues"
     },
-    "homepage": "https://github.com/DashCruft-Nation/lazap#readme",
+    "homepage": "https://github.com/Lazap-Development/lazap#readme",
     "dependencies": {
         "axios": "^0.24.0",
         "deepmerge": "^4.2.2",

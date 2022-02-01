@@ -9,9 +9,9 @@ let mainWindow;
 autoUpdater.logger = logger;
 
 // Configuration
-autoUpdater.autoInstallOnAppQuit = true;
+autoUpdater.autoInstallOnAppQuit = false;
 autoUpdater.autoDownload = false;
-autoUpdater.checkForUpdates();
+autoUpdater.checkForUpdatesAndNotify();
 setInterval(() => {
 	// Check for updates regardless of the setting but do not notify or update if disallowed
 	if (getAutoUpdateSetting()) {
@@ -20,7 +20,7 @@ setInterval(() => {
 	else {
 		autoUpdater.checkForUpdates().catch(() => ''); // Handle errors thrown by these functions because .catch() doesn't seem to work
 	}
-}, 60 * 1000);
+}, 60 * 60 * 1000);
 
 autoUpdater.on('error', (...args) => {
 	console.log(args[0]);
@@ -47,7 +47,7 @@ autoUpdater.on('update-downloaded', (info) => {
 });
 
 ipcMain.on('handle-update-install', () => {
-	autoUpdater.quitAndInstall();
+	autoUpdater.quitAndInstall(false, true);
 });
 
 function getAutoUpdateSetting() {

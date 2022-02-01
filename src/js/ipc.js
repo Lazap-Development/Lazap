@@ -1,4 +1,5 @@
 const { ipcRenderer } = require('electron');
+const fs = require('fs');
 
 const fnScript = document.createElement('script');
 fnScript.async = true;
@@ -88,3 +89,14 @@ ipcRenderer.on('load-banners-response', () => {
 		});
 	});
 });
+
+const path = require('path');
+ipcRenderer.on('load-main-banner', () => {
+	document.querySelector('img.head-pic').src = loadBanner() ? path.join(__dirname, path.relative(__dirname, `./storage/Cache/Games/Images/${loadBanner()}`)) : '../img/gta-3-definitive-edition-wallpaper.jpg';
+});
+document.querySelector('img.head-pic').src = loadBanner() ? path.join(__dirname, path.relative(__dirname, `./storage/Cache/Games/Images/${loadBanner()}`)) : '../img/gta-3-definitive-edition-wallpaper.jpg';
+
+function loadBanner() {
+	const imgs = fs.readdirSync('./storage/Cache/Games/Images');
+	return imgs[Math.floor(Math.random() * imgs.length)];
+}

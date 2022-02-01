@@ -6,6 +6,9 @@ const RiotGames = require('./RiotGames.js');
 const Uplay = require('./Uplay.js');
 const Minecraft = require('./Minecraft.js');
 const FiveM = require('./FiveM.js');
+const path = require('path');
+const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
+const Constants = require('../../../Constants.json');
 const fs = require('fs');
 const md5 = require('md5');
 const games_blacklist = [
@@ -53,8 +56,8 @@ async function loadAllGames() {
 		const gameBanner = document.createElement('img');
 
 		let banner;
-		if (fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Images')) {
-			const dirs = fs.readdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Images');
+		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
+			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
 			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
 			banner = img ? `../storage/Cache/Games/Images/${img}` : '../icon.ico';
 		}
@@ -88,14 +91,15 @@ async function loadAllGames() {
 }
 function loadFavouriteGames() {
 	let Data;
-	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
-		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
+	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
+	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
+		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
 		Data = {
 			Games: [],
 		};
 	}
 	else {
-		Data = require('../../../storage/Cache/Games/Data.json');
+		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
 	}
 
 	if (document.querySelector('#game-loading-overlay').style.opacity === '1') loadAllGames();
@@ -115,8 +119,8 @@ function loadFavouriteGames() {
 		const gameBanner = document.createElement('img');
 
 		let banner;
-		if (fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Images')) {
-			const dirs = fs.readdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Images');
+		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
+			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
 			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
 			banner = img ? `../storage/Cache/Games/Images/${img}` : '../icon.ico';
 		}
@@ -150,14 +154,15 @@ function loadFavouriteGames() {
 
 function loadRecentGames() {
 	let Data;
-	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
-		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
+	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
+	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
+		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
 		Data = {
 			Games: [],
 		};
 	}
 	else {
-		Data = require('../../../storage/Cache/Games/Data.json');
+		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
 	}
 
 	if (document.querySelector('#game-loading-overlay').style.opacity === '1') loadAllGames();
@@ -177,8 +182,8 @@ function loadRecentGames() {
 		const gameBanner = document.createElement('img');
 
 		let banner;
-		if (fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Images')) {
-			const dirs = fs.readdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Images');
+		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
+			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
 			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
 			banner = img ? `../storage/Cache/Games/Images/${img}` : '../icon.ico';
 		}
@@ -220,31 +225,32 @@ function runCommand(command, args, id, force = false) {
 	processes.set(id, res);
 	return res;
 }
-function checkDirs() {
-	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage')) {
-		fs.mkdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage');
-		fs.mkdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache');
-		fs.mkdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games');
-	}
-	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache')) {
-		fs.mkdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache');
-		fs.mkdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games');
-	}
-	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games')) {
-		fs.mkdirSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games');
-	}
+function checkForDirAndCreate(dir, fileContent = '') {
+	if (fs.existsSync(dir.split(__dirname)[1])) return true;
+	dir.split(__dirname)[1].split('/').slice(1).forEach((name, i, arr) => {
+		dir = dir.replaceAll('\\', '/');
+		if (!fs.existsSync(`./${arr.slice(0, i + 1).join('/')}`)) {
+			if (name.split('.')[1]) {
+				fs.writeFileSync(`./${arr.slice(0, i + 1).join('/')}`, fileContent);
+				return;
+			}
+			else {
+				fs.mkdirSync(`./${arr.slice(0, i + 1).join('/')}`);
+			}
+		}
+	});
 }
 function saveGames(games) {
 	let Data;
-	checkDirs();
-	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
-		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
+	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
+	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
+		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
 		Data = {
 			Games: [],
 		};
 	}
 	else {
-		Data = require(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json');
+		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
 	}
 
 	const GameIDs = games.map(x => x.GameID);
@@ -252,61 +258,61 @@ function saveGames(games) {
 	Data.Games = Data.Games.filter(x => GameIDs.includes(x.GameID));
 	const StoredGameIDs = Data.Games.map(x => x.GameID);
 	Data.Games.push(...games.filter(x => !StoredGameIDs.includes(x.GameID)));
-	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data));
+	fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', JSON.stringify(Data));
 }
 function addLaunch(GameID, LauncherName) {
 	let Data;
-	checkDirs();
-	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
-		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
+	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
+	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
+		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
 		Data = {
 			Games: [],
 		};
 	}
 	else {
-		Data = require('../../../storage/Cache/Games/Data.json');
+		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
 	}
 
 	if (!Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches) Data.Games.find(x => x.GameID === GameID).Launches = 0;
 	Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches++;
 
-	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data));
+	fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', JSON.stringify(Data));
 }
 function toggleFavourite(GameID, LauncherName) {
 	let Data;
-	checkDirs();
-	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
-		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
+	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
+	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
+		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
 		Data = {
 			Games: [],
 		};
 	}
 	else {
-		Data = require('../../../storage/Cache/Games/Data.json');
+		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
 	}
 
 	if (!Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite) Data.Games.find(x => x.GameID === GameID).Favourite = false;
 	Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite = !Data.Games.find(x => x.GameID === GameID).Favourite;
 
-	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data));
+	fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', JSON.stringify(Data));
 }
 function setLastLaunch(GameID, LauncherName) {
 	let Data;
-	checkDirs();
-	if (!fs.existsSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json')) {
-		fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', '{\n\n}');
+	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
+	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
+		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
 		Data = {
 			Games: [],
 		};
 	}
 	else {
-		Data = require('../../../storage/Cache/Games/Data.json');
+		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
 	}
 
 	if (!Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite) Data.Games.find(x => x.GameID === GameID).LastLaunch = Date.now();
 	Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).LastLaunch = Date.now();
 
-	fs.writeFileSync(__dirname.split('\\').slice(0, -3).join('\\') + '\\storage\\Cache\\Games\\Data.json', JSON.stringify(Data));
+	fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', JSON.stringify(Data));
 }
 function handleLaunch(game) {
 	addLaunch(game.GameID, game.LauncherName);

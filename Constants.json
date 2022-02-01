@@ -1,7 +1,10 @@
 {
-    "autoUpdateLink": "https://api.github.com/repos/DashCruft-Nation/lazap/releases/latest",
-    "userprofilePath": "/storage/Settings/userprofile.json",
-    "launcherdataPath": "/storage/Settings/LauncherData.json",
+    "autoUpdate": {
+        "owner": "Lazap-Development",
+        "repo": "lazap"
+    },
+    "GAMES_DATA_BASE_PATH": "./storage/Cache/Games",
+    "GAME_BANNERS_BASE_PATH": "./storage/Cache/Games/Images",
     "defaultLauncherData": {
         "enableRPC": true,
         "launchOnStartup": false,
