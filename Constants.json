@@ -10,6 +10,7 @@
         "launchOnStartup": false,
         "disableHardwareAcceleration": false,
         "skipLogin": false,
+        "trayMinLaunch": true,
         "checkForUpdates": true
     },
     "defaultUserprofileData": {

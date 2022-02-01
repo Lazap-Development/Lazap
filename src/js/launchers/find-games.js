@@ -80,8 +80,11 @@ async function loadAllGames() {
 		}
 		gameElement.appendChild(gameText);
 
-		gameBanner.addEventListener('click', handleLaunch.bind(null, game));
-
+		gameBanner.addEventListener('click', () => {
+			handleLaunch(game);
+			ipcRenderer.send('min-tray')
+		});
+		
 		game.Banner = banner;
 		return game;
 	});
