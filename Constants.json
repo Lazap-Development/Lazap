@@ -3,11 +3,11 @@
     "userprofilePath": "/storage/Settings/userprofile.json",
     "launcherdataPath": "/storage/Settings/LauncherData.json",
     "defaultLauncherData": {
-        "skipLogin": true,
-        "enableRPC": false,
+        "enableRPC": true,
         "launchOnStartup": false,
-        "checkForUpdates": true,
-        "disableHardwareAcceleration": false
+        "disableHardwareAcceleration": false,
+        "skipLogin": false,
+        "checkForUpdates": true
     },
     "defaultUserprofileData": {
         "username": null,
