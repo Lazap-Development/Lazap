@@ -93,8 +93,7 @@ async function loadAllGames() {
 		gameElement.appendChild(gameText);
 
 		const starIcon = document.createElement('div');
-		starIcon.classList.add('star');
-		starIcon.id = 'woah';
+		starIcon.classList.add("star");
 		gameElement.appendChild(starIcon);
 
 		gameBanner.addEventListener('click', () => {
@@ -105,6 +104,7 @@ async function loadAllGames() {
 		gameBanner.addEventListener('mouseover', () => {
 			const x = gameElement.getElementsByClassName('star');
 			for (let i = 0; i < x.length; i++) {
+				starIcon.classList.add('fade');
 				x[i].style.visibility = 'visible';
 			}
 		});
@@ -113,6 +113,7 @@ async function loadAllGames() {
 			const x = gameElement.getElementsByClassName('star');
 			for (let i = 0; i < x.length; i++) {
 				if (!x[i].matches(':hover')) {
+					starIcon.classList.remove('fade');
 					x[i].style.visibility = 'hidden';
 				}
 			}

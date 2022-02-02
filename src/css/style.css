@@ -42,6 +42,16 @@
     }
 }
 
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 @keyframes spinner {
     0% {
         -webkit-transform: rotate(0deg);
@@ -59,22 +69,27 @@
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
     }
+
     10% {
         -webkit-transform: rotate(18deg);
         transform: rotate(18deg);
     }
+
     20% {
         -webkit-transform: rotate(36deg);
         transform: rotate(36deg);
     }
+
     80% {
         -webkit-transform: rotate(324deg);
         transform: rotate(324deg);
     }
+
     90% {
         -webkit-transform: rotate(342deg);
         transform: rotate(342deg);
     }
+
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
@@ -509,11 +524,11 @@ foot {
     color: #d3d3d3;
     display: block;
     z-index: 10000000;
-    content:url("../../img/star-empty.svg");
+    content: url("../../img/star-empty.svg");
     height: 25px;
     width: 25px;
     filter: invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%);
-    visibility:hidden;
+    visibility: hidden;
 }
 
 .star:hover {
@@ -524,13 +539,17 @@ foot {
     color: #d3d3d3;
     display: block;
     z-index: 10000000;
-    content:url("../../img/star-solid.svg");
+    content: url("../../img/star-solid.svg");
     height: 25px;
     width: 25px;
     cursor: pointer;
     filter: invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%);
 }
 
+.fade {
+    animation: fadeIn 0.5s;
+
+}
 
 .fadeInUp {
     animation-duration: 0.7s;
@@ -679,14 +698,14 @@ img,
     animation-duration: 0.3s;
     z-index: 2000;
     border-radius: 2%;
-    text-shadow: 2px 4px 3px rgba(0,0,0,0.3);
+    text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 16px -7px rgb(17 18 24 / 100%);
 
-    top:0;
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    
+
     margin: auto;
     justify-content: center;
 }
@@ -793,6 +812,7 @@ img,
     position: absolute;
     margin-left: calc(100% - 39px)
 }
+
 .alert-box-cross:hover {
     filter: invert(21%) sepia(70%) saturate(3776%) hue-rotate(255deg) brightness(97%) contrast(101%);
 }
@@ -816,6 +836,7 @@ img,
     width: 275px;
     text-align: center;
 }
+
 .search-bar {
     margin-left: auto;
     margin-right: 110px;
@@ -826,8 +847,9 @@ img,
     max-width: 350px;
     padding-left: 16px;
     border-radius: 4px;
-    display:inline;
+    display: inline;
 }
+
 .search-bar input {
     width: 100%;
     height: 100%;
@@ -844,6 +866,7 @@ img,
     background-position: 16px 48%;
     color: #f9fafb;
 }
+
 .search-bar input::placeholder {
     font-family: Comfortaa;
     color: rgb(113 119 144 / 78%);
@@ -859,15 +882,19 @@ img,
     --text: #9ea0be;
     cursor: pointer;
 }
+
 .switch input {
     display: none;
 }
-.switch input + div {
+
+.switch input+div {
     margin-top: -41px;
     margin-left: 280px;
     position: relative;
 }
-.switch input + div:before, .switch input + div:after {
+
+.switch input+div:before,
+.switch input+div:after {
     --s: 1;
     content: '';
     position: absolute;
@@ -878,23 +905,27 @@ img,
     transform: scaleX(var(--s));
     transition: transform var(--duration) ease;
 }
-.switch input + div:before {
+
+.switch input+div:before {
     --s: 0;
     left: 0;
     transform-origin: 0 50%;
     border-radius: 2px 0 0 2px;
 }
-.switch input + div:after {
+
+.switch input+div:after {
     left: 28px;
     transform-origin: 100% 50%;
     border-radius: 0 2px 2px 0;
 }
-.switch input + div span {
+
+.switch input+div span {
     padding-left: 56px;
     line-height: 24px;
     color: var(--text);
 }
-.switch input + div span:before {
+
+.switch input+div span:before {
     --x: 0;
     --b: var(--circle);
     --s: 4px;
@@ -909,16 +940,20 @@ img,
     transform: translateX(var(--x));
     transition: box-shadow var(--duration) ease, transform var(--duration) ease;
 }
-.switch input + div span:not(:empty) {
+
+.switch input+div span:not(:empty) {
     padding-left: 64px;
 }
-.switch input:checked + div:before {
+
+.switch input:checked+div:before {
     --s: 1;
 }
-.switch input:checked + div:after {
+
+.switch input:checked+div:after {
     --s: 0;
 }
-.switch input:checked + div span:before {
+
+.switch input:checked+div span:before {
     --x: 28px;
     --s: 12px;
     --b: var(--dot);
