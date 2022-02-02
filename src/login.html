@@ -1,25 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta charset="UTF-8">
-
-<title>Lazap</title>
+<meta charset="UTF-8" />
 
 <head>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" type="text/css" href="./css/login.css" />
 
-    <script async type="module" src="js/listeners.js"></script>
-    <script async type="text/javascript" src="js/titlebar.js"></script>
-    <script async type="text/javascript" src="js/functions.js"></script>
+    <script async type="module" src="./js/login/listener.js"></script>
+    <script async type="text/javascript" src="./js/login/ipc.js"></script>
 </head>
 
 <body>
+    <div class="titlebar">
+        <div class="titlebar-icons">
+            <div onclick="min_window()" class="titlebar-min mx-1"></div>
+            <div onclick="max_window()" class="titlebar-max mx-1"></div>
+            <div onclick="close_window()" class="titlebar-exit mx-1"></div>
+        </div>
+    </div>
 
-    <bg></bg>
+    <div class="alert-box fadeInUpNoDelay" id="alertbox">
+        <div class="alert-box-container">
+            <img class="alert-box-exclamation" src="../img/triangle.svg">
+            <p class="alert-box-title">Alert</p>
 
+            <span class="alert-box-cross" id="alertboxexit">&times;</span>
+            
+            <hr class="alert-box-divider">
+            <div class="alert-box-message" style="align-items: center;">
+                <p class=alert-box-message>The Launcher Loaded 😱</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg">
+        <button onclick="load_main()" class="fadeInUp ignore">
+            Continue and Ignore
+        </button>
+        <div class="container fadeInUp" id="container">
+            <div class="form-container sign-up-container">
+                <div class="leftsection">
+                    <h1>Create Account</h1>
+                    <input type="text" placeholder="Username" />
+                    <input type="email" placeholder="Email" />
+                    <input type="password" placeholder="Password" />
+                    <button>Sign Up</button>
+                </div>
+            </div>
+            <div class="form-container sign-in-container">
+                <div class="leftsection">
+                    <h1>Sign In</h1>
+                    <input type="text" placeholder="Username" />
+                    <input type="password" placeholder="Password" />
+                    <button>Sign In</button>
+                    <a>Forgot your password?</a>
+                </div>
+            </div>
+            <div class="overlay-container">
+                <div class="overlay">
+                    <div class="overlay-panel overlay-left">
+                        <h1 class="mt-4">Dear, User!</h1>
+                        <p>
+                            We believe and respect complete privacy. We do
+                            not sell your data! It is completely your choice
+                            to sign up or login. <br /><br />
+                            If you do not login or sign up, You will not
+                            have access to some integerated features in this
+                            launcher. <br /><br /><br />
+                            - Lazap Development Team
+                        </p>
+                        <button id="signIn">Sign In</button>
+                    </div>
+                    <div class="overlay-panel overlay-right">
+                        <h1 class="mt-4">Welcome Back!</h1>
+                        <p>
+                            We believe and respect complete privacy. We do
+                            not sell your data! It is completely your choice
+                            to sign up or login. <br /><br />
+                            If you do not login or sign up, You will not
+                            have access to some integerated features in this
+                            launcher. <br /><br /><br />
+                            - Lazap Development Team
+                        </p>
+                        <button id="signUp">Sign Up</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="line typewriter">
+            © 2022 Lazap Development Team All Rights Reserved
+        </p>
+
+    </div>
 </body>
-
 
 </html>

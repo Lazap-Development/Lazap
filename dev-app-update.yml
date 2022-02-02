@@ -1,0 +1,4 @@
+owner: Lazap-Development
+repo: lazap
+provider: github
+updaterCacheDirName: lazap-updater

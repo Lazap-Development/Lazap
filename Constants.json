@@ -1,0 +1,20 @@
+{
+    "autoUpdate": {
+        "owner": "Lazap-Development",
+        "repo": "lazap"
+    },
+    "GAMES_DATA_BASE_PATH": "./storage/Cache/Games",
+    "GAME_BANNERS_BASE_PATH": "./storage/Cache/Games/Images",
+    "defaultLauncherData": {
+        "enableRPC": true,
+        "launchOnStartup": false,
+        "disableHardwareAcceleration": false,
+        "skipLogin": false,
+        "trayMinLaunch": true,
+        "checkForUpdates": true
+    },
+    "defaultUserprofileData": {
+        "username": null,
+        "pfp": "default"
+    }
+}
