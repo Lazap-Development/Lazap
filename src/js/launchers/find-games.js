@@ -71,7 +71,7 @@ async function loadAllGames() {
 		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
 			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
 			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
-			banner = img ? `../storage/Cache/Games/Images/${img}` : '../icon.ico';
+			banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../icon.ico';
 		}
 		else {
 			banner = '../icon.ico';
@@ -164,7 +164,7 @@ function loadFavouriteGames() {
 		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
 			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
 			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
-			banner = img ? `../storage/Cache/Games/Images/${img}` : '../icon.ico';
+			banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../icon.ico';
 		}
 		else {
 			banner = '../icon.ico';
@@ -227,7 +227,7 @@ function loadRecentGames() {
 		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
 			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
 			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
-			banner = img ? `../storage/Cache/Games/Images/${img}` : '../icon.ico';
+			banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../icon.ico';
 		}
 		else {
 			banner = '../icon.ico';
