@@ -93,7 +93,7 @@ async function loadAllGames() {
 		gameElement.appendChild(gameText);
 
 		const starIcon = document.createElement('div');
-		starIcon.classList.add("star");
+		starIcon.classList.add('star');
 		gameElement.appendChild(starIcon);
 
 		gameBanner.addEventListener('click', () => {
@@ -117,6 +117,10 @@ async function loadAllGames() {
 					x[i].style.visibility = 'hidden';
 				}
 			}
+		});
+
+		starIcon.addEventListener('click', () => {
+			toggleFavourite(game.GameID, game.LauncherName);
 		});
 
 		game.Banner = banner;
