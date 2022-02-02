@@ -12,11 +12,13 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Made%20Using-JavaScript%20%26%20%E2%9D%A4-green">
+  <a href="https://github.com/Lazap-Development/lazap/releases">
+     <img src="https://img.shields.io/github/downloads/Lazap-Development/lazap/total.svg?style=for-the-badge&color=ffffff&logo=windows" />
+  </a>⠀
   <a href="https://dashcruft.com/discord">
-    <img src="https://discordapp.com/api/guilds/644764850706448384/embed.png">
+      <img src="https://img.shields.io/discord/836790685784211486?logo=discord&label=Discord&style=for-the-badge&color=228B22">
   </a>
-</p>
+ </p>
 
 <br>
 
