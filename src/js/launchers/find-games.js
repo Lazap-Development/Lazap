@@ -82,7 +82,6 @@ async function loadAllGames() {
 
 		const starIcon = document.createElement('div');
 		starIcon.classList.add("star");
-		starIcon.id = "woah"
 		gameElement.appendChild(starIcon);
 
 		gameBanner.addEventListener('click', () => {
@@ -93,18 +92,18 @@ async function loadAllGames() {
 		gameBanner.addEventListener('mouseover', () => {
 			var x = gameElement.getElementsByClassName("star");
 			for (i = 0; i < x.length; i++) {
+				starIcon.classList.add("fade");
 				x[i].style.visibility = "visible";
 			}
 		});
 
 		gameBanner.addEventListener('mouseout', () => {
-			
 			var x = gameElement.getElementsByClassName("star");
 			for (i = 0; i < x.length; i++) {
 				if (!x[i].matches(':hover')) {
+					starIcon.classList.remove("fade");
 					x[i].style.visibility = "hidden";
 				}
-
 			}
 		});
 
