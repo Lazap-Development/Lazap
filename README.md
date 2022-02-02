@@ -27,8 +27,8 @@
 ## How do I start using Lazap?
 `1` - Head over to the [releases](https://github.com/Lazap-Development/lazap/releases) page in lazap's github and download the latest zip file.<br>
 `2` - Once downloaded, unzip the downloaded file and extract it.<br>
-`3` - Once extracted, inside of the extracted content you should see a file named `Lazap Setup.exe`. Go on and double click the file.<br>
-`4` - Follow the setup and Lazap should be installed for you! <br>
+`3` - Once extracted, inside of the extracted content you should see a file named `Lazap Setup.exe`<br>
+`4` - Go on and double click the file. Follow the setup and Lazap should be installed for you! <br>
 
 Interestingly we have developed a system to handle automatic updates for Lazap once a new version releases.<br>
 Furthermore, don't hesitate to disable this `auto update` feature inside of the settings in lazap.
