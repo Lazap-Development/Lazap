@@ -28,7 +28,7 @@
 `3` - Once extracted, inside of the extracted content you should see a file named `Lazap Setup.exe`. Go on and double click the file.<br>
 `4` - Follow the setup and Lazap should be installed for you! <br>
 
-Interestingly we have developed a system to handle automatic updates for Lazap once a new version releases in this GitHub page!<br>
+Interestingly we have developed a system to handle automatic updates for Lazap once a new version releases.<br>
 Furthermore, don't hesitate to disable this `auto update` feature inside of the settings in lazap.
 
 ## Building Lazap (Developers & Contributers)
