@@ -22,7 +22,7 @@
 
 **The new face of Open Source Game Launchers**, Lazap unites all your games together in one place! Whether it be Linux, Windows or MacOS, we got you covered. Lazap can connect with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam. Our team of Developers make sure that Lazap is customizable, Meet up the user's need and have a glancing & modernish look - meaning, custom JavaScript & CSS scripts, games outside the launchers we support and much more!
 
-# How do I start using Lazap?
+## How do I start using Lazap?
 `1` - Head over to the [releases](https://github.com/Lazap-Development/lazap/releases) page in lazap's github and download the latest zip file.<br>
 `2` - Once downloaded, unzip the downloaded file and extract it.<br>
 `3` - Once extracted, inside of the extracted content you should see a file named `Lazap Setup.exe`. Go on and double click the file.<br>
@@ -31,7 +31,7 @@
 Interestingly we have developed a system to handle automatic updates for Lazap once a new version releases in this GitHub page!<br>
 Furthermore, don't hesitate to disable this `auto update` feature inside of the settings in lazap.
 
-# Building Lazap (Developers & Contributers)
+## Building Lazap (Developers & Contributers)
 Building Lazap is very simple. Simply run these commands in order and you should be good to go:<br>
 __NOTE:__ Make sure you have [Node.js](https://nodejs.org/en/download/) and [git](https://git-scm.com/) installed
 ```
@@ -49,11 +49,11 @@ npm run build
 ```
 Then you should see a new directory named `dist`. Open it up and you can easily figure everything out yourself.
 
-# Help & Support
+## Help & Support
 We are here to help you if you get any problems when building Lazap, just join our [Discord](https://discord.gg/DashCruft)!<br><br>
 **Want to help out insted of getting help?** We love Pull Requests and Issue hunters! Open up a PR and fix some gears, we would love the community's help to improve lazap and make it more user friendly! 😀
 
-# License
+## License
 Lazap is licensed under the terms of [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://github.com/Lazap-Development/lazap/blob/main/LICENSE.md) ("CC-BY-NC-SA-4.0"). Commercial use is not allowed under this license. This includes any kind of revenue made with or based upon the software, even donations.
 
 The CC-BY-NC-SA-4.0 allows you to:
