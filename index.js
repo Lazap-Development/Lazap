@@ -164,7 +164,7 @@ ipcMain.on('updateSetting', (e, key, bool) => {
 			break;
 		}
 		case 'launchOnStartup': {
-			ipcMain.emit('rpcUpdate', bool);
+			ipcMain.emit('setLaunchOnStartup', bool);
 			break;
 		}
 	}
