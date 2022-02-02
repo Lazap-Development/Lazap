@@ -101,16 +101,17 @@ app.on('ready', () => {
 	ipcMain.on('min-window', () => {
 		mainWindow.minimize();
 	});
-	ipcMain.on('min-tray', function (event) {
+	ipcMain.on('min-tray', () => {
 		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinLaunch === true) {
-			tray = new Tray('icon.ico')
-			tray.setToolTip('Lazap')
+			const tray = new Tray('icon.ico');
+			tray.setToolTip('Lazap');
 
-			tray.on('click', function (e) {
+			tray.on('click', () => {
 				if (mainWindow.isVisible()) {
-					mainWindow.hide()
-				} else {
-					mainWindow.show()
+					mainWindow.hide();
+				}
+				else {
+					mainWindow.show();
 				}
 			});
 

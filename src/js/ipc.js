@@ -1,5 +1,4 @@
 const { ipcRenderer } = require('electron');
-const fs = require('fs');
 
 const fnScript = document.createElement('script');
 fnScript.async = true;

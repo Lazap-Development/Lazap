@@ -20,7 +20,9 @@
             "!dev-app-update.yml",
             "!.gitignore",
             "!.eslintrc.json",
-            "!Lazap Development.pfx"
+            "!Lazap Development.pfx",
+            "!src/js/launchers/LinuxGames.js",
+            "!src/js/launchers/RockstarGames.js"
         ],
         "productName": "Lazap",
         "forceCodeSigning": false,

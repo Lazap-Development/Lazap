@@ -1,6 +1,7 @@
+/* eslint-disable indent */
 console.info('OS:', process.platform, 'Arch:', process.arch);
 const {
-	ipcRenderer
+	ipcRenderer,
 } = require('electron');
 const Steam = require('./Steam.js');
 const EpicGames = require('./EpicGames.js');
@@ -18,6 +19,15 @@ const games_blacklist = [
 ];
 const processes = new Map();
 
+const alphabets = 'abcdefghijklmnopqrstuvwxyz'.split('');
+function sort(games, type = 'alphabetical') {
+	if (type === 'alphabetical') {
+		return games.sort((a, b) => {
+			return (alphabets.findIndex(x => x === a.DisplayName.slice(0, 1).toLowerCase()) - alphabets.findIndex(x => x === b.DisplayName.slice(0, 1).toLowerCase()));
+		});
+	}
+}
+
 async function loadAllGames() {
 	const gamesElement = document.querySelector('div#allGamesList');
 
@@ -25,14 +35,14 @@ async function loadAllGames() {
 		return;
 	}
 
-	const games = [
+	const games = sort([
 		...(await Steam.getInstalledGames()),
 		...(await Uplay.getInstalledGames()),
 		...EpicGames.getInstalledGames(),
 		...(await RiotGames.getInstalledGames()),
 		...(await Minecraft.getInstalledGames()),
 		...(await FiveM.getInstalledGames()),
-	];
+	]);
 	/*
 	if (games.length == 0) {
 		var exists = document.getElementsByClassName('notFound')
@@ -62,7 +72,8 @@ async function loadAllGames() {
 			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
 			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
 			banner = img ? `../storage/Cache/Games/Images/${img}` : '../icon.ico';
-		} else {
+		}
+		else {
 			banner = '../icon.ico';
 		}
 		gameBanner.setAttribute('src', banner);
@@ -75,42 +86,41 @@ async function loadAllGames() {
 		if (game.DisplayName.length > 25) {
 			gameText.innerHTML = game.DisplayName.slice(0, 25);
 			gameText.innerHTML += '...';
-		} else {
+		}
+		else {
 			gameText.innerHTML = game.DisplayName;
 		}
 		gameElement.appendChild(gameText);
 
 		const starIcon = document.createElement('div');
-		starIcon.classList.add("star");
-		starIcon.id = "woah"
+		starIcon.classList.add('star');
+		starIcon.id = 'woah';
 		gameElement.appendChild(starIcon);
 
 		gameBanner.addEventListener('click', () => {
 			handleLaunch(game);
-			ipcRenderer.send('min-tray')
+			ipcRenderer.send('min-tray');
 		});
 
 		gameBanner.addEventListener('mouseover', () => {
-			var x = gameElement.getElementsByClassName("star");
-			for (i = 0; i < x.length; i++) {
-				x[i].style.visibility = "visible";
+			const x = gameElement.getElementsByClassName('star');
+			for (let i = 0; i < x.length; i++) {
+				x[i].style.visibility = 'visible';
 			}
 		});
 
 		gameBanner.addEventListener('mouseout', () => {
-			
-			var x = gameElement.getElementsByClassName("star");
-			for (i = 0; i < x.length; i++) {
+			const x = gameElement.getElementsByClassName('star');
+			for (let i = 0; i < x.length; i++) {
 				if (!x[i].matches(':hover')) {
-					x[i].style.visibility = "hidden";
+					x[i].style.visibility = 'hidden';
 				}
-
 			}
 		});
 
 		game.Banner = banner;
 		return game;
-	});
+	}).filter(x => Object.keys(x).length > 0);
 	saveGames(uncachedGames);
 
 	ipcRenderer.send('load-banners-request', uncachedGames.filter((x) => x.Banner === '../icon.ico'));
@@ -124,13 +134,14 @@ function loadFavouriteGames() {
 		Data = {
 			Games: [],
 		};
-	} else {
+	}
+	else {
 		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
 	}
 
 	if (document.querySelector('#game-loading-overlay').style.opacity === '1') loadAllGames();
 
-	const games = Data.Games.filter(x => x.Favourite);
+	const games = sort(Data.Games.filter(x => x.Favourite));
 	const gamesElement = document.querySelector('div#favGamesList');
 	gamesElement.replaceChildren([]);
 	games.map((game) => {
@@ -149,7 +160,8 @@ function loadFavouriteGames() {
 			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
 			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
 			banner = img ? `../storage/Cache/Games/Images/${img}` : '../icon.ico';
-		} else {
+		}
+		else {
 			banner = '../icon.ico';
 		}
 		gameBanner.setAttribute('src', banner);
@@ -162,7 +174,8 @@ function loadFavouriteGames() {
 		if (game.DisplayName.length > 25) {
 			gameText.innerHTML = game.DisplayName.slice(0, 25);
 			gameText.innerHTML += '...';
-		} else {
+		}
+		else {
 			gameText.innerHTML = game.DisplayName;
 		}
 		gameElement.appendChild(gameText);
@@ -184,7 +197,8 @@ function loadRecentGames() {
 		Data = {
 			Games: [],
 		};
-	} else {
+	}
+	else {
 		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
 	}
 
@@ -209,7 +223,8 @@ function loadRecentGames() {
 			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
 			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
 			banner = img ? `../storage/Cache/Games/Images/${img}` : '../icon.ico';
-		} else {
+		}
+		else {
 			banner = '../icon.ico';
 		}
 		gameBanner.setAttribute('src', banner);
@@ -222,7 +237,8 @@ function loadRecentGames() {
 		if (game.DisplayName.length > 25) {
 			gameText.innerHTML = game.DisplayName.slice(0, 25);
 			gameText.innerHTML += '...';
-		} else {
+		}
+		else {
 			gameText.innerHTML = game.DisplayName;
 		}
 		gameElement.appendChild(gameText);
@@ -238,12 +254,12 @@ function loadRecentGames() {
 
 function runCommand(command, args, id, force = false) {
 	const {
-		spawn
+		spawn,
 	} = require('child_process');
 	if (processes.get(id) && !force) return 'RUNNING_ALREADY';
 	const res = spawn(`${command}`, args, {
 		detached: true,
-		shell: true
+		shell: true,
 	});
 	res.on('error', (error) => console.log('[PROC] Error on process', id, ':', error));
 	res.on('exit', (code, signal) => console.log('[PROC] Exited on process', id, 'with code', code, 'and signal', signal));
@@ -260,7 +276,8 @@ function checkForDirAndCreate(dir, fileContent = '') {
 			if (name.split('.')[1]) {
 				fs.writeFileSync(`./${arr.slice(0, i + 1).join('/')}`, fileContent);
 				return;
-			} else {
+			}
+			else {
 				fs.mkdirSync(`./${arr.slice(0, i + 1).join('/')}`);
 			}
 		}
@@ -275,7 +292,8 @@ function saveGames(games) {
 		Data = {
 			Games: [],
 		};
-	} else {
+	}
+	else {
 		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
 	}
 
@@ -295,7 +313,8 @@ function addLaunch(GameID, LauncherName) {
 		Data = {
 			Games: [],
 		};
-	} else {
+	}
+	else {
 		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
 	}
 
@@ -313,7 +332,8 @@ function toggleFavourite(GameID, LauncherName) {
 		Data = {
 			Games: [],
 		};
-	} else {
+	}
+	else {
 		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
 	}
 
@@ -331,7 +351,8 @@ function setLastLaunch(GameID, LauncherName) {
 		Data = {
 			Games: [],
 		};
-	} else {
+	}
+	else {
 		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
 	}
 
