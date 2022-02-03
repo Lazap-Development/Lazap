@@ -21,6 +21,8 @@ rpcClient.login({ clientId: '932504287337148417' });
 
 handleHardwareAcceleration();
 
+let tray = null;
+
 app.on('ready', () => {
 	const mainWindow = new electron.BrowserWindow({
 		width: 1150,
@@ -103,7 +105,7 @@ app.on('ready', () => {
 	});
 	ipcMain.on('min-tray', () => {
 		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinLaunch === true) {
-			const tray = new Tray('icon.ico');
+			tray = new Tray(__dirname + '/icon.ico');
 			tray.setToolTip('Lazap');
 
 			tray.on('click', () => {
