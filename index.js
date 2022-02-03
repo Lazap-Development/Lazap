@@ -115,11 +115,9 @@ app.on('ready', () => {
 			tray.setContextMenu(contextMenu)
 
 			tray.on('click', () => {
-				if (mainWindow.isVisible()) {
-					mainWindow.hide();
-				}
-				else {
+				if (!mainWindow.isVisible()) {
 					mainWindow.show();
+					tray.destroy();
 				}
 			});
 
