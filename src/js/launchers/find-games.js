@@ -103,18 +103,28 @@ async function loadAllGames() {
 
 		gameBanner.addEventListener('mouseover', () => {
 			const x = gameElement.getElementsByClassName('star');
+			const isFavourite = JSON.parse(fs.readFileSync(APP_BASE_PATH + '/storage/Cache/Games/Data.json').toString()).Games.find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
 			for (let i = 0; i < x.length; i++) {
 				starIcon.classList.add('fade');
 				x[i].style.visibility = 'visible';
+				if (isFavourite) {
+					starIcon.style.content = 'url("../img/star-solid.svg")';
+					starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
+				}
 			}
 		});
 
 		gameBanner.addEventListener('mouseout', () => {
 			const x = gameElement.getElementsByClassName('star');
+			const isFavourite = JSON.parse(fs.readFileSync(APP_BASE_PATH + '/storage/Cache/Games/Data.json').toString()).Games.find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
 			for (let i = 0; i < x.length; i++) {
 				if (!x[i].matches(':hover')) {
 					starIcon.classList.remove('fade');
 					x[i].style.visibility = 'hidden';
+					if (!isFavourite) {
+						starIcon.style.content = 'url("../img/star-empty.svg")';
+						starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
+					}
 				}
 			}
 		});

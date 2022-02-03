@@ -1,6 +1,6 @@
 {
     "name": "lazap",
-    "version": "0.1.0",
+    "version": "0.1.0-nightly",
     "description": "A cross platform launcher - All your games at one library",
     "main": "./index.js",
     "scripts": {
@@ -24,7 +24,7 @@
             "!src/js/launchers/LinuxGames.js",
             "!src/js/launchers/RockstarGames.js"
         ],
-        "productName": "Lazap",
+        "productName": "Lazap Beta",
         "forceCodeSigning": false,
         "nsis": {
             "license": "./LICENSE.md",
