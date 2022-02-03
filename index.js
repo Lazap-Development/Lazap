@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 require('v8-compile-cache');
 const electron = require('electron');
-const { ipcMain, Tray } = require('electron');
+const { ipcMain, Tray, Menu } = require('electron');
 const app = electron.app;
 const fs = require('fs');
 const axios = require('axios').default;
@@ -107,6 +107,12 @@ app.on('ready', () => {
 		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinLaunch === true) {
 			tray = new Tray(__dirname + '/icon.ico');
 			tray.setToolTip('Lazap');
+
+			const contextMenu = Menu.buildFromTemplate([
+				{ label: 'Show', type: 'normal',  click: () => mainWindow.show() },
+				{ label: 'Exit', type: 'normal', click: () => mainWindow.close() }
+			])
+			tray.setContextMenu(contextMenu)
 
 			tray.on('click', () => {
 				if (mainWindow.isVisible()) {
