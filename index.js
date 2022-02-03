@@ -109,7 +109,10 @@ app.on('ready', () => {
 			tray.setToolTip('Lazap');
 
 			const contextMenu = Menu.buildFromTemplate([
-				{ label: 'Show', type: 'normal',  click: () => mainWindow.show() },
+				{ label: 'Show', type: 'normal',  click: () => {
+					mainWindow.show()
+					tray.destroy()
+				} },
 				{ label: 'Exit', type: 'normal', click: () => mainWindow.close() }
 			])
 			tray.setContextMenu(contextMenu)
