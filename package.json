@@ -1,6 +1,6 @@
 {
     "name": "lazap",
-    "version": "0.1.0-nightly",
+    "version": "0.1.1-nightly",
     "description": "A cross platform launcher - All your games at one library",
     "main": "./index.js",
     "scripts": {
