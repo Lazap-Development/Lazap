@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 require('v8-compile-cache');
 const electron = require('electron');
-const { ipcMain, Tray } = require('electron');
+const { ipcMain, Tray, Menu } = require('electron');
 const app = electron.app;
 const fs = require('fs');
 const axios = require('axios').default;
@@ -20,6 +20,8 @@ const rpcClient = new rpc.Client({ transport: 'ipc' });
 rpcClient.login({ clientId: '932504287337148417' });
 
 handleHardwareAcceleration();
+
+let tray = null;
 
 app.on('ready', () => {
 	const mainWindow = new electron.BrowserWindow({
@@ -103,15 +105,22 @@ app.on('ready', () => {
 	});
 	ipcMain.on('min-tray', () => {
 		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinLaunch === true) {
-			const tray = new Tray('icon.ico');
+			tray = new Tray(__dirname + '/icon.ico');
 			tray.setToolTip('Lazap');
 
+			const contextMenu = Menu.buildFromTemplate([
+				{ label: 'Show', type: 'normal',  click: () => {
+					mainWindow.show()
+					tray.destroy()
+				} },
+				{ label: 'Exit', type: 'normal', click: () => mainWindow.close() }
+			])
+			tray.setContextMenu(contextMenu)
+
 			tray.on('click', () => {
-				if (mainWindow.isVisible()) {
-					mainWindow.hide();
-				}
-				else {
+				if (!mainWindow.isVisible()) {
 					mainWindow.show();
+					tray.destroy();
 				}
 			});
 
@@ -164,7 +173,7 @@ ipcMain.on('updateSetting', (e, key, bool) => {
 			break;
 		}
 		case 'launchOnStartup': {
-			ipcMain.emit('rpcUpdate', bool);
+			ipcMain.emit('setLaunchOnStartup', bool);
 			break;
 		}
 	}
