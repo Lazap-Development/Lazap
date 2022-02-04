@@ -38,9 +38,6 @@
                 "repo": "lazap",
                 "owner": "Lazap-Development"
             }
-        },
-        "win": {
-            "requestedExecutionLevel": "highestAvailable"
         }
     },
     "repository": {
