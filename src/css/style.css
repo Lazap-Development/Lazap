@@ -169,8 +169,7 @@ body {
 }
 
 .titlebar-max:hover {
-    background: #ffc400 url("../../img/square.png");
-    background-size: cover;
+    background: #ffc400;
 }
 
 .titlebar-min {

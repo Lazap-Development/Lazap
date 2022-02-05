@@ -91,7 +91,8 @@ body {
 }
 
 .titlebar-exit:hover {
-    filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg) brightness(92%) contrast(94%);
+    background: #a70000 url("../../img/cross.png");
+    background-size: cover;
 }
 
 .titlebar-max {
@@ -106,7 +107,7 @@ body {
 }
 
 .titlebar-max:hover {
-    filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg) brightness(102%) contrast(110%);
+    background: #ffc400;
 }
 
 .titlebar-min {
@@ -121,7 +122,7 @@ body {
 }
 
 .titlebar-min:hover {
-    filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg) brightness(92%) contrast(97%);
+    background: #22ff00;
 }
 
 h1 {
