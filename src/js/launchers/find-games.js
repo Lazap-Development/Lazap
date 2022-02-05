@@ -282,7 +282,7 @@ function loadRecentGamesMainPage() {
 
 	if (document.querySelector('#game-loading-overlay').style.opacity === '1') loadAllGames();
 
-	const games = Data.Games.filter(x => x.LastLaunch).slice(0, 4);
+	const games = Data.Games.filter(x => x.LastLaunch).slice(0, 5);
 	const gamesElement = document.querySelector('div#recentGamesListMainPage');
 	gamesElement.replaceChildren([]);
 	games.sort((a, b) => b.LastLaunch - a.LastLaunch).map((game) => {
