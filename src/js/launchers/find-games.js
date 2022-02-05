@@ -83,8 +83,8 @@ async function loadAllGames() {
 		gameElement.appendChild(gameBanner);
 
 		const gameText = document.createElement('span');
-		if (game.DisplayName.length > 25) {
-			gameText.innerHTML = game.DisplayName.slice(0, 25);
+		if (game.DisplayName.length > 18) {
+			gameText.innerHTML = game.DisplayName.slice(0, 18);
 			gameText.innerHTML += '...';
 		}
 		else {
@@ -186,8 +186,8 @@ function loadFavouriteGames() {
 		gameElement.appendChild(gameBanner);
 
 		const gameText = document.createElement('span');
-		if (game.DisplayName.length > 25) {
-			gameText.innerHTML = game.DisplayName.slice(0, 25);
+		if (game.DisplayName.length > 18) {
+			gameText.innerHTML = game.DisplayName.slice(0, 18);
 			gameText.innerHTML += '...';
 		}
 		else {
@@ -249,8 +249,8 @@ function loadRecentGames() {
 		gameElement.appendChild(gameBanner);
 
 		const gameText = document.createElement('span');
-		if (game.DisplayName.length > 25) {
-			gameText.innerHTML = game.DisplayName.slice(0, 25);
+		if (game.DisplayName.length > 18) {
+			gameText.innerHTML = game.DisplayName.slice(0, 18);
 			gameText.innerHTML += '...';
 		}
 		else {
