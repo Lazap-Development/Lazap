@@ -93,9 +93,7 @@ document.getElementById('games-btn').addEventListener('click', async function ()
 		smallImageText: 'All Games',
 	});
 
-	setTimeout(async () => {
-		await require('./js/launchers/find-games.js').loadAllGames();
-	}, 400);
+	await require('./js/launchers/find-games.js').loadAllGames();
 });
 
 document.getElementById('favs-btn').addEventListener('click', async function () {
