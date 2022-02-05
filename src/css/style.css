@@ -516,6 +516,59 @@ foot {
     display: block;
 }
 
+.mainPageGamesList {
+    position: absolute;
+    width: 99%;
+    height: 82%;
+    margin-top: 35px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 2%;
+
+}
+
+.mainPageGamebox {
+    position: relative;
+    margin-bottom: 30px;
+    text-align: center;
+    display: inline-block;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    margin-left: 20px;
+    height: 180px;
+    width: 140px;
+    object-fit: contain;
+}
+
+.mainPageGamebox:hover {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.mainPageGamebox img {
+    height: 180px;
+    width: 140px;
+    object-fit: contain;
+    border-radius: 8px;
+    image-rendering: auto;
+    object-fit: cover;
+}
+
+.mainPageGamebox img:hover {
+    cursor: pointer;
+}
+
+.mainPageGamebox span {
+    position: absolute;
+    margin-top: -28px;
+    margin-left: 10px;
+    font-size: 14px;
+    color: #d3d3d3;
+    display: block;
+}
+
 .star {
     position: absolute;
     margin-top: -270px;

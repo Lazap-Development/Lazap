@@ -15,13 +15,14 @@ const settingsbackblur = document.getElementById('settings-backblur');
 const alertbox = document.getElementById('alertbox');
 const alertboxcross = document.getElementById('alertboxexit');
 
-alertboxcross.addEventListener('click', function() {
+alertboxcross.addEventListener('click', function () {
 	alertbox.style.display = 'none';
 });
 
-window.onload = async function() {
+window.onload = async function () {
 	document.getElementById('main-loading-overlay').style.opacity = '0';
 	document.getElementById('main-loading-overlay').style.visibility = 'hidden';
+	await require('./js/launchers/find-games.js').loadRecentGamesMainPage();
 };
 
 items.forEach((link) =>
@@ -32,7 +33,7 @@ items.forEach((link) =>
 	}),
 );
 
-document.getElementById('home-btn').addEventListener('click', function() {
+document.getElementById('home-btn').addEventListener('click', async function () {
 	home.style.display = 'flex';
 	recent.style.display = 'none';
 	games.style.display = 'none';
@@ -49,9 +50,11 @@ document.getElementById('home-btn').addEventListener('click', function() {
 		largeImageText: 'Lazap',
 		smallImageText: 'Home Screen',
 	});
+
+	await require('./js/launchers/find-games.js').loadRecentGamesMainPage();
 });
 
-document.getElementById('recent-btn').addEventListener('click', function() {
+document.getElementById('recent-btn').addEventListener('click', async function () {
 	home.style.display = 'none';
 	recent.style.display = 'flex';
 	games.style.display = 'none';
@@ -69,12 +72,10 @@ document.getElementById('recent-btn').addEventListener('click', function() {
 		smallImageText: 'Recently Played',
 	});
 
-	setTimeout(async () => {
-		await require('./js/launchers/find-games.js').loadRecentGames();
-	}, 400);
+	await require('./js/launchers/find-games.js').loadRecentGames();
 });
 
-document.getElementById('games-btn').addEventListener('click', function() {
+document.getElementById('games-btn').addEventListener('click', async function () {
 	home.style.display = 'none';
 	recent.style.display = 'none';
 	games.style.display = 'flex';
@@ -97,7 +98,7 @@ document.getElementById('games-btn').addEventListener('click', function() {
 	}, 400);
 });
 
-document.getElementById('favs-btn').addEventListener('click', function() {
+document.getElementById('favs-btn').addEventListener('click', async function () {
 	home.style.display = 'none';
 	recent.style.display = 'none';
 	games.style.display = 'none';
@@ -115,12 +116,10 @@ document.getElementById('favs-btn').addEventListener('click', function() {
 		smallImageText: 'Favourites',
 	});
 
-	setTimeout(async () => {
-		await require('./js/launchers/find-games.js').loadFavouriteGames();
-	}, 400);
+	await require('./js/launchers/find-games.js').loadFavouriteGames();
 });
 
-document.getElementById('messages-btn').addEventListener('click', function() {
+document.getElementById('messages-btn').addEventListener('click', async function () {
 	home.style.display = 'none';
 	recent.style.display = 'none';
 	games.style.display = 'none';
@@ -130,7 +129,7 @@ document.getElementById('messages-btn').addEventListener('click', function() {
 	friends.style.display = 'none';
 });
 
-document.getElementById('activity-btn').addEventListener('click', function() {
+document.getElementById('activity-btn').addEventListener('click', async function () {
 	home.style.display = 'none';
 	recent.style.display = 'none';
 	games.style.display = 'none';
@@ -140,7 +139,7 @@ document.getElementById('activity-btn').addEventListener('click', function() {
 	friends.style.display = 'none';
 });
 
-document.getElementById('friends-btn').addEventListener('click', function() {
+document.getElementById('friends-btn').addEventListener('click', async function () {
 	home.style.display = 'none';
 	recent.style.display = 'none';
 	games.style.display = 'none';
@@ -150,12 +149,12 @@ document.getElementById('friends-btn').addEventListener('click', function() {
 	friends.style.display = 'flex';
 });
 
-document.getElementById('settings-btn').addEventListener('click', function() {
+document.getElementById('settings-btn').addEventListener('click', async function () {
 	settingsbackblur.style.display = 'flex';
 	settings.style.display = 'flex';
 });
 
-settingsbackblur.addEventListener('click', function() {
+settingsbackblur.addEventListener('click', function () {
 	settings.style.display = 'none';
 	settingsbackblur.style.display = 'none';
 });

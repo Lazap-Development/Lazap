@@ -258,7 +258,59 @@ function loadRecentGames() {
 		}
 		gameElement.appendChild(gameText);
 
-		gameBanner.addEventListener('click', handleLaunch.bind(game));
+		gameBanner.addEventListener('click', () => handleLaunch(game));
+
+		game.Banner = banner;
+		return game;
+	});
+	document.querySelector('div#recent > div#recent-loading-overlay').style.opacity = '0';
+	document.querySelector('div#recent > div#recent-loading-overlay').style.visibility = 'hidden';
+}
+
+function loadRecentGamesMainPage() {
+	let Data;
+	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
+	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
+		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
+		Data = {
+			Games: [],
+		};
+	}
+	else {
+		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
+	}
+
+	if (document.querySelector('#game-loading-overlay').style.opacity === '1') loadAllGames();
+
+	const games = Data.Games.filter(x => x.LastLaunch).slice(0, 4);
+	const gamesElement = document.querySelector('div#recentGamesListMainPage');
+	gamesElement.replaceChildren([]);
+	games.sort((a, b) => b.LastLaunch - a.LastLaunch).map((game) => {
+		if (games_blacklist.includes(game.GameID)) return {};
+		const gameElement = document.createElement('div');
+		gameElement.id = 'game-div-' + game.DisplayName;
+		gameElement.className += 'mainPageGamebox';
+		gameElement.style.diplay = 'table';
+		gamesElement.appendChild(gameElement);
+
+		const gameBanner = document.createElement('img');
+
+		let banner;
+		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
+			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
+			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
+			banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../icon.ico';
+		}
+		else {
+			banner = '../icon.ico';
+		}
+		gameBanner.setAttribute('src', banner);
+		gameBanner.style = 'opacity: 1;';
+		gameBanner.height = 500;
+		gameBanner.width = 500;
+		gameElement.appendChild(gameBanner);
+
+		gameBanner.addEventListener('click', () => handleLaunch(game));
 
 		game.Banner = banner;
 		return game;
@@ -410,6 +462,7 @@ module.exports = {
 	loadAllGames,
 	loadFavouriteGames,
 	loadRecentGames,
+	loadRecentGamesMainPage,
 	saveGames,
 	toggleFavourite,
 	addLaunch,
