@@ -25,7 +25,7 @@ let tray = null;
 
 app.on('ready', () => {
 	const mainWindow = new electron.BrowserWindow({
-		width: 1150,
+		width: 1360,
 		height: 630,
 		minWidth: 950,
 		minHeight: 550,
