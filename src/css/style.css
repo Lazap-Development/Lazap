@@ -146,12 +146,14 @@ body {
     height: 18px;
     width: 18px;
     background-color: rgb(70, 70, 70);
+    
     -webkit-app-region: no-drag;
     display: block;
 }
 
 .titlebar-exit:hover {
-    filter: invert(29%) sepia(93%) saturate(6374%) hue-rotate(353deg) brightness(92%) contrast(94%);
+    background:#a70000 url("../../img/cross.png");
+    background-size: cover;
 }
 
 .titlebar-max {
@@ -161,12 +163,14 @@ body {
     height: 18px;
     width: 18px;
     background-color: rgb(70, 70, 70);
+
     -webkit-app-region: no-drag;
     display: block;
 }
 
 .titlebar-max:hover {
-    filter: invert(80%) sepia(51%) saturate(2452%) hue-rotate(348deg) brightness(102%) contrast(110%);
+    background:#ffc400 url("../../img/square.png");
+    background-size: cover;
 }
 
 .titlebar-min {
@@ -178,11 +182,10 @@ body {
     background-color: rgb(70, 70, 70);
     -webkit-app-region: no-drag;
     display: block;
-
 }
 
 .titlebar-min:hover {
-    filter: invert(58%) sepia(76%) saturate(543%) hue-rotate(81deg) brightness(92%) contrast(97%);
+    background:#22ff00;
 }
 
 .titlebar-settings {
