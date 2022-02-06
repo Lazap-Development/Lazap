@@ -535,7 +535,7 @@ foot {
     align-content: flex-start;
     align-items: center;
     justify-content: flex-start;
-    margin-left: 2%;
+    margin-left: 2.5%;
 
 }
 
@@ -546,9 +546,9 @@ foot {
     display: inline-block;
     border-radius: 12px;
     transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-    margin-left: 20px;
+    margin-left: 26px;
     height: 180px;
-    width: 140px;
+    width: 130px;
     object-fit: contain;
 }
 
@@ -558,7 +558,7 @@ foot {
 
 .mainPageGamebox img {
     height: 180px;
-    width: 140px;
+    width: 130px;
     object-fit: contain;
     border-radius: 8px;
     image-rendering: auto;
