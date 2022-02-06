@@ -91,7 +91,7 @@ body {
 }
 
 .titlebar-exit:hover {
-    background: #a70000 url("../../img/cross.png");
+    background: #c80000 url("../../img/cross.png");
     background-size: cover;
 }
 

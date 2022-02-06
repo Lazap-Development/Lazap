@@ -152,7 +152,7 @@ body {
 }
 
 .titlebar-exit:hover {
-    background: #a70000 url("../../img/cross.png");
+    background: #c80000 url("../../img/cross.png");
     background-size: cover;
 }
 
@@ -351,7 +351,7 @@ body {
 .user-pfp {
     position: relative;
     margin-top: 50px;
-    width: 100px;
+    width: 80px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -365,11 +365,12 @@ body {
     border-radius: 18px;
     image-rendering: auto;
     object-fit: cover;
+    box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
 }
 
 .user-pfp:hover img {
     transition: border-radius 0.2s ease-in-out;
-    border-radius: 6px;
+    border-radius: 10px;
 }
 
 .user-pfp label {
@@ -394,7 +395,7 @@ body {
 .side-tabs {
     margin-left: 20px;
     position: absolute;
-    height: calc(100% - 230px);
+    height: calc(100% - 220px);
     overflow-y: auto;
 }
 
@@ -540,7 +541,7 @@ foot {
 
 .mainPageGamebox {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
     text-align: center;
     display: inline-block;
     border-radius: 12px;

@@ -27,7 +27,7 @@ app.on('ready', () => {
 	const mainWindow = new electron.BrowserWindow({
 		width: 1360,
 		height: 630,
-		minWidth: 950,
+		minWidth: 1150,
 		minHeight: 550,
 		resizable: true,
 		frame: false,
