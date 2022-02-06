@@ -58,13 +58,13 @@ app.on('ready', () => {
 		const contextMenu = Menu.buildFromTemplate([
 			{
 				label: 'Show', type: 'normal', click: () => {
-					mainWindow.show()
-					tray.destroy()
-				}
+					mainWindow.show();
+					tray.destroy();
+				},
 			},
-			{ label: 'Exit', type: 'normal', click: () => mainWindow.close() }
-		])
-		tray.setContextMenu(contextMenu)
+			{ label: 'Exit', type: 'normal', click: () => mainWindow.close() },
+		]);
+		tray.setContextMenu(contextMenu);
 
 		tray.on('click', () => {
 			if (!mainWindow.isVisible()) {
@@ -116,7 +116,8 @@ app.on('ready', () => {
 	ipcMain.on('close-window', () => {
 		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinQuit === true) {
 			mainWindow.hide();
-		} else {
+		}
+		else {
 			tray.destroy();
 			mainWindow.close();
 		}
@@ -245,7 +246,7 @@ function fetch_banner(data) {
 					break;
 				}
 				case 'Steam': {
-					resolve(`https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/header.jpg`);
+					resolve(`https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`);
 					break;
 				}
 				case 'RiotGames': {
