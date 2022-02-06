@@ -117,6 +117,7 @@ app.on('ready', () => {
 		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinQuit === true) {
 			mainWindow.hide();
 		} else {
+			tray.destroy();
 			mainWindow.close();
 		}
 	});
