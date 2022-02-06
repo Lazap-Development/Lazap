@@ -16,6 +16,7 @@ const fs = require('fs');
 const md5 = require('md5');
 const games_blacklist = [
 	'228980', // Steamworks Common Redistributables
+	'231350'
 ];
 const processes = new Map();
 
