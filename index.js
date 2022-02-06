@@ -114,7 +114,11 @@ app.on('ready', () => {
 		mainWindow.loadFile('src/index.html');
 	});
 	ipcMain.on('close-window', () => {
-		mainWindow.close();
+		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinQuit === true) {
+			mainWindow.hide();
+		} else {
+			mainWindow.close();
+		}
 	});
 	ipcMain.on('max-window', () => {
 		mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
