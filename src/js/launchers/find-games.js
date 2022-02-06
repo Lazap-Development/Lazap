@@ -311,7 +311,10 @@ function loadRecentGamesMainPage() {
 		gameBanner.width = 500;
 		gameElement.appendChild(gameBanner);
 
-		gameBanner.addEventListener('click', () => handleLaunch(game));
+		gameBanner.addEventListener('click', () => {
+			handleLaunch(game);
+			ipcRenderer.send('min-tray');
+		});
 
 		game.Banner = banner;
 		return game;
@@ -330,7 +333,13 @@ function runCommand(command, args, id, force = false) {
 		shell: true,
 	});
 	res.on('error', (error) => console.log('[PROC] Error on process', id, ':', error));
-	res.on('exit', (code, signal) => console.log('[PROC] Exited on process', id, 'with code', code, 'and signal', signal));
+	setTimeout(() => {
+		res.on('exit', (code, signal) => {
+			ipcRenderer.send('show-window')
+			console.log('[PROC] Exited on process', id, 'with code', code, 'and signal', signal);
+		});
+	}, 1000);
+
 	res.on('spawn', () => console.log('[PROC] Started process with id', id));
 	processes.set(id, res);
 	return res;

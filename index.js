@@ -133,6 +133,11 @@ app.on('ready', () => {
 			mainWindow.hide();
 		}
 	});
+	ipcMain.on('show-window', () => {
+		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinLaunch === true) {
+			mainWindow.show();
+		}
+	});
 	ipcMain.on('update-profile', (e, data) => {
 		editLocalStorage(data);
 	});
