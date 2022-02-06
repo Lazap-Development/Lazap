@@ -601,11 +601,11 @@ foot {
     color: #d3d3d3;
     display: block;
     z-index: 10000000;
-    content: url("../../img/star-solid.svg");
+    content: url("../../img/star-solid.svg") !important;
     height: 25px;
     width: 25px;
     cursor: pointer;
-    filter: invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%);
+    filter: invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%) !important;
 }
 
 .fade {
