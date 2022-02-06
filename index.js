@@ -22,7 +22,9 @@ rpcClient.login({ clientId: '932504287337148417' });
 handleHardwareAcceleration();
 
 let tray = null;
-
+app.on('before-quit', () => {
+	if (tray) tray.destroy();
+});
 app.on('ready', () => {
 	const mainWindow = new electron.BrowserWindow({
 		width: 1360,

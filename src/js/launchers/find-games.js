@@ -16,9 +16,10 @@ const fs = require('fs');
 const md5 = require('md5');
 const games_blacklist = [
 	'228980', // Steamworks Common Redistributables
-	'231350'
+	'231350',
 ];
 const processes = new Map();
+let running = false;
 
 const alphabets = 'abcdefghijklmnopqrstuvwxyz'.split('');
 function sort(games, type = 'alphabetical') {
@@ -30,9 +31,12 @@ function sort(games, type = 'alphabetical') {
 }
 
 async function loadAllGames() {
+	if (running === true) return;
+	running = true;
 	const gamesElement = document.querySelector('div#allGamesList');
 
 	if (gamesElement.children.length >= 1) {
+		running.all_games = false;
 		return;
 	}
 
@@ -129,6 +133,9 @@ async function loadAllGames() {
 				}
 			}
 		});
+		document.addEventListener('mousemove', () => {
+			if (!gameBanner.matches(':hover') && !starIcon.matches(':hover')) starIcon.style.visibility = 'hidden';
+		});
 
 		starIcon.addEventListener('click', () => {
 			toggleFavourite(game.GameID, game.LauncherName);
@@ -140,6 +147,7 @@ async function loadAllGames() {
 	saveGames(uncachedGames);
 
 	ipcRenderer.send('load-banners-request', uncachedGames.filter((x) => x.Banner === '../icon.ico'));
+	running = false;
 }
 
 function loadFavouriteGames() {
@@ -335,7 +343,7 @@ function runCommand(command, args, id, force = false) {
 	res.on('error', (error) => console.log('[PROC] Error on process', id, ':', error));
 	setTimeout(() => {
 		res.on('exit', (code, signal) => {
-			ipcRenderer.send('show-window')
+			ipcRenderer.send('show-window');
 			console.log('[PROC] Exited on process', id, 'with code', code, 'and signal', signal);
 		});
 	}, 1000);
