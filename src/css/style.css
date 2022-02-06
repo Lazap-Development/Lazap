@@ -449,7 +449,7 @@ foot {
 }
 
 #indicator {
-    transition: 0.35s;
+    transition: 0.3s;
     position: absolute;
     margin-top: 5.8px;
     margin-left: 2px;
