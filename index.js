@@ -52,6 +52,25 @@ app.on('ready', () => {
 	);
 
 	mainWindow.once('ready-to-show', async () => {
+		tray = new Tray(__dirname + '/icon.ico');
+		tray.setToolTip('Lazap');
+
+		const contextMenu = Menu.buildFromTemplate([
+			{
+				label: 'Show', type: 'normal', click: () => {
+					mainWindow.show()
+					tray.destroy()
+				}
+			},
+			{ label: 'Exit', type: 'normal', click: () => mainWindow.close() }
+		])
+		tray.setContextMenu(contextMenu)
+
+		tray.on('click', () => {
+			if (!mainWindow.isVisible()) {
+				mainWindow.show();
+			}
+		});
 		mainWindow.show();
 	});
 
@@ -105,25 +124,6 @@ app.on('ready', () => {
 	});
 	ipcMain.on('min-tray', () => {
 		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinLaunch === true) {
-			tray = new Tray(__dirname + '/icon.ico');
-			tray.setToolTip('Lazap');
-
-			const contextMenu = Menu.buildFromTemplate([
-				{ label: 'Show', type: 'normal',  click: () => {
-					mainWindow.show()
-					tray.destroy()
-				} },
-				{ label: 'Exit', type: 'normal', click: () => mainWindow.close() }
-			])
-			tray.setContextMenu(contextMenu)
-
-			tray.on('click', () => {
-				if (!mainWindow.isVisible()) {
-					mainWindow.show();
-					tray.destroy();
-				}
-			});
-
 			mainWindow.hide();
 		}
 	});
