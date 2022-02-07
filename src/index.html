@@ -81,6 +81,16 @@
             </div>
 
             <div>
+                <p>Minimize to Tray on Quit</p>
+                <label class="switch">
+                    <input type="checkbox" id="setting-trayMinQuit">
+                    <div>
+                        <span></span>
+                    </div>
+                </label>
+            </div>
+
+            <div>
                 <p>Check for Updates</p>
                 <label class="switch">
                     <input type="checkbox" id="setting-checkForUpdates">
@@ -91,7 +101,7 @@
             </div>
     
             <foot>
-                v0.1.1
+                v0.2
             </foot>
         </div>
     </div>
@@ -125,7 +135,8 @@
             </div>
             <div class="children fadeInDown">
                 <div class="jump-back">
-                    <p>Most Played Games</p>
+                    <p>Recently Launched</p>
+                    <div id="recentGamesListMainPage" class="fadeInDown mainPageGamesList"></div>
                 </div>
             </div>
             <div class="children fadeInLeft">
@@ -195,7 +206,7 @@
                     <div class="user-pfp">
                         <label for="file"></label>
                         <input id="file" type="file" accept="image/*" onchange="loadFile(event)" />
-                        <img src="../img/default-profile.svg" alt="Avatar" width="80" height="80" id="output">
+                        <img src="../img/default-profile.svg" alt="Avatar" width="85" height="85" id="output">
                     </div>
                     <input class="username" id="text" type="text" value="DashCruft" spellcheck="false" maxlength="12" />
                 </div>

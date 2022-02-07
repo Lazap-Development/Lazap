@@ -11,6 +11,7 @@
         "disableHardwareAcceleration": false,
         "skipLogin": false,
         "trayMinLaunch": true,
+        "trayMinQuit": true,
         "checkForUpdates": true
     },
     "defaultUserprofileData": {

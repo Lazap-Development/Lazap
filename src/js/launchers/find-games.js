@@ -16,8 +16,10 @@ const fs = require('fs');
 const md5 = require('md5');
 const games_blacklist = [
 	'228980', // Steamworks Common Redistributables
+	'231350',
 ];
 const processes = new Map();
+let running = false;
 
 const alphabets = 'abcdefghijklmnopqrstuvwxyz'.split('');
 function sort(games, type = 'alphabetical') {
@@ -29,9 +31,12 @@ function sort(games, type = 'alphabetical') {
 }
 
 async function loadAllGames() {
+	if (running === true) return;
+	running = true;
 	const gamesElement = document.querySelector('div#allGamesList');
 
 	if (gamesElement.children.length >= 1) {
+		running.all_games = false;
 		return;
 	}
 
@@ -83,8 +88,8 @@ async function loadAllGames() {
 		gameElement.appendChild(gameBanner);
 
 		const gameText = document.createElement('span');
-		if (game.DisplayName.length > 25) {
-			gameText.innerHTML = game.DisplayName.slice(0, 25);
+		if (game.DisplayName.length > 18) {
+			gameText.innerHTML = game.DisplayName.slice(0, 18);
 			gameText.innerHTML += '...';
 		}
 		else {
@@ -128,6 +133,9 @@ async function loadAllGames() {
 				}
 			}
 		});
+		document.addEventListener('mousemove', () => {
+			if (!gameBanner.matches(':hover') && !starIcon.matches(':hover')) starIcon.style.visibility = 'hidden';
+		});
 
 		starIcon.addEventListener('click', () => {
 			toggleFavourite(game.GameID, game.LauncherName);
@@ -139,6 +147,7 @@ async function loadAllGames() {
 	saveGames(uncachedGames);
 
 	ipcRenderer.send('load-banners-request', uncachedGames.filter((x) => x.Banner === '../icon.ico'));
+	running = false;
 }
 
 function loadFavouriteGames() {
@@ -186,8 +195,8 @@ function loadFavouriteGames() {
 		gameElement.appendChild(gameBanner);
 
 		const gameText = document.createElement('span');
-		if (game.DisplayName.length > 25) {
-			gameText.innerHTML = game.DisplayName.slice(0, 25);
+		if (game.DisplayName.length > 18) {
+			gameText.innerHTML = game.DisplayName.slice(0, 18);
 			gameText.innerHTML += '...';
 		}
 		else {
@@ -249,8 +258,8 @@ function loadRecentGames() {
 		gameElement.appendChild(gameBanner);
 
 		const gameText = document.createElement('span');
-		if (game.DisplayName.length > 25) {
-			gameText.innerHTML = game.DisplayName.slice(0, 25);
+		if (game.DisplayName.length > 18) {
+			gameText.innerHTML = game.DisplayName.slice(0, 18);
 			gameText.innerHTML += '...';
 		}
 		else {
@@ -258,7 +267,62 @@ function loadRecentGames() {
 		}
 		gameElement.appendChild(gameText);
 
-		gameBanner.addEventListener('click', handleLaunch.bind(game));
+		gameBanner.addEventListener('click', () => handleLaunch(game));
+
+		game.Banner = banner;
+		return game;
+	});
+	document.querySelector('div#recent > div#recent-loading-overlay').style.opacity = '0';
+	document.querySelector('div#recent > div#recent-loading-overlay').style.visibility = 'hidden';
+}
+
+function loadRecentGamesMainPage() {
+	let Data;
+	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
+	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
+		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
+		Data = {
+			Games: [],
+		};
+	}
+	else {
+		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
+	}
+
+	if (document.querySelector('#game-loading-overlay').style.opacity === '1') loadAllGames();
+
+	const games = Data.Games.filter(x => x.LastLaunch).slice(0, 5);
+	const gamesElement = document.querySelector('div#recentGamesListMainPage');
+	gamesElement.replaceChildren([]);
+	games.sort((a, b) => b.LastLaunch - a.LastLaunch).map((game) => {
+		if (games_blacklist.includes(game.GameID)) return {};
+		const gameElement = document.createElement('div');
+		gameElement.id = 'game-div-' + game.DisplayName;
+		gameElement.className += 'mainPageGamebox';
+		gameElement.style.diplay = 'table';
+		gamesElement.appendChild(gameElement);
+
+		const gameBanner = document.createElement('img');
+
+		let banner;
+		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
+			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
+			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
+			banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../icon.ico';
+		}
+		else {
+			banner = '../icon.ico';
+		}
+		gameBanner.setAttribute('src', banner);
+		gameBanner.style = 'opacity: 1;';
+		gameBanner.height = 500;
+		gameBanner.width = 500;
+		gameElement.appendChild(gameBanner);
+
+		gameBanner.addEventListener('click', () => {
+			handleLaunch(game);
+			ipcRenderer.send('min-tray');
+		});
 
 		game.Banner = banner;
 		return game;
@@ -277,7 +341,13 @@ function runCommand(command, args, id, force = false) {
 		shell: true,
 	});
 	res.on('error', (error) => console.log('[PROC] Error on process', id, ':', error));
-	res.on('exit', (code, signal) => console.log('[PROC] Exited on process', id, 'with code', code, 'and signal', signal));
+	setTimeout(() => {
+		res.on('exit', (code, signal) => {
+			ipcRenderer.send('show-window');
+			console.log('[PROC] Exited on process', id, 'with code', code, 'and signal', signal);
+		});
+	}, 1000);
+
 	res.on('spawn', () => console.log('[PROC] Started process with id', id));
 	processes.set(id, res);
 	return res;
@@ -410,6 +480,7 @@ module.exports = {
 	loadAllGames,
 	loadFavouriteGames,
 	loadRecentGames,
+	loadRecentGamesMainPage,
 	saveGames,
 	toggleFavourite,
 	addLaunch,

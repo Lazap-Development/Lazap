@@ -22,12 +22,14 @@ rpcClient.login({ clientId: '932504287337148417' });
 handleHardwareAcceleration();
 
 let tray = null;
-
+app.on('before-quit', () => {
+	if (tray) tray.destroy();
+});
 app.on('ready', () => {
 	const mainWindow = new electron.BrowserWindow({
-		width: 1150,
+		width: 1360,
 		height: 630,
-		minWidth: 950,
+		minWidth: 1150,
 		minHeight: 550,
 		resizable: true,
 		frame: false,
@@ -52,6 +54,25 @@ app.on('ready', () => {
 	);
 
 	mainWindow.once('ready-to-show', async () => {
+		tray = new Tray(__dirname + '/icon.ico');
+		tray.setToolTip('Lazap');
+
+		const contextMenu = Menu.buildFromTemplate([
+			{
+				label: 'Show', type: 'normal', click: () => {
+					mainWindow.show();
+					tray.destroy();
+				},
+			},
+			{ label: 'Exit', type: 'normal', click: () => mainWindow.close() },
+		]);
+		tray.setContextMenu(contextMenu);
+
+		tray.on('click', () => {
+			if (!mainWindow.isVisible()) {
+				mainWindow.show();
+			}
+		});
 		mainWindow.show();
 	});
 
@@ -95,7 +116,13 @@ app.on('ready', () => {
 		mainWindow.loadFile('src/index.html');
 	});
 	ipcMain.on('close-window', () => {
-		mainWindow.close();
+		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinQuit === true) {
+			mainWindow.hide();
+		}
+		else {
+			tray.destroy();
+			mainWindow.close();
+		}
 	});
 	ipcMain.on('max-window', () => {
 		mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
@@ -105,26 +132,12 @@ app.on('ready', () => {
 	});
 	ipcMain.on('min-tray', () => {
 		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinLaunch === true) {
-			tray = new Tray(__dirname + '/icon.ico');
-			tray.setToolTip('Lazap');
-
-			const contextMenu = Menu.buildFromTemplate([
-				{ label: 'Show', type: 'normal',  click: () => {
-					mainWindow.show()
-					tray.destroy()
-				} },
-				{ label: 'Exit', type: 'normal', click: () => mainWindow.close() }
-			])
-			tray.setContextMenu(contextMenu)
-
-			tray.on('click', () => {
-				if (!mainWindow.isVisible()) {
-					mainWindow.show();
-					tray.destroy();
-				}
-			});
-
 			mainWindow.hide();
+		}
+	});
+	ipcMain.on('show-window', () => {
+		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinLaunch === true) {
+			mainWindow.show();
 		}
 	});
 	ipcMain.on('update-profile', (e, data) => {
@@ -240,7 +253,7 @@ function fetch_banner(data) {
 					break;
 				}
 				case 'Steam': {
-					resolve(`https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/header.jpg`);
+					resolve(`https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`);
 					break;
 				}
 				case 'RiotGames': {
