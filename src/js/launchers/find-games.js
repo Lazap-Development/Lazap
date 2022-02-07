@@ -138,7 +138,9 @@ async function loadAllGames() {
 		});
 
 		starIcon.addEventListener('click', () => {
-			toggleFavourite(game.GameID, game.LauncherName);
+			const res = toggleFavourite(game.GameID, game.LauncherName);
+			starIcon.style.content = `url("../img/star-${res ? 'solid' : 'empty'}.svg")`;
+			starIcon.style.filter = res ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 		});
 
 		game.Banner = banner;
@@ -426,6 +428,7 @@ function toggleFavourite(GameID, LauncherName) {
 	Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite = !Data.Games.find(x => x.GameID === GameID).Favourite;
 
 	fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', JSON.stringify(Data));
+	return Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite;
 }
 
 function setLastLaunch(GameID, LauncherName) {
