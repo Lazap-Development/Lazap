@@ -1,7 +1,7 @@
 {
     "name": "lazap",
     "version": "0.2.0",
-    "description": "A cross platform launcher - All your games at one library",
+    "description": "Lazap, All your games at one library with a modernish look and experience",
     "main": "./index.js",
     "scripts": {
         "start": "electron .",
