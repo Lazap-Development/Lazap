@@ -50,7 +50,8 @@ account.addEventListener('mouseover', () => {
 account.addEventListener('mouseout', () => account.style['filter'] = 'none');
 account.addEventListener('click', () => ipcRenderer.send('load-login'));
 
-ipcRenderer.on('load-banners-response', () => {
+ipcRenderer.on('load-banners-response', (e, id, force) => {
+	if (id !== 'allGames') return;
 	const gamesList = document.querySelectorAll('#allGamesList > div');
 	const games = [];
 	for (let i = 0; i < gamesList.length; i++) {
@@ -72,9 +73,12 @@ ipcRenderer.on('load-banners-response', () => {
 	}
 	games.forEach((game) => {
 		game.addEventListener('load', () => {
-			// if (game.getAttribute('src') !== '../icon.ico') {
-			loaded++;
-			// }
+			if (force) {
+				loaded++;
+			}
+			else if (game.getAttribute('src') !== '../icon.ico') {
+				loaded++;
+			}
 			if (loaded == total) {
 				setTimeout(() => {
 					document.getElementById('game-loading-overlay').style.opacity = '0';

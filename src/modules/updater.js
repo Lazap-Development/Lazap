@@ -3,8 +3,10 @@ const { autoUpdater } = require('electron-updater');
 const { ipcMain } = require('electron');
 const logger = require('electron-log');
 const fs = require('fs');
+const path = require('path');
+const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
 let mainWindow;
-
+const { checkForDirAndCreate } = require('../utils.js');
 // Logging
 autoUpdater.logger = logger;
 
@@ -51,25 +53,9 @@ ipcMain.on('handle-update-install', () => {
 });
 
 function getAutoUpdateSetting() {
-	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', JSON.stringify(require('./Constants.json').defaultLauncherData));
+	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/LauncherData.json', JSON.stringify(require('./Constants.json').defaultLauncherData));
 	const data = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
 	return data.checkForUpdates;
-}
-
-function checkForDirAndCreate(dir, fileContent = '') {
-	if (fs.existsSync(dir.split(__dirname)[1])) return true;
-	dir.split(__dirname)[1].split('/').slice(1).forEach((name, i, arr) => {
-		dir = dir.replaceAll('\\', '/');
-		if (!fs.existsSync(`./${arr.slice(0, i + 1).join('/')}`)) {
-			if (name.split('.')[1]) {
-				fs.writeFileSync(`./${arr.slice(0, i + 1).join('/')}`, fileContent);
-				return;
-			}
-			else {
-				fs.mkdirSync(`./${arr.slice(0, i + 1).join('/')}`);
-			}
-		}
-	});
 }
 
 module.exports = (win) => mainWindow = win;

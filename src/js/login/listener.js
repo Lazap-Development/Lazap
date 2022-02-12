@@ -19,8 +19,8 @@ signInButton.addEventListener('click', () => {
 });
 
 ignore.addEventListener('click', () => {
-	var parseJson = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
+	const parseJson = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
 	parseJson.skipLogin = true;
 	fs.writeFileSync('./storage/Settings/LauncherData.json', JSON.stringify(parseJson));
-	console.log(parseJson)
+	console.log(parseJson);
 });

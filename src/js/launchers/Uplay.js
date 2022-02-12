@@ -42,7 +42,7 @@ async function parseGameObject(GameID) {
 		return;
 	}
 	const Location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
-	if (!fs.existsSync(Location)) return console.log(Location, registry_res);
+	if (!fs.existsSync(Location)) return;
 	const Executable = null;
 	const DisplayName = Location.split('/').slice(-2)[0];
 	const Size = fs.statSync(Location).size;

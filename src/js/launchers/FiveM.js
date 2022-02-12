@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const user = require('os').userInfo().username;
 
-async function getInstalledGames(os = process.platform) {
+function getInstalledGames(os = process.platform) {
 	if (os === 'win32') {
 		const isInstalled = fs.existsSync(`C:\\Users\\${user}\\AppData\\Local\\FiveM\\FiveM.exe`);
 		if (!isInstalled) return [];

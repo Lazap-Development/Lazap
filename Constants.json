@@ -3,7 +3,7 @@
         "owner": "Lazap-Development",
         "repo": "lazap"
     },
-    "GAMES_DATA_BASE_PATH": "./storage/Cache/Games",
+    "GAMES_DATA_BASE_PATH": "./storage/Cache/Games/Data.json",
     "GAME_BANNERS_BASE_PATH": "./storage/Cache/Games/Images",
     "defaultLauncherData": {
         "enableRPC": true,
