@@ -9,6 +9,7 @@ const CONSTANTS = require('./Constants.json');
 // Require all other functions
 const { checkForDirAndCreate, handleStorageAndTransportData, editLocalStorage } = require('./src/utils.js');
 const { fetch_banner } = require('./src/modules/banners.js');
+const os = require("os");
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
@@ -38,7 +39,7 @@ app.on('ready', () => {
 			backgroundThrottling: false,
 			zoomFactor: 0.9,
 		},
-		icon: 'icon.ico',
+		icon: os.platform() === 'linux' ? "./icon.png" : "./icon.ico",
 	});
 
 	mainWindow.loadFile(
@@ -50,7 +51,7 @@ app.on('ready', () => {
 	);
 
 	mainWindow.once('ready-to-show', async () => {
-		tray = new Tray(__dirname + '/icon.ico');
+		tray = new Tray(os.platform() === 'linux' ? "./icon.png" : "./icon.ico");
 		tray.setToolTip('Lazap');
 
 		const contextMenu = Menu.buildFromTemplate([
