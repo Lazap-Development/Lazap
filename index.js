@@ -1,30 +1,16 @@
 /* eslint-disable indent */
 require('v8-compile-cache');
-const electron = require('electron');
-const { ipcMain, Tray, Menu, app } = require('electron');
-const fs = require('fs');
-const rpc = require('discord-rpc');
-const CONSTANTS = require('./Constants.json');
-
-// Require all other functions
-const { checkForDirAndCreate, handleStorageAndTransportData, editLocalStorage } = require('./src/utils.js');
-const { fetch_banner } = require('./src/modules/banners.js');
-const os = require("os");
+const { ipcMain, Tray, Menu, app, BrowserWindow } = require('electron');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) return app.quit();
 
-const rpcClient = new rpc.Client({ transport: 'ipc' });
-rpcClient.login({ clientId: '932504287337148417' });
-
-handleHardwareAcceleration();
-
 let tray = null;
 
 app.on('ready', () => {
-	const mainWindow = new electron.BrowserWindow({
+	const mainWindow = new BrowserWindow({
 		width: 1360,
 		height: 630,
 		minWidth: 1150,
@@ -39,7 +25,7 @@ app.on('ready', () => {
 			backgroundThrottling: false,
 			zoomFactor: 0.9,
 		},
-		icon: os.platform() === 'linux' ? "./icon.png" : "./icon.ico",
+		icon: __dirname + (process.platform === 'linux' ? 'icon.png' : 'icon.ico'),
 	});
 
 	mainWindow.loadFile(
@@ -51,7 +37,9 @@ app.on('ready', () => {
 	);
 
 	mainWindow.once('ready-to-show', async () => {
-		tray = new Tray(os.platform() === 'linux' ? "./icon.png" : "./icon.ico");
+		mainWindow.show();
+
+		tray = new Tray(__dirname + (process.platform === 'linux' ? '/icon.png' : '/icon.ico'));
 		tray.setToolTip('Lazap');
 
 		const contextMenu = Menu.buildFromTemplate([
@@ -69,12 +57,9 @@ app.on('ready', () => {
 				mainWindow.show();
 			}
 		});
-
-		mainWindow.show();
 	});
 
 	mainWindow.webContents.on('did-finish-load', async () => {
-		require('./src/modules/updater.js')(mainWindow);
 		handleStorageAndTransportData(mainWindow);
 		if (!fs.existsSync('./storage/Settings/LauncherData.json')) {
 			checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', '{}');
@@ -86,6 +71,7 @@ app.on('ready', () => {
 				largeImageKey: 'lazap',
 			});
 		}
+		require('./src/modules/updater.js')(mainWindow);
 	});
 
 	ipcMain.on('load-main', () => {
@@ -139,6 +125,7 @@ app.on('ready', () => {
 		editLocalStorage(data);
 	});
 	ipcMain.on('load-banners-request', async (e, r, id) => {
+		const { fetch_banner } = require('./src/modules/banners.js');
 		const res = fetch_banner(r);
 		res.forEach(async (url, i) => {
 			mainWindow.webContents.executeJavaScript(`
@@ -176,6 +163,9 @@ ipcMain.on('updateSetting', (e, key, bool) => {
 	}
 });
 
+const rpc = require('discord-rpc');
+const rpcClient = new rpc.Client({ transport: 'ipc' });
+rpcClient.login({ clientId: '932504287337148417' });
 function updateRPC(data) {
 	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData));
 	const LauncherData = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
@@ -187,6 +177,11 @@ function updateRPC(data) {
 	rpcClient.setActivity(data).catch(err => console.warn('[RPC]', err.stack.includes('connection closed') ? 'OFFLINE' : err));
 }
 
+const CONSTANTS = require('./Constants.json');
+const { checkForDirAndCreate, handleStorageAndTransportData, editLocalStorage } = require('./src/utils.js');
+const fs = require('fs');
+
+handleHardwareAcceleration();
 async function handleHardwareAcceleration() {
 	// fs.readFileSync('./storage/Settings/LauncherData.json').toString();
 	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData));

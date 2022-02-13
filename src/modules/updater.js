@@ -1,13 +1,9 @@
 /* eslint-disable no-unused-vars */
-const { autoUpdater } = require('electron-updater');
-const { ipcMain, Notification } = require('electron');
-const logger = require('electron-log');
-const fs = require('fs');
-const path = require('path');
-const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
 let mainWindow;
-const { checkForDirAndCreate } = require('../utils.js');
+const { autoUpdater } = require('electron-updater');
+
 // Logging
+const logger = require('electron-log');
 autoUpdater.logger = logger;
 
 // Configuration
@@ -51,12 +47,18 @@ autoUpdater.on('update-downloaded', (info) => {
 	}
 });
 
+const { ipcMain, Notification } = require('electron');
+
 ipcMain.on('handle-update-install', () => {
 	autoUpdater.quitAndInstall(false, true);
 });
 
 function getAutoUpdateSetting() {
+	const path = require('path');
+	const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
+	const { checkForDirAndCreate } = require('../utils.js');
 	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/LauncherData.json', JSON.stringify(require('../../Constants.json').defaultLauncherData));
+	const fs = require('fs');
 	const data = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
 	return data.checkForUpdates;
 }

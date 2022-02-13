@@ -2,10 +2,11 @@ module.exports = {
 	getInstalledGames,
 	parseGameObject,
 };
-const fs = require('fs');
+
 function getInstalledGames(os = process.platform) {
 	if (os === 'win32') {
 		if (!isLauncherInstalled()) return [];
+		const fs = require('fs');
 		const games = fs.readdirSync('C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests')
 			.filter((x) => x.split('.')[1]?.toLowerCase() === 'item')
 			.map((x) =>
@@ -17,7 +18,7 @@ function getInstalledGames(os = process.platform) {
 }
 
 function isLauncherInstalled(path = 'C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests') {
-	return fs.existsSync(path);
+	return require('fs').existsSync(path);
 }
 /* Game Object Example
 {
@@ -36,17 +37,15 @@ function parseGameObject(rawObj = {}) {
 		InstallSize: Size,
 		LaunchCommand,
 	} = rawObj;
-	const LaunchID = `${rawObj.CatalogNamespace}:${rawObj.CatalogItemId}:${rawObj.AppName}`;
 
 	return {
 		Executable,
 		Location,
 		DisplayName,
 		GameID,
-		LaunchID,
+		LaunchID: `${rawObj.CatalogNamespace}:${rawObj.CatalogItemId}:${rawObj.AppName}`,
 		Size,
 		LaunchCommand,
 		LauncherName: 'EpicGames',
 	};
 }
-// LaunchExecutable, InstallSize, LaunchCommand, InstallLocation

@@ -1,6 +1,5 @@
 let { exec } = require('child_process');
 exec = require('util').promisify(exec);
-const fs = require('fs');
 
 async function getUplayLocation(os = process.platform, checkForUplay = true) {
 	let launcher_location;
@@ -25,6 +24,7 @@ async function getUplayLocation(os = process.platform, checkForUplay = true) {
 	return launcher_location;
 }
 
+const fs = require('fs');
 async function getInstalledGames() {
 	const path = await getUplayLocation();
 	if (!path) return [];

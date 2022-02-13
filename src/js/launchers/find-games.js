@@ -1,23 +1,6 @@
 /* eslint-disable indent */
 console.debug('OS:', process.platform, 'Arch:', process.arch);
-const { ipcRenderer } = require('electron');
-const fs = require('fs');
-const md5 = require('md5');
-const path = require('path');
-const { spawn } = require('child_process');
-const launchers = fs.readdirSync(__dirname);
-const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
 const Constants = require('../../../Constants.json');
-const { checkForDirAndCreate: checkDirs } = require('../../utils.js');
-
-let lastCheck;
-let cachedGames = [];
-const games_blacklist = [
-	'228980', // Steamworks Common Redistributables
-	'231350', // 3D Mark Demo
-];
-let running = false;
-const processes = new Map();
 
 async function getInstalledGames() {
 	// Cooldown
@@ -30,6 +13,7 @@ async function getInstalledGames() {
 
 	// Fetch all games
 	const games = [];
+	const launchers = fs.readdirSync(__dirname);
 	await launchers.filter(x => require(`./${x}`).getInstalledGames && x !== 'find-games.js').map(launcherName => require(`./${launcherName}`).getInstalledGames()).forEach(async (x) => {
 		games.push(...(await x));
 	});
@@ -92,6 +76,7 @@ async function loadGames(id) {
 		let banner;
 		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
 			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
+			const md5 = require('md5');
 			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
 			banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../icon.ico';
 		}
@@ -187,6 +172,7 @@ function sort(games, type) {
 	return games;
 }
 
+const { checkForDirAndCreate: checkDirs } = require('../../utils.js');
 function setGames(games) {
 	if (!fs.existsSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1))) checkDirs(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1), '{"Games":[]}');
 	fs.writeFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1), JSON.stringify(games));
@@ -258,7 +244,23 @@ function createProcess(Command, Args, GameID, force = false) {
 	return instance;
 }
 
+let lastCheck;
+let cachedGames = [];
+const games_blacklist = [
+	'228980', // Steamworks Common Redistributables
+	'231350', // 3D Mark Demo
+];
+let running = false;
+const processes = new Map();
+
+const fs = require('fs');
+const path = require('path');
+const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
+
 module.exports = {
 	loadGames,
 	getInstalledGames,
 };
+
+const { ipcRenderer } = require('electron');
+const { spawn } = require('child_process');

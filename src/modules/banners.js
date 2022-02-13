@@ -1,25 +1,12 @@
 /* eslint-disable indent */
-const { JSDOM } = require('jsdom');
-const md5 = require('md5');
-const axios = require('axios').default;
-const fs = require('fs');
-const path = require('path');
-const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
-
-const { checkForDirAndCreate } = require('../utils.js');
-
-const { ipcMain } = require('electron');
-ipcMain.on('line-change', (e, bool) => isOffline = bool);
-let isOffline = false;
-
 function fetch_banner(data) {
+	const htmlparser = require('htmlparser2');
+	const fetch = require('axios');
 	const arr = [];
 	for (let i = 0; i < data.length; i++) {
 		arr.push((async () => {
-			if (isOffline) return '../icon.ico';
 			if (data[i].LauncherName === 'EpicGames') {
-				const response = await axios({
-					url: `https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(data[i].DisplayName)}&sortBy=releaseDate&sortDir=DESC&count=5&category=Game&start=0`,
+				const response = await fetch(`https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(data[i].DisplayName)}&sortBy=releaseDate&sortDir=DESC&count=5&category=Game&start=0`, {
 					method: 'GET',
 					responseType: 'arraybuffer',
 				}).catch((err) => {
@@ -27,20 +14,20 @@ function fetch_banner(data) {
 					return '../icon.ico';
 				});
 
-				const dom = new JSDOM(response.data);
-				const elements = dom.window.document.querySelectorAll('#dieselReactWrapper > div > div > main > div > div > div > div > div > section > div > section > div > section > section > ul > li > div > div > div > a > div > div > div > div > div > img[alt]');
+				const dom = htmlparser.parseDocument(response.data, { 'decodeEntities': true });
+				const elements = dom.children[1].children[1].children.filter(x => x.name === 'div' && x.children.length > 0)[0].children[0].children.filter(x => x.children.length > 0)[0].children.find(x => x.name === 'main').children[1].children[0].children[0].children[0].children[0].children[0].children[0].children[1].children[0].children.find(x => x.name === 'section').children[0].children[0].children.map(x => x.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0]).filter(x => x.attribs.alt);
 				let index;
 				elements.forEach((element, _index) => {
 					if (typeof index === 'number') return;
-					if (element.getAttribute('alt') === data[i].DisplayName) {
+					if (element.attribs['alt'] === data[i].DisplayName) {
 						index = _index;
 					}
-					else if (element.getAttribute('alt').includes(data[i].DisplayName)) {
+					else if (element.attribs['alt'].includes(data[i].DisplayName)) {
 						index = _index;
 					}
 				});
-				const element = elements.item(index) ?? elements.item(0);
-				return element?.getAttribute('data-image') ? element?.getAttribute('data-image') : '../icon.ico';
+				const element = elements[index] ?? elements[0];
+				return element?.attribs['data-image'] ? element.attribs['data-image'] : '../icon.ico';
 			}
 			else if (data[i].LauncherName === 'Steam') {
 				return `https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`;
@@ -56,19 +43,18 @@ function fetch_banner(data) {
 				}
 
 				/* Use Epic Games to get banners of Uplay Games for now, unless new alternative found */
-				const response = await axios({
-					url: `https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(ubisoftified)}&sortBy=releaseDate&sortDir=DESC&count=5&category=Game&start=0`,
+				const response = await fetch(`https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(ubisoftified)}&sortBy=releaseDate&sortDir=DESC&count=5&category=Game&start=0`, {
 					method: 'GET',
-					responseType: 'arraybuffer',
 				}).catch((err) => {
 					console.warn(err.stack.slice(0, 500));
 					return '../icon.ico';
 				});
-				const dom = new JSDOM(response.data);
-				const elements = dom.window.document.querySelectorAll('#dieselReactWrapper > div > div > main > div > div > div > div > div > section > div > section > div > section > section > ul > li > div > div > div > a > div > div > div > div > div > img[alt]');
+
+				const dom = htmlparser.parseDocument(response.data, { 'decodeEntities': true });
+				const elements = dom.children[1].children[1].children.filter(x => x.name === 'div' && x.children.length > 0)[0].children[0].children.filter(x => x.children.length > 0)[0].children.find(x => x.name === 'main').children[1].children[0].children[0].children[0].children[0].children[0].children[0].children[1].children[0].children.find(x => x.name === 'section').children[0].children[0].children.map(x => x.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0]).filter(x => x.attribs.alt);
 				let index;
 				elements.forEach((element, _index) => {
-					const name = element.getAttribute('alt').split(' ').map(x => x.toLowerCase()).includes('edition') ? element.getAttribute('alt').split(' ').slice(0, element.getAttribute('alt').split(' ').length - element.getAttribute('alt').split(' ').reverse().findIndex(x => x.toLowerCase() === 'edition') - 2).join(' ') : element.getAttribute('alt');
+					const name = element.attribs['alt'].split(' ').map(x => x.toLowerCase()).includes('edition') ? element.attribs['alt'].split(' ').slice(0, element.attribs['alt'].split(' ').length - element.attribs['alt'].split(' ').reverse().findIndex(x => x.toLowerCase() === 'edition') - 2).join(' ') : element.attribs['alt'];
 					if (typeof index === 'number') return;
 
 					const matched = name.toLowerCase().split('').map((str, _i) =>
@@ -86,8 +72,8 @@ function fetch_banner(data) {
 						index = _index;
 					}
 				});
-				const element = elements.item(index) ?? elements.item(0);
-				return element?.getAttribute('data-image') ? element?.getAttribute('data-image') : '../icon.ico';
+				const element = elements[index] ?? elements[0];
+				return element?.attribs['data-image'] ? element?.attribs['data-image'] : '../icon.ico';
 			}
 			else if (data[i].LauncherName === 'Minecraft') {
 				return 'https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png';
@@ -108,15 +94,20 @@ function fetch_banner(data) {
 }
 
 function cacheBanners(data, res) {
+	const fetch = require('node-fetch');
+	const { checkForDirAndCreate } = require('../utils.js');
+	const path = require('path');
+	const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
+
 	checkForDirAndCreate(APP_BASE_PATH + '/storage/Cache/Games/Images');
 
 	res.filter(async (x) => (await x).startsWith('http')).forEach(async (x, i) => {
-		axios({
-			url: (await x),
+		fetch(await x, {
 			method: 'GET',
-			responseType: 'stream',
-		}).then((response) => {
-			response.data.pipe(fs.createWriteStream(`./storage/Cache/Games/Images/${md5(data[i].DisplayName)}.png`));
+		}).then(async (response) => {
+			const md5 = require('md5');
+			const fs = require('fs');
+			fs.createWriteStream(`./storage/Cache/Games/Images/${md5(data[i].DisplayName)}.png`).write(Buffer.from(await response.arrayBuffer()));
 		}).catch(() => '');
 	});
 }

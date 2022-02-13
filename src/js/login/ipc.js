@@ -1,5 +1,3 @@
-const { ipcRenderer } = require('electron');
-
 // eslint-disable-next-line no-unused-vars
 function load_main() {
 	ipcRenderer.send('load-main');
@@ -16,6 +14,8 @@ function max_window() {
 function min_window() {
 	ipcRenderer.send('min-window');
 }
+
+const { ipcRenderer } = require('electron');
 
 ipcRenderer.on('alert', (e, msg) => {
 	const alert = document.querySelector('.alert-box');

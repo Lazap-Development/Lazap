@@ -13,6 +13,13 @@ function loadFile(event) {
 	});
 }
 
+document.getElementById('text').addEventListener('change', (e) => {
+	ipcRenderer.send('update-profile', {
+		username: e.target.value,
+		pfp: img,
+	});
+});
+
 const searchbars = document.querySelectorAll('div.search-bar > input[type="text"]');
 
 searchbars.item(0).addEventListener('keyup', () => {
@@ -45,13 +52,6 @@ searchbars.item(1).addEventListener('keyup', () => {
 		else {
 			game.style.display = 'none';
 		}
-	});
-});
-
-document.getElementById('text').addEventListener('change', (e) => {
-	ipcRenderer.send('update-profile', {
-		username: e.target.value,
-		pfp: img,
 	});
 });
 

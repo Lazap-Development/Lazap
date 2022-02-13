@@ -1,13 +1,8 @@
-const { ipcRenderer } = require('electron');
-
 const fnScript = document.createElement('script');
 fnScript.async = true;
 fnScript.type = 'text/javascript';
 fnScript.src = 'js/functions.js';
 document.querySelector('head').appendChild(fnScript);
-
-const account = document.getElementById('account-btn');
-let loggedin;
 
 // eslint-disable-next-line no-unused-vars
 function close_window() {
@@ -24,6 +19,8 @@ function min_window() {
 	ipcRenderer.send('min-window');
 }
 
+const { ipcRenderer } = require('electron');
+
 ipcRenderer.on('check-for-login', async (e, r) => {
 	const res = r;
 	if (res.status === 'SUCCESS') {
@@ -38,6 +35,9 @@ ipcRenderer.on('handle-update-available', () => {
 	document.querySelector('img.titlebar-update#update-btn').style.display = 'block';
 });
 document.querySelector('img.titlebar-update#update-btn').addEventListener('click', () => ipcRenderer.send('handle-update-install'));
+
+const account = document.getElementById('account-btn');
+let loggedin;
 
 account.addEventListener('mouseover', () => {
 	if (loggedin === true) {

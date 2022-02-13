@@ -1,5 +1,3 @@
-const fs = require('fs');
-
 const signUpButton = document.getElementById('signUp');
 const signInButton = document.getElementById('signIn');
 const container = document.getElementById('container');
@@ -19,6 +17,7 @@ signInButton.addEventListener('click', () => {
 });
 
 ignore.addEventListener('click', () => {
+	const fs = require('fs');
 	const parseJson = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
 	parseJson.skipLogin = true;
 	fs.writeFileSync('./storage/Settings/LauncherData.json', JSON.stringify(parseJson));

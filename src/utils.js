@@ -1,15 +1,11 @@
-const fs = require('fs');
-const os = require('os');
-const Constants = require('../Constants.json');
-const path = require('path');
-const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
-
 function handleStorageAndTransportData(mainWindow) {
+	const Constants = require('../Constants.json');
 	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/LauncherData.json', JSON.stringify(Constants.defaultLauncherData));
 	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/userprofile.json', '{}');
 
 	let LauncherData = JSON.parse(fs.readFileSync('./storage/Settings/userprofile.json').toString());
 	if (!Object.keys(LauncherData).length) {
+		const os = require('os');
 		LauncherData = {
 			username: os.userInfo().username,
 			pfp: 'default',
@@ -54,3 +50,7 @@ module.exports = {
 	editLocalStorage,
 	handleStorageAndTransportData,
 };
+
+const fs = require('fs');
+const path = require('path');
+const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));

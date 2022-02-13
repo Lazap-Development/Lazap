@@ -12,15 +12,13 @@ let {
 } = require('child_process');
 const util = require('util');
 exec = util.promisify(exec);
-const fs = require('fs');
 
 async function getSteamLocation(os = process.platform, checkForSteam = true) {
 	let launcher_location;
 	let registry_res;
 	if (os === 'win32') {
 		const { stdout, error } = await exec(
-			`Reg Query "HKEY_LOCAL_MACHINE\\SOFTWARE\\${process.arch === 'x64' ? 'Wow6432Node\\' : ''
-			}Valve\\Steam" /v InstallPath`,
+			`Reg Query "HKEY_LOCAL_MACHINE\\SOFTWARE\\${process.arch === 'x64' ? 'Wow6432Node\\' : ''}Valve\\Steam" /v InstallPath`,
 		).catch(() => {
 			launcher_location = null;
 			return { error: 'NOT_FOUND' };
@@ -38,6 +36,7 @@ async function getSteamLocation(os = process.platform, checkForSteam = true) {
 	return launcher_location;
 }
 
+const fs = require('fs');
 function isLauncherInstalled(path) {
 	return fs.existsSync(path);
 }
