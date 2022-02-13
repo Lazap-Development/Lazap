@@ -22,7 +22,8 @@
             "!.eslintrc.json",
             "!Lazap Development.pfx",
             "!src/js/launchers/LinuxGames.js",
-            "!src/js/launchers/RockstarGames.js"
+            "!src/js/launchers/RockstarGames.js",
+            "!src/modules/login.js"
         ],
         "productName": "Lazap",
         "forceCodeSigning": false,

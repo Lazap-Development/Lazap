@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const { autoUpdater } = require('electron-updater');
-const { ipcMain } = require('electron');
+const { ipcMain, Notification } = require('electron');
 const logger = require('electron-log');
 const fs = require('fs');
 const path = require('path');
@@ -16,12 +16,7 @@ autoUpdater.autoDownload = false;
 autoUpdater.checkForUpdatesAndNotify();
 setInterval(() => {
 	// Check for updates regardless of the setting but do not notify or update if disallowed
-	if (getAutoUpdateSetting()) {
-		autoUpdater.checkForUpdatesAndNotify({ 'body': 'Test', 'title': 'New Update!' }).catch(() => '');
-	}
-	else {
-		autoUpdater.checkForUpdates().catch(() => ''); // Handle errors thrown by these functions because .catch() doesn't seem to work
-	}
+	autoUpdater.checkForUpdates().catch(() => '');
 }, 60 * 60 * 1000);
 
 autoUpdater.on('error', (...args) => {
@@ -44,6 +39,14 @@ autoUpdater.on('update-downloaded', (info) => {
 	}
 
 	if (getAutoUpdateSetting()) {
+		const notif = new Notification({
+			'body': `An update is available!\nCurrent Version: ${autoUpdater.currentVersion}\nUpdate Version: ${info.version}`,
+			'icon': __dirname.split('\\').slice(0, -2).join('/') + '/icon.ico',
+			'title': 'Lazap Update Available!',
+			'silent': false,
+		});
+		notif.show();
+		notif.on('click', () => autoUpdater.quitAndInstall(false, true));
 		mainWindow.webContents.send('handle-update-available', info);
 	}
 });
@@ -53,7 +56,7 @@ ipcMain.on('handle-update-install', () => {
 });
 
 function getAutoUpdateSetting() {
-	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/LauncherData.json', JSON.stringify(require('./Constants.json').defaultLauncherData));
+	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/LauncherData.json', JSON.stringify(require('../../Constants.json').defaultLauncherData));
 	const data = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
 	return data.checkForUpdates;
 }

@@ -75,18 +75,6 @@ app.on('ready', () => {
 
 	mainWindow.webContents.on('did-finish-load', async () => {
 		require('./src/modules/updater.js')(mainWindow);
-		require('./src/modules/login.js')._setup(mainWindow);
-		// Checking for auto-login
-		/*
-		if (fs.existsSync(__dirname + '\\storage\\Settings\\userprofile.js')) {
-			if (require('./storage/Settings/userprofile.json').token) {
-				mainWindow.webContents.send('check-if-logged-in', await identify());
-			}
-			else {
-				return;
-			}
-		}
-		*/
 		handleStorageAndTransportData(mainWindow);
 		if (!fs.existsSync('./storage/Settings/LauncherData.json')) {
 			checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', '{}');
@@ -102,7 +90,6 @@ app.on('ready', () => {
 
 	ipcMain.on('load-main', () => {
 		mainWindow.loadFile('src/index.html');
-		// setTimeout(async () => mainWindow.webContents.send('check-for-login', data || await identify()), 2000);
 	});
 	ipcMain.on('load-custom', (e, str) => {
 		mainWindow.loadFile(str);

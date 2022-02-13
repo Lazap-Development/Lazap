@@ -8,17 +8,14 @@ const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
 
 const { checkForDirAndCreate } = require('../utils.js');
 
-let isOffline = checkOffline();
-let lastCheck;
+const { ipcMain } = require('electron');
+ipcMain.on('line-change', (e, bool) => isOffline = bool);
+let isOffline = false;
 
 function fetch_banner(data) {
 	const arr = [];
 	for (let i = 0; i < data.length; i++) {
 		arr.push((async () => {
-			if (lastCheck + 1000 * 60 * 5 < Date.now()) {
-				await checkOffline();
-				lastCheck = Date.now();
-			}
 			if (isOffline) return '../icon.ico';
 			if (data[i].LauncherName === 'EpicGames') {
 				const response = await axios({
@@ -108,10 +105,6 @@ function fetch_banner(data) {
 		return (await x) !== '../icon.ico';
 	}));
 	return arr;
-}
-
-async function checkOffline() {
-	await axios.get('https://google.com').then(() => isOffline = false).catch(() => isOffline = true);
 }
 
 function cacheBanners(data, res) {
