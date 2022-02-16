@@ -1,8 +1,8 @@
 window.onload = async function() {
+	// Cache games first before loading
+	await require('./js/launchers/find-games.js').getInstalledGames();
 	document.getElementById('main-loading-overlay').style.opacity = '0';
 	document.getElementById('main-loading-overlay').style.visibility = 'hidden';
-	// Cache games first before loading
-	require('./js/launchers/find-games.js').getInstalledGames();
 	setTimeout(() => require('./js/launchers/find-games.js').loadGames('recentGamesListMainPage'), 200);
 };
 

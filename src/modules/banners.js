@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 function fetch_banner(data) {
 	const htmlparser = require('htmlparser2');
-	const fetch = require('axios');
+	const fetch = require('node-fetch');
 	const arr = [];
 	for (let i = 0; i < data.length; i++) {
 		arr.push((async () => {
@@ -14,7 +14,7 @@ function fetch_banner(data) {
 					return '../icon.ico';
 				});
 
-				const dom = htmlparser.parseDocument(response.data, { 'decodeEntities': true });
+				const dom = htmlparser.parseDocument(await response.text(), { 'decodeEntities': true });
 				const elements = dom.children[1].children[1].children.filter(x => x.name === 'div' && x.children.length > 0)[0].children[0].children.filter(x => x.children.length > 0)[0].children.find(x => x.name === 'main').children[1].children[0].children[0].children[0].children[0].children[0].children[0].children[1].children[0].children.find(x => x.name === 'section').children[0].children[0].children.map(x => x.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0]).filter(x => x.attribs.alt);
 				let index;
 				elements.forEach((element, _index) => {
@@ -50,7 +50,7 @@ function fetch_banner(data) {
 					return '../icon.ico';
 				});
 
-				const dom = htmlparser.parseDocument(response.data, { 'decodeEntities': true });
+				const dom = htmlparser.parseDocument(await response.text(), { 'decodeEntities': true });
 				const elements = dom.children[1].children[1].children.filter(x => x.name === 'div' && x.children.length > 0)[0].children[0].children.filter(x => x.children.length > 0)[0].children.find(x => x.name === 'main').children[1].children[0].children[0].children[0].children[0].children[0].children[0].children[1].children[0].children.find(x => x.name === 'section').children[0].children[0].children.map(x => x.children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0].children[0]).filter(x => x.attribs.alt);
 				let index;
 				elements.forEach((element, _index) => {
@@ -83,6 +83,9 @@ function fetch_banner(data) {
 			}
 			else if (data[i].LauncherName === 'Lunar') {
 				return 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
+			}
+			else if (data[i].LauncherName === 'XboxGames') {
+				return data[i].Banner;
 			}
 		})());
 	}

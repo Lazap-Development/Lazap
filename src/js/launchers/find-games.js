@@ -13,8 +13,9 @@ async function getInstalledGames() {
 
 	// Fetch all games
 	const games = [];
+	games.push(...(await require('./XboxGames').getInstalledGames()));
 	const launchers = fs.readdirSync(__dirname);
-	await launchers.filter(x => require(`./${x}`).getInstalledGames && x !== 'find-games.js').map(launcherName => require(`./${launcherName}`).getInstalledGames()).forEach(async (x) => {
+	await launchers.filter(x => require(`./${x}`).getInstalledGames && !['find-games.js', 'XboxGames.js'].includes(x)).map(launcherName => require(`./${launcherName}`).getInstalledGames()).forEach(async (x) => {
 		games.push(...(await x));
 	});
 
@@ -74,14 +75,19 @@ async function loadGames(id) {
 		// Game Banner creation
 		const gameBanner = document.createElement('img');
 		let banner;
-		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
-			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
-			const md5 = require('md5');
-			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
-			banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../icon.ico';
+		if (game.LauncherName !== 'XboxGames') {
+			if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
+				const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
+				const md5 = require('md5');
+				const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
+				banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../icon.ico';
+			}
+			else {
+				banner = '../icon.ico';
+			}
 		}
 		else {
-			banner = '../icon.ico';
+			banner = game.Banner;
 		}
 		gameBanner.setAttribute('src', banner);
 		gameBanner.style = `opacity: ${id === 'allGames' ? '0.2' : '1'};`;
@@ -210,6 +216,10 @@ function handleLaunch(game) {
 		}
 		case 'Uplay': {
 			res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
+			break;
+		}
+		case 'XboxGames': {
+			res = createProcess('start', [game.LaunchID], game.GameID);
 			break;
 		}
 		default: {
