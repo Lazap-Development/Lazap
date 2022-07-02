@@ -1,7 +1,7 @@
 /* eslint-disable indent */
 function fetch_banner(data) {
 	const htmlparser = require('htmlparser2');
-	const fetch = require('node-fetch');
+	const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 	const arr = [];
 	for (let i = 0; i < data.length; i++) {
 		arr.push((async () => {
@@ -97,7 +97,7 @@ function fetch_banner(data) {
 }
 
 function cacheBanners(data, res) {
-	const fetch = require('node-fetch');
+	const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 	const { checkForDirAndCreate } = require('../utils.js');
 	const path = require('path');
 	const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
