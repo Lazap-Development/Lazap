@@ -25,7 +25,7 @@ app.on('ready', () => {
 			backgroundThrottling: false,
 			zoomFactor: 0.9,
 		},
-		icon: __dirname + (process.platform === 'linux' ? 'icon.png' : 'icon.ico'),
+		icon: __dirname + (process.platform === 'linux' ? '/img/icons/icon.png' : '/img/icons/icon.ico'),
 	});
 
 	mainWindow.loadFile(
@@ -39,7 +39,7 @@ app.on('ready', () => {
 	mainWindow.once('ready-to-show', async () => {
 		mainWindow.show();
 
-		tray = new Tray(__dirname + (process.platform === 'linux' ? '/icon.png' : '/icon.ico'));
+		tray = new Tray(__dirname + (process.platform === 'linux' ? '/img/icons/icon.png' : '/img/icons/icon.ico'));
 		tray.setToolTip('Lazap');
 
 		const contextMenu = Menu.buildFromTemplate([
