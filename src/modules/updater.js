@@ -9,11 +9,11 @@ autoUpdater.logger = logger;
 // Configuration
 autoUpdater.autoInstallOnAppQuit = false;
 autoUpdater.autoDownload = false;
-autoUpdater.checkForUpdatesAndNotify();
-setInterval(() => {
-	// Check for updates regardless of the setting but do not notify or update if disallowed
-	autoUpdater.checkForUpdates().catch(() => '');
-}, 60 * 60 * 1000);
+//autoUpdater.checkForUpdatesAndNotify();
+//setInterval(() => {
+//	// Check for updates regardless of the setting but do not notify or update if disallowed
+//	autoUpdater.checkForUpdates().catch(() => '');
+//}, 60 * 60 * 1000);
 
 autoUpdater.on('error', (...args) => {
 	console.log(args[0]);
