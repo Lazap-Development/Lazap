@@ -301,6 +301,7 @@ body {
     min-width: calc(100% - 900px);
     min-height: 100%;
     border-radius: 10px;
+    image-rendering: auto;
 }
 
 .jump-back {
@@ -385,6 +386,7 @@ body {
     margin-bottom: 35px;
     text-align: center;
     font-size: 22px;
+    font-weight: 600;
     font-family: Comfortaa;
     color: #b9b9b9;
     background-color: transparent;
@@ -395,6 +397,7 @@ body {
 .side-tabs {
     margin-left: 20px;
     position: absolute;
+    font-weight:900;
     height: calc(100% - 220px);
     overflow-y: auto;
 }
