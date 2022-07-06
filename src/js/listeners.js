@@ -1,3 +1,19 @@
+
+const marker = document.getElementById('indicator');
+const home = document.getElementById('home');
+const recent = document.getElementById('recent');
+const games = document.getElementById('games');
+const favs = document.getElementById('favs');
+const friends = document.getElementById('friends');
+const messages = document.getElementById('messages');
+const activity = document.getElementById('activity');
+const settings = document.getElementById('settings-popup');
+const alertbox = document.getElementById('alertbox');
+const settingsbackblur = document.getElementById('settings-backblur');
+
+const { ipcRenderer } = require('electron');
+const fs = require('fs');
+
 window.onload = async function() {
 	// Cache games first before loading
 	await require('./js/launchers/find-games.js').getInstalledGames();
@@ -137,14 +153,12 @@ document.getElementById('settings-btn').addEventListener('click', async function
 	settings.style.display = 'flex';
 });
 
-const settingsbackblur = document.getElementById('settings-backblur');
 settingsbackblur.addEventListener('click', function() {
 	settings.style.display = 'none';
 	settingsbackblur.style.display = 'none';
 });
 
 document.querySelector('.titlebar-settings').addEventListener('click', () => {
-	const fs = require('fs');
 	const Data = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
 	document.querySelectorAll('input[id^=setting-]').forEach((input) => {
 		input.checked = Data[input.id.split('-')[1]] ? true : false;
@@ -160,16 +174,3 @@ function indicator(item) {
 	marker.style.top = item.offsetTop + 'px';
 	marker.style.height = '30px';
 }
-
-const marker = document.getElementById('indicator');
-const home = document.getElementById('home');
-const recent = document.getElementById('recent');
-const games = document.getElementById('games');
-const favs = document.getElementById('favs');
-const friends = document.getElementById('friends');
-const messages = document.getElementById('messages');
-const activity = document.getElementById('activity');
-const settings = document.getElementById('settings-popup');
-const alertbox = document.getElementById('alertbox');
-
-const { ipcRenderer } = require('electron');
