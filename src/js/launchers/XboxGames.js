@@ -1,24 +1,23 @@
-/* eslint-disable no-async-promise-executor */
-function getInstalledGames(os = process.platform) {
+async function getInstalledGames(os = process.platform) {
 	if (!navigator.onLine) return [];
-	return new Promise(async (resolve) => {
-		let { exec } = require('child_process');
-		exec = require('util').promisify(exec);
-		if (os === 'win32') {
-			const { stdout, stderr } = await exec('"C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe" "get-appxpackage"');
-			if (stderr) {
-				console.log(stderr);
-				resolve([]);
-			}
-			let apps = await parseRawToJSON(stdout).filter(x => x.IsFramework !== 'True' && x.SignatureKind === 'Store' && x.PublisherId !== '8wekyb3d8bbwe');
-			apps = (await Promise.all(verifyGames(apps))).filter(async x => typeof (await x) === 'object');
-			apps = apps.filter(x => x?.Banner);
-			resolve(apps.map(x => parseGmeObject(x)));
+	let { exec } = require('child_process');
+	exec = require('util').promisify(exec);
+	if (os === 'win32') {
+		const { stdout, stderr } = await exec('"C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe" "get-appxpackage"');
+		if (stderr) {
+			console.log(stderr);
+			return [];
 		}
-		else {
-			resolve([]);
-		}
-	});
+		let apps = await parseRawToJSON(stdout).filter(x => x.IsFramework !== 'True' && x.SignatureKind === 'Store' && x.PublisherId !== '8wekyb3d8bbwe');
+		apps = (await Promise.all(verifyGames(apps))).filter(async x => {
+			return typeof (await x) === 'object';
+		});
+		apps = apps.filter(x => x?.Banner);
+		return apps.map(x => parseGmeObject(x));
+	}
+	else {
+		return [];
+	}
 }
 
 function parseRawToJSON(res) {
@@ -56,23 +55,22 @@ function verifyGames(jsons) {
 	const arr = [];
 	for (let i = 0; i < jsons.length; i++) {
 		const json = jsons[i];
-		arr.push(new Promise(async (resolve) => {
-			if (!navigator.onLine) return resolve(false);
+		arr.push((async () => {
 			json.Name = json.Name.split('.')[1];
 			const fetch = require('node-fetch');
 			const htmlparser = require('htmlparser2');
 			const response = await fetch(`https://www.microsoft.com/en-in/search/shop/games?q=${encodeURIComponent(json.Name)}&devicetype=pc`);
 			const dom = htmlparser.parseDocument(await response.text(), { 'decodeEntities': true });
 			const list = dom.children.find(x => x.name === 'html').children.find(x => x.name === 'body').children.find(x => x.attribs ? x.attribs['data-grid'] === 'container pad-12x stack-2' : false).children.find(x => x.name === 'section').children.find(x => x.type === 'tag').children.find(x => x.attribs ? x.attribs.id.includes('productplacementlist') : false).children;
-			if (list.find(x => x.name === 'p')) return resolve(false);
+			if (list.find(x => x.name === 'p')) return false;
 
 			const results = list.filter(x => x.type === 'tag').find(x => Object.values(x.attribs).length === 0).children.find(x => x.type === 'tag' && x.name === 'div' && x.attribs?.class).children.filter(x => x.type === 'tag');
 
-			if (!results[0].children[1].children.find(x => x.type === 'tag' && x.attribs?.id?.startsWith('coreui')).children.find(x => x.name === 'h3').children[0].data.toLowerCase().includes(json.Name.toLowerCase())) return resolve();
+			if (!results[0].children[1].children.find(x => x.type === 'tag' && x.attribs?.id?.startsWith('coreui')).children.find(x => x.name === 'h3').children[0].data.toLowerCase().includes(json.Name.toLowerCase())) return;
 
 			json.Banner = results[0].children[1].children.find(x => x.type === 'tag' && !x.attribs?.id?.startsWith('coreui')).children[1].children.find(x => x.name === 'img').attribs['data-src'];
-			return resolve(json);
-		}));
+			return json;
+		})());
 	}
 	return arr;
 }

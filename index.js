@@ -133,7 +133,7 @@ app.on('ready', () => {
 			gameElement.firstElementChild.setAttribute('src', '${await url}');
 		   `);
 		});
-		mainWindow.webContents.send('load-banners-response', id, res.filter(async x => (await x) === '../icon.ico').length === res.length ? true : false);
+		mainWindow.webContents.send('load-banners-response', id, res.filter(async x => (await x) === '../img/icons/icon.ico').length === res.length ? true : false);
 	});
 	ipcMain.on('rpcUpdate', (e, d) => updateRPC(d));
 	ipcMain.on('setLaunchOnStartup', (e, bool) => app.setLoginItemSettings({ 'openAtLogin': bool, 'enabled': bool }));
