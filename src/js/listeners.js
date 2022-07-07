@@ -20,9 +20,6 @@ window.onload = async function () {
 	document.getElementById('main-loading-overlay').style.opacity = '0';
 	document.getElementById('main-loading-overlay').style.visibility = 'hidden';
 	setTimeout(() => require('./js/launchers/find-games.js').loadGames('recentGamesListMainPage'), 200);
-};
-
-window.addEventListener('DOMContentLoaded', (event) => {
 	document.querySelectorAll('.side-tab').forEach((link) =>
 		link.addEventListener('click', (e) => {
 			marker.style.top = '0';
@@ -170,7 +167,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 			ipcRenderer.send('updateSetting', input.id.split('-')[1], document.querySelector(`input[id=${input.id}]`).checked);
 		});
 	});
-})
+};
 
 function indicator(item) {
 	marker.style.top = item.offsetTop + 'px';
