@@ -23,8 +23,7 @@ const getInstalledGames = async () => {
 			console.log(await x);
 			games.push(await x)
 		});
-	}
- else if (process.platform === 'linux') {
+	} else if (process.platform === 'linux') {
 		games.push(...(await mc.getInstalledGames()));
 	}
 
