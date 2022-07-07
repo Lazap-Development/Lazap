@@ -1,5 +1,5 @@
 /* eslint-disable no-async-promise-executor */
-function getInstalledGames(os = process.platform) {
+const getInstalledGames = (os = process.platform) => {
 	if (!navigator.onLine) return [];
 	return new Promise(async (resolve) => {
 		let { exec } = require('child_process');
@@ -21,7 +21,7 @@ function getInstalledGames(os = process.platform) {
 	});
 }
 
-function parseRawToJSON(res) {
+const parseRawToJSON = (res) => {
 	return res.split('\r\n\r\n').slice(1).map(x => {
 		return x.split('\r\n').filter(y => !y.startsWith(' ')).map(y => y.split(':', 3).map((z, i, arr) => `${arr.length === 3 && i !== 0 ? (i === 2 ? '' : '"') : '"'}${z.trim()}${arr.length === 3 && i !== 0 ? (i === 2 ? '"' : '') : '"'}`).join(':')).join(',\n').replaceAll('\\', '/');
 	}).filter(x => x.length > 20).map(x => {
@@ -29,7 +29,7 @@ function parseRawToJSON(res) {
 	});
 }
 
-function parseGmeObject(obj) {
+const parseGmeObject = (obj) => {
 	const fs = require('fs');
 	const {
 		Banner,
@@ -52,7 +52,7 @@ function parseGmeObject(obj) {
 	};
 }
 
-function verifyGames(jsons) {
+const verifyGames = (jsons) => {
 	const arr = [];
 	for (let i = 0; i < jsons.length; i++) {
 		const json = jsons[i];

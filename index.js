@@ -18,7 +18,7 @@ app.on('ready', () => {
 		resizable: true,
 		frame: false,
 		show: false,
-		title: 'Lazap',
+		title: 'Lazap Nightly',
 		webPreferences: {
 			nodeIntegration: true,
 			contextIsolation: false,
@@ -48,6 +48,7 @@ app.on('ready', () => {
 					mainWindow.show();
 				},
 			},
+			{ label: 'get sussy amogus/hide', type: 'normal', click: () => mainWindow.hide() },
 			{ label: 'Exit', type: 'normal', click: () => mainWindow.close() },
 		]);
 		tray.setContextMenu(contextMenu);
@@ -73,6 +74,8 @@ app.on('ready', () => {
 		}
 		require('./src/modules/updater.js')(mainWindow);
 	});
+
+	eventHandler(ipcMain, app);
 
 	ipcMain.on('load-main', () => {
 		mainWindow.loadFile('src/index.html');
@@ -137,10 +140,10 @@ app.on('ready', () => {
 	});
 	ipcMain.on('rpcUpdate', (e, d) => updateRPC(d));
 	ipcMain.on('setLaunchOnStartup', (e, bool) => app.setLoginItemSettings({ 'openAtLogin': bool, 'enabled': bool }));
-	ipcMain.on('restart', async () => {
+	/* ipcMain.on('restart', async () => {
 		app.relaunch();
 		app.exit();
-	});
+	});*/
 });
 
 ipcMain.on('updateSetting', (e, key, bool) => {
@@ -152,21 +155,22 @@ ipcMain.on('updateSetting', (e, key, bool) => {
 	if (requireRestart.includes(key)) ipcMain.emit('restart');
 
 	switch (key) {
-		case 'enableRPC': {
-			updateRPC(bool ? { details: 'On Main Screen', startTimestamp: Date.now(), largeImageKey: 'lazap' } : undefined);
-			break;
-		}
-		case 'launchOnStartup': {
-			ipcMain.emit('setLaunchOnStartup', bool);
-			break;
-		}
+	case 'enableRPC': {
+		updateRPC(bool ? { details: 'On Main Screen', startTimestamp: Date.now(), largeImageKey: 'lazap' } : undefined);
+		break;
+	}
+	case 'launchOnStartup': {
+		ipcMain.emit('setLaunchOnStartup', bool);
+		break;
+	}
 	}
 });
 
 const rpc = require('discord-rpc');
 const rpcClient = new rpc.Client({ transport: 'ipc' });
 rpcClient.login({ clientId: '932504287337148417' });
-function updateRPC(data) {
+
+const updateRPC = (data) => {
 	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData));
 	const LauncherData = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
 	if (LauncherData.enableRPC !== true && typeof data === 'object' && data !== null) return 'DISABLED';
@@ -177,15 +181,17 @@ function updateRPC(data) {
 	rpcClient.setActivity(data).catch(err => console.warn('[RPC]', err.stack.includes('connection closed') ? 'OFFLINE' : err));
 }
 
-const CONSTANTS = require('./Constants.json');
+const CONSTANTS = require('./util/Constants.json');
 const { checkForDirAndCreate, handleStorageAndTransportData, editLocalStorage } = require('./src/utils.js');
 const fs = require('fs');
+const { eventHandler } = require('./util/functions');
 
-handleHardwareAcceleration();
-async function handleHardwareAcceleration() {
+const handleHardwareAcceleration = async () => {
 	// fs.readFileSync('./storage/Settings/LauncherData.json').toString();
 	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData));
 	if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.disableHardwareAcceleration === true) {
 		app.disableHardwareAcceleration();
 	}
 }
+
+handleHardwareAcceleration();

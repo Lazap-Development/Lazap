@@ -24,7 +24,7 @@ autoUpdater.on('update-available', () => {
 });
 
 autoUpdater.on('update-downloaded', (info) => {
-	const isPreRelease = autoUpdater.currentVersion.version.split('.')[2].split('-')[1] ? true : false;
+	const isPreRelease = !!autoUpdater.currentVersion.version.split('.')[2].split('-')[1];
 	const minorVersion = autoUpdater.currentVersion.version.split('.')[1];
 	const majorVersion = autoUpdater.currentVersion.version.split('.')[0];
 	const patchVersion = autoUpdater.currentVersion.version.split('.')[2].split('-')[0];
@@ -53,11 +53,11 @@ ipcMain.on('handle-update-install', () => {
 	autoUpdater.quitAndInstall(false, true);
 });
 
-function getAutoUpdateSetting() {
+const getAutoUpdateSetting = () => {
 	const path = require('path');
 	const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
 	const { checkForDirAndCreate } = require('../utils.js');
-	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/LauncherData.json', JSON.stringify(require('../../Constants.json').defaultLauncherData));
+	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/LauncherData.json', JSON.stringify(require('../../util/Constants.json').defaultLauncherData));
 	const fs = require('fs');
 	const data = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
 	return data.checkForUpdates;

@@ -5,7 +5,7 @@ const alertbox = document.querySelector('.alert-box');
 const alertboxcross = document.getElementById('alertboxexit');
 const ignore = document.getElementById('ignoreBTN');
 
-alertboxcross.addEventListener('click', function() {
+alertboxcross.addEventListener('click', () => {
 	alertbox.style.display = 'none';
 });
 signUpButton.addEventListener('click', () => {

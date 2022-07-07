@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-function fetch_banner(data) {
+const fetch_banner = (data) => {
 	const htmlparser = require('htmlparser2');
 	const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 	const arr = [];
@@ -96,7 +96,7 @@ function fetch_banner(data) {
 	return arr;
 }
 
-function cacheBanners(data, res) {
+const cacheBanners = async (data, res) => {
 	const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 	const { checkForDirAndCreate } = require('../utils.js');
 	const path = require('path');
