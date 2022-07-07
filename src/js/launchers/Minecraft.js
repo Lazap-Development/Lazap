@@ -6,8 +6,7 @@ const getInstalledGames = async (os = process.platform) => {
 	let games = [];
 	if (os === 'win32') {
 		games = [await getMinecraftLauncher(), await getLunarClient()];
-	}
-	if (os === 'linux') {
+	} else if (os === 'linux') {
 		games.push(await getMinecraftLauncherOnLinux()/* , await getLunarClient()*/);
 	}
 	return games;

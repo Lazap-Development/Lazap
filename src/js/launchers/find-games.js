@@ -1,4 +1,26 @@
 /* eslint-disable indent */
+let lastCheck;
+let cachedGames = [];
+const games_blacklist = [
+	'228980', // Steamworks Common Redistributables
+	'231350', // 3D Mark Demo
+];
+let running = false;
+const processes = new Map();
+
+const fs = require('fs');
+const path = require('path');
+const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
+
+module.exports = {
+	loadGames,
+	getInstalledGames,
+};
+
+const { ipcRenderer } = require('electron');
+const { spawn } = require('child_process');
+const { log } = require('electron-log');
+
 console.debug('OS:', process.platform, 'Arch:', process.arch);
 const Constants = require('../../../util/Constants.json');
 const mc = require('./Minecraft.js');
@@ -262,25 +284,3 @@ const createProcess = (Command, Args, GameID, force = false) => {
 
 	return instance;
 };
-
-let lastCheck;
-let cachedGames = [];
-const games_blacklist = [
-	'228980', // Steamworks Common Redistributables
-	'231350', // 3D Mark Demo
-];
-let running = false;
-const processes = new Map();
-
-const fs = require('fs');
-const path = require('path');
-const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
-
-module.exports = {
-	loadGames,
-	getInstalledGames,
-};
-
-const { ipcRenderer } = require('electron');
-const { spawn } = require('child_process');
-const { log } = require('electron-log');
