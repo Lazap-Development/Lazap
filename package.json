@@ -58,7 +58,7 @@
         "electron-updater": "^5.0.5",
         "htmlparser2": "^8.0.1",
         "md5": "^2.3.0",
-        "node-fetch": "^3.2.6",
+        "node-fetch": "^2.6.1",
         "v8-compile-cache": "^2.3.0"
     },
     "devDependencies": {

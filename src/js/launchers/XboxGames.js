@@ -59,7 +59,7 @@ function verifyGames(jsons) {
 		arr.push(new Promise(async (resolve) => {
 			if (!navigator.onLine) return resolve(false);
 			json.Name = json.Name.split('.')[1];
-			const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+			const fetch = require('node-fetch');
 			const htmlparser = require('htmlparser2');
 			const response = await fetch(`https://www.microsoft.com/en-in/search/shop/games?q=${encodeURIComponent(json.Name)}&devicetype=pc`);
 			const dom = htmlparser.parseDocument(await response.text(), { 'decodeEntities': true });
