@@ -12,11 +12,6 @@ const fs = require('fs');
 const path = require('path');
 const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
 
-module.exports = {
-	loadGames,
-	getInstalledGames,
-};
-
 const { ipcRenderer } = require('electron');
 const { spawn } = require('child_process');
 const { log } = require('electron-log');
@@ -283,4 +278,9 @@ const createProcess = (Command, Args, GameID, force = false) => {
 	}), 100);
 
 	return instance;
+};
+
+module.exports = {
+	loadGames,
+	getInstalledGames,
 };
