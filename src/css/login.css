@@ -5,7 +5,7 @@
 
 @font-face {
     font-family: Comfortaa;
-    src: url('../../fonts/Comfortaa-SemiBold.ttf') format('truetype');
+    src: url('../../fonts/Dosis-Medium.ttf') format('truetype');
 }
 
 @keyframes fadeInUp {
@@ -420,7 +420,7 @@ input:focus {
     }
 
     to {
-        width: 30em;
+        width: 24em;
     }
 }
 

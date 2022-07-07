@@ -6,12 +6,13 @@ function fetch_banner(data) {
 	for (let i = 0; i < data.length; i++) {
 		arr.push((async () => {
 			if (data[i].LauncherName === 'EpicGames') {
-				const response = await fetch(`https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(data[i].DisplayName)}&sortBy=releaseDate&sortDir=DESC&count=5&category=Game&start=0`, {
+				return '../img/icons/icon.ico';
+				/* const response = await fetch(`https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(data[i].DisplayName)}&sortBy=releaseDate&sortDir=DESC&count=5&category=Game&start=0`, {
 					method: 'GET',
 					responseType: 'arraybuffer',
 				}).catch((err) => {
 					console.warn(err.stack.slice(0, 500));
-					return '../icon.ico';
+					return '../img/icons/icon.ico';
 				});
 
 				const dom = htmlparser.parseDocument(await response.text(), { 'decodeEntities': true });
@@ -27,7 +28,7 @@ function fetch_banner(data) {
 					}
 				});
 				const element = elements[index] ?? elements[0];
-				return element?.attribs['data-image'] ? element.attribs['data-image'] : '../icon.ico';
+				return element?.attribs['data-image'] ? element.attribs['data-image'] : '../img/icons/icon.ico'; */
 			}
 			else if (data[i].LauncherName === 'Steam') {
 				return `https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`;
@@ -36,18 +37,19 @@ function fetch_banner(data) {
 				return 'https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png';
 			}
 			else if (data[i].LauncherName === 'Uplay') {
-				let ubisoftified = data[i].DisplayName.replaceAll('_', ' ');
+				return '../img/icons/icon.ico';
+				/* let ubisoftified = data[i].DisplayName.replaceAll('_', ' ');
 				if (data[i].DisplayName.replaceAll('_', ' ').match(/\d$/ig) && !data[i].DisplayName.replaceAll('_', ' ').replaceAll('\\d', '').endsWith(' ')) {
 					const numlength = ubisoftified.split('').reverse().join('').match(/\d/ig)[0].length;
 					ubisoftified = ubisoftified.slice(0, ubisoftified.length - numlength) + ' ' + ubisoftified.slice(ubisoftified.length - numlength);
 				}
 
-				/* Use Epic Games to get banners of Uplay Games for now, unless new alternative found */
+				/* Use Epic Games to get banners of Uplay Games for now, unless new alternative found *\/
 				const response = await fetch(`https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(ubisoftified)}&sortBy=releaseDate&sortDir=DESC&count=5&category=Game&start=0`, {
 					method: 'GET',
 				}).catch((err) => {
 					console.warn(err.stack.slice(0, 500));
-					return '../icon.ico';
+					return '../img/icons/icon.ico';
 				});
 
 				const dom = htmlparser.parseDocument(await response.text(), { 'decodeEntities': true });
@@ -73,7 +75,7 @@ function fetch_banner(data) {
 					}
 				});
 				const element = elements[index] ?? elements[0];
-				return element?.attribs['data-image'] ? element?.attribs['data-image'] : '../icon.ico';
+				return element?.attribs['data-image'] ? element?.attribs['data-image'] : '../img/icons/icon.ico'; */
 			}
 			else if (data[i].LauncherName === 'Minecraft') {
 				return 'https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png';
@@ -91,7 +93,7 @@ function fetch_banner(data) {
 	}
 
 	cacheBanners(data, arr.filter(async x => {
-		return (await x) !== '../icon.ico';
+		return (await x) !== '../img/icons/icon.ico';
 	}));
 	return arr;
 }

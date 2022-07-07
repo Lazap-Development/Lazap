@@ -49,7 +49,7 @@ ipcRenderer.on('load-banners-response', (e, id, force) => {
 	const gamesList = document.querySelectorAll('#allGamesList > div');
 	const games = [];
 	for (let i = 0; i < gamesList.length; i++) {
-		if (gamesList.item(i).firstElementChild.getAttribute('src') === '../icon.ico') {
+		if (gamesList.item(i).firstElementChild.getAttribute('src') === '../img/icons/icon.ico') {
 			games.push(gamesList.item(i).firstElementChild);
 		}
 	}
@@ -70,7 +70,7 @@ ipcRenderer.on('load-banners-response', (e, id, force) => {
 			if (force) {
 				loaded++;
 			}
-			else if (game.getAttribute('src') !== '../icon.ico') {
+			else if (game.getAttribute('src') !== '../img/icons/icon.ico') {
 				loaded++;
 			}
 			if (loaded == total) {

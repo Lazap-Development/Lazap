@@ -6,7 +6,7 @@
 
 @font-face {
     font-family: Comfortaa;
-    src: url('../../fonts/Comfortaa-Medium.ttf') format('truetype');
+    src: url('../../fonts/Dosis-Medium.ttf') format('truetype');
 }
 
 @keyframes fadeInUp {
@@ -397,7 +397,7 @@ body {
 .side-tabs {
     margin-left: 20px;
     position: absolute;
-    font-weight:900;
+    font-weight:500;
     height: calc(100% - 220px);
     overflow-y: auto;
 }
@@ -432,7 +432,7 @@ body {
     color: #dadada;
     font-size: 18px;
     margin-left: 20px;
-    padding-top: 12px;
+    padding-top: 9px;
 }
 
 .category-name {

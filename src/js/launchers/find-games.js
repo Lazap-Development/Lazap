@@ -171,7 +171,7 @@ const loadGames = async (id) => {
 	}).filter(x => Object.keys(x).length > 0);
 
 	setGames({ Games: getGames().Games.length < games.length ? games : getGames().Games });
-	ipcRenderer.send('load-banners-request', resolvedGames.filter((x) => x.Banner === '../icon.ico'), id);
+	ipcRenderer.send('load-banners-request', resolvedGames.filter((x) => x.Banner === '../img/icons/icon.ico'), id);
 	running = false;
 };
 
