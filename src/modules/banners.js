@@ -1,7 +1,7 @@
 /* eslint-disable indent */
-const fetch_banner = (data) => {
-	const htmlparser = require('htmlparser2');
-	const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+function fetch_banner(data) {
+	/* const htmlparser = require('htmlparser2');
+	const fetch = require('node-fetch'); */
 	const arr = [];
 	for (let i = 0; i < data.length; i++) {
 		arr.push((async () => {

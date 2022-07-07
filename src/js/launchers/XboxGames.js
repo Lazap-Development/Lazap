@@ -1,5 +1,4 @@
-/* eslint-disable no-async-promise-executor */
-const getInstalledGames = (os = process.platform) => {
+async function getInstalledGames(os = process.platform) {
 	if (!navigator.onLine) return [];
 	return new Promise(async (resolve) => {
 		let { exec } = require('child_process');

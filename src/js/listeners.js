@@ -159,7 +159,7 @@ window.onload = async function () {
 	document.querySelector('.titlebar-settings').addEventListener('click', () => {
 		const Data = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
 		document.querySelectorAll('input[id^=setting-]').forEach((input) => {
-			input.checked = !!Data[input.id.split('-')[1]];
+			input.checked = Data[input.id.split('-')[1]] ? true : false;
 		});
 	});
 	document.querySelectorAll('input[id^=setting-]').forEach((input) => {
