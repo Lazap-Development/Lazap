@@ -257,13 +257,15 @@ const handleLaunch = (game) => {
 		document.querySelector('.alert-box-message').textContent = `${game.DisplayName} is already running!`;
 		document.querySelector('.alert-box').style.marginTop = '40px';
 		document.querySelector('.alert-box').style.visibility = 'visible';
-		document.querySelector('.alert-box').style.opacity = '1';
+		return document.querySelector('.alert-box').style.opacity = '1';
 	}
 
 	addLaunch(game.GameID, game.LauncherName);
 };
 
 const createProcess = (Command, Args, GameID, force = false) => {
+	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
+
 	const instance = spawn(Command, Args, { detached: true, shell: true });
 	processes.set(GameID, instance);
 
@@ -271,6 +273,7 @@ const createProcess = (Command, Args, GameID, force = false) => {
 	instance.on('error', (error) => console.error('[PROC] Error on process', GameID, '\n', error));
 	setTimeout(() => instance.on('exit', (code, signal) => {
 		ipcRenderer.send('show-window');
+		processes.delete(GameID);
 		console.log('[PROC] Process', GameID, 'exited with code', code, 'and signal', signal);
 	}), 100);
 
