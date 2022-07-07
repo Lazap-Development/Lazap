@@ -84,14 +84,19 @@ const loadGames = async (id) => {
 		// Game Banner creation
 		const gameBanner = document.createElement('img');
 		let banner;
-		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
-			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
-			const md5 = require('md5');
-			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
-			banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../img/icons/icon.ico';
+		if (game.LauncherName !== 'XboxGames') {
+			if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
+				const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
+				const md5 = require('md5');
+				const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
+				banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../img/icons/icon.ico';
+			}
+			else {
+				banner = '../img/icons/icon.ico';
+			}
 		}
 		else {
-			banner = '../img/icons/icon.ico';
+			banner = game.Banner;
 		}
 		gameBanner.setAttribute('src', banner);
 		gameBanner.style = `opacity: ${id === 'allGames' ? '0.2' : '1'};`;
