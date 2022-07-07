@@ -257,16 +257,13 @@ const handleLaunch = (game) => {
 		document.querySelector('.alert-box-message').textContent = `${game.DisplayName} is already running!`;
 		document.querySelector('.alert-box').style.marginTop = '40px';
 		document.querySelector('.alert-box').style.visibility = 'visible';
-		return document.querySelector('.alert-box').style.opacity = '1';
+		document.querySelector('.alert-box').style.opacity = '1';
 	}
 
 	addLaunch(game.GameID, game.LauncherName);
 };
 
 const createProcess = (Command, Args, GameID, force = false) => {
-	console.log(processes.get(GameID));
-	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
-
 	const instance = spawn(Command, Args, { detached: true, shell: true });
 	processes.set(GameID, instance);
 
