@@ -96,8 +96,8 @@ function fetch_banner(data) {
 	return arr;
 }
 
-const cacheBanners = async (data, res) => {
-	const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+function cacheBanners(data, res) {
+	const fetch = require('node-fetch');
 	const { checkForDirAndCreate } = require('../utils.js');
 	const path = require('path');
 	const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
