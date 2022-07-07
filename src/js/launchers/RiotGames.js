@@ -1,14 +1,9 @@
-module.exports = {
-	getInstalledGames,
-	parseGameObject,
-};
-
 const fs = require('fs');
 const { promisify } = require('util');
 let { exec } = require('child_process');
 exec = promisify(exec);
 
-async function getInstalledGames(os = process.platform) {
+const getInstalledGames = async (os = process.platform) => {
 	let launcher_location;
 	if (os === 'win32') {
 		const { stdout, error } = await exec(
@@ -33,7 +28,7 @@ async function getInstalledGames(os = process.platform) {
 	return [await parseGameObject(launcher_location)].filter(x => typeof x === 'object' && x !== null);
 }
 
-async function parseGameObject(path) {
+const parseGameObject = async (path) => {
 	const Executable = 'RiotClientServices.exe';
 	const Location = path.slice(0, -22);
 	const Args = ['--launch-product=valorant', '--launch-patchline=live'];
@@ -51,3 +46,8 @@ async function parseGameObject(path) {
 		GameID: 'Valorant',
 	};
 }
+
+module.exports = {
+	getInstalledGames,
+	parseGameObject,
+};

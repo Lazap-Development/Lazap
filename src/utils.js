@@ -1,5 +1,5 @@
-function handleStorageAndTransportData(mainWindow) {
-	const Constants = require('../Constants.json');
+const handleStorageAndTransportData = (mainWindow) => {
+	const Constants = require('../util/Constants.json');
 	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/LauncherData.json', JSON.stringify(Constants.defaultLauncherData));
 	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/userprofile.json', '{}');
 
@@ -22,14 +22,14 @@ function handleStorageAndTransportData(mainWindow) {
 	mainWindow.webContents.send('load-profile', LauncherData);
 }
 
-function editLocalStorage(content) {
+const editLocalStorage = (content) => {
 	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/userprofile.json', '{}');
 	fs.writeFile('./storage/Settings/userprofile.json', JSON.stringify(content), (err) => {
 		if (err) throw err;
 	});
 }
 
-function checkForDirAndCreate(dir, fileContent = '') {
+const checkForDirAndCreate = (dir, fileContent = '') => {
 	if (fs.existsSync(dir.split(APP_BASE_PATH)[1])) return true;
 	dir.split(APP_BASE_PATH)[1].split('/').slice(1).forEach((name, i, arr) => {
 		dir = dir.replaceAll('\\', '/');

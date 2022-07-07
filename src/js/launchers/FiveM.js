@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const user = require('os').userInfo().username;
 
-function getInstalledGames(os = process.platform) {
+const getInstalledGames = (os = process.platform) => {
 	if (os === 'win32') {
 		const isInstalled = fs.existsSync(`C:\\Users\\${user}\\AppData\\Local\\FiveM\\FiveM.exe`);
 		if (!isInstalled) return [];
@@ -17,6 +17,11 @@ function getInstalledGames(os = process.platform) {
 			Executable,
 			Args: [],
 		}];
+	}
+	if(os === 'linux') {
+		return [{
+			game: 'FiveM',
+		}]
 	}
 }
 

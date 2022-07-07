@@ -2,7 +2,7 @@
 let img;
 
 // eslint-disable-next-line no-unused-vars
-function loadFile(event) {
+const loadFile = (event) => {
 	const image = document.getElementById('output');
 	image.src = URL.createObjectURL(event.target.files[0]);
 	img = event.target.files[0].path;

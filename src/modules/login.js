@@ -14,7 +14,7 @@ ipcMain.on('login-identify', async () => {
 
 const { editLocalStorage } = require('../utils.js');
 
-async function handleSignup(data) {
+const handleSignup = async (data) => {
 	let deniedCode;
 	const res = await axios.post('http://localhost:3000/accounts/add-account', data).catch(e => {
 		deniedCode = e.response?.status;
@@ -22,7 +22,7 @@ async function handleSignup(data) {
 	return res ? res.status : deniedCode;
 }
 
-async function handleSignin(data) {
+const handleSignin = async (data) => {
 	let deniedCode;
 	const res = await axios.post('http://localhost:3000/accounts/login', data).catch(e => {
 		deniedCode = e.response?.status;
@@ -50,7 +50,7 @@ async function handleSignin(data) {
 	}
 }
 
-async function identify() {
+const identify = async () => {
 	if (!fs.existsSync('./storage/Settings/userprofile.json')) return { status: 'ACCOUNT_NOT_FOUND', data: null };
 	const { token, password, username } = JSON.parse(fs.readFileSync('./storage/Settings/userprofile.json').toString());
 	const res = await axios.post('http://localhost:3000/accounts/identify', { token, pass: password, name: username }).catch((e) => e.response?.status || 0);

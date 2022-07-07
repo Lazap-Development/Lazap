@@ -152,14 +152,14 @@ ipcMain.on('updateSetting', (e, key, bool) => {
 	if (requireRestart.includes(key)) ipcMain.emit('restart');
 
 	switch (key) {
-		case 'enableRPC': {
-			updateRPC(bool ? { details: 'On Main Screen', startTimestamp: Date.now(), largeImageKey: 'lazap' } : undefined);
-			break;
-		}
-		case 'launchOnStartup': {
-			ipcMain.emit('setLaunchOnStartup', bool);
-			break;
-		}
+	case 'enableRPC': {
+		updateRPC(bool ? { details: 'On Main Screen', startTimestamp: Date.now(), largeImageKey: 'lazap' } : undefined);
+		break;
+	}
+	case 'launchOnStartup': {
+		ipcMain.emit('setLaunchOnStartup', bool);
+		break;
+	}
 	}
 });
 
@@ -177,7 +177,7 @@ function updateRPC(data) {
 	rpcClient.setActivity(data).catch(err => console.warn('[RPC]', err.stack.includes('connection closed') ? 'OFFLINE' : err));
 }
 
-const CONSTANTS = require('./Constants.json');
+const CONSTANTS = require('./util/Constants.json');
 const { checkForDirAndCreate, handleStorageAndTransportData, editLocalStorage } = require('./src/utils.js');
 const fs = require('fs');
 

@@ -1,19 +1,10 @@
-/* eslint-disable prefer-const */
-module.exports = {
-	getSteamLocation,
-	getInstalledGames,
-	parseGameObject,
-	acf_to_json,
-	isLauncherInstalled,
-};
-
 let {
 	exec,
 } = require('child_process');
 const util = require('util');
 exec = util.promisify(exec);
 
-async function getSteamLocation(os = process.platform, checkForSteam = true) {
+const getSteamLocation = async (os = process.platform, checkForSteam = true) => {
 	let launcher_location;
 	let registry_res;
 	if (os === 'win32') {
@@ -37,11 +28,11 @@ async function getSteamLocation(os = process.platform, checkForSteam = true) {
 }
 
 const fs = require('fs');
-function isLauncherInstalled(path) {
+const isLauncherInstalled = (path) => {
 	return fs.existsSync(path);
 }
 
-async function getInstalledGames() {
+const getInstalledGames = async () => {
 	const path = await getSteamLocation();
 	if (!path) return [];
 	const acf_basePath = `${path}\\steamapps`;
@@ -61,7 +52,7 @@ async function getInstalledGames() {
 }
 */
 
-function parseGameObject(acf_object = {}) {
+const parseGameObject = (acf_object = {}) => {
 	let {
 		LauncherPath: Executable,
 		LauncherPath: Location,
@@ -84,7 +75,7 @@ function parseGameObject(acf_object = {}) {
 	};
 }
 
-function acf_to_json(acf_content = '') {
+const acf_to_json = (acf_content = '') => {
 	if (acf_content.length === 0) return;
 	return JSON.parse(
 		acf_content.split('\n').slice(1).map((x, i, arr) => {
@@ -100,3 +91,13 @@ function acf_to_json(acf_content = '') {
 		}).join('\n'),
 	);
 }
+
+
+/* eslint-disable prefer-const */
+module.exports = {
+	getSteamLocation,
+	getInstalledGames,
+	parseGameObject,
+	acf_to_json,
+	isLauncherInstalled,
+};

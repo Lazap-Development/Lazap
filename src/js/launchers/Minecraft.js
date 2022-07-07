@@ -2,15 +2,18 @@ let { exec } = require('child_process');
 exec = require('util').promisify(exec);
 const fs = require('fs');
 const user = require('os').userInfo().username;
-async function getInstalledGames(os = process.platform) {
+const getInstalledGames = async (os = process.platform) => {
 	let games = [];
 	if (os === 'win32') {
 		games = [await getMinecraftLauncher(), await getLunarClient()];
 	}
+	if (os === 'linux') {
+		games.push(await getMinecraftLauncherOnLinux()/* , await getLunarClient()*/);
+	}
 	return games;
 }
 
-async function getMinecraftLauncher() {
+const getMinecraftLauncher = async () => {
 	const { stdout, error } = await exec('Reg query HKEY_CLASSES_ROOT\\Applications\\MinecraftLauncher.exe\\shell\\open\\command /ve').catch(() => { return { error: 'NOT_FOUND' }; });
 	if (error) {
 		const isInstalled = fs.existsSync('C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.0.113.0_x64__8wekyb3d8bbwe\\Minecraft.exe');
@@ -44,7 +47,44 @@ async function getMinecraftLauncher() {
 	}
 }
 
-async function getLunarClient() {
+const getMinecraftLauncherOnLinux = async () => {
+	// eslint-disable-next-line no-unused-vars
+	const { stdout, error } = await exec('which minecraft-launcher').catch(() => { return { error: 'NOT_FOUND' }; });
+	if (!error) {
+		const name = await exec('eval echo $HOME');
+		let a = name.stdout;
+		a = a.substring(0, a.length - 1);
+		const isInstalled = fs.existsSync(`${a}/.minecraft`);
+		if (!isInstalled) return {};
+		const Location = '/usr/bin/minecraft-launcher';
+		const Executable = 'minecraft-launcher';
+		return {
+			DisplayName: 'Minecraft Launcher',
+			LauncherName: 'Minecraft',
+			GameID: 'Minecraft',
+			Size: fs.statSync(Location).size,
+			Location,
+			Executable,
+			Args: [],
+		};
+	} else {
+		const Location = stdout.split('REG_SZ')[1].split('\r\n\r\n')[0].trim().split('" "')[0].split('"').join('').split('\\').slice(0, -1).join('\\');
+		const Args = stdout.split('REG_SZ')[1].split('\r\n\r\n')[0].trim().split('" "')[1].split('"').join('');
+		const Executable = stdout.split('REG_SZ')[1].split('\r\n\r\n')[0].trim().split('" "')[0].split('"').join('').split('\\').slice(-1)[0];
+		if (!fs.existsSync(Location)) return {};
+		return {
+			DisplayName: 'Minecraft Launcher',
+			LauncherName: 'Minecraft',
+			GameID: 'Minecraft',
+			Size: fs.statSync(Location).size,
+			Location,
+			Executable,
+			Args: [Args],
+		};
+	}
+};
+
+const getLunarClient = () => {
 	const isLunarInstalled = fs.existsSync(`C:\\Users\\${user}\\.lunarclient`);
 	if (!isLunarInstalled) return {};
 	const Location = `C:\\Users\\${user}\\AppData\\Local\\Programs\\lunarclient`;

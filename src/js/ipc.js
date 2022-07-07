@@ -5,30 +5,24 @@ fnScript.src = 'js/functions.js';
 document.querySelector('head').appendChild(fnScript);
 
 // eslint-disable-next-line no-unused-vars
-function close_window() {
+const close_window = () => {
 	ipcRenderer.send('close-window');
 }
 
 // eslint-disable-next-line no-unused-vars
-function max_window() {
+const max_window = () => {
 	ipcRenderer.send('max-window');
 }
 
 // eslint-disable-next-line no-unused-vars
-function min_window() {
+const min_window = () => {
 	ipcRenderer.send('min-window');
 }
 
 const { ipcRenderer } = require('electron');
 
 ipcRenderer.on('check-for-login', async (e, r) => {
-	const res = r;
-	if (res.status === 'SUCCESS') {
-		loggedin = true;
-	}
-	else {
-		loggedin = false;
-	}
+	loggedin = r.status === 'SUCCESS';
 });
 
 ipcRenderer.on('handle-update-available', () => {
