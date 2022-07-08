@@ -3,21 +3,22 @@ exec = require('util').promisify(exec);
 const fs = require('fs');
 const user = require('os').userInfo().username;
 async function getInstalledGames(os = process.platform) {
-	let games = [];
 	if (os === 'win32') {
-		games = [await getMinecraftLauncher(), await getLunarClient()];
+		return [await getMinecraftLauncher(), await getLunarClient()].filter(x => x !== false);
 	}
 	else if (os === 'linux') {
-		games.push(await getMinecraftLauncherOnLinux()/* , await getLunarClient()*/);
+		return [await getMinecraftLauncherOnLinux()].filter(x => x !== false);
 	}
-	return games;
+	else {
+		return [];
+	}
 }
 
 async function getMinecraftLauncher() {
 	const { stdout, error } = await exec('Reg query HKEY_CLASSES_ROOT\\Applications\\MinecraftLauncher.exe\\shell\\open\\command /ve').catch(() => { return { error: 'NOT_FOUND' }; });
 	if (error) {
 		const isInstalled = fs.existsSync('C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.0.113.0_x64__8wekyb3d8bbwe\\Minecraft.exe');
-		if (!isInstalled) return {};
+		if (!isInstalled) return false;
 		const Location = 'C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.0.113.0_x64__8wekyb3d8bbwe';
 		const Executable = 'Minecraft.exe';
 		return {
@@ -53,7 +54,7 @@ async function getMinecraftLauncherOnLinux() {
 	if (!error) {
 		const name = await exec('eval echo $HOME');
 		const isInstalled = fs.existsSync(`${name.stdout.substring(0, name.length - 1)}/.minecraft`);
-		if (!isInstalled) return {};
+		if (!isInstalled) return false;
 		const Location = '/usr/bin/minecraft-launcher';
 		const Executable = 'minecraft-launcher';
 		return {
@@ -70,7 +71,7 @@ async function getMinecraftLauncherOnLinux() {
 
 function getLunarClient() {
 	const isLunarInstalled = fs.existsSync(`C:\\Users\\${user}\\.lunarclient`);
-	if (!isLunarInstalled) return {};
+	if (!isLunarInstalled) return false;
 	const Location = `C:\\Users\\${user}\\AppData\\Local\\Programs\\lunarclient`;
 	const Executable = 'Lunar Client.exe';
 	return {
