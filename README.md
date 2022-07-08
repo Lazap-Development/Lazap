@@ -29,10 +29,10 @@
 Installing Lazap is very straight forward. Depending on your operating system, we provided as much ease in terms of installation.<br>
 Currently, Mac Support is pending so we appreciate your paitence.<br>
 
-#### ▸ Windows OS 
+#### ▸ Windows
 `-` Download the latest .exe file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
-#### ▸ Linux OS 
+#### ▸ Linux
 `-` [AUR](https://aur.archlinux.org/packages/lazap) for **Arch Linux** <br>
 `-` For **other distros**, we recommend you to download the latest `.Appimage` in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
