@@ -24,26 +24,26 @@ const getSteamLocation = async (os = process.platform, checkForSteam = true) => 
 			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 		}
 	} else if (os === 'linux') {
-		let text = await fetch('/home/porya/.steam/steam/steamapps/libraryfolders.vdf')
+		const text = await fetch(`${require('os').userInfo().homedir}/.steam/steam/steamapps/libraryfolders.vdf`)
 			.then(response => response.text())
+			// eslint-disable-next-line no-shadow
 			.then(text => {
 				return text;
-			})
+			});
 
 		const VDF = require('../../modules/parseVDF');
-		var parsed = VDF.parse(text);
+		const parsed = VDF.parse(text);
 		const toArray = Object.entries(parsed.libraryfolders);
-		let mappedVDF = toArray.map((item) => {
-			return item[1].path
-		})
-
-		launcher_location = mappedVDF;
+		launcher_location = toArray.map((item) => {
+			return item[1].path;
+		});
 
 	}
 	return launcher_location;
 }
 
 const fs = require('fs');
+const { all } = require('deepmerge');
 
 const isLauncherInstalled = (path) => {
 	return fs.existsSync(path);
@@ -61,15 +61,14 @@ const getInstalledGames = async () => {
 
 		return acf_files;
 	} else if (process.platform === 'linux') {
-		
+		let allGames;
 		await path.forEach(x => {
 			const acf_basePath = `${x}/steamapps`;
 			if (!fs.existsSync(acf_basePath)) return [];
 			const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
 				.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}/${x}`).toString())));
 			console.log(acf_files);
-
-			allGames = acf_files
+			allGames = acf_files;
 			/*		const games = [];
 			const gamesDir = fs.readdirSync('../../.steam/steam/steamapps/common').filter(x => x !== 'Steam.dll' && x !== 'Steamworks Shared' && x !== 'SteamLinuxRuntime_soldier' && !x.startsWith('Proton'));
 			gamesDir.forEach(x => {
