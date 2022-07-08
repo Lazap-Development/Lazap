@@ -2,6 +2,7 @@ let {
 	exec,
 } = require('child_process');
 const util = require('util');
+
 exec = util.promisify(exec);
 
 const getSteamLocation = async (os = process.platform, checkForSteam = true) => {
@@ -23,14 +24,15 @@ const getSteamLocation = async (os = process.platform, checkForSteam = true) => 
 			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 		}
 	} else if (os === 'linux') {
-		launcher_location = '../../.steam/steam';
+		const os = require("os");
+		launcher_location = os.userInfo().homedir + `/.steam/steam`;
 	}
 	if (checkForSteam && !isLauncherInstalled(launcher_location)) return false;
 	return launcher_location;
 }
 
 const fs = require('fs');
-const { log } = require('electron-log');
+
 const isLauncherInstalled = (path) => {
 	return fs.existsSync(path);
 };

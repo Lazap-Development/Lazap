@@ -215,8 +215,6 @@ const setGames = (games) => {
 };
 const getGames = (GameID, LauncherName) => {
 	if (!fs.existsSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1))) checkDirs(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1), '{"Games":[]}');
-	console.log(JSON.parse(fs.readFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1)).toString()).Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName));
-	console.log(JSON.parse(fs.readFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1)).toString()));
 	return GameID ? JSON.parse(fs.readFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1)).toString()).Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName) : JSON.parse(fs.readFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1)).toString());
 };
 const toggleFavourite = (GameID, LauncherName) => {
@@ -239,49 +237,42 @@ const handleLaunch = (game) => {
 	let res;
 	if (process.platform === 'win32') {
 		switch (game.LauncherName) {
-		case 'EpicGames': {
-			res = createProcess('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch`, '--wait'], game.GameID);
-			break;
-		}
-		case 'Steam': {
-			res = createProcess('start', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
-			break;
-		}
-		case 'Uplay': {
-			res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
-			break;
-		}
-		case 'Minecraft': {
-			res = createProcess('minecraft-launcher', [], game.GameID);
-			break;
-		}
-		default: {
-			res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
-			break;
-		}
+			case 'EpicGames': {
+				res = createProcess('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch`, '--wait'], game.GameID);
+				break;
+			}
+			case 'Steam': {
+				res = createProcess('start', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
+				break;
+			}
+			case 'Uplay': {
+				res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
+				break;
+			}
+			case 'Minecraft': {
+				res = createProcess('minecraft-launcher', [], game.GameID);
+				break;
+			}
+			default: {
+				res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+				break;
+			}
 		}
 	} else if (process.platform === 'linux') {
 		switch (game.LauncherName) {
-		case 'EpicGames': {
-			res = createProcess('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch`, '--wait'], game.GameID);
-			break;
-		}
-		case 'steam': {
-			res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
-			break;
-		}
-		case 'Uplay': {
-			res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
-			break;
-		}
-		case 'Minecraft': {
-			res = createProcess('minecraft-launcher', [], game.GameID);
-			break;
-		}
-		default: {
-			res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
-			break;
-		}
+			case 'steam': {
+				res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '-silent'], game.GameID);
+				console.log(game.GameID)
+				break;
+			}
+			case 'Minecraft': {
+				res = createProcess('minecraft-launcher', [], game.GameID);
+				break;
+			}
+			default: {
+				res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
+				break;
+			}
 		}
 	}
 
