@@ -58,7 +58,6 @@
     "dependencies": {
         "deepmerge": "^4.2.2",
         "discord-rpc": "^4.0.1",
-        "electron-log": "^4.4.8",
         "electron-updater": "^5.0.5",
         "htmlparser2": "^8.0.1",
         "md5": "^2.3.0",

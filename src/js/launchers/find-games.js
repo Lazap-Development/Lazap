@@ -14,7 +14,6 @@ const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
 
 const { ipcRenderer } = require('electron');
 const { spawn } = require('child_process');
-const { log } = require('electron-log');
 
 console.debug('OS:', process.platform, 'Arch:', process.arch);
 const Constants = require('../../../util/Constants.json');
