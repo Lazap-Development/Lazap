@@ -30,6 +30,7 @@ const getSteamLocation = async (os = process.platform, checkForSteam = true) => 
 }
 
 const fs = require('fs');
+const { log } = require('electron-log');
 const isLauncherInstalled = (path) => {
 	return fs.existsSync(path);
 };
@@ -47,22 +48,27 @@ const getInstalledGames = async () => {
 	} else if (process.platform === 'linux') {
 		const Location = '/usr/bin/minecraft-launcher';
 		const Executable = 'minecraft-launcher';
-		const games = [];
+		const acf_basePath = `${path}/steamapps`;
+		if (!fs.existsSync(acf_basePath)) return [];
+		const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
+			.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}/${x}`).toString())));
+		console.log(acf_files);
+		/*		const games = [];
 		const gamesDir = fs.readdirSync('../../.steam/steam/steamapps/common').filter(x => x !== 'Steam.dll' && x !== 'Steamworks Shared' && x !== 'SteamLinuxRuntime_soldier' && !x.startsWith('Proton'));
 		gamesDir.forEach(x => {
 			games.push({
 				DisplayName: x,
 				LauncherName: 'steam',
-				GameID: x,
+				GameID: 'game',
 				Size: fs.statSync(Location).size,
 				Location,
 				Executable,
 				Args: [],
 			});
 		})
-		console.log(games);
+		console.log(games);*/
 
-		return games;
+		return acf_files;
 	}
 }
 
@@ -77,15 +83,15 @@ const getInstalledGames = async () => {
 
 const parseGameObject = (acf_object = {}) => {
 	let {
-		LauncherPath: Executable,
+		LauncherExe: Executable,
 		LauncherPath: Location,
 		name: DisplayName,
 		appid: GameID,
 		BytesDownloaded: Size,
 	} = acf_object;
 
-	Executable = Executable.split('\\')[Executable.split('\\').length - 1];
-	Location = Location.split('\\').slice(0, -1).join('\\');
+	// Executable = Executable.split('/')[Executable.split('/').length - 1];
+	// Location = Location.split('/').slice(0, -1).join('/');
 	Size = parseInt(Size);
 
 	return {
@@ -94,7 +100,7 @@ const parseGameObject = (acf_object = {}) => {
 		DisplayName,
 		GameID,
 		Size,
-		LauncherName: 'Steam',
+		LauncherName: 'steam',
 	};
 }
 

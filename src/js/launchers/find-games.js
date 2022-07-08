@@ -4,6 +4,9 @@ let cachedGames = [];
 const games_blacklist = [
 	'228980', // Steamworks Common Redistributables
 	'231350', // 3D Mark Demo
+	'228980',
+	'1493710',
+	'1391110',
 ];
 let running = false;
 const processes = new Map();
@@ -14,7 +17,6 @@ const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
 
 const { ipcRenderer } = require('electron');
 const { spawn } = require('child_process');
-const { log } = require('electron-log');
 
 console.debug('OS:', process.platform, 'Arch:', process.arch);
 const Constants = require('../../../util/Constants.json');
@@ -34,14 +36,15 @@ const getInstalledGames = async () => {
 	// games.push(...(await mc.getInstalledGames()));
 	console.log(games);
 
-	if(process.platform === 'win32') {
+	if (process.platform === 'win32') {
 		const filesInFolder = fs.readdirSync('./src/js/launchers').filter(x => require(`./${x}`).getInstalledGames && x !== 'find-games.js')
 			.map(async x => await require(`./${x}`).getInstalledGames());
 		filesInFolder.forEach(async x => {
 			console.log(await x);
-			games.push(await x)
+			games.push(await x);
 		});
-	} else if (process.platform === 'linux') {
+	}
+	else if (process.platform === 'linux') {
 		games.push(...(await mc.getInstalledGames()));
 		games.push(...(await steam.getInstalledGames()));
 	}
@@ -212,6 +215,8 @@ const setGames = (games) => {
 };
 const getGames = (GameID, LauncherName) => {
 	if (!fs.existsSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1))) checkDirs(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1), '{"Games":[]}');
+	console.log(JSON.parse(fs.readFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1)).toString()).Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName));
+	console.log(JSON.parse(fs.readFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1)).toString()));
 	return GameID ? JSON.parse(fs.readFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1)).toString()).Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName) : JSON.parse(fs.readFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1)).toString());
 };
 const toggleFavourite = (GameID, LauncherName) => {
@@ -224,35 +229,60 @@ const toggleFavourite = (GameID, LauncherName) => {
 const addLaunch = (GameID, LauncherName) => {
 	const data = getGames();
 	if (!data.Games) return;
+	console.log(data.Games);
 	data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).LastLaunch = Date.now();
 	data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches = typeof data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches === 'number' ? data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches + 1 : 1;
-	console.log(data);
 	setGames(data);
 };
 
 const handleLaunch = (game) => {
 	let res;
-	switch (game.LauncherName) {
-	case 'EpicGames': {
-		res = createProcess('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch`, '--wait'], game.GameID);
-		break;
-	}
-	case 'Steam': {
-		res = createProcess('start', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
-		break;
-	}
-	case 'Uplay': {
-		res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
-		break;
-	}
-	case 'Minecraft': {
-		res = createProcess('minecraft-launcher', [], game.GameID);
-		break;
-	}
-	default: {
-		res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
-		break;
-	}
+	if (process.platform === 'win32') {
+		switch (game.LauncherName) {
+		case 'EpicGames': {
+			res = createProcess('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch`, '--wait'], game.GameID);
+			break;
+		}
+		case 'Steam': {
+			res = createProcess('start', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
+			break;
+		}
+		case 'Uplay': {
+			res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
+			break;
+		}
+		case 'Minecraft': {
+			res = createProcess('minecraft-launcher', [], game.GameID);
+			break;
+		}
+		default: {
+			res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+			break;
+		}
+		}
+	} else if (process.platform === 'linux') {
+		switch (game.LauncherName) {
+		case 'EpicGames': {
+			res = createProcess('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch`, '--wait'], game.GameID);
+			break;
+		}
+		case 'steam': {
+			res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
+			break;
+		}
+		case 'Uplay': {
+			res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
+			break;
+		}
+		case 'Minecraft': {
+			res = createProcess('minecraft-launcher', [], game.GameID);
+			break;
+		}
+		default: {
+			res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
+			break;
+		}
+		}
 	}
 
 	if (res === 'RUNNING_ALREADY') {
@@ -269,7 +299,7 @@ const handleLaunch = (game) => {
 const createProcess = (Command, Args, GameID, force = false) => {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
 
-	const instance = spawn(Command, Args, { detached: true, shell: true });
+	const instance = spawn(Command, Args, { detached: false, shell: true });
 	processes.set(GameID, instance);
 
 	instance.on('spawn', () => console.log('[PROC] Process started with ID', GameID));
