@@ -53,6 +53,7 @@ function isLauncherInstalled(path) {
 	else if (Array.isArray(path)) {
 		return path.map(x => fs.existsSync(x)).includes(true);
 	}
+}
 
 async function getInstalledGames() {
 	const path = await getSteamLocation();
@@ -67,15 +68,23 @@ async function getInstalledGames() {
 		return acf_files;
 	}
 	else if (process.platform === 'linux') {
-		let allGames;
+		let allGames = [];
 		await path.forEach(location => {
 			const acf_basePath = `${location}/steamapps`;
 			if (!fs.existsSync(acf_basePath)) return [];
 			const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
 				.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}/${x}`).toString())));
+			
 			allGames.push(acf_files);
+			var result = allGames.flat().reduce((unique, o) => {
+				if(!unique.some(obj => obj.DisplayName === o.DisplayName)) {
+				  unique.push(o);
+				}
+				return unique;
+			},[]);
+			allGames = result;
 		});
-		return allGames.flat();
+		return allGames;
 	}
 }
 /* Game Object Example
