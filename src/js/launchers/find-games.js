@@ -257,7 +257,8 @@ const handleLaunch = (game) => {
 		document.querySelector('.alert-box-message').textContent = `${game.DisplayName} is already running!`;
 		document.querySelector('.alert-box').style.marginTop = '40px';
 		document.querySelector('.alert-box').style.visibility = 'visible';
-		return document.querySelector('.alert-box').style.opacity = '1';
+		document.querySelector('.alert-box').style.opacity = '1';
+		return document.querySelector('.alert-box').style.display = 'flex';
 	}
 
 	addLaunch(game.GameID, game.LauncherName);
