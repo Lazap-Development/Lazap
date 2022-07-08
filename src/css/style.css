@@ -334,6 +334,13 @@ body {
     font-size: 16px;
 }
 
+.online-friends .CMS {
+    color: rgba(226, 226, 226, 0.1);
+    margin-top: 185px;
+    font-size: 38px;
+    transform: rotate(-90deg);
+}
+
 .leftbar {
     background-color: #202126;
     border-radius: 15px;
