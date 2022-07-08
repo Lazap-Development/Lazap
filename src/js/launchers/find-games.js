@@ -19,6 +19,7 @@ const { log } = require('electron-log');
 console.debug('OS:', process.platform, 'Arch:', process.arch);
 const Constants = require('../../../util/Constants.json');
 const mc = require('./Minecraft.js');
+const steam = require('./Steam');
 
 const getInstalledGames = async () => {
 	// Cooldown
@@ -42,6 +43,7 @@ const getInstalledGames = async () => {
 		});
 	} else if (process.platform === 'linux') {
 		games.push(...(await mc.getInstalledGames()));
+		games.push(...(await steam.getInstalledGames()));
 	}
 
 	if (games.length < 1) {
