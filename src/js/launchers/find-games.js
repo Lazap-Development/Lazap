@@ -4,9 +4,13 @@ let cachedGames = [];
 const games_blacklist = [
 	'228980', // Steamworks Common Redistributables
 	'231350', // 3D Mark Demo
-	'228980',
-	'1493710',
-	'1391110',
+	'1493710', // Proton Exp
+	'1391110', // Steam Linux Runtime,
+	'1113280', // Proton 4.11
+	'1245040', // Proton 5.0
+	'1420170', // Proton 5.13
+	'1580130', // Proton 6.3
+	'1887720', // Proton 7.0
 ];
 let running = false;
 const processes = new Map();
