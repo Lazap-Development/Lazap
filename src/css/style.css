@@ -371,7 +371,7 @@ body {
 
 .user-pfp:hover img {
     transition: border-radius 0.2s ease-in-out;
-    border-radius: 10px;
+    border-radius: 14px;
 }
 
 .user-pfp label {
@@ -383,7 +383,7 @@ body {
 
 .username {
     margin-top: 10px;
-    margin-bottom: 35px;
+    margin-bottom: 30px;
     text-align: center;
     font-size: 22px;
     font-weight: 600;
@@ -397,8 +397,7 @@ body {
 .side-tabs {
     margin-left: 20px;
     position: absolute;
-    font-weight:500;
-    height: calc(100% - 220px);
+    height: calc(100% - 225px);
     overflow-y: auto;
 }
 
