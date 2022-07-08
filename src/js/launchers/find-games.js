@@ -264,8 +264,8 @@ const handleLaunch = (game) => {
 		}
 	} else if (process.platform === 'linux') {
 		switch (game.LauncherName) {
-			case 'steam': {
-				res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '-silent'], game.GameID);
+			case 'Steam': {
+				res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '-silent -wait'], game.GameID);
 				console.log(game.GameID)
 				break;
 			}

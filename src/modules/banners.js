@@ -31,7 +31,7 @@ function fetch_banner(data) {
 				return element?.attribs['data-image'] ? element.attribs['data-image'] : '../img/icons/icon.ico'; */
 			}
 			else if (data[i].LauncherName === 'Steam') {
-				return `https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`;
+				return `https://steamcdn-a.akamaihd.net/steam/apps/${data[i].GameID}/library_600x900.jpg`;
 			}
 			else if (data[i].LauncherName === 'RiotGames') {
 				return 'https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png';
@@ -88,9 +88,6 @@ function fetch_banner(data) {
 			}
 			else if (data[i].LauncherName === 'XboxGames') {
 				return data[i].Banner;
-			}
-			else if (data[i].LauncherName === 'steam') {
-				return 'https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg';
 			}
 		})());
 	}

@@ -117,7 +117,7 @@ const parseGameObject = (acf_object = {}) => {
 		DisplayName,
 		GameID,
 		Size,
-		LauncherName: 'steam',
+		LauncherName: 'Steam',
 	};
 }
 
