@@ -48,7 +48,7 @@ const getInstalledGames = async () => {
 		const Location = '/usr/bin/minecraft-launcher';
 		const Executable = 'minecraft-launcher';
 		const games = [];
-		const gamesDir = fs.readdirSync('../../.steam/steam/steamapps/common');
+		const gamesDir = fs.readdirSync('../../.steam/steam/steamapps/common').filter(x => x !== 'Steam.dll' && x !== 'Steamworks Shared' && x !== 'SteamLinuxRuntime_soldier' && !x.startsWith('Proton'));
 		gamesDir.forEach(x => {
 			games.push({
 				DisplayName: x,
