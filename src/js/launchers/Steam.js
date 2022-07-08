@@ -22,8 +22,6 @@ const getSteamLocation = async (os = process.platform, checkForSteam = true) => 
 			registry_res = stdout;
 			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 		}
-	} else if (os === 'linux') {
-		launcher_location = '../../.steam/steam';
 	}
 	if (checkForSteam && !isLauncherInstalled(launcher_location)) return false;
 	return launcher_location;
@@ -32,38 +30,17 @@ const getSteamLocation = async (os = process.platform, checkForSteam = true) => 
 const fs = require('fs');
 const isLauncherInstalled = (path) => {
 	return fs.existsSync(path);
-};
+}
 
 const getInstalledGames = async () => {
 	const path = await getSteamLocation();
 	if (!path) return [];
-	if (process.platform === 'win32') {
-		const acf_basePath = `${path}\\steamapps`;
-		if (!fs.existsSync(acf_basePath)) return [];
-		const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
-			.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
+	const acf_basePath = `${path}\\steamapps`;
+	if (!fs.existsSync(acf_basePath)) return [];
+	const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
+		.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
 
-		return acf_files;
-	} else if (process.platform === 'linux') {
-		const Location = '/usr/bin/minecraft-launcher';
-		const Executable = 'minecraft-launcher';
-		const games = [];
-		const gamesDir = fs.readdirSync('../../.steam/steam/steamapps/common');
-		gamesDir.forEach(x => {
-			games.push({
-				DisplayName: x,
-				LauncherName: 'steam',
-				GameID: x,
-				Size: fs.statSync(Location).size,
-				Location,
-				Executable,
-				Args: [],
-			});
-		})
-		console.log(games);
-
-		return games;
-	}
+	return acf_files;
 }
 
 /* Game Object Example

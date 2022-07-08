@@ -89,9 +89,6 @@ function fetch_banner(data) {
 			else if (data[i].LauncherName === 'XboxGames') {
 				return data[i].Banner;
 			}
-			else if (data[i].LauncherName === 'steam') {
-				return 'https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg';
-			}
 		})());
 	}
 
