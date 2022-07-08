@@ -2,10 +2,6 @@
 let mainWindow;
 const { autoUpdater } = require('electron-updater');
 
-// Logging
-const logger = require('electron-log');
-autoUpdater.logger = logger;
-
 // Configuration
 autoUpdater.autoInstallOnAppQuit = false;
 autoUpdater.autoDownload = false;
