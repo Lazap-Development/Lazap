@@ -23,7 +23,8 @@ async function getSteamLocation(os = process.platform, checkForSteam = true) {
 			registry_res = stdout;
 			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 		}
-	} else if (os === 'linux') {
+	}
+	else if (os === 'linux') {
 		const text = await fetch(`${require('os').userInfo().homedir}/.steam/steam/steamapps/libraryfolders.vdf`)
 			.then(response => response.text())
 			// eslint-disable-next-line no-shadow
@@ -44,7 +45,6 @@ async function getSteamLocation(os = process.platform, checkForSteam = true) {
 }
 
 const fs = require('fs');
-const { all } = require('deepmerge');
 
 function isLauncherInstalled(path) {
 	if (typeof path === 'string') {
@@ -53,7 +53,6 @@ function isLauncherInstalled(path) {
 	else if (Array.isArray(path)) {
 		return path.map(x => fs.existsSync(x)).includes(true);
 	}
-};
 
 async function getInstalledGames() {
 	const path = await getSteamLocation();
@@ -66,34 +65,19 @@ async function getInstalledGames() {
 			.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
 
 		return acf_files;
-	} else if (process.platform === 'linux') {
+	}
+	else if (process.platform === 'linux') {
 		let allGames;
-		await path.forEach(x => {
-			const acf_basePath = `${x}/steamapps`;
+		await path.forEach(location => {
+			const acf_basePath = `${location}/steamapps`;
 			if (!fs.existsSync(acf_basePath)) return [];
 			const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
 				.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}/${x}`).toString())));
-			console.log(acf_files);
-			allGames = acf_files;
-			/*		const games = [];
-			const gamesDir = fs.readdirSync('../../.steam/steam/steamapps/common').filter(x => x !== 'Steam.dll' && x !== 'Steamworks Shared' && x !== 'SteamLinuxRuntime_soldier' && !x.startsWith('Proton'));
-			gamesDir.forEach(x => {
-				games.push({
-					DisplayName: x,
-					LauncherName: 'steam',
-					GameID: 'game',
-					Size: fs.statSync(Location).size,
-					Location,
-					Executable,
-					Args: [],
-				});
-			})
-			console.log(games);*/
+			allGames.push(acf_files);
 		});
-		return allGames;
+		return allGames.flat();
 	}
 }
-
 /* Game Object Example
 {
   "executable": "game.exe",

@@ -20,7 +20,7 @@ async function getInstalledGames(os = process.platform) {
 	}
 }
 
-const parseRawToJSON = (res) => {
+function parseRawToJSON(res) {
 	return res.split('\r\n\r\n').slice(1).map(x => {
 		return x.split('\r\n').filter(y => !y.startsWith(' ')).map(y => y.split(':', 3).map((z, i, arr) => `${arr.length === 3 && i !== 0 ? (i === 2 ? '' : '"') : '"'}${z.trim()}${arr.length === 3 && i !== 0 ? (i === 2 ? '"' : '') : '"'}`).join(':')).join(',\n').replaceAll('\\', '/');
 	}).filter(x => x.length > 20).map(x => {
@@ -28,7 +28,7 @@ const parseRawToJSON = (res) => {
 	});
 }
 
-const parseGmeObject = (obj) => {
+function parseGmeObject(obj) {
 	const fs = require('fs');
 	const {
 		Banner,
@@ -51,7 +51,7 @@ const parseGmeObject = (obj) => {
 	};
 }
 
-const verifyGames = (jsons) => {
+function verifyGames(jsons) {
 	const arr = [];
 	for (let i = 0; i < jsons.length; i++) {
 		const json = jsons[i];
