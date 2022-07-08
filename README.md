@@ -53,7 +53,7 @@ git switch nightly
 # Installs dependencies
 npm install
 ```
-To run lazap afterwards, run `npm start`.
+To run lazap afterwards, do `npm start`.
 
 
 ## Help & Support
