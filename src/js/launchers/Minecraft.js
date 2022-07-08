@@ -52,8 +52,9 @@ async function getMinecraftLauncherOnLinux() {
 	// eslint-disable-next-line no-unused-vars
 	const { stdout, error } = await exec('which minecraft-launcher').catch(() => { return { error: 'NOT_FOUND' }; });
 	if (!error) {
-		const name = await exec('eval echo $HOME');
-		const isInstalled = fs.existsSync(`${name.stdout.substring(0, name.length - 1)}/.minecraft`);
+
+		const homedir = require('os').userInfo().homedir;
+		const isInstalled = fs.existsSync(`${homedir}/.minecraft`);
 		if (!isInstalled) return false;
 		const Location = '/usr/bin/minecraft-launcher';
 		const Executable = 'minecraft-launcher';
