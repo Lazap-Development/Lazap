@@ -24,10 +24,22 @@ const getSteamLocation = async (os = process.platform, checkForSteam = true) => 
 			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 		}
 	} else if (os === 'linux') {
-		const os = require("os");
-		launcher_location = os.userInfo().homedir + `/.steam/steam`;
+		let text = await fetch('/home/porya/.steam/steam/steamapps/libraryfolders.vdf')
+			.then(response => response.text())
+			.then(text => {
+				return text;
+			})
+
+		const VDF = require('../../modules/parseVDF');
+		var parsed = VDF.parse(text);
+		const toArray = Object.entries(parsed.libraryfolders);
+		let mappedVDF = toArray.map((item) => {
+			return item[1].path
+		})
+
+		launcher_location = mappedVDF;
+
 	}
-	if (checkForSteam && !isLauncherInstalled(launcher_location)) return false;
 	return launcher_location;
 }
 
@@ -39,6 +51,7 @@ const isLauncherInstalled = (path) => {
 
 const getInstalledGames = async () => {
 	const path = await getSteamLocation();
+
 	if (!path) return [];
 	if (process.platform === 'win32') {
 		const acf_basePath = `${path}\\steamapps`;
@@ -48,29 +61,31 @@ const getInstalledGames = async () => {
 
 		return acf_files;
 	} else if (process.platform === 'linux') {
-		const Location = '/usr/bin/minecraft-launcher';
-		const Executable = 'minecraft-launcher';
-		const acf_basePath = `${path}/steamapps`;
-		if (!fs.existsSync(acf_basePath)) return [];
-		const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
-			.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}/${x}`).toString())));
-		console.log(acf_files);
-		/*		const games = [];
-		const gamesDir = fs.readdirSync('../../.steam/steam/steamapps/common').filter(x => x !== 'Steam.dll' && x !== 'Steamworks Shared' && x !== 'SteamLinuxRuntime_soldier' && !x.startsWith('Proton'));
-		gamesDir.forEach(x => {
-			games.push({
-				DisplayName: x,
-				LauncherName: 'steam',
-				GameID: 'game',
-				Size: fs.statSync(Location).size,
-				Location,
-				Executable,
-				Args: [],
-			});
-		})
-		console.log(games);*/
+		
+		await path.forEach(x => {
+			const acf_basePath = `${x}/steamapps`;
+			if (!fs.existsSync(acf_basePath)) return [];
+			const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
+				.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}/${x}`).toString())));
+			console.log(acf_files);
 
-		return acf_files;
+			allGames = acf_files
+			/*		const games = [];
+			const gamesDir = fs.readdirSync('../../.steam/steam/steamapps/common').filter(x => x !== 'Steam.dll' && x !== 'Steamworks Shared' && x !== 'SteamLinuxRuntime_soldier' && !x.startsWith('Proton'));
+			gamesDir.forEach(x => {
+				games.push({
+					DisplayName: x,
+					LauncherName: 'steam',
+					GameID: 'game',
+					Size: fs.statSync(Location).size,
+					Location,
+					Executable,
+					Args: [],
+				});
+			})
+			console.log(games);*/
+		});
+		return allGames;
 	}
 }
 
