@@ -3,7 +3,7 @@ const { exec } = require('child_process');
 const pexec = require('util').promisify(exec);
 
 // eslint-disable-next-line no-unused-vars
-const getInstalledGames = async (os = process.platform) => {
+async function getInstalledGames(os = process.platform) {
 	if (os === 'linux') {
 		const checkIfInstalled = exec('find . -name Launcher.exe | head -n 1');
 

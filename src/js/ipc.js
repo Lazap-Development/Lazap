@@ -5,17 +5,17 @@ fnScript.src = 'js/functions.js';
 document.querySelector('head').appendChild(fnScript);
 
 // eslint-disable-next-line no-unused-vars
-const close_window = () => {
+function close_window() {
 	ipcRenderer.send('close-window');
 }
 
 // eslint-disable-next-line no-unused-vars
-const max_window = () => {
+function max_window() {
 	ipcRenderer.send('max-window');
 }
 
 // eslint-disable-next-line no-unused-vars
-const min_window = () => {
+function min_window() {
 	ipcRenderer.send('min-window');
 }
 

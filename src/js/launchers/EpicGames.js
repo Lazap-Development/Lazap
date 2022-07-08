@@ -1,4 +1,4 @@
-const getInstalledGames = (os = process.platform) => {
+function getInstalledGames(os = process.platform) {
 	if (os === 'win32') {
 		if (!isLauncherInstalled()) return [];
 		const fs = require('fs');
@@ -10,14 +10,10 @@ const getInstalledGames = (os = process.platform) => {
 
 		return games.map((x) => parseGameObject(x));
 	}
-	if(os === 'linux') {
-		return [{
-			game: 'EpicGames',
-		}]
-	}
+	return [];
 }
 
-const isLauncherInstalled = (path = 'C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests') => {
+function isLauncherInstalled(path = 'C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests') {
 	return require('fs').existsSync(path);
 }
 /* Game Object Example
@@ -28,7 +24,7 @@ const isLauncherInstalled = (path = 'C:\\ProgramData\\Epic\\EpicGamesLauncher\\D
   "size": 69420 // in bytes
 }
 */
-const parseGameObject = (rawObj = {}) => {
+function parseGameObject(rawObj = {}) {
 	const {
 		LaunchExecutable: Executable,
 		InstallLocation: Location,

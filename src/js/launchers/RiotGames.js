@@ -3,7 +3,7 @@ const { promisify } = require('util');
 let { exec } = require('child_process');
 exec = promisify(exec);
 
-const getInstalledGames = async (os = process.platform) => {
+async function getInstalledGames(os = process.platform) {
 	let launcher_location;
 	if (os === 'win32') {
 		const { stdout, error } = await exec(
@@ -28,7 +28,7 @@ const getInstalledGames = async (os = process.platform) => {
 	return [await parseGameObject(launcher_location)].filter(x => typeof x === 'object' && x !== null);
 }
 
-const parseGameObject = async (path) => {
+async function parseGameObject(path) {
 	const Executable = 'RiotClientServices.exe';
 	const Location = path.slice(0, -22);
 	const Args = ['--launch-product=valorant', '--launch-patchline=live'];

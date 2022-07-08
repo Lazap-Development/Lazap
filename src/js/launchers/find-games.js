@@ -1,4 +1,5 @@
 /* eslint-disable indent */
+console.debug('OS:', process.platform, 'Arch:', process.arch);
 let lastCheck;
 let cachedGames = [];
 const games_blacklist = [
@@ -22,12 +23,9 @@ const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
 const { ipcRenderer } = require('electron');
 const { spawn } = require('child_process');
 
-console.debug('OS:', process.platform, 'Arch:', process.arch);
 const Constants = require('../../../util/Constants.json');
-const mc = require('./Minecraft.js');
-const steam = require('./Steam');
 
-const getInstalledGames = async () => {
+async function getInstalledGames() {
 	// Cooldown
 	if (!lastCheck) {
 		lastCheck = Date.now();
@@ -36,22 +34,8 @@ const getInstalledGames = async () => {
 		return `COOLDOWN_${(lastCheck + 1000 * 60 * 10) - Date.now()}`;
 	}
 	// Fetch all games
-	const games = [];
-	// games.push(...(await mc.getInstalledGames()));
-	console.log(games);
-
-	if (process.platform === 'win32') {
-		const filesInFolder = fs.readdirSync('./src/js/launchers').filter(x => require(`./${x}`).getInstalledGames && x !== 'find-games.js')
-			.map(async x => await require(`./${x}`).getInstalledGames());
-		filesInFolder.forEach(async x => {
-			console.log(await x);
-			games.push(await x);
-		});
-	}
-	else if (process.platform === 'linux') {
-		games.push(...(await mc.getInstalledGames()));
-		games.push(...(await steam.getInstalledGames()));
-	}
+	const launchers = fs.readdirSync('./src/js/launchers').filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
+	const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat();
 
 	if (games.length < 1) {
 		return 'NO_GAMES_FOUND';
@@ -59,9 +43,9 @@ const getInstalledGames = async () => {
 
 	cachedGames = games;
 	return games;
-};
+}
 
-const loadGames = async (id) => {
+async function loadGames(id) {
 	// Prevent duping Game Elements on multiple clicks
 	if (running === true) return;
 	running = true;
@@ -199,9 +183,9 @@ const loadGames = async (id) => {
 	setGames({ Games: getGames().Games.length < games.length ? games : getGames().Games });
 	ipcRenderer.send('load-banners-request', resolvedGames.filter((x) => x.Banner === '../img/icons/icon.ico'), id);
 	running = false;
-};
+}
 
-const sort = (games, type) => {
+function sort(games, type) {
 	if (type === 'alphabetical') {
 		return games.map(x => x.DisplayName).sort().map(x => games[games.findIndex(y => y.DisplayName === x)]);
 	}
@@ -210,34 +194,33 @@ const sort = (games, type) => {
 		return games.filter(x => data.find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName).LastLaunch).sort((a, b) => data.find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch);
 	}
 	return games;
-};
+}
 
 const { checkForDirAndCreate: checkDirs } = require('../../utils.js');
-const setGames = (games) => {
+function setGames(games) {
 	if (!fs.existsSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1))) checkDirs(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1), '{"Games":[]}');
 	fs.writeFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1), JSON.stringify(games));
-};
-const getGames = (GameID, LauncherName) => {
+}
+function getGames(GameID, LauncherName) {
 	if (!fs.existsSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1))) checkDirs(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1), '{"Games":[]}');
 	return GameID ? JSON.parse(fs.readFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1)).toString()).Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName) : JSON.parse(fs.readFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1)).toString());
-};
-const toggleFavourite = (GameID, LauncherName) => {
+}
+function toggleFavourite(GameID, LauncherName) {
 	const data = getGames();
 	if (!data.Games) return;
 	data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite = !data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite;
 
 	setGames(data);
-};
-const addLaunch = (GameID, LauncherName) => {
+}
+function addLaunch(GameID, LauncherName) {
 	const data = getGames();
 	if (!data.Games) return;
-	console.log(data.Games);
 	data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).LastLaunch = Date.now();
 	data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches = typeof data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches === 'number' ? data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches + 1 : 1;
 	setGames(data);
-};
+}
 
-const handleLaunch = (game) => {
+function handleLaunch(game) {
 	let res;
 	if (process.platform === 'win32') {
 		switch (game.LauncherName) {
@@ -262,11 +245,11 @@ const handleLaunch = (game) => {
 				break;
 			}
 		}
-	} else if (process.platform === 'linux') {
+	}
+	else if (process.platform === 'linux') {
 		switch (game.LauncherName) {
 			case 'Steam': {
 				res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '-silent'], game.GameID);
-				console.log(game.GameID)
 				break;
 			}
 			case 'Minecraft': {
@@ -289,9 +272,9 @@ const handleLaunch = (game) => {
 	}
 
 	addLaunch(game.GameID, game.LauncherName);
-};
+}
 
-const createProcess = (Command, Args, GameID, force = false) => {
+function createProcess(Command, Args, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
 
 	const instance = spawn(Command, Args, { detached: false, shell: true });
@@ -306,7 +289,7 @@ const createProcess = (Command, Args, GameID, force = false) => {
 	}), 100);
 
 	return instance;
-};
+}
 
 module.exports = {
 	loadGames,

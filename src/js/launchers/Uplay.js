@@ -1,7 +1,7 @@
 let { exec } = require('child_process');
 exec = require('util').promisify(exec);
 
-const getUplayLocation = async (os = process.platform, checkForUplay = true) => {
+async function getUplayLocation(os = process.platform, checkForUplay = true) {
 	let launcher_location;
 	let registry_res;
 	if (os === 'win32') {
@@ -20,12 +20,15 @@ const getUplayLocation = async (os = process.platform, checkForUplay = true) => 
 			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 		}
 	}
+	else {
+		return;
+	}
 	if (checkForUplay && !isLauncherInstalled(launcher_location)) return false;
 	return launcher_location;
 }
 
 const fs = require('fs');
-const getInstalledGames = async () => {
+async function getInstalledGames() {
 	const path = await getUplayLocation();
 	if (!path) return [];
 	const dataPath = `${path}\\data`;
@@ -33,7 +36,7 @@ const getInstalledGames = async () => {
 	return (await Promise.all(games.map(x => parseGameObject(x)))).filter(x => typeof x === 'object' && x !== null);
 }
 
-const parseGameObject = async (GameID) => {
+async function parseGameObject(GameID) {
 	const { stdout: registry_res, error } = await exec(`Reg Query "HKEY_LOCAL_MACHINE\\SOFTWARE\\${process.arch === 'x64' ? 'Wow6432Node\\' : ''}Ubisoft\\Launcher\\Installs\\${GameID}" /v InstallDir`).catch(() => {
 		return { error: `${GameID} NOT_FOUND` };
 	});
@@ -56,7 +59,7 @@ const parseGameObject = async (GameID) => {
 	};
 }
 
-const isLauncherInstalled = (path) => {
+function isLauncherInstalled(path) {
 	return fs.existsSync(path);
 }
 

@@ -5,7 +5,7 @@ const util = require('util');
 
 exec = util.promisify(exec);
 
-const getSteamLocation = async (os = process.platform, checkForSteam = true) => {
+async function getSteamLocation(os = process.platform, checkForSteam = true) {
 	let launcher_location;
 	let registry_res;
 	if (os === 'win32') {
@@ -23,33 +23,37 @@ const getSteamLocation = async (os = process.platform, checkForSteam = true) => 
 			registry_res = stdout;
 			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 		}
-	} else if (os === 'linux') {
-		let text = await fetch('/home/porya/.steam/steam/steamapps/libraryfolders.vdf')
+	}
+	else if (os === 'linux') {
+		const text = await fetch('/home/porya/.steam/steam/steamapps/libraryfolders.vdf')
 			.then(response => response.text())
-			.then(text => {
-				return text;
-			})
+			.then(_ => _);
 
 		const VDF = require('../../modules/parseVDF');
-		var parsed = VDF.parse(text);
+		const parsed = VDF.parse(text);
 		const toArray = Object.entries(parsed.libraryfolders);
-		let mappedVDF = toArray.map((item) => {
-			return item[1].path
-		})
+		const mappedVDF = toArray.map((item) => {
+			return item[1].path;
+		});
 
 		launcher_location = mappedVDF;
-
 	}
+	if (checkForSteam && !isLauncherInstalled(launcher_location)) return false;
 	return launcher_location;
 }
 
 const fs = require('fs');
 
-const isLauncherInstalled = (path) => {
-	return fs.existsSync(path);
+function isLauncherInstalled(path) {
+	if (typeof path === 'string') {
+		return fs.existsSync(path);
+	}
+	else if (Array.isArray(path)) {
+		return path.map(x => fs.existsSync(x)).includes(true);
+	}
 };
 
-const getInstalledGames = async () => {
+async function getInstalledGames() {
 	const path = await getSteamLocation();
 
 	if (!path) return [];
@@ -98,8 +102,8 @@ const getInstalledGames = async () => {
 }
 */
 
-const parseGameObject = (acf_object = {}) => {
-	let {
+function parseGameObject(acf_object = {}) {
+	const {
 		LauncherExe: Executable,
 		LauncherPath: Location,
 		name: DisplayName,
@@ -109,19 +113,18 @@ const parseGameObject = (acf_object = {}) => {
 
 	// Executable = Executable.split('/')[Executable.split('/').length - 1];
 	// Location = Location.split('/').slice(0, -1).join('/');
-	Size = parseInt(Size);
 
 	return {
 		Executable,
 		Location,
 		DisplayName,
 		GameID,
-		Size,
+		Size: parseInt(Size),
 		LauncherName: 'Steam',
 	};
 }
 
-const acf_to_json = (acf_content = '') => {
+function acf_to_json(acf_content = '') {
 	if (acf_content.length === 0) return;
 	return JSON.parse(
 		acf_content.split('\n').slice(1).map((x, i, arr) => {
@@ -138,8 +141,6 @@ const acf_to_json = (acf_content = '') => {
 	);
 }
 
-
-/* eslint-disable prefer-const */
 module.exports = {
 	getSteamLocation,
 	getInstalledGames,

@@ -59,7 +59,8 @@ const verifyGames = (jsons) => {
 			json.Name = json.Name.split('.')[1];
 			const fetch = require('node-fetch');
 			const htmlparser = require('htmlparser2');
-			const response = await fetch(`https://www.microsoft.com/en-in/search/shop/games?q=${encodeURIComponent(json.Name)}&devicetype=pc`);
+			const response = await fetch(`https://www.microsoft.com/en-in/search/shop/games?q=${encodeURIComponent(json.Name)}&devicetype=pc`).catch(() => '');
+			if (response === '') return;
 			const dom = htmlparser.parseDocument(await response.text(), { 'decodeEntities': true });
 			const list = dom.children.find(x => x.name === 'html').children.find(x => x.name === 'body').children.find(x => x.attribs ? x.attribs['data-grid'] === 'container pad-12x stack-2' : false).children.find(x => x.name === 'section').children.find(x => x.type === 'tag').children.find(x => x.attribs ? x.attribs.id.includes('productplacementlist') : false).children;
 			if (list.find(x => x.name === 'p')) return false;
