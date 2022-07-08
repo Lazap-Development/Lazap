@@ -8,7 +8,7 @@ async function getInstalledGames(os = process.platform) {
 			console.log(stderr);
 			return [];
 		}
-		let apps = await parseRawToJSON(stdout).filter(x => x.IsFramework !== 'True' && x.SignatureKind === 'Store' && x.PublisherId !== '8wekyb3d8bbwe');
+		let apps = await parseRawToJSON(stdout).filter(x => x.IsFramework !== 'True' && x.SignatureKind === 'Store' && x.PublisherId !== '8wekyb3d8bbwe' && !x.PackageFullName.startsWith('MicrosoftWindows'));
 		apps = (await Promise.all(verifyGames(apps))).filter(async x => {
 			return typeof (await x) === 'object';
 		});
