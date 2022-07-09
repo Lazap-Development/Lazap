@@ -4,9 +4,7 @@ let { exec } = require('child_process');
 exec = promisify(exec);
 
 function getRiotGamesLocation(launcher_location) {
-        const array = launcher_location.split("\\");
-        array.splice(array.indexOf("Riot Client"), 2);
-        return array.join("\\");
+	return launcher_location.split('\\').slice(0, -2).join('\\');
 }
 
 async function getInstalledGames(os = process.platform) {
@@ -32,27 +30,19 @@ async function getInstalledGames(os = process.platform) {
 	}
 
 	if (!fs.existsSync(launcher_location)) return [];
-        
-        let allGames = [];
-        const games = fs.readdirSync(getRiotGamesLocation((launcher_location)));
-        const indexToRemove = games.indexOf("Riot Client");
-        games.splice(indexToRemove, 1);
+	const games = fs.readdirSync(getRiotGamesLocation((launcher_location))).filter(x => x !== 'Riot Client');
 
-        if (games.includes("VALORANT")) {
-          games[games.indexOf("VALORANT")] = "Valorant";
-        }
+	if (games.includes('VALORANT')) {
+		games[games.indexOf('VALORANT')] = 'Valorant';
+	}
 
-        for (i = 0; i < games.length; i++) {
-                  allGames.push(await parseGameObject(launcher_location, games[i]));
-        }
-
-        return allGames;
+	return games.map(x => parseGameObject(launcher_location, x));
 }
 
-async function parseGameObject(path, game = '') {
+function parseGameObject(path, game = '') {
 	const Executable = 'RiotClientServices.exe';
 	const Location = path.slice(0, -22);
-	const Args = [`--launch-product=${game.toLowerCase().replace(" ", "_").replace(" ", "_")}`, '--launch-patchline=live'];
+	const Args = [`--launch-product=${game.toLowerCase().replaceAll(' ', '_')}`, '--launch-patchline=live'];
 	const DisplayName = game;
 	if (!fs.existsSync(Location.slice(0, -12) + game)) return;
 	const Size = fs.statSync(Location.slice(0, -12) + game).size;
