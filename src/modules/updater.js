@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-/*let mainWindow;
+/* let mainWindow;
 const { autoUpdater } = require('electron-updater');
 
 // Configuration

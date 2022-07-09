@@ -22,15 +22,15 @@ const handleStorageAndTransportData = (mainWindow, userDataPath) => {
 	}
 
 	mainWindow.webContents.send('load-profile', LauncherData);
-}
+};
 
 const editLocalStorage = (content, userDataPath) => {
-	
+
 	checkForDirAndCreate(userDataPath + '/storage/Settings/userprofile.json', '{}', userDataPath);
 	fs.writeFile(userDataPath + '/storage/Settings/userprofile.json', JSON.stringify(content), (err) => {
 		if (err) throw err;
 	});
-}
+};
 
 const checkForDirAndCreate = (dir, fileContent = '', userDataPath) => {
 	if (fs.existsSync(dir.split(userDataPath)[1])) return true;
@@ -46,7 +46,7 @@ const checkForDirAndCreate = (dir, fileContent = '', userDataPath) => {
 			}
 		}
 	});
-}
+};
 
 module.exports = {
 	checkForDirAndCreate,

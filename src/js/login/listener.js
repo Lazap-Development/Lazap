@@ -6,8 +6,8 @@ const alertboxcross = document.getElementById('alertboxexit');
 const ignore = document.getElementById('ignoreBTN');
 let userDataPath;
 (async () => {
-    const result = await ipcRenderer.invoke('read-path');
-    userDataPath = result
+	const result = await ipcRenderer.invoke('read-path');
+	userDataPath = result;
 })();
 
 alertboxcross.addEventListener('click', () => {

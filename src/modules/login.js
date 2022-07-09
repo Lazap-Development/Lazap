@@ -4,8 +4,8 @@ const { ipcMain } = require('electron');
 let mainWindow;
 let userDataPath;
 (async () => {
-    const result = await ipcRenderer.invoke('read-path');
-    userDataPath = result
+	const result = await ipcRenderer.invoke('read-path');
+	userDataPath = result;
 })();
 ipcMain.on('signup-request', async (e, data) => {
 	mainWindow.webContents.send('signup-response', await handleSignup(data));
@@ -25,7 +25,7 @@ const handleSignup = async (data) => {
 		deniedCode = e.response?.status;
 	});
 	return res ? res.status : deniedCode;
-}
+};
 
 const handleSignin = async (data) => {
 	let deniedCode;
@@ -53,7 +53,7 @@ const handleSignin = async (data) => {
 	else {
 		return deniedCode || null;
 	}
-}
+};
 
 const identify = async () => {
 	if (!fs.existsSync(userDataPath + '/storage/Settings/userprofile.json')) return { status: 'ACCOUNT_NOT_FOUND', data: null };
@@ -68,7 +68,7 @@ const identify = async () => {
 	};
 
 	return { data: res.data, status: errcodes[res.request?.res.statusCode] || 'OFFLINE/API_DOWN' };
-}
+};
 
 module.exports = {
 	handleSignin,

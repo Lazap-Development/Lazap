@@ -151,7 +151,7 @@ app.on('ready', () => {
 	ipcMain.handle('read-path', async () => {
 		const path = app.getPath('userData');
 		return path;
-	})
+	});
 
 });
 

@@ -93,7 +93,7 @@ function fetch_banner(data, userDataPath) {
 		})());
 	}
 
-	cacheBanners(data, arr.filter(async x => { return (await x) !== '../img/icons/icon.ico'}), userDataPath);
+	cacheBanners(data, arr.filter(async x => { return (await x) !== '../img/icons/icon.ico';}), userDataPath);
 	return arr;
 }
 

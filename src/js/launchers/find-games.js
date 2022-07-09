@@ -23,7 +23,7 @@ const { spawn } = require('child_process');
 let userDataPath;
 (async () => {
 	const result = await ipcRenderer.invoke('read-path');
-	userDataPath = result
+	userDataPath = result;
 })();
 
 async function getInstalledGames() {
@@ -54,6 +54,7 @@ async function loadGames(id) {
 	let games = await getInstalledGames();
 	const list = document.getElementById(id) ?? document.getElementById(`${id}List`);
 
+	console.log(games);
 	// Cache results or get from cache if cooldown
 	if (typeof games === 'string' && games.startsWith('COOLDOWN')) {
 		games = cachedGames;
@@ -66,25 +67,31 @@ async function loadGames(id) {
 		cachedGames = games;
 	}
 
-	const resolvedGames = sort(games.filter(x => {
+	let resolvedGames = sort(games.filter(x => {
 		if (games_blacklist.includes(x.GameID)) return false;
 		if (id === 'allGames') {
 			return true;
 		}
 		else if (id === 'recentGames') {
 			const data = getGames(x.GameID, x.LauncherName);
-			return !!data?.Launches;
+			return !data?.Launches;
 		}
 		else if (id === 'favGames') {
 			const data = getGames(x.GameID, x.LauncherName);
-			return !!data?.Favourite;
+			return !data?.Favourite;
 		}
 		else if (id.startsWith('recent') && id.includes('Main')) {
 			const data = getGames(x.GameID, x.LauncherName);
-			return !!data?.Launches;
+			return !data?.Launches;
 		}
-	}), id === 'allGames' ? 'alphabetical' : id === 'recentGames' || (id.startsWith('recent') && id.includes('Main')) ? 'lastLaunch' : 'none').map((game) => {
-		const GAME_BANNERS_BASE_PATH = userDataPath + "/storage/Cache/Games/Images"
+	}), id === 'allGames' ? 'alphabetical' : id === 'recentGames' || (id.startsWith('recent') && id.includes('Main')) ? 'lastLaunch' : 'none');
+
+	if ((list.children.length === resolvedGames.length) && list.children.length !== 0) {
+		if (resolvedGames.every((x, i) => list.children.item(i).id === `game-div-${x.DisplayName}`)) return;
+	}
+
+	resolvedGames = resolvedGames.map((game) => {
+		const GAME_BANNERS_BASE_PATH = userDataPath + '/storage/Cache/Games/Images';
 
 		// Gamebox creation
 		const gameElement = document.createElement('div');
@@ -107,7 +114,6 @@ async function loadGames(id) {
 			else {
 				banner = '../img/icons/icon.ico';
 			}
-			console.log(banner)
 		}
 		else {
 			banner = game.Banner;
@@ -204,13 +210,13 @@ function sort(games, type) {
 
 const { checkForDirAndCreate: checkDirs } = require('../../utils.js');
 function setGames(games) {
-	const GAMES_DATA_BASE_PATH = "/storage/Cache/Games/Data.json"
+	const GAMES_DATA_BASE_PATH = '/storage/Cache/Games/Data.json';
 
 	if (!fs.existsSync(userDataPath + GAMES_DATA_BASE_PATH)) checkDirs(userDataPath + GAMES_DATA_BASE_PATH, '{"Games":[]}', userDataPath);
 	fs.writeFileSync(userDataPath + GAMES_DATA_BASE_PATH, JSON.stringify(games));
 }
 function getGames(GameID, LauncherName) {
-	const GAMES_DATA_BASE_PATH = "/storage/Cache/Games/Data.json"
+	const GAMES_DATA_BASE_PATH = '/storage/Cache/Games/Data.json';
 
 	if (!fs.existsSync(userDataPath + GAMES_DATA_BASE_PATH)) checkDirs(userDataPath + GAMES_DATA_BASE_PATH, '{"Games":[]}', userDataPath);
 	return GameID ? JSON.parse(fs.readFileSync(userDataPath + GAMES_DATA_BASE_PATH).toString()).Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName) : JSON.parse(fs.readFileSync(userDataPath + GAMES_DATA_BASE_PATH).toString());
