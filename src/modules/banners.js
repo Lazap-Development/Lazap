@@ -41,6 +41,9 @@ function fetch_banner(data) {
                                 if(data[i].DisplayName == "League of Legends") {
                                       return 'https://images.igdb.com/igdb/image/upload/t_cover_big/co49wj.png';
                                 }
+                                if(data[i].DisplayName == "Legends of Runeterra") {
+                                      return 'https://images.igdb.com/igdb/image/upload/t_cover_big/co3wnv.png';
+                                }
 			}
 			else if (data[i].LauncherName === 'Uplay') {
 				return '../img/icons/icon.ico';
