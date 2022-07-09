@@ -2,6 +2,11 @@ const axios = require('axios').default;
 const fs = require('fs');
 const { ipcMain } = require('electron');
 let mainWindow;
+let userDataPath;
+(async () => {
+	const result = await ipcRenderer.invoke('read-path');
+	userDataPath = result;
+})();
 ipcMain.on('signup-request', async (e, data) => {
 	mainWindow.webContents.send('signup-response', await handleSignup(data));
 });
@@ -20,7 +25,7 @@ const handleSignup = async (data) => {
 		deniedCode = e.response?.status;
 	});
 	return res ? res.status : deniedCode;
-}
+};
 
 const handleSignin = async (data) => {
 	let deniedCode;
@@ -30,8 +35,8 @@ const handleSignin = async (data) => {
 
 	if (res) {
 		// console.log(res.data);
-		if (fs.existsSync('./storage/Settings/userprofile.json')) {
-			const json = JSON.parse(fs.readFileSync('./storage/Settings/userprofile.json').toString());
+		if (fs.existsSync(userDataPath + '/storage/Settings/userprofile.json')) {
+			const json = JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/userprofile.json').toString());
 			json['token'] = res.data;
 			json['password'] = data.pass;
 			json['username'] = data.username;
@@ -48,11 +53,11 @@ const handleSignin = async (data) => {
 	else {
 		return deniedCode || null;
 	}
-}
+};
 
 const identify = async () => {
-	if (!fs.existsSync('./storage/Settings/userprofile.json')) return { status: 'ACCOUNT_NOT_FOUND', data: null };
-	const { token, password, username } = JSON.parse(fs.readFileSync('./storage/Settings/userprofile.json').toString());
+	if (!fs.existsSync(userDataPath + '/storage/Settings/userprofile.json')) return { status: 'ACCOUNT_NOT_FOUND', data: null };
+	const { token, password, username } = JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/userprofile.json').toString());
 	const res = await axios.post('http://localhost:3000/accounts/identify', { token, pass: password, name: username }).catch((e) => e.response?.status || 0);
 
 	const errcodes = {
@@ -63,7 +68,7 @@ const identify = async () => {
 	};
 
 	return { data: res.data, status: errcodes[res.request?.res.statusCode] || 'OFFLINE/API_DOWN' };
-}
+};
 
 module.exports = {
 	handleSignin,

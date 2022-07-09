@@ -46,6 +46,6 @@ async function getInstalledGames(os = process.platform) {
 		}
 	}
 	else if (os === 'win32') {
-		let allGames = (await pexec('Reg query "HKEY_LOCAL_MACHINE\\SOFTWARE\\Rockstar Games" /s')).stdout?.split('\n');
+		const allGames = (await pexec('Reg query "HKEY_LOCAL_MACHINE\\SOFTWARE\\Rockstar Games" /s')).stdout?.split('\n');
 	}
-};
+}

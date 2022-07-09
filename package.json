@@ -7,6 +7,9 @@
         "start": "electron .",
         "build": "IF exist \"dist\" ( rmdir /s /q dist && electron-builder build ) ELSE ( electron-builder build )",
         "build:dev": "IF exist \"dist\" ( rmdir /s /q dist && electron-builder build --dir ) ELSE ( electron-builder build --dir )",
+        "build:armv7h": "electron-builder build --armv7l --linux dir",
+        "build:i686": "electron-builder build --ia32 --linux dir",
+        "build:x86_64": "electron-builder build --x64 --linux dir",
         "publish:draft": "echo Make sure to change the publish settings if you are testing! && pause && IF exist \"dist\" ( rmdir /s /q dist && electron-builder build -p onTagOrDraft ) ELSE ( electron-builder build -p onTagOrDraft )"
     },
     "build": {
