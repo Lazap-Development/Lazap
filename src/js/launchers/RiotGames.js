@@ -5,8 +5,8 @@ exec = promisify(exec);
 
 function getRiotGamesLocation(launcher_location) {
         const array = launcher_location.split("\\");
-        array.length = 2;
-        return array.join("\\")
+        array.splice(array.indexOf("Riot Client"), 2);
+        return array.join("\\");
 }
 
 async function getInstalledGames(os = process.platform) {
