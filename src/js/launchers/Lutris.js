@@ -23,9 +23,10 @@ async function getLutrisLocation(os = process.platform, checkForSteam = true) {
 			registry_res = stdout;
 			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 		}
-	}  else if (os === 'linux') {
+	}
+	else if (os === 'linux') {
 		const homedir = require('os').userInfo().homedir;
-		launcher_location = `${homedir}/.local/share/lutris`
+		launcher_location = `${homedir}/.local/share/lutris`;
 	}
 	if (checkForSteam && !isLauncherInstalled(launcher_location)) return false;
 	return launcher_location;
@@ -33,6 +34,9 @@ async function getLutrisLocation(os = process.platform, checkForSteam = true) {
 
 const fs = require('fs');
 const VDF = require('../../modules/parseVDF');
+const yaml = require('js-yaml');
+const { loadGames } = require('./find-games');
+const { Database } = require('sqlite3');
 
 function isLauncherInstalled(path) {
 	if (typeof path === 'string') {
@@ -45,8 +49,8 @@ function isLauncherInstalled(path) {
 
 async function getInstalledGames() {
 	const path = await getLutrisLocation();
-
 	if (!path) return [];
+
 	if (process.platform === 'win32') {
 		const acf_basePath = `${path}\\steamapps`;
 		if (!fs.existsSync(acf_basePath)) return [];
@@ -57,10 +61,31 @@ async function getInstalledGames() {
 	}
 	else if (process.platform === 'linux') {
 		let allGames = [];
+		let allDBGames = [];
 
-		return allGames;
+		const path = fs.readdirSync(`${require('os').userInfo().homedir}/.config/lutris/games`);
+		const LutrisDB = new Database(`${require('os').userInfo().homedir}/.local/share/lutris/pga.db`);
+		// let obj = {};
+		await LutrisDB.all(`SELECT * FROM games`, (err, info) => {
+			info.forEach(x => {
+				const obj = {
+					DisplayName: x.name,
+					GameID: 'yourmom',
+					LauncherName: 'Lutris',
+					Executable: 'xd',
+					Location: 'xd',
+					Size: 9999,
+				}
+				allDBGames.push(obj);
+			})
+		});
+		// path.forEach(x => obj = yaml.load(fs.readFileSync(`${require('os').userInfo().homedir}/.config/lutris/games/${x}`, { encoding: 'utf-8' })));
+		console.log(allDBGames);
+		// console.log(obj);
+		return allDBGames;
 	}
 }
+
 /* Game Object Example
 {
   "executable": "game.exe",

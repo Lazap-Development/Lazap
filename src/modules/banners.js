@@ -30,6 +30,9 @@ function fetch_banner(data, userDataPath) {
 				const element = elements[index] ?? elements[0];
 				return element?.attribs['data-image'] ? element.attribs['data-image'] : '../img/icons/icon.ico'; */
 			}
+			else if (data[i].LauncherName === 'Lutris') {
+				return '../img/icons/icon.ico';
+			}
 			else if (data[i].LauncherName === 'Steam') {
 				if(data[i].DisplayName === 'FrostRunner') return '../img/icons/icon.ico';
 				return `https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`;

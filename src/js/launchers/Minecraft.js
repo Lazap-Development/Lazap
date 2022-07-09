@@ -7,7 +7,6 @@ async function getInstalledGames(os = process.platform) {
 		return [await getMinecraftLauncher(), await getLunarClient()].filter(x => x !== false);
 	}
 	else if (os === 'linux') {
-		console.log([await getMinecraftLauncherOnLinux(), await getLunarClient()].filter(x => x !== false));
 		return [await getMinecraftLauncherOnLinux(), await getLunarClient()].filter(x => x !== false);
 	}
 	else {

@@ -17,8 +17,12 @@ let running = false;
 const processes = new Map();
 
 const fs = require('fs');
+const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
+const path = require('path');
+const homeDir = require('os').userInfo().homedir;
+
 const { ipcRenderer } = require('electron');
-const { spawn } = require('child_process');
+const { spawn, exec } = require('child_process');
 
 let userDataPath;
 (async () => {
@@ -35,10 +39,9 @@ async function getInstalledGames() {
 		return `COOLDOWN_${(lastCheck + 1000 * 4) - Date.now()}`;
 	}
 	// Fetch all games
-	const launchers = fs.readdirSync(__dirname).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
+	const launchers = fs.readdirSync('./src/js/launchers').filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
+	console.log(launchers);
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
-
-	console.log(games);
 
 	if (games.length < 1) {
 		return 'NO_GAMES_FOUND';
@@ -210,18 +213,21 @@ function sort(games, type) {
 }
 
 const { checkForDirAndCreate: checkDirs } = require('../../utils.js');
+
 function setGames(games) {
 	const GAMES_DATA_BASE_PATH = '/storage/Cache/Games/Data.json';
 
 	if (!fs.existsSync(userDataPath + GAMES_DATA_BASE_PATH)) checkDirs(userDataPath + GAMES_DATA_BASE_PATH, '{"Games":[]}', userDataPath);
 	fs.writeFileSync(userDataPath + GAMES_DATA_BASE_PATH, JSON.stringify(games));
 }
+
 function getGames(GameID, LauncherName) {
 	const GAMES_DATA_BASE_PATH = '/storage/Cache/Games/Data.json';
 
 	if (!fs.existsSync(userDataPath + GAMES_DATA_BASE_PATH)) checkDirs(userDataPath + GAMES_DATA_BASE_PATH, '{"Games":[]}', userDataPath);
 	return GameID ? JSON.parse(fs.readFileSync(userDataPath + GAMES_DATA_BASE_PATH).toString()).Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName) : JSON.parse(fs.readFileSync(userDataPath + GAMES_DATA_BASE_PATH).toString());
 }
+
 function toggleFavourite(GameID, LauncherName) {
 	const data = getGames();
 	if (!data.Games) return;
@@ -229,6 +235,7 @@ function toggleFavourite(GameID, LauncherName) {
 
 	setGames(data);
 }
+
 function addLaunch(GameID, LauncherName) {
 	const data = getGames();
 	if (!data.Games) return;
@@ -237,46 +244,81 @@ function addLaunch(GameID, LauncherName) {
 	setGames(data);
 }
 
-function handleLaunch(game) {
+async function handleLaunch(game) {
 	let res;
 	if (process.platform === 'win32') {
 		switch (game.LauncherName) {
-			case 'EpicGames': {
-				res = createProcess('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch`, '--wait'], game.GameID);
-				break;
-			}
-			case 'Steam': {
-				res = createProcess('start', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
-				break;
-			}
-			case 'Uplay': {
-				res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
-				break;
-			}
-			case 'Minecraft': {
-				res = createProcess('minecraft-launcher', [], game.GameID);
-				break;
-			}
-			default: {
-				res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
-				break;
-			}
+		case 'EpicGames': {
+			res = createProcess('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch`, '--wait'], game.GameID);
+			break;
+		}
+		case 'Steam': {
+			res = createProcess('start', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
+			break;
+		}
+		case 'Uplay': {
+			res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
+			break;
+		}
+		case 'Minecraft': {
+			res = createProcess('minecraft-launcher', [], game.GameID);
+			break;
+		}
+		default: {
+			res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+			break;
+		}
 		}
 	}
 	else if (process.platform === 'linux') {
 		switch (game.LauncherName) {
-			case 'Steam': {
-				res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '-silent'], game.GameID);
-				break;
+		case 'Steam': {
+			res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '-silent'], game.GameID);
+			break;
+		}
+		case 'Minecraft': {
+			res = createProcess('minecraft-launcher', [], game.GameID);
+			break;
+		}
+		case 'Lunar': {
+			let processString;
+			const cwd = process.cwd();
+			const xd = async () => {
+				await exec(`cd ${homeDir} && find -name 'Lunar Client-*' | grep '.AppImage'`, (error, stdout, stderr) => {
+					processString = `${stdout.replace(/[\r\n]/gm, '')}`;
+				});
+				setTimeout(() => {
+					console.log(processString);
+					res = createProcess('cd', [homeDir, '&&', `'${processString}'`], game.GameID);
+					const jsonContent = JSON.stringify({
+						'LunarAppImageLocation': processString,
+					});
+					fs.writeFile('storage/Cache/Games/LunarCache.json', jsonContent, 'utf8', (err) => {
+						if (err) {
+							console.log('An error occurred while writing JSON Object to File.');
+							return console.log(err);
+						}
+						console.log('JSON file has been saved.');
+					});
+				}, 5000);
 			}
-			case 'Minecraft': {
-				res = createProcess('minecraft-launcher', [], game.GameID);
-				break;
+			const cacheExists = fs.existsSync(`${cwd}/storage/Cache/Games/LunarCache.json`);
+			if (cacheExists) {
+				const cache = fs.readFileSync(`${cwd}/storage/Cache/Games/LunarCache.json`);
+				const data = JSON.parse(cache);
+				let string = data.LunarAppImageLocation;
+				const theLunarPath = fs.existsSync(`/home/logic${string.slice(1)}`);
+				if (!theLunarPath) await xd();
+				res = createProcess('cd', [homeDir, '&&', `'${data.LunarAppImageLocation}'`], game.GameID);
+				return;
 			}
-			default: {
-				res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
-				break;
-			}
+			await xd();
+			break;
+		}
+		default: {
+			res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
+			break;
+		}
 		}
 	}
 
