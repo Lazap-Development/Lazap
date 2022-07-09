@@ -39,6 +39,7 @@ async function getInstalledGames() {
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
 
 	if (games.length < 1) {
+		console.log('NO_GAMES_FOUND');
 		return 'NO_GAMES_FOUND';
 	}
 
@@ -200,24 +201,24 @@ async function loadGames(id) {
 function sort(games, type) {
 	if (type === 'alphabetical') {
 		return games.map(x => x.DisplayName).sort().map(x => games[games.findIndex(y => y.DisplayName === x)]);
-	}
-	else if (type === 'lastLaunch') {
+	} else if (type === 'lastLaunch') {
 		const data = getGames().Games;
-		return games.filter(x => data.find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName).LastLaunch).sort((a, b) => data.find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch);
+		console.log(games);
+		console.log(data);
+		return games // games.filter(x => data.find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName).LastLaunch).sort((a, b) => data.find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch);
 	}
 	return games;
 }
 
 const { checkForDirAndCreate: checkDirs } = require('../../utils.js');
 function setGames(games) {
+	console.log(games);
 	const GAMES_DATA_BASE_PATH = '/storage/Cache/Games/Data.json';
-
 	if (!fs.existsSync(userDataPath + GAMES_DATA_BASE_PATH)) checkDirs(userDataPath + GAMES_DATA_BASE_PATH, '{"Games":[]}', userDataPath);
 	fs.writeFileSync(userDataPath + GAMES_DATA_BASE_PATH, JSON.stringify(games));
 }
 function getGames(GameID, LauncherName) {
 	const GAMES_DATA_BASE_PATH = '/storage/Cache/Games/Data.json';
-
 	if (!fs.existsSync(userDataPath + GAMES_DATA_BASE_PATH)) checkDirs(userDataPath + GAMES_DATA_BASE_PATH, '{"Games":[]}', userDataPath);
 	return GameID ? JSON.parse(fs.readFileSync(userDataPath + GAMES_DATA_BASE_PATH).toString()).Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName) : JSON.parse(fs.readFileSync(userDataPath + GAMES_DATA_BASE_PATH).toString());
 }
