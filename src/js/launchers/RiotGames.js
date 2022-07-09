@@ -33,7 +33,6 @@ async function getInstalledGames(os = process.platform) {
 
 	if (!fs.existsSync(launcher_location)) return [];
         
-        //test
         let allGames = [];
         const games = fs.readdirSync(getRiotGamesLocation((launcher_location)));
         const indexToRemove = games.indexOf("Riot Client");
