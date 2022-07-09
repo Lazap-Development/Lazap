@@ -1,3 +1,8 @@
+const fs = require('fs');
+const path = require('path');
+const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
+console.log(APP_BASE_PATH)
+
 const handleStorageAndTransportData = (mainWindow) => {
 	const Constants = require('../util/Constants.json');
 	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/LauncherData.json', JSON.stringify(Constants.defaultLauncherData));
@@ -31,6 +36,7 @@ const editLocalStorage = (content) => {
 
 const checkForDirAndCreate = (dir, fileContent = '') => {
 	if (fs.existsSync(dir.split(APP_BASE_PATH)[1])) return true;
+	console.log()
 	dir.split(APP_BASE_PATH)[1].split('/').slice(1).forEach((name, i, arr) => {
 		dir = dir.replaceAll('\\', '/');
 		if (!fs.existsSync(`./${arr.slice(0, i + 1).join('/')}`)) {
@@ -50,7 +56,3 @@ module.exports = {
 	editLocalStorage,
 	handleStorageAndTransportData,
 };
-
-const fs = require('fs');
-const path = require('path');
-const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
