@@ -8,6 +8,10 @@ sudo apt-get install -y nodejs
 # Clone Lazap into .config
 git clone https://github.com/lazap ~/.config/lazap
 
+# run npm install
+cd ~/.config/lazap
+npm install
+
 # Move the script to /usr/bin.
 sudo mv ~/.config/lazap/scripts/lazap /usr/bin/
 
