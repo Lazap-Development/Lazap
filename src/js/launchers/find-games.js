@@ -34,7 +34,7 @@ async function getInstalledGames() {
 		return `COOLDOWN_${(lastCheck + 1000 * 60 * 10) - Date.now()}`;
 	}
 	// Fetch all games
-	const launchers = fs.readdirSync('./src/js/launchers').filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
+	const launchers = fs.readdirSync(process.cwd() + '/src/js/launchers').filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
 
 	if (games.length < 1) {
