@@ -4,7 +4,15 @@ const { ipcMain, Tray, Menu, app, BrowserWindow } = require('electron');
 
 app.commandLine.appendSwitch('auto-detect', 'false');
 app.commandLine.appendSwitch('no-proxy-server');
+
 const gotTheLock = app.requestSingleInstanceLock();
+
+const CONSTANTS = require('./util/Constants.json');
+const { checkForDirAndCreate, handleStorageAndTransportData, editLocalStorage } = require('./src/utils.js');
+const fs = require('fs');
+
+const userDataPath = app.getPath('userData');
+
 if (!gotTheLock) return app.quit();
 
 let tray = null;
@@ -29,8 +37,8 @@ app.on('ready', () => {
 	});
 
 	mainWindow.loadFile(
-		fs.existsSync('./storage/Settings/LauncherData.json')
-			? JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.skipLogin
+		fs.existsSync(userDataPath + '/storage/Settings/LauncherData.json')
+			? JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString())?.skipLogin
 				? 'src/index.html'
 				: 'src/login.html'
 			: 'src/login.html',
@@ -60,18 +68,17 @@ app.on('ready', () => {
 	});
 
 	mainWindow.webContents.on('did-finish-load', async () => {
-		handleStorageAndTransportData(mainWindow);
-		if (!fs.existsSync('./storage/Settings/LauncherData.json')) {
-			checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', '{}');
+		handleStorageAndTransportData(mainWindow, userDataPath);
+		if (!fs.existsSync(userDataPath + '/storage/Settings/LauncherData.json')) {
+			checkForDirAndCreate(userDataPath + '/storage/Settings/LauncherData.json', '{}', userDataPath);
 		}
-		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.enableRPC) {
+		if (JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString())?.enableRPC) {
 			updateRPC({
 				details: 'On Main Screen',
 				startTimestamp: Date.now(),
 				largeImageKey: 'lazap',
 			});
 		}
-		require('./src/modules/updater.js')(mainWindow);
 	});
 
 	ipcMain.on('load-main', () => {
@@ -85,10 +92,10 @@ app.on('ready', () => {
 		mainWindow.webContents.once('did-finish-load', () => mainWindow.webContents.send('replace-ignore-and-continue'));
 	});
 	ipcMain.on('close-window', () => {
-		if (!fs.existsSync('./storage/Settings/LauncherData.json')) {
-			checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', '{}');
+		if (!fs.existsSync(userDataPath + '/storage/Settings/LauncherData.json')) {
+			checkForDirAndCreate(userDataPath + '/storage/Settings/LauncherData.json', '{}', userDataPath);
 		}
-		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinQuit === true) {
+		if (JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString())?.trayMinQuit === true) {
 			mainWindow.hide();
 		}
 		else {
@@ -106,27 +113,27 @@ app.on('ready', () => {
 		mainWindow.minimize();
 	});
 	ipcMain.on('min-tray', () => {
-		if (!fs.existsSync('./storage/Settings/LauncherData.json')) {
-			checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', '{}');
+		if (!fs.existsSync(userDataPath + '/storage/Settings/LauncherData.json')) {
+			checkForDirAndCreate(userDataPath + '/storage/Settings/LauncherData.json', '{}', userDataPath);
 		}
-		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinLaunch === true) {
+		if (JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString())?.trayMinLaunch === true) {
 			mainWindow.hide();
 		}
 	});
 	ipcMain.on('show-window', () => {
-		if (!fs.existsSync('./storage/Settings/LauncherData.json')) {
-			checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', '{}');
+		if (!fs.existsSync(userDataPath + '/storage/Settings/LauncherData.json')) {
+			checkForDirAndCreate(userDataPath + '/storage/Settings/LauncherData.json', '{}', userDataPath);
 		}
-		if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.trayMinLaunch === true) {
+		if (JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString())?.trayMinLaunch === true) {
 			mainWindow.show();
 		}
 	});
 	ipcMain.on('update-profile', (e, data) => {
-		editLocalStorage(data);
+		editLocalStorage(data, userDataPath);
 	});
 	ipcMain.on('load-banners-request', async (e, r, id) => {
 		const { fetch_banner } = require('./src/modules/banners.js');
-		const res = fetch_banner(r);
+		const res = fetch_banner(r, userDataPath);
 		res.forEach(async (url, i) => {
 			mainWindow.webContents.executeJavaScript(`
 			var gameElement = document.getElementById('game-div-${r[i].DisplayName}');
@@ -141,25 +148,30 @@ app.on('ready', () => {
 		app.relaunch();
 		app.exit();
 	});
+	ipcMain.handle('read-path', async () => {
+		const path = app.getPath('userData');
+		return path;
+	});
+
 });
 
 ipcMain.on('updateSetting', (e, key, bool) => {
 	const requireRestart = ['disableHardwareAcceleration'];
-	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', '{}');
-	const LauncherData = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
+	checkForDirAndCreate(userDataPath + '/storage/Settings/LauncherData.json', '{}', app.getPath('userData', userDataPath));
+	const LauncherData = JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString());
 	LauncherData[key] = bool;
-	fs.writeFileSync('./storage/Settings/LauncherData.json', JSON.stringify(LauncherData));
+	fs.writeFileSync(userDataPath + '/storage/Settings/LauncherData.json', JSON.stringify(LauncherData));
 	if (requireRestart.includes(key)) ipcMain.emit('restart');
 
 	switch (key) {
-	case 'enableRPC': {
-		updateRPC(bool ? { details: 'On Main Screen', startTimestamp: Date.now(), largeImageKey: 'lazap' } : undefined);
-		break;
-	}
-	case 'launchOnStartup': {
-		ipcMain.emit('setLaunchOnStartup', bool);
-		break;
-	}
+		case 'enableRPC': {
+			updateRPC(bool ? { details: 'On Main Screen', startTimestamp: Date.now(), largeImageKey: 'lazap' } : undefined);
+			break;
+		}
+		case 'launchOnStartup': {
+			ipcMain.emit('setLaunchOnStartup', bool);
+			break;
+		}
 	}
 });
 
@@ -167,8 +179,7 @@ const rpc = require('discord-rpc');
 const rpcClient = new rpc.Client({ transport: 'ipc' });
 rpcClient.login({ clientId: '932504287337148417' });
 function updateRPC(data) {
-	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData));
-	const LauncherData = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
+	const LauncherData = JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString());
 	if (LauncherData.enableRPC !== true && typeof data === 'object' && data !== null) return 'DISABLED';
 	if (!data) {
 		rpcClient.clearActivity();
@@ -177,15 +188,10 @@ function updateRPC(data) {
 	rpcClient.setActivity(data).catch(err => console.warn('[RPC]', err.stack.includes('connection closed') ? 'OFFLINE' : err));
 }
 
-const CONSTANTS = require('./util/Constants.json');
-const { checkForDirAndCreate, handleStorageAndTransportData, editLocalStorage } = require('./src/utils.js');
-const fs = require('fs');
-
 handleHardwareAcceleration();
 async function handleHardwareAcceleration() {
-	// fs.readFileSync('./storage/Settings/LauncherData.json').toString();
-	checkForDirAndCreate(__dirname + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData));
-	if (JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString())?.disableHardwareAcceleration === true) {
+	checkForDirAndCreate(userDataPath + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData), userDataPath);
+	if (JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString())?.disableHardwareAcceleration === true) {
 		app.disableHardwareAcceleration();
 	}
 }

@@ -73,14 +73,14 @@ async function getInstalledGames() {
 			if (!fs.existsSync(acf_basePath)) return [];
 			const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
 				.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}/${x}`).toString())));
-			
+
 			allGames.push(acf_files);
-			var result = allGames.flat().reduce((unique, o) => {
+			const result = allGames.flat().reduce((unique, o) => {
 				if(!unique.some(obj => obj.DisplayName === o.DisplayName)) {
 				  unique.push(o);
 				}
 				return unique;
-			},[]);
+			}, []);
 			allGames = result;
 		});
 		return allGames;

@@ -1,4 +1,3 @@
-
 const marker = document.getElementById('indicator');
 const home = document.getElementById('home');
 const recent = document.getElementById('recent');
@@ -14,7 +13,13 @@ const settingsbackblur = document.getElementById('settings-backblur');
 const { ipcRenderer } = require('electron');
 const fs = require('fs');
 
-window.onload = async function () {
+let userDataPath;
+(async () => {
+	const result = await ipcRenderer.invoke('read-path');
+	userDataPath = result;
+})();
+
+window.onload = async function() {
 	// Cache games first before loading
 	await require('./js/launchers/find-games.js').getInstalledGames();
 	document.getElementById('main-loading-overlay').style.opacity = '0';
@@ -28,11 +33,11 @@ window.onload = async function () {
 		}),
 	);
 
-	document.getElementById('alertboxexit').addEventListener('click', function () {
+	document.getElementById('alertboxexit').addEventListener('click', function() {
 		alertbox.style.display = 'none';
 	});
 
-	document.getElementById('home-btn').addEventListener('click', async function () {
+	document.getElementById('home-btn').addEventListener('click', async function() {
 		home.style.display = 'flex';
 		recent.style.display = 'none';
 		games.style.display = 'none';
@@ -53,7 +58,7 @@ window.onload = async function () {
 		await require('./js/launchers/find-games.js').loadGames('recentGamesListMainPage');
 	});
 
-	document.getElementById('recent-btn').addEventListener('click', async function () {
+	document.getElementById('recent-btn').addEventListener('click', async function() {
 		home.style.display = 'none';
 		recent.style.display = 'flex';
 		games.style.display = 'none';
@@ -74,7 +79,7 @@ window.onload = async function () {
 		await require('./js/launchers/find-games.js').loadGames('recentGames');
 	});
 
-	document.getElementById('games-btn').addEventListener('click', async function () {
+	document.getElementById('games-btn').addEventListener('click', async function() {
 		home.style.display = 'none';
 		recent.style.display = 'none';
 		games.style.display = 'flex';
@@ -95,7 +100,7 @@ window.onload = async function () {
 		await require('./js/launchers/find-games.js').loadGames('allGames');
 	});
 
-	document.getElementById('favs-btn').addEventListener('click', async function () {
+	document.getElementById('favs-btn').addEventListener('click', async function() {
 		home.style.display = 'none';
 		recent.style.display = 'none';
 		games.style.display = 'none';
@@ -116,7 +121,7 @@ window.onload = async function () {
 		await require('./js/launchers/find-games.js').loadGames('favGames');
 	});
 
-	document.getElementById('messages-btn').addEventListener('click', async function () {
+	document.getElementById('messages-btn').addEventListener('click', async function() {
 		home.style.display = 'none';
 		recent.style.display = 'none';
 		games.style.display = 'none';
@@ -126,7 +131,7 @@ window.onload = async function () {
 		friends.style.display = 'none';
 	});
 
-	document.getElementById('activity-btn').addEventListener('click', async function () {
+	document.getElementById('activity-btn').addEventListener('click', async function() {
 		home.style.display = 'none';
 		recent.style.display = 'none';
 		games.style.display = 'none';
@@ -136,7 +141,7 @@ window.onload = async function () {
 		friends.style.display = 'none';
 	});
 
-	document.getElementById('friends-btn').addEventListener('click', async function () {
+	document.getElementById('friends-btn').addEventListener('click', async function() {
 		home.style.display = 'none';
 		recent.style.display = 'none';
 		games.style.display = 'none';
@@ -146,18 +151,18 @@ window.onload = async function () {
 		friends.style.display = 'flex';
 	});
 
-	document.getElementById('settings-btn').addEventListener('click', async function () {
+	document.getElementById('settings-btn').addEventListener('click', async function() {
 		settingsbackblur.style.display = 'flex';
 		settings.style.display = 'flex';
 	});
 
-	settingsbackblur.addEventListener('click', function () {
+	settingsbackblur.addEventListener('click', function() {
 		settings.style.display = 'none';
 		settingsbackblur.style.display = 'none';
 	});
 
 	document.querySelector('.titlebar-settings').addEventListener('click', () => {
-		const Data = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
+		const Data = JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString());
 		document.querySelectorAll('input[id^=setting-]').forEach((input) => {
 			input.checked = Data[input.id.split('-')[1]] ? true : false;
 		});
