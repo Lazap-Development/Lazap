@@ -1,6 +1,5 @@
 const fs = require('fs');
-const path = require('path');
-const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
+const APP_BASE_PATH = process.env.PWD;
 console.log(APP_BASE_PATH)
 
 const handleStorageAndTransportData = (mainWindow) => {
@@ -36,7 +35,6 @@ const editLocalStorage = (content) => {
 
 const checkForDirAndCreate = (dir, fileContent = '') => {
 	if (fs.existsSync(dir.split(APP_BASE_PATH)[1])) return true;
-	console.log()
 	dir.split(APP_BASE_PATH)[1].split('/').slice(1).forEach((name, i, arr) => {
 		dir = dir.replaceAll('\\', '/');
 		if (!fs.existsSync(`./${arr.slice(0, i + 1).join('/')}`)) {
