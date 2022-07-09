@@ -31,21 +31,21 @@ function fetch_banner(data, userDataPath) {
 				return element?.attribs['data-image'] ? element.attribs['data-image'] : '../img/icons/icon.ico'; */
 			}
 			else if (data[i].LauncherName === 'Lutris') {
-				return '../img/icons/icon.ico';
+				return `https://lutris.net/games/banner/${data[i].GameID}.jpg`;
 			}
 			else if (data[i].LauncherName === 'Steam') {
-				if(data[i].DisplayName === 'FrostRunner') return '../img/icons/icon.ico';
+				if(data[i].DisplayName === 'FrostRunner') return 'https://cdnb.artstation.com/p/assets/covers/images/026/711/505/large/david-rosario-iii-david-rosario-iii-frostrunner-banner-small.jpg?1589504830';
 				return `https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`;
 				// return `https://steamcdn-a.akamaihd.net/steam/apps/${data[i].GameID}/library_600x900.jpg`;
 			}
 			else if (data[i].LauncherName === 'RiotGames') {
-                                if (data[i].DisplayName == "Valorant") {
+                                if (data[i].DisplayName === "Valorant") {
       				      return 'https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png';
                                 }
-                                if(data[i].DisplayName == "League of Legends") {
+                                if(data[i].DisplayName === "League of Legends") {
                                       return 'https://images.igdb.com/igdb/image/upload/t_cover_big/co49wj.png';
                                 }
-                                if(data[i].DisplayName == "Legends of Runeterra") {
+                                if(data[i].DisplayName === "Legends of Runeterra") {
                                       return 'https://images.igdb.com/igdb/image/upload/t_cover_big/co3wnv.png';
                                 }
 			}

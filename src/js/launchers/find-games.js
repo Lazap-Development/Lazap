@@ -17,8 +17,8 @@ let running = false;
 const processes = new Map();
 
 const fs = require('fs');
-const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
 const path = require('path');
+const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
 const homeDir = require('os').userInfo().homedir;
 
 const { ipcRenderer } = require('electron');
@@ -40,9 +40,8 @@ async function getInstalledGames() {
 	}
 	// Fetch all games
 	const launchers = fs.readdirSync('./src/js/launchers').filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
-	console.log(launchers);
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
-
+	console.log(games);
 	if (games.length < 1) {
 		return 'NO_GAMES_FOUND';
 	}
@@ -223,7 +222,6 @@ function setGames(games) {
 
 function getGames(GameID, LauncherName) {
 	const GAMES_DATA_BASE_PATH = '/storage/Cache/Games/Data.json';
-
 	if (!fs.existsSync(userDataPath + GAMES_DATA_BASE_PATH)) checkDirs(userDataPath + GAMES_DATA_BASE_PATH, '{"Games":[]}', userDataPath);
 	return GameID ? JSON.parse(fs.readFileSync(userDataPath + GAMES_DATA_BASE_PATH).toString()).Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName) : JSON.parse(fs.readFileSync(userDataPath + GAMES_DATA_BASE_PATH).toString());
 }
@@ -301,7 +299,7 @@ async function handleLaunch(game) {
 						console.log('JSON file has been saved.');
 					});
 				}, 5000);
-			}
+			};
 			const cacheExists = fs.existsSync(`${cwd}/storage/Cache/Games/LunarCache.json`);
 			if (cacheExists) {
 				const cache = fs.readFileSync(`${cwd}/storage/Cache/Games/LunarCache.json`);
@@ -315,6 +313,10 @@ async function handleLaunch(game) {
 			await xd();
 			break;
 		}
+		case 'Lutris':
+			console.log(game.LaunchID);
+			res = createProcess('LUTRIS_SKIP_INIT=1', ['lutris', `lutris:rungameid/${game.LaunchID}`], game.GameID);
+			break;
 		default: {
 			res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
 			break;

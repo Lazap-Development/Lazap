@@ -7,24 +7,7 @@ exec = util.promisify(exec);
 
 async function getLutrisLocation(os = process.platform, checkForSteam = true) {
 	let launcher_location;
-	let registry_res;
-	if (os === 'win32') {
-		const { stdout, error } = await exec(
-			`Reg Query "HKEY_LOCAL_MACHINE\\SOFTWARE\\${process.arch === 'x64' ? 'Wow6432Node\\' : ''}Valve\\Steam" /v InstallPath`,
-		).catch(() => {
-			launcher_location = null;
-			return { error: 'NOT_FOUND' };
-		});
-
-		if (error) {
-			return;
-		}
-		else {
-			registry_res = stdout;
-			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
-		}
-	}
-	else if (os === 'linux') {
+	if (os === 'linux') {
 		const homedir = require('os').userInfo().homedir;
 		launcher_location = `${homedir}/.local/share/lutris`;
 	}
@@ -33,9 +16,6 @@ async function getLutrisLocation(os = process.platform, checkForSteam = true) {
 }
 
 const fs = require('fs');
-const VDF = require('../../modules/parseVDF');
-const yaml = require('js-yaml');
-const { loadGames } = require('./find-games');
 const { Database } = require('sqlite3');
 
 function isLauncherInstalled(path) {
@@ -51,14 +31,6 @@ async function getInstalledGames() {
 	const path = await getLutrisLocation();
 	if (!path) return [];
 
-	if (process.platform === 'win32') {
-		const acf_basePath = `${path}\\steamapps`;
-		if (!fs.existsSync(acf_basePath)) return [];
-		const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
-			.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
-
-		return acf_files;
-	}
 	else if (process.platform === 'linux') {
 		let allGames = [];
 		let allDBGames = [];
@@ -67,20 +39,33 @@ async function getInstalledGames() {
 		const LutrisDB = new Database(`${require('os').userInfo().homedir}/.local/share/lutris/pga.db`);
 		// let obj = {};
 		await LutrisDB.all(`SELECT * FROM games`, (err, info) => {
+			console.log(info);
+			/*for (let i = 0; i >= info.length; i++) {
+				const game = info[i];
+				const obj = {
+					DisplayName: game.name,
+					GameID: game.slug,
+					LauncherName: 'Lutris',
+					Executable: game.installer_slug,
+					Location: game.directory,
+					Size: game.installed_at,
+				}
+				allDBGames.push(obj);
+			}*/
 			info.forEach(x => {
 				const obj = {
 					DisplayName: x.name,
-					GameID: 'yourmom',
+					GameID: x.slug,
 					LauncherName: 'Lutris',
-					Executable: 'xd',
-					Location: 'xd',
-					Size: 9999,
-				}
+					LaunchID: x.id,
+					Executable: x.installer_slug,
+					Location: x.directory,
+					Size: x.installed_at,
+				};
 				allDBGames.push(obj);
 			})
 		});
 		// path.forEach(x => obj = yaml.load(fs.readFileSync(`${require('os').userInfo().homedir}/.config/lutris/games/${x}`, { encoding: 'utf-8' })));
-		console.log(allDBGames);
 		// console.log(obj);
 		return allDBGames;
 	}
