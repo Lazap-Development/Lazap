@@ -7,7 +7,8 @@ async function getInstalledGames(os = process.platform) {
 		return [await getMinecraftLauncher(), await getLunarClient()].filter(x => x !== false);
 	}
 	else if (os === 'linux') {
-		return [await getMinecraftLauncherOnLinux()].filter(x => x !== false);
+		console.log([await getMinecraftLauncherOnLinux(), await getLunarClient()].filter(x => x !== false));
+		return [await getMinecraftLauncherOnLinux(), await getLunarClient()].filter(x => x !== false);
 	}
 	else {
 		return [];
@@ -49,10 +50,8 @@ async function getMinecraftLauncher() {
 }
 
 async function getMinecraftLauncherOnLinux() {
-	// eslint-disable-next-line no-unused-vars
-	const { stdout, error } = await exec('which minecraft-launcher').catch(() => { return { error: 'NOT_FOUND' }; });
+	const { error } = await exec('which minecraft-launcher').catch(() => { return { error: 'NOT_FOUND' }; });
 	if (!error) {
-
 		const homedir = require('os').userInfo().homedir;
 		const isInstalled = fs.existsSync(`${homedir}/.minecraft`);
 		if (!isInstalled) return false;
@@ -74,19 +73,36 @@ async function getMinecraftLauncherOnLinux() {
 }
 
 function getLunarClient() {
-	const isLunarInstalled = fs.existsSync(`C:\\Users\\${user}\\.lunarclient`);
-	if (!isLunarInstalled) return false;
-	const Location = `C:\\Users\\${user}\\AppData\\Local\\Programs\\lunarclient`;
-	const Executable = 'Lunar Client.exe';
-	return {
-		DisplayName: 'Lunar Client',
-		LauncherName: 'Lunar',
-		GameID: 'Lunar',
-		Size: fs.statSync(Location).size,
-		Location,
-		Executable,
-		Args: [],
-	};
+	if(process.platform === 'win32') {
+		const isLunarInstalled = fs.existsSync(`C:\\Users\\${user}\\.lunarclient`);
+		if (!isLunarInstalled) return false;
+		const Location = `C:\\Users\\${user}\\AppData\\Local\\Programs\\lunarclient`;
+		const Executable = 'Lunar Client.exe';
+		return {
+			DisplayName: 'Lunar Client',
+			LauncherName: 'Lunar',
+			GameID: 'Lunar',
+			Size: fs.statSync(Location).size,
+			Location,
+			Executable,
+			Args: [],
+		};
+	} else if (process.platform === 'linux') {
+		const homedir = require('os').userInfo().homedir;
+		const isLunarInstalled = fs.existsSync(`${homedir}/.config/lunarclient`);
+		const Location = `${homedir}/.lunarclient`;
+		const Executable = 'Lunar Client-2.11.2.AppImage';
+		if (!isLunarInstalled) return false;
+		return {
+			DisplayName: 'Lunar Client',
+			LauncherName: 'Lunar',
+			GameID: 'Lunar',
+			Size: fs.statSync(Location).size,
+			Location,
+			Executable,
+			Args: [],
+		};
+	}
 }
 /*
 async function getBadlion() {

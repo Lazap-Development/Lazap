@@ -35,7 +35,10 @@ async function getInstalledGames() {
 	}
 	// Fetch all games
 	const launchers = fs.readdirSync('./src/js/launchers').filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
+	console.log(launchers);
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
+
+	console.log(games);
 
 	if (games.length < 1) {
 		return 'NO_GAMES_FOUND';
