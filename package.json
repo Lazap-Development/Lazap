@@ -1,6 +1,6 @@
 {
     "name": "lazap",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "All your games at one library with a modernish look and experience",
     "main": "./index.js",
     "scripts": {
@@ -30,7 +30,11 @@
         ],
         "productName": "Lazap",
         "forceCodeSigning": false,
+        "directories": {
+            "buildResources": "./img/icons/"
+        },
         "nsis": {
+            "installerIcon": "./img/icons/icon.ico",
             "license": "./LICENSE.md",
             "runAfterFinish": false,
             "uninstallDisplayName": "Lazap",
@@ -48,7 +52,7 @@
         "type": "git",
         "url": "git+https://github.com/Lazap-Development/lazap.git"
     },
-    "author": "Lazap Development ",
+    "author": "Lazap Development",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/Lazap-Development/lazap/issues"
@@ -57,17 +61,16 @@
     "dependencies": {
         "deepmerge": "^4.2.2",
         "discord-rpc": "^4.0.1",
-        "electron-log": "^4.4.5",
-        "electron-updater": "^4.6.1",
-        "htmlparser2": "^7.2.0",
+        "electron-updater": "^5.0.5",
+        "htmlparser2": "^8.0.1",
         "md5": "^2.3.0",
-        "node-fetch": "^2.6.7",
+        "node-fetch": "^2.6.1",
         "v8-compile-cache": "^2.3.0"
     },
     "devDependencies": {
-        "electron": "^16.0.4",
-        "electron-builder": "^22.14.5",
-        "eslint": "8.6.0",
+        "electron": "^19.0.7",
+        "electron-builder": "^23.1.0",
+        "eslint": "8.19.0",
         "open-term": "^2.0.4"
     }
 }

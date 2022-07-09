@@ -1,8 +1,3 @@
-module.exports = {
-	getInstalledGames,
-	parseGameObject,
-};
-
 const fs = require('fs');
 const { promisify } = require('util');
 let { exec } = require('child_process');
@@ -51,3 +46,8 @@ async function parseGameObject(path) {
 		GameID: 'Valorant',
 	};
 }
+
+module.exports = {
+	getInstalledGames,
+	parseGameObject,
+};

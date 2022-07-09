@@ -1,6 +1,5 @@
 let { exec } = require('child_process');
 exec = require('util').promisify(exec);
-const fs = require('fs');
 
 async function getUplayLocation(os = process.platform, checkForUplay = true) {
 	let launcher_location;
@@ -21,10 +20,14 @@ async function getUplayLocation(os = process.platform, checkForUplay = true) {
 			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 		}
 	}
+	else {
+		return;
+	}
 	if (checkForUplay && !isLauncherInstalled(launcher_location)) return false;
 	return launcher_location;
 }
 
+const fs = require('fs');
 async function getInstalledGames() {
 	const path = await getUplayLocation();
 	if (!path) return [];
@@ -42,7 +45,7 @@ async function parseGameObject(GameID) {
 		return;
 	}
 	const Location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
-	if (!fs.existsSync(Location)) return console.log(Location, registry_res);
+	if (!fs.existsSync(Location)) return;
 	const Executable = null;
 	const DisplayName = Location.split('/').slice(-2)[0];
 	const Size = fs.statSync(Location).size;

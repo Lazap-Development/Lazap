@@ -1,92 +1,123 @@
 /* eslint-disable indent */
-console.info('OS:', process.platform, 'Arch:', process.arch);
-const {
-	ipcRenderer,
-} = require('electron');
-const Steam = require('./Steam.js');
-const EpicGames = require('./EpicGames.js');
-const RiotGames = require('./RiotGames.js');
-const Uplay = require('./Uplay.js');
-const Minecraft = require('./Minecraft.js');
-const FiveM = require('./FiveM.js');
-const path = require('path');
-const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
-const Constants = require('../../../Constants.json');
-const fs = require('fs');
-const md5 = require('md5');
+console.debug('OS:', process.platform, 'Arch:', process.arch);
+let lastCheck;
+let cachedGames = [];
 const games_blacklist = [
 	'228980', // Steamworks Common Redistributables
-	'231350',
+	'231350', // 3D Mark Demo
+	'1493710', // Proton Exp
+	'1391110', // Steam Linux Runtime,
+	'1113280', // Proton 4.11
+	'1245040', // Proton 5.0
+	'1420170', // Proton 5.13
+	'1580130', // Proton 6.3
+	'1887720', // Proton 7.0
 ];
-const processes = new Map();
 let running = false;
+const processes = new Map();
 
-const alphabets = 'abcdefghijklmnopqrstuvwxyz'.split('');
-function sort(games, type = 'alphabetical') {
-	if (type === 'alphabetical') {
-		return games.sort((a, b) => {
-			return (alphabets.findIndex(x => x === a.DisplayName.slice(0, 1).toLowerCase()) - alphabets.findIndex(x => x === b.DisplayName.slice(0, 1).toLowerCase()));
-		});
+const fs = require('fs');
+const path = require('path');
+const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
+
+const { ipcRenderer } = require('electron');
+const { spawn } = require('child_process');
+
+const Constants = require('../../../util/Constants.json');
+
+async function getInstalledGames() {
+	// Cooldown
+	if (!lastCheck) {
+		lastCheck = Date.now();
 	}
+	else if (lastCheck + 1000 * 60 * 10 > Date.now()) {
+		return `COOLDOWN_${(lastCheck + 1000 * 60 * 10) - Date.now()}`;
+	}
+	// Fetch all games
+	const launchers = fs.readdirSync('./src/js/launchers').filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
+	const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
+
+	if (games.length < 1) {
+		return 'NO_GAMES_FOUND';
+	}
+
+	cachedGames = games;
+	return games;
 }
 
-async function loadAllGames() {
+async function loadGames(id) {
+	// Prevent duping Game Elements on multiple clicks
 	if (running === true) return;
 	running = true;
-	const gamesElement = document.querySelector('div#allGamesList');
 
-	if (gamesElement.children.length >= 1) {
-		running.all_games = false;
-		return;
+	let games = await getInstalledGames();
+	const list = document.getElementById(id) ?? document.getElementById(`${id}List`);
+
+	// Cache results or get from cache if cooldown
+	if (typeof games === 'string' && games.startsWith('COOLDOWN')) {
+		games = cachedGames;
+		list.replaceChildren([]);
+	}
+	else if (typeof games === 'string') {
+		// When games not found
+	}
+	else if (Array.isArray(games)) {
+		cachedGames = games;
 	}
 
-	const games = sort([
-		...(await Steam.getInstalledGames()),
-		...(await Uplay.getInstalledGames()),
-		...EpicGames.getInstalledGames(),
-		...(await RiotGames.getInstalledGames()),
-		...(await Minecraft.getInstalledGames()),
-		...(await FiveM.getInstalledGames()),
-	]);
-	/*
-	if (games.length == 0) {
-		var exists = document.getElementsByClassName('notFound')
-
-		if (exists.length == 0) {
-			const gamesNotFound = document.createElement('div')
-			gamesNotFound.className = 'notFound';
-			gamesNotFound.textContent = 'Unable to detect games in your computer!';
-			return gamesElement.appendChild(gamesNotFound);
+	const resolvedGames = sort(games.filter(x => {
+		if (games_blacklist.includes(x.GameID)) return false;
+		if (id === 'allGames') {
+			return true;
 		}
-	}
-	*/
-
-	const uncachedGames = games.map((game) => {
-		if (games_blacklist.includes(game.GameID)) return {};
-
+		else if (id === 'recentGames') {
+			const data = getGames(x.GameID, x.LauncherName);
+			return !!data?.Launches;
+		}
+		else if (id === 'favGames') {
+			const data = getGames(x.GameID, x.LauncherName);
+			return !!data?.Favourite;
+		}
+		else if (id.startsWith('recent') && id.includes('Main')) {
+			const data = getGames(x.GameID, x.LauncherName);
+			return !!data?.Launches;
+		}
+	}), id === 'allGames' ? 'alphabetical' : id === 'recentGames' || (id.startsWith('recent') && id.includes('Main')) ? 'lastLaunch' : 'none').map((game) => {
+		// Gamebox creation
 		const gameElement = document.createElement('div');
 		gameElement.id = 'game-div-' + game.DisplayName;
-		gameElement.className += 'gamebox';
+		gameElement.className += id.startsWith('recent') && id.includes('Main') ? 'mainPageGamebox' : 'gamebox';
 		gameElement.style.diplay = 'table';
-		gamesElement.appendChild(gameElement);
+		list.appendChild(gameElement);
 
+		// Game Banner creation
 		const gameBanner = document.createElement('img');
-
 		let banner;
-		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
-			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
-			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
-			banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../icon.ico';
+		if (game.LauncherName !== 'XboxGames') {
+			if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
+				const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
+				const md5 = require('md5');
+				const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
+				banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../img/icons/icon.ico';
+			}
+			else {
+				banner = '../img/icons/icon.ico';
+			}
 		}
 		else {
-			banner = '../icon.ico';
+			banner = game.Banner;
 		}
 		gameBanner.setAttribute('src', banner);
-		gameBanner.style = 'opacity: 0.2;';
+		gameBanner.style = `opacity: ${id === 'allGames' ? '0.2' : '1'};`;
 		gameBanner.height = 500;
 		gameBanner.width = 500;
 		gameElement.appendChild(gameBanner);
 
+		game.Banner = banner;
+
+		if (id.startsWith('recent') && id.includes('Main')) return game;
+
+		// Set Game Display Name
 		const gameText = document.createElement('span');
 		if (game.DisplayName.length > 18) {
 			gameText.innerHTML = game.DisplayName.slice(0, 18);
@@ -97,14 +128,17 @@ async function loadAllGames() {
 		}
 		gameElement.appendChild(gameText);
 
-		const starIcon = document.createElement('div');
-		starIcon.classList.add('star');
-		gameElement.appendChild(starIcon);
-
 		gameBanner.addEventListener('click', () => {
 			handleLaunch(game);
 			ipcRenderer.send('min-tray');
 		});
+
+		if (id !== 'allGames') return game;
+
+		// Handle starring
+		const starIcon = document.createElement('div');
+		starIcon.classList.add('star');
+		gameElement.appendChild(starIcon);
 
 		gameBanner.addEventListener('mouseover', () => {
 			const x = gameElement.getElementsByClassName('star');
@@ -138,351 +172,126 @@ async function loadAllGames() {
 		});
 
 		starIcon.addEventListener('click', () => {
-			toggleFavourite(game.GameID, game.LauncherName);
+			const res = toggleFavourite(game.GameID, game.LauncherName);
+			starIcon.style.content = `url("../img/star-${res ? 'solid' : 'empty'}.svg")`;
+			starIcon.style.filter = res ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 		});
 
-		game.Banner = banner;
 		return game;
 	}).filter(x => Object.keys(x).length > 0);
-	saveGames(uncachedGames);
 
-	ipcRenderer.send('load-banners-request', uncachedGames.filter((x) => x.Banner === '../icon.ico'));
+	setGames({ Games: getGames().Games.length < games.length ? games : getGames().Games });
+	ipcRenderer.send('load-banners-request', resolvedGames.filter((x) => x.Banner === '../img/icons/icon.ico'), id);
 	running = false;
 }
 
-function loadFavouriteGames() {
-	let Data;
-	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
-	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
-		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
-		Data = {
-			Games: [],
-		};
+function sort(games, type) {
+	if (type === 'alphabetical') {
+		return games.map(x => x.DisplayName).sort().map(x => games[games.findIndex(y => y.DisplayName === x)]);
 	}
-	else {
-		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
+	else if (type === 'lastLaunch') {
+		const data = getGames().Games;
+		return games.filter(x => data.find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName).LastLaunch).sort((a, b) => data.find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch);
 	}
-
-	if (document.querySelector('#game-loading-overlay').style.opacity === '1') loadAllGames();
-
-	const games = sort(Data.Games.filter(x => x.Favourite));
-	const gamesElement = document.querySelector('div#favGamesList');
-	gamesElement.replaceChildren([]);
-	games.map((game) => {
-		if (games_blacklist.includes(game.GameID)) return {};
-
-		const gameElement = document.createElement('div');
-		gameElement.id = 'game-div-' + game.DisplayName;
-		gameElement.className += 'gamebox';
-		gameElement.style.diplay = 'table';
-		gamesElement.appendChild(gameElement);
-
-		const gameBanner = document.createElement('img');
-
-		let banner;
-		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
-			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
-			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
-			banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../icon.ico';
-		}
-		else {
-			banner = '../icon.ico';
-		}
-		gameBanner.setAttribute('src', banner);
-		gameBanner.style = 'opacity: 1;';
-		gameBanner.height = 500;
-		gameBanner.width = 500;
-		gameElement.appendChild(gameBanner);
-
-		const gameText = document.createElement('span');
-		if (game.DisplayName.length > 18) {
-			gameText.innerHTML = game.DisplayName.slice(0, 18);
-			gameText.innerHTML += '...';
-		}
-		else {
-			gameText.innerHTML = game.DisplayName;
-		}
-		gameElement.appendChild(gameText);
-
-		gameBanner.addEventListener('click', () => handleLaunch(game));
-
-		game.Banner = banner;
-		return game;
-	});
-	document.querySelector('div#favs > div#favs-loading-overlay').style.opacity = '0';
-	document.querySelector('div#favs > div#favs-loading-overlay').style.visibility = 'hidden';
+	return games;
 }
 
-function loadRecentGames() {
-	let Data;
-	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
-	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
-		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
-		Data = {
-			Games: [],
-		};
-	}
-	else {
-		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
-	}
-
-	if (document.querySelector('#game-loading-overlay').style.opacity === '1') loadAllGames();
-
-	const games = Data.Games.filter(x => x.LastLaunch);
-	const gamesElement = document.querySelector('div#recentGamesList');
-	gamesElement.replaceChildren([]);
-	games.sort((a, b) => b.LastLaunch - a.LastLaunch).map((game) => {
-		if (games_blacklist.includes(game.GameID)) return {};
-
-		const gameElement = document.createElement('div');
-		gameElement.id = 'game-div-' + game.DisplayName;
-		gameElement.className += 'gamebox';
-		gameElement.style.diplay = 'table';
-		gamesElement.appendChild(gameElement);
-
-		const gameBanner = document.createElement('img');
-
-		let banner;
-		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
-			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
-			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
-			banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../icon.ico';
-		}
-		else {
-			banner = '../icon.ico';
-		}
-		gameBanner.setAttribute('src', banner);
-		gameBanner.style = 'opacity: 1;';
-		gameBanner.height = 500;
-		gameBanner.width = 500;
-		gameElement.appendChild(gameBanner);
-
-		const gameText = document.createElement('span');
-		if (game.DisplayName.length > 18) {
-			gameText.innerHTML = game.DisplayName.slice(0, 18);
-			gameText.innerHTML += '...';
-		}
-		else {
-			gameText.innerHTML = game.DisplayName;
-		}
-		gameElement.appendChild(gameText);
-
-		gameBanner.addEventListener('click', () => handleLaunch(game));
-
-		game.Banner = banner;
-		return game;
-	});
-	document.querySelector('div#recent > div#recent-loading-overlay').style.opacity = '0';
-	document.querySelector('div#recent > div#recent-loading-overlay').style.visibility = 'hidden';
+const { checkForDirAndCreate: checkDirs } = require('../../utils.js');
+function setGames(games) {
+	if (!fs.existsSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1))) checkDirs(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1), '{"Games":[]}');
+	fs.writeFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1), JSON.stringify(games));
 }
-
-function loadRecentGamesMainPage() {
-	let Data;
-	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
-	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
-		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
-		Data = {
-			Games: [],
-		};
-	}
-	else {
-		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
-	}
-
-	if (document.querySelector('#game-loading-overlay').style.opacity === '1') loadAllGames();
-
-	const games = Data.Games.filter(x => x.LastLaunch).slice(0, 5);
-	const gamesElement = document.querySelector('div#recentGamesListMainPage');
-	gamesElement.replaceChildren([]);
-	games.sort((a, b) => b.LastLaunch - a.LastLaunch).map((game) => {
-		if (games_blacklist.includes(game.GameID)) return {};
-		const gameElement = document.createElement('div');
-		gameElement.id = 'game-div-' + game.DisplayName;
-		gameElement.className += 'mainPageGamebox';
-		gameElement.style.diplay = 'table';
-		gamesElement.appendChild(gameElement);
-
-		const gameBanner = document.createElement('img');
-
-		let banner;
-		if (fs.existsSync(Constants.GAME_BANNERS_BASE_PATH)) {
-			const dirs = fs.readdirSync(Constants.GAME_BANNERS_BASE_PATH);
-			const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
-			banner = img ? `${APP_BASE_PATH}/storage/Cache/Games/Images/${img}` : '../icon.ico';
-		}
-		else {
-			banner = '../icon.ico';
-		}
-		gameBanner.setAttribute('src', banner);
-		gameBanner.style = 'opacity: 1;';
-		gameBanner.height = 500;
-		gameBanner.width = 500;
-		gameElement.appendChild(gameBanner);
-
-		gameBanner.addEventListener('click', () => {
-			handleLaunch(game);
-			ipcRenderer.send('min-tray');
-		});
-
-		game.Banner = banner;
-		return game;
-	});
-	document.querySelector('div#recent > div#recent-loading-overlay').style.opacity = '0';
-	document.querySelector('div#recent > div#recent-loading-overlay').style.visibility = 'hidden';
+function getGames(GameID, LauncherName) {
+	if (!fs.existsSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1))) checkDirs(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1), '{"Games":[]}');
+	return GameID ? JSON.parse(fs.readFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1)).toString()).Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName) : JSON.parse(fs.readFileSync(APP_BASE_PATH + Constants.GAMES_DATA_BASE_PATH.slice(1)).toString());
 }
-
-function runCommand(command, args, id, force = false) {
-	const {
-		spawn,
-	} = require('child_process');
-	if (processes.get(id) && !force) return 'RUNNING_ALREADY';
-	const res = spawn(`${command}`, args, {
-		detached: true,
-		shell: true,
-	});
-	res.on('error', (error) => console.log('[PROC] Error on process', id, ':', error));
-	setTimeout(() => {
-		res.on('exit', (code, signal) => {
-			ipcRenderer.send('show-window');
-			console.log('[PROC] Exited on process', id, 'with code', code, 'and signal', signal);
-		});
-	}, 1000);
-
-	res.on('spawn', () => console.log('[PROC] Started process with id', id));
-	processes.set(id, res);
-	return res;
-}
-
-function checkForDirAndCreate(dir, fileContent = '') {
-	if (fs.existsSync(dir.split(__dirname)[1])) return true;
-	dir.split(__dirname)[1].split('/').slice(1).forEach((name, i, arr) => {
-		dir = dir.replaceAll('\\', '/');
-		if (!fs.existsSync(`./${arr.slice(0, i + 1).join('/')}`)) {
-			if (name.split('.')[1]) {
-				fs.writeFileSync(`./${arr.slice(0, i + 1).join('/')}`, fileContent);
-				return;
-			}
-			else {
-				fs.mkdirSync(`./${arr.slice(0, i + 1).join('/')}`);
-			}
-		}
-	});
-}
-
-function saveGames(games) {
-	let Data;
-	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
-	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
-		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
-		Data = {
-			Games: [],
-		};
-	}
-	else {
-		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
-	}
-
-	const GameIDs = games.map(x => x.GameID);
-	if (!Data.Games) Data.Games = [];
-	Data.Games = Data.Games.filter(x => GameIDs.includes(x.GameID));
-	const StoredGameIDs = Data.Games.map(x => x.GameID);
-	Data.Games.push(...games.filter(x => !StoredGameIDs.includes(x.GameID)));
-	fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', JSON.stringify(Data));
-}
-
-function addLaunch(GameID, LauncherName) {
-	let Data;
-	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
-	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
-		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
-		Data = {
-			Games: [],
-		};
-	}
-	else {
-		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
-	}
-
-	if (!Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches) Data.Games.find(x => x.GameID === GameID).Launches = 0;
-	Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches++;
-
-	fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', JSON.stringify(Data));
-}
-
 function toggleFavourite(GameID, LauncherName) {
-	let Data;
-	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
-	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
-		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
-		Data = {
-			Games: [],
-		};
-	}
-	else {
-		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
-	}
+	const data = getGames();
+	if (!data.Games) return;
+	data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite = !data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite;
 
-	if (!Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite) Data.Games.find(x => x.GameID === GameID).Favourite = false;
-	Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite = !Data.Games.find(x => x.GameID === GameID).Favourite;
-
-	fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', JSON.stringify(Data));
+	setGames(data);
 }
-
-function setLastLaunch(GameID, LauncherName) {
-	let Data;
-	checkForDirAndCreate(__dirname + '/storage/Cache/Games/Images');
-	if (!fs.existsSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json')) {
-		fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', '{\n\n}');
-		Data = {
-			Games: [],
-		};
-	}
-	else {
-		Data = require(path.join(APP_BASE_PATH, Constants.GAMES_DATA_BASE_PATH.slice(2), '/Data.json'));
-	}
-
-	if (!Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite) Data.Games.find(x => x.GameID === GameID).LastLaunch = Date.now();
-	Data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).LastLaunch = Date.now();
-
-	fs.writeFileSync(Constants.GAMES_DATA_BASE_PATH + '/Data.json', JSON.stringify(Data));
+function addLaunch(GameID, LauncherName) {
+	const data = getGames();
+	if (!data.Games) return;
+	data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).LastLaunch = Date.now();
+	data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches = typeof data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches === 'number' ? data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches + 1 : 1;
+	setGames(data);
 }
 
 function handleLaunch(game) {
-	addLaunch(game.GameID, game.LauncherName);
-	setLastLaunch(game.GameID, game.LauncherName);
 	let res;
-	switch (game.LauncherName) {
-		case 'Steam': {
-			res = runCommand('start', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
-			break;
-		}
-		case 'EpicGames': {
-			res = runCommand('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, '--wait'], game.GameID);
-			break;
-		}
-		case 'Uplay': {
-			res = runCommand('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
-			break;
-		}
-		default: {
-			res = runCommand(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
-			break;
+	if (process.platform === 'win32') {
+		switch (game.LauncherName) {
+			case 'EpicGames': {
+				res = createProcess('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch`, '--wait'], game.GameID);
+				break;
+			}
+			case 'Steam': {
+				res = createProcess('start', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
+				break;
+			}
+			case 'Uplay': {
+				res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
+				break;
+			}
+			case 'Minecraft': {
+				res = createProcess('minecraft-launcher', [], game.GameID);
+				break;
+			}
+			default: {
+				res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+				break;
+			}
 		}
 	}
-	if (res == 'RUNNING_ALREADY') {
+	else if (process.platform === 'linux') {
+		switch (game.LauncherName) {
+			case 'Steam': {
+				res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '-silent'], game.GameID);
+				break;
+			}
+			case 'Minecraft': {
+				res = createProcess('minecraft-launcher', [], game.GameID);
+				break;
+			}
+			default: {
+				res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
+				break;
+			}
+		}
+	}
+
+	if (res === 'RUNNING_ALREADY') {
 		document.querySelector('.alert-box-message').textContent = `${game.DisplayName} is already running!`;
 		document.querySelector('.alert-box').style.marginTop = '40px';
 		document.querySelector('.alert-box').style.visibility = 'visible';
-		return document.querySelector('.alert-box').style.opacity = '1';
+		document.querySelector('.alert-box').style.opacity = '1';
+		return document.querySelector('.alert-box').style.display = 'flex';
 	}
+
+	addLaunch(game.GameID, game.LauncherName);
 }
+
+function createProcess(Command, Args, GameID, force = false) {
+	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
+
+	const instance = spawn(Command, Args, { detached: false, shell: true });
+	processes.set(GameID, instance);
+
+	instance.on('spawn', () => console.log('[PROC] Process started with ID', GameID));
+	instance.on('error', (error) => console.error('[PROC] Error on process', GameID, '\n', error));
+	setTimeout(() => instance.on('exit', (code, signal) => {
+		ipcRenderer.send('show-window');
+		processes.delete(GameID);
+		console.log('[PROC] Process', GameID, 'exited with code', code, 'and signal', signal);
+	}), 100);
+
+	return instance;
+}
+
 module.exports = {
-	loadAllGames,
-	loadFavouriteGames,
-	loadRecentGames,
-	loadRecentGamesMainPage,
-	saveGames,
-	toggleFavourite,
-	addLaunch,
-	setLastLaunch,
+	loadGames,
+	getInstalledGames,
 };

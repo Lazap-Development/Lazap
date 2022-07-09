@@ -1,13 +1,8 @@
-const { ipcRenderer } = require('electron');
-
 const fnScript = document.createElement('script');
 fnScript.async = true;
 fnScript.type = 'text/javascript';
 fnScript.src = 'js/functions.js';
 document.querySelector('head').appendChild(fnScript);
-
-const account = document.getElementById('account-btn');
-let loggedin;
 
 // eslint-disable-next-line no-unused-vars
 function close_window() {
@@ -24,20 +19,19 @@ function min_window() {
 	ipcRenderer.send('min-window');
 }
 
+const { ipcRenderer } = require('electron');
+
 ipcRenderer.on('check-for-login', async (e, r) => {
-	const res = r;
-	if (res.status === 'SUCCESS') {
-		loggedin = true;
-	}
-	else {
-		loggedin = false;
-	}
+	loggedin = r.status === 'SUCCESS';
 });
 
 ipcRenderer.on('handle-update-available', () => {
 	document.querySelector('img.titlebar-update#update-btn').style.display = 'block';
 });
 document.querySelector('img.titlebar-update#update-btn').addEventListener('click', () => ipcRenderer.send('handle-update-install'));
+
+const account = document.getElementById('account-btn');
+let loggedin;
 
 account.addEventListener('mouseover', () => {
 	if (loggedin === true) {
@@ -50,11 +44,12 @@ account.addEventListener('mouseover', () => {
 account.addEventListener('mouseout', () => account.style['filter'] = 'none');
 account.addEventListener('click', () => ipcRenderer.send('load-login'));
 
-ipcRenderer.on('load-banners-response', () => {
+ipcRenderer.on('load-banners-response', (e, id, force) => {
+	if (id !== 'allGames') return;
 	const gamesList = document.querySelectorAll('#allGamesList > div');
 	const games = [];
 	for (let i = 0; i < gamesList.length; i++) {
-		if (gamesList.item(i).firstElementChild.getAttribute('src') === '../icon.ico') {
+		if (gamesList.item(i).firstElementChild.getAttribute('src') === '../img/icons/icon.ico') {
 			games.push(gamesList.item(i).firstElementChild);
 		}
 	}
@@ -72,9 +67,12 @@ ipcRenderer.on('load-banners-response', () => {
 	}
 	games.forEach((game) => {
 		game.addEventListener('load', () => {
-			// if (game.getAttribute('src') !== '../icon.ico') {
-			loaded++;
-			// }
+			if (force) {
+				loaded++;
+			}
+			else if (game.getAttribute('src') !== '../img/icons/icon.ico') {
+				loaded++;
+			}
 			if (loaded == total) {
 				setTimeout(() => {
 					document.getElementById('game-loading-overlay').style.opacity = '0';

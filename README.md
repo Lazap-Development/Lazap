@@ -1,5 +1,5 @@
 <p align="center">
-<a href="#" target="_blank"><img src="https://media.discordapp.net/attachments/910422768045133869/914878042508251156/icon.png" width="200px" height="auto"/></a>
+<a href="#" target="_blank"><img src="https://media.discordapp.net/attachments/910422768045133869/914878042508251156/icon.png" width="160px" height="auto"/></a>
 </p>
 
 <h1 align="center">
@@ -22,49 +22,42 @@
 
 <br>
 
-**The new face of Open Source Game Launchers**, Lazap unites all your games together in one place! Whether it be Linux, Windows or MacOS, we got you covered. Lazap can connect with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam. Our team of Developers make sure that Lazap is customizable, Meet up the user's need and have a glancing & modernish look - meaning, custom JavaScript & CSS scripts, games outside the launchers we support and much more!
+**The new face of Open Source Game Launchers**, Lazap unites all your games together in one place! Whether it be Linux, Windows or MacOS, we got you covered. Lazap can connect with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam. Our team of Developers make sure that Lazap is customizable, Meet up the user's need and have a glancing & modernish look - meaning, custom JavaScript & CSS scripts, games outside the launchers we support and much more.
 
-## How do I start using Lazap?
-`1` - Head over to the [releases](https://github.com/Lazap-Development/lazap/releases) page in lazap's github and download the latest zip file.<br>
-`2` - Once downloaded, unzip the downloaded file and extract it.<br>
-`3` - Once extracted, inside of the extracted content you should see a file named `Lazap Setup.exe`<br>
-`4` - Go on and double click the file. Follow the setup and Lazap should be installed for you! <br>
+## Download & Install
 
-Interestingly we have developed a system to handle automatic updates for Lazap once a new version releases.<br>
-Furthermore, don't hesitate to disable this `auto update` feature inside of the settings in lazap.
+Installing Lazap is very straight forward. Depending on your operating system, we provided as much ease in terms of installation.<br>
+Currently, Mac Support is pending so we appreciate your paitence.<br>
 
-## Building Lazap (Developers & Contributers)
-Building Lazap is very simple. Simply run these commands in order and you should be good to go:<br>
-__NOTE:__ Make sure you have [Node.js](https://nodejs.org/en/download/) and [git](https://git-scm.com/) installed
-```
+#### ▸ Windows
+`-` Download the latest .exe file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+
+#### ▸ Linux
+`-` [AUR](https://aur.archlinux.org/packages/lazap) for **Arch Linux** <br>
+`-` For **other distros**, we recommend you to download the latest `.Appimage` in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+
+
+
+## Development
+
+Lazap uses Electron for the framework. The game detection is developed by using bare Vanilla JavaScript - no other libraries included.
+If you'd like to compile lazap from source or to contribute, please read the following: <br>
+
+● **REQUIREMENT**<br> 
+node `v17` or higher (`v18.5` is tested on our end and seems to be the most compatible)
+
+Once met requirement, do the following:
+```bash
+# Clones the repository
 git clone https://github.com/Lazap-Development/lazap.git
-cd lazap
-git switch nightly
-npm i
-npm start
+# Switches to the nightly development branch. !!! not needed if you are not a contributor !!!
+git switch nightly 
+# Installs dependencies
+npm install
 ```
-And if you did everything right, Lazap should start right up!
+To run lazap afterwards, do `npm start`.
 
-After doing those, if you would like to have the `exe` file (and the installable), rather then running a cmd each time, simply run the following:
-```
-npm run build
-```
-Then you should see a new directory named `dist`. Open it up and you can easily figure everything out yourself.
 
 ## Help & Support
-We are here to help you if you get any problems when building Lazap, just join our [Discord](https://discord.gg/DashCruft)!<br><br>
-**Want to help out insted of getting help?** We love Pull Requests and Issue hunters! Open up a PR and fix some gears, we would love the community's help to improve lazap and make it more user friendly! 😀
-
-## License
-Lazap is licensed under the terms of [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://github.com/Lazap-Development/lazap/blob/main/LICENSE.md) ("CC-BY-NC-SA-4.0"). Commercial use is not allowed under this license. This includes any kind of revenue made with or based upon the software, even donations.
-
-The CC-BY-NC-SA-4.0 allows you to:
-- [x] **Share** -- copy and redistribute the material in any medium or format
-- [x] **Adapt** -- remix, transform, and build upon the material
-
-Under the following terms:
-- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
-- **NonCommercial** — You may not use the material for commercial purposes. 
-- **ShareAlike** — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
-
-More information can be found [here](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+If you need help or tech support for your Lazap installation, feel free to file an [issue](https://github.com/Lazap-Development/lazap/issues) so we can assist you.<br><br>
+**Want to help out insted of getting help?** We love Pull Requests and Issue hunters. Open up a PR and fix some gears, we would love the community's help to improve lazap and make it more user friendly.

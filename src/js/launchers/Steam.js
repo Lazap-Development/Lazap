@@ -1,26 +1,16 @@
-/* eslint-disable prefer-const */
-module.exports = {
-	getSteamLocation,
-	getInstalledGames,
-	parseGameObject,
-	acf_to_json,
-	isLauncherInstalled,
-};
-
 let {
 	exec,
 } = require('child_process');
 const util = require('util');
+
 exec = util.promisify(exec);
-const fs = require('fs');
 
 async function getSteamLocation(os = process.platform, checkForSteam = true) {
 	let launcher_location;
 	let registry_res;
 	if (os === 'win32') {
 		const { stdout, error } = await exec(
-			`Reg Query "HKEY_LOCAL_MACHINE\\SOFTWARE\\${process.arch === 'x64' ? 'Wow6432Node\\' : ''
-			}Valve\\Steam" /v InstallPath`,
+			`Reg Query "HKEY_LOCAL_MACHINE\\SOFTWARE\\${process.arch === 'x64' ? 'Wow6432Node\\' : ''}Valve\\Steam" /v InstallPath`,
 		).catch(() => {
 			launcher_location = null;
 			return { error: 'NOT_FOUND' };
@@ -34,25 +24,69 @@ async function getSteamLocation(os = process.platform, checkForSteam = true) {
 			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
 		}
 	}
+	else if (os === 'linux') {
+		const text = await fetch(`${require('os').userInfo().homedir}/.steam/steam/steamapps/libraryfolders.vdf`)
+			.then(response => response.text())
+			// eslint-disable-next-line no-shadow
+			.then(text => {
+				return text;
+			});
+
+		const VDF = require('../../modules/parseVDF');
+		const parsed = VDF.parse(text);
+		const toArray = Object.entries(parsed.libraryfolders);
+		launcher_location = toArray.map((item) => {
+			return item[1].path;
+		});
+
+	}
 	if (checkForSteam && !isLauncherInstalled(launcher_location)) return false;
 	return launcher_location;
 }
 
+const fs = require('fs');
+
 function isLauncherInstalled(path) {
-	return fs.existsSync(path);
+	if (typeof path === 'string') {
+		return fs.existsSync(path);
+	}
+	else if (Array.isArray(path)) {
+		return path.map(x => fs.existsSync(x)).includes(true);
+	}
 }
 
 async function getInstalledGames() {
 	const path = await getSteamLocation();
+
 	if (!path) return [];
-	const acf_basePath = `${path}\\steamapps`;
-	if (!fs.existsSync(acf_basePath)) return [];
-	const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
-		.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
+	if (process.platform === 'win32') {
+		const acf_basePath = `${path}\\steamapps`;
+		if (!fs.existsSync(acf_basePath)) return [];
+		const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
+			.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
 
-	return acf_files;
+		return acf_files;
+	}
+	else if (process.platform === 'linux') {
+		let allGames = [];
+		await path.forEach(location => {
+			const acf_basePath = `${location}/steamapps`;
+			if (!fs.existsSync(acf_basePath)) return [];
+			const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
+				.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}/${x}`).toString())));
+			
+			allGames.push(acf_files);
+			var result = allGames.flat().reduce((unique, o) => {
+				if(!unique.some(obj => obj.DisplayName === o.DisplayName)) {
+				  unique.push(o);
+				}
+				return unique;
+			},[]);
+			allGames = result;
+		});
+		return allGames;
+	}
 }
-
 /* Game Object Example
 {
   "executable": "game.exe",
@@ -63,24 +97,23 @@ async function getInstalledGames() {
 */
 
 function parseGameObject(acf_object = {}) {
-	let {
-		LauncherPath: Executable,
+	const {
+		LauncherExe: Executable,
 		LauncherPath: Location,
 		name: DisplayName,
 		appid: GameID,
 		BytesDownloaded: Size,
 	} = acf_object;
 
-	Executable = Executable.split('\\')[Executable.split('\\').length - 1];
-	Location = Location.split('\\').slice(0, -1).join('\\');
-	Size = parseInt(Size);
+	// Executable = Executable.split('/')[Executable.split('/').length - 1];
+	// Location = Location.split('/').slice(0, -1).join('/');
 
 	return {
 		Executable,
 		Location,
 		DisplayName,
 		GameID,
-		Size,
+		Size: parseInt(Size),
 		LauncherName: 'Steam',
 	};
 }
@@ -101,3 +134,11 @@ function acf_to_json(acf_content = '') {
 		}).join('\n'),
 	);
 }
+
+module.exports = {
+	getSteamLocation,
+	getInstalledGames,
+	parseGameObject,
+	acf_to_json,
+	isLauncherInstalled,
+};
