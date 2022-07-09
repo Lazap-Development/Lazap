@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-let mainWindow;
+/*let mainWindow;
 const { autoUpdater } = require('electron-updater');
 
 // Configuration
@@ -50,13 +50,10 @@ ipcMain.on('handle-update-install', () => {
 });
 
 const getAutoUpdateSetting = () => {
-	const path = require('path');
-	const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
-	const { checkForDirAndCreate } = require('../utils.js');
-	checkForDirAndCreate(APP_BASE_PATH + '/storage/Settings/LauncherData.json', JSON.stringify(require('../../util/Constants.json').defaultLauncherData));
 	const fs = require('fs');
 	const data = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
 	return data.checkForUpdates;
 }
 
 module.exports = (win) => mainWindow = win;
+*/

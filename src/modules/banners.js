@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-function fetch_banner(data) {
+function fetch_banner(data, userDataPath) {
 	/* const htmlparser = require('htmlparser2');
 	const fetch = require('node-fetch'); */
 	const arr = [];
@@ -93,19 +93,15 @@ function fetch_banner(data) {
 		})());
 	}
 
-	cacheBanners(data, arr.filter(async x => {
-		return (await x) !== '../img/icons/icon.ico';
-	}));
+	cacheBanners(data, arr.filter(async x => { return (await x) !== '../img/icons/icon.ico'}), userDataPath);
 	return arr;
 }
 
-function cacheBanners(data, res) {
+function cacheBanners(data, res, userDataPath) {
 	const fetch = require('node-fetch');
 	const { checkForDirAndCreate } = require('../utils.js');
-	const path = require('path');
-	const APP_BASE_PATH = path.join(__dirname, path.relative(__dirname, './'));
 
-	checkForDirAndCreate(APP_BASE_PATH + '/storage/Cache/Games/Images');
+	checkForDirAndCreate(userDataPath + '/storage/Cache/Games/Images', '{}', userDataPath);
 
 	res.filter(async (x) => (await x).startsWith('http')).forEach(async (x, i) => {
 		fetch(await x, {
@@ -113,7 +109,7 @@ function cacheBanners(data, res) {
 		}).then(async (response) => {
 			const md5 = require('md5');
 			const fs = require('fs');
-			fs.createWriteStream(`./storage/Cache/Games/Images/${md5(data[i].DisplayName)}.png`).write(Buffer.from(await response.arrayBuffer()));
+			fs.createWriteStream(userDataPath + `/storage/Cache/Games/Images/${md5(data[i].DisplayName)}.png`).write(Buffer.from(await response.arrayBuffer()));
 		}).catch(() => '');
 	});
 }

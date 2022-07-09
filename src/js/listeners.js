@@ -14,6 +14,12 @@ const settingsbackblur = document.getElementById('settings-backblur');
 const { ipcRenderer } = require('electron');
 const fs = require('fs');
 
+let userDataPath;
+(async () => {
+    const result = await ipcRenderer.invoke('read-path');
+    userDataPath = result
+})();
+ 
 window.onload = async function () {
 	// Cache games first before loading
 	await require('./js/launchers/find-games.js').getInstalledGames();
@@ -157,7 +163,7 @@ window.onload = async function () {
 	});
 
 	document.querySelector('.titlebar-settings').addEventListener('click', () => {
-		const Data = JSON.parse(fs.readFileSync('./storage/Settings/LauncherData.json').toString());
+		const Data = JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString());
 		document.querySelectorAll('input[id^=setting-]').forEach((input) => {
 			input.checked = Data[input.id.split('-')[1]] ? true : false;
 		});
