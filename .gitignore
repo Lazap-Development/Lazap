@@ -138,3 +138,4 @@ dist
 electron-builder.env
 
 *.pfx
+yarn.lock

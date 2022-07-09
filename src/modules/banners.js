@@ -31,6 +31,7 @@ function fetch_banner(data) {
 				return element?.attribs['data-image'] ? element.attribs['data-image'] : '../img/icons/icon.ico'; */
 			}
 			else if (data[i].LauncherName === 'Steam') {
+				if(data[i].DisplayName === 'FrostRunner') return '../img/icons/icon.ico';
 				return `https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`;
 				// return `https://steamcdn-a.akamaihd.net/steam/apps/${data[i].GameID}/library_600x900.jpg`;
 			}
