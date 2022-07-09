@@ -64,7 +64,6 @@ async function getInstalledGames() {
 		if (!fs.existsSync(acf_basePath)) return [];
 		const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
 			.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
-
 		return acf_files;
 	}
 	else if (process.platform === 'linux') {
