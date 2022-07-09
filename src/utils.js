@@ -1,5 +1,6 @@
 const fs = require('fs');
-const APP_BASE_PATH = process.env.PWD;
+const path = require('path');
+const APP_BASE_PATH = path.join(__dirname, '..');
 console.log(APP_BASE_PATH)
 
 const handleStorageAndTransportData = (mainWindow) => {
