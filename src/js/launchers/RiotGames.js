@@ -35,24 +35,24 @@ async function getInstalledGames(os = process.platform) {
 	if (games.includes('VALORANT')) {
 		games[games.indexOf('VALORANT')] = 'Valorant';
 	}
-        if (games.includes("LoR")) {
-                games[games.indexOf("LoR")] = "Legends of Runeterra";
-        }
+	if (games.includes('LoR')) {
+		games[games.indexOf('LoR')] = 'Legends of Runeterra';
+	}
 
 	return games.map(x => parseGameObject(launcher_location, x));
 }
 
 function parseGameObject(path, game = '') {
-        const correctArgs = {
-          'Valorant': 'valorant',
-          'League of Legends': 'league_of_legends',
-          'Legends of Runeterra': 'bacon'
-        }
-        const correctPathName = {
-          'Valorant': 'VALORANT',
-          'League of Legends': 'League of Legends',
-          'Legends of Runeterra': 'LoR'
-        }
+	const correctArgs = {
+		'Valorant': 'valorant',
+		'League of Legends': 'league_of_legends',
+		'Legends of Runeterra': 'bacon',
+	};
+	const correctPathName = {
+		'Valorant': 'VALORANT',
+		'League of Legends': 'League of Legends',
+		'Legends of Runeterra': 'LoR',
+	};
 	const Executable = 'RiotClientServices.exe';
 	const Location = path.slice(0, -22);
 	const Args = [`--launch-product=${correctArgs[game]}`, '--launch-patchline=live'];
