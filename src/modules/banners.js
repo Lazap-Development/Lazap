@@ -35,7 +35,12 @@ function fetch_banner(data) {
 				// return `https://steamcdn-a.akamaihd.net/steam/apps/${data[i].GameID}/library_600x900.jpg`;
 			}
 			else if (data[i].LauncherName === 'RiotGames') {
-				return 'https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png';
+                                if (data[i].DisplayName == "Valorant") {
+      				      return 'https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png';
+                                }
+                                if(data[i].DisplayName == "League of Legends") {
+                                      return 'https://images.igdb.com/igdb/image/upload/t_cover_big/co49wj.png';
+                                }
 			}
 			else if (data[i].LauncherName === 'Uplay') {
 				return '../img/icons/icon.ico';

@@ -3,6 +3,12 @@ const { promisify } = require('util');
 let { exec } = require('child_process');
 exec = promisify(exec);
 
+function getRiotGamesLocation(launcher_location) {
+        const array = launcher_location.split("\\");
+        array.length = 2;
+        return array.join("\\")
+}
+
 async function getInstalledGames(os = process.platform) {
 	let launcher_location;
 	if (os === 'win32') {
@@ -24,17 +30,33 @@ async function getInstalledGames(os = process.platform) {
 		}
 		launcher_location = stdout.split('"')[1];
 	}
+
 	if (!fs.existsSync(launcher_location)) return [];
-	return [await parseGameObject(launcher_location)].filter(x => typeof x === 'object' && x !== null);
+        
+        //test
+        let allGames = [];
+        const games = fs.readdirSync(getRiotGamesLocation((launcher_location)));
+        const indexToRemove = games.indexOf("Riot Client");
+        games.splice(indexToRemove, 1);
+
+        if (games.includes("VALORANT")) {
+          games[games.indexOf("VALORANT")] = "Valorant";
+        }
+
+        for (i = 0; i < games.length; i++) {
+                  allGames.push(await parseGameObject(launcher_location, games[i]));
+        }
+
+        return allGames;
 }
 
-async function parseGameObject(path) {
+async function parseGameObject(path, game = '') {
 	const Executable = 'RiotClientServices.exe';
 	const Location = path.slice(0, -22);
-	const Args = ['--launch-product=valorant', '--launch-patchline=live'];
-	const DisplayName = 'Valorant';
-	if (!fs.existsSync(Location.slice(0, -12) + 'VALORANT')) return;
-	const Size = fs.statSync(Location.slice(0, -12) + 'VALORANT').size;
+	const Args = [`--launch-product=${game.toLowerCase().replace(" ", "_").replace(" ", "_")}`, '--launch-patchline=live'];
+	const DisplayName = game;
+	if (!fs.existsSync(Location.slice(0, -12) + game)) return;
+	const Size = fs.statSync(Location.slice(0, -12) + game).size;
 
 	return {
 		Executable,
@@ -43,7 +65,7 @@ async function parseGameObject(path) {
 		DisplayName,
 		Size,
 		LauncherName: 'RiotGames',
-		GameID: 'Valorant',
+		GameID: game,
 	};
 }
 
