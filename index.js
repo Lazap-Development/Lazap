@@ -46,7 +46,6 @@ app.on('ready', () => {
 
 	mainWindow.once('ready-to-show', async () => {
 		mainWindow.show();
-
 		tray = new Tray(__dirname + (process.platform === 'linux' ? '/img/icons/icon.png' : '/img/icons/icon.ico'));
 		tray.setToolTip('Lazap');
 

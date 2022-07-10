@@ -92,6 +92,9 @@ function fetch_banner(data, userDataPath) {
 			else if (data[i].LauncherName === 'FiveM') {
 				return 'https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png';
 			}
+			else if (data[i].LauncherName === 'osu!') {
+				return 'https://static.wikia.nocookie.net/osugame/images/4/41/Osu_new_logo.png/revision/latest?cb=20220105150330';
+			}
 			else if (data[i].LauncherName === 'Lunar') {
 				return 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
 			}
