@@ -82,15 +82,18 @@ app.on('ready', () => {
 	});
 
 	ipcMain.on('load-main', () => {
-		mainWindow.loadFile('src/index.html');
+		mainWindow.loadFile('src/index.html').then(r => console.log("index.html loaded successfully"));
 	});
+
 	ipcMain.on('load-custom', (e, str) => {
-		mainWindow.loadFile(str);
+		mainWindow.loadFile(str).then(r => console.log("custom loaded successfully"));
 	});
-	ipcMain.on('load-login', async () => {
-		mainWindow.loadFile('src/login.html');
+
+	ipcMain.on('load-login', () => {
+		mainWindow.loadFile('src/login.html').then(r => console.log("login.html loaded successfully"));
 		mainWindow.webContents.once('did-finish-load', () => mainWindow.webContents.send('replace-ignore-and-continue'));
 	});
+
 	ipcMain.on('close-window', () => {
 		if (!fs.existsSync(userDataPath + '/storage/Settings/LauncherData.json')) {
 			checkForDirAndCreate(userDataPath + '/storage/Settings/LauncherData.json', '{}', userDataPath);
@@ -109,9 +112,11 @@ app.on('ready', () => {
 	ipcMain.on('max-window', () => {
 		mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize();
 	});
+
 	ipcMain.on('min-window', () => {
 		mainWindow.minimize();
 	});
+
 	ipcMain.on('min-tray', () => {
 		if (!fs.existsSync(userDataPath + '/storage/Settings/LauncherData.json')) {
 			checkForDirAndCreate(userDataPath + '/storage/Settings/LauncherData.json', '{}', userDataPath);
@@ -120,6 +125,7 @@ app.on('ready', () => {
 			mainWindow.hide();
 		}
 	});
+
 	ipcMain.on('show-window', () => {
 		if (!fs.existsSync(userDataPath + '/storage/Settings/LauncherData.json')) {
 			checkForDirAndCreate(userDataPath + '/storage/Settings/LauncherData.json', '{}', userDataPath);
@@ -128,9 +134,11 @@ app.on('ready', () => {
 			mainWindow.show();
 		}
 	});
+
 	ipcMain.on('update-profile', (e, data) => {
 		editLocalStorage(data, userDataPath);
 	});
+
 	ipcMain.on('load-banners-request', async (e, r, id) => {
 		const { fetch_banner } = require('./src/modules/banners.js');
 		const res = fetch_banner(r, userDataPath);
@@ -140,17 +148,20 @@ app.on('ready', () => {
 			gameElement.firstElementChild.setAttribute('src', '${await url}');
 		   `);
 		});
-		mainWindow.webContents.send('load-banners-response', id, res.filter(async x => (await x) === '../img/icons/icon.ico').length === res.length ? true : false);
+		mainWindow.webContents.send('load-banners-response', id, res.filter(async x => (await x) === '../img/icons/icon.ico').length === res.length);
 	});
+
 	ipcMain.on('rpcUpdate', (e, d) => updateRPC(d));
+
 	ipcMain.on('setLaunchOnStartup', (e, bool) => app.setLoginItemSettings({ 'openAtLogin': bool, 'enabled': bool }));
+
 	ipcMain.on('restart', async () => {
 		app.relaunch();
 		app.exit();
 	});
+
 	ipcMain.handle('read-path', async () => {
-		const path = app.getPath('userData');
-		return path;
+		return app.getPath('userData');
 	});
 
 });
@@ -177,18 +188,21 @@ ipcMain.on('updateSetting', (e, key, bool) => {
 
 const rpc = require('discord-rpc');
 const rpcClient = new rpc.Client({ transport: 'ipc' });
-rpcClient.login({ clientId: '932504287337148417' });
+
+rpcClient.login({ clientId: '932504287337148417' }).then(r => console.log("rpc logged in"));
+
 function updateRPC(data) {
 	const LauncherData = JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString());
 	if (LauncherData.enableRPC !== true && typeof data === 'object' && data !== null) return 'DISABLED';
 	if (!data) {
-		rpcClient.clearActivity();
+		rpcClient.clearActivity().then(r => console.log('Activity cleared!'));
 		return;
 	}
 	rpcClient.setActivity(data).catch(err => console.warn('[RPC]', err.stack.includes('connection closed') ? 'OFFLINE' : err));
 }
 
-handleHardwareAcceleration();
+handleHardwareAcceleration().then(r => console.log("Handled hardware acceleration like a :Man:"));
+
 async function handleHardwareAcceleration() {
 	checkForDirAndCreate(userDataPath + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData), userDataPath);
 	if (JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString())?.disableHardwareAcceleration === true) {
