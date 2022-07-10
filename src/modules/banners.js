@@ -3,6 +3,24 @@ function fetch_banner(data, userDataPath) {
 	/* const htmlparser = require('htmlparser2');
 	const fetch = require('node-fetch'); */
 	const arr = [];
+
+	function isConnected() {
+		const obj = require('os').networkInterfaces()
+		const arr = Object.entries(obj);
+		let result = false;
+		for (let a of arr) {
+			a[1] = a[1].filter(x => x.internal === false);
+			result = a[1].length !== 0;
+			// console.log(a[1]);
+			/* for (const xd of a[1]) {
+				if(xd.family === 'IPv6') return;
+				console.log(xd);
+			}*/
+		}
+		console.log(result);
+		return result;
+	}
+
 	for (let i = 0; i < data.length; i++) {
 		arr.push((async () => {
 			if (data[i].LauncherName === 'EpicGames') {
@@ -32,31 +50,51 @@ function fetch_banner(data, userDataPath) {
 			}
 			else if (data[i].LauncherName === 'Lutris') {
 				let url = `https://lutris.net/games/banner/${data[i].GameID}.jpg`;
-				await fetch(`https://lutris.net/games/banner/${data[i].GameID}.jpg`).then(res => {
-					console.log(res.status, typeof res.status);
-					if(res.status === 404) return url = 'https://cdn2.steamgriddb.com/file/sgdb-cdn/thumb/ac3f115b3a14f86b904bdc5ed5f82c4b.jpg'
-				});
+				if(!isConnected()) {
+					url = '../img/icons/icon.ico';
+				} else {
+					await fetch(`https://lutris.net/games/banner/${data[i].GameID}.jpg`).then(res => {
+						console.log(res.status, typeof res.status);
+						if(res.status === 404) return url = 'https://cdn2.steamgriddb.com/file/sgdb-cdn/thumb/ac3f115b3a14f86b904bdc5ed5f82c4b.jpg'
+					});
+				}
 				return url;
 			}
 			else if (data[i].LauncherName === 'Steam') {
 				let url = `https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`;
-				fetch(`https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`).then(res => {
-					console.log(res.status, typeof res.status);
-					if(res.status === 404) return url = 'https://www.sketchappsources.com/resources/source-image/roberto-steam-logo.png';
-				});
-				if(data[i].DisplayName === 'FrostRunner') return 'https://cdnb.artstation.com/p/assets/covers/images/026/711/505/large/david-rosario-iii-david-rosario-iii-frostrunner-banner-small.jpg?1589504830';
+				if(!isConnected()) {
+					url = '../img/icons/icon.ico';
+				} else {
+					await fetch(`https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`).then(res => {
+						console.log(res.status, typeof res.status);
+						if(res.status === 404) return url = 'https://www.sketchappsources.com/resources/source-image/roberto-steam-logo.png';
+					});
+					if(data[i].DisplayName === 'FrostRunner') return url = 'https://cdnb.artstation.com/p/assets/covers/images/026/711/505/large/david-rosario-iii-david-rosario-iii-frostrunner-banner-small.jpg?1589504830';
+				}
 				return url;
 			}
 			else if (data[i].LauncherName === 'RiotGames') {
-                                if (data[i].DisplayName === "Valorant") {
-      				      return 'https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png';
-                                }
-                                if(data[i].DisplayName === "League of Legends") {
-                                      return 'https://images.igdb.com/igdb/image/upload/t_cover_big/co49wj.png';
-                                }
-                                if(data[i].DisplayName === "Legends of Runeterra") {
-                                      return 'https://images.igdb.com/igdb/image/upload/t_cover_big/co3wnv.png';
-                                }
+				if (data[i].DisplayName === "Valorant") {
+					let url = 'https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png';
+					if(!isConnected()) {
+						url = '../img/icons/icon.ico';
+					}
+					return url;
+				}
+				if(data[i].DisplayName === "League of Legends") {
+					let url = 'https://images.igdb.com/igdb/image/upload/t_cover_big/co49wj.png';
+					if(!isConnected()) {
+						url = '../img/icons/icon.ico';
+					}
+					return url;
+				}
+				if(data[i].DisplayName === "Legends of Runeterra") {
+					let url = 'https://images.igdb.com/igdb/image/upload/t_cover_big/co3wnv.png';
+					if(!isConnected()) {
+						url = '../img/icons/icon.ico';
+					}
+					return url;
+				}
 			}
 			else if (data[i].LauncherName === 'Uplay') {
 				return '../img/icons/icon.ico';
@@ -100,13 +138,25 @@ function fetch_banner(data, userDataPath) {
 				return element?.attribs['data-image'] ? element?.attribs['data-image'] : '../img/icons/icon.ico'; */
 			}
 			else if (data[i].LauncherName === 'Minecraft') {
-				return 'https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png';
+				let url = 'https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png';
+				if(!isConnected()) {
+					url = '../img/icons/icon.ico';
+				}
+				return url;
 			}
 			else if (data[i].LauncherName === 'FiveM') {
-				return 'https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png';
+				let url = 'https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png';
+				if(!isConnected()) {
+					url = '../img/icons/icon.ico';
+				}
+				return url;
 			}
 			else if (data[i].LauncherName === 'Lunar') {
-				return 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
+				let url = 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
+				if(!isConnected()) {
+					url = '../img/icons/icon.ico';
+				}
+				return url;
 			}
 			else if (data[i].LauncherName === 'XboxGames') {
 				return data[i].Banner;
