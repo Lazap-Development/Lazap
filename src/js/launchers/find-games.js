@@ -247,23 +247,23 @@ async function handleLaunch(game) {
 	if (process.platform === 'win32') {
 		switch (game.LauncherName) {
 		case 'EpicGames': {
-			res = createProcess('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch`, '--wait'], game.GameID);
+			res = createProcess('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch`, '--wait'], game);
 			break;
 		}
 		case 'Steam': {
-			res = createProcess('start', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
+			res = createProcess('start', [`steam://rungameid/${game.GameID}`, '--wait'], game);
 			break;
 		}
 		case 'Uplay': {
-			res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
+			res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game);
 			break;
 		}
 		case 'Minecraft': {
-			res = createProcess('minecraft-launcher', [], game.GameID);
+			res = createProcess('minecraft-launcher', [], game);
 			break;
 		}
 		default: {
-			res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+			res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game);
 			break;
 		}
 		}
@@ -271,11 +271,11 @@ async function handleLaunch(game) {
 	else if (process.platform === 'linux') {
 		switch (game.LauncherName) {
 		case 'Steam': {
-			res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '-silent'], game.GameID);
+			res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '-silent'], game);
 			break;
 		}
 		case 'Minecraft': {
-			res = createProcess('minecraft-launcher', [], game.GameID);
+			res = createProcess('minecraft-launcher', [], game);
 			break;
 		}
 		case 'Lunar': {
@@ -287,7 +287,7 @@ async function handleLaunch(game) {
 				});
 				setTimeout(() => {
 					console.log(processString);
-					res = createProcess('cd', [homeDir, '&&', `'${processString}'`], game.GameID);
+					res = createProcess('cd', [homeDir, '&&', `'${processString}'`], game);
 					const jsonContent = JSON.stringify({
 						'LunarAppImageLocation': processString,
 					});
@@ -307,18 +307,17 @@ async function handleLaunch(game) {
 				let string = data.LunarAppImageLocation;
 				const theLunarPath = fs.existsSync(`/home/logic${string.slice(1)}`);
 				if (!theLunarPath) await xd();
-				res = createProcess('cd', [homeDir, '&&', `'${data.LunarAppImageLocation}'`], game.GameID);
+				res = createProcess('cd', [homeDir, '&&', `'${data.LunarAppImageLocation}'`], game);
 				return;
 			}
 			await xd();
 			break;
 		}
 		case 'Lutris':
-			console.log(game.LaunchID);
-			res = createProcess('LUTRIS_SKIP_INIT=1', ['lutris', `lutris:rungameid/${game.LaunchID}`], game.GameID);
+			res = createProcess('LUTRIS_SKIP_INIT=1', ['lutris', `lutris:rungameid/${game.LaunchID}`], game);
 			break;
 		default: {
-			res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
+			res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game);
 			break;
 		}
 		}
@@ -335,18 +334,36 @@ async function handleLaunch(game) {
 	addLaunch(game.GameID, game.LauncherName);
 }
 
-function createProcess(Command, Args, GameID, force = false) {
-	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
+function createProcess(Command, Args, game, force = false) {
+	if (processes.get(game.GameID) && !force) return 'RUNNING_ALREADY';
 
 	const instance = spawn(Command, Args, { detached: false, shell: true });
-	processes.set(GameID, instance);
+	processes.set(game.GameID, instance);
 
-	instance.on('spawn', () => console.log('[PROC] Process started with ID', GameID));
-	instance.on('error', (error) => console.error('[PROC] Error on process', GameID, '\n', error));
+	instance.on('spawn', () => {
+		console.log('[PROC] Process started with ID', game.GameID);
+		ipcRenderer.send('rpcUpdate', {
+			details: `Playing ${game.DisplayName}`,
+			startTimestamp: Date.now(),
+			largeImageKey: `${game.LauncherName}`,
+			smallImageKey: 'games',
+			largeImageText: `${game.LauncherName}`,
+			smallImageText: `${game.DisplayName}`,
+		});
+	});
+	instance.on('error', (error) => console.error('[PROC] Error on process', game.GameID, '\n', error));
 	setTimeout(() => instance.on('exit', (code, signal) => {
 		ipcRenderer.send('show-window');
-		processes.delete(GameID);
-		console.log('[PROC] Process', GameID, 'exited with code', code, 'and signal', signal);
+		processes.delete(game.GameID);
+		ipcRenderer.send('rpcUpdate', {
+			details: 'Browsing All Games',
+			startTimestamp: Date.now(),
+			largeImageKey: 'lazap',
+			smallImageKey: 'games',
+			largeImageText: 'Lazap',
+			smallImageText: 'All Games',
+		});
+		console.log('[PROC] Process', game.GameID, 'exited with code', code, 'and signal', signal);
 	}), 100);
 
 	return instance;
