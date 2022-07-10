@@ -63,7 +63,6 @@
         "discord-rpc": "^4.0.1",
         "electron-updater": "^5.0.5",
         "htmlparser2": "^8.0.1",
-        "js-yaml": "^4.1.0",
         "md5": "^2.3.0",
         "node-fetch": "^2.6.1",
         "sqlite3": "^5.0.8",
