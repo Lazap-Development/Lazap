@@ -108,10 +108,10 @@ function parseGameObject(acf_object = {}) {
 	// Location = Location.split('/').slice(0, -1).join('/');
 
 	return {
-		Executable,
-		Location,
 		DisplayName,
 		GameID,
+		Executable,
+		Location,
 		Size: parseInt(Size),
 		LauncherName: 'Steam',
 	};

@@ -26,8 +26,7 @@ const { spawn, exec } = require('child_process');
 
 let userDataPath;
 (async () => {
-	const result = await ipcRenderer.invoke('read-path');
-	userDataPath = result;
+	userDataPath = await ipcRenderer.invoke('read-path');
 })();
 
 async function getInstalledGames() {
@@ -41,7 +40,6 @@ async function getInstalledGames() {
 	// Fetch all games
 	const launchers = fs.readdirSync('./src/js/launchers').filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
-	console.log(games);
 	if (games.length < 1) {
 		return 'NO_GAMES_FOUND';
 	}

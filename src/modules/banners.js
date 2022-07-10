@@ -31,18 +31,21 @@ function fetch_banner(data, userDataPath) {
 				return element?.attribs['data-image'] ? element.attribs['data-image'] : '../img/icons/icon.ico'; */
 			}
 			else if (data[i].LauncherName === 'Lutris') {
-				fetch(`https://lutris.net/games/banner/${data[i].GameID}.jpg`).then(res => {
-					if(res.status === '404') return 'https://cdn2.steamgriddb.com/file/sgdb-cdn/thumb/ac3f115b3a14f86b904bdc5ed5f82c4b.jpg';
+				let url = `https://lutris.net/games/banner/${data[i].GameID}.jpg`;
+				await fetch(`https://lutris.net/games/banner/${data[i].GameID}.jpg`).then(res => {
+					console.log(res.status, typeof res.status);
+					if(res.status === 404) return url = 'https://cdn2.steamgriddb.com/file/sgdb-cdn/thumb/ac3f115b3a14f86b904bdc5ed5f82c4b.jpg'
 				});
-				return `https://lutris.net/games/banner/${data[i].GameID}.jpg`;
+				return url;
 			}
 			else if (data[i].LauncherName === 'Steam') {
+				let url = `https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`;
 				fetch(`https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`).then(res => {
-					if(res.status === '404') return 'https://www.sketchappsources.com/resources/source-image/roberto-steam-logo.png';
+					console.log(res.status, typeof res.status);
+					if(res.status === 404) return url = 'https://www.sketchappsources.com/resources/source-image/roberto-steam-logo.png';
 				});
 				if(data[i].DisplayName === 'FrostRunner') return 'https://cdnb.artstation.com/p/assets/covers/images/026/711/505/large/david-rosario-iii-david-rosario-iii-frostrunner-banner-small.jpg?1589504830';
-				return `https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`;
-				// return `https://steamcdn-a.akamaihd.net/steam/apps/${data[i].GameID}/library_600x900.jpg`;
+				return url;
 			}
 			else if (data[i].LauncherName === 'RiotGames') {
                                 if (data[i].DisplayName === "Valorant") {
