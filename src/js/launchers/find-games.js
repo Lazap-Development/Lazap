@@ -54,7 +54,6 @@ async function loadGames(id) {
 	let games = await getInstalledGames();
 	const list = document.getElementById(id) ?? document.getElementById(`${id}List`);
 
-	console.log(games);
 	// Cache results or get from cache if cooldown
 	if (typeof games === 'string' && games.startsWith('COOLDOWN')) {
 		games = cachedGames;
@@ -203,7 +202,7 @@ function sort(games, type) {
 	}
 	else if (type === 'lastLaunch') {
 		const data = getGames().Games;
-		return games.filter(x => data.find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName).LastLaunch).sort((a, b) => data.find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch);
+		return games.filter(x => data.find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName)?.LastLaunch).sort((a, b) => data.find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch);
 	}
 	return games;
 }
