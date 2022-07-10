@@ -82,15 +82,15 @@ app.on('ready', () => {
 	});
 
 	ipcMain.on('load-main', () => {
-		mainWindow.loadFile('src/index.html').then(r => console.log("index.html loaded successfully"));
+		mainWindow.loadFile('src/index.html');
 	});
 
 	ipcMain.on('load-custom', (e, str) => {
-		mainWindow.loadFile(str).then(r => console.log("custom loaded successfully"));
+		mainWindow.loadFile(str);
 	});
 
 	ipcMain.on('load-login', () => {
-		mainWindow.loadFile('src/login.html').then(r => console.log("login.html loaded successfully"));
+		mainWindow.loadFile('src/login.html');
 		mainWindow.webContents.once('did-finish-load', () => mainWindow.webContents.send('replace-ignore-and-continue'));
 	});
 
@@ -175,21 +175,21 @@ ipcMain.on('updateSetting', (e, key, bool) => {
 	if (requireRestart.includes(key)) ipcMain.emit('restart');
 
 	switch (key) {
-		case 'enableRPC': {
-			updateRPC(bool ? { details: 'On Main Screen', startTimestamp: Date.now(), largeImageKey: 'lazap' } : undefined);
-			break;
-		}
-		case 'launchOnStartup': {
-			ipcMain.emit('setLaunchOnStartup', bool);
-			break;
-		}
+	case 'enableRPC': {
+		updateRPC(bool ? { details: 'On Main Screen', startTimestamp: Date.now(), largeImageKey: 'lazap' } : undefined);
+		break;
+	}
+	case 'launchOnStartup': {
+		ipcMain.emit('setLaunchOnStartup', bool);
+		break;
+	}
 	}
 });
 
 const rpc = require('discord-rpc');
 const rpcClient = new rpc.Client({ transport: 'ipc' });
 
-rpcClient.login({ clientId: '932504287337148417' }).then(r => console.log("rpc logged in"));
+rpcClient.login({ clientId: '932504287337148417' });
 
 function updateRPC(data) {
 	const LauncherData = JSON.parse(fs.readFileSync(userDataPath + '/storage/Settings/LauncherData.json').toString());
@@ -201,7 +201,7 @@ function updateRPC(data) {
 	rpcClient.setActivity(data).catch(err => console.warn('[RPC]', err.stack.includes('connection closed') ? 'OFFLINE' : err));
 }
 
-handleHardwareAcceleration().then(r => console.log("Handled hardware acceleration like a :Man:"));
+handleHardwareAcceleration();
 
 async function handleHardwareAcceleration() {
 	checkForDirAndCreate(userDataPath + '/storage/Settings/LauncherData.json', JSON.stringify(CONSTANTS.defaultLauncherData), userDataPath);
