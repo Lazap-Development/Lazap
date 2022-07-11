@@ -90,7 +90,7 @@ function getLunarClient() {
 		const homedir = require('os').userInfo().homedir;
 		const isLunarInstalled = fs.existsSync(`${homedir}/.config/lunarclient`);
 		const Location = `${homedir}/.lunarclient`;
-		const Executable = 'Lunar Client-2.11.2.AppImage';
+		const Executable = 'lunarclient';
 		if (!isLunarInstalled) return false;
 		return {
 			DisplayName: 'Lunar Client',

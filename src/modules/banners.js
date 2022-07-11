@@ -5,7 +5,7 @@ function fetch_banner(data, userDataPath) {
 	const arr = [];
 
 	function isConnected() {
-		const obj = require('os').networkInterfaces()
+		const obj = require('os').networkInterfaces();
 		const arr = Object.entries(obj);
 		let result = false;
 		for (let a of arr) {

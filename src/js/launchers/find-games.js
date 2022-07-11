@@ -256,10 +256,6 @@ async function handleLaunch(game) {
 			res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game);
 			break;
 		}
-		case 'Minecraft': {
-			res = createProcess('minecraft-launcher', [], game);
-			break;
-		}
 		default: {
 			res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game);
 			break;
@@ -277,38 +273,7 @@ async function handleLaunch(game) {
 			break;
 		}
 		case 'Lunar': {
-			let processString;
-			const cwd = process.cwd();
-			const xd = async () => {
-				await exec(`cd ${homeDir} && find -name 'Lunar Client-*' | grep '.AppImage'`, (error, stdout, stderr) => {
-					processString = `${stdout.replace(/[\r\n]/gm, '')}`;
-				});
-				setTimeout(() => {
-					console.log(processString);
-					res = createProcess('cd', [homeDir, '&&', `'${processString}'`], game);
-					const jsonContent = JSON.stringify({
-						'LunarAppImageLocation': processString,
-					});
-					fs.writeFile('storage/Cache/Games/LunarCache.json', jsonContent, 'utf8', (err) => {
-						if (err) {
-							console.log('An error occurred while writing JSON Object to File.');
-							return console.log(err);
-						}
-						console.log('JSON file has been saved.');
-					});
-				}, 5000);
-			};
-			const cacheExists = fs.existsSync(`${cwd}/storage/Cache/Games/LunarCache.json`);
-			if (cacheExists) {
-				const cache = fs.readFileSync(`${cwd}/storage/Cache/Games/LunarCache.json`);
-				const data = JSON.parse(cache);
-				let string = data.LunarAppImageLocation;
-				const theLunarPath = fs.existsSync(`/home/logic${string.slice(1)}`);
-				if (!theLunarPath) await xd();
-				res = createProcess('cd', [homeDir, '&&', `'${data.LunarAppImageLocation}'`], game);
-				return;
-			}
-			await xd();
+			res = createProcess('lunarclient', [], game);
 			break;
 		}
 		case 'Lutris':
