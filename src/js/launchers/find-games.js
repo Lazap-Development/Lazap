@@ -304,6 +304,7 @@ function createProcess(Command, Args, game, force = false) {
 	processes.set(game.GameID, instance);
 
 	instance.on('spawn', () => {
+		ipcRenderer.send('min-tray');
 		console.log('[PROC] Process started with ID', game.GameID);
 		ipcRenderer.send('rpcUpdate', {
 			details: `Playing ${game.DisplayName}`,
@@ -314,6 +315,7 @@ function createProcess(Command, Args, game, force = false) {
 			smallImageText: `${game.DisplayName}`,
 		});
 	});
+
 	instance.on('error', (error) => console.error('[PROC] Error on process', game.GameID, '\n', error));
 	setTimeout(() => instance.on('exit', (code, signal) => {
 		ipcRenderer.send('show-window');
