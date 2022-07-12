@@ -64,6 +64,7 @@
         "resizable": true,
         "title": "Lazap",
         "width": 1360,
+        "center": true,
         "decorations": false
       }
     ]
