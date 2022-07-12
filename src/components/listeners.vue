@@ -14,7 +14,6 @@ window.addEventListener("load", function () {
   const fs = window.__TAURI__.fs;
   const path = window.__TAURI__.path;
 
-
   (async () => {
     const appDirPath = await path.appDir();
     const data = JSON.parse(await fs.readTextFile(appDirPath + 'storage/UserProfile.json', (err) => {

@@ -27,17 +27,24 @@ const path = window.__TAURI__.path;
     if (err) throw err;
   });
 
-    fs.writeTextFile(appDirPath + "storage/LauncherData.json", CONSTANTS, { recursive: true }, (err) => {
-      if (err) throw err;
-    });
- 
-    fs.writeTextFile(appDirPath + "storage/UserProfile.json", JSON.stringify({ username: "Lazap" }), { recursive: false }, (err) => {
-      if (err) throw err;
-    }); 
+  try {
+    JSON.parse(await fs.readTextFile(appDirPath + "storage/LauncherData.json"));
+  } catch (e) {
+    fs.writeTextFile(appDirPath + "storage/LauncherData.json", CONSTANTS);
+  }
 
-    fs.writeTextFile(appDirPath + "storage/Cache/Games/Data.json", CONSTANTS, { recursive: true }, (err) => {
-      if (err) throw err;
-    });
+  try {
+    JSON.parse(await fs.readTextFile(appDirPath + "storage/UserProfile.json"));
+  } catch (e) {
+    fs.writeTextFile(appDirPath + "storage/UserProfile.json", JSON.stringify({ username: "Lazap" }));
+  }
+
+  try {
+    JSON.parse(await fs.readTextFile(appDirPath + "storage/Cache/Games/Data.json"));
+  } catch (e) {
+    fs.writeTextFile(appDirPath + "storage/Cache/Games/Data.json", CONSTANTS);
+  }
+
 })();
 
 </script>
