@@ -36,9 +36,6 @@ Currently, Mac Support is pending so we appreciate your paitence.<br>
 `-` [AUR](https://aur.archlinux.org/packages/lazap) for **Arch Linux** <br>
 `-` For **other distros**, we recommend you to download the latest `.Appimage` in the [releases](https://github.com/Lazap-Development/lazap/releases) section. 
 
-`-` For **Debian based distros**: ```wget https://raw.githubusercontent.com/lazap-development/lazap/main/scripts/install-deb.sh```
-
-
 ## Development
 
 Lazap uses Electron for the framework. The game detection is developed by using bare Vanilla JavaScript - no other libraries included.
