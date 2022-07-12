@@ -27,23 +27,17 @@ const path = window.__TAURI__.path;
     if (err) throw err;
   });
 
-  if (!fs.readTextFile(appDirPath + 'storage/LauncherData.json')) {
     fs.writeTextFile(appDirPath + "storage/LauncherData.json", CONSTANTS, { recursive: true }, (err) => {
       if (err) throw err;
     });
-  }
-
-  if (!fs.readTextFile(appDirPath + 'storage/UserProfile.json')) {
+ 
     fs.writeTextFile(appDirPath + "storage/UserProfile.json", JSON.stringify({ username: "Lazap" }), { recursive: false }, (err) => {
       if (err) throw err;
-    });
-  }
+    }); 
 
-  if (!fs.readTextFile(appDirPath + 'storage/Cache/Games/Data.json')) {
     fs.writeTextFile(appDirPath + "storage/Cache/Games/Data.json", CONSTANTS, { recursive: true }, (err) => {
       if (err) throw err;
     });
-  }
 })();
 
 </script>
