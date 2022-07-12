@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "core-js": "^3.8.3",
+    "discord-rpc": "^4.0.1",
     "md5": "^2.3.0",
     "vue": "^3.2.13"
   },

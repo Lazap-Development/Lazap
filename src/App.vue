@@ -263,6 +263,9 @@ export default {
   async created() {
         const process = window.__TAURI__.os;
         console.log('OS: ' + await process.platform() + '\nArch: ' + await process.arch());
+        // const rpc = require('discord-rpc');
+        // const rpcClient = new rpc.Client({ transport: 'ipc' });
+        // await rpcClient.login({ clientId: '932504287337148417' });
   },
   listeners,
   storage,

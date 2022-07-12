@@ -1,9 +1,10 @@
 <script>
 
-let { exec } = require('child_process');
-exec = require('util').promisify(exec);
-const fs = require('fs');
-const user = require('os').userInfo().username;
+let { exec } = window.__TAURI__.child_process;
+exec = window.__TAURI__.util.promisify(exec);
+const fs = window.__TAURI__.fs;
+const process = window.__TAURI__.os;
+const user = process.userInfo().username;
 async function getInstalledGames(os = process.platform) {
   if (os === 'win32') {
     return [await getMinecraftLauncher(), await getLunarClient()].filter(x => x !== false);
@@ -53,7 +54,7 @@ async function getMinecraftLauncher() {
 async function getMinecraftLauncherOnLinux() {
   const { error } = await exec('which minecraft-launcher').catch(() => { return { error: 'NOT_FOUND' }; });
   if (!error) {
-    const homedir = require('os').userInfo().homedir;
+    const homedir = window.__TAURI__.is.userInfo().homedir;
     const isInstalled = fs.existsSync(`${homedir}/.minecraft`);
     if (!isInstalled) return false;
     const Location = '/usr/bin/minecraft-launcher';
@@ -89,7 +90,7 @@ function getLunarClient() {
       Args: [],
     };
   } else if (process.platform === 'linux') {
-    const homedir = require('os').userInfo().homedir;
+    const homedir = window.__TAURI__.os.userInfo().homedir;
     const isLunarInstalled = fs.existsSync(`${homedir}/.config/lunarclient`);
     const Location = `${homedir}/.lunarclient`;
     const Executable = 'lunarclient';

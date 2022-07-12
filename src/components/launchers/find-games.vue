@@ -1,11 +1,10 @@
 <script>
 (async () => {
-    // const process = window.__TAURI__.os;
-    // const fs = window.__TAURI__.fs;
-    // const shell = window.__TAURI__.shell;
-    // const path = window.__TAURI__.path;
+    const process = window.__TAURI__.os;
+    const fs = window.__TAURI__.fs;
+    const shell = window.__TAURI__.shell;
+    const path = window.__TAURI__.path;
     // const Window = window.__TAURI__.window
-
 
     let lastCheck;
     let cachedGames = [];
@@ -23,13 +22,14 @@
     let running = false;
     const processes = new Map();
 
-    const spawn = shell.childProcess;
+    const spawn = shell.child;
 
     console.log('OS:', await process.platform() + ' Arch:', await process.arch());
     const appDirPath = await path.appDir();
+    console.log("hi this is find-games.vue")
 
     async function getInstalledGames() {
-        // Cooldown
+         // Cooldown
         if (!lastCheck) {
             lastCheck = Date.now();
         }
@@ -40,6 +40,7 @@
         const launchers = fs.readdirSync(__dirname).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
         const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
         console.log(games);
+        console.log("and this is getInstalledGames function flushed");
 
         if (games.length < 1) {
             return 'NO_GAMES_FOUND';
