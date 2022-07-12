@@ -111,10 +111,10 @@
                 if (fs.existsSync(GAME_BANNERS_BASE_PATH)) {
                     //const dirs = fs.readdirSync(GAME_BANNERS_BASE_PATH);
                     //const img = dirs.find(x => x === `${md5(game.DisplayName)}.png`);
-                    //banner = img ? appDirPath + `storage/Cache/Games/Images/${img}` : '../img/icons/icon.ico';
+                    //banner = img ? appDirPath + `storage/Cache/Games/Images/${img}` : '../assets/icons/icon.ico';
                 }
                 else {
-                    banner = '../img/icons/icon.ico';
+                    banner = '../assets/icons/icon.ico';
                 }
             }
             else {
@@ -161,7 +161,7 @@
                     starIcon.classList.add('fade');
                     x[i].style.visibility = 'visible';
                     if (isFavourite) {
-                        starIcon.style.content = 'url("../img/star-solid.svg")';
+                        starIcon.style.content = 'url("../assets/star-solid.svg")';
                         starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
                     }
                 }
@@ -175,7 +175,7 @@
                         starIcon.classList.remove('fade');
                         x[i].style.visibility = 'hidden';
                         if (!isFavourite) {
-                            starIcon.style.content = 'url("../img/star-empty.svg")';
+                            starIcon.style.content = 'url("../assets/star-empty.svg")';
                             starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
                         }
                     }
@@ -187,7 +187,7 @@
 
             starIcon.addEventListener('click', () => {
                 const res = toggleFavourite(game.GameID, game.LauncherName);
-                starIcon.style.content = `url("../img/star-${res ? 'solid' : 'empty'}.svg")`;
+                starIcon.style.content = `url("../assets/star-${res ? 'solid' : 'empty'}.svg")`;
                 starIcon.style.filter = res ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
             });
 

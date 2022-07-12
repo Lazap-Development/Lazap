@@ -1,7 +1,7 @@
 <template>
   <div class="alert-box fadeInUpNoDelay" id="alertbox">
     <div class="alert-box-container">
-      <img class="alert-box-exclamation" src="./img/triangle.svg">
+      <img class="alert-box-exclamation" src="./assets/triangle.svg">
       <p class="alert-box-title">Alert</p>
 
       <span class="alert-box-cross" id="alertboxexit">&times;</span>
@@ -89,9 +89,9 @@
   <div class="titlebar">
     <div style="justify-content: space-between;" class="titlebar-icons">
       <div class="titlebar-options">
-        <img class="titlebar-settings" src="./img/settings.svg" id="settings-btn">
-        <img class="titlebar-account" src="./img/account.svg" id="account-btn">
-        <img class="titlebar-update" src="./img/download.svg" id="update-btn">
+        <img class="titlebar-settings" src="./assets/settings.svg" id="settings-btn">
+        <img class="titlebar-account" src="./assets/account.svg" id="account-btn">
+        <img class="titlebar-update" src="./assets/download.svg" id="update-btn">
       </div>
       <div style="margin-top: 0px;" class="titlebar-icons">
         <div @click="min_window" class="titlebar-min mx-1"></div>
@@ -103,7 +103,7 @@
 
   <div id="main-loading-overlay">
     <div class="spinner-content">
-      <img src="./img/spinner.svg" alt="Loading..." class="loading-spinner">
+      <img src="./assets/spinner.svg" alt="Loading..." class="loading-spinner">
       <p class="fadeInDown">Loading...</p>
     </div>
   </div>
@@ -111,7 +111,7 @@
   <div class="bg" id="bg">
     <div class="homebox" id="home">
       <div class="children fadeInUp">
-        <img class="head-pic" src="./img/main-banner.png">
+        <img class="head-pic" src="./assets/main-banner.png">
       </div>
       <div class="children fadeInDown">
         <div class="jump-back">
@@ -136,7 +136,7 @@
     <div class="secondorybox" id="games">
       <div id="game-loading-overlay" class="game-loading-overlay">
         <div class="spinner-content">
-          <img src="./img/spinner.svg" alt="Loading..." class="loading-spinner">
+          <img src="./assets/spinner.svg" alt="Loading..." class="loading-spinner">
           <p class="fadeInDown">Loading your games...</p>
         </div>
       </div>
@@ -175,7 +175,7 @@
           <div class="user-pfp">
             <label for="file"></label>
             <input id="file" type="file" accept="image/*" @change="(event)=>loadFile(event)" />
-            <img src="./img/default-profile.svg" alt="Avatar" width="85" height="85" id="output">
+            <img src="./assets/default-profile.svg" alt="Avatar" width="85" height="85" id="output">
           </div>
           <input class="username" id="text" type="text" value="Lazap" spellcheck="false" maxlength="12" />
         </div>
@@ -185,7 +185,7 @@
         <div class="d-flex justify-content-center pb-2">
           <div class="side-tab" id="home-btn">
             <div id="indicator"></div>
-            <img src="./img/home.svg" height="25" width="25">
+            <img src="./assets/home.svg" height="25" width="25">
             <div class="side-tab-text">
               Home
             </div>
@@ -197,7 +197,7 @@
         </div>
         <div class="d-flex justify-content-center">
           <div class="side-tab" id="recent-btn">
-            <img id="recently-btn-img" src="./img/recent.svg" height="25" width="25">
+            <img id="recently-btn-img" src="./assets/recent.svg" height="25" width="25">
             <div class="side-tab-text">
               Recent
             </div>
@@ -205,7 +205,7 @@
         </div>
         <div class="d-flex justify-content-center">
           <div class="side-tab" id="games-btn">
-            <img id="games-btn-img" src="./img/games.svg" height="25" width="25">
+            <img id="games-btn-img" src="./assets/games.svg" height="25" width="25">
             <div class="side-tab-text">
               All Games
             </div>
@@ -213,7 +213,7 @@
         </div>
         <div class="d-flex justify-content-center pb-2">
           <div class="side-tab" id="favs-btn">
-            <img id="favs-btn-img" src="./img/favs.svg" height="25" width="25">
+            <img id="favs-btn-img" src="./assets/favs.svg" height="25" width="25">
             <div class="side-tab-text">
               Favourites
             </div>
@@ -227,7 +227,7 @@
         </div>
         <div class="d-flex justify-content-center">
           <div class="side-tab" id="messages-btn">
-            <img src="./img/messages.svg" height="25" width="25">
+            <img src="./assets/messages.svg" height="25" width="25">
             <div class="side-tab-text">
               Messages
             </div>
@@ -235,7 +235,7 @@
         </div>
         <div class="d-flex justify-content-center">
           <div class="side-tab" id="activity-btn">
-            <img src="./img/activity.svg" height="25" width="25">
+            <img src="./assets/activity.svg" height="25" width="25">
             <div class="side-tab-text">
               Activity
             </div>
@@ -243,7 +243,7 @@
         </div>
         <div class="d-flex justify-content-center">
           <div class="side-tab" id="friends-btn">
-            <img src="./img/friends.svg" height="25" width="25">
+            <img src="./assets/friends.svg" height="25" width="25">
             <div class="side-tab-text">
               All Friends
             </div>

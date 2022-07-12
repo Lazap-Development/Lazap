@@ -6,12 +6,12 @@
 
 @font-face {
     font-family: Dosis;
-    src: url('../fonts/Dosis-Medium.ttf') format('truetype');
+    src: url('../assets/fonts/Dosis-Medium.ttf') format('truetype');
 }
 
 @font-face {
     font-family: Dosis-Bold;
-    src: url('../fonts/Dosis-Bold.ttf') format('truetype');
+    src: url('../assets/fonts/Dosis-Bold.ttf') format('truetype');
 }
 
 @keyframes fadeInUp {
@@ -585,7 +585,7 @@ body {
     color: #d3d3d3;
     display: block;
     z-index: 10000000;
-    content: url("../img/star-empty.svg");
+    content: url("../assets/star-empty.svg");
     height: 25px;
     width: 25px;
     filter: invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%);
@@ -600,7 +600,7 @@ body {
     color: #d3d3d3;
     display: block;
     z-index: 10000000;
-    content: url("../img/star-solid.svg") !important;
+    content: url("../assets/star-solid.svg") !important;
     height: 25px;
     width: 25px;
     cursor: pointer;
