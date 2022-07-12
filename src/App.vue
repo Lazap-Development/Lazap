@@ -81,7 +81,7 @@
       </div>
 
       <div class="settings-footer">
-        v0.3 (Tauri Release)
+        v0.4 (Tauri Release)
       </div>
     </div>
   </div>
@@ -108,7 +108,7 @@
     </div>
   </div>
 
-  <div class="bg">
+  <div class="bg" id="bg">
     <div class="homebox" id="home">
       <div class="children fadeInUp">
         <img class="head-pic" src="./img/main-banner.png">
@@ -263,6 +263,10 @@ export default {
   async created() {
         const process = window.__TAURI__.os;
         console.log('OS: ' + await process.platform() + '\nArch: ' + await process.arch());
+
+        if (await process.platform() == "win32") {
+            document.getElementById('bg').style.height = '111.5vh';
+        }
   },
   listeners,
   storage,
