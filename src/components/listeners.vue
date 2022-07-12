@@ -22,7 +22,11 @@ window.addEventListener("load", function () {
     }));
     document.getElementById('text').value = data.username;
   })()
-  
+
+  window.onload = async function() {
+    // await require("./launchers/find-games").getInstalledGames();
+  }
+
   document.getElementById('main-loading-overlay').style.opacity = '0';
   document.getElementById('main-loading-overlay').style.visibility = 'hidden';
 

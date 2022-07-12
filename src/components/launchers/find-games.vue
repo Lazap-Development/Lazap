@@ -1,11 +1,10 @@
 <script>
-
 (async () => {
-    const process = window.__TAURI__.os;
-    const fs = window.__TAURI__.fs;
-    const shell = window.__TAURI__.shell;
-    const path = window.__TAURI__.path;
-    //const Window = window.__TAURI__.window
+    // const process = window.__TAURI__.os;
+    // const fs = window.__TAURI__.fs;
+    // const shell = window.__TAURI__.shell;
+    // const path = window.__TAURI__.path;
+    // const Window = window.__TAURI__.window
 
 
     let lastCheck;
