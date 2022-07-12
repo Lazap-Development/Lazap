@@ -1,0 +1,287 @@
+<template>
+  <div class="alert-box fadeInUpNoDelay" id="alertbox">
+    <div class="alert-box-container">
+      <img class="alert-box-exclamation" src="./img/triangle.svg">
+      <p class="alert-box-title">Alert</p>
+
+      <span class="alert-box-cross" id="alertboxexit">&times;</span>
+
+      <hr class="alert-box-divider">
+      <div class="alert-box-message" style="align-items: center;">
+        <p class=alert-box-message>The Launcher Loaded 😱</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-background fadeInDownNoDelay" id="settings-backblur"></div>
+  <div class="settings fadeInDown" id="settings-popup">
+    <div>
+      <h1>
+        Settings
+      </h1>
+
+      <div>
+        <p>Discord Rich Presence</p>
+        <label class="switch">
+          <input type="checkbox" id="setting-enableRPC">
+          <div>
+            <span></span>
+          </div>
+        </label>
+      </div>
+
+      <div>
+        <p>Launch on Startup</p>
+        <label class="switch">
+          <input type="checkbox" id="setting-launchOnStartup">
+          <div>
+            <span></span>
+          </div>
+        </label>
+      </div>
+
+      <div>
+        <p>Skip Login Menu</p>
+        <label class="switch">
+          <input type="checkbox" id="setting-skipLogin">
+          <div>
+            <span></span>
+          </div>
+        </label>
+      </div>
+
+      <div>
+        <p>Minimize to Tray on Launch</p>
+        <label class="switch">
+          <input type="checkbox" id="setting-trayMinLaunch">
+          <div>
+            <span></span>
+          </div>
+        </label>
+      </div>
+
+      <div>
+        <p>Minimize to Tray on Quit</p>
+        <label class="switch">
+          <input type="checkbox" id="setting-trayMinQuit">
+          <div>
+            <span></span>
+          </div>
+        </label>
+      </div>
+
+      <div>
+        <p>Check for Updates</p>
+        <label class="switch">
+          <input type="checkbox" id="setting-checkForUpdates">
+          <div>
+            <span></span>
+          </div>
+        </label>
+      </div>
+
+      <div class="settings-footer">
+        v0.3 (Tauri Release)
+      </div>
+    </div>
+  </div>
+
+  <div class="titlebar">
+    <div style="justify-content: space-between;" class="titlebar-icons">
+      <div class="titlebar-options">
+        <img class="titlebar-settings" src="./img/settings.svg" id="settings-btn">
+        <img class="titlebar-account" src="./img/account.svg" id="account-btn">
+        <img class="titlebar-update" src="./img/download.svg" id="update-btn">
+      </div>
+      <div style="margin-top: 0px;" class="titlebar-icons">
+        <div @click="min_window" class="titlebar-min mx-1"></div>
+        <div @click="max_window" class="titlebar-max mx-1"></div>
+        <div @click="close_window" class="titlebar-exit mx-1"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="main-loading-overlay">
+    <div class="spinner-content">
+      <img src="./img/spinner.svg" alt="Loading..." class="loading-spinner">
+      <p class="fadeInDown">Loading...</p>
+    </div>
+  </div>
+
+  <div class="bg">
+    <div class="homebox" id="home">
+      <div class="children fadeInUp">
+        <img class="head-pic" src="./img/main-banner.png">
+      </div>
+      <div class="children fadeInDown">
+        <div class="jump-back">
+          <p>Recently Launched</p>
+          <div id="recentGamesListMainPage" class="fadeInDown mainPageGamesList"></div>
+        </div>
+      </div>
+      <div class="children fadeInLeft">
+        <div class="online-friends">
+          <p>Online Friends</p>
+          <div class="CMS">Coming Soon...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="secondorybox" id="recent">
+      <p>Recently Played</p>
+      <div id="recentGamesList" class="fadeInDown gamesList">
+      </div>
+    </div>
+
+    <div class="secondorybox" id="games">
+      <div id="game-loading-overlay" class="game-loading-overlay">
+        <div class="spinner-content">
+          <img src="./img/spinner.svg" alt="Loading..." class="loading-spinner">
+          <p class="fadeInDown">Loading your games...</p>
+        </div>
+      </div>
+      <p>All Games</p>
+      <div class="search-bar">
+        <input type="text" placeholder="Search">
+      </div>
+      <div id="allGamesList" class="fadeInDown gamesList">
+      </div>
+    </div>
+
+    <div class="secondorybox" id="favs">
+      <p>Favourite Games</p>
+      <div class="search-bar">
+        <input type="text" placeholder="Search">
+      </div>
+      <div id="favGamesList" class="fadeInDown gamesList">
+      </div>
+    </div>
+
+    <div class="secondorybox" id="messages">
+      <p>Messages</p>
+    </div>
+
+    <div class="secondorybox" id="activity">
+      <p>Activity</p>
+    </div>
+
+    <div class="secondorybox" id="friends">
+      <p>Friends</p>
+    </div>
+
+    <div class="leftbar">
+      <div class="d-flex justify-content-center">
+        <div>
+          <div class="user-pfp">
+            <label for="file"></label>
+            <input id="file" type="file" accept="image/*" @change="(event)=>loadFile(event)" />
+            <img src="./img/default-profile.svg" alt="Avatar" width="85" height="85" id="output">
+          </div>
+          <input class="username" id="text" type="text" value="Lazap" spellcheck="false" maxlength="12" />
+        </div>
+      </div>
+
+      <div class="side-tabs">
+        <div class="d-flex justify-content-center pb-2">
+          <div class="side-tab" id="home-btn">
+            <div id="indicator"></div>
+            <img src="./img/home.svg" height="25" width="25">
+            <div class="side-tab-text">
+              Home
+            </div>
+          </div>
+        </div>
+
+        <div class="category-name d-flex justify-content-left">
+          Games
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="side-tab" id="recent-btn">
+            <img id="recently-btn-img" src="./img/recent.svg" height="25" width="25">
+            <div class="side-tab-text">
+              Recent
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="side-tab" id="games-btn">
+            <img id="games-btn-img" src="./img/games.svg" height="25" width="25">
+            <div class="side-tab-text">
+              All Games
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center pb-2">
+          <div class="side-tab" id="favs-btn">
+            <img id="favs-btn-img" src="./img/favs.svg" height="25" width="25">
+            <div class="side-tab-text">
+              Favourites
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="category-name d-flex justify-content-start">
+          Friends
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="side-tab" id="messages-btn">
+            <img src="./img/messages.svg" height="25" width="25">
+            <div class="side-tab-text">
+              Messages
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="side-tab" id="activity-btn">
+            <img src="./img/activity.svg" height="25" width="25">
+            <div class="side-tab-text">
+              Activity
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="side-tab" id="friends-btn">
+            <img src="./img/friends.svg" height="25" width="25">
+            <div class="side-tab-text">
+              All Friends
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import listeners from './components/listeners.vue'
+import storage from './components/storage.vue'
+const Window = window.__TAURI__.window
+
+export default {
+  async created() {
+        const process = window.__TAURI__.os;
+        console.log('OS: ' + await process.platform() + '\nArch: ' + await process.arch());
+  },
+  listeners,
+  storage,
+  methods: {
+    min_window() {
+      Window.appWindow.minimize()
+    },
+    max_window() {
+      Window.appWindow.toggleMaximize()
+    },
+    close_window() {
+      Window.appWindow.close()
+    },
+
+  }
+};
+</script>
+
+
+ <style>
+ @import './css/default.css';
+ </style>
