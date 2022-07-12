@@ -1,7 +1,0 @@
-#!/bin/bash
-
-cd $HOME/Downloads/lazap
-
-npm start
-
-cd
