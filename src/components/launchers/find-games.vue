@@ -29,7 +29,6 @@
     console.log('OS:', await process.platform() + ' Arch:', await process.arch());
     const appDirPath = await path.appDir();
 
-
     async function getInstalledGames() {
         // Cooldown
         if (!lastCheck) {
@@ -41,6 +40,7 @@
         // Fetch all games
         const launchers = fs.readdirSync(__dirname).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
         const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
+        console.log(games);
 
         if (games.length < 1) {
             return 'NO_GAMES_FOUND';
