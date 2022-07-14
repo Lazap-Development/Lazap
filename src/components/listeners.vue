@@ -17,11 +17,10 @@ window.addEventListener("load", async function () {
   const path = window.__TAURI__.path;
 
   await models.getInstalledGames()
-    .then(() => {
+    .then(() => {})
+    .catch(errors => {
+      return console.error(errors);
     })
-    .catch((errors) => {
-      return console.log(errors);
-    });
 
   const appDirPath = await path.appDir();
   const data = JSON.parse(await fs.readTextFile(appDirPath + 'storage/UserProfile.json', (err) => {

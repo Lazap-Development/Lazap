@@ -4,10 +4,10 @@ const shell = window.__TAURI__.shell;
 const path = window.__TAURI__.path;
 
 async function getInstalledGames() {
-	if (await os.platform() == 'win32') {
+	if (await os.platform() === 'win32') {
 		return [await getMinecraftLauncher()].filter(x => x !== false);
 	}
-	else if (await os.platform() == 'linux') {
+	else if (await os.platform() === 'linux') {
 		return [await getMinecraftLauncherOnLinux()].filter(x => x !== false);
 	}
 	else {
@@ -61,6 +61,7 @@ async function getMinecraftLauncherOnLinux() {
 			const homedir = await path.homeDir();
 			try {
 				await fs.readDir(`${homedir}/.minecraft`);
+				console.log(await fs.readDir(`${homedir}/.minecraft`));
 			} catch (e) {
 				return console.log(e);
 			}

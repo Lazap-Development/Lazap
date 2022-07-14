@@ -22,7 +22,6 @@ let running = false;
 const processes = new Map();
 
 async function getInstalledGames() {
-
     // Cooldown
     if (!lastCheck) {
         lastCheck = Date.now();
@@ -34,8 +33,9 @@ async function getInstalledGames() {
     const rootDir = await new shell.Command('pwd').execute();
 
     let data = await fs.readDir(await path.join(rootDir.stdout, "../src/components/launchers"));
-    const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x))
+    const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
     const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
+    console.log(games);
 
     if (games.length < 1) {
         return 'NO_GAMES_FOUND';

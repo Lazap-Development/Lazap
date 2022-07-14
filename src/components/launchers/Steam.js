@@ -1,3 +1,5 @@
+// eslint-disable-next-line
+const { loadGames } = require('@/components/launchers/find-games');
 const os = window.__TAURI__.os;
 const fs = window.__TAURI__.fs;
 const path = window.__TAURI__.path;
@@ -31,29 +33,28 @@ async function getSteamLocation() {
         const VDF = require('../modules/parseVDF');
         const parsed = VDF.parse(text);
         const toArray = Object.entries(parsed.libraryfolders);
-        launcher_location = toArray.map((item) => {
+        const mappedArray = toArray.map((item) => {
             return item[1].path;
         });
-
-
-
+        launcher_location = mappedArray[0];
     }
-    if (!isLauncherInstalled(launcher_location)) return false;
+    if (!await isLauncherInstalled(launcher_location)) return false;
     return launcher_location;
 }
 
 async function isLauncherInstalled(path) {
     if (typeof path === 'string') {
+        console.log(await fs.readDir(path));
         return await fs.readDir(path);
     }
     else if (Array.isArray(path)) {
-        return path.map(x => fs.readDir(x)).includes(true);
+        console.log(path.map(async () => await fs.readDir("/home/logic/.local/share/Steam")).includes(true));
+        return path.map(async x => await fs.readDir(x)).includes(true);
     }
 }
 
 async function getInstalledGames() {
     const path = await getSteamLocation();
-
     if (!path) return [];
     if (await os.platform() === 'win32') {
         const acf_basePath = `${path}\\steamapps`;
@@ -65,26 +66,43 @@ async function getInstalledGames() {
     }
     else if (await os.platform() === 'linux') {
         let allGames = [];
-        await path.forEach(async location => {
+        /*await path.forEach(async location => {
             const acf_basePath = `${location}/steamapps`;
             if (!await fs.readDir(acf_basePath)) return [];
             const getPath = await fs.readDir(acf_basePath)
-            
-            console.log(getPath)
 
             const acf_files = getPath.filter((x) => x.split('.')[1] === 'acf')
                 .map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}/${x}`).toString())));
 
             allGames.push(acf_files);
-            console.log(allGames)
             const result = allGames.flat().reduce((unique, o) => {
                 if (!unique.some(obj => obj.DisplayName === o.DisplayName)) {
                     unique.push(o);
                 }
                 return unique;
             }, []);
+            console.log(result);
             allGames = result;
-        });
+        });*/
+
+        const acf_basePath = `${path}/steamapps`;
+        if (!await fs.readDir(acf_basePath)) return [];
+        const getPath = await fs.readDir(acf_basePath);
+        // eslint-disable-next-line
+        const acf_files = getPath.filter((x) => x.name.includes(".acf"))
+            .map(x => parseGameObject(acf_to_json(fs.readTextFile(`${acf_basePath}/${x.name}`).toString())));
+        //console.log(xd);
+
+        allGames.push(acf_files);
+        const result = allGames.flat().reduce((unique, o) => {
+            if (!unique.some(obj => obj.DisplayName === o.DisplayName)) {
+                unique.push(o);
+            }
+            return unique;
+        }, []);
+
+        console.log(result);
+
         return allGames;
     }
 }
@@ -109,21 +127,35 @@ function parseGameObject(acf_object = {}) {
     };
 }
 
-function acf_to_json(acf_content = '') {
+async function acf_to_json(acf_content = '') {
     if (acf_content.length === 0) return;
-    return JSON.parse(
-        acf_content.split('\n').slice(1).map((x, i, arr) => {
-            if (x.length === 0) return;
-            if (x.trim().includes('\t\t')) {
-                return (
-                    x.trim().replace('\t\t', ':') + (['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
-                );
-            }
+    console.log(acf_content.split('\n'));
+    console.log(acf_content.split('\n').slice(1).map((x, i, arr) => {
+        if (x.length === 0) return;
+        if (x.trim().includes('\t\t')) {
             return (
-                x.split('"').length > 1 ? x.trim() + ':' : x + (x.trim() === '{' || !arr[i + 1] || ['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
+                x.trim().replace('\t\t', ':') + (['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
             );
-        }).join('\n'),
-    );
+        }
+        return (
+            x.split('"').length > 1 ? x.trim() + ':' : x + (x.trim() === '{' || !arr[i + 1] || ['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
+        );
+    }));
+    const o = acf_content.split('\n').slice(1).map((x, i, arr) => {
+        if (x.length === 0) return;
+        if (x.trim().includes('\t\t')) {
+            return (
+                x.trim().replace('\t\t', ':') + (['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
+            );
+        }
+        return (
+            x.split('"').length > 1 ? x.trim() + ':' : x + (x.trim() === '{' || !arr[i + 1] || ['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
+        );
+    }).join('\n');
+    console.log(o);
+    const ha = JSON.parse(o,);
+    console.log(ha);
+    return "ha"
 }
 
 module.exports = {
