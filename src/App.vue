@@ -264,11 +264,11 @@ export default {
     const process = window.__TAURI__.os;
     console.log('OS: ' + await process.platform() + '\nArch: ' + await process.arch());
 
-    if (await process.platform() == "win32") {
-      document.getElementById('main-loading-overlay').style.width = '111.7vw';
-      document.getElementById('main-loading-overlay').style.height = '111.5vh';
-      document.getElementById('bg').style.height = '111.5vh';
     }
+      document.getElementById('bg').style.height = '111.5vh';
+      document.getElementById('main-loading-overlay').style.height = '111.5vh';
+      document.getElementById('main-loading-overlay').style.width = '111.7vw';
+    if (await process.platform() == "win32") {
   },
   listeners,
   storage,
