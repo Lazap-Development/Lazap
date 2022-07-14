@@ -16,7 +16,12 @@ window.addEventListener("load", async function () {
   const fs = window.__TAURI__.fs;
   const path = window.__TAURI__.path;
 
-  await models.getInstalledGames();
+  await models.getInstalledGames()
+    .then(() => {
+    })
+    .catch((errors) => {
+      return console.log(errors);
+    });
 
   const appDirPath = await path.appDir();
   const data = JSON.parse(await fs.readTextFile(appDirPath + 'storage/UserProfile.json', (err) => {
@@ -69,7 +74,12 @@ window.addEventListener("load", async function () {
     messages.style.display = 'none';
     activity.style.display = 'none';
 
-    await models.loadGames('allGames');
+    await models.loadGames('allGames')
+      .then(() => {
+      })
+      .catch((errors) => {
+        return console.log(errors);
+      });
   });
 
   document.getElementById('favs-btn').addEventListener('click', async function () {
