@@ -258,7 +258,7 @@ async function handleLaunch(game) {
     else if (await os.platform() === 'linux') {
         switch (game.LauncherName) {
             case 'Steam': {
-                res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '-silent'], game.GameID);
+                res = createProcess('steam', `steam://rungameid/${game.GameID} -silent`, game.GameID);
                 break;
             }
             case 'Minecraft': {
@@ -285,8 +285,8 @@ async function handleLaunch(game) {
 
 async function createProcess(Command, Args, GameID, force = false) {
     if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
-
-    const instance = invoke('run_game', { exec: Command })
+    console.log(Args)
+    const instance = invoke('run_game', { exec: Command, args: Args })
         .then(() => {
             VisibilityState();
             processes.delete(GameID);

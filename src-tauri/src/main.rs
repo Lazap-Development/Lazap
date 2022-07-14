@@ -6,8 +6,9 @@ fn main() {
 }
 
 #[tauri::command]
-async fn run_game(exec: String) {
+async fn run_game(exec: String, args: String) {
     let child = std::process::Command::new(exec)
+        .arg(args)
         .spawn()
         .expect("failed to run");
     let _output = child.wait_with_output().expect("failed to wait on child");
