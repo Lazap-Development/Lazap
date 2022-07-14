@@ -10,5 +10,5 @@ async fn run_game(exec: String) {
     let child = std::process::Command::new(exec)
         .spawn()
         .expect("failed to run");
-    let output = child.wait_with_output().expect("failed to wait on child");
+    let _output = child.wait_with_output().expect("failed to wait on child");
 }

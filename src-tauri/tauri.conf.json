@@ -15,22 +15,31 @@
     "allowlist": {
       "all": true,
       "fs": {
-        "scope": ["**"]
+        "scope": [
+          "**"
+        ]
       },
       "shell": {
         "all": true,
         "execute": true,
         "open": true,
-        "scope": [{
-          "name": "which",
-          "cmd": "which",
-          "args": true
-        },
-        {
-          "name": "node",
-          "cmd": "node",
-          "args": true
-        }],
+        "scope": [
+          {
+            "name": "which",
+            "cmd": "which",
+            "args": true
+          },
+          {
+            "name": "pwd",
+            "cmd": "pwd",
+            "args": true
+          },
+          {
+            "name": "Reg",
+            "cmd": "Reg",
+            "args": true
+          }
+        ],
         "sidecar": true
       }
     },

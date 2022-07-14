@@ -3,6 +3,7 @@ const fs = window.__TAURI__.fs;
 const invoke = window.__TAURI__.invoke
 const path = window.__TAURI__.path;
 const Window = window.__TAURI__.window
+const shell = window.__TAURI__.shell
 
 let lastCheck;
 let cachedGames = [];
@@ -30,9 +31,10 @@ async function getInstalledGames() {
         return `COOLDOWN_${(lastCheck + 1000 * 4) - Date.now()}`;
     }
     // Fetch all games
-    let data = await fs.readDir("/home/porya/Github/lazap/src/components/launchers");
+    const output = await new shell.Command('pwd').execute();
+
+    let data = await fs.readDir(await path.join(output.stdout, "../src/components/launchers"));
     const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x))
-    console.log(await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames())))
     const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
 
     if (games.length < 1) {
@@ -185,7 +187,6 @@ async function loadGames(id) {
         return game;
     }).filter(x => Object.keys(x).length > 0);
 
-    console.log(games)
     setGames(games);
     require("../utils").getBannerResponse(resolvedGames.filter((x) => x.Banner === '../img/icons/icon.ico'), id);
     running = false;
@@ -203,8 +204,6 @@ function sort(games, type) {
 }
 
 async function setGames(games) {
-    console.log("SETGAMES " + games)
-
     const appDirPath = await path.appDir();
     const GAMES_DATA_BASE_PATH = appDirPath + 'storage/Cache/Games/Data.json';
     fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
