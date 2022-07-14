@@ -53,8 +53,8 @@ async function isLauncherInstalled(path) {
 
 async function getInstalledGames() {
     const path = await getSteamLocation();
-
     if (!path) return [];
+
     if (await os.platform() === 'win32') {
         const acf_basePath = `${path}\\steamapps`;
         if (!await fs.readDir(acf_basePath)) return [];
@@ -65,18 +65,18 @@ async function getInstalledGames() {
     }
     else if (await os.platform() === 'linux') {
         let allGames = [];
-        await path.forEach(async location => {
+
+        for (const location of path) {
             const acf_basePath = `${location}/steamapps`;
             if (!await fs.readDir(acf_basePath)) return [];
-            const getPath = await fs.readDir(acf_basePath)
-            
-            console.log(getPath)
 
-            const acf_files = getPath.filter((x) => x.split('.')[1] === 'acf')
-                .map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}/${x}`).toString())));
+            const readDirOfBasePath = await fs.readDir(acf_basePath)
+            const acf_files = await Promise.all(readDirOfBasePath.filter(x => x.name.split(".")[1] === 'acf').map(async x => {
+                return parseGameObject(acf_to_json(await fs.readTextFile(`${acf_basePath}/${JSON.stringify(x.name).replace(/['"]+/g, '')}`)));
+            }))
 
             allGames.push(acf_files);
-            console.log(allGames)
+
             const result = allGames.flat().reduce((unique, o) => {
                 if (!unique.some(obj => obj.DisplayName === o.DisplayName)) {
                     unique.push(o);
@@ -84,13 +84,15 @@ async function getInstalledGames() {
                 return unique;
             }, []);
             allGames = result;
-        });
+
+        }
+        console.log(allGames)
         return allGames;
     }
 }
 
 
-function parseGameObject(acf_object = {}) {
+async function parseGameObject(acf_object = {}) {
     const {
         LauncherExe: Executable,
         LauncherPath: Location,
