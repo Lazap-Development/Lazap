@@ -31,9 +31,9 @@ async function getInstalledGames() {
         return `COOLDOWN_${(lastCheck + 1000 * 4) - Date.now()}`;
     }
     // Fetch all games
-    const output = await new shell.Command('pwd').execute();
+    const rootDir = await new shell.Command('pwd').execute();
 
-    let data = await fs.readDir(await path.join(output.stdout, "../src/components/launchers"));
+    let data = await fs.readDir(await path.join(rootDir.stdout, "../src/components/launchers"));
     const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x))
     const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
 
@@ -149,7 +149,7 @@ async function loadGames(id) {
 
         gameBanner.addEventListener('mouseover', async () => {
             const x = gameElement.getElementsByClassName('star');
-            const isFavourite = await fs.readTextFile(appDirPath + 'storage/Cache/Games/Data.json').Games.find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
+            const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/Cache/Games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
             for (let i = 0; i < x.length; i++) {
                 starIcon.classList.add('fade');
                 x[i].style.visibility = 'visible';
@@ -162,7 +162,7 @@ async function loadGames(id) {
 
         gameBanner.addEventListener('mouseout', async () => {
             const x = gameElement.getElementsByClassName('star');
-            const isFavourite = await fs.readTextFile(appDirPath + 'storage/Cache/Games/Data.json').Games.find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
+            const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/Cache/Games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
             for (let i = 0; i < x.length; i++) {
                 if (!x[i].matches(':hover')) {
                     starIcon.classList.remove('fade');
