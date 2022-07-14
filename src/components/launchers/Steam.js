@@ -1,5 +1,3 @@
-// eslint-disable-next-line
-const { loadGames } = require('@/components/launchers/find-games');
 const os = window.__TAURI__.os;
 const fs = window.__TAURI__.fs;
 const path = window.__TAURI__.path;
@@ -28,7 +26,7 @@ async function getSteamLocation() {
     else if (await os.platform() === 'linux') {
         const homedir = await path.homeDir();
 
-        const text = await fs.readTextFile(homedir + `.steam/steam/steamapps/libraryfolders.vdf`)
+        const text = await fs.readTextFile(homedir + `.steam/steam/steamapps/libraryfolders.vdf`);
 
         const VDF = require('../modules/parseVDF');
         const parsed = VDF.parse(text);
@@ -59,12 +57,25 @@ async function getInstalledGames() {
     if (await os.platform() === 'win32') {
         const acf_basePath = `${path}\\steamapps`;
         if (!await fs.readDir(acf_basePath)) return [];
-        const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
+        return fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
             .map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
-
-        return acf_files;
     }
     else if (await os.platform() === 'linux') {
+        // eslint-disable-next-line
+        const readTextFile = (file) => {
+            const rawFile = new XMLHttpRequest();
+            rawFile.open("GET", file, false);
+            rawFile.onreadystatechange = function () {
+                if(rawFile.readyState === 4) {
+                    if(rawFile.status === 200 || rawFile.status === 0) {
+                        const allText = rawFile.responseText;
+                        alert(allText);
+                    }
+                }
+            }
+            rawFile.send(null);
+        }
+
         let allGames = [];
         /*await path.forEach(async location => {
             const acf_basePath = `${location}/steamapps`;
@@ -88,20 +99,24 @@ async function getInstalledGames() {
         const acf_basePath = `${path}/steamapps`;
         if (!await fs.readDir(acf_basePath)) return [];
         const getPath = await fs.readDir(acf_basePath);
+        console.log(acf_basePath);
+        await fetch(`${acf_basePath}/appmanifest_706990.acf`).then(e => e.text()).then(text => console.log(text))
         // eslint-disable-next-line
         const acf_files = getPath.filter((x) => x.name.includes(".acf"))
             .map(x => parseGameObject(acf_to_json(fs.readTextFile(`${acf_basePath}/${x.name}`).toString())));
-        //console.log(xd);
 
         allGames.push(acf_files);
+        console.log(getPath.filter((x) => x.name.includes(".acf"))
+            .map(x => parseGameObject(acf_to_json(fetch(`${acf_basePath}/${x.name}`).then(response => response.text())))));
+        console.log(getPath.filter((x) => x.name.includes(".acf"))
+            .map(x => parseGameObject(acf_to_json(fs.readTextFile(`${acf_basePath}/${x.name}`).toString()))));
+        // eslint-disable-next-line
         const result = allGames.flat().reduce((unique, o) => {
             if (!unique.some(obj => obj.DisplayName === o.DisplayName)) {
                 unique.push(o);
             }
             return unique;
         }, []);
-
-        console.log(result);
 
         return allGames;
     }
@@ -118,10 +133,10 @@ function parseGameObject(acf_object = {}) {
     } = acf_object;
 
     return {
-        Executable,
-        Location,
         DisplayName,
         GameID,
+        Executable,
+        Location,
         Size: parseInt(Size),
         LauncherName: 'Steam',
     };
@@ -129,18 +144,6 @@ function parseGameObject(acf_object = {}) {
 
 async function acf_to_json(acf_content = '') {
     if (acf_content.length === 0) return;
-    console.log(acf_content.split('\n'));
-    console.log(acf_content.split('\n').slice(1).map((x, i, arr) => {
-        if (x.length === 0) return;
-        if (x.trim().includes('\t\t')) {
-            return (
-                x.trim().replace('\t\t', ':') + (['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
-            );
-        }
-        return (
-            x.split('"').length > 1 ? x.trim() + ':' : x + (x.trim() === '{' || !arr[i + 1] || ['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
-        );
-    }));
     const o = acf_content.split('\n').slice(1).map((x, i, arr) => {
         if (x.length === 0) return;
         if (x.trim().includes('\t\t')) {
@@ -152,10 +155,11 @@ async function acf_to_json(acf_content = '') {
             x.split('"').length > 1 ? x.trim() + ':' : x + (x.trim() === '{' || !arr[i + 1] || ['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
         );
     }).join('\n');
-    console.log(o);
+    // eslint-disable-next-line
     const ha = JSON.parse(o,);
-    console.log(ha);
-    return "ha"
+    return {
+        DisplayName: "gay"
+    }
 }
 
 module.exports = {
