@@ -264,11 +264,10 @@ export default {
     const process = window.__TAURI__.os;
     console.log('OS: ' + await process.platform() + '\nArch: ' + await process.arch());
 
-    document.getElementById('bg').style.height = '111.5vh';
-    document.getElementById('main-loading-overlay').style.height = '111.5vh';
-    document.getElementById('main-loading-overlay').style.width = '111.7vw';
-    // eslint-disable-next-line
     if (await process.platform() === "win32") {
+      document.getElementById('bg').style.height = '111.5vh';
+      document.getElementById('main-loading-overlay').style.height = '111.5vh';
+      document.getElementById('main-loading-overlay').style.width = '111.7vw';
     }
   },
   listeners,

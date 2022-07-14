@@ -61,7 +61,6 @@ async function getMinecraftLauncherOnLinux() {
 			const homedir = await path.homeDir();
 			try {
 				await fs.readDir(`${homedir}/.minecraft`);
-				console.log(await fs.readDir(`${homedir}/.minecraft`));
 			} catch (e) {
 				return console.log(e);
 			}

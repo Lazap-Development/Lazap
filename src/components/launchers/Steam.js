@@ -61,21 +61,6 @@ async function getInstalledGames() {
             .map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
     }
     else if (await os.platform() === 'linux') {
-        // eslint-disable-next-line
-        const readTextFile = (file) => {
-            const rawFile = new XMLHttpRequest();
-            rawFile.open("GET", file, false);
-            rawFile.onreadystatechange = function () {
-                if(rawFile.readyState === 4) {
-                    if(rawFile.status === 200 || rawFile.status === 0) {
-                        const allText = rawFile.responseText;
-                        alert(allText);
-                    }
-                }
-            }
-            rawFile.send(null);
-        }
-
         let allGames = [];
         /*await path.forEach(async location => {
             const acf_basePath = `${location}/steamapps`;
@@ -99,17 +84,14 @@ async function getInstalledGames() {
         const acf_basePath = `${path}/steamapps`;
         if (!await fs.readDir(acf_basePath)) return [];
         const getPath = await fs.readDir(acf_basePath);
-        console.log(acf_basePath);
-        await fetch(`${acf_basePath}/appmanifest_706990.acf`).then(e => e.text()).then(text => console.log(text))
         // eslint-disable-next-line
         const acf_files = getPath.filter((x) => x.name.includes(".acf"))
-            .map(x => parseGameObject(acf_to_json(fs.readTextFile(`${acf_basePath}/${x.name}`).toString())));
-
-        allGames.push(acf_files);
-        console.log(getPath.filter((x) => x.name.includes(".acf"))
-            .map(x => parseGameObject(acf_to_json(fetch(`${acf_basePath}/${x.name}`).then(response => response.text())))));
-        console.log(getPath.filter((x) => x.name.includes(".acf"))
-            .map(x => parseGameObject(acf_to_json(fs.readTextFile(`${acf_basePath}/${x.name}`).toString()))));
+            .map(async x => parseGameObject(acf_to_json(await fs.readTextFile(`${acf_basePath}/${JSON.stringify(x.name).replace(/['"]+/g, '')}`).toString())));
+        const acf_filess = await Promise.all(getPath.filter(x => x.name.split(".")[1] === 'acf').map(async x => {
+            return parseGameObject(acf_to_json(await fs.readTextFile(`${acf_basePath}/${JSON.stringify(x.name).replace(/['"]+/g, '')}`)));
+        }))
+        allGames.push(acf_filess);
+        console.log(allGames);
         // eslint-disable-next-line
         const result = allGames.flat().reduce((unique, o) => {
             if (!unique.some(obj => obj.DisplayName === o.DisplayName)) {
@@ -123,14 +105,14 @@ async function getInstalledGames() {
 }
 
 
-function parseGameObject(acf_object = {}) {
+async function parseGameObject(acf_object = {}) {
     const {
-        LauncherExe: Executable,
-        LauncherPath: Location,
         name: DisplayName,
         appid: GameID,
+        LauncherExe: Executable,
+        LauncherPath: Location,
         BytesDownloaded: Size,
-    } = acf_object;
+    } = await acf_object;
 
     return {
         DisplayName,
@@ -144,7 +126,7 @@ function parseGameObject(acf_object = {}) {
 
 async function acf_to_json(acf_content = '') {
     if (acf_content.length === 0) return;
-    const o = acf_content.split('\n').slice(1).map((x, i, arr) => {
+    return JSON.parse(acf_content.split('\n').slice(1).map((x, i, arr) => {
         if (x.length === 0) return;
         if (x.trim().includes('\t\t')) {
             return (
@@ -154,18 +136,10 @@ async function acf_to_json(acf_content = '') {
         return (
             x.split('"').length > 1 ? x.trim() + ':' : x + (x.trim() === '{' || !arr[i + 1] || ['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
         );
-    }).join('\n');
-    // eslint-disable-next-line
-    const ha = JSON.parse(o,);
-    return {
-        DisplayName: "gay"
-    }
+        }).join('\n'),
+    );
 }
 
 module.exports = {
-    getSteamLocation,
     getInstalledGames,
-    parseGameObject,
-    acf_to_json,
-    isLauncherInstalled,
 };
