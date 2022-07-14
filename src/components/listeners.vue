@@ -1,5 +1,7 @@
 <script>
-window.addEventListener("load", function () {
+let models = require('./launchers/find-games');
+
+window.addEventListener("load", async function () {
   const marker = document.getElementById('indicator');
   const home = document.getElementById('home');
   const recent = document.getElementById('recent');
@@ -14,14 +16,14 @@ window.addEventListener("load", function () {
   const fs = window.__TAURI__.fs;
   const path = window.__TAURI__.path;
 
-  (async () => {
-    const appDirPath = await path.appDir();
-    const data = JSON.parse(await fs.readTextFile(appDirPath + 'storage/UserProfile.json', (err) => {
-      if (err) throw err;
-    }));
-    document.getElementById('text').value = data.username;
-  })()
-  
+  await models.getInstalledGames();
+
+  const appDirPath = await path.appDir();
+  const data = JSON.parse(await fs.readTextFile(appDirPath + 'storage/UserProfile.json', (err) => {
+    if (err) throw err;
+  }));
+  document.getElementById('text').value = data.username;
+
   document.getElementById('main-loading-overlay').style.opacity = '0';
   document.getElementById('main-loading-overlay').style.visibility = 'hidden';
 
@@ -66,6 +68,8 @@ window.addEventListener("load", function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
+
+    await models.loadGames('allGames');
   });
 
   document.getElementById('favs-btn').addEventListener('click', async function () {
@@ -108,13 +112,11 @@ window.addEventListener("load", function () {
     friends.style.display = 'flex';
   });
 
-  document.getElementById('text').addEventListener('change', (e) => {
-    (async () => {
-      const appDirPath = await path.appDir();
-      fs.writeTextFile(appDirPath + 'storage/UserProfile.json', JSON.stringify({ username: e.target.value, }), (err) => {
-        if (err) throw err;
-      });
-    })();
+  document.getElementById('text').addEventListener('change', async (e) => {
+    const appDirPath = await path.appDir();
+    fs.writeTextFile(appDirPath + 'storage/UserProfile.json', JSON.stringify({ username: e.target.value, }), (err) => {
+      if (err) throw err;
+    });
   });
 
   document.getElementById('settings-btn').addEventListener('click', async function () {
@@ -127,14 +129,12 @@ window.addEventListener("load", function () {
     settingsbackblur.style.display = 'none';
   });
 
-  document.querySelector('.titlebar-settings').addEventListener('click', () => {
-    (async () => {
-      const appDirPath = await path.appDir();
-      const Data = JSON.parse(await fs.readTextFile(appDirPath + 'storage/LauncherData.json'));
-      document.querySelectorAll('input[id^=setting-]').forEach((input) => {
-        input.checked = Data[input.id.split('-')[1]] ? true : false;
-      });
-    })();
+  document.querySelector('.titlebar-settings').addEventListener('click', async () => {
+    const appDirPath = await path.appDir();
+    const Data = JSON.parse(await fs.readTextFile(appDirPath + 'storage/LauncherData.json'));
+    document.querySelectorAll('input[id^=setting-]').forEach((input) => {
+      input.checked = Data[input.id.split('-')[1]] ? true : false;
+    });
   });
 
   document.querySelectorAll('input[id^=setting-]').forEach((input) => {

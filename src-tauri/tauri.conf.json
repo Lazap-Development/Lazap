@@ -16,6 +16,22 @@
       "all": true,
       "fs": {
         "scope": ["**"]
+      },
+      "shell": {
+        "all": true,
+        "execute": true,
+        "open": true,
+        "scope": [{
+          "name": "which",
+          "cmd": "which",
+          "args": true
+        },
+        {
+          "name": "node",
+          "cmd": "node",
+          "args": true
+        }],
+        "sidecar": true
       }
     },
     "bundle": {
