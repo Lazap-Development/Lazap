@@ -25,7 +25,9 @@ async function getSteamLocation(os = process.platform, checkForSteam = true) {
 		}
 	}
 	else if (os === 'linux') {
-		const text = await fetch(`${require('os').userInfo().homedir}/.steam/steam/steamapps/libraryfolders.vdf`)
+		const path = `${require('os').userInfo().homedir}/.steam/steam/steamapps/libraryfolders.vdf`;
+		if (!fs.existsSync(path)) return launcher_location = false;
+		const text = await fetch(path)
 			.then(response => response.text())
 			// eslint-disable-next-line no-shadow
 			.then(text => {
@@ -62,9 +64,8 @@ async function getInstalledGames() {
 	if (process.platform === 'win32') {
 		const acf_basePath = `${path}\\steamapps`;
 		if (!fs.existsSync(acf_basePath)) return [];
-		const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
+		return fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
 			.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
-		return acf_files;
 	}
 	else if (process.platform === 'linux') {
 		let allGames = [];
@@ -75,13 +76,12 @@ async function getInstalledGames() {
 				.map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}/${x}`).toString())));
 
 			allGames.push(acf_files);
-			const result = allGames.flat().reduce((unique, o) => {
-				if(!unique.some(obj => obj.DisplayName === o.DisplayName)) {
-				  unique.push(o);
+			allGames = allGames.flat().reduce((unique, o) => {
+				if (!unique.some(obj => obj.DisplayName === o.DisplayName)) {
+					unique.push(o);
 				}
 				return unique;
 			}, []);
-			allGames = result;
 		});
 		return allGames;
 	}
