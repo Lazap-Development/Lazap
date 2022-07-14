@@ -174,7 +174,7 @@
         <div>
           <div class="user-pfp">
             <label for="file"></label>
-            <input id="file" type="file" accept="image/*" @change="(event)=>loadFile(event)" />
+            <input id="file" type="file" accept="image/*" @change="(event) => loadFile(event)" />
             <img src="./assets/default-profile.svg" alt="Avatar" width="85" height="85" id="output">
           </div>
           <input class="username" id="text" type="text" value="Lazap" spellcheck="false" maxlength="12" />
@@ -261,12 +261,14 @@ const Window = window.__TAURI__.window
 
 export default {
   async created() {
-        const process = window.__TAURI__.os;
-        console.log('OS: ' + await process.platform() + '\nArch: ' + await process.arch());
+    const process = window.__TAURI__.os;
+    console.log('OS: ' + await process.platform() + '\nArch: ' + await process.arch());
 
-        if (await process.platform() == "win32") {
-            document.getElementById('bg').style.height = '111.5vh';
-        }
+    if (await process.platform() == "win32") {
+      document.getElementById('main-loading-overlay').style.width = '111.7vw';
+      document.getElementById('main-loading-overlay').style.height = '111.5vh';
+      document.getElementById('bg').style.height = '111.5vh';
+    }
   },
   listeners,
   storage,
