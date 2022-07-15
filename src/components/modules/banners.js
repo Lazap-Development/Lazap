@@ -3,8 +3,8 @@ function fetch_banner(data, userDataPath) {
 	const fetch = require('node-fetch'); */
 	const arr = [];
 
-	function isConnected() {
-		const obj = require('os').networkInterfaces();
+	/*function isConnected() {
+		const obj = window.__TAURI__.os.networkInterfaces();
 		const arr = Object.entries(obj);
 		let result = false;
 		for (let a of arr) {
@@ -14,14 +14,14 @@ function fetch_banner(data, userDataPath) {
 			/* for (const xd of a[1]) {
 				if(xd.family === 'IPv6') return;
 				console.log(xd);
-			}*/
+			}
 		}
 		console.log(result);
-		return result;
-	}
+	}*/
 
 	for (let i = 0; i < data.length; i++) {
 		arr.push((async () => {
+			// const { fetch } = require('@tauri-apps/api/http')
 			if (data[i].LauncherName === 'EpicGames') {
 				return '../img/icons/icon.ico';
 				/* const response = await fetch(`https://www.epicgames.com/store/en-US/browse?q=${encodeURIComponent(data[i].DisplayName)}&sortBy=releaseDate&sortDir=DESC&count=5&category=Game&start=0`, {
@@ -48,19 +48,19 @@ function fetch_banner(data, userDataPath) {
 			}
 			else if (data[i].LauncherName === 'Lutris') {
 				let url = `https://lutris.net/games/banner/${data[i].GameID}.jpg`;
-				if(!isConnected()) {
+				/*if(!isConnected()) {
 					url = '../img/icons/icon.ico';
 				} else {
 					await fetch(`https://lutris.net/games/banner/${data[i].GameID}.jpg`).then(res => {
 						console.log(res.status, typeof res.status);
 						if(res.status === 404) return url = 'https://cdn2.steamgriddb.com/file/sgdb-cdn/thumb/ac3f115b3a14f86b904bdc5ed5f82c4b.jpg'
 					});
-				}
+				//}*/
 				return url;
 			}
 			else if (data[i].LauncherName === 'Steam') {
 				let url = `https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`;
-				if(!isConnected()) {
+				/*if(!isConnected()) {
 					url = '../img/icons/icon.ico';
 				} else {
 					await fetch(`https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`).then(res => {
@@ -68,29 +68,29 @@ function fetch_banner(data, userDataPath) {
 						if(res.status === 404) return url = 'https://www.sketchappsources.com/resources/source-image/roberto-steam-logo.png';
 					});
 					if(data[i].DisplayName === 'FrostRunner') return url = 'https://cdnb.artstation.com/p/assets/covers/images/026/711/505/large/david-rosario-iii-david-rosario-iii-frostrunner-banner-small.jpg?1589504830';
-				}
+				}*/
 				return url;
 			}
 			else if (data[i].LauncherName === 'RiotGames') {
 				if (data[i].DisplayName === "Valorant") {
 					let url = 'https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png';
-					if(!isConnected()) {
+					/*if(!isConnected()) {
 						url = '../img/icons/icon.ico';
-					}
+					}*/
 					return url;
 				}
 				if(data[i].DisplayName === "League of Legends") {
 					let url = 'https://images.igdb.com/igdb/image/upload/t_cover_big/co49wj.png';
-					if(!isConnected()) {
+					/*if(!isConnected()) {
 						url = '../img/icons/icon.ico';
-					}
+					}*/
 					return url;
 				}
 				if(data[i].DisplayName === "Legends of Runeterra") {
 					let url = 'https://images.igdb.com/igdb/image/upload/t_cover_big/co3wnv.png';
-					if(!isConnected()) {
+					/*if(!isConnected()) {
 						url = '../img/icons/icon.ico';
-					}
+					}*/
 					return url;
 				}
 			}
@@ -133,23 +133,23 @@ function fetch_banner(data, userDataPath) {
 			}
 			else if (data[i].LauncherName === 'Minecraft') {
 				let url = 'https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png';
-				if(!isConnected()) {
-					url = '../img/icons/icon.ico';
-				}
+				/*if(!isConnected()) {
+						url = '../img/icons/icon.ico';
+					}*/
 				return url;
 			}
 			else if (data[i].LauncherName === 'FiveM') {
 				let url = 'https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png';
-				if(!isConnected()) {
-					url = '../img/icons/icon.ico';
-				}
+				/*if(!isConnected()) {
+						url = '../img/icons/icon.ico';
+					}*/
 				return url;
 			}
 			else if (data[i].LauncherName === 'Lunar') {
 				let url = 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
-				if(!isConnected()) {
-					url = '../img/icons/icon.ico';
-				}
+				/*if(!isConnected()) {
+						url = '../img/icons/icon.ico';
+					}*/
 				return url;
 			}
 			else if (data[i].LauncherName === 'XboxGames') {
@@ -163,16 +163,16 @@ function fetch_banner(data, userDataPath) {
 }
 
 function cacheBanners(data, res, userDataPath) {
-	const { checkForDirAndCreate } = require('../utils.js');
+	// const { checkForDirAndCreate } = require('../utils.js');
 
-	checkForDirAndCreate(userDataPath + '/storage/Cache/Games/Images', '{}', userDataPath);
+	// checkForDirAndCreate(userDataPath + '/storage/Cache/Games/Images', '{}', userDataPath);
 
 	res.filter(async (x) => (await x).startsWith('http')).forEach(async (x, i) => {
 		fetch(await x, {
 			method: 'GET',
 		}).then(async (response) => {
-			const md5 = require('md5');
-			const fs = require('fs');
+			const fs = window.__TAURI__.fs;
+			const md5 = window.__TAURI__.md5;
 			fs.createWriteStream(userDataPath + `/storage/Cache/Games/Images/${md5(data[i].DisplayName)}.png`).write(Buffer.from(await response.arrayBuffer()));
 		}).catch(() => '');
 	});

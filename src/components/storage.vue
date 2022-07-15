@@ -5,7 +5,7 @@ const path = window.__TAURI__.path;
 (async () => {
   const appDirPath = await path.appDir();
 
-  let data = new Object();
+  let data = {};
   data.enableRPC = true;
   data.launchOnStartup = false;
   data.skipLogin = false;

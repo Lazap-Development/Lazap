@@ -37,7 +37,7 @@ async function getInstalledGames() {
     } else {
         rootDir = await new shell.Command('pwd').execute();
     }
-    
+
     let data = await fs.readDir(await path.join(rootDir.stdout, "../src/components/launchers"));
     const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x))
     console.log((await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0))
@@ -191,12 +191,13 @@ async function loadGames(id) {
         });
 
         return game;
-    }).filter(x => Object.keys(x).length > 0);
-
-    setGames(games);
-    require("../utils").getBannerResponse(resolvedGames.filter((x) => x.Banner === '../img/icons/icon.ico'), id);
+    }).filter(async x => Object.keys(await x).length > 0);
+    await setGames(games);
+    const a = await Promise.all(resolvedGames);
+    // require("../utils").getBannerResponse(resolvedGames.filter((x) => x.Banner === '../img/icons/icon.ico'), id);
+    await require("../utils").load_banners_request(a.filter(async x => await x.Banner === 'https://cdn.discordapp.com/attachments/814938072999395388/983977458120396830/IMG_4432.jpg'), id);
     running = false;
-}
+    }
 
 function sort(games, type) {
     if (type === 'alphabetical') {

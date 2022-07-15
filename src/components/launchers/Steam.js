@@ -35,7 +35,7 @@ async function getSteamLocation() {
         const VDF = require('../modules/parseVDF');
         const parsed = VDF.parse(text);
         const toArray = Object.entries(parsed.libraryfolders);
-        const mappedArray = toArray.map((item) => {
+        launcher_location = toArray.map((item) => {
             return item[1].path;
         });
     }
@@ -45,12 +45,10 @@ async function getSteamLocation() {
 
 async function isLauncherInstalled(path) {
     if (typeof path === 'string') {
-        console.log(await fs.readDir(path));
         return await fs.readDir(path);
     }
     else if (Array.isArray(path)) {
-        console.log(path.map(async () => await fs.readDir("/home/logic/.local/share/Steam")).includes(true));
-        return path.map(async x => await fs.readDir(x)).includes(true);
+        return path.map(async (x) => await fs.readDir(x)).length > 0;
     }
 }
 
