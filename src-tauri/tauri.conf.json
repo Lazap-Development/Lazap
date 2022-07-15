@@ -38,6 +38,11 @@
             "name": "Reg",
             "cmd": "Reg",
             "args": true
+          },
+          {
+            "name": "cd",
+            "cmd": "cd",
+            "args": true
           }
         ],
         "sidecar": true
@@ -84,6 +89,7 @@
     },
     "windows": [
       {
+        "label":"main",
         "fullscreen": false,
         "resizable": true,
         "title": "Lazap",
