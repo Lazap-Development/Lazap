@@ -269,7 +269,7 @@ async function handleLaunch(game) {
                 break;
             }
             case 'Minecraft': {
-                res = createProcess('minecraft-launcher', [], game.GameID);
+                res = createProcess('minecraft-launcher', "", game.GameID);
                 break;
             }
             default: {
