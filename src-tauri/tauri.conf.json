@@ -35,13 +35,8 @@
             "args": true
           },
           {
-            "name": "Reg",
-            "cmd": "Reg",
-            "args": true
-          },
-          {
-            "name": "cd",
-            "cmd": "cd",
+            "name": "cmd",
+            "cmd": "cmd",
             "args": true
           }
         ],

@@ -1,26 +1,30 @@
 const os = window.__TAURI__.os;
 const fs = window.__TAURI__.fs;
 const path = window.__TAURI__.path;
-
-let exec = "l";
+const shell = window.__TAURI__.shell
 
 async function getSteamLocation() {
     let launcher_location;
     let registry_res;
     if (await os.platform() === 'win32') {
-        const { stdout, error } = await exec(
-            `Reg Query "HKEY_LOCAL_MACHINE\\SOFTWARE\\${process.arch === 'x64' ? 'Wow6432Node\\' : ''}Valve\\Steam" /v InstallPath`,
-        ).catch(() => {
-            launcher_location = null;
-            return { error: 'NOT_FOUND' };
-        });
+        const output = await new shell.Command('cmd', ["/C", "Reg", "Query", `HKEY_LOCAL_MACHINE\\SOFTWARE\\${await os.arch() === 'x86_64' ? 'WOW6432Node\\' : ''}Valve\\Steam`, "/v", "InstallPath"]).execute();
 
-        if (error) {
+        if (!output.stdout) {
             return;
         }
         else {
-            registry_res = stdout;
-            launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
+            registry_res = output.stdout;
+            const steamDir = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
+
+            const text = await fs.readTextFile(steamDir + `\\steamapps\\libraryfolders.vdf`)
+
+            const VDF = require('../modules/parseVDF');
+            const parsed = VDF.parse(text);
+            const toArray = Object.entries(parsed.libraryfolders);
+
+            launcher_location = toArray.map((item) => {
+                return item[1].path;
+            });
         }
     }
     else if (await os.platform() === 'linux') {
@@ -34,9 +38,6 @@ async function getSteamLocation() {
         launcher_location = toArray.map((item) => {
             return item[1].path;
         });
-
-
-
     }
     if (!isLauncherInstalled(launcher_location)) return false;
     return launcher_location;
@@ -55,40 +56,36 @@ async function getInstalledGames() {
     const path = await getSteamLocation();
     if (!path) return [];
 
-    if (await os.platform() === 'win32') {
-        const acf_basePath = `${path}\\steamapps`;
-        if (!await fs.readDir(acf_basePath)) return [];
-        const acf_files = fs.readdirSync(acf_basePath).filter((x) => x.split('.')[1] === 'acf')
-            .map((x) => parseGameObject(acf_to_json(fs.readFileSync(`${acf_basePath}\\${x}`).toString())));
 
-        return acf_files;
-    }
-    else if (await os.platform() === 'linux') {
-        let allGames = [];
+    let allGames = [];
 
-        for (const location of path) {
-            const acf_basePath = `${location}/steamapps`;
-            if (!await fs.readDir(acf_basePath)) return [];
-
-            const readDirOfBasePath = await fs.readDir(acf_basePath)
-            const acf_files = await Promise.all(readDirOfBasePath.filter(x => x.name.split(".")[1] === 'acf').map(async x => {
-                return parseGameObject(acf_to_json(await fs.readTextFile(`${acf_basePath}/${JSON.stringify(x.name).replace(/['"]+/g, '')}`)));
-            }))
-
-            allGames.push(acf_files);
-
-            const result = allGames.flat().reduce((unique, o) => {
-                if (!unique.some(obj => obj.DisplayName === o.DisplayName)) {
-                    unique.push(o);
-                }
-                return unique;
-            }, []);
-            allGames = result;
-
+    for (const location of path) {
+        let acf_basePath;
+        if (await os.platform() === 'win32') {
+            acf_basePath = `${location}\\steamapps`;
+        } else if (await os.platform() === 'linux') {
+            acf_basePath = `${location}/steamapps`;
         }
-        console.log(allGames)
-        return allGames;
+
+        if (!await fs.readDir(acf_basePath)) return [];
+
+        const readDirOfBasePath = await fs.readDir(acf_basePath)
+        const acf_files = await Promise.all(readDirOfBasePath.filter(x => x.name.split(".")[1] === 'acf').map(async x => {
+            return parseGameObject(acf_to_json(await fs.readTextFile(`${acf_basePath}/${JSON.stringify(x.name).replace(/['"]+/g, '')}`)));
+        }))
+
+        allGames.push(acf_files);
+
+        const result = allGames.flat().reduce((unique, o) => {
+            if (!unique.some(obj => obj.DisplayName === o.DisplayName)) {
+                unique.push(o);
+            }
+            return unique;
+        }, []);
+        allGames = result;
+
     }
+    return allGames;
 }
 
 

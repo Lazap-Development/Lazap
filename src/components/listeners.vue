@@ -1,5 +1,5 @@
 <script>
-let models = require('./launchers/find-games');
+const models = require('./launchers/find-games');
 
 window.addEventListener("load", async function () {
   const marker = document.getElementById('indicator');
@@ -17,10 +17,8 @@ window.addEventListener("load", async function () {
   const path = window.__TAURI__.path;
 
   await models.getInstalledGames()
-    .then(() => {
-    })
-    .catch((errors) => {
-      return console.log(errors);
+    .catch((err) => {
+      return console.log(err);
     });
 
   const appDirPath = await path.appDir();
@@ -75,10 +73,8 @@ window.addEventListener("load", async function () {
     activity.style.display = 'none';
 
     await models.loadGames('allGames')
-      .then(() => {
-      })
-      .catch((errors) => {
-        return console.log(errors);
+      .catch((err) => {
+        return console.log(err);
       });
   });
 
