@@ -46,6 +46,9 @@
           }
         ],
         "sidecar": true
+      },
+      "http": {
+        "scope": ["https://**", "http://**"]
       }
     },
     "bundle": {

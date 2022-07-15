@@ -3,8 +3,6 @@ const fs = window.__TAURI__.fs;
 const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
 const Window = window.__TAURI__.window
-const shell = window.__TAURI__.shell;
-const process = window.__TAURI__.os;
 
 let lastCheck;
 let cachedGames = [];
@@ -31,14 +29,9 @@ async function getInstalledGames() {
         return `COOLDOWN_${(lastCheck + 1000 * 4) - Date.now()}`;
     }
 
-    let rootDir;
-    if (await process.platform() == "win32") {
-        rootDir = await new shell.Command('cmd', ["/C", "cd"]).execute();
-    } else {
-        rootDir = await new shell.Command('pwd').execute();
-    }
-
-    let data = await fs.readDir(await path.join(rootDir.stdout, "../src/components/launchers"));
+    let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
+    
+    let data = await fs.readDir(rootDir);
     const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x))
     console.log((await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0))
     const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0).flat();
