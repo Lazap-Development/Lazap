@@ -2,8 +2,6 @@ use tauri::Manager;
 
 fn main() {
     if cfg!(windows) {
-        println!("\n OS: [\x1b[34;1mWINDOWS\x1b[0m]");
-
         tauri::Builder::default()
             .invoke_handler(tauri::generate_handler![run_game])
             .setup(|app| {
@@ -14,15 +12,11 @@ fn main() {
             .run(tauri::generate_context!())
             .expect("error while running lazap");
     } else if cfg!(unix) {
-        println!("\n OS: [\x1b[32;1mLINUX\x1b[0m]");
-
         tauri::Builder::default()
             .invoke_handler(tauri::generate_handler![run_game])
             .run(tauri::generate_context!())
             .expect("error while running lazap");
     } else if cfg!(target_os = "macos") {
-        println!("\n OS: [\x1b[1;35mMacOS\x1b[0m]");
-
         tauri::Builder::default()
             .invoke_handler(tauri::generate_handler![run_game])
             .run(tauri::generate_context!())

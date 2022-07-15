@@ -1,11 +1,11 @@
 [package]
-name = "lazap"
+name = "Lazap"
 version = "0.4.0"
 description = "A Tauri App"
 authors = ["Lazap-Development"]
 license = ""
-repository = ""
-default-run = "lazap"
+repository = "https://github.com/Lazap-Development/lazap"
+default-run = "Lazap"
 edition = "2021"
 rust-version = "1.57"
 
