@@ -1,7 +1,7 @@
 {
-  "name": "my-tauri-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "lazap",
+  "version": "0.4.0",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -12,9 +12,6 @@
   "dependencies": {
     "@tauri-apps/api": "^1.0.2",
     "core-js": "^3.8.3",
-    "discord-rpc": "^4.0.1",
-    "md5": "^2.3.0",
-    "utils": "^0.3.1",
     "vue": "^3.2.13"
   },
   "devDependencies": {

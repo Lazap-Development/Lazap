@@ -8,7 +8,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "lazap",
+    "productName": "Lazap",
     "version": "0.4.0"
   },
   "tauri": {
@@ -35,8 +35,8 @@
             "args": true
           },
           {
-            "name": "Reg",
-            "cmd": "Reg",
+            "name": "cmd",
+            "cmd": "cmd",
             "args": true
           }
         ],
@@ -84,6 +84,7 @@
     },
     "windows": [
       {
+        "label":"main",
         "fullscreen": false,
         "resizable": true,
         "title": "Lazap",

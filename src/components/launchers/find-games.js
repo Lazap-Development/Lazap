@@ -1,9 +1,10 @@
 const os = window.__TAURI__.os;
 const fs = window.__TAURI__.fs;
-const invoke = window.__TAURI__.invoke
+const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
 const Window = window.__TAURI__.window
-const shell = window.__TAURI__.shell
+const shell = window.__TAURI__.shell;
+const process = window.__TAURI__.os;
 
 let lastCheck;
 let cachedGames = [];
@@ -29,13 +30,18 @@ async function getInstalledGames() {
     else if (lastCheck + 1000 * 4 > Date.now()) {
         return `COOLDOWN_${(lastCheck + 1000 * 4) - Date.now()}`;
     }
-    // Fetch all games
-    const rootDir = await new shell.Command('pwd').execute();
 
+    let rootDir;
+    if (await process.platform() == "win32") {
+        rootDir = await new shell.Command('cmd', ["/C", "cd"]).execute();
+    } else {
+        rootDir = await new shell.Command('pwd').execute();
+    }
+    
     let data = await fs.readDir(await path.join(rootDir.stdout, "../src/components/launchers"));
-    const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
-    const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0);
-    console.log(games.flat());
+    const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x))
+    console.log((await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0))
+    const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0).flat();
 
     if (games.length < 1) {
         return 'NO_GAMES_FOUND';
@@ -234,15 +240,16 @@ async function handleLaunch(game) {
     if (await os.platform() === 'win32') {
         switch (game.LauncherName) {
             case 'EpicGames': {
-                res = createProcess('start', [`com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch`, '--wait'], game.GameID);
+                res = createProcess('cmd', `/C start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch --wait`, game.GameID);
                 break;
             }
             case 'Steam': {
-                res = createProcess('start', [`steam://rungameid/${game.GameID}`, '--wait'], game.GameID);
+                console.log(game.GameID)
+                res = createProcess('cmd', `/C start steam://rungameid/${game.GameID} --wait`, game.GameID);
                 break;
             }
             case 'Uplay': {
-                res = createProcess('start', [`uplay://launch/${game.GameID}/0`, '--wait'], game.GameID);
+                res = createProcess('cmd', `/C start uplay://launch/${game.GameID}/0 --wait`, game.GameID);
                 break;
             }
             case 'Minecraft': {
@@ -258,11 +265,11 @@ async function handleLaunch(game) {
     else if (await os.platform() === 'linux') {
         switch (game.LauncherName) {
             case 'Steam': {
-                res = createProcess('steam', [`steam://rungameid/${game.GameID}`, '-silent'], game.GameID);
+                res = createProcess('steam', `steam://rungameid/${game.GameID} -silent`, game.GameID);
                 break;
             }
             case 'Minecraft': {
-                res = createProcess('minecraft-launcher', [], game.GameID);
+                res = createProcess('minecraft-launcher', "", game.GameID);
                 break;
             }
             default: {
@@ -285,8 +292,8 @@ async function handleLaunch(game) {
 
 async function createProcess(Command, Args, GameID, force = false) {
     if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
-
-    const instance = invoke('run_game', { exec: Command })
+    console.log(Args)
+    const instance = invoke('run_game', { exec: Command, args: Args })
         .then(() => {
             VisibilityState();
             processes.delete(GameID);
