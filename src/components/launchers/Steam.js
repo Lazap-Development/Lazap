@@ -39,11 +39,22 @@ async function getSteamLocation() {
             return item[1].path;
         });
     }
-    return launcher_location.filter(async x => typeof (await fs.readDir(x).catch(() => '')) !== 'string');
+
+    for (const path of launcher_location) {
+        try {
+            await fs.readDir(path);
+        } catch (err) {
+            launcher_location = launcher_location.filter(e => e !== path)
+        }
+    }
+
+    return launcher_location;
+
 }
 
 async function getInstalledGames() {
     const path = await getSteamLocation();
+    console.log(path)
     if (path?.length === 0) return [];
 
     let allGames = [];
