@@ -13,29 +13,29 @@ async function getBannerResponse(games, id) {
             switch (games[i].LauncherName) {
                 case 'EpicGames': {
                     return;
-                };
+                }
                 case 'Steam': {
                     return `https://cdn.akamai.steamstatic.com/steam/apps/${games[i].GameID}/library_600x900.jpg`;
-                };
+                }
                 case 'RiotGames': {
                     return 'https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png';
-                };
+                }
                 case 'Uplay': {
                     return;
-                };
+                }
                 case 'Minecraft': {
                     return 'https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png';
-                };
+                }
                 case 'FiveM': {
                     return 'https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png';
-                };
+                }
                 case 'Lunar': {
                     return 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
-                };
+                }
                 case 'XboxGames': {
                     return games[i].Banner;
-                };
-            };
+                }
+            }
         })());
 
     }
