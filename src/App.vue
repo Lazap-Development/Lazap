@@ -282,6 +282,16 @@ export default {
     close_window() {
       Window.appWindow.close()
     },
+    loadFile(event) {
+      var selectedFile = event.target.files[0];
+      var reader = new FileReader();
+
+      reader.onload = function (event) {
+        document.getElementById("output").src = event.target.result;
+      };
+
+      reader.readAsDataURL(selectedFile);
+    }
 
   }
 };
