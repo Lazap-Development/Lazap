@@ -122,9 +122,7 @@ body {
 
 .titlebar {
     overflow: hidden;
-    -webkit-app-region: drag;
-    -webkit-user-select: none;
-    user-select: none;
+
 
     border-radius: 10px;
     background-color: #202126;

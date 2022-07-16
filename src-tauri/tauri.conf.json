@@ -49,6 +49,10 @@
       },
       "http": {
         "scope": ["https://**", "http://**"]
+      },
+      "protocol": {
+        "asset": true,
+        "assetScope": ["**"]
       }
     },
     "bundle": {

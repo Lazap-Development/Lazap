@@ -20,7 +20,7 @@ async function getSteamLocation() {
 
             const VDF = require('../modules/parseVDF');
             const parsed = VDF.parse(text);
-            const toArray = Object.entries(parsed.libraryfolders);
+            const toArray = Object.entries(parsed.libraryfolders).filter(x => x[1].path);
 
             launcher_location = toArray.map((item) => {
                 return item[1].path;
@@ -39,23 +39,12 @@ async function getSteamLocation() {
             return item[1].path;
         });
     }
-    if (!await isLauncherInstalled(launcher_location)) return false;
-    return launcher_location;
-}
-
-async function isLauncherInstalled(path) {
-    if (typeof path === 'string') {
-        return await fs.readDir(path);
-    }
-    else if (Array.isArray(path)) {
-        return path.map(async (x) => await fs.readDir(x)).length > 0;
-    }
+    return launcher_location.filter(async x => typeof (await fs.readDir(x).catch(() => '')) !== 'string');
 }
 
 async function getInstalledGames() {
     const path = await getSteamLocation();
-    if (!path) return [];
-
+    if (path?.length === 0) return [];
 
     let allGames = [];
 
@@ -126,4 +115,6 @@ async function acf_to_json(acf_content = '') {
 
 module.exports = {
     getInstalledGames,
+    parseGameObject,
+    acf_to_json,
 };

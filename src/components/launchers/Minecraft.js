@@ -34,7 +34,7 @@ async function getMinecraftLauncherOnLinux() {
 			const Location = '/usr/bin/minecraft-launcher';
 			const Executable = 'minecraft-launcher';
 			return {
-				DisplayName: 'Minecraft Launcher',
+				DisplayName: 'Minecraft',
 				LauncherName: 'Minecraft',
 				GameID: 'Minecraft',
 				Location,

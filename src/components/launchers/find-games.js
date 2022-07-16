@@ -3,6 +3,7 @@ const fs = window.__TAURI__.fs;
 const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
 const Window = window.__TAURI__.window
+const tauri = window.__TAURI__.tauri;
 
 let lastCheck;
 let cachedGames = [];
@@ -29,11 +30,16 @@ async function getInstalledGames() {
         return `COOLDOWN_${(lastCheck + 1000 * 4) - Date.now()}`;
     }
 
-    let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
+    function fix(str, index, value) { return str.substr(0, index) + value + str.substr(index); }
+    let rootDir;
+    if (await os.platform() === 'win32') {
+        rootDir = fix(await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname))), 2, "\\")
+    } else if (await os.platform() === 'linux') {
+        rootDir = await path.dirname(decodeURI(new URL(import.meta.url).pathname))
+    }
 
     let data = await fs.readDir(rootDir);
-    const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x))
-    console.log((await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0))
+    const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
     const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0).flat();
 
     if (games.length < 1) {
@@ -103,14 +109,19 @@ async function loadGames(id) {
         let banner;
         if (game.LauncherName !== 'XboxGames') {
             try {
-                await fs.readDir(GAME_BANNERS_BASE_PATH)
-            } catch (e) {
+                const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH);
+                const img = dirs.find(x => x.name === `${require("../modules/sha256").sha256(game.DisplayName)}.png`);
+
+                banner = img ? tauri.convertFileSrc(appDirPath + `storage/Cache/Games/Images/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://cdn.discordapp.com/attachments/814938072999395388/983977458120396830/IMG_4432.jpg';
+            } catch (err) {
                 banner = 'https://cdn.discordapp.com/attachments/814938072999395388/983977458120396830/IMG_4432.jpg';
+                console.log(err)
             }
         }
         else {
             banner = game.Banner;
         }
+
         gameBanner.setAttribute('src', banner);
         gameBanner.style = `opacity: ${id === 'allGames' ? '0.2' : '1'};`;
         gameBanner.height = 500;
@@ -123,8 +134,8 @@ async function loadGames(id) {
 
         // Set Game Display Name
         const gameText = document.createElement('span');
-        if (game.DisplayName.length > 18) {
-            gameText.innerHTML = game.DisplayName.slice(0, 18);
+        if (game.DisplayName.length > 20) {
+            gameText.innerHTML = game.DisplayName.slice(0, 20);
             gameText.innerHTML += '...';
         }
         else {
@@ -151,7 +162,8 @@ async function loadGames(id) {
                 starIcon.classList.add('fade');
                 x[i].style.visibility = 'visible';
                 if (isFavourite) {
-                    starIcon.style.content = 'url("../assets/star-solid.svg")';
+                    let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
+                    starIcon.style.content = `url("asset://${await path.join(rootDir, "../../assets/star-solid.svg")}")`;
                     starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
                 }
             }
@@ -165,7 +177,8 @@ async function loadGames(id) {
                     starIcon.classList.remove('fade');
                     x[i].style.visibility = 'hidden';
                     if (!isFavourite) {
-                        starIcon.style.content = 'url("../assets/star-empty.svg")';
+                        let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
+                        starIcon.style.content = `url("asset://${await path.join(rootDir, "../../assets/star-empty.svg")}")`;
                         starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
                     }
                 }
@@ -175,18 +188,18 @@ async function loadGames(id) {
             if (!gameBanner.matches(':hover') && !starIcon.matches(':hover')) starIcon.style.visibility = 'hidden';
         });
 
-        starIcon.addEventListener('click', () => {
+        starIcon.addEventListener('click', async () => {
             const res = toggleFavourite(game.GameID, game.LauncherName);
-            starIcon.style.content = `url("../assets/star-${res ? 'solid' : 'empty'}.svg")`;
+            let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
+            starIcon.style.content = `url("asset://${await path.join(rootDir, "../../assets/star-" + res ? 'solid' : 'empty' + ".svg")}")`;
             starIcon.style.filter = res ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
         });
 
         return game;
-    }).filter(async x => Object.keys(await x).length > 0);
-    await setGames(games);
-    const a = await Promise.all(resolvedGames);
-    // require("../utils").getBannerResponse(resolvedGames.filter((x) => x.Banner === '../img/icons/icon.ico'), id);
-    await require("../utils").load_banners_request(a.filter(async x => await x.Banner === 'https://cdn.discordapp.com/attachments/814938072999395388/983977458120396830/IMG_4432.jpg'), id);
+    }).filter(x => Object.keys(x).length > 0);
+
+    setGames(games);
+    await require("../modules/banners").getBannerResponse(games, id);
     running = false;
     }
 
