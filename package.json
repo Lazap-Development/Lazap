@@ -9,6 +9,8 @@
     "tauri:build": "vue-cli-service tauri:build",
     "tauri:serve": "vue-cli-service tauri:serve"
   },
+  "author": "Lazap Development",
+  "license": "ISC",
   "dependencies": {
     "@tauri-apps/api": "^1.0.2",
     "core-js": "^3.8.3",
