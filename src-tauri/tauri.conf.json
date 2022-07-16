@@ -12,13 +12,12 @@
     "version": "0.4.0"
   },
   "tauri": {
+    "systemTray": {
+      "iconPath": "icons/icon.ico",
+      "iconAsTemplate": true
+    },
     "allowlist": {
       "all": true,
-      "http": {
-        "all": true,
-        "request": true,
-        "scope": ["https://**"]
-      },
       "fs": {
         "scope": [
           "**"
