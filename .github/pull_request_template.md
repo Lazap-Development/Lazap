@@ -28,7 +28,7 @@ Please go through these guidelines before submitting the PR.
 
 
 #### **Description**
- breif description of what this pull request is
+A brief description of what this pull request is
 
 #### **Changes (in short)**
 ```diff
