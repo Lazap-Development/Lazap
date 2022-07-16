@@ -264,19 +264,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
-name = "chrono"
-version = "0.4.19"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "670ad68c9088c2a963aaa298cb369688cf3f9465ce5e2d4ca10e6e0098a1ce73"
-dependencies = [
- "libc",
- "num-integer",
- "num-traits",
- "time 0.1.44",
- "winapi",
-]
-
-[[package]]
 name = "cocoa"
 version = "0.24.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1365,7 +1352,6 @@ dependencies = [
 name = "lazap"
 version = "0.4.0"
 dependencies = [
- "chrono",
  "discord-presence",
  "serde",
  "serde_json",
@@ -1488,7 +1474,7 @@ dependencies = [
  "dirs-next",
  "objc-foundation",
  "objc_id",
- "time 0.3.11",
+ "time",
 ]
 
 [[package]]
@@ -2076,7 +2062,7 @@ dependencies = [
  "indexmap",
  "line-wrap",
  "serde",
- "time 0.3.11",
+ "time",
  "xml-rs",
 ]
 
@@ -2919,7 +2905,7 @@ dependencies = [
  "sha2",
  "tauri-utils",
  "thiserror",
- "time 0.3.11",
+ "time",
  "uuid 1.1.2",
  "walkdir",
 ]
@@ -3063,17 +3049,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5516c27b78311c50bf42c071425c560ac799b11c30b31f87e3081965fe5e0180"
 dependencies = [
  "once_cell",
-]
-
-[[package]]
-name = "time"
-version = "0.1.44"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6db9e6914ab8b1ae1c260a4ae7a49b6c5611b40328a735b21862567685e73255"
-dependencies = [
- "libc",
- "wasi 0.10.0+wasi-snapshot-preview1",
- "winapi",
 ]
 
 [[package]]
@@ -3344,12 +3319,6 @@ name = "wasi"
 version = "0.9.0+wasi-snapshot-preview1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cccddf32554fecc6acb585f82a32a72e28b48f8c4c1883ddfeeeaa96f7d8e519"
-
-[[package]]
-name = "wasi"
-version = "0.10.0+wasi-snapshot-preview1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1a143597ca7c7793eff794def352d41792a93c481eb1042423ff7ff72ba2c31f"
 
 [[package]]
 name = "wasi"
