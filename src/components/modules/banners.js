@@ -1,6 +1,7 @@
 const http = window.__TAURI__.http;
 const fs = window.__TAURI__.fs;
 const path = window.__TAURI__.path;
+const tauri = window.__TAURI__.tauri;
 
 async function getBannerResponse(games, id) {
     //const bannerPath = appDirPath + 'storage/Cache/Games/Images';
@@ -55,7 +56,7 @@ async function cacheBanners(data, res) {
         }).then(async (response) => {
             await fs.writeBinaryFile(GAME_BANNERS_BASE_PATH + `/${require("../modules/sha256").sha256(data[i].DisplayName)}.png`, response.data)
             var gameElement = document.getElementById(`game-div-${data[i].DisplayName}`);
-            gameElement.firstElementChild.setAttribute('src', "asset://" + GAME_BANNERS_BASE_PATH + `/${require("../modules/sha256").sha256(data[i].DisplayName)}.png`);
+            gameElement.firstElementChild.setAttribute('src', tauri.convertFileSrc(GAME_BANNERS_BASE_PATH + `/${require("../modules/sha256").sha256(data[i].DisplayName)}.png`));
         }).catch((e) => console.log(e));
     });
 

@@ -3,6 +3,7 @@ const fs = window.__TAURI__.fs;
 const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
 const Window = window.__TAURI__.window
+const tauri = window.__TAURI__.tauri;
 
 let lastCheck;
 let cachedGames = [];
@@ -29,7 +30,13 @@ async function getInstalledGames() {
         return `COOLDOWN_${(lastCheck + 1000 * 4) - Date.now()}`;
     }
 
-    let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
+    function fix(str, index, value) { return str.substr(0, index) + value + str.substr(index); }
+    let rootDir;
+    if (await os.platform() === 'win32') {
+        rootDir = fix(await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname))), 2, "\\")
+    } else if (await os.platform() === 'linux') {
+        rootDir = await path.dirname(decodeURI(new URL(import.meta.url).pathname))
+    }
 
     let data = await fs.readDir(rootDir);
     const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x))
@@ -107,7 +114,7 @@ async function loadGames(id) {
                 const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH);
                 const img = dirs.find(x => x.name === `${require("../modules/sha256").sha256(game.DisplayName)}.png`);
 
-                banner = img ? "asset://" + appDirPath + `storage/Cache/Games/Images/${JSON.stringify(img.name).slice(1, -1)}` : 'https://cdn.discordapp.com/attachments/814938072999395388/983977458120396830/IMG_4432.jpg';
+                banner = img ? tauri.convertFileSrc(appDirPath + `storage/Cache/Games/Images/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://cdn.discordapp.com/attachments/814938072999395388/983977458120396830/IMG_4432.jpg';
             } catch (err) {
                 banner = 'https://cdn.discordapp.com/attachments/814938072999395388/983977458120396830/IMG_4432.jpg';
                 console.log(err)
@@ -116,15 +123,14 @@ async function loadGames(id) {
         else {
             banner = game.Banner;
         }
-        game.Banner = banner;
 
-        gameBanner.setAttribute('src', game.Banner);
+        gameBanner.setAttribute('src', banner);
         gameBanner.style = `opacity: ${id === 'allGames' ? '0.2' : '1'};`;
         gameBanner.height = 500;
         gameBanner.width = 500;
         gameElement.appendChild(gameBanner);
 
-        
+        game.Banner = banner;
 
         if (id.startsWith('recent') && id.includes('Main')) return game;
 
