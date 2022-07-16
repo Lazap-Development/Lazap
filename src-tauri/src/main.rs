@@ -2,7 +2,7 @@
 
 use tauri::Manager;
 use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem, SystemTray, SystemTrayEvent};
-// use tauri_plugin_sql::TauriSql;
+use tauri_plugin_sql::TauriSql;
 // use discord_presence::{Client, Event};
 
 fn main() {
@@ -67,7 +67,7 @@ fn main() {
             .expect("error while running lazap");
     } else if cfg!(unix) {
         tauri::Builder::default()
-            // .plugin(TauriSql::default())
+            .plugin(TauriSql::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
                 SystemTrayEvent::MenuItemClick { id, .. } => {

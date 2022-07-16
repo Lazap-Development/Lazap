@@ -41,13 +41,12 @@ async function getInstalledGames() {
     let data = await fs.readDir(rootDir);
     const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
     const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0).flat();
-
     if (games.length < 1) {
         return 'NO_GAMES_FOUND';
     }
 
-    cachedGames = games.flat();
-    return games.flat();
+    cachedGames = games;
+    return games;
 }
 
 async function loadGames(id) {
