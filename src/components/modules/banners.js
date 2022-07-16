@@ -66,9 +66,9 @@ function fetch_banner(data, userDataPath) {
 					await fetch(`https://cdn.akamai.steamstatic.com/steam/apps/${data[i].GameID}/library_600x900.jpg`).then(res => {
 						console.log(res.status, typeof res.status);
 						if(res.status === 404) return url = 'https://www.sketchappsources.com/resources/source-image/roberto-steam-logo.png';
-					});
-					if(data[i].DisplayName === 'FrostRunner') return url = 'https://cdnb.artstation.com/p/assets/covers/images/026/711/505/large/david-rosario-iii-david-rosario-iii-frostrunner-banner-small.jpg?1589504830';
-				}*/
+					});*/
+				if(data[i].DisplayName === 'FrostRunner') return url = 'https://cdnb.artstation.com/p/assets/covers/images/026/711/505/large/david-rosario-iii-david-rosario-iii-frostrunner-banner-small.jpg?1589504830';
+				//}
 				return url;
 			}
 			else if (data[i].LauncherName === 'RiotGames') {
@@ -158,23 +158,34 @@ function fetch_banner(data, userDataPath) {
 		})());
 	}
 
-	cacheBanners(data, arr.filter(async x => { return (await x) !== '../img/icons/icon.ico';}), userDataPath);
+	cacheBanners(data, arr.filter(async x => {
+		return (await x) !== '../img/icons/icon.ico';
+	}), userDataPath).then(() => console.log("cm"));
 	return arr;
 }
-
-function cacheBanners(data, res, userDataPath) {
+// eslint-disable-next-line
+async function cacheBanners(data, el, userDataPath) {
+	const http = window.__TAURI__.http;
 	// const { checkForDirAndCreate } = require('../utils.js');
-
+	const fs = window.__TAURI__.fs;
 	// checkForDirAndCreate(userDataPath + '/storage/Cache/Games/Images', '{}', userDataPath);
 
-	res.filter(async (x) => (await x).startsWith('http')).forEach(async (x, i) => {
-		fetch(await x, {
+	el.filter(async (x) => (await x).startsWith('http')).forEach(async (x, i) => {
+		await http.fetch(await x, {
 			method: 'GET',
+			responseType: 3
 		}).then(async (response) => {
-			const fs = window.__TAURI__.fs;
-			const md5 = window.__TAURI__.md5;
-			fs.createWriteStream(userDataPath + `/storage/Cache/Games/Images/${md5(data[i].DisplayName)}.png`).write(Buffer.from(await response.arrayBuffer()));
-		}).catch(() => '');
+			fs.writeBinaryFile(`${data[i].DisplayName}.png`, Buffer.from(await response.arrayBuffer()), { dir: `${userDataPath}storage/Cache/Games/Images/` })
+				.then(e => console.log(e));
+			// fs.createWriteStream(userDataPath + `/storage/Cache/Games/Images/${data[i].DisplayName}.png`).write(Buffer.from(await response.arrayBuffer()));
+		}).catch(() => console.error("doesn't work lol"));
+			//.then(async (rese) => await fs.writeBinaryFile(userDataPath + `storage/Cache/Games/Images/${data[i].DisplayName}.png`, Buffer.from(await rese.arrayBuffer())))
+			//.then((resp) => resp.blob())
+			//.then(blob => {
+			//	const imageObjectURL = URL.createObjectURL(blob);
+			//	console.log(imageObjectURL);
+			//})
+			//.catch(() => console.log("L u suck can't even use fs to write to a file"));
 	});
 }
 

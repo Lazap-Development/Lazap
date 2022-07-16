@@ -30,7 +30,7 @@ async function getInstalledGames() {
     }
 
     let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
-    
+
     let data = await fs.readDir(rootDir);
     const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x))
     console.log((await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0))
@@ -102,7 +102,6 @@ async function loadGames(id) {
         const gameBanner = document.createElement('img');
         let banner;
         if (game.LauncherName !== 'XboxGames') {
-
             try {
                 await fs.readDir(GAME_BANNERS_BASE_PATH)
             } catch (e) {
@@ -111,7 +110,6 @@ async function loadGames(id) {
         }
         else {
             banner = game.Banner;
-
         }
         gameBanner.setAttribute('src', banner);
         gameBanner.style = `opacity: ${id === 'allGames' ? '0.2' : '1'};`;
