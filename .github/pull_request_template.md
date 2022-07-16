@@ -1,4 +1,4 @@
-# Pull Request Guidelines
+<!-- # Pull Request Guidelines
 
 ### Code guidelines
 
@@ -24,14 +24,13 @@ Please go through these guidelines before submitting the PR.
 
 *Pull Request is abbreviated as "PR"
 
-__**MAKE SURE TO REMOVE THIS WHEN SUBMITTING A PULL REQUEST**__
+-->
 
-- - - -
 
 #### **Description**
-Following changes were made to
+ breif description of what this pull request is
 
-#### **Changes(in short)**
+#### **Changes (in short)**
 ```diff
 + Added [...]
 - Removed [...]
@@ -39,12 +38,12 @@ Following changes were made to
 + Added [...]
 ```
 
-#### **Affected OS(es)**
+#### **Affected Operating System(s)**
 
 Windows(8, 10, 11), Linux(Arch, Manjaro, etc.), MacOS
 
 
-#### **Changes(in detail)**
+#### **Changes (in detail)**
 
 * This PR adds [...] which helps fixing [...] and also improving [...].
 * This PR also removes [...] because it reduces [...] resulting in [...].
@@ -58,13 +57,8 @@ There is a chance for [...] to happen and I have no idea how to prevent it.
 #### **Checklist**
 
 - [ ] Does the app work in Windows?
-
 - [ ] Does the app work in Linux?
-
-<!-- - [ ] Does the app work in MacOS? --->
-
+- [ ] Does the app work in MacOS?
 - [ ] Is there any condition specific errors?
-
 - [ ] Are the features of this PR completed?
-
 - [ ] Is the PR following all the guidelines?
