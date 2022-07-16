@@ -14,13 +14,13 @@ rust-version = "1.57"
 [build-dependencies]
 tauri-build = { version = "1.0.4", features = [] }
 
-[dependencies.tauri-plugin-sql]
-git = "https://github.com/tauri-apps/tauri-plugin-sql"
-features = ["sqlite"] # or "postgres", or "mysql"
-#branch = "main"
+# [dependencies.tauri-plugin-sql]
+# git = "https://github.com/tauri-apps/tauri-plugin-sql"
+# features = ["sqlite"] # or "postgres", or "mysql"
+# branch = "main"
 
 [dependencies]
-discord-presence = "0.5.5"
+# discord-presence = "0.5.5"
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.0.4", features = ["api-all", "devtools", "system-tray"] }
