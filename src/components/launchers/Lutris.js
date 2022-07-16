@@ -8,10 +8,7 @@ const homedir = window.__TAURI__.path.homeDir();
 
 async function getLutrisLocation(os = window.__TAURI__.os.platform(), checkForLutris = true) {
 	let launcher_location;
-	if (await os === 'linux') {
-		launcher_location = `${await homedir}/.local/share/lutris`;
-		console.log(launcher_location);
-	}
+	if (await os === 'linux') launcher_location = `${await homedir}/.local/share/lutris`;
 	if (checkForLutris && !isLauncherInstalled(launcher_location)) return false;
 	return launcher_location;
 }
@@ -30,12 +27,20 @@ async function getInstalledGames(os = window.__TAURI__.os.platform()) {
 
 	else if (await os === 'linux') {
 		let allDBGames = [];
-		console.error("not yet because I can't import the sqlite package yet. so cringy");
-		// const LutrisDB = new Database(`${await homedir}/.local/share/lutris/pga.db`);
-		Database.load(`${await homedir}/.local/share/lutris/pga.db`).then(db => {
-			console.log(db.path);
-		});
-		// console.log(await lutris.execute('SELECT * FROM games'));
+		const lutris = await Database.load(`sqlite:/home/logic/.local/share/lutris/pga.db`);
+		const a = await lutris.select('SELECT * FROM games');
+		a.map(x => {
+			const obj = {
+				DisplayName: x.name,
+				GameID: x.slug,
+				LauncherName: 'Lutris',
+				LaunchID: x.id,
+				Executable: x.installer_slug,
+				Location: x.directory,
+				Size: x.installed_at,
+			};
+			allDBGames.push(obj);
+		})
 		/*await LutrisDB.all(`SELECT * FROM games`, (err, info) => {
 			info.forEach(x => {	
 				const obj = {

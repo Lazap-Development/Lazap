@@ -32,6 +32,17 @@ async function getBannerResponse(games, id) {
                 case 'Lunar': {
                     return 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
                 }
+                case 'Lutris': {
+                    const { fetch } = window.__TAURI__.http;
+                    let url = `https://lutris.net/games/banner/${games[i].GameID}.jpg`;
+                    fetch(`https://lutris.net/games/banner/${games[i].GameID}.jpg`, {
+                        responseType: 3,
+                    }).then(res => {
+						console.log(res.status, typeof res.status);
+						if(res.status === 404) return url = 'https://cdn2.steamgriddb.com/file/sgdb-cdn/thumb/ac3f115b3a14f86b904bdc5ed5f82c4b.jpg'
+					});
+                    return url;
+                }
                 case 'XboxGames': {
                     return games[i].Banner;
                 }

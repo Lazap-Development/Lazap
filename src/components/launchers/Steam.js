@@ -51,7 +51,6 @@ async function getSteamLocation() {
 
 async function getInstalledGames() {
     const path = await getSteamLocation();
-    console.log(path)
     if (path?.length === 0) return [];
 
     let allGames = [];

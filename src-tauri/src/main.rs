@@ -32,7 +32,6 @@ fn main() {
 
     if cfg!(windows) {
         tauri::Builder::default()
-            // .plugin(TauriSql::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
                 SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
@@ -85,7 +84,6 @@ fn main() {
             .expect("error while running lazap");
     } else if cfg!(target_os = "macos") {
         tauri::Builder::default()
-            // .plugin(TauriSql::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
                 SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
