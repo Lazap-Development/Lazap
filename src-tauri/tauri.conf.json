@@ -42,6 +42,11 @@
             "name": "cmd",
             "cmd": "cmd",
             "args": true
+          },
+          {
+            "name": "start",
+            "cmd": "start",
+            "args": true
           }
         ],
         "sidecar": true
