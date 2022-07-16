@@ -26,6 +26,9 @@ const path = window.__TAURI__.path;
   fs.createDir(appDirPath + "storage/Cache/Games", { recursive: true }, (err) => {
     if (err) throw err;
   });
+  fs.createDir(appDirPath + "storage/Cache/Games/Images", { recursive: true }, (err) => {
+    if (err) throw err;
+  })
 
   try {
     JSON.parse(await fs.readTextFile(appDirPath + "storage/LauncherData.json"));
