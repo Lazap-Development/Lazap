@@ -277,6 +277,10 @@ async function handleLaunch(game) {
                 res = createProcess('minecraft-launcher', "", game.GameID);
                 break;
             }
+            case 'Lunar': {
+                res = createProcess('lunarclient', "", game.gameID);
+                break;
+            }
             default: {
                 res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
                 break;

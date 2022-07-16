@@ -14,6 +14,7 @@ async function getBannerResponse(games, id) {
                 return;
             }
             else if (games[i].LauncherName === 'Steam') {
+                if(games[i].DisplayName === 'FrostRunner') return 'https://cdnb.artstation.com/p/assets/covers/images/026/711/505/large/david-rosario-iii-david-rosario-iii-frostrunner-banner-small.jpg?1589504830'
                 return `https://cdn.akamai.steamstatic.com/steam/apps/${games[i].GameID}/library_600x900.jpg`;
             }
             else if (games[i].LauncherName === 'RiotGames') {

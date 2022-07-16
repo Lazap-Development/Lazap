@@ -12,6 +12,7 @@
   "dependencies": {
     "@tauri-apps/api": "^1.0.2",
     "core-js": "^3.8.3",
+    "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql",
     "vue": "^3.2.13"
   },
   "devDependencies": {
