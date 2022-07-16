@@ -20,7 +20,7 @@ async function getSteamLocation() {
 
             const VDF = require('../modules/parseVDF');
             const parsed = VDF.parse(text);
-            const toArray = Object.entries(parsed.libraryfolders);
+            const toArray = Object.entries(parsed.libraryfolders).filter(x => x[1].path);
 
             launcher_location = toArray.map((item) => {
                 return item[1].path;
