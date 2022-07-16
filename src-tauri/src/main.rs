@@ -3,6 +3,7 @@
 use discord_presence::Client;
 use tauri::Manager;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
+use tauri_plugin_sql::TauriSql;
 
 fn main() {
     /*
