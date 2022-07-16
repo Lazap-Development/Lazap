@@ -10,29 +10,31 @@ async function getBannerResponse(games, id) {
     const arr = [];
     for (let i = 0; i < games.length; i++) {
         arr.push((async () => {
-            if (games[i].LauncherName === 'EpicGames') {
-                return;
-            }
-            else if (games[i].LauncherName === 'Steam') {
-                return `https://cdn.akamai.steamstatic.com/steam/apps/${games[i].GameID}/library_600x900.jpg`;
-            }
-            else if (games[i].LauncherName === 'RiotGames') {
-                return 'https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png';
-            }
-            else if (games[i].LauncherName === 'Uplay') {
-                return;
-            }
-            else if (games[i].LauncherName === 'Minecraft') {
-                return 'https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png';
-            }
-            else if (games[i].LauncherName === 'FiveM') {
-                return 'https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png';
-            }
-            else if (games[i].LauncherName === 'Lunar') {
-                return 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
-            }
-            else if (games[i].LauncherName === 'XboxGames') {
-                return games[i].Banner;
+            switch (games[i].LauncherName) {
+                case 'EpicGames': {
+                    return;
+                }
+                case 'Steam': {
+                    return `https://cdn.akamai.steamstatic.com/steam/apps/${games[i].GameID}/library_600x900.jpg`;
+                }
+                case 'RiotGames': {
+                    return 'https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png';
+                }
+                case 'Uplay': {
+                    return;
+                }
+                case 'Minecraft': {
+                    return 'https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png';
+                }
+                case 'FiveM': {
+                    return 'https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png';
+                }
+                case 'Lunar': {
+                    return 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
+                }
+                case 'XboxGames': {
+                    return games[i].Banner;
+                }
             }
         })());
 
