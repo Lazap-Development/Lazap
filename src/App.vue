@@ -86,17 +86,17 @@
     </div>
   </div>
 
-  <div class="titlebar">
-    <div style="justify-content: space-between;" class="titlebar-icons">
+  <div data-tauri-drag-region class="titlebar">
+    <div data-tauri-drag-region style="justify-content: space-between;" class="titlebar-icons">
       <div class="titlebar-options">
         <img class="titlebar-settings" src="./assets/settings.svg" id="settings-btn">
         <img class="titlebar-account" src="./assets/account.svg" id="account-btn">
         <img class="titlebar-update" src="./assets/download.svg" id="update-btn">
       </div>
-      <div style="margin-top: 0px;" class="titlebar-icons">
-        <div @click="min_window" class="titlebar-min mx-1"></div>
-        <div @click="max_window" class="titlebar-max mx-1"></div>
-        <div @click="close_window" class="titlebar-exit mx-1"></div>
+      <div data-tauri-drag-region style="margin-top: 0px;" class="titlebar-icons">
+        <div data-tauri-drag-region @click="min_window" class="titlebar-min mx-1"></div>
+        <div data-tauri-drag-region @click="max_window" class="titlebar-max mx-1"></div>
+        <div data-tauri-drag-region @click="close_window" class="titlebar-exit mx-1"></div>
       </div>
     </div>
   </div>
