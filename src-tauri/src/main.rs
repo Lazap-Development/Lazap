@@ -14,7 +14,8 @@ fn main() {
     drpc.set_activity(|act| {
         act.state("On Main Screen")
             .assets(|ass| ass.large_image("lazap").large_text("lazap"))
-    }).ok();
+    })
+    .ok();
 
     /*
      * Tray code
@@ -35,6 +36,14 @@ fn main() {
             // .plugin(TauriSql::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
+                SystemTrayEvent::LeftClick {
+                    position: _,
+                    size: _,
+                    ..
+                } => {
+                    let window = app.get_window("main").unwrap();
+                    window.show().unwrap();
+                },
                 SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                     "quit" => {
                         std::process::exit(0);
@@ -64,6 +73,14 @@ fn main() {
             // .plugin(TauriSql::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
+                SystemTrayEvent::LeftClick {
+                    position: _,
+                    size: _,
+                    ..
+                } => {
+                    let window = app.get_window("main").unwrap();
+                    window.show().unwrap();
+                },
                 SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                     "quit" => {
                         std::process::exit(0);
@@ -88,6 +105,14 @@ fn main() {
             // .plugin(TauriSql::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
+                SystemTrayEvent::LeftClick {
+                    position: _,
+                    size: _,
+                    ..
+                } => {
+                    let window = app.get_window("main").unwrap();
+                    window.show().unwrap();
+                },
                 SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                     "quit" => {
                         std::process::exit(0);

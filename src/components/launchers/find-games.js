@@ -245,16 +245,16 @@ async function handleLaunch(game) {
     if (await os.platform() === 'win32') {
         switch (game.LauncherName) {
             case 'EpicGames': {
-                res = createProcess('cmd', `/C start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch --wait`, game.GameID);
+                res = createProcess('cmd', `/C start /min cmd /c start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch --wait`, game.GameID);
                 break;
             }
             case 'Steam': {
                 console.log(game.GameID)
-                res = createProcess('cmd', `/C start steam://rungameid/${game.GameID} --wait`, game.GameID);
+                res = createProcess('cmd', `/C start /min cmd /c start steam://rungameid/${game.GameID} --wait`, game.GameID);
                 break;
             }
             case 'Uplay': {
-                res = createProcess('cmd', `/C start uplay://launch/${game.GameID}/0 --wait`, game.GameID);
+                res = createProcess('cmd', `/C start /min cmd /c start uplay://launch/${game.GameID}/0 --wait`, game.GameID);
                 break;
             }
             case 'Minecraft': {
@@ -308,9 +308,6 @@ async function createProcess(Command, Args, GameID, force = false) {
             processes.delete(GameID);
         });
     processes.set(GameID, instance);
-    instance.on("exit", () => {
-        window.appWindow.hide();
-    })
 
     return instance;
 }
