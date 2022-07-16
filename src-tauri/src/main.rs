@@ -1,37 +1,33 @@
 #![windows_subsystem = "windows"]
 
+use discord_presence::Client;
 use tauri::Manager;
-use tauri::{CustomMenuItem, SystemTrayMenu, SystemTrayMenuItem, SystemTray, SystemTrayEvent};
-// use tauri_plugin_sql::TauriSql;
-// use discord_presence::{Client, Event};
+use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 
 fn main() {
-    /* 
-     * rpc 
-    */
+    /*
+     * rpc
+     */
 
-    /* let state_message = "sheeesh";
-    let mut drpc = Client::new(997900605072887860);
-    drpc.on_event(Event::Ready, |_ctx| {
-        println!("READY!");
-    });
+    let mut drpc = Client::new(932504287337148417);
     drpc.start();
-    drpc.set_activity(|act| act.state(state_message).assets(|ass| ass
-      .large_image("lazap").large_text("xd")
-    ));*/
+    drpc.set_activity(|act| {
+        act.state("On Main Screen")
+            .assets(|ass| ass.large_image("lazap").large_text("lazap"))
+    }).ok();
 
-    /* 
+    /*
      * Tray code
-    */
+     */
 
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
     let hide = CustomMenuItem::new("hide".to_string(), "Hide");
     let show = CustomMenuItem::new("show".to_string(), "Show");
     let tray_menu = SystemTrayMenu::new()
-    .add_item(quit)
-    .add_native_item(SystemTrayMenuItem::Separator)
-    .add_item(hide)
-    .add_item(show);
+        .add_item(quit)
+        .add_native_item(SystemTrayMenuItem::Separator)
+        .add_item(hide)
+        .add_item(show);
     let tray = SystemTray::new().with_menu(tray_menu);
 
     if cfg!(windows) {
@@ -39,24 +35,22 @@ fn main() {
             // .plugin(TauriSql::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
-                SystemTrayEvent::MenuItemClick { id, .. } => {
-                  match id.as_str() {
+                SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                     "quit" => {
-                      std::process::exit(0);
+                        std::process::exit(0);
                     }
                     "hide" => {
-                      let window = app.get_window("main").unwrap();
-                      window.hide().unwrap();
+                        let window = app.get_window("main").unwrap();
+                        window.hide().unwrap();
                     }
                     "show" => {
                         let window = app.get_window("main").unwrap();
                         window.show().unwrap();
                     }
                     _ => {}
-                  }
-                }
+                },
                 _ => {}
-              })
+            })
             .invoke_handler(tauri::generate_handler![run_game])
             .setup(|app| {
                 let window = app.get_window(&"main").unwrap();
@@ -70,24 +64,22 @@ fn main() {
             // .plugin(TauriSql::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
-                SystemTrayEvent::MenuItemClick { id, .. } => {
-                  match id.as_str() {
+                SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                     "quit" => {
-                      std::process::exit(0);
+                        std::process::exit(0);
                     }
                     "hide" => {
-                      let window = app.get_window("main").unwrap();
-                      window.hide().unwrap();
+                        let window = app.get_window("main").unwrap();
+                        window.hide().unwrap();
                     }
                     "show" => {
                         let window = app.get_window("main").unwrap();
                         window.show().unwrap();
                     }
                     _ => {}
-                  }
-                }
+                },
                 _ => {}
-              })
+            })
             .invoke_handler(tauri::generate_handler![run_game])
             .run(tauri::generate_context!())
             .expect("error while running lazap");
@@ -96,24 +88,22 @@ fn main() {
             // .plugin(TauriSql::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
-                SystemTrayEvent::MenuItemClick { id, .. } => {
-                  match id.as_str() {
+                SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                     "quit" => {
-                      std::process::exit(0);
+                        std::process::exit(0);
                     }
                     "hide" => {
-                      let window = app.get_window("main").unwrap();
-                      window.hide().unwrap();
+                        let window = app.get_window("main").unwrap();
+                        window.hide().unwrap();
                     }
                     "show" => {
                         let window = app.get_window("main").unwrap();
                         window.show().unwrap();
                     }
                     _ => {}
-                  }
-                }
+                },
                 _ => {}
-              })
+            })
             .invoke_handler(tauri::generate_handler![run_game])
             .run(tauri::generate_context!())
             .expect("error while running lazap");
