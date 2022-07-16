@@ -4,11 +4,11 @@ const shell = window.__TAURI__.shell;
 const path = window.__TAURI__.path;
 
 async function getInstalledGames() {
-	if (await os.platform() == 'win32') {
+	if (await os.platform() === 'win32') {
 		return [await getMinecraftLauncher()].filter(x => x !== false);
 	}
-	else if (await os.platform() == 'linux') {
-		return [await getMinecraftLauncherOnLinux()].filter(x => x !== false);
+	else if (await os.platform() === 'linux') {
+		return [await getMinecraftLauncherOnLinux(), await getLunarMyFavouriteMinecraftClientdrooool()].filter(x => x !== false);
 	}
 	else {
 		return [];
@@ -34,9 +34,40 @@ async function getMinecraftLauncherOnLinux() {
 			const Location = '/usr/bin/minecraft-launcher';
 			const Executable = 'minecraft-launcher';
 			return {
-				DisplayName: 'Minecraft',
+				DisplayName: 'Minecraft Launcher',
 				LauncherName: 'Minecraft',
 				GameID: 'Minecraft',
+				Location,
+				Executable,
+				Args: [],
+			};
+		}
+		else {
+			return false;
+		}
+	}
+	catch (e) {
+		return;
+	}
+}
+
+async function getLunarMyFavouriteMinecraftClientdrooool() {
+	try {
+		const output = await new shell.Command('which', "lunarclient").execute();
+
+		if (output.stdout) {
+			const homedir = await path.homeDir();
+			try {
+				await fs.readDir(`${homedir}/.lunarclient`);
+			} catch (e) {
+				return console.log(e);
+			}
+			const Location = '/usr/bin/lunarclient';
+			const Executable = 'lunarclient';
+			return {
+				DisplayName: 'Lunar Client',
+				LauncherName: 'Lunar',
+				GameID: 'Lunar',
 				Location,
 				Executable,
 				Args: [],

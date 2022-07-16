@@ -46,8 +46,8 @@ async function getInstalledGames() {
         return 'NO_GAMES_FOUND';
     }
 
-    cachedGames = games;
-    return games;
+    cachedGames = games.flat();
+    return games.flat();
 }
 
 async function loadGames(id) {
@@ -108,7 +108,6 @@ async function loadGames(id) {
         const gameBanner = document.createElement('img');
         let banner;
         if (game.LauncherName !== 'XboxGames') {
-
             try {
                 const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH);
                 const img = dirs.find(x => x.name === `${require("../modules/sha256").sha256(game.DisplayName)}.png`);
@@ -202,7 +201,7 @@ async function loadGames(id) {
     setGames(games);
     await require("../modules/banners").getBannerResponse(games, id);
     running = false;
-}
+    }
 
 function sort(games, type) {
     if (type === 'alphabetical') {
@@ -278,6 +277,10 @@ async function handleLaunch(game) {
                 res = createProcess('minecraft-launcher', "", game.GameID);
                 break;
             }
+            case 'Lunar': {
+                res = createProcess('lunarclient', "", game.gameID);
+                break;
+            }
             default: {
                 res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
                 break;
@@ -305,7 +308,9 @@ async function createProcess(Command, Args, GameID, force = false) {
             processes.delete(GameID);
         });
     processes.set(GameID, instance);
-
+    instance.on("exit", () => {
+        window.appWindow.hide();
+    })
 
     return instance;
 }

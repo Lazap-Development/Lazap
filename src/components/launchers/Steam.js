@@ -30,7 +30,7 @@ async function getSteamLocation() {
     else if (await os.platform() === 'linux') {
         const homedir = await path.homeDir();
 
-        const text = await fs.readTextFile(homedir + `.steam/steam/steamapps/libraryfolders.vdf`)
+        const text = await fs.readTextFile(homedir + `.steam/steam/steamapps/libraryfolders.vdf`);
 
         const VDF = require('../modules/parseVDF');
         const parsed = VDF.parse(text);
@@ -80,42 +80,40 @@ async function getInstalledGames() {
 
 async function parseGameObject(acf_object = {}) {
     const {
-        LauncherExe: Executable,
-        LauncherPath: Location,
         name: DisplayName,
         appid: GameID,
+        LauncherExe: Executable,
+        LauncherPath: Location,
         BytesDownloaded: Size,
-    } = acf_object;
+    } = await acf_object;
 
     return {
-        Executable,
-        Location,
         DisplayName,
         GameID,
+        Executable,
+        Location,
         Size: parseInt(Size),
         LauncherName: 'Steam',
     };
 }
 
-function acf_to_json(acf_content = '') {
+async function acf_to_json(acf_content = '') {
     if (acf_content.length === 0) return;
-    return JSON.parse(
-        acf_content.split('\n').slice(1).map((x, i, arr) => {
-            if (x.length === 0) return;
-            if (x.trim().includes('\t\t')) {
-                return (
-                    x.trim().replace('\t\t', ':') + (['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
-                );
-            }
+    return JSON.parse(acf_content.split('\n').slice(1).map((x, i, arr) => {
+        if (x.length === 0) return;
+        if (x.trim().includes('\t\t')) {
             return (
-                x.split('"').length > 1 ? x.trim() + ':' : x + (x.trim() === '{' || !arr[i + 1] || ['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
+                x.trim().replace('\t\t', ':') + (['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
             );
+        }
+        return (
+            x.split('"').length > 1 ? x.trim() + ':' : x + (x.trim() === '{' || !arr[i + 1] || ['{', '}'].includes(arr[i + 1]?.trim().slice(0, 1)) ? '' : ',')
+        );
         }).join('\n'),
     );
 }
 
 module.exports = {
-    getSteamLocation,
     getInstalledGames,
     parseGameObject,
     acf_to_json,
