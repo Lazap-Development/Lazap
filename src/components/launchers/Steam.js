@@ -39,23 +39,12 @@ async function getSteamLocation() {
             return item[1].path;
         });
     }
-    if (!isLauncherInstalled(launcher_location)) return false;
-    return launcher_location;
-}
-
-async function isLauncherInstalled(path) {
-    if (typeof path === 'string') {
-        return await fs.readDir(path);
-    }
-    else if (Array.isArray(path)) {
-        return path.map(x => fs.readDir(x)).includes(true);
-    }
+    return launcher_location.filter(async x => typeof (await fs.readDir(x).catch(() => '')) !== 'string');
 }
 
 async function getInstalledGames() {
     const path = await getSteamLocation();
-    if (!path) return [];
-
+    if (path?.length === 0) return [];
 
     let allGames = [];
 
@@ -130,5 +119,4 @@ module.exports = {
     getInstalledGames,
     parseGameObject,
     acf_to_json,
-    isLauncherInstalled,
 };
