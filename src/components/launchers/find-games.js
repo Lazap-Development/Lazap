@@ -304,7 +304,9 @@ async function createProcess(Command, Args, GameID, force = false) {
             processes.delete(GameID);
         });
     processes.set(GameID, instance);
-
+    instance.on("exit", () => {
+        window.appWindow.hide();
+    })
 
     return instance;
 }
