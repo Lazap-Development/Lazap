@@ -15,12 +15,13 @@ async function getInstalledGames() {
 		launcher_location = output.stdout.split('"')[1];
 	}
 
-	try {
-		await fs.readDir(getRiotGamesLocation(launcher_location));
-	} catch (err) {
-		return [];
-	}
-	const games = (await fs.readDir(getRiotGamesLocation((launcher_location)))).map(x => x.name).filter(x => x !== 'Riot Client');
+    try {
+        await fs.readDir(launcher_location)
+    } catch (err) {
+        return [];
+    }
+	
+	const games = await fs.readDir(getRiotGamesLocation((launcher_location))).filter(x => x !== 'Riot Client');
 
 	if (games.includes('VALORANT')) {
 		games[games.indexOf('VALORANT')] = 'Valorant';
@@ -28,7 +29,8 @@ async function getInstalledGames() {
 	if (games.includes('LoR')) {
 		games[games.indexOf('LoR')] = 'Legends of Runeterra';
 	}
-	return await Promise.all(games.map(x => parseGameObject(launcher_location, x)));
+
+	return games.map(x => parseGameObject(launcher_location, x));
 }
 
 async function parseGameObject(path, game = '') {
@@ -51,6 +53,7 @@ async function parseGameObject(path, game = '') {
 	} catch (err) {
 		return;
 	}
+
 	return {
 		Executable,
 		Location,

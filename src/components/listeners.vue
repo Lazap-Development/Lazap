@@ -29,10 +29,6 @@ window.addEventListener("load", async function () {
 
   document.getElementById('main-loading-overlay').style.opacity = '0';
   document.getElementById('main-loading-overlay').style.visibility = 'hidden';
-  await models.loadGames('recentGamesListMainPage')
-    .catch((err) => {
-      return console.log(err);
-    });
 
   document.querySelectorAll('.side-tab').forEach((link) =>
     link.addEventListener('click', (e) => {
@@ -55,10 +51,6 @@ window.addEventListener("load", async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
-    await models.loadGames('recentGamesListMainPage')
-      .catch((err) => {
-        return console.log(err);
-      });
   });
 
   document.getElementById('recent-btn').addEventListener('click', async function () {
@@ -69,10 +61,6 @@ window.addEventListener("load", async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
-    await models.loadGames('recentGames')
-      .catch((err) => {
-        return console.log(err);
-      });
   });
 
   document.getElementById('games-btn').addEventListener('click', async function () {
