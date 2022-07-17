@@ -85,7 +85,7 @@ async function loadGames(id) {
             if (typeof data?.Favourite === 'boolean') resolvedGames.push(x);
         }
         else if (id.startsWith('recent') && id.includes('Main')) {
-            const data = await getGames(x.GameID, x.LauncherName).catch();
+            const data = await getGames(x.GameID, x.LauncherName);
             if (typeof data?.Launches === 'number') resolvedGames.push(x);
         }
     }
