@@ -72,7 +72,7 @@ async function loadGames(id) {
     let resolvedGames = [];
     for (let i = 0; i < games.length; i++) {
         let x = games[i];
-        if (games_blacklist.includes(x.GameID)) return false;
+        if (games_blacklist.includes(x.GameID)) continue;
         if (id === 'allGames') {
             resolvedGames.push(x);
         }
@@ -85,7 +85,7 @@ async function loadGames(id) {
             if (typeof data?.Favourite === 'boolean') resolvedGames.push(x);
         }
         else if (id.startsWith('recent') && id.includes('Main')) {
-            const data = await getGames(x.GameID, x.LauncherName);
+            const data = await getGames(x.GameID, x.LauncherName).catch();
             if (typeof data?.Launches === 'number') resolvedGames.push(x);
         }
     }
@@ -243,6 +243,8 @@ async function setGames(games) {
 async function getGames(GameID, LauncherName) {
     const appDirPath = await path.appDir();
     const GAMES_DATA_BASE_PATH = appDirPath + 'storage/Cache/Games/Data.json';
+
+    if (!Object.keys(JSON.parse(await fs.readTextFile(GAMES_DATA_BASE_PATH))).length) return;
     return GameID ? JSON.parse(await fs.readTextFile(GAMES_DATA_BASE_PATH)).find(x => x.GameID === GameID && x.LauncherName === LauncherName) : JSON.parse(await fs.readTextFile(GAMES_DATA_BASE_PATH));
 }
 async function toggleFavourite(GameID, LauncherName) {

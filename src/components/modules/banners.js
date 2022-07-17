@@ -31,22 +31,9 @@ async function getBannerResponse(games, id) {
                     return 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
                 }
                 case 'Lutris': {
-                    // const { fetch } = window.__TAURI__.http;
-                    const e = games[i].DisplayName;
-                    let u = `https://thumbnails.pcgamingwiki.com/5/53/${e.replace(/ /g, "_")}_-_cover.png/300px-${e.replace(/ /g, "_")}_-_cover.png`
-                    // eslint-disable-next-line
-                    let url = 'https://cdn2.steamgriddb.com/file/sgdb-cdn/thumb/ac3f115b3a14f86b904bdc5ed5f82c4b.jpg';
-                    await http.fetch(u, {
-                        responseType: 3,
-                    }).then(res => {
-                        console.log(res.status, typeof res.status);
-                        if (res.status === 404) {
-                            if (games[i].DisplayName === 'Epic Games Store') return u = 'https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png'
-                            return u = url;
-
-                        }
-                    });
-                    return u;
+                    if (games[i].DisplayName == 'Epic Games Store') return 'https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png'
+                    if (games[i].DisplayName == 'Rockstar Games Launcher') return 'https://cdn.player.one/sites/player.one/files/2019/08/26/rockstar-games.png'
+                    return `https://thumbnails.pcgamingwiki.com/5/53/${games[i].DisplayName.replace(/ /g, "_")}_-_cover.png/300px-${games[i].DisplayName.replace(/ /g, "_")}_-_cover.png`
                 }
                 case 'XboxGames': {
                     return games[i].Banner;
@@ -72,6 +59,7 @@ async function cacheBanners(data, res) {
             },
             responseType: 3
         }).then(async (response) => {
+            if (response.status === 404 && data[i].LauncherName === "Lutris") return;
             await fs.writeBinaryFile(GAME_BANNERS_BASE_PATH + `/${require("../modules/sha256").sha256(data[i].DisplayName)}.png`, response.data);
             document.getElementById(`game-div-${data[i].DisplayName}`).firstElementChild.setAttribute('src', tauri.convertFileSrc(GAME_BANNERS_BASE_PATH + `/${require("../modules/sha256").sha256(data[i].DisplayName)}.png`));
         }).catch((e) => console.log(e));
