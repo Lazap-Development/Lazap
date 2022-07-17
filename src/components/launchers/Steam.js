@@ -120,7 +120,7 @@ async function acf_to_json(acf_content = '') {
     );
 }
 
-module.exports = {
+export {
     getInstalledGames,
     parseGameObject,
     acf_to_json,

@@ -33,7 +33,7 @@ async function getInstalledGames() {
 	return games.map(x => parseGameObject(launcher_location, x));
 }
 
-function parseGameObject(path, game = '') {
+async function parseGameObject(path, game = '') {
 	const correctArgs = {
 		'Valorant': 'valorant',
 		'League of Legends': 'league_of_legends',
@@ -48,21 +48,23 @@ function parseGameObject(path, game = '') {
 	const Location = path.slice(0, -22);
 	const Args = [`--launch-product=${correctArgs[game]}`, '--launch-patchline=live'];
 	const DisplayName = game;
-	if (!fs.existsSync(Location.slice(0, -12) + correctPathName[game])) return;
-	const Size = fs.statSync(Location.slice(0, -12) + correctPathName[game]).size;
+	try {
+		await fs.readDir(Location.slice(0, -12) + correctPathName[game])
+	} catch (err) {
+		return;
+	}
 
 	return {
 		Executable,
 		Location,
 		Args,
 		DisplayName,
-		Size,
 		LauncherName: 'RiotGames',
 		GameID: game,
 	};
 }
 
-module.exports = {
+export {
 	getInstalledGames,
 	parseGameObject,
 };

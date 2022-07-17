@@ -4,8 +4,6 @@ const path = window.__TAURI__.path;
 const tauri = window.__TAURI__.tauri;
 
 async function getBannerResponse(games, id) {
-    //const bannerPath = appDirPath + 'storage/Cache/Games/Images';
-
     if (id !== 'allGames') return;
     const arr = [];
     for (let i = 0; i < games.length; i++) {
