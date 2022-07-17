@@ -33,15 +33,21 @@ async function getBannerResponse(games, id) {
                     return 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
                 }
                 case 'Lutris': {
-                    const { fetch } = window.__TAURI__.http;
+                    // const { fetch } = window.__TAURI__.http;
+                    const e = games[i].DisplayName;
+                    let u = `https://thumbnails.pcgamingwiki.com/5/53/${e.replace(/ /g,"_")}_-_cover.png/300px-${e.replace(/ /g,"_")}_-_cover.png`
+                    // eslint-disable-next-line
                     let url = `https://lutris.net/games/banner/${games[i].GameID}.jpg`;
-                    fetch(`https://lutris.net/games/banner/${games[i].GameID}.jpg`, {
+                    await http.fetch(u, {
                         responseType: 3,
                     }).then(res => {
 						console.log(res.status, typeof res.status);
-						if(res.status === 404) return url = 'https://cdn2.steamgriddb.com/file/sgdb-cdn/thumb/ac3f115b3a14f86b904bdc5ed5f82c4b.jpg'
+						if(res.status === 404) {
+                            console.log("h");
+                            return u = url;
+                        }
 					});
-                    return url;
+                    return u;
                 }
                 case 'XboxGames': {
                     return games[i].Banner;
