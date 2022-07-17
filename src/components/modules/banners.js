@@ -35,19 +35,19 @@ async function getBannerResponse(games, id) {
                 case 'Lutris': {
                     // const { fetch } = window.__TAURI__.http;
                     const e = games[i].DisplayName;
-                    let u = `https://thumbnails.pcgamingwiki.com/5/53/${e.replace(/ /g,"_")}_-_cover.png/300px-${e.replace(/ /g,"_")}_-_cover.png`
+                    let u = `https://thumbnails.pcgamingwiki.com/5/53/${e.replace(/ /g, "_")}_-_cover.png/300px-${e.replace(/ /g, "_")}_-_cover.png`
                     // eslint-disable-next-line
                     let url = 'https://cdn2.steamgriddb.com/file/sgdb-cdn/thumb/ac3f115b3a14f86b904bdc5ed5f82c4b.jpg';
                     await http.fetch(u, {
                         responseType: 3,
                     }).then(res => {
-						console.log(res.status, typeof res.status);
-						if(res.status === 404) {
-                            if(games[i].DisplayName === 'Epic Games Store') return u = 'https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png'
+                        console.log(res.status, typeof res.status);
+                        if (res.status === 404) {
+                            if (games[i].DisplayName === 'Epic Games Store') return u = 'https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png'
                             return u = url;
 
                         }
-					});
+                    });
                     return u;
                 }
                 case 'XboxGames': {
@@ -74,9 +74,8 @@ async function cacheBanners(data, res) {
             },
             responseType: 3
         }).then(async (response) => {
-            await fs.writeBinaryFile(GAME_BANNERS_BASE_PATH + `/${require("../modules/sha256").sha256(data[i].DisplayName)}.png`, response.data)
-            var gameElement = document.getElementById(`game-div-${data[i].DisplayName}`);
-            gameElement.firstElementChild.setAttribute('src', tauri.convertFileSrc(GAME_BANNERS_BASE_PATH + `/${require("../modules/sha256").sha256(data[i].DisplayName)}.png`));
+            await fs.writeBinaryFile(GAME_BANNERS_BASE_PATH + `/${require("../modules/sha256").sha256(data[i].DisplayName)}.png`, response.data);
+            document.getElementById(`game-div-${data[i].DisplayName}`).firstElementChild.setAttribute('src', tauri.convertFileSrc(GAME_BANNERS_BASE_PATH + `/${require("../modules/sha256").sha256(data[i].DisplayName)}.png`));
         }).catch((e) => console.log(e));
     });
 
@@ -86,9 +85,9 @@ async function cacheBanners(data, res) {
         document.getElementById('game-loading-overlay').style.visibility = 'hidden';
     }, 100);
     setTimeout(() =>
-        // eslint-disable-next-line max-nested-callbacks
-        gamesList.forEach((gameElement) => gameElement.firstElementChild.style.opacity = '1'), 200,
-    );
+        gamesList.forEach(gameElement => {
+            gameElement.firstElementChild.style.opacity = '1'
+        }), 100);
 }
 
 export {
