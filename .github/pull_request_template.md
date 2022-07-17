@@ -30,7 +30,7 @@ Please go through these guidelines before submitting the PR.
 #### **Description**
 A brief description of what this pull request is
 
-#### **Changes (in short)**
+#### **Changes**
 ```diff
 + Added [...]
 - Removed [...]
@@ -41,13 +41,6 @@ A brief description of what this pull request is
 #### **Affected Operating System(s)**
 
 Windows(8, 10, 11), Linux(Arch, Manjaro, etc.), MacOS
-
-
-#### **Changes (in detail)**
-
-* This PR adds [...] which helps fixing [...] and also improving [...].
-* This PR also removes [...] because it reduces [...] resulting in [...].
-
 
 #### **Additional Information**
 
