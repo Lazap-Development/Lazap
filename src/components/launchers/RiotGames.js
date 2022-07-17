@@ -1,8 +1,6 @@
 const os = window.__TAURI__.os;
 const fs = window.__TAURI__.fs;
-const { promisify } = require('util');
-let { exec } = require('child_process');
-exec = promisify(exec);
+const shell = window.__TAURI__.shell;
 
 function getRiotGamesLocation(launcher_location) {
 	return launcher_location.split('\\').slice(0, -2).join('\\');
@@ -17,8 +15,13 @@ async function getInstalledGames() {
 		launcher_location = output.stdout.split('"')[1];
 	}
 
-	if (!fs.existsSync(launcher_location)) return [];
-	const games = fs.readdirSync(getRiotGamesLocation((launcher_location))).filter(x => x !== 'Riot Client');
+    try {
+        await fs.readDir(launcher_location)
+    } catch (err) {
+        return [];
+    }
+	
+	const games = await fs.readDir(getRiotGamesLocation((launcher_location))).filter(x => x !== 'Riot Client');
 
 	if (games.includes('VALORANT')) {
 		games[games.indexOf('VALORANT')] = 'Valorant';

@@ -1,7 +1,7 @@
 const os = window.__TAURI__.os;
 const fs = window.__TAURI__.fs;
 const path = window.__TAURI__.path;
-const shell = window.__TAURI__.shell
+const shell = window.__TAURI__.shell;
 
 async function getSteamLocation() {
     let launcher_location;
