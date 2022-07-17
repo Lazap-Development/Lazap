@@ -162,7 +162,7 @@ async function loadGames(id) {
                 x[i].style.visibility = 'visible';
                 if (isFavourite) {
                     let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
-                    starIcon.style.content = `url("asset://${await path.join(rootDir, "../../assets/star-solid.svg")}")`;
+                    starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, "../../assets/star-solid.svg"))}")`;
                     starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
                 }
             }
@@ -177,7 +177,7 @@ async function loadGames(id) {
                     x[i].style.visibility = 'hidden';
                     if (!isFavourite) {
                         let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
-                        starIcon.style.content = `url("asset://${await path.join(rootDir, "../../assets/star-empty.svg")}")`;
+                        starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, "../../assets/star-empty.svg"))}")`;
                         starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
                     }
                 }
@@ -190,17 +190,18 @@ async function loadGames(id) {
         starIcon.addEventListener('click', async () => {
             const res = toggleFavourite(game.GameID, game.LauncherName);
             let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
-            starIcon.style.content = `url("asset://${await path.join(rootDir, "../../assets/star-" + res ? 'solid' : 'empty' + ".svg")}")`;
+            let solidOrEmpty = res ? 'solid' : 'empty';
+            starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, "../../assets/star-" + solidOrEmpty + ".svg"))}")`;
             starIcon.style.filter = res ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
         });
 
         return game;
     }).filter(async x => Object.keys(await x).length > 0);
 
-    setGames(games);
-    await require("../modules/banners").getBannerResponse(games, id);
+    setGames(await Promise.all(resolvedGames));
+    await require("../modules/banners").getBannerResponse(await Promise.all(resolvedGames), id);
     running = false;
-    }
+}
 
 function sort(games, type) {
     if (type === 'alphabetical') {
@@ -221,13 +222,13 @@ async function setGames(games) {
 async function getGames(GameID, LauncherName) {
     const appDirPath = await path.appDir();
     const GAMES_DATA_BASE_PATH = appDirPath + 'storage/Cache/Games/Data.json';
-
-    return GameID ? await fs.readTextFile(GAMES_DATA_BASE_PATH).Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName) : await fs.readTextFile(GAMES_DATA_BASE_PATH);
+    
+    return GameID ? JSON.parse(await fs.readTextFile(GAMES_DATA_BASE_PATH)).find(x => x.GameID === GameID && x.LauncherName === LauncherName) : JSON.parse(await fs.readTextFile(GAMES_DATA_BASE_PATH));
 }
-function toggleFavourite(GameID, LauncherName) {
-    const data = getGames();
-    if (!data.Games) return;
-    data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite = !data.Games.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite;
+async function toggleFavourite(GameID, LauncherName) {
+    const data = await getGames();
+    if (!data) return;
+    data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite = !data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite;
 
     setGames(data);
 }
@@ -282,7 +283,7 @@ async function handleLaunch(game) {
             }
             case 'Lutris': {
                 res = createProcess('lutris', `lutris:rungameid/${game.LaunchID}`, game.gameID);
-                break;  
+                break;
             }
             default: {
                 res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);

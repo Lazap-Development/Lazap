@@ -86,6 +86,11 @@ window.addEventListener("load", async function () {
     messages.style.display = 'none';
     activity.style.display = 'none';
     friends.style.display = 'none';
+
+    await models.loadGames('favGames')
+      .catch((err) => {
+        return console.log(err);
+      });
   });
 
   document.getElementById('messages-btn').addEventListener('click', async function () {

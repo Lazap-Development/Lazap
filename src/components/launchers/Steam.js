@@ -1,14 +1,14 @@
 const os = window.__TAURI__.os;
 const fs = window.__TAURI__.fs;
 const path = window.__TAURI__.path;
-const shell = window.__TAURI__.shell
+const shell = window.__TAURI__.shell;
 
 async function getSteamLocation() {
     let launcher_location;
     let registry_res;
     if (await os.platform() === 'win32') {
         const output = await new shell.Command('cmd', ["/C", "Reg", "Query", `HKEY_LOCAL_MACHINE\\SOFTWARE\\${await os.arch() === 'x86_64' ? 'WOW6432Node\\' : ''}Valve\\Steam`, "/v", "InstallPath"]).execute();
-        if (!output.stdout) return;
+        if (!output.stdout) return [];
         else {
             registry_res = output.stdout;
             const steamDir = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
@@ -120,7 +120,7 @@ async function acf_to_json(acf_content = '') {
     );
 }
 
-module.exports = {
+export {
     getInstalledGames,
     parseGameObject,
     acf_to_json,

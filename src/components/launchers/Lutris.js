@@ -1,10 +1,6 @@
-// let { exec } = require('child_process');
-// const util = require('util');
 const fs = window.__TAURI__.fs;
 import Database from "tauri-plugin-sql-api";
 const homedir = window.__TAURI__.path.homeDir();
-// const Database = require('tauri-plugin-sql-api');
-// exec = util.promisify(exec);
 
 async function getLutrisLocation(os = window.__TAURI__.os.platform(), checkForLutris = true) {
 	let launcher_location;
@@ -27,7 +23,8 @@ async function getInstalledGames(os = window.__TAURI__.os.platform()) {
 
 	else if (await os === 'linux') {
 		let allDBGames = [];
-		const lutris = await Database.load(`sqlite:/home/logic/.local/share/lutris/pga.db`);
+		const dataDirPath = await window.__TAURI__.path.dataDir();
+		const lutris = await Database.load(`sqlite:${dataDirPath}/lutris/pga.db`);
 		const a = await lutris.select('SELECT * FROM games');
 		a.map(x => {
 			const obj = {
