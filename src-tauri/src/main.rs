@@ -3,6 +3,7 @@
 use discord_presence::Client;
 use tauri::Manager;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
+use tauri_plugin_sql::TauriSql;
 
 fn main() {
     /*
@@ -33,7 +34,6 @@ fn main() {
 
     if cfg!(windows) {
         tauri::Builder::default()
-            // .plugin(TauriSql::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
                 SystemTrayEvent::LeftClick {
@@ -70,7 +70,7 @@ fn main() {
             .expect("error while running lazap");
     } else if cfg!(unix) {
         tauri::Builder::default()
-            // .plugin(TauriSql::default())
+            .plugin(TauriSql::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
                 SystemTrayEvent::LeftClick {
@@ -102,7 +102,6 @@ fn main() {
             .expect("error while running lazap");
     } else if cfg!(target_os = "macos") {
         tauri::Builder::default()
-            // .plugin(TauriSql::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
                 SystemTrayEvent::LeftClick {

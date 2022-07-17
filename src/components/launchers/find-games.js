@@ -41,13 +41,12 @@ async function getInstalledGames() {
     let data = await fs.readDir(rootDir);
     const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
     const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0).flat();
-
     if (games.length < 1) {
         return 'NO_GAMES_FOUND';
     }
 
-    cachedGames = games.flat();
-    return games.flat();
+    cachedGames = games;
+    return games;
 }
 
 async function loadGames(id) {
@@ -115,7 +114,7 @@ async function loadGames(id) {
                 banner = img ? tauri.convertFileSrc(appDirPath + `storage/Cache/Games/Images/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://cdn.discordapp.com/attachments/814938072999395388/983977458120396830/IMG_4432.jpg';
             } catch (err) {
                 banner = 'https://cdn.discordapp.com/attachments/814938072999395388/983977458120396830/IMG_4432.jpg';
-                console.log(err)
+                console.log(err);
             }
         }
         else {
@@ -196,7 +195,7 @@ async function loadGames(id) {
         });
 
         return game;
-    }).filter(x => Object.keys(x).length > 0);
+    }).filter(async x => Object.keys(await x).length > 0);
 
     setGames(games);
     await require("../modules/banners").getBannerResponse(games, id);
@@ -257,10 +256,10 @@ async function handleLaunch(game) {
                 res = createProcess('cmd', `/C start /min cmd /c start uplay://launch/${game.GameID}/0 --wait`, game.GameID);
                 break;
             }
-            case 'Minecraft': {
-                res = createProcess('minecraft-launcher', [], game.GameID);
-                break;
-            }
+            //  case 'Minecraft': {
+            //      res = createProcess('minecraft-launcher', [], game.GameID);
+            //      break;
+            //  }
             default: {
                 res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
                 break;
@@ -280,6 +279,10 @@ async function handleLaunch(game) {
             case 'Lunar': {
                 res = createProcess('lunarclient', "", game.gameID);
                 break;
+            }
+            case 'Lutris': {
+                res = createProcess('lutris', `lutris:rungameid/${game.LaunchID}`, game.gameID);
+                break;  
             }
             default: {
                 res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
@@ -301,7 +304,6 @@ async function handleLaunch(game) {
 
 async function createProcess(Command, Args, GameID, force = false) {
     if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
-    console.log(Args)
     const instance = invoke('run_game', { exec: Command, args: Args })
         .then(() => {
             VisibilityState();
