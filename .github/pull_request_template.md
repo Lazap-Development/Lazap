@@ -51,7 +51,6 @@ There is a chance for [...] to happen and I have no idea how to prevent it.
 
 - [ ] Does the app work in Windows?
 - [ ] Does the app work in Linux?
-- [ ] Does the app work in MacOS?
-- [ ] Is there any condition specific errors?
 - [ ] Are the features of this PR completed?
 - [ ] Is the PR following all the guidelines?
+<!-- - [ ] Does the app work in MacOS? --->
