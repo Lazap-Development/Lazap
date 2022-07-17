@@ -5,10 +5,11 @@ const path = window.__TAURI__.path;
 
 async function getInstalledGames() {
 	if (await os.platform() === 'win32') {
-		return [await getMinecraftLauncher()].filter(x => x !== false);
+		// Minecraft Game Detection on Windows is Disabled until further notice. For more info check out https://discord.com/channels/644764850706448384/825224040641724416/997324642534559764
+		return [await getMinecraftLauncher(), await getLunarClient()].filter(x => x !== false);
 	}
 	else if (await os.platform() === 'linux') {
-		return [await getMinecraftLauncherOnLinux(), await getLunarMyFavouriteMinecraftClientdrooool()].filter(x => x !== false);
+		return [await getMinecraftLauncher(), await getLunarClient()].filter(x => x !== false);
 	}
 	else {
 		return [];
@@ -16,69 +17,80 @@ async function getInstalledGames() {
 }
 
 async function getMinecraftLauncher() {
-	// Minecraft Game Detection on Windows is Disabled until further notice. For more info check out https://discord.com/channels/644764850706448384/825224040641724416/997324642534559764
-	return false;
-}
+	if (await os.platform() === 'win32') {
+		return false;
+	}
+	else if (await os.platform() === 'linux') {
+		try {
+			const output = await new shell.Command('which', "minecraft-launcher").execute();
 
-async function getMinecraftLauncherOnLinux() {
-	try {
-		const output = await new shell.Command('which', "minecraft-launcher").execute();
-
-		if (output.stdout) {
-			const homedir = await path.homeDir();
-			try {
-				await fs.readDir(`${homedir}/.minecraft`);
-			} catch (e) {
-				return console.log(e);
+			if (output.stdout) {
+				const homedir = await path.homeDir();
+				try {
+					await fs.readDir(`${homedir}/.minecraft`);
+				} catch (e) {
+					return console.log(e);
+				}
+				const Location = '/usr/bin/minecraft-launcher';
+				const Executable = 'minecraft-launcher';
+				return {
+					DisplayName: 'Minecraft Launcher',
+					LauncherName: 'Minecraft',
+					GameID: 'Minecraft',
+					Location,
+					Executable,
+					Args: [],
+				};
 			}
-			const Location = '/usr/bin/minecraft-launcher';
-			const Executable = 'minecraft-launcher';
-			return {
-				DisplayName: 'Minecraft Launcher',
-				LauncherName: 'Minecraft',
-				GameID: 'Minecraft',
-				Location,
-				Executable,
-				Args: [],
-			};
+			else {
+				return false;
+			}
 		}
-		else {
+		catch (e) {
 			return false;
 		}
 	}
-	catch (e) {
-		return;
+	else {
+		return false;
 	}
 }
 
-async function getLunarMyFavouriteMinecraftClientdrooool() {
-	try {
-		const output = await new shell.Command('which', "lunarclient").execute();
+async function getLunarClient() {
+	if (await os.platform() === 'win32') {
+		return false;
+	}
+	else if (await os.platform() === 'linux') {
+		try {
+			const output = await new shell.Command('which', "lunarclient").execute();
 
-		if (output.stdout) {
-			const homedir = await path.homeDir();
-			try {
-				await fs.readDir(`${homedir}/.lunarclient`);
-			} catch (e) {
-				return console.log(e);
+			if (output.stdout) {
+				const homedir = await path.homeDir();
+				try {
+					await fs.readDir(`${homedir}/.lunarclient`);
+				} catch (e) {
+					return console.log(e);
+				}
+				const Location = '/usr/bin/lunarclient';
+				const Executable = 'lunarclient';
+				return {
+					DisplayName: 'Lunar Client',
+					LauncherName: 'Lunar',
+					GameID: 'Lunar',
+					Location,
+					Executable,
+					Args: [],
+				};
 			}
-			const Location = '/usr/bin/lunarclient';
-			const Executable = 'lunarclient';
-			return {
-				DisplayName: 'Lunar Client',
-				LauncherName: 'Lunar',
-				GameID: 'Lunar',
-				Location,
-				Executable,
-				Args: [],
-			};
+			else {
+				return false;
+			}
 		}
-		else {
+		catch (e) {
 			return false;
 		}
 	}
-	catch (e) {
-		return;
+	else {
+		return false;
 	}
 }
 
