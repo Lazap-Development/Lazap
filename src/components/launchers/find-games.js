@@ -198,7 +198,7 @@ async function loadGames(id) {
         return game;
     }).filter(async x => Object.keys(await x).length > 0);
 
-    setGames(games);
+    setGames(await Promise.all(resolvedGames));
     await require("../modules/banners").getBannerResponse(await Promise.all(resolvedGames), id);
     running = false;
 }
