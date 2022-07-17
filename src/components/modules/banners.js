@@ -37,14 +37,15 @@ async function getBannerResponse(games, id) {
                     const e = games[i].DisplayName;
                     let u = `https://thumbnails.pcgamingwiki.com/5/53/${e.replace(/ /g,"_")}_-_cover.png/300px-${e.replace(/ /g,"_")}_-_cover.png`
                     // eslint-disable-next-line
-                    let url = `https://lutris.net/games/banner/${games[i].GameID}.jpg`;
+                    let url = 'https://cdn2.steamgriddb.com/file/sgdb-cdn/thumb/ac3f115b3a14f86b904bdc5ed5f82c4b.jpg';
                     await http.fetch(u, {
                         responseType: 3,
                     }).then(res => {
 						console.log(res.status, typeof res.status);
 						if(res.status === 404) {
-                            console.log("h");
+                            if(games[i].DisplayName === 'Epic Games Store') return u = 'https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png'
                             return u = url;
+
                         }
 					});
                     return u;
