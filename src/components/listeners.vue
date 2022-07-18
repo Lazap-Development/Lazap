@@ -81,11 +81,12 @@ window.addEventListener("load", async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
-
     await require('./launchers/find-games').loadGames('allGames')
       .catch((err) => {
         return console.log(err);
       });
+
+    document.getElementById("gamesInput").focus();
   });
 
   document.getElementById('favs-btn').addEventListener('click', async function () {
@@ -96,11 +97,12 @@ window.addEventListener("load", async function () {
     messages.style.display = 'none';
     activity.style.display = 'none';
     friends.style.display = 'none';
-
     await require('./launchers/find-games').loadGames('favGames')
       .catch((err) => {
         return console.log(err);
       });
+
+    document.getElementById("favsInput").focus();
   });
 
   document.getElementById('messages-btn').addEventListener('click', async function () {
