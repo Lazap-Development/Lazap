@@ -102,13 +102,12 @@
     }
 }
 
-
 body {
     zoom: 0.895;
     background: #1b1d22;
     overflow: hidden;
     font-family: Dosis;
-
+    -webkit-overflow-scrolling: touch;
 }
 
 .bg {

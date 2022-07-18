@@ -1,6 +1,4 @@
 <script>
-const models = require('./launchers/find-games');
-
 window.addEventListener("load", async function () {
   const marker = document.getElementById('indicator');
   const home = document.getElementById('home');
@@ -16,23 +14,23 @@ window.addEventListener("load", async function () {
   const fs = window.__TAURI__.fs;
   const path = window.__TAURI__.path;
 
-  await models.getInstalledGames()
-    .catch((err) => {
-      return console.log(err);
-    });
-
-  const appDirPath = await path.appDir();
-  const data = JSON.parse(await fs.readTextFile(appDirPath + 'storage/UserProfile.json', (err) => {
+  const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/UserProfile.json', (err) => {
     if (err) throw err;
   }));
   document.getElementById('text').value = data.username;
 
-  document.getElementById('main-loading-overlay').style.opacity = '0';
-  document.getElementById('main-loading-overlay').style.visibility = 'hidden';
-  await models.loadGames('recentGamesListMainPage')
+  await require('./launchers/find-games').getInstalledGames()
     .catch((err) => {
       return console.log(err);
     });
+
+  await require('./launchers/find-games').loadGames('recentGamesListMainPage')
+    .catch((err) => {
+      return console.log(err);
+    });
+
+  document.getElementById('main-loading-overlay').style.opacity = '0';
+  document.getElementById('main-loading-overlay').style.visibility = 'hidden';
 
   document.querySelectorAll('.side-tab').forEach((link) =>
     link.addEventListener('click', (e) => {
@@ -41,7 +39,6 @@ window.addEventListener("load", async function () {
       indicator(e.target);
     }),
   );
-
 
   document.getElementById('alertboxexit').addEventListener('click', function () {
     alertbox.style.display = 'none';
@@ -55,7 +52,7 @@ window.addEventListener("load", async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
-    await models.loadGames('recentGamesListMainPage')
+    await require('./launchers/find-games').loadGames('recentGamesListMainPage')
       .catch((err) => {
         return console.log(err);
       });
@@ -69,7 +66,7 @@ window.addEventListener("load", async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
-    await models.loadGames('recentGames')
+    await require('./launchers/find-games').loadGames('recentGames')
       .catch((err) => {
         return console.log(err);
       });
@@ -84,7 +81,7 @@ window.addEventListener("load", async function () {
     messages.style.display = 'none';
     activity.style.display = 'none';
 
-    await models.loadGames('allGames')
+    await require('./launchers/find-games').loadGames('allGames')
       .catch((err) => {
         return console.log(err);
       });
@@ -99,7 +96,7 @@ window.addEventListener("load", async function () {
     activity.style.display = 'none';
     friends.style.display = 'none';
 
-    await models.loadGames('favGames')
+    await require('./launchers/find-games').loadGames('favGames')
       .catch((err) => {
         return console.log(err);
       });
