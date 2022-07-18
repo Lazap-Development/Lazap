@@ -102,13 +102,12 @@
     }
 }
 
-
 body {
     zoom: 0.895;
     background: #1b1d22;
     overflow: hidden;
     font-family: Dosis;
-
+    -webkit-overflow-scrolling: touch;
 }
 
 .bg {
@@ -544,7 +543,7 @@ body {
     text-align: center;
     display: inline-block;
     border-radius: 14px;
-    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
     margin-left: 26px;
     height: 180px;
     width: 130px;
@@ -553,7 +552,7 @@ body {
 
 .mainPageGamebox:hover {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    transform: scale(1.04);
+    transform: scale(1.05);
     cursor: pointer;
 }
 
@@ -561,7 +560,7 @@ body {
     height: 180px;
     width: 130px;
     object-fit: contain;
-    border-radius: 14px;
+    border-radius: 10px;
     image-rendering: auto;
     object-fit: cover;
 }

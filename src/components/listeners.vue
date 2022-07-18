@@ -1,6 +1,4 @@
 <script>
-const models = require('./launchers/find-games');
-
 window.addEventListener("load", async function () {
   const marker = document.getElementById('indicator');
   const home = document.getElementById('home');
@@ -13,26 +11,27 @@ window.addEventListener("load", async function () {
   const settings = document.getElementById('settings-popup');
   const alertbox = document.getElementById('alertbox');
   const settingsbackblur = document.getElementById('settings-backblur');
+  const searchbars = document.querySelectorAll('div.search-bar > input[type="text"]');
   const fs = window.__TAURI__.fs;
   const path = window.__TAURI__.path;
 
-  await models.getInstalledGames()
-    .catch((err) => {
-      return console.log(err);
-    });
-
-  const appDirPath = await path.appDir();
-  const data = JSON.parse(await fs.readTextFile(appDirPath + 'storage/UserProfile.json', (err) => {
+  const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/UserProfile.json', (err) => {
     if (err) throw err;
   }));
   document.getElementById('text').value = data.username;
 
-  document.getElementById('main-loading-overlay').style.opacity = '0';
-  document.getElementById('main-loading-overlay').style.visibility = 'hidden';
-  await models.loadGames('recentGamesListMainPage')
+  await require('./launchers/find-games').getInstalledGames()
     .catch((err) => {
       return console.log(err);
     });
+
+  await require('./launchers/find-games').loadGames('recentGamesListMainPage')
+    .catch((err) => {
+      return console.log(err);
+    });
+
+  document.getElementById('main-loading-overlay').style.opacity = '0';
+  document.getElementById('main-loading-overlay').style.visibility = 'hidden';
 
   document.querySelectorAll('.side-tab').forEach((link) =>
     link.addEventListener('click', (e) => {
@@ -41,7 +40,6 @@ window.addEventListener("load", async function () {
       indicator(e.target);
     }),
   );
-
 
   document.getElementById('alertboxexit').addEventListener('click', function () {
     alertbox.style.display = 'none';
@@ -55,7 +53,7 @@ window.addEventListener("load", async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
-    await models.loadGames('recentGamesListMainPage')
+    await require('./launchers/find-games').loadGames('recentGamesListMainPage')
       .catch((err) => {
         return console.log(err);
       });
@@ -69,7 +67,7 @@ window.addEventListener("load", async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
-    await models.loadGames('recentGames')
+    await require('./launchers/find-games').loadGames('recentGames')
       .catch((err) => {
         return console.log(err);
       });
@@ -83,11 +81,12 @@ window.addEventListener("load", async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
-
-    await models.loadGames('allGames')
+    await require('./launchers/find-games').loadGames('allGames')
       .catch((err) => {
         return console.log(err);
       });
+
+    document.getElementById("gamesInput").focus();
   });
 
   document.getElementById('favs-btn').addEventListener('click', async function () {
@@ -98,11 +97,12 @@ window.addEventListener("load", async function () {
     messages.style.display = 'none';
     activity.style.display = 'none';
     friends.style.display = 'none';
-
-    await models.loadGames('favGames')
+    await require('./launchers/find-games').loadGames('favGames')
       .catch((err) => {
         return console.log(err);
       });
+
+    document.getElementById("favsInput").focus();
   });
 
   document.getElementById('messages-btn').addEventListener('click', async function () {
@@ -169,6 +169,40 @@ window.addEventListener("load", async function () {
       fs.writeTextFile(appDirPath + 'storage/LauncherData.json', JSON.stringify(LauncherData));
     });
   });
+
+  searchbars.item(0).addEventListener('keyup', () => {
+    const query = searchbars.item(0).value;
+    const allGames = document.querySelectorAll('#allGamesList > div[id^="game-div"]');
+
+    allGames.forEach((game) => {
+      if (game.id.split('-').slice(2).join('-').match(new RegExp(`${query}`, 'gi'))) {
+        game.style.display = 'block';
+      }
+      else if (query.length === 0) {
+        game.style.display = 'block';
+      }
+      else {
+        game.style.display = 'none';
+      }
+    });
+  });
+  searchbars.item(1).addEventListener('keyup', () => {
+    const query = searchbars.item(1).value;
+    const allGames = document.querySelectorAll('#favGamesList > div[id^="game-div"]');
+
+    allGames.forEach((game) => {
+      if (game.id.split('-').slice(2).join('-').match(new RegExp(`${query}`, 'gi'))) {
+        game.style.display = 'block';
+      }
+      else if (query.length === 0) {
+        game.style.display = 'block';
+      }
+      else {
+        game.style.display = 'none';
+      }
+    });
+  });
+
 
   function indicator(item) {
     marker.style.top = item.offsetTop + 'px';

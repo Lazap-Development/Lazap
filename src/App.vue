@@ -142,7 +142,7 @@
       </div>
       <p>All Games</p>
       <div class="search-bar">
-        <input type="text" placeholder="Search">
+        <input type="text" placeholder="Search" id="gamesInput">
       </div>
       <div id="allGamesList" class="fadeInDown gamesList">
       </div>
@@ -151,7 +151,7 @@
     <div class="secondorybox" id="favs">
       <p>Favourite Games</p>
       <div class="search-bar">
-        <input type="text" placeholder="Search">
+        <input type="text" placeholder="Search" id="favsInput">
       </div>
       <div id="favGamesList" class="fadeInDown gamesList">
       </div>

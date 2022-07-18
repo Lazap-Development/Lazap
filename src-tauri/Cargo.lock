@@ -603,27 +603,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "discord-presence"
-version = "0.5.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f81a7cba650fdacd79d8db70f3ed5c46a1d1800b342780c379fabde3b491b36e"
-dependencies = [
- "byteorder",
- "bytes",
- "cfg-if",
- "crossbeam-channel",
- "log",
- "named_pipe",
- "num-derive",
- "num-traits",
- "parking_lot 0.12.1",
- "serde",
- "serde_json",
- "thiserror",
- "uuid 1.1.2",
-]
-
-[[package]]
 name = "dispatch"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1474,7 +1453,6 @@ dependencies = [
 name = "lazap"
 version = "0.4.0"
 dependencies = [
- "discord-presence",
  "serde",
  "serde_json",
  "tauri",
@@ -1692,15 +1670,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "named_pipe"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ad9c443cce91fc3e12f017290db75dde490d685cdaaf508d7159d7cf41f0eb2b"
-dependencies = [
- "winapi",
-]
-
-[[package]]
 name = "native-tls"
 version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1777,17 +1746,6 @@ dependencies = [
  "dbus",
  "mac-notification-sys",
  "winrt-notification",
-]
-
-[[package]]
-name = "num-derive"
-version = "0.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "876a53fff98e03a936a674b29568b0e605f06b29372c2489ff4de23f1949743d"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
 ]
 
 [[package]]
