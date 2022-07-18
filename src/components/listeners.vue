@@ -11,6 +11,7 @@ window.addEventListener("load", async function () {
   const settings = document.getElementById('settings-popup');
   const alertbox = document.getElementById('alertbox');
   const settingsbackblur = document.getElementById('settings-backblur');
+  const searchbars = document.querySelectorAll('div.search-bar > input[type="text"]');
   const fs = window.__TAURI__.fs;
   const path = window.__TAURI__.path;
 
@@ -166,6 +167,40 @@ window.addEventListener("load", async function () {
       fs.writeTextFile(appDirPath + 'storage/LauncherData.json', JSON.stringify(LauncherData));
     });
   });
+
+  searchbars.item(0).addEventListener('keyup', () => {
+    const query = searchbars.item(0).value;
+    const allGames = document.querySelectorAll('#allGamesList > div[id^="game-div"]');
+
+    allGames.forEach((game) => {
+      if (game.id.split('-').slice(2).join('-').match(new RegExp(`${query}`, 'gi'))) {
+        game.style.display = 'block';
+      }
+      else if (query.length === 0) {
+        game.style.display = 'block';
+      }
+      else {
+        game.style.display = 'none';
+      }
+    });
+  });
+  searchbars.item(1).addEventListener('keyup', () => {
+    const query = searchbars.item(1).value;
+    const allGames = document.querySelectorAll('#favGamesList > div[id^="game-div"]');
+
+    allGames.forEach((game) => {
+      if (game.id.split('-').slice(2).join('-').match(new RegExp(`${query}`, 'gi'))) {
+        game.style.display = 'block';
+      }
+      else if (query.length === 0) {
+        game.style.display = 'block';
+      }
+      else {
+        game.style.display = 'none';
+      }
+    });
+  });
+
 
   function indicator(item) {
     marker.style.top = item.offsetTop + 'px';
