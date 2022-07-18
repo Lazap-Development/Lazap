@@ -1,23 +1,10 @@
 #![windows_subsystem = "windows"]
 
-use discord_presence::Client;
 use tauri::Manager;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
 use tauri_plugin_sql::TauriSql;
 
 fn main() {
-    /*
-     * rpc
-     */
-
-    let mut drpc = Client::new(932504287337148417);
-    drpc.start();
-    drpc.set_activity(|act| {
-        act.state("On Main Screen")
-            .assets(|ass| ass.large_image("lazap").large_text("lazap"))
-    })
-    .ok();
-
     /*
      * Tray code
      */
