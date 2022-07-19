@@ -26,9 +26,10 @@ async function getSteamLocation() {
     }
     else if (await os.platform() === 'linux') {
         const homedir = await path.homeDir();
-
-        const text = await fs.readTextFile(homedir + `.steam/steam/steamapps/libraryfolders.vdf`);
-
+        const text = await fs.readTextFile(homedir + `.steam/steam/steamapps/libraryfolders.vdf`).then(x => console.log(x)).catch(() => {
+            return [];
+        });
+        if(text.length === 0) return launcher_location = [];
         const VDF = require('../modules/parseVDF');
         const parsed = VDF.parse(text);
         const toArray = Object.entries(parsed.libraryfolders);
@@ -44,14 +45,13 @@ async function getSteamLocation() {
             launcher_location = launcher_location.filter(e => e !== path)
         }
     }
-
     return launcher_location;
-
 }
 
 async function getInstalledGames() {
     const path = await getSteamLocation();
     if (path?.length === 0) return [];
+    console.log(path);
 
     let allGames = [];
 
