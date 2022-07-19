@@ -82,7 +82,7 @@ async function loadGames(id) {
         }
         else if (id === 'favGames') {
             const data = await getGames(x.GameID, x.LauncherName);
-            if (typeof data?.Favourite === 'boolean') resolvedGames.push(x);
+            if (typeof data?.Favourite === 'boolean' && data?.Favourite === true) resolvedGames.push(x);
         }
         else if (id.startsWith('recent') && id.includes('Main')) {
             const data = await getGames(x.GameID, x.LauncherName);
@@ -92,7 +92,10 @@ async function loadGames(id) {
     resolvedGames = await sort(resolvedGames, id === 'allGames' ? 'alphabetical' : id === 'recentGames' || (id.startsWith('recent') && id.includes('Main')) ? 'lastLaunch' : 'none');
 
     if ((list.children.length === resolvedGames.length) && list.children.length !== 0) {
-        if (resolvedGames.every((x, i) => list.children.item(i).id === `game-div-${x.DisplayName}`)) return;
+        if (resolvedGames.every((x, i) => list.children.item(i).id === `game-div-${x.DisplayName}`)) {
+			running = false;
+			return;
+		}
     }
 
     resolvedGames = resolvedGames.map(async (game) => {
@@ -200,7 +203,7 @@ async function loadGames(id) {
         return game;
     }).filter(async x => Object.keys(await x).length > 0);
 
-    if (id === 'allGames') setGames(await Promise.all(resolvedGames));
+    if (id === 'allGames') setGames(await Promise.all(resolvedGames), 'all-games');
     await require("../modules/banners").getBannerResponse(await Promise.all(resolvedGames), id);
     running = false;
 }
@@ -216,9 +219,10 @@ async function sort(games, type) {
     return games;
 }
 
-async function setGames(games) {
+async function setGames(games, src) {
     const appDirPath = await path.appDir();
     const GAMES_DATA_BASE_PATH = appDirPath + 'storage/Cache/Games/Data.json';
+	if (!['all-games'].includes(src)) return fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
     let data = await getGames();
     if (!Array.isArray(data)) {
         data = [];
@@ -228,12 +232,12 @@ async function setGames(games) {
         let dgame = data.find(x => x.GameID === games[i].GameID);
         let ngame = games[i];
         if (!dgame) data.push(games[i]);
-        if (dgame?.Launches && !ngame?.Launches) ngame.Launches = dgame.Launches;
-        if (ngame?.Launches && !dgame?.Launches) dgame.Launches = ngame.Launches;
-        if (dgame?.LastLaunch && !ngame?.LastLaunch) ngame.LastLaunch = dgame.LastLaunch;
-        if (ngame?.LastLaunch && !dgame?.LastLaunch) dgame.LastLaunch = ngame.LastLaunch;
-        if (dgame?.Favourite && !ngame?.Favourite) ngame.Favourite = dgame.Favourite;
-        if (ngame?.Favourite && !dgame?.Favourite) dgame.Favourite = ngame.Favourite;
+        if (typeof ngame?.Launches === 'number' && typeof dgame?.Launches !== 'number') dgame.Launches = ngame.Launches;
+        else if (typeof dgame?.Launches === 'number' && typeof ngame?.Launches !== 'number') ngame.Launches = dgame.Launches;
+        if (typeof ngame?.LastLaunch === 'number' && typeof dgame?.LastLaunch !== 'number') dgame.LastLaunch = ngame.LastLaunch;
+        else if (typeof dgame?.LastLaunch !== 'number' && typeof ngame?.LastLaunch !== 'number') ngame.LastLaunch = dgame.LastLaunch;
+        if (typeof ngame?.Favourite === 'boolean' && typeof dgame?.Favourite !== 'boolean') dgame.Favourite = ngame.Favourite;
+        else if (typeof dgame?.Favourite === 'boolean' && typeof ngame?.Favourite !== 'boolean') ngame.Favourite = dgame.Favourite;
         if (dgame && ((dgame?.Executable !== ngame?.Executable) || (dgame?.Location !== ngame?.Location))) {
             data[data.findIndex(dgame)] = ngame;
         }
@@ -252,14 +256,14 @@ async function toggleFavourite(GameID, LauncherName) {
     if (!data) return;
     data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite = !data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite;
 
-    setGames(data);
+    setGames(data, 'toggle-favourite');
 }
 async function addLaunch(GameID, LauncherName) {
     const data = await getGames();
     if (!data) return;
     data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).LastLaunch = Date.now();
     data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches = typeof data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches === 'number' ? data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches + 1 : 1;
-    setGames(data);
+    setGames(data, 'add-launch');
 }
 
 async function handleLaunch(game) {
