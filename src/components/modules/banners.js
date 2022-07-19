@@ -31,8 +31,8 @@ async function getBannerResponse(games, id) {
                     return 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
                 }
                 case 'Lutris': {
-                    if (games[i].DisplayName == 'Epic Games Store') return 'https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png'
-                    if (games[i].DisplayName == 'Rockstar Games Launcher') return 'https://cdn.player.one/sites/player.one/files/2019/08/26/rockstar-games.png'
+                    if (games[i].DisplayName === 'Epic Games Store') return 'https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png'
+                    if (games[i].DisplayName === 'Rockstar Games Launcher') return 'https://cdn.player.one/sites/player.one/files/2019/08/26/rockstar-games.png'
                     return `https://thumbnails.pcgamingwiki.com/5/53/${games[i].DisplayName.replace(/ /g, "_")}_-_cover.png/300px-${games[i].DisplayName.replace(/ /g, "_")}_-_cover.png`
                 }
                 case 'XboxGames': {

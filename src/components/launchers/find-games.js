@@ -116,9 +116,9 @@ async function loadGames(id) {
                 const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH);
                 const img = dirs.find(x => x.name === `${require("../modules/sha256").sha256(game.DisplayName)}.png`);
 
-                banner = img ? tauri.convertFileSrc(appDirPath + `storage/Cache/Games/Images/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://cdn.discordapp.com/attachments/814938072999395388/983977458120396830/IMG_4432.jpg';
+                banner = img ? tauri.convertFileSrc(appDirPath + `storage/Cache/Games/Images/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
             } catch (err) {
-                banner = 'https://cdn.discordapp.com/attachments/814938072999395388/983977458120396830/IMG_4432.jpg';
+                banner = 'https://i.ibb.co/dK15dV3/e.jpg';
                 console.log(err);
             }
         }
