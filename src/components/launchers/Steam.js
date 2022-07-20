@@ -26,9 +26,13 @@ async function getSteamLocation() {
     }
     else if (await os.platform() === 'linux') {
         const homedir = await path.homeDir();
-        const text = await fs.readTextFile(homedir + `.steam/steam/steamapps/libraryfolders.vdf`).then(x => console.log(x)).catch(() => {
-            return [];
-        });
+        try {
+          await fs.readTextFile(homedir + `.steam/steam/steamapps/libraryfolders.vdf`);
+        } catch (err) {
+          return [];
+        }
+
+        const text = await fs.readTextFile(homedir + `.steam/steam/steamapps/libraryfolders.vdf`);
         if(text.length === 0) return launcher_location = [];
         const VDF = require('../modules/parseVDF');
         const parsed = VDF.parse(text);

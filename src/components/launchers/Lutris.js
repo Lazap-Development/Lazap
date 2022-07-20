@@ -2,19 +2,15 @@ const fs = window.__TAURI__.fs;
 import Database from "tauri-plugin-sql-api";
 const homedir = window.__TAURI__.path.homeDir();
 
-async function getLutrisLocation(os = window.__TAURI__.os.platform(), checkForLutris = true) {
+async function getLutrisLocation(os = window.__TAURI__.os.platform()) {
 	let launcher_location;
-	if (await os === 'linux') launcher_location = `${await homedir}/.local/share/lutris`;
-	if (checkForLutris && !isLauncherInstalled(launcher_location)) return false;
-	return launcher_location;
-}
-
-function isLauncherInstalled(path) {
-	if (typeof path === 'string') {
-		return fs.readDir(path);
-	} else if (Array.isArray(path)) {
-		return path.map(x => fs.readDir(x)).includes(true);
+	if (await os === 'linux') launcher_location = `${await homedir}.local/share/lutris`;
+	try {
+			await fs.readDir(launcher_location);
+	} catch (err) {
+			return false;
 	}
+	return launcher_location;
 }
 
 async function getInstalledGames(os = window.__TAURI__.os.platform()) {
@@ -39,7 +35,7 @@ async function getInstalledGames(os = window.__TAURI__.os.platform()) {
 			allDBGames.push(obj);
 		})
 		/*await LutrisDB.all(`SELECT * FROM games`, (err, info) => {
-			info.forEach(x => {	
+			info.forEach(x => {
 				const obj = {
 					DisplayName: x.name,
 					GameID: x.slug,
