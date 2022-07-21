@@ -19,6 +19,7 @@ window.addEventListener("load", async function () {
     if (err) throw err;
   }));
   document.getElementById('text').value = data.username;
+  document.getElementById("output").src = window.__TAURI__.tauri.convertFileSrc(await path.appDir() + "storage/Cache/User/pfp.png");
 
   await require('./launchers/find-games').getInstalledGames()
     .catch((err) => {

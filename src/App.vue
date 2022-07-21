@@ -174,7 +174,7 @@
         <div>
           <div class="user-pfp">
             <label for="file"></label>
-            <input id="file" type="file" accept="image/*" @change="(event) => loadFile(event)" />
+            <input id="file" type="file" accept="image/png" @change="(event) => loadFile(event)" />
             <img src="./assets/default-profile.svg" alt="Avatar" width="85" height="85" id="output">
           </div>
           <input class="username" id="text" type="text" value="Lazap" spellcheck="false" maxlength="12" />
@@ -257,7 +257,6 @@
 <script>
 import listeners from './components/listeners.vue'
 import storage from './components/storage.vue'
-const Window = window.__TAURI__.window
 
 export default {
   async created() {
@@ -274,25 +273,25 @@ export default {
   storage,
   methods: {
     min_window() {
-      Window.appWindow.minimize()
+      window.__TAURI__.window.appWindow.minimize()
     },
     max_window() {
-      Window.appWindow.toggleMaximize()
+      window.__TAURI__.window.appWindow.toggleMaximize()
     },
     close_window() {
-      Window.appWindow.close()
+      window.__TAURI__.window.appWindow.close()
     },
-    loadFile(event) {
+    async loadFile(event) {
       var selectedFile = event.target.files[0];
       var reader = new FileReader();
 
-      reader.onload = function (event) {
-        document.getElementById("output").src = event.target.result;
+      reader.readAsArrayBuffer(selectedFile);
+      reader.onload = async function () {
+        const appDirPath = await window.__TAURI__.path.appDir();
+        await window.__TAURI__.fs.writeBinaryFile(appDirPath + `storage/Cache/User/pfp.png`, reader.result);
+        document.getElementById("output").src = window.__TAURI__.tauri.convertFileSrc(appDirPath + "storage/Cache/User/pfp.png");
       };
-
-      reader.readAsDataURL(selectedFile);
     }
-
   }
 };
 </script>

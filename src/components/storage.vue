@@ -23,6 +23,9 @@ const path = window.__TAURI__.path;
   fs.createDir(appDirPath + "storage/Cache", { recursive: true }, (err) => {
     if (err) throw err;
   });
+  fs.createDir(appDirPath + "storage/Cache/User", { recursive: true }, (err) => {
+    if (err) throw err;
+  })
   fs.createDir(appDirPath + "storage/Cache/Games", { recursive: true }, (err) => {
     if (err) throw err;
   });
