@@ -135,6 +135,10 @@ async function loadGames(id) {
 
         game.Banner = banner;
 
+        gameBanner.addEventListener('click', async () => {
+            handleLaunch(game);
+            VisibilityState()
+        });
         if (id.startsWith('recent') && id.includes('Main')) return game;
 
         // Set Game Display Name
