@@ -83,7 +83,7 @@ async function loadGames(id) {
         }
         else if (id === 'favGames') {
             const data = await getGames(x.GameID, x.LauncherName);
-            if (typeof data?.Favourite === 'boolean' && data?.Favourite === true) resolvedGames.push(x);
+            if (typeof data?.Favourite === 'boolean' && data?.Favourite === true || false) resolvedGames.push(x);
         }
         else if (id.startsWith('recent') && id.includes('Main')) {
             const data = await getGames(x.GameID, x.LauncherName);
@@ -228,20 +228,16 @@ async function setGames(games, src) {
     if (!Array.isArray(data)) {
         data = [];
     }
-    data = data.filter(x => games.map(y => y.GameID).includes(x.GameID));
     for (let i = 0; i < games.length; i++) {
         let dgame = data.find(x => x.GameID === games[i].GameID);
         let ngame = games[i];
         if (!dgame) data.push(games[i]);
-        if (typeof ngame?.Launches === 'number' && typeof dgame?.Launches !== 'number') dgame.Launches = ngame.Launches;
-        else if (typeof dgame?.Launches === 'number' && typeof ngame?.Launches !== 'number') ngame.Launches = dgame.Launches;
-        if (typeof ngame?.LastLaunch === 'number' && typeof dgame?.LastLaunch !== 'number') dgame.LastLaunch = ngame.LastLaunch;
-        else if (typeof dgame?.LastLaunch !== 'number' && typeof ngame?.LastLaunch !== 'number') ngame.LastLaunch = dgame.LastLaunch;
-        if (typeof ngame?.Favourite === 'boolean' && typeof dgame?.Favourite !== 'boolean') dgame.Favourite = ngame.Favourite;
-        else if (typeof dgame?.Favourite === 'boolean' && typeof ngame?.Favourite !== 'boolean') ngame.Favourite = dgame.Favourite;
-        if (dgame && ((dgame?.Executable !== ngame?.Executable) || (dgame?.Location !== ngame?.Location))) {
-            data[data.findIndex(dgame)] = ngame;
-        }
+        if (dgame?.Launches && !ngame?.Launches) ngame.Launches = dgame.Launches;
+        if (ngame?.Launches && !dgame?.Launches) dgame.Launches = ngame.Launches;
+        if (dgame?.LastLaunch && !ngame?.LastLaunch) ngame.LastLaunch = dgame.LastLaunch;
+        if (ngame?.LastLaunch && !dgame?.LastLaunch) dgame.LastLaunch = ngame.LastLaunch;
+        if (dgame?.Favourite && !ngame?.Favourite) ngame.Favourite = dgame.Favourite;
+        if (ngame?.Favourite && !dgame?.Favourite) dgame.Favourite = ngame.Favourite;
     }
     fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(data));
 }
