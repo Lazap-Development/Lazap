@@ -74,6 +74,7 @@ async function loadGames(id) {
     for (let i = 0; i < games.length; i++) {
         let x = games[i];
         if (games_blacklist.includes(x.GameID)) continue;
+		if (list.children.namedItem(`game-div-${x.DisplayName}`) !== null) continue;
         if (id === 'allGames') {
             resolvedGames.push(x);
         }
