@@ -285,12 +285,11 @@ export default {
       var selectedFile = event.target.files[0];
       var reader = new FileReader();
 
-      reader.readAsArrayBuffer(selectedFile);
       reader.onload = async function () {
-        const appDirPath = await window.__TAURI__.path.appDir();
-        await window.__TAURI__.fs.writeBinaryFile(appDirPath + `storage/Cache/User/pfp.png`, reader.result);
-        document.getElementById("output").src = window.__TAURI__.tauri.convertFileSrc(appDirPath + "storage/Cache/User/pfp.png");
+        await window.__TAURI__.fs.writeBinaryFile(await window.__TAURI__.path.appDir() + `storage/Cache/User/pfp.png`, reader.result);
+        document.getElementById("output").src = window.__TAURI__.tauri.convertFileSrc(await window.__TAURI__.path.appDir() + `storage/Cache/User/pfp.png`) + `?${new Date().getSeconds()}`;
       };
+      reader.readAsArrayBuffer(selectedFile);
     }
   }
 };
