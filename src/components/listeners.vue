@@ -15,7 +15,7 @@ window.addEventListener("load", async function () {
   const fs = window.__TAURI__.fs;
   const path = window.__TAURI__.path;
 
-  const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/UserProfile.json', (err) => {
+  const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/Cache/User/UserProfile.json', (err) => {
     if (err) throw err;
   }));
   document.getElementById('text').value = data.username;
@@ -143,7 +143,7 @@ window.addEventListener("load", async function () {
 
   document.getElementById('text').addEventListener('change', async (e) => {
     const appDirPath = await path.appDir();
-    fs.writeTextFile(appDirPath + 'storage/UserProfile.json', JSON.stringify({ username: e.target.value, }), (err) => {
+    fs.writeTextFile(appDirPath + 'storage/Cache/User/UserProfile.json', JSON.stringify({ username: e.target.value, }), (err) => {
       if (err) throw err;
     });
   });

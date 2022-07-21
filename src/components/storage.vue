@@ -40,9 +40,9 @@ const path = window.__TAURI__.path;
   }
 
   try {
-    JSON.parse(await fs.readTextFile(appDirPath + "storage/UserProfile.json"));
+    JSON.parse(await fs.readTextFile(appDirPath + "storage/Cache/User/UserProfile.json"));
   } catch (e) {
-    fs.writeTextFile(appDirPath + "storage/UserProfile.json", JSON.stringify({ username: "Lazap" }));
+    fs.writeTextFile(appDirPath + "storage/Cache/User/UserProfile.json", JSON.stringify({ username: "Lazap" }));
   }
 
   try {
