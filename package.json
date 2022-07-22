@@ -1,76 +1,50 @@
 {
-    "name": "lazap",
-    "version": "0.3.0",
-    "description": "All your games at one library with a modernish look and experience",
-    "main": "./index.js",
-    "scripts": {
-        "start": "electron .",
-        "build": "IF exist \"dist\" ( rmdir /s /q dist && electron-builder build ) ELSE ( electron-builder build )",
-        "build:dev": "IF exist \"dist\" ( rmdir /s /q dist && electron-builder build --dir ) ELSE ( electron-builder build --dir )",
-        "build:armv7h": "electron-builder build --armv7l --linux dir",
-        "build:i686": "electron-builder build --ia32 --linux dir",
-        "build:x86_64": "electron-builder build --x64 --linux dir",
-        "publish:draft": "echo Make sure to change the publish settings if you are testing! && pause && IF exist \"dist\" ( rmdir /s /q dist && electron-builder build -p onTagOrDraft ) ELSE ( electron-builder build -p onTagOrDraft )"
+  "name": "lazap",
+  "version": "0.4.0",
+  "private": false,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "tauri:build": "vue-cli-service tauri:build",
+    "tauri:serve": "vue-cli-service tauri:serve"
+  },
+  "author": "Lazap Development",
+  "license": "ISC",
+  "dependencies": {
+    "@tauri-apps/api": "^1.0.2",
+    "core-js": "^3.8.3",
+    "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql",
+    "vue": "^3.2.13"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "eslint": "^7.32.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "vue-cli-plugin-tauri": "~1.0.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
     },
-    "build": {
-        "files": [
-            "**/*",
-            "!electron-builder.env",
-            "!.env",
-            "!storage",
-            "!README.md",
-            "!dist",
-            "!dev-app-update.yml",
-            "!.gitignore",
-            "!.eslintrc.json",
-            "!Lazap Development.pfx",
-            "!src/js/launchers/LinuxGames.js",
-            "!src/js/launchers/RockstarGames.js",
-            "!src/modules/login.js"
-        ],
-        "productName": "Lazap",
-        "forceCodeSigning": false,
-        "directories": {
-            "buildResources": "./img/icons/"
-        },
-        "nsis": {
-            "installerIcon": "./img/icons/icon.ico",
-            "license": "./LICENSE.md",
-            "runAfterFinish": false,
-            "uninstallDisplayName": "Lazap",
-            "oneClick": false,
-            "perMachine": false,
-            "publish": {
-                "provider": "github",
-                "releaseType": "draft",
-                "repo": "lazap",
-                "owner": "Lazap-Development"
-            }
-        }
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Lazap-Development/lazap.git"
-    },
-    "author": "Lazap Development",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/Lazap-Development/lazap/issues"
-    },
-    "homepage": "https://github.com/Lazap-Development/lazap#readme",
-    "dependencies": {
-        "deepmerge": "^4.2.2",
-        "discord-rpc": "^4.0.1",
-        "electron-updater": "^5.0.5",
-        "htmlparser2": "^8.0.1",
-        "md5": "^2.3.0",
-        "node-fetch": "^2.6.1",
-        "v8-compile-cache": "^2.3.0"
-    },
-    "devDependencies": {
-        "electron": "^19.0.7",
-        "electron-builder": "^23.1.0",
-        "eslint": "8.19.0",
-        "open-term": "^2.0.4"
-    }
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
 }

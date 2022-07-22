@@ -1,0 +1,116 @@
+{
+  "$schema": "../node_modules/@tauri-apps/cli/schema.json",
+  "build": {
+    "beforeBuildCommand": "",
+    "beforeDevCommand": "",
+    "devPath": "Set automatically by Vue CLI plugin",
+    "distDir": "Set automatically by Vue CLI plugin",
+    "withGlobalTauri": true
+  },
+  "package": {
+    "productName": "Lazap",
+    "version": "0.4.0"
+  },
+  "tauri": {
+    "systemTray": {
+      "iconPath": "icons/icon.ico",
+      "iconAsTemplate": true
+    },
+    "allowlist": {
+      "all": true,
+      "fs": {
+        "scope": [
+          "**"
+        ]
+      },
+      "shell": {
+        "all": true,
+        "execute": true,
+        "open": true,
+        "scope": [
+          {
+            "name": "which",
+            "cmd": "which",
+            "args": true
+          },
+          {
+            "name": "pwd",
+            "cmd": "pwd",
+            "args": true
+          },
+          {
+            "name": "cmd",
+            "cmd": "cmd",
+            "args": true
+          },
+          {
+            "name": "start",
+            "cmd": "start",
+            "args": true
+          }
+        ],
+        "sidecar": true
+      },
+      "http": {
+        "scope": ["https://**", "http://**"]
+      },
+      "protocol": {
+        "asset": true,
+        "assetScope": ["**"]
+      }
+    },
+    "bundle": {
+      "active": true,
+      "category": "DeveloperTool",
+      "copyright": "",
+      "deb": {
+        "depends": []
+      },
+      "externalBin": [],
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "identifier": "com.lazap.dev",
+      "longDescription": "",
+      "macOS": {
+        "entitlements": null,
+        "exceptionDomain": "",
+        "frameworks": [],
+        "providerShortName": null,
+        "signingIdentity": null
+      },
+      "resources": [],
+      "shortDescription": "",
+      "targets": "all",
+      "windows": {
+        "certificateThumbprint": null,
+        "digestAlgorithm": "sha256",
+        "timestampUrl": ""
+      }
+    },
+    "security": {
+      "csp": null
+    },
+    "updater": {
+      "active": false
+    },
+    "windows": [
+      {
+        "label":"main",
+        "fullscreen": false,
+        "resizable": true,
+        "title": "Lazap",
+        "height": 630,
+        "width": 1360,
+        "minHeight": 550,
+        "minWidth": 1150,
+        "center": true,
+        "decorations": false
+      }
+    ]
+  }
+}
