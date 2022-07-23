@@ -81,7 +81,6 @@ async function loadGames(id) {
         else if (id.startsWith('recent') && id.includes('Main')) {
             const data = await getGames(x.GameID, x.LauncherName);
             if (typeof data?.Launches === 'number') resolvedGames.push(x);
-            if (resolvedGames.length > 5) resolvedGames.shift();
         }
     }
     resolvedGames = await sort(resolvedGames, id === 'allGames' ? 'alphabetical' : id === 'recentGames' || (id.startsWith('recent') && id.includes('Main')) ? 'lastLaunch' : 'none');
@@ -213,7 +212,7 @@ async function sort(games, type) {
     }
     else if (type === 'lastLaunch') {
         const data = await getGames();
-        return games.filter(x => data.find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName)?.LastLaunch).sort((a, b) => data.find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch);
+        return games.filter(x => data.slice(0, 6).find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName)?.LastLaunch).sort((a, b) => data.slice(0, 6).find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.slice(0, 6).find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch);
     }
     return games;
 }
