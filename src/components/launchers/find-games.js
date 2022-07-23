@@ -13,6 +13,7 @@ const games_blacklist = [
     '1493710', // Proton Exp
     '1391110', // Steam Linux Runtime
     '1070560', // Steam Linux Runtime
+    '1826330', // Proton EasyAntiCheat Runtime
     '1113280', // Proton 4.11
     '1245040', // Proton 5.0
     '1420170', // Proton 5.13
