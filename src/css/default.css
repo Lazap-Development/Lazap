@@ -346,8 +346,9 @@ body {
 
 .online-friends .CMS {
     color: rgba(226, 226, 226, 0.1);
-    margin-top: 185px;
-    font-size: 38px;
+    margin-top: 60%;
+    margin-left: 10px;
+    font-size: 40px;
     transform: rotate(-90deg);
 }
 
@@ -526,15 +527,13 @@ body {
 .mainPageGamesList {
     position: absolute;
     width: 99%;
-    height: 82%;
-    margin-top: 35px;
+    height: 100%;
     display: flex;
     flex-wrap: wrap;
-    align-content: flex-start;
+    align-content: center;
     align-items: center;
-    justify-content: flex-start;
-    margin-left: 2.5%;
-
+    justify-content: center;
+    align-items: center;
 }
 
 .mainPageGamebox {
@@ -544,12 +543,16 @@ body {
     display: inline-block;
     border-radius: 14px;
     transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
-    margin-left: 26px;
-    height: 180px;
-    width: 130px;
-    object-fit: contain;
-}
 
+    height: 60%;
+    width: 16%;
+}
+.mainPageGamebox:nth-child(1) {
+    margin-left: 1%;
+}
+.mainPageGamebox:nth-last-child(-n+4) {
+    margin-left: 3%;
+}
 .mainPageGamebox:hover {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     transform: scale(1.05);
@@ -557,12 +560,12 @@ body {
 }
 
 .mainPageGamebox img {
-    height: 180px;
-    width: 130px;
-    object-fit: contain;
-    border-radius: 10px;
-    image-rendering: auto;
     object-fit: cover;
+    object-position: top;
+    display: block;
+    height: 100%;
+    width: 100%;
+    border-radius: 14px;
 }
 
 .mainPageGamebox span {
