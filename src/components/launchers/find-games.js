@@ -82,8 +82,8 @@ async function loadGames(id) {
             const data = await getGames(x.GameID, x.LauncherName);
             if (typeof data?.Launches === 'number') resolvedGames.push(x);
         }
-    }
-    resolvedGames = await sort(resolvedGames, id === 'allGames' ? 'alphabetical' : id === 'recentGames' || (id.startsWith('recent') && id.includes('Main')) ? 'lastLaunch' : 'none');
+    }   
+    resolvedGames = await sort(resolvedGames, id === 'allGames' ? 'alphabetical' : id === 'recentGames' ? 'lastLaunch' : 'lastLaunchMainMenu');
 
     if ((list.children.length === resolvedGames.length) && list.children.length !== 0) {
         if (resolvedGames.every((x, i) => list.children.item(i).id === `game-div-${x.DisplayName}`)) {
@@ -207,10 +207,15 @@ async function loadGames(id) {
 }
 
 async function sort(games, type) {
+    console.log(type)
     if (type === 'alphabetical') {
         return games.map(x => x.DisplayName).sort().map(x => games[games.findIndex(y => y.DisplayName === x)]);
     }
     else if (type === 'lastLaunch') {
+        const data = await getGames();
+        return games.filter(x => data.find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName)?.LastLaunch).sort((a, b) => data.find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch);
+    }
+    else if (type === 'lastLaunchMainMenu') {
         const data = await getGames();
         return games.filter(x => data.slice(0, 6).find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName)?.LastLaunch).sort((a, b) => data.slice(0, 6).find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.slice(0, 6).find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch);
     }
