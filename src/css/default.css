@@ -121,8 +121,6 @@ body {
 
 .titlebar {
     overflow: hidden;
-
-
     border-radius: 10px;
     background-color: #202126;
     height: 35px;
@@ -159,7 +157,7 @@ body {
 }
 
 .titlebar-exit:hover {
-    background: #c80000;
+    background: #ff0000;
     
     background-size: cover;
 }

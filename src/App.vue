@@ -31,9 +31,9 @@
       </div>
 
       <div>
-        <p>Launch on Startup</p>
+        <p>(X) Launch on Startup</p>
         <label class="switch">
-          <input type="checkbox" id="setting-launchOnStartup">
+          <input type="checkbox" id="setting-launchOnStartup" disabled="readonly">
           <div>
             <span></span>
           </div>
@@ -41,9 +41,9 @@
       </div>
 
       <div>
-        <p>Skip Login Menu</p>
+        <p>(X) Skip Login Menu</p>
         <label class="switch">
-          <input type="checkbox" id="setting-skipLogin">
+          <input type="checkbox" id="setting-skipLogin" disabled="readonly">
           <div>
             <span></span>
           </div>
@@ -71,9 +71,9 @@
       </div>
 
       <div>
-        <p>Check for Updates</p>
+        <p>(X) Check for Updates</p>
         <label class="switch">
-          <input type="checkbox" id="setting-checkForUpdates">
+          <input type="checkbox" id="setting-checkForUpdates" disabled="readonly">
           <div>
             <span></span>
           </div>
