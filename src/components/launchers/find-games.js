@@ -10,8 +10,8 @@ let cachedGames = [];
 let running = false;
 const processes = new Map();
 
-function wintoesFix(str, index, value) { 
-    return str.substr(0, index) + value + str.substr(index); 
+function wintoesFix(str, index, value) {
+    return str.substr(0, index) + value + str.substr(index);
 }
 async function rootDir() {
     if (await os.platform() === 'win32') {
@@ -81,6 +81,7 @@ async function loadGames(id) {
         else if (id.startsWith('recent') && id.includes('Main')) {
             const data = await getGames(x.GameID, x.LauncherName);
             if (typeof data?.Launches === 'number') resolvedGames.push(x);
+            if (resolvedGames.length > 5) resolvedGames.shift();
         }
     }
     resolvedGames = await sort(resolvedGames, id === 'allGames' ? 'alphabetical' : id === 'recentGames' || (id.startsWith('recent') && id.includes('Main')) ? 'lastLaunch' : 'none');
