@@ -347,7 +347,7 @@ body {
 .online-friends .CMS {
     color: rgba(226, 226, 226, 0.1);
     margin-top: 60%;
-    margin-left: 10px;
+    margin-left: 10pxy;
     font-size: 40px;
     transform: rotate(-90deg);
 }
@@ -542,10 +542,10 @@ body {
     text-align: center;
     display: inline-block;
     border-radius: 14px;
-    transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
-
+    transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
     height: 60%;
     width: 16%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 .mainPageGamebox:nth-child(1) {
     margin-left: 1%;
@@ -555,7 +555,7 @@ body {
 }
 .mainPageGamebox:hover {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    transform: scale(1.05);
+    transform: scale(0.95);
     cursor: pointer;
 }
 

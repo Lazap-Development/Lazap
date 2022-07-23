@@ -217,7 +217,7 @@ async function sort(games, type) {
     }
     else if (type === 'lastLaunchMainMenu') {
         const data = await getGames();
-        return games.filter(x => data.slice(0, 6).find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName)?.LastLaunch).sort((a, b) => data.slice(0, 6).find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.slice(0, 6).find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch);
+        return games.filter(x => data.find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName)?.LastLaunch).sort((a, b) => data.find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch).slice(0, 6);
     }
     return games;
 }
