@@ -7,23 +7,21 @@ const tauri = window.__TAURI__.tauri;
 
 let lastCheck;
 let cachedGames = [];
-const games_blacklist = [
-    '228980', // Steamworks Common Redistributables
-    '231350', // 3D Mark Demo
-    '1493710', // Proton Exp
-    '1391110', // Steam Linux Runtime
-    '1070560', // Steam Linux Runtime
-    '1113280', // Proton 4.11
-    '1245040', // Proton 5.0
-    '1420170', // Proton 5.13
-    '1580130', // Proton 6.3
-    '1887720', // Proton 7.0
-];
 let running = false;
 const processes = new Map();
 
+function wintoesFix(str, index, value) {
+    return str.substr(0, index) + value + str.substr(index);
+}
+async function rootDir() {
+    if (await os.platform() === 'win32') {
+        return wintoesFix(await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname))), 2, "\\")
+    } else if (await os.platform() === 'linux') {
+        return await path.dirname(decodeURI(new URL(import.meta.url).pathname))
+    }
+}
+
 async function getInstalledGames() {
-    // Cooldown
     if (!lastCheck) {
         lastCheck = Date.now();
     }
@@ -31,15 +29,7 @@ async function getInstalledGames() {
         return `COOLDOWN_${(lastCheck + 1000 * 4) - Date.now()}`;
     }
 
-    function fix(str, index, value) { return str.substr(0, index) + value + str.substr(index); }
-    let rootDir;
-    if (await os.platform() === 'win32') {
-        rootDir = fix(await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname))), 2, "\\")
-    } else if (await os.platform() === 'linux') {
-        rootDir = await path.dirname(decodeURI(new URL(import.meta.url).pathname))
-    }
-
-    let data = await fs.readDir(rootDir);
+    let data = await fs.readDir(await rootDir());
     const launchers = data.map(x => x.name).filter(x => require(`./${x}`)?.getInstalledGames && !['find-games.js'].includes(x));
     const games = (await Promise.all(launchers.map(x => require(`./${x}`).getInstalledGames()))).flat().filter(x => Object.keys(x).length > 0).flat();
     if (games.length < 1) {
@@ -70,11 +60,13 @@ async function loadGames(id) {
         cachedGames = games;
     }
 
+    const games_blacklist = JSON.parse(await fs.readTextFile(await path.join(await rootDir(), "../blacklist.json")))
+
     let resolvedGames = [];
     for (let i = 0; i < games.length; i++) {
         let x = games[i];
-        if (games_blacklist.includes(x.GameID)) continue;
-		if (list.children.namedItem(`game-div-${x.DisplayName}`) !== null) continue;
+        if (games_blacklist[0].includes(x.GameID)) continue;
+        if (list.children.namedItem(`game-div-${x.DisplayName}`) !== null) continue;
         if (id === 'allGames') {
             resolvedGames.push(x);
         }
@@ -90,14 +82,14 @@ async function loadGames(id) {
             const data = await getGames(x.GameID, x.LauncherName);
             if (typeof data?.Launches === 'number') resolvedGames.push(x);
         }
-    }
-    resolvedGames = await sort(resolvedGames, id === 'allGames' ? 'alphabetical' : id === 'recentGames' || (id.startsWith('recent') && id.includes('Main')) ? 'lastLaunch' : 'none');
+    }   
+    resolvedGames = await sort(resolvedGames, id === 'allGames' ? 'alphabetical' : id === 'recentGames' ? 'lastLaunch' : 'lastLaunchMainMenu');
 
     if ((list.children.length === resolvedGames.length) && list.children.length !== 0) {
         if (resolvedGames.every((x, i) => list.children.item(i).id === `game-div-${x.DisplayName}`)) {
-			running = false;
-			return;
-		}
+            running = false;
+            return;
+        }
     }
 
     resolvedGames = resolvedGames.map(async (game) => {
@@ -215,6 +207,7 @@ async function loadGames(id) {
 }
 
 async function sort(games, type) {
+    console.log(type)
     if (type === 'alphabetical') {
         return games.map(x => x.DisplayName).sort().map(x => games[games.findIndex(y => y.DisplayName === x)]);
     }
@@ -222,13 +215,17 @@ async function sort(games, type) {
         const data = await getGames();
         return games.filter(x => data.find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName)?.LastLaunch).sort((a, b) => data.find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch);
     }
+    else if (type === 'lastLaunchMainMenu') {
+        const data = await getGames();
+        return games.filter(x => data.find(y => y.GameID === x.GameID && y.LauncherName === x.LauncherName)?.LastLaunch).sort((a, b) => data.find(x => x.GameID === b.GameID && x.LauncherName === b.LauncherName).LastLaunch - data.find(x => x.GameID === a.GameID && x.LauncherName === a.LauncherName).LastLaunch).slice(0, 6);
+    }
     return games;
 }
 
 async function setGames(games, src) {
     const appDirPath = await path.appDir();
     const GAMES_DATA_BASE_PATH = appDirPath + 'storage/Cache/Games/Data.json';
-	if (!['all-games'].includes(src)) return fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
+    if (!['all-games'].includes(src)) return fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
     let data = await getGames();
     if (!Array.isArray(data)) {
         data = [];
