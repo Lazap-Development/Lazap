@@ -20,8 +20,8 @@ window.addEventListener("load", async function () {
   }));
   document.getElementById('text').value = data.username;
   try {
-      await fs.readBinaryFile(await path.appDir() + "storage/Cache/User/pfp.png");
-      document.getElementById("output").src = window.__TAURI__.tauri.convertFileSrc(await path.appDir() + "storage/Cache/User/pfp.png") + `?${new Date().getSeconds()}`;
+    await fs.readBinaryFile(await path.appDir() + "storage/Cache/User/pfp.png");
+    document.getElementById("output").src = window.__TAURI__.tauri.convertFileSrc(await path.appDir() + "storage/Cache/User/pfp.png") + `?${new Date().getSeconds()}`;
   } catch (err) {
     console.log(err);
   }
@@ -39,17 +39,20 @@ window.addEventListener("load", async function () {
   document.getElementById('main-loading-overlay').style.opacity = '0';
   document.getElementById('main-loading-overlay').style.visibility = 'hidden';
 
-  document.querySelectorAll('.side-tab').forEach((link) =>
-    link.addEventListener('click', (e) => {
-      marker.style.top = '0';
-      marker.style.height = '0px';
-      indicator(e.target);
-    }),
-  );
-
   document.getElementById('alertboxexit').addEventListener('click', function () {
     alertbox.style.display = 'none';
   });
+
+
+  Array.from(document.getElementsByClassName('side-tab')).forEach((link) => {
+    link.addEventListener('click', (e) => {
+      marker.style.top = '0';
+      marker.style.height = '0px';
+      marker.style.top = e.target.offsetTop + 'px';
+      marker.style.height = '30px';
+    })
+  })
+
 
   document.getElementById('home-btn').addEventListener('click', async function () {
     home.style.display = 'flex';
@@ -208,12 +211,5 @@ window.addEventListener("load", async function () {
       }
     });
   });
-
-
-  function indicator(item) {
-    marker.style.top = item.offsetTop + 'px';
-    marker.style.height = '30px';
-  }
-
 });
 </script>

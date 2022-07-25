@@ -49,7 +49,25 @@ async function getBannerResponse(games, id) {
 
 async function cacheBanners(data, res) {
     const appDirPath = await path.appDir();
+    const sha256 = require("../modules/sha256")
     const GAME_BANNERS_BASE_PATH = appDirPath + 'storage/Cache/Games/Images';
+    const ALREADY_GAME_BANNERS = await fs.readDir(GAME_BANNERS_BASE_PATH);
+    let alreadyProcessed = false;
+    let itemsProcessed = 0;
+
+    ALREADY_GAME_BANNERS.forEach(async (x) => {
+        data.forEach (async (i) => {
+            if (x.name  === `${sha256.convert(i.DisplayName)}.png`) {
+                alreadyProcessed = true;
+            }
+        })
+    })
+
+    if(alreadyProcessed === true) {
+        document.getElementById('game-loading-overlay').style.opacity = '0';
+        document.getElementById('game-loading-overlay').style.visibility = 'hidden';
+        return console.log("[BANNER] Banners are already loaded. Skipping.");
+    }
 
     res.filter(async (x) => (await x).startsWith('http')).forEach(async (x, i) => {
         await http.fetch(await x, {
@@ -60,20 +78,17 @@ async function cacheBanners(data, res) {
             responseType: 3
         }).then(async (response) => {
             if (response.status === 404 && data[i].LauncherName === "Lutris") return;
-            await fs.writeBinaryFile(GAME_BANNERS_BASE_PATH + `/${require("../modules/sha256").sha256(data[i].DisplayName)}.png`, response.data);
-            document.getElementById(`game-div-${data[i].DisplayName}`).firstElementChild.setAttribute('src', tauri.convertFileSrc(GAME_BANNERS_BASE_PATH + `/${require("../modules/sha256").sha256(data[i].DisplayName)}.png`));
+            await fs.writeBinaryFile(GAME_BANNERS_BASE_PATH + `/${sha256.convert(data[i].DisplayName)}.png`, response.data);
+            document.getElementById(`game-div-${data[i].DisplayName}`).firstElementChild.setAttribute('src', tauri.convertFileSrc(GAME_BANNERS_BASE_PATH + `/${sha256.convert(data[i].DisplayName)}.png`));
         }).catch((e) => console.log(e));
+        
+        itemsProcessed++;
+        if (itemsProcessed === data.length) {
+            document.getElementById('game-loading-overlay').style.opacity = '0';
+            document.getElementById('game-loading-overlay').style.visibility = 'hidden';
+            return console.log("[BANNER] Just finished processing banners.");
+        }
     });
-
-    const gamesList = document.querySelectorAll('#allGamesList > div');
-    setTimeout(() => {
-        document.getElementById('game-loading-overlay').style.opacity = '0';
-        document.getElementById('game-loading-overlay').style.visibility = 'hidden';
-    }, 100);
-    setTimeout(() =>
-        gamesList.forEach(gameElement => {
-            gameElement.firstElementChild.style.opacity = '1'
-        }), 100);
 }
 
 export {

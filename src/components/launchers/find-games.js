@@ -108,7 +108,7 @@ async function loadGames(id) {
         if (game.LauncherName !== 'XboxGames') {
             try {
                 const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH);
-                const img = dirs.find(x => x.name === `${require("../modules/sha256").sha256(game.DisplayName)}.png`);
+                const img = dirs.find(x => x.name === `${require("../modules/sha256").convert(game.DisplayName)}.png`);
 
                 banner = img ? tauri.convertFileSrc(appDirPath + `storage/Cache/Games/Images/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
             } catch (err) {
@@ -121,7 +121,6 @@ async function loadGames(id) {
         }
 
         gameBanner.setAttribute('src', banner);
-        gameBanner.style = `opacity: ${id === 'allGames' ? '0.2' : '1'};`;
         gameBanner.height = 500;
         gameBanner.width = 500;
         gameElement.appendChild(gameBanner);
@@ -207,7 +206,6 @@ async function loadGames(id) {
 }
 
 async function sort(games, type) {
-    console.log(type)
     if (type === 'alphabetical') {
         return games.map(x => x.DisplayName).sort().map(x => games[games.findIndex(y => y.DisplayName === x)]);
     }
@@ -274,7 +272,6 @@ async function handleLaunch(game) {
                 break;
             }
             case 'Steam': {
-                console.log(game.GameID)
                 res = createProcess('cmd', `/C start /min cmd /c start steam://rungameid/${game.GameID} --wait`, game.GameID);
                 break;
             }
@@ -318,11 +315,7 @@ async function handleLaunch(game) {
     }
 
     if (res === 'RUNNING_ALREADY') {
-        document.querySelector('.alert-box-message').textContent = `${game.DisplayName} is already running!`;
-        document.querySelector('.alert-box').style.marginTop = '40px';
-        document.querySelector('.alert-box').style.visibility = 'visible';
-        document.querySelector('.alert-box').style.opacity = '1';
-        return document.querySelector('.alert-box').style.display = 'flex';
+        return;
     }
 
     addLaunch(game.GameID, game.LauncherName);
