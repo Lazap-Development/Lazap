@@ -9,7 +9,6 @@ window.addEventListener("load", async function () {
   const messages = document.getElementById('messages');
   const activity = document.getElementById('activity');
   const settings = document.getElementById('settings-popup');
-  const alertbox = document.getElementById('alertbox');
   const settingsbackblur = document.getElementById('settings-backblur');
   const searchbars = document.querySelectorAll('div.search-bar > input[type="text"]');
   const fs = window.__TAURI__.fs;
@@ -38,21 +37,7 @@ window.addEventListener("load", async function () {
 
   document.getElementById('main-loading-overlay').style.opacity = '0';
   document.getElementById('main-loading-overlay').style.visibility = 'hidden';
-
-  document.getElementById('alertboxexit').addEventListener('click', function () {
-    alertbox.style.display = 'none';
-  });
-
-
-  Array.from(document.getElementsByClassName('side-tab')).forEach((link) => {
-    link.addEventListener('click', (e) => {
-      marker.style.top = '0';
-      marker.style.height = '0px';
-      marker.style.top = e.target.offsetTop + 'px';
-      marker.style.height = '30px';
-    })
-  })
-
+  marker.style.top = '0px';
 
   document.getElementById('home-btn').addEventListener('click', async function () {
     home.style.display = 'flex';
@@ -62,6 +47,9 @@ window.addEventListener("load", async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
+
+    marker.style.top = '0px';
+
     await require('./launchers/find-games').loadGames('recentGamesListMainPage')
       .catch((err) => {
         return console.log(err);
@@ -76,6 +64,10 @@ window.addEventListener("load", async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
+
+    marker.style.top = '81px';
+    marker.style.height = '30px';
+
     await require('./launchers/find-games').loadGames('recentGames')
       .catch((err) => {
         return console.log(err);
@@ -83,6 +75,8 @@ window.addEventListener("load", async function () {
   });
 
   document.getElementById('games-btn').addEventListener('click', async function () {
+    marker.style.top = '131px';
+
     home.style.display = 'none';
     recent.style.display = 'none';
     games.style.display = 'flex';
@@ -90,6 +84,7 @@ window.addEventListener("load", async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
+
     await require('./launchers/find-games').loadGames('allGames')
       .catch((err) => {
         return console.log(err);
@@ -99,6 +94,8 @@ window.addEventListener("load", async function () {
   });
 
   document.getElementById('favs-btn').addEventListener('click', async function () {
+    marker.style.top = '180px';
+
     home.style.display = 'none';
     recent.style.display = 'none';
     games.style.display = 'none';
@@ -106,6 +103,7 @@ window.addEventListener("load", async function () {
     messages.style.display = 'none';
     activity.style.display = 'none';
     friends.style.display = 'none';
+
     await require('./launchers/find-games').loadGames('favGames')
       .catch((err) => {
         return console.log(err);
@@ -115,6 +113,8 @@ window.addEventListener("load", async function () {
   });
 
   document.getElementById('messages-btn').addEventListener('click', async function () {
+    marker.style.top = '261px';
+
     home.style.display = 'none';
     recent.style.display = 'none';
     games.style.display = 'none';
@@ -125,6 +125,8 @@ window.addEventListener("load", async function () {
   });
 
   document.getElementById('activity-btn').addEventListener('click', async function () {
+    marker.style.top = '311px';
+
     home.style.display = 'none';
     recent.style.display = 'none';
     games.style.display = 'none';
@@ -135,6 +137,8 @@ window.addEventListener("load", async function () {
   });
 
   document.getElementById('friends-btn').addEventListener('click', async function () {
+    marker.style.top = '361px';
+
     home.style.display = 'none';
     recent.style.display = 'none';
     games.style.display = 'none';

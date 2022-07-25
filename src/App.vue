@@ -1,18 +1,4 @@
 <template>
-  <div class="alert-box fadeInUpNoDelay" id="alertbox">
-    <div class="alert-box-container">
-      <img class="alert-box-exclamation" src="./assets/triangle.svg">
-      <p class="alert-box-title">Alert</p>
-
-      <span class="alert-box-cross" id="alertboxexit">&times;</span>
-
-      <hr class="alert-box-divider">
-      <div class="alert-box-message" style="align-items: center;">
-        <p class=alert-box-message>The Launcher Loaded 😱</p>
-      </div>
-    </div>
-  </div>
-
   <div class="settings-background fadeInDownNoDelay" id="settings-backblur"></div>
   <div class="settings fadeInDown" id="settings-popup">
     <div>
@@ -31,7 +17,7 @@
       </div>
 
       <div>
-        <p>(X) Launch on Startup</p>
+        <p>Launch on Startup</p>
         <label class="switch">
           <input type="checkbox" id="setting-launchOnStartup" disabled="readonly">
           <div>
@@ -41,7 +27,7 @@
       </div>
 
       <div>
-        <p>(X) Skip Login Menu</p>
+        <p>Skip Login Menu</p>
         <label class="switch">
           <input type="checkbox" id="setting-skipLogin" disabled="readonly">
           <div>
@@ -71,7 +57,7 @@
       </div>
 
       <div>
-        <p>(X) Check for Updates</p>
+        <p>Check for Updates</p>
         <label class="switch">
           <input type="checkbox" id="setting-checkForUpdates" disabled="readonly">
           <div>

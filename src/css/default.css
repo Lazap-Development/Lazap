@@ -344,7 +344,7 @@ body {
 
 .online-friends .CMS {
     color: rgba(226, 226, 226, 0.1);
-    margin-top: 60%;
+    margin-top: 64%;
     margin-left: 10pxy;
     font-size: 40px;
     transform: rotate(-90deg);
@@ -422,11 +422,9 @@ body {
     height: 40px;
     width: 230px;
     border-radius: 8px;
-
     display: flex;
-    
     margin-bottom: 10px;
-    transition: background-color 0.1s;
+    transition: background-color 0.05s;
 }
 
 .side-tab:hover {
@@ -446,7 +444,7 @@ body {
 .side-tab .side-tab-text {
     color: #dadada;
     font-size: 18px;
-    margin-left: 20px;
+    margin-left: 16px;
     align-self: center;
     margin-top: 4px;
 }
@@ -463,7 +461,7 @@ body {
     position: absolute;
     margin-top: 5.3px;
     margin-left: 2px;
-
+    
     background-color: rgb(121, 52, 250);
     height: 32px;
     width: 5px;
