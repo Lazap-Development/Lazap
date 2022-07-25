@@ -8,15 +8,15 @@ const { sha256 } = require('../modules/sha256.js');
 
 const processes = new Map();
 
-function wintoesFix(str, index, value) {
-    return str.substr(0, index) + value + str.substr(index);
+function fixPath(str, index, value) {
+	return str.substr(0, index) + value + str.substr(index);
 }
 async function rootDir() {
-    if (await os.platform() === 'win32') {
-        return wintoesFix(await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname))), 2, '\\');
-    } else if (await os.platform() === 'linux') {
-        return await path.dirname(decodeURI(new URL(import.meta.url).pathname));
-    }
+	if (await os.platform() === 'win32') {
+		return fixPath(await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname))), 2, '\\');
+	} else if (await os.platform() === 'linux') {
+		return await path.dirname(decodeURI(new URL(import.meta.url).pathname));
+	}
 }
 
 async function getInstalledGames() {
@@ -25,6 +25,29 @@ async function getInstalledGames() {
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
 
 	return games;
+}
+
+async function filterAndSort(games, type) {
+	const list = document.getElementById(type);
+
+	// Check if the list already has the games loaded and prevent further execution
+	if ((list.children.length === games.length) && list.children.length !== 0) {
+		if (games.every((x, i) => list.children.item(i).id === `game-div-${x.DisplayName.replaceAll(' ', '_')}`)) return [];
+	}
+
+	// Filter out new games and delete old games
+	const games_blacklist = JSON.parse(await fs.readTextFile(await path.join(await rootDir(), "../blacklist.json")))
+	games = games.filter(x => !games_blacklist.includes(x.GameID) && !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`));
+	for (let i = 0; i < list.length; i++) {
+		if (!games.map(x => x.GameID.replaceAll(' ', '_')).includes(list.children[i].id.slice(9))) {
+			list.removeChild(list.children[i]);
+			continue;
+		}
+	}
+
+	if (type === 'allGamesList') {
+		return games.map(x => x.DisplayName).sort().map(x => games[games.findIndex(y => y.DisplayName === x)]);
+	}
 }
 
 async function loadGames() {
@@ -48,10 +71,10 @@ async function loadGames() {
 		const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH).catch(() => []);
 		const img = dirs.find(x => x.name === `${sha256(game.DisplayName.replaceAll(' ', '_'))}.png`);
 		if (img) {
-			banner = `${GAME_BANNERS_BASE_PATH}${img.name.slice(1, -1)}`;
+			banner = img ? tauri.convertFileSrc(appDirPath + `storage/Cache/Games/Images/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
 		}
 		else {
-			banner = 'https://cdn.discordapp.com/attachments/910422768045133869/914878042508251156/icon.png';
+			banner = 'https://i.ibb.co/dK15dV3/e.jpg';
 		}
 
 		gameBanner.setAttribute('src', banner);
@@ -122,51 +145,30 @@ async function loadGames() {
 		return game;
 	}).filter(async x => Object.keys(await x).length > 0);
 	await require('../modules/banners').getBanners(await Promise.all(games));
+	if (games.length > 0) setGames(games, 'all-games');
 }
-async function filterAndSort(games, type) {
-	const list = document.getElementById(type);
 
-	// Check if the list already has the games loaded and prevent further execution
-	if ((list.children.length === games.length) && list.children.length !== 0) {
-		if (games.every((x, i) => list.children.item(i).id === `game-div-${x.DisplayName.replaceAll(' ', '_')}`)) return [];
-	}
-
-	// Filter out new games and delete old games
-	const games_blacklist = JSON.parse(await fs.readTextFile(await path.join(await rootDir(), "../blacklist.json")))
-	games = games.filter(x => !games_blacklist.includes(x.GameID) && !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`));
-	for (let i = 0; i < list.length; i++) {
-		if (!games.map(x => x.GameID.replaceAll(' ', '_')).includes(list.children[i].id.slice(9))) {
-			list.removeChild(list.children[i]);
-			continue;
-		}
-	}
-
-	if (type === 'allGamesList') {
-		return games.map(x => x.DisplayName).sort().map(x => games[games.findIndex(y => y.DisplayName === x)]);
-	}
-}
 async function handleLaunch(game) {
-	let res;
 	if (await os.platform() === 'win32') {
 		switch (game.LauncherName) {
 			case 'EpicGames': {
-				res = createProcess('cmd', `/C start /min cmd /c start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch --wait`, game.GameID);
+				createProcess('cmd', `/C start /min cmd /c start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch --wait`, game.GameID);
 				break;
 			}
 			case 'Steam': {
-				res = createProcess('cmd', `/C start /min cmd /c start steam://rungameid/${game.GameID} --wait`, game.GameID);
+				createProcess('cmd', `/C start /min cmd /c start steam://rungameid/${game.GameID} --wait`, game.GameID);
 				break;
 			}
 			case 'Uplay': {
-				res = createProcess('cmd', `/C start /min cmd /c start uplay://launch/${game.GameID}/0 --wait`, game.GameID);
+				createProcess('cmd', `/C start /min cmd /c start uplay://launch/${game.GameID}/0 --wait`, game.GameID);
 				break;
 			}
 			//  case 'Minecraft': {
-			//      res = createProcess('minecraft-launcher', [], game.GameID);
+			//      createProcess('minecraft-launcher', [], game.GameID);
 			//      break;
 			//  }
 			default: {
-				res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+				createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
 				break;
 			}
 		}
@@ -174,37 +176,43 @@ async function handleLaunch(game) {
 	else if (await os.platform() === 'linux') {
 		switch (game.LauncherName) {
 			case 'Steam': {
-				res = createProcess('steam', `steam://rungameid/${game.GameID} -silent`, game.GameID);
+				createProcess('steam', `steam://rungameid/${game.GameID} -silent`, game.GameID);
 				break;
 			}
 			case 'Minecraft': {
-				res = createProcess('minecraft-launcher', "", game.GameID);
+				createProcess('minecraft-launcher', "", game.GameID);
 				break;
 			}
 			case 'Lunar': {
-				res = createProcess('lunarclient', "", game.gameID);
+				createProcess('lunarclient', "", game.gameID);
 				break;
 			}
 			case 'Lutris': {
-				res = createProcess('lutris', `lutris:rungameid/${game.LaunchID}`, game.gameID);
+				createProcess('lutris', `lutris:rungameid/${game.LaunchID}`, game.gameID);
 				break;
 			}
 			default: {
-				res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+				createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
 				break;
 			}
 		}
 	}
 
-	if (res === 'RUNNING_ALREADY') {
-		document.querySelector('.alert-box-message').textContent = `${game.DisplayName} is already running!`;
-		document.querySelector('.alert-box').style.marginTop = '40px';
-		document.querySelector('.alert-box').style.visibility = 'visible';
-		document.querySelector('.alert-box').style.opacity = '1';
-		return document.querySelector('.alert-box').style.display = 'flex';
-	}
-
 	addLaunch(game.GameID, game.LauncherName);
+}
+async function toggleFavourite(GameID, LauncherName) {
+	const data = await getGames();
+	if (!data) return;
+	data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite = !data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite;
+
+	setGames(data, 'toggle-favourite');
+}
+async function addLaunch(GameID, LauncherName) {
+	const data = await getGames();
+	if (!data) return;
+	data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).LastLaunch = Date.now();
+	data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches = typeof data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches === 'number' ? data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches + 1 : 1;
+	setGames(data, 'add-launch');
 }
 function createProcess(Command, Args, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
@@ -236,6 +244,45 @@ async function VisibilityState() {
 	}
 }
 
+async function setGames(games, source) {
+	const appDirPath = await path.appDir();
+	const GAMES_DATA_BASE_PATH = appDirPath + 'storage/Cache/Games/Data.json';
+	const data = JSON.parse(await fs.readTextFile(appDirPath + GAMES_DATA_BASE_PATH).catch(() => '[]'));
+
+	if (source === 'add-launch') {
+		fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
+	}
+	else if (source === 'toggle-favourite') {
+		fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
+	}
+	else if (source === 'all-games') {
+		if (data.length > 0) {
+			for (let i = 0; i < games.length; i++) {
+				const game = data.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName);
+				if (!game) {
+					data.push(games[i]);
+				}
+				else if (!Object.keys(games[i]).every((x) => games[i][x] === data.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName)[x])) {
+					data[data.findIndex(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName)] = games[i];
+				}
+			}
+		}
+		else {
+			return fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
+		}
+		fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(data));
+	}
+}
+async function getGames(GameID, LauncherName) {
+	const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/Cache/Games/Data.json').catch(() => '[]'));
+
+	if (GameID && LauncherName) {
+		return data.find(x => (x.GameID === GameID) && (x.LauncherName === LauncherName));
+	}
+	else {
+		return data;
+	}
+}
 export {
 	getInstalledGames,
 	loadGames,
