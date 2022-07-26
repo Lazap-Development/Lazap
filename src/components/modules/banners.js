@@ -49,7 +49,7 @@ async function getBannerResponse(games, id) {
 
 async function cacheBanners(data, res) {
     const appDirPath = await path.appDir();
-    const sha256 = require("../modules/sha256")
+    const { sha256 } = require("../modules/sha256")
     const GAME_BANNERS_BASE_PATH = appDirPath + 'storage/Cache/Games/Images';
     const ALREADY_GAME_BANNERS = await fs.readDir(GAME_BANNERS_BASE_PATH);
     let alreadyProcessed = false;
@@ -57,7 +57,7 @@ async function cacheBanners(data, res) {
 
     ALREADY_GAME_BANNERS.forEach(async (x) => {
         data.forEach (async (i) => {
-            if (x.name  === `${sha256.convert(i.DisplayName)}.png`) {
+            if (x.name  === `${sha256(i.DisplayName)}.png`) {
                 alreadyProcessed = true;
             }
         })
@@ -78,8 +78,8 @@ async function cacheBanners(data, res) {
             responseType: 3
         }).then(async (response) => {
             if (response.status === 404 && data[i].LauncherName === "Lutris") return;
-            await fs.writeBinaryFile(GAME_BANNERS_BASE_PATH + `/${sha256.convert(data[i].DisplayName)}.png`, response.data);
-            document.getElementById(`game-div-${data[i].DisplayName}`).firstElementChild.setAttribute('src', tauri.convertFileSrc(GAME_BANNERS_BASE_PATH + `/${sha256.convert(data[i].DisplayName)}.png`));
+            await fs.writeBinaryFile(GAME_BANNERS_BASE_PATH + `/${sha256(data[i].DisplayName)}.png`, response.data);
+            document.getElementById(`game-div-${data[i].DisplayName}`).firstElementChild.setAttribute('src', tauri.convertFileSrc(GAME_BANNERS_BASE_PATH + `/${sha256(data[i].DisplayName)}.png`));
         }).catch((e) => console.log(e));
         
         itemsProcessed++;

@@ -84,4 +84,4 @@ function sha256(ascii) {
     return result;
 };
 
-exports.convert = sha256;
+exports.sha256 = sha256;

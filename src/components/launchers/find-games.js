@@ -108,7 +108,7 @@ async function loadGames(id) {
         if (game.LauncherName !== 'XboxGames') {
             try {
                 const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH);
-                const img = dirs.find(x => x.name === `${require("../modules/sha256").convert(game.DisplayName)}.png`);
+                const img = dirs.find(x => x.name === `${require("../modules/sha256").sha256(game.DisplayName)}.png`);
 
                 banner = img ? tauri.convertFileSrc(appDirPath + `storage/Cache/Games/Images/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
             } catch (err) {
