@@ -12,6 +12,7 @@ async function getInstalledGames() {
 
 		return await Promise.all(games.map((x) => parseGameObject(x)));
 	}
+	return [];
 }
 
 async function isLauncherInstalled(path = 'C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests') {
