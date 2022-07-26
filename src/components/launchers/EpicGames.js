@@ -30,14 +30,18 @@ async function parseGameObject(rawObj = {}) {
 		AppName: GameID,
 		InstallSize: Size,
 		LaunchCommand,
+		CatalogNamespace,
+		CatalogItemId,
+		AppName
 	} = await rawObj;
+
 
 	return {
 		Executable,
 		Location,
 		DisplayName,
 		GameID,
-		LaunchID: `${rawObj.CatalogNamespace}:${rawObj.CatalogItemId}:${rawObj.AppName}`,
+		LaunchID: `${CatalogNamespace}:${CatalogItemId}:${AppName}`,
 		Size,
 		LaunchCommand,
 		LauncherName: 'EpicGames',
