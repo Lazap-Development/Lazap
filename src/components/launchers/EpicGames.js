@@ -3,27 +3,26 @@ const fs = window.__TAURI__.fs;
 
 async function getInstalledGames() {
 	if (await os.platform() === 'win32') {
-		if (!isLauncherInstalled()) return [];
-		const games = await fs.readDir('C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests')
-			.filter((x) => x.split('.')[1]?.toLowerCase() === 'item')
-			.map((x) =>
-				JSON.parse(fs.readFileSync(`C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests\\${x}`)),
+		if (!await isLauncherInstalled()) return [];
+		const read = await fs.readDir('C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests')
+		const games = read.filter((x) => x.name.split('.')[1]?.toLowerCase() === 'item')
+			.map(async (x) =>
+				JSON.parse(await fs.readTextFile(`C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests\\${JSON.stringify(x.name).replace(/['"]+/g, '')}`)),
 			);
 
-		return games.map((x) => parseGameObject(x));
+		return await Promise.all(games.map((x) => parseGameObject(x)));
 	}
-	return [];
 }
 
 async function isLauncherInstalled(path = 'C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests') {
 	try {
-        return await fs.readDir(path);
-    } catch (err) {
-        return false;
-    }
+		return await fs.readDir(path);
+	} catch (err) {
+		return false;
+	}
 }
 
-function parseGameObject(rawObj = {}) {
+async function parseGameObject(rawObj = {}) {
 	const {
 		LaunchExecutable: Executable,
 		InstallLocation: Location,
@@ -31,7 +30,7 @@ function parseGameObject(rawObj = {}) {
 		AppName: GameID,
 		InstallSize: Size,
 		LaunchCommand,
-	} = rawObj;
+	} = await rawObj;
 
 	return {
 		Executable,
@@ -45,7 +44,7 @@ function parseGameObject(rawObj = {}) {
 	};
 }
 
-module.exports = {
+export {
 	getInstalledGames,
 	parseGameObject,
 };
