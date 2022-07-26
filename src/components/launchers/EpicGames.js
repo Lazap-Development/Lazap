@@ -1,7 +1,7 @@
 const os = window.__TAURI__.os;
 const fs = window.__TAURI__.fs;
 
-function getInstalledGames() {
+async function getInstalledGames() {
 	if (await os.platform() === 'win32') {
 		if (!isLauncherInstalled()) return [];
 		const games = await fs.readDir('C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests')
@@ -15,8 +15,12 @@ function getInstalledGames() {
 	return [];
 }
 
-function isLauncherInstalled(path = 'C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests') {
-	return await fs.readDir(path);
+async function isLauncherInstalled(path = 'C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests') {
+	try {
+        return await fs.readDir(path);
+    } catch (err) {
+        return false;
+    }
 }
 
 function parseGameObject(rawObj = {}) {
