@@ -268,15 +268,15 @@ async function handleLaunch(game) {
     if (await os.platform() === 'win32') {
         switch (game.LauncherName) {
             case 'EpicGames': {
-                res = createProcess('cmd', `/C start /min cmd /c start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch --wait`, game.GameID);
+                res = createProcess('cmd', `/C start /min cmd /c start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, game.GameID);
                 break;
             }
             case 'Steam': {
-                res = createProcess('cmd', `/C start /min cmd /c start steam://rungameid/${game.GameID} --wait`, game.GameID);
+                res = createProcess('cmd', `/C start /min cmd /c start steam://rungameid/${game.GameID}`, game.GameID);
                 break;
             }
             case 'Uplay': {
-                res = createProcess('cmd', `/C start /min cmd /c start uplay://launch/${game.GameID}/0 --wait`, game.GameID);
+                res = createProcess('cmd', `/C start /min cmd /c start uplay://launch/${game.GameID}/0`, game.GameID);
                 break;
             }
             //  case 'Minecraft': {
