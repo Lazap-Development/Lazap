@@ -48,7 +48,7 @@ const path = window.__TAURI__.path;
   try {
     JSON.parse(await fs.readTextFile(appDirPath + "storage/Cache/Games/Data.json"));
   } catch (e) {
-    fs.writeTextFile(appDirPath + "storage/Cache/Games/Data.json", JSON.stringify({ }));
+    fs.writeTextFile(appDirPath + "storage/Cache/Games/Data.json", JSON.stringify([]));
   }
 
 })();
