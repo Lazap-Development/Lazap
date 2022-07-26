@@ -37,7 +37,7 @@ async function filterAndSort(games, type) {
 
 	// Filter out new games and delete old games
 	const games_blacklist = JSON.parse(await fs.readTextFile(await path.join(await rootDir(), "../blacklist.json")))
-	games = games.filter(x => !games_blacklist.includes(x.GameID) && !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`));
+	games = games.filter(x => !games_blacklist[0].includes(x.GameID) && !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`));
 	for (let i = 0; i < list.length; i++) {
 		if (!games.map(x => x.GameID.replaceAll(' ', '_')).includes(list.children[i].id.slice(9))) {
 			list.removeChild(list.children[i]);
