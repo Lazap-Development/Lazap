@@ -56,7 +56,7 @@ async function cacheBanners(data, res) {
 
 	ALREADY_GAME_BANNERS.forEach(async (x) => {
 		data.forEach(async (i) => {
-			if (x.name === `${sha256(i.DisplayName)}.png`) {
+			if (x.name === `${sha256(i.DisplayName.replaceAll(' ', '_'))}.png`) {
 				alreadyProcessed = true;
 			}
 		})
@@ -77,8 +77,8 @@ async function cacheBanners(data, res) {
 			responseType: 3
 		}).then(async (response) => {
 			if (response.status === 404 && data[i].LauncherName === "Lutris") return;
-			await fs.writeBinaryFile(GAME_BANNERS_BASE_PATH + `/${sha256(data[i].DisplayName)}.png`, response.data);
-			document.getElementById(`game-div-${data[i].DisplayName}`).firstElementChild.setAttribute('src', tauri.convertFileSrc(GAME_BANNERS_BASE_PATH + `/${sha256(data[i].DisplayName)}.png`));
+			await fs.writeBinaryFile(GAME_BANNERS_BASE_PATH + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`, response.data);
+			document.getElementById(`game-div-${data[i].DisplayName.replaceAll(' ', '_')}`).firstElementChild.setAttribute('src', tauri.convertFileSrc(GAME_BANNERS_BASE_PATH + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`));
 		}).catch((e) => console.log(e));
 
 		itemsProcessed++;

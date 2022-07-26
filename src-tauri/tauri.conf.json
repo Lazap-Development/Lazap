@@ -34,11 +34,6 @@
             "args": true
           },
           {
-            "name": "pwd",
-            "cmd": "pwd",
-            "args": true
-          },
-          {
             "name": "cmd",
             "cmd": "cmd",
             "args": true
@@ -74,7 +69,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.lazap.dev",
+      "identifier": "com.lazap.config",
       "longDescription": "",
       "macOS": {
         "entitlements": null,

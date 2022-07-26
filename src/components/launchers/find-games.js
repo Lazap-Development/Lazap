@@ -241,7 +241,7 @@ class Elements {
 
 		let banner;
 		const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH).catch(() => []);
-		const img = dirs.find(x => x.name === `${sha256(game.DisplayName)}.png`);
+		const img = dirs.find(x => x.name === `${sha256(game.DisplayName.replaceAll(' ', '_'))}.png`);
 		if (img) {
 			banner = img ? tauri.convertFileSrc(appDirPath + `storage/Cache/Games/Images/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
 		}
