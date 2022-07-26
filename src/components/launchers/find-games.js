@@ -54,63 +54,21 @@ async function loadGames() {
 	let games = await filterAndSort(await getInstalledGames(), 'allGamesList');
 	const list = document.getElementById('allGamesList');
 
-	const appDirPath = await path.appDir();
-
 	games.map(async (game) => {
 		const gameElement = Elements.getGameElement(game);
 		list.appendChild(gameElement);
 
-		const gameBanner = Elements.getGameBannerElement(game);
+		const gameBanner = await Elements.getGameBannerElement(game);
 		gameElement.appendChild(gameBanner);
 
 		const gameText = Elements.getGameDisplayElement(game);
 		gameElement.appendChild(gameText);
 
-		gameBanner.addEventListener('click', () => {
-			handleLaunch(game);
-		});
-
-		const starIcon = document.createElement('div');
-		starIcon.classList.add('star');
+		const starIcon = await Elements.getStarElement(game, gameElement, gameBanner);
 		gameElement.appendChild(starIcon);
 
-		gameBanner.addEventListener('mouseover', async () => {
-			const x = gameElement.getElementsByClassName('star');
-			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/Cache/Games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
-			for (let i = 0; i < x.length; i++) {
-				starIcon.classList.add('fade');
-				x[i].style.visibility = 'visible';
-				if (isFavourite) {
-					let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
-					starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, "../../assets/star-solid.svg"))}")`;
-					starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
-				}
-			}
-		});
-		gameBanner.addEventListener('mouseout', async () => {
-			const x = gameElement.getElementsByClassName('star');
-			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/Cache/Games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
-			for (let i = 0; i < x.length; i++) {
-				if (!x[i].matches(':hover')) {
-					starIcon.classList.remove('fade');
-					x[i].style.visibility = 'hidden';
-					if (!isFavourite) {
-						let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
-						starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, "../../assets/star-empty.svg"))}")`;
-						starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
-					}
-				}
-			}
-		});
-		document.addEventListener('mousemove', () => {
-			if (!gameBanner.matches(':hover') && !starIcon.matches(':hover')) starIcon.style.visibility = 'hidden';
-		});
-		starIcon.addEventListener('click', async () => {
-			const res = toggleFavourite(game.GameID, game.LauncherName);
-			let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
-			let solidOrEmpty = res ? 'solid' : 'empty';
-			starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, "../../assets/star-" + solidOrEmpty + ".svg"))}")`;
-			starIcon.style.filter = res ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
+		gameBanner.addEventListener('click', () => {
+			handleLaunch(game);
 		});
 
 		return game;
@@ -306,5 +264,52 @@ class Elements {
 		}
 
 		return gameText;
+	}
+	static async getStarElement(game, gameElement, gameBanner) {
+		const appDirPath = await path.appDir();
+
+		const starIcon = document.createElement('div');
+		starIcon.classList.add('star');
+
+		gameBanner.addEventListener('mouseover', async () => {
+			const x = gameElement.getElementsByClassName('star');
+			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/Cache/Games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
+			for (let i = 0; i < x.length; i++) {
+				starIcon.classList.add('fade');
+				x[i].style.visibility = 'visible';
+				if (isFavourite) {
+					let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
+					starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, "../../assets/star-solid.svg"))}")`;
+					starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
+				}
+			}
+		});
+		gameBanner.addEventListener('mouseout', async () => {
+			const x = gameElement.getElementsByClassName('star');
+			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/Cache/Games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
+			for (let i = 0; i < x.length; i++) {
+				if (!x[i].matches(':hover')) {
+					starIcon.classList.remove('fade');
+					x[i].style.visibility = 'hidden';
+					if (!isFavourite) {
+						let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
+						starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, "../../assets/star-empty.svg"))}")`;
+						starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
+					}
+				}
+			}
+		});
+		starIcon.addEventListener('click', async () => {
+			const res = toggleFavourite(game.GameID, game.LauncherName);
+			let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
+			let solidOrEmpty = res ? 'solid' : 'empty';
+			starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, "../../assets/star-" + solidOrEmpty + ".svg"))}")`;
+			starIcon.style.filter = res ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
+		});
+		document.addEventListener('mousemove', () => {
+			if (!gameBanner.matches(':hover') && !starIcon.matches(':hover')) starIcon.style.visibility = 'hidden';
+		});
+
+		return starIcon;
 	}
 }
