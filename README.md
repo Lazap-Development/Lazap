@@ -1,8 +1,8 @@
 # Tauri Lazap
 
-### Before starting, please make sure you have the [prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) 
+#### Before starting, please make sure you have the [prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites) 
 
-## Project setup
+### Project setup
 ```
 yarn install
 ```
