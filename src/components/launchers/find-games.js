@@ -78,6 +78,7 @@ async function loadGames() {
 }
 
 async function handleLaunch(game) {
+	let res;
 	if (await os.platform() === 'win32') {
 		switch (game.LauncherName) {
 			case 'EpicGames': {
@@ -127,6 +128,8 @@ async function handleLaunch(game) {
 		}
 	}
 
+	if (res === 'RUNNING_ALREADY') return;
+
 	addLaunch(game.GameID, game.LauncherName);
 }
 async function toggleFavourite(GameID, LauncherName) {
@@ -145,6 +148,7 @@ async function addLaunch(GameID, LauncherName) {
 }
 function createProcess(Command, Args, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
+	VisibilityState();
 	const instance = invoke('run_game', { exec: Command, args: Args })
 		.then(() => {
 			VisibilityState();
@@ -160,8 +164,9 @@ async function VisibilityState() {
 	try {
 		const LauncherData = JSON.parse(await fs.readTextFile(appDirPath + 'storage/LauncherData.json'));
 
-		if (LauncherData.trayMinLaunch == true) {
-			if (await Window.appWindow.isVisible() == true) {
+		if (LauncherData.trayMinLaunch === true) {
+			console.log(await Window.appWindow.isVisible())
+			if (await Window.appWindow.isVisible() === true) {
 				Window.appWindow.hide()
 			} else {
 				Window.appWindow.show()
@@ -236,7 +241,7 @@ class Elements {
 
 		let banner;
 		const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH).catch(() => []);
-		const img = dirs.find(x => x.name === `${sha256(game.DisplayName.replaceAll(' ', '_'))}.png`);
+		const img = dirs.find(x => x.name === `${sha256(game.DisplayName)}.png`);
 		if (img) {
 			banner = img ? tauri.convertFileSrc(appDirPath + `storage/Cache/Games/Images/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
 		}
@@ -245,7 +250,6 @@ class Elements {
 		}
 
 		gameBanner.setAttribute('src', banner);
-		gameBanner.style = 'opacity: 0.2;';
 		gameBanner.height = 500;
 		gameBanner.width = 500;
 		game.Banner = banner;
