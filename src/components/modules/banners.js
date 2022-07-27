@@ -56,16 +56,14 @@ async function cacheBanners(data, res) {
 	let existingProcessed = 0;
 	let fetchProcessed = 0;
 
-	readBanners.forEach(async (x) => {
-		data.forEach(async (i) => {
-			if (x.name === `${sha256(i.DisplayName.replaceAll(' ', '_'))}.png`) {
-				existingProcessed++;
-				if (existingProcessed === data.length) {
-					alreadyProcessed = true;
-				}
+	for (let i = 0; i < data.length; i++) {
+		if (readBanners.includes(`${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`)) {
+			existingProcessed++;
+			if (existingProcessed === data.length) {
+				alreadyProcessed = true;
 			}
-		})
-	})
+		}
+	}
 
 	if (alreadyProcessed === true) {
 		document.getElementById('game-loading-overlay').style.opacity = '0';
@@ -73,7 +71,7 @@ async function cacheBanners(data, res) {
 		return console.log("[BANNER] Banners are already loaded. Skipping.");
 	}
 
-	res.filter(async (x) => (await x).startsWith('http')).forEach(async (x, i) => {
+	res.filter(async (x) => (await x)?.startsWith('http')).forEach(async (x, i) => {
 		await http.fetch(await x, {
 			method: 'GET',
 			headers: {

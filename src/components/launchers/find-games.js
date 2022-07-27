@@ -51,7 +51,9 @@ async function filterAndSort(games, type) {
 }
 
 async function loadGames() {
-	let games = await filterAndSort(await getInstalledGames(), 'allGamesList');
+	let games = await getInstalledGames();
+	require('../modules/banners').getBanners(await Promise.all(games));
+	games = await filterAndSort(games, 'allGamesList');
 	const list = document.getElementById('allGamesList');
 
 	games.map(async (game) => {
@@ -73,7 +75,6 @@ async function loadGames() {
 
 		return game;
 	}).filter(async x => Object.keys(await x).length > 0);
-	await require('../modules/banners').getBanners(await Promise.all(games));
 	if (games.length > 0) setGames(games, 'all-games');
 }
 
