@@ -30,8 +30,8 @@ async function getBanners(games) {
 					return 'https://www.lunarclient.com/assets/img/default-twitter-icon.webp';
 				}
 				case 'Lutris': {
-					if (games[i].DisplayName.replaceAll(' ', '_') === 'Epic Games Store') return 'https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png'
-					if (games[i].DisplayName.replaceAll(' ', '_') === 'Rockstar Games Launcher') return 'https://cdn.player.one/sites/player.one/files/2019/08/26/rockstar-games.png'
+					if (games[i].DisplayName.replaceAll(' ', '_') === 'Epic_Games_Store') return 'https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png'
+					if (games[i].DisplayName.replaceAll(' ', '_') === 'Rockstar_Games_Launcher') return 'https://cdn.player.one/sites/player.one/files/2019/08/26/rockstar-games.png'
 					return `https://thumbnails.pcgamingwiki.com/5/53/${games[i].DisplayName.replaceAll(' ', '_')}_-_cover.png/300px-${games[i].DisplayName.replaceAll(' ', '_')}_-_cover.png`
 				}
 				case 'XboxGames': {
@@ -49,15 +49,20 @@ async function getBanners(games) {
 async function cacheBanners(data, res) {
 	const appDirPath = await path.appDir();
 	const { sha256 } = require("../modules/sha256")
-	const GAME_BANNERS_BASE_PATH = appDirPath + 'storage/Cache/Games/Images';
-	const ALREADY_GAME_BANNERS = await fs.readDir(GAME_BANNERS_BASE_PATH);
-	let alreadyProcessed = false;
-	let itemsProcessed = 0;
+	const bannerBasePath = appDirPath + 'storage/Cache/Games/Images';
+	const readBanners = await fs.readDir(bannerBasePath);
 
-	ALREADY_GAME_BANNERS.forEach(async (x) => {
+	let alreadyProcessed = false;
+	let existingProcessed = 0;
+	let fetchProcessed = 0;
+
+	readBanners.forEach(async (x) => {
 		data.forEach(async (i) => {
 			if (x.name === `${sha256(i.DisplayName.replaceAll(' ', '_'))}.png`) {
-				alreadyProcessed = true;
+				existingProcessed++;
+				if (existingProcessed === data.length) {
+					alreadyProcessed = true;
+				}
 			}
 		})
 	})
@@ -77,12 +82,12 @@ async function cacheBanners(data, res) {
 			responseType: 3
 		}).then(async (response) => {
 			if (response.status === 404 && data[i].LauncherName === "Lutris") return;
-			await fs.writeBinaryFile(GAME_BANNERS_BASE_PATH + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`, response.data);
-			document.getElementById(`game-div-${data[i].DisplayName.replaceAll(' ', '_')}`).firstElementChild.setAttribute('src', tauri.convertFileSrc(GAME_BANNERS_BASE_PATH + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`));
+			await fs.writeBinaryFile(bannerBasePath + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`, response.data);
+			document.getElementById(`game-div-${data[i].DisplayName.replaceAll(' ', '_')}`).firstElementChild.setAttribute('src', tauri.convertFileSrc(bannerBasePath + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`));
 		}).catch((e) => console.log(e));
 
-		itemsProcessed++;
-		if (itemsProcessed === data.length) {
+		fetchProcessed++;
+		if (fetchProcessed === data.length) {
 			document.getElementById('game-loading-overlay').style.opacity = '0';
 			document.getElementById('game-loading-overlay').style.visibility = 'hidden';
 			return console.log("[BANNER] Just finished processing banners.");
