@@ -48,7 +48,7 @@ async function getBanners(games) {
 
 async function cacheBanners(data, res) {
 	const appDirPath = await path.appDir();
-	const { sha256 } = require("../modules/sha256")
+	const { sha256 } = require('../modules/sha256')
 	const bannerBasePath = appDirPath + 'storage/Cache/Games/Images';
 	const readBanners = await fs.readDir(bannerBasePath);
 
@@ -68,7 +68,7 @@ async function cacheBanners(data, res) {
 	if (alreadyProcessed === true) {
 		document.getElementById('game-loading-overlay').style.opacity = '0';
 		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
-		return console.log("[BANNER] Banners are already loaded. Skipping.");
+		return console.log('[BANNER] Banners are already loaded. Skipping.');
 	}
 
 	res.filter(async (x) => (await x)?.startsWith('http')).forEach(async (x, i) => {
@@ -79,16 +79,16 @@ async function cacheBanners(data, res) {
 			},
 			responseType: 3
 		}).then(async (response) => {
-			if (response.status === 404 && data[i].LauncherName === "Lutris") return;
+			if (response.status === 404 && data[i].LauncherName === 'Lutris') return;
 			await fs.writeBinaryFile(bannerBasePath + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`, response.data);
-			document.getElementById(`game-div-${data[i].DisplayName.replaceAll(' ', '_')}`).firstElementChild.setAttribute('src', tauri.convertFileSrc(bannerBasePath + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`));
+			document.getElementById(`game-div-${data[i].DisplayName.replaceAll(' ', '_')}`)?.firstElementChild?.setAttribute('src', tauri.convertFileSrc(bannerBasePath + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`));
 		}).catch((e) => console.log(e));
 
 		fetchProcessed++;
 		if (fetchProcessed === data.length) {
 			document.getElementById('game-loading-overlay').style.opacity = '0';
 			document.getElementById('game-loading-overlay').style.visibility = 'hidden';
-			return console.log("[BANNER] Just finished processing banners.");
+			return console.log('[BANNER] Just finished processing banners.');
 		}
 	});
 }

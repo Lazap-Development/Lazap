@@ -36,7 +36,7 @@ async function filterAndSort(games, type) {
 	}
 
 	// Filter out new games and delete old games
-	const games_blacklist = JSON.parse(await fs.readTextFile(await path.join(await rootDir(), "../blacklist.json")))
+	const games_blacklist = JSON.parse(await fs.readTextFile(await path.join(await rootDir(), '../blacklist.json')));
 	games = games.filter(x => !games_blacklist[0].includes(x.GameID) && !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`));
 	for (let i = 0; i < list.length; i++) {
 		if (!games.map(x => x.GameID.replaceAll(' ', '_')).includes(list.children[i].id.slice(9))) {
@@ -48,34 +48,57 @@ async function filterAndSort(games, type) {
 	if (type === 'allGamesList') {
 		return games.map(x => x.DisplayName).sort().map(x => games[games.findIndex(y => y.DisplayName === x)]);
 	}
+	else if (['recentGamesListMainPage', 'recentGamesList'].includes(type)) {
+		let final = [];
+		for (let i = 0; i < games.length; i++) {
+			const game = await getGames(games[i].GameID, games[i].LauncherName);
+			if (typeof game?.LastLaunch === 'number' && typeof game?.Launches === 'number') final.push(game);
+		}
+		return final;
+	}
+	else if (type === 'favGamesList') {
+		let final = [];
+		for (let i = 0; i < games.length; i++) {
+			const game = await getGames(games[i].GameID, games[i].LauncherName);
+			if (typeof game?.Favourite === 'boolean' && game.Favourite === true) final.push(game);
+		}
+		return final;
+	}
+	else {
+		return [];
+	}
 }
 
-async function loadGames() {
+async function loadGames(id) {
 	let games = await getInstalledGames();
 	require('../modules/banners').getBanners(await Promise.all(games));
-	games = await filterAndSort(games, 'allGamesList');
-	const list = document.getElementById('allGamesList');
+	games = await filterAndSort(games, id);
+	const list = document.getElementById(id);
 
 	games.map(async (game) => {
-		const gameElement = Elements.getGameElement(game);
+		const gameElement = Elements.getGameElement(game, id);
 		list.appendChild(gameElement);
 
 		const gameBanner = await Elements.getGameBannerElement(game);
 		gameElement.appendChild(gameBanner);
+
+		gameBanner.addEventListener('click', () => {
+			handleLaunch(game);
+		});
+
+		if (id.startsWith('recent') && id.includes('Main')) return game;
 
 		const gameText = Elements.getGameDisplayElement(game);
 		gameElement.appendChild(gameText);
 
 		const starIcon = await Elements.getStarElement(game, gameElement, gameBanner);
 		gameElement.appendChild(starIcon);
-
-		gameBanner.addEventListener('click', () => {
-			handleLaunch(game);
-		});
-
 		return game;
 	}).filter(async x => Object.keys(await x).length > 0);
-	if (games.length > 0) setGames(games, 'all-games');
+	if ((games.length > 0) && id === 'allGamesList') {
+		// KNOWN-ISSUE - creates new Data.json, overwriting old data whenever all games tab is clicked
+		setGames(games, 'all-games');
+	}
 }
 
 async function handleLaunch(game) {
@@ -111,11 +134,11 @@ async function handleLaunch(game) {
 				break;
 			}
 			case 'Minecraft': {
-				res = createProcess('minecraft-launcher', "", game.GameID);
+				res = createProcess('minecraft-launcher', '', game.GameID);
 				break;
 			}
 			case 'Lunar': {
-				res = createProcess('lunarclient', "", game.gameID);
+				res = createProcess('lunarclient', '', game.gameID);
 				break;
 			}
 			case 'Lutris': {
@@ -166,7 +189,6 @@ async function VisibilityState() {
 		const LauncherData = JSON.parse(await fs.readTextFile(appDirPath + 'storage/LauncherData.json'));
 
 		if (LauncherData.trayMinLaunch === true) {
-			console.log(await Window.appWindow.isVisible())
 			if (await Window.appWindow.isVisible() === true) {
 				Window.appWindow.hide()
 			} else {
@@ -197,7 +219,12 @@ async function setGames(games, source) {
 				if (!game) {
 					data.push(games[i]);
 				}
-				else if (!Object.keys(games[i]).every((x) => games[i][x] === data.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName)[x])) {
+				else if (Object.keys(games[i]).length < Object.keys(data.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName)).length) {
+					let obj = { ...data.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) };
+					Object.keys(data.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName)).filter(x => !Object.keys(games[i]).includes(x)).forEach(x => obj[x] = data.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName)[x]);
+					data.splice(data.findIndex(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName), 1, obj);
+				}
+				else if (Object.keys(games[i]).length > Object.keys(data.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName)).length) {
 					data[data.findIndex(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName)] = games[i];
 				}
 			}
@@ -224,11 +251,11 @@ export {
 };
 
 class Elements {
-	static getGameElement(game) {
+	static getGameElement(game, id) {
 		const gameElement = document.createElement('div');
 
 		gameElement.id = `game-div-${game.DisplayName.replaceAll(' ', '_')}`;
-		gameElement.className += 'gamebox';
+		gameElement.className += id.startsWith('recent') && id.includes('Main') ? 'mainPageGamebox' : 'gamebox';
 		gameElement.style.diplay = 'table';
 
 		return gameElement;
@@ -308,7 +335,7 @@ class Elements {
 			const res = toggleFavourite(game.GameID, game.LauncherName);
 			let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
 			let solidOrEmpty = res ? 'solid' : 'empty';
-			starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, "../../assets/star-" + solidOrEmpty + ".svg"))}")`;
+			starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, '../../assets/star-' + solidOrEmpty + '.svg'))}")`;
 			starIcon.style.filter = res ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 		});
 		document.addEventListener('mousemove', () => {

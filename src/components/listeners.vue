@@ -1,5 +1,5 @@
 <script>
-window.addEventListener("load", async function () {
+window.addEventListener('load', async function () {
   const marker = document.getElementById('indicator');
   const home = document.getElementById('home');
   const recent = document.getElementById('recent');
@@ -19,8 +19,8 @@ window.addEventListener("load", async function () {
   }));
   document.getElementById('text').value = data.username;
   try {
-    await fs.readBinaryFile(await path.appDir() + "storage/Cache/User/pfp.png");
-    document.getElementById("output").src = window.__TAURI__.tauri.convertFileSrc(await path.appDir() + "storage/Cache/User/pfp.png") + `?${new Date().getSeconds()}`;
+    await fs.readBinaryFile(await path.appDir() + 'storage/Cache/User/pfp.png');
+    document.getElementById('output').src = window.__TAURI__.tauri.convertFileSrc(await path.appDir() + 'storage/Cache/User/pfp.png') + `?${new Date().getSeconds()}`;
   } catch (err) {
     console.log(err);
   }
@@ -68,7 +68,7 @@ window.addEventListener("load", async function () {
     marker.style.top = '81px';
     marker.style.height = '30px';
 
-    await require('./launchers/find-games').loadGames('recentGames')
+    await require('./launchers/find-games').loadGames('recentGamesList')
       .catch((err) => {
         return console.log(err);
       });
@@ -85,12 +85,12 @@ window.addEventListener("load", async function () {
     messages.style.display = 'none';
     activity.style.display = 'none';
 
-    await require('./launchers/find-games').loadGames('allGames')
+    await require('./launchers/find-games').loadGames('allGamesList')
       .catch((err) => {
         return console.log(err);
       });
 
-    document.getElementById("gamesInput").focus();
+    document.getElementById('gamesInput').focus();
   });
 
   document.getElementById('favs-btn').addEventListener('click', async function () {
@@ -104,12 +104,12 @@ window.addEventListener("load", async function () {
     activity.style.display = 'none';
     friends.style.display = 'none';
 
-    await require('./launchers/find-games').loadGames('favGames')
+    await require('./launchers/find-games').loadGames('favGamesList')
       .catch((err) => {
         return console.log(err);
       });
 
-    document.getElementById("favsInput").focus();
+    document.getElementById('favsInput').focus();
   });
 
   document.getElementById('messages-btn').addEventListener('click', async function () {

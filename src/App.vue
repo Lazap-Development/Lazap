@@ -247,7 +247,7 @@ import storage from './components/storage.vue'
 export default {
   async created() {
     const os = window.__TAURI__.os;
-    console.warn(`OS: ${await os.platform()}` + ` | Arch: ${await os.arch()}`);
+    console.info(`OS: ${await os.platform()} | Arch: ${await os.arch()}`);
 
     if (await os.platform() === "win32") {
       document.getElementById('bg').style.height = '111.5vh';
