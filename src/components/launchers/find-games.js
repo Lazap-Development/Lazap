@@ -96,7 +96,6 @@ async function loadGames(id) {
 		return game;
 	}).filter(async x => Object.keys(await x).length > 0);
 	if ((games.length > 0) && id === 'allGamesList') {
-		// KNOWN-ISSUE - creates new Data.json, overwriting old data whenever all games tab is clicked
 		setGames(games, 'all-games');
 	}
 }
@@ -204,7 +203,7 @@ async function VisibilityState() {
 async function setGames(games, source) {
 	const appDirPath = await path.appDir();
 	const GAMES_DATA_BASE_PATH = appDirPath + 'storage/Cache/Games/Data.json';
-	const data = JSON.parse(await fs.readTextFile(appDirPath + GAMES_DATA_BASE_PATH).catch(() => '[]'));
+	const data = JSON.parse(await fs.readTextFile(GAMES_DATA_BASE_PATH).catch(() => '[]'));
 
 	if (source === 'add-launch') {
 		fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
