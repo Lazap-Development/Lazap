@@ -30,6 +30,7 @@ async function getInstalledGames() {
 	// Fetch all games
 	const launchers = (await fs.readDir(await rootDir())).map(x => x.name).filter(x => !['find-games.js'].includes(x));
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
+	lastFetch = Date.now();
 
 	return games;
 }
