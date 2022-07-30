@@ -41,7 +41,7 @@ fn main() {
                 },
                 _ => {}
             })
-            .invoke_handler(tauri::generate_handler![run_game])
+            .invoke_handler(tauri::generate_handler![run_game, parse])
             .setup(|app| {
                 let window = app.get_window(&"main").unwrap();
                 window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
@@ -109,7 +109,7 @@ fn main() {
                 },
                 _ => {}
             })
-            .invoke_handler(tauri::generate_handler![run_game])
+            .invoke_handler(tauri::generate_handler![run_game, parse])
             .run(tauri::generate_context!())
             .expect("error while running lazap");
     }
