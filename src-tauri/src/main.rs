@@ -24,7 +24,7 @@ fn main() {
                 } => {
                     let window = app.get_window("main").unwrap();
                     window.show().unwrap();
-                },
+                }
                 SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                     "quit" => {
                         std::process::exit(0);
@@ -61,7 +61,7 @@ fn main() {
                 } => {
                     let window = app.get_window("main").unwrap();
                     window.show().unwrap();
-                },
+                }
                 SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                     "quit" => {
                         std::process::exit(0);
@@ -78,7 +78,7 @@ fn main() {
                 },
                 _ => {}
             })
-            .invoke_handler(tauri::generate_handler![run_game])
+            .invoke_handler(tauri::generate_handler![run_game, parse])
             .run(tauri::generate_context!())
             .expect("error while running lazap");
     } else if cfg!(target_os = "macos") {
@@ -92,7 +92,7 @@ fn main() {
                 } => {
                     let window = app.get_window("main").unwrap();
                     window.show().unwrap();
-                },
+                }
                 SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                     "quit" => {
                         std::process::exit(0);
@@ -122,4 +122,26 @@ async fn run_game(exec: String, args: String) {
         .spawn()
         .expect("failed to run");
     let _output = child.wait_with_output().expect("failed to wait on child");
+}
+
+use html_parser::Dom;
+#[tauri::command]
+async fn parse(value: &str) -> Result<String, Error> {
+    let lol = Dom::parse(value)?.to_json_pretty()?;
+    Ok(lol)
+}
+
+#[derive(Debug, thiserror::Error)]
+enum Error {
+    #[error(transparent)]
+    Io(#[from] html_parser::Error),
+}
+
+impl serde::Serialize for Error {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> 
+    where
+        S: serde::ser::Serializer,
+    {
+        serializer.serialize_str(self.to_string().as_ref())
+    }
 }
