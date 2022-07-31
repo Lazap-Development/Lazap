@@ -720,7 +720,7 @@ img,
     align-items: center;
     justify-content: center;
     z-index: 5;
-    background: #202126;
+    background-color: #1e1f24;
 }
 
 .loading-spinner {

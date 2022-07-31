@@ -7,8 +7,6 @@ const tauri = window.__TAURI__.tauri;
 const { sha256 } = require('../modules/sha256.js');
 
 const processes = new Map();
-let cachedGames = [];
-let lastFetch;
 
 function fixPath(str, index, value) {
 	return str.substr(0, index) + value + str.substr(index);
@@ -22,15 +20,9 @@ async function rootDir() {
 }
 
 async function getInstalledGames() {
-	// Use cache instead of fetching frequently
-	if (cachedGames && ((Date.now() - lastFetch) < 5 * 60 * 1000)) {
-		return cachedGames;
-	}
-
 	// Fetch all games
 	const launchers = (await fs.readDir(await rootDir())).map(x => x.name).filter(x => !['find-games.js'].includes(x));
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
-	lastFetch = Date.now();
 
 	return games;
 }
@@ -90,7 +82,6 @@ async function loadGames(id) {
 		gameElement.appendChild(gameBanner);
 		// eslint-disable-next-line no-self-assign
 		game.Banner = game.Banner;
-		gameElement.focus();
 
 		gameBanner.addEventListener('click', () => {
 			handleLaunch(game);
@@ -108,14 +99,9 @@ async function loadGames(id) {
 	if ((games.length > 0) && id === 'allGamesList') {
 		setGames(games, 'all-games');
 	}
-	if (cachedGames && ((Date.now() - lastFetch) > 5 * 60 * 1000)) {
-		require('../modules/banners').getBanners(await Promise.all(_games_.filter(x => !x.Banner?.startsWith('https://asset.localhost/'))));
-	}
-	else {
-		document.getElementById('game-loading-overlay').style.opacity = '0';
-		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
-		console.log('[BANNER] Aborted fetching banners as games are still cached.');
-	}
+
+	require('../modules/banners').getBanners(await Promise.all(_games_));
+
 }
 
 async function handleLaunch(game) {
