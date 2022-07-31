@@ -139,39 +139,29 @@ body {
 .titlebar-options {
     margin-left: 14px;
     display: flex;
-
     justify-content: space-between;
 }
 
 .titlebar-exit {
-    -moz-border-radius: 50px/50px;
-    -webkit-border-radius: 50px 50px;
-    border-radius: 50px/50px;
-    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border-radius: 50px;
+    transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
     height: 18px;
     width: 18px;
     background-color: rgb(70, 70, 70);
-
-    -webkit-app-region: no-drag;
     display: block;
 }
 
 .titlebar-exit:hover {
     background: #ff0000;
-    
     background-size: cover;
 }
 
 .titlebar-max {
-    -moz-border-radius: 50px/50px;
-    -webkit-border-radius: 50px 50px;
-    border-radius: 50px/50px;
-    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border-radius: 50px;
+    transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
     height: 18px;
     width: 18px;
     background-color: rgb(70, 70, 70);
-
-    -webkit-app-region: no-drag;
     display: block;
 }
 
@@ -180,14 +170,11 @@ body {
 }
 
 .titlebar-min {
-    -moz-border-radius: 50px/50px;
-    -webkit-border-radius: 50px 50px;
-    border-radius: 50px/50px;
-    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border-radius: 50px;
+    transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
     height: 18px;
     width: 18px;
     background-color: rgb(70, 70, 70);
-    -webkit-app-region: no-drag;
     display: block;
 }
 
@@ -196,7 +183,6 @@ body {
 }
 
 .titlebar-settings {
-    -webkit-app-region: no-drag;
     display: block;
     height: 18px;
     width: 18px;
@@ -210,7 +196,6 @@ body {
 }
 
 .titlebar-account {
-    -webkit-app-region: no-drag;
     display: block;
     height: 18px;
     width: 18px;
@@ -267,7 +252,7 @@ body {
     background-color: #1e1f24;
     border-radius: 10px;
 
-    height: calc(100% - 70px);
+    height: calc(100% - 72px);
     width: calc(100% - 310px);
     margin-bottom: 5px;
     margin-left: 285px;
