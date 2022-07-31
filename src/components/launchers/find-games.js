@@ -162,7 +162,13 @@ async function handleLaunch(game) {
 async function toggleFavourite(GameID, LauncherName) {
 	const data = await getGames();
 	if (!data) return;
-	data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite = !data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Favourite;
+	const game = data.find(x => x.GameID === GameID && x.LauncherName === LauncherName);
+	game.Favourite = !game.Favourite;
+	if (game.Favourite === false && document.getElementById('favGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
+		const element = document.getElementById('favGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`);
+		element.classList.add('fadeOutUpNoDelay');
+		setTimeout(() => document.getElementById('favGamesList').removeChild(element), 500);
+	}
 
 	setGames(data, 'toggle-favourite');
 }
