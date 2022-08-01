@@ -14,13 +14,13 @@ window.addEventListener('load', async function () {
   const fs = window.__TAURI__.fs;
   const path = window.__TAURI__.path;
 
-  const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/Cache/User/UserProfile.json', (err) => {
+  const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/user/UserProfile.json', (err) => {
     if (err) throw err;
   }));
   document.getElementById('text').value = data.username;
   try {
-    await fs.readBinaryFile(await path.appDir() + 'storage/Cache/User/pfp.png');
-    document.getElementById('output').src = window.__TAURI__.tauri.convertFileSrc(await path.appDir() + 'storage/Cache/User/pfp.png') + `?${new Date().getSeconds()}`;
+    await fs.readBinaryFile(await path.appDir() + 'storage/cache/user/pfp.png');
+    document.getElementById('output').src = window.__TAURI__.tauri.convertFileSrc(await path.appDir() + 'storage/cache/user/pfp.png') + `?${new Date().getSeconds()}`;
   } catch (err) {
     console.log(err);
   }
@@ -150,7 +150,7 @@ window.addEventListener('load', async function () {
 
   document.getElementById('text').addEventListener('change', async (e) => {
     const appDirPath = await path.appDir();
-    fs.writeTextFile(appDirPath + 'storage/Cache/User/UserProfile.json', JSON.stringify({ username: e.target.value, }), (err) => {
+    fs.writeTextFile(appDirPath + 'storage/cache/user/UserProfile.json', JSON.stringify({ username: e.target.value, }), (err) => {
       if (err) throw err;
     });
   });

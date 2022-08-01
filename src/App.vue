@@ -272,8 +272,8 @@ export default {
       var reader = new FileReader();
 
       reader.onload = async function () {
-        await window.__TAURI__.fs.writeBinaryFile(await window.__TAURI__.path.appDir() + `storage/Cache/User/pfp.png`, reader.result);
-        document.getElementById("output").src = window.__TAURI__.tauri.convertFileSrc(await window.__TAURI__.path.appDir() + `storage/Cache/User/pfp.png`) + `?${new Date().getSeconds()}`;
+        await window.__TAURI__.fs.writeBinaryFile(await window.__TAURI__.path.appDir() + `storage/cache/user/pfp.png`, reader.result);
+        document.getElementById("output").src = window.__TAURI__.tauri.convertFileSrc(await window.__TAURI__.path.appDir() + `storage/cache/user/pfp.png`) + `?${new Date().getSeconds()}`;
       };
       reader.readAsArrayBuffer(selectedFile);
     }

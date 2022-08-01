@@ -20,16 +20,16 @@ const path = window.__TAURI__.path;
   fs.createDir(appDirPath + "storage", { recursive: true }, (err) => {
     if (err) throw err;
   });
-  fs.createDir(appDirPath + "storage/Cache", { recursive: true }, (err) => {
+  fs.createDir(appDirPath + "storage/cache", { recursive: true }, (err) => {
     if (err) throw err;
   });
-  fs.createDir(appDirPath + "storage/Cache/User", { recursive: true }, (err) => {
+  fs.createDir(appDirPath + "storage/cache/user", { recursive: true }, (err) => {
     if (err) throw err;
   })
-  fs.createDir(appDirPath + "storage/Cache/Games", { recursive: true }, (err) => {
+  fs.createDir(appDirPath + "storage/cache/games", { recursive: true }, (err) => {
     if (err) throw err;
   });
-  fs.createDir(appDirPath + "storage/Cache/Games/Images", { recursive: true }, (err) => {
+  fs.createDir(appDirPath + "storage/cache/games/banners", { recursive: true }, (err) => {
     if (err) throw err;
   })
 
@@ -40,15 +40,15 @@ const path = window.__TAURI__.path;
   }
 
   try {
-    JSON.parse(await fs.readTextFile(appDirPath + "storage/Cache/User/UserProfile.json"));
+    JSON.parse(await fs.readTextFile(appDirPath + "storage/cache/user/UserProfile.json"));
   } catch (e) {
-    fs.writeTextFile(appDirPath + "storage/Cache/User/UserProfile.json", JSON.stringify({ username: "Lazap" }));
+    fs.writeTextFile(appDirPath + "storage/cache/user/UserProfile.json", JSON.stringify({ username: "Lazap" }));
   }
 
   try {
-    JSON.parse(await fs.readTextFile(appDirPath + "storage/Cache/Games/Data.json"));
+    JSON.parse(await fs.readTextFile(appDirPath + "storage/cache/games/data.json"));
   } catch (e) {
-    fs.writeTextFile(appDirPath + "storage/Cache/Games/Data.json", JSON.stringify([]));
+    fs.writeTextFile(appDirPath + "storage/cache/games/Data.json", JSON.stringify([]));
   }
 
 })();

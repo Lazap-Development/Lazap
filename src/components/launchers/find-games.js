@@ -212,7 +212,7 @@ async function VisibilityState() {
 
 async function setGames(games, source) {
 	const appDirPath = await path.appDir();
-	const GAMES_DATA_BASE_PATH = appDirPath + 'storage/Cache/Games/Data.json';
+	const GAMES_DATA_BASE_PATH = appDirPath + 'storage/cache/games/Data.json';
 	const data = JSON.parse(await fs.readTextFile(GAMES_DATA_BASE_PATH).catch(() => '[]'));
 
 	if (source === 'add-launch') {
@@ -245,7 +245,7 @@ async function setGames(games, source) {
 	}
 }
 async function getGames(GameID, LauncherName) {
-	const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/Cache/Games/Data.json').catch(() => '[]'));
+	const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/Data.json').catch(() => '[]'));
 
 	if (GameID && LauncherName) {
 		return data.find(x => (x.GameID === GameID) && (x.LauncherName === LauncherName));
@@ -272,7 +272,7 @@ class Elements {
 
 	static async getGameBannerElement(game) {
 		const appDirPath = await path.appDir();
-		const GAME_BANNERS_BASE_PATH = `${appDirPath}storage/Cache/Games/Images`;
+		const GAME_BANNERS_BASE_PATH = `${appDirPath}storage/cache/games/banners`;
 
 		const gameBanner = document.createElement('img');
 
@@ -280,7 +280,7 @@ class Elements {
 		const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH).catch(() => []);
 		const img = dirs.find(x => x.name === `${sha256(game.DisplayName.replaceAll(' ', '_'))}.png`);
 		if (img) {
-			banner = img ? tauri.convertFileSrc(appDirPath + `storage/Cache/Games/Images/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
+			banner = img ? tauri.convertFileSrc(appDirPath + `storage/cache/games/banners/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
 		}
 		else {
 			banner = 'https://i.ibb.co/dK15dV3/e.jpg';
@@ -314,7 +314,7 @@ class Elements {
 
 		gameBanner.addEventListener('mouseover', async () => {
 			const x = gameElement.getElementsByClassName('star');
-			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/Cache/Games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
+			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
 			for (let i = 0; i < x.length; i++) {
 				starIcon.classList.add('fade');
 				x[i].style.visibility = 'visible';
@@ -327,7 +327,7 @@ class Elements {
 		});
 		gameBanner.addEventListener('mouseout', async () => {
 			const x = gameElement.getElementsByClassName('star');
-			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/Cache/Games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
+			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
 			for (let i = 0; i < x.length; i++) {
 				if (!x[i].matches(':hover')) {
 					starIcon.classList.remove('fade');

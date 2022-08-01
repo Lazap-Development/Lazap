@@ -49,7 +49,7 @@ async function getBanners(games) {
 async function cacheBanners(data, res) {
 	const appDirPath = await path.appDir();
 	const { sha256 } = require('../modules/sha256')
-	const bannerBasePath = appDirPath + 'storage/Cache/Games/Images';
+	const bannerBasePath = appDirPath + 'storage/cache/games/banners';
 	const readBanners = (await fs.readDir(bannerBasePath)).map(x => x.name);
 
 	let alreadyProcessed = false;
