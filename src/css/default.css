@@ -456,7 +456,7 @@ body {
     position: absolute;
     margin-top: 5.3px;
     margin-left: 2px;
-    
+
     background-color: rgb(121, 52, 250);
     height: 32px;
     width: 5px;
@@ -540,15 +540,18 @@ body {
     width: 16%;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
+
 .mainPageGamebox:nth-child(1) {
-    margin-left: 3.8%;
+    margin-left: 4%;
 }
+
 .mainPageGamebox:nth-last-child(-n+4) {
     margin-left: 3%;
 }
+
 .mainPageGamebox:hover {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    transform: scale(0.95);
+    transform: scale(1.03);
     cursor: pointer;
 }
 
@@ -574,8 +577,6 @@ body {
     position: absolute;
     margin-top: -270px;
     margin-left: 10px;
-    font-size: 16px;
-    color: #d3d3d3;
     display: block;
     z-index: 10000000;
     content: url("../assets/star-empty.svg");
@@ -583,20 +584,15 @@ body {
     width: 25px;
     filter: invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%);
     visibility: hidden;
+
 }
 
 .star:hover {
-    position: absolute;
-    margin-top: -270px;
-    margin-left: 10px;
-    font-size: 16px;
-    color: #d3d3d3;
     display: block;
     z-index: 10000000;
     content: url("../assets/star-solid.svg") !important;
-    height: 25px;
-    width: 25px;
     cursor: pointer;
+    transform: scale(1.2);
     filter: invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%) !important;
 }
 
@@ -1028,4 +1024,14 @@ img,
     --x: 28px;
     --s: 12px;
     --b: var(--dot);
+}
+
+particle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-size: contain;
 }

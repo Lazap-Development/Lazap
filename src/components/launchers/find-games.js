@@ -171,6 +171,12 @@ async function toggleFavourite(GameID, LauncherName) {
 	}
 
 	setGames(data, 'toggle-favourite');
+
+	if (game.Favourite === false) {
+		return "empty"
+	} else {
+		return "solid"
+	}
 }
 async function addLaunch(GameID, LauncherName) {
 	const data = await getGames();
@@ -311,6 +317,7 @@ class Elements {
 
 		const starIcon = document.createElement('div');
 		starIcon.classList.add('star');
+		starIcon.id = 'star';
 
 		gameBanner.addEventListener('mouseover', async () => {
 			const x = gameElement.getElementsByClassName('star');
@@ -341,11 +348,19 @@ class Elements {
 			}
 		});
 		starIcon.addEventListener('click', async () => {
-			const res = toggleFavourite(game.GameID, game.LauncherName);
+			const res = await toggleFavourite(game.GameID, game.LauncherName);
 			let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
-			let solidOrEmpty = res ? 'solid' : 'empty';
+			let solidOrEmpty = res;
 			starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, '../../assets/star-' + solidOrEmpty + '.svg'))}")`;
 			starIcon.style.filter = res ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
+
+			if (solidOrEmpty === "solid") {
+				for (let i = 0; i < 20; i++) {
+					particle(starIcon.getBoundingClientRect().left, starIcon.getBoundingClientRect().top);
+				}
+			} else {
+				starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
+			}
 		});
 		document.addEventListener('mousemove', () => {
 			if (!gameBanner.matches(':hover') && !starIcon.matches(':hover')) starIcon.style.visibility = 'hidden';
@@ -353,4 +368,39 @@ class Elements {
 
 		return starIcon;
 	}
+}
+
+function particle(x, y) {
+	const particle = document.createElement('particle');
+	document.body.appendChild(particle);
+	let width = Math.floor(Math.random() * 30 + 8);
+	let height = width;
+	let destinationX = (Math.random() - 0.5) * 300;
+	let destinationY = (Math.random() - 0.5) * 300;
+	let rotation = Math.random() * 500;
+	let delay = Math.random() * 100;
+	particle.innerHTML = ['⭐', '💛'][Math.floor(Math.random() * 2)];
+	particle.style.fontSize = `${Math.random() * 24 + 10}px`;
+	width = height = 'auto';
+
+	particle.style.width = `${width}px`;
+	particle.style.height = `${height}px`;
+	const animation = particle.animate([
+		{
+			transform: `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(0deg)`,
+			opacity: 1
+		},
+		{
+			transform: `translate(-50%, -50%) translate(${x + destinationX}px, ${y + destinationY}px) rotate(${rotation}deg)`,
+			opacity: 0
+		}
+	], {
+		duration: Math.random() * 1000 + 1000,
+		easing: 'cubic-bezier(0, .9, .57, 1)',
+		delay: delay
+	});
+	animation.onfinish = deleteParticle;
+}
+function deleteParticle(e) {
+	e.srcElement.effect.target.remove();
 }
