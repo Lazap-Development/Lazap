@@ -1,5 +1,5 @@
 <p align="center">
-<a href="#" target="_blank"><img src="https://media.discordapp.net/attachments/910422768045133869/914878042508251156/icon.png" width="140px" height="auto"/></a>
+<a href="#" target="_blank"><img src="https://media.discordapp.net/attachments/910422768045133869/914878042508251156/icon.png" width="130px" height="auto"/></a>
 </p>
 
 <h1 align="center">
@@ -42,7 +42,7 @@ If you'd like to compile lazap from source, please do and read the following: <b
 
 **REQUIREMENTS**<br> 
 - node `v17` or higher (`v18.5` is tested on my end and seems to be the most compatible)<br>
-- All prerequisites in **[Here](https://tauri.app/v1/guides/getting-started/prerequisites/)**
+- All prerequisites in **[here](https://tauri.app/v1/guides/getting-started/prerequisites/)**
 - yarn (`npm install --global yarn`)
 
 Once met requirements, do the following:
