@@ -32,8 +32,7 @@ Currently, Mac Support is pending so we appreciate your paitence.<br>
 `-` Download and Install the latest `.exe` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
 #### ▸ Linux
-`-` [AUR](https://aur.archlinux.org/packages/lazap) for **Arch Linux** <br>
-`-` For **other distros**, we recommend you to download the either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+`-` [AUR](https://aur.archlinux.org/packages/lazap) for **Arch Linux** <br> `-` For **other distros**, we recommend you to download either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
 
 ## 👾 Development
