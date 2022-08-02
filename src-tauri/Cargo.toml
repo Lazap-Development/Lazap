@@ -19,8 +19,8 @@ git = "https://github.com/tauri-apps/tauri-plugin-sql"
 features = ["sqlite"] # or "postgres", or "mysql"
 
 [dependencies]
-serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0.82"
+serde = { version = "1.0.141", features = ["derive"] }
 tauri = { version = "1.0.5", features = ["api-all", "devtools", "system-tray"] }
 window-shadows = "0.2"
 html_parser = "0.6.3"
