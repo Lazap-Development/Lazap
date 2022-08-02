@@ -46,7 +46,7 @@ If you'd like to compile lazap from source, please do and read the following: <b
 
 Once met requirements, do the following:
 ```bash
-$ git clone https://github.com/DashCruft/Hackathon.git && cd Hackathon
+$ git clone https://github.com/Lazap-Development/Lazap.git && cd Hackathon
 $ yarn install
 ```
 To run lazap afterwards, do `yarn tauri:serve`.
