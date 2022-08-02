@@ -32,7 +32,7 @@ Currently, Mac Support is pending so we appreciate your paitence.<br>
 `-` Download and Install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
 #### ▸ Linux
-`-` [AUR](https://aur.archlinux.org/packages/lazap) for **Arch Linux** <br> `-` For **other distros**, we recommend you to download either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+`-` For **Linux Distros**, we recommend you to download either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
 
 ## 👾 Development
