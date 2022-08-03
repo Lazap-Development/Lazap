@@ -8,20 +8,9 @@ const { sha256 } = require('../modules/sha256.js');
 
 const processes = new Map();
 
-function fixPath(str, index, value) {
-	return str.substr(0, index) + value + str.substr(index);
-}
-async function rootDir() {
-	if (await os.platform() === 'win32') {
-		return fixPath(await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname))), 2, '\\');
-	} else if (await os.platform() === 'linux') {
-		return await path.dirname(decodeURI(new URL(import.meta.url).pathname));
-	}
-}
-
 async function getInstalledGames() {
 	// Fetch all games
-	const launchers = (await fs.readDir(await rootDir())).map(x => x.name).filter(x => !['find-games.js'].includes(x));
+	const launchers = ['EpicGames.js', 'FiveM.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js'];
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
 
 	return games;
@@ -36,7 +25,7 @@ async function filterAndSort(games, type) {
 	}
 
 	// Filter out new games and delete old games
-	const games_blacklist = JSON.parse(await fs.readTextFile(await path.join(await rootDir(), '../blacklist.json')));
+	const games_blacklist = require('../blacklist.json');
 	games = games.filter(x => !games_blacklist[0].includes(x.GameID) && !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`));
 	for (let i = 0; i < list.length; i++) {
 		if (!games.map(x => x.GameID.replaceAll(' ', '_')).includes(list.children[i].id.slice(9))) {
