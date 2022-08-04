@@ -131,6 +131,7 @@ body {
 }
 
 .titlebar {
+    position: relative;
     overflow: hidden;
     border-radius: 10px;
     background-color: #1e1f24;

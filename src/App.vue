@@ -79,7 +79,7 @@
         <img class="titlebar-account" src="./assets/account.svg" id="account-btn">
         <img class="titlebar-update" src="./assets/download.svg" id="update-btn">
       </div>
-      <div data-tauri-drag-region style="margin-top: 0px;" class="titlebar-icons">
+      <div style="margin-top: 0px;" class="titlebar-icons">
         <div @click="min_window" class="titlebar-min mx-1"></div>
         <div @click="max_window" class="titlebar-max mx-1"></div>
         <div @click="close_window" class="titlebar-exit mx-1"></div>
