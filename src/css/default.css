@@ -131,9 +131,10 @@ body {
 }
 
 .titlebar {
+    position: relative;
     overflow: hidden;
     border-radius: 10px;
-    background-color: #202126;
+    background-color: #1e1f24;
     height: 35px;
     width: 100%;
     flex: auto;
@@ -260,7 +261,7 @@ body {
     flex-direction: column;
     flex-wrap: wrap;
 
-    background-color: #1e1f24;
+    background-color: #1c1d22;
     border-radius: 10px;
 
     height: calc(100% - 72px);
@@ -308,7 +309,7 @@ body {
 }
 
 .jump-back {
-    background-color: #1e1f24;
+    background-color: #1c1d22;
     width: 100%;
     height: 100%;
 
@@ -323,7 +324,7 @@ body {
 }
 
 .online-friends {
-    background-color: #1e1f24;
+    background-color: #1c1d22;
     width: 100%;
     height: 100%;
 
@@ -346,7 +347,7 @@ body {
 }
 
 .leftbar {
-    background-color: #1e1f24;
+    background-color: #1c1d22;
     border-radius: 15px;
     position: absolute;
     height: calc(100% - 71px);
