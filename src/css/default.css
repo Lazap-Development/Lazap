@@ -585,7 +585,10 @@ body {
     width: 25px;
     filter: invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%);
     visibility: hidden;
+}
 
+.star-fill {
+    content: url("../assets/star-solid.svg") !important;
 }
 
 .star:hover {

@@ -16,8 +16,8 @@ async function getInstalledGames() {
 	return games;
 }
 
-async function filterAndSort(games, type) {
-	const list = document.getElementById(type);
+async function filterAndSort(games, type, list, stored) {
+	list = list ?? document.getElementById(type);
 
 	// Check if the list already has the games loaded and prevent further execution
 	if ((list.children.length === games.length) && list.children.length !== 0) {
@@ -40,7 +40,7 @@ async function filterAndSort(games, type) {
 	else if (['recentGamesListMainPage', 'recentGamesList'].includes(type)) {
 		let final = [];
 		for (let i = 0; i < games.length; i++) {
-			const game = await getGames(games[i].GameID, games[i].LauncherName);
+			const game = stored.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? stored.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName);
 			if (typeof game?.LastLaunch === 'number' && typeof game?.Launches === 'number') final.push(game);
 		}
 		return final;
@@ -48,7 +48,7 @@ async function filterAndSort(games, type) {
 	else if (type === 'favGamesList') {
 		let final = [];
 		for (let i = 0; i < games.length; i++) {
-			const game = await getGames(games[i].GameID, games[i].LauncherName);
+			const game = stored.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
 			if (typeof game?.Favourite === 'boolean' && game.Favourite === true) final.push(game);
 		}
 		return final;
@@ -58,39 +58,18 @@ async function filterAndSort(games, type) {
 	}
 }
 
-async function loadGames(id) {
-	const _games_ = await getInstalledGames();
-	const games = await filterAndSort(_games_, id);
+async function loadGames(id, data, stored) {
+	const games = data ?? await getInstalledGames();
 	const list = document.getElementById(id);
 
-	games.map(async (game) => {
-		const gameElement = Elements.getGameElement(game, id);
-		list.appendChild(gameElement);
-
-		const gameBanner = await Elements.getGameBannerElement(game);
-		gameElement.appendChild(gameBanner);
-		// eslint-disable-next-line no-self-assign
-		game.Banner = game.Banner;
-
-		gameBanner.addEventListener('click', () => {
-			handleLaunch(game);
-		});
-
-		if (id.startsWith('recent') && id.includes('Main')) return game;
-
-		const gameText = Elements.getGameDisplayElement(game);
-		gameElement.appendChild(gameText);
-
-		const starIcon = await Elements.getStarElement(game, gameElement, gameBanner);
-		gameElement.appendChild(starIcon);
-		return game;
-	}).filter(async x => Object.keys(await x).length > 0);
+	(await filterAndSort(games, id, list, stored)).map(async (game) => Elements.createGameElement(game, id, list)).filter(async x => Object.keys(await x).length > 0);
 	if ((games.length > 0) && id === 'allGamesList') {
 		setGames(games, 'all-games');
 	}
 
-	require('../modules/banners').getBanners(await Promise.all(_games_));
-
+	if (id === 'allGamesList') {
+		require('../modules/banners').getBanners(await Promise.all(games));
+	}
 }
 
 async function handleLaunch(game) {
@@ -170,9 +149,15 @@ async function toggleFavourite(GameID, LauncherName) {
 async function addLaunch(GameID, LauncherName) {
 	const data = await getGames();
 	if (!data) return;
-	data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).LastLaunch = Date.now();
-	data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches = typeof data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches === 'number' ? data.find(x => x.GameID === GameID && x.LauncherName === LauncherName).Launches + 1 : 1;
+	const game = data.find(x => x.GameID === GameID && x.LauncherName === LauncherName);
+	game.LastLaunch = Date.now();
+	game.Launches = typeof game.Launches === 'number' ? game.Launches + 1 : 1;
 	setGames(data, 'add-launch');
+	if (!document.getElementById('recentGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`))
+	// eslint-disable-next-line no-undef
+	Elements.createGameElement(game, 'recentGamesList', recentGamesList);
+	// eslint-disable-next-line no-undef
+	Elements.createGameElement(game, 'recentGamesListMainPage', recentGamesListMainPage);
 }
 function createProcess(Command, Args, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
@@ -252,6 +237,7 @@ async function getGames(GameID, LauncherName) {
 export {
 	getInstalledGames,
 	loadGames,
+	getGames,
 };
 
 class Elements {
@@ -315,8 +301,7 @@ class Elements {
 				starIcon.classList.add('fade');
 				x[i].style.visibility = 'visible';
 				if (isFavourite) {
-					let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
-					starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, "../../assets/star-solid.svg"))}")`;
+					starIcon.classList.add('star-fill');
 					starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
 				}
 			}
@@ -329,25 +314,23 @@ class Elements {
 					starIcon.classList.remove('fade');
 					x[i].style.visibility = 'hidden';
 					if (!isFavourite) {
-						let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
-						starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, "../../assets/star-empty.svg"))}")`;
+						starIcon.classList.remove('star-fill')
 						starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 					}
 				}
 			}
 		});
 		starIcon.addEventListener('click', async () => {
-			const res = await toggleFavourite(game.GameID, game.LauncherName);
-			let rootDir = await path.resolve(await path.dirname(decodeURI(new URL(import.meta.url).pathname)));
-			let solidOrEmpty = res;
-			starIcon.style.content = `url("${tauri.convertFileSrc(await path.join(rootDir, '../../assets/star-' + solidOrEmpty + '.svg'))}")`;
-			starIcon.style.filter = res ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
+			const solidOrEmpty = await toggleFavourite(game.GameID, game.LauncherName);
+			starIcon.style.filter = solidOrEmpty ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 
 			if (solidOrEmpty === "solid") {
+				starIcon.classList.add('star-fill');
 				for (let i = 0; i < 20; i++) {
 					particle(starIcon.getBoundingClientRect().left, starIcon.getBoundingClientRect().top);
 				}
 			} else {
+				starIcon.classList.remove('star-fill');
 				starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 			}
 		});
@@ -356,6 +339,31 @@ class Elements {
 		});
 
 		return starIcon;
+	}
+
+	static async createGameElement(game, id, list) {
+		list = list ?? document.getElementById(id);
+		const gameElement = Elements.getGameElement(game, id);
+		list.appendChild(gameElement);
+
+		const gameBanner = await Elements.getGameBannerElement(game);
+		gameElement.appendChild(gameBanner);
+		// eslint-disable-next-line no-self-assign
+		game.Banner = game.Banner;
+
+		gameBanner.addEventListener('click', () => {
+			handleLaunch(game);
+		});
+
+		if (id.startsWith('recent') && id.includes('Main')) return game;
+
+		const gameText = Elements.getGameDisplayElement(game);
+		gameElement.appendChild(gameText);
+
+		const starIcon = await Elements.getStarElement(game, gameElement, gameBanner);
+		gameElement.appendChild(starIcon);
+
+		return game;
 	}
 }
 
