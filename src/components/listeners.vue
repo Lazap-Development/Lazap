@@ -25,12 +25,28 @@ window.addEventListener('load', async function () {
     console.log(err);
   }
 
-  await require('./launchers/find-games').getInstalledGames()
+  const allGames = await require('./launchers/find-games').getInstalledGames()
+    .catch((err) => {
+      return console.log(err);
+    });
+  const gamesdata = await require('./launchers/find-games').getGames()
     .catch((err) => {
       return console.log(err);
     });
 
-  await require('./launchers/find-games').loadGames('recentGamesListMainPage')
+  await require('./launchers/find-games').loadGames('recentGamesListMainPage', allGames, gamesdata)
+    .catch((err) => {
+      return console.log(err);
+    });
+  await require('./launchers/find-games').loadGames('recentGamesList', allGames, gamesdata)
+    .catch((err) => {
+      return console.log(err);
+    });
+  await require('./launchers/find-games').loadGames('allGamesList', allGames)
+    .catch((err) => {
+      return console.log(err);
+    });
+  await require('./launchers/find-games').loadGames('favGamesList', allGames, gamesdata)
     .catch((err) => {
       return console.log(err);
     });
