@@ -18,10 +18,11 @@ async function getInstalledGames() {
 async function getMinecraftLauncher() {
 	if (await os.platform() === 'win32') {
 		const out = await new shell.Command('cmd', ['/C', 'Reg', 'query', 'HKEY_CLASSES_ROOT\\Applications\\MinecraftLauncher.exe\\shell\\open\\command', '/ve']).execute().catch(() => null);
-		if (out?.error) {
-			const isInstalled = await fs.readDir('C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.0.113.0_x64__8wekyb3d8bbwe\\Minecraft.exe').catch(() => null);
-			if (!isInstalled) return false;
-			const Location = 'C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.0.113.0_x64__8wekyb3d8bbwe';
+		if (out?.stderr) {
+			const isInstalled = (await new shell.Command('cmd', ['/C', 'Get-appxpackage', 'Microsoft.4297127D64EC6']).execute().catch(() => null))?.stdout;
+			if (!isInstalled?.length > 1) return false;
+			const Location = isInstalled.split(window.__TAURI__.os.EOL).find(x => x.startsWith('InstallLocation')).split(':').trim();
+			if (!(await fs.readDir(Location).catch(() => null))) return false;
 			const Executable = 'Minecraft.exe';
 			return {
 				DisplayName: 'Minecraft Launcher',
