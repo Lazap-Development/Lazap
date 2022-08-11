@@ -12,9 +12,12 @@ async function getSteamLocation() {
         else {
             registry_res = output.stdout;
             const steamDir = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].trim();
-
-            const text = await fs.readTextFile(steamDir + `\\steamapps\\libraryfolders.vdf`)
-
+            let text;
+            try {
+                text = await fs.readTextFile(steamDir + `\\steamapps\\libraryfolders.vdf`);
+            } catch {
+                return [];
+            }
             const VDF = require('../modules/parseVDF');
             const parsed = VDF.parse(text);
             const toArray = Object.entries(parsed.libraryfolders).filter(x => x[1].path);

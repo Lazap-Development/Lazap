@@ -9,7 +9,7 @@ async function getBanners(games) {
 		arr.push((() => {
 			switch (games[i].LauncherName) {
 				case 'EpicGames': {
-					return;
+					return "https://media.sidefx.com/uploads/article/epic-games-invests-in-sidefx/epic_logo_black_banner3.jpg";
 				}
 				case 'Steam': {
 					return `https://cdn.akamai.steamstatic.com/steam/apps/${games[i].GameID}/library_600x900.jpg`;
@@ -42,11 +42,16 @@ async function getBanners(games) {
 
 	}
 
-	cacheBanners(games.filter(x => x.LauncherName !== 'EpicGames'), arr.filter(x => x));
+	cacheBanners(games.filter(x => x), arr.filter(x => x));
 	return arr;
 }
 
 async function cacheBanners(data, res) {
+	if(data?.length === 0) {
+		document.getElementById('game-loading-overlay').style.opacity = '0';
+		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
+		return console.log('[BANNER] No games to process');
+	}
 	const appDirPath = await path.appDir();
 	const { sha256 } = require('../modules/sha256')
 	const bannerBasePath = appDirPath + 'storage/cache/games/banners';
@@ -64,7 +69,6 @@ async function cacheBanners(data, res) {
 			}
 		}
 	}
-
 	if (alreadyProcessed === true) {
 		document.getElementById('game-loading-overlay').style.opacity = '0';
 		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
@@ -80,6 +84,7 @@ async function cacheBanners(data, res) {
 			responseType: 3
 		}).then(async (response) => {
 			if (response.status === 404 && data[i].LauncherName === 'Lutris') return;
+			console.warn(data);
 			await fs.writeBinaryFile(bannerBasePath + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`, response.data);
 			document.getElementById(`game-div-${data[i].DisplayName.replaceAll(' ', '_')}`)?.firstElementChild?.setAttribute('src', tauri.convertFileSrc(bannerBasePath + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`));
 		}).catch((e) => console.log(e));
