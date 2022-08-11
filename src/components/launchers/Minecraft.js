@@ -19,9 +19,9 @@ async function getMinecraftLauncher() {
 	if (await os.platform() === 'win32') {
 		const out = await new shell.Command('cmd', ['/C', 'Reg', 'query', 'HKEY_CLASSES_ROOT\\Applications\\MinecraftLauncher.exe\\shell\\open\\command', '/ve']).execute().catch(() => null);
 		if (out?.stderr) {
-			const isInstalled = await fs.readDir('C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.0.113.0_x64__8wekyb3d8bbwe\\Minecraft.exe').catch(() => null);
+			const isInstalled = await fs.readDir('C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.1.21.0_x64__8wekyb3d8bbwe').catch(() => null);
 			if (!isInstalled) return false;
-			const Location = 'C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.0.113.0_x64__8wekyb3d8bbwe';
+			const Location = 'C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.1.21.0_x64__8wekyb3d8bbwe';
 			const Executable = 'Minecraft.exe';
 			return {
 				DisplayName: 'Minecraft Launcher',

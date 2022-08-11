@@ -84,7 +84,6 @@ async function cacheBanners(data, res) {
 			responseType: 3
 		}).then(async (response) => {
 			if (response.status === 404 && data[i].LauncherName === 'Lutris') return;
-			console.warn(data);
 			await fs.writeBinaryFile(bannerBasePath + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`, response.data);
 			document.getElementById(`game-div-${data[i].DisplayName.replaceAll(' ', '_')}`)?.firstElementChild?.setAttribute('src', tauri.convertFileSrc(bannerBasePath + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`));
 		}).catch((e) => console.log(e));
