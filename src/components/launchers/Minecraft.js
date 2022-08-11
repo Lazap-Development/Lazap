@@ -18,7 +18,7 @@ async function getInstalledGames() {
 async function getMinecraftLauncher() {
 	if (await os.platform() === 'win32') {
 		const out = await new shell.Command('cmd', ['/C', 'Reg', 'query', 'HKEY_CLASSES_ROOT\\Applications\\MinecraftLauncher.exe\\shell\\open\\command', '/ve']).execute().catch(() => null);
-		if (out?.error) {
+		if (out?.stderr) {
 			const isInstalled = await fs.readDir('C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.0.113.0_x64__8wekyb3d8bbwe\\Minecraft.exe').catch(() => null);
 			if (!isInstalled) return false;
 			const Location = 'C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.0.113.0_x64__8wekyb3d8bbwe';
@@ -34,7 +34,9 @@ async function getMinecraftLauncher() {
 			};
 		}
 		else {
+			console.warn(out);
 			const Location = out?.stdout.split('REG_SZ')[1].split('\r\n\r\n')[0].trim().split('" "')[0].split('"').join('').split('\\').slice(0, -1).join('\\');
+			console.warn(Location);
 			const Args = out?.stdout.split('REG_SZ')[1].split('\r\n\r\n')[0].trim().split('" "')[1].split('"').join('');
 			const Executable = out?.stdout.split('REG_SZ')[1].split('\r\n\r\n')[0].trim().split('" "')[0].split('"').join('').split('\\').slice(-1)[0];
 			if (!(await fs.readDir(Location).catch(() => null))) return false;
