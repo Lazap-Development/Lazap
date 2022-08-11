@@ -5,7 +5,6 @@ const path = window.__TAURI__.path;
 
 async function getInstalledGames() {
 	if (await os.platform() === 'win32') {
-		// Minecraft Game Detection on Windows is Disabled until further notice. For more info check out https://discord.com/channels/644764850706448384/825224040641724416/997324642534559764
 		return [await getMinecraftLauncher(), await getLunarClient()].filter(x => x !== false);
 	}
 	else if (await os.platform() === 'linux') {
@@ -18,7 +17,37 @@ async function getInstalledGames() {
 
 async function getMinecraftLauncher() {
 	if (await os.platform() === 'win32') {
-		return false;
+		const out = await new shell.Command('cmd', ['/C', 'Reg', 'query', 'HKEY_CLASSES_ROOT\\Applications\\MinecraftLauncher.exe\\shell\\open\\command', '/ve']).execute().catch(() => null);
+		if (out?.error) {
+			const isInstalled = await fs.readDir('C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.0.113.0_x64__8wekyb3d8bbwe\\Minecraft.exe').catch(() => null);
+			if (!isInstalled) return false;
+			const Location = 'C:\\Program Files\\WindowsApps\\Microsoft.4297127D64EC6_1.0.113.0_x64__8wekyb3d8bbwe';
+			const Executable = 'Minecraft.exe';
+			return {
+				DisplayName: 'Minecraft Launcher',
+				LauncherName: 'Minecraft',
+				GameID: 'Minecraft',
+				Size: null,
+				Location,
+				Executable,
+				Args: [],
+			};
+		}
+		else {
+			const Location = out?.stdout.split('REG_SZ')[1].split('\r\n\r\n')[0].trim().split('" "')[0].split('"').join('').split('\\').slice(0, -1).join('\\');
+			const Args = out?.stdout.split('REG_SZ')[1].split('\r\n\r\n')[0].trim().split('" "')[1].split('"').join('');
+			const Executable = out?.stdout.split('REG_SZ')[1].split('\r\n\r\n')[0].trim().split('" "')[0].split('"').join('').split('\\').slice(-1)[0];
+			if (!(await fs.readDir(Location).catch(() => null))) return false;
+			return {
+				DisplayName: 'Minecraft Launcher',
+				LauncherName: 'Minecraft',
+				GameID: 'Minecraft',
+				Size: null,
+				Location,
+				Executable,
+				Args: [Args],
+			};
+		}
 	}
 	else if (await os.platform() === 'linux') {
 		try {
@@ -57,7 +86,19 @@ async function getMinecraftLauncher() {
 
 async function getLunarClient() {
 	if (await os.platform() === 'win32') {
-		return false;
+		const isLunarInstalled = await fs.readDir(`${await path.localDataDir()}Programs\\lunarclient`).catch(() => null);
+		if (!isLunarInstalled) return false;
+		const Location = `${await path.localDataDir()}Programs\\lunarclient`;
+		const Executable = 'Lunar Client.exe';
+		return {
+			DisplayName: 'Lunar Client',
+			LauncherName: 'Lunar',
+			GameID: 'Lunar',
+			Size: null,
+			Location,
+			Executable,
+			Args: [],
+		};
 	}
 	else if (await os.platform() === 'linux') {
 		try {
