@@ -23,7 +23,6 @@ async function getMinecraftLauncher() {
 			if (!isInstalled?.length > 1) return false;
 			const Location = isInstalled.split(window.__TAURI__.os.EOL).find(x => x.startsWith('InstallLocation')).split(':').trim();
 			if (!(await fs.readDir(Location).catch(() => null))) return false;
->>>>>>> 6a08975b797a5a5be865ae5aea9ad8a2c161a2fb
 			const Executable = 'Minecraft.exe';
 			return {
 				DisplayName: 'Minecraft Launcher',
