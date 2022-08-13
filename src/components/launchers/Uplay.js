@@ -13,18 +13,13 @@ async function getUplayLocation(checkForUplay = true) {
 			return { stderr: 'NOT_FOUND' };
 		});
 
-		if (stderr) {
-            console.log(stderr);
-			return;
-		}
+		if (stderr) return console.error(stderr);
 		else {
 			registry_res = stdout;
 			launcher_location = registry_res.split('REG_SZ')[1].split('\r\n\r\n')[0].split('\r\n')[0].trim();
 		}
 	}
-	else {
-		return;
-	}
+	else return;
 	if (checkForUplay && !(await isLauncherInstalled(launcher_location))) return false;
 	return launcher_location;
 }
@@ -41,10 +36,7 @@ async function parseGameObject(GameID) {
 	const { stdout: registry_res, stderr } = await new shell.Command('cmd', ['/C', 'Reg', 'Query', `HKEY_LOCAL_MACHINE\\SOFTWARE\\${await os.arch() === 'x86_64' ? 'Wow6432Node\\' : ''}Ubisoft\\Launcher\\Installs\\${GameID}`]).execute().catch(async () => {
 		return { error: `${GameID} NOT_FOUND` };
 	});
-	if (stderr) {
-		console.error(stderr);
-		return;
-	}
+	if (stderr) return console.error(stderr);
 	const Location = registry_res.split('\r\n').map(x => x.trim()).filter(x => x.startsWith('InstallDir'))[0]?.split('REG_SZ')[1].trim();
 	if (!(await fs.readDir(Location).catch(() => null))) return;
 	const Executable = null;

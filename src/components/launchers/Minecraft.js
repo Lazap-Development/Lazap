@@ -4,24 +4,25 @@ const shell = window.__TAURI__.shell;
 const path = window.__TAURI__.path;
 
 async function getInstalledGames() {
-	if (await os.platform() === 'win32') {
-		return [await getMinecraftLauncher(), await getLunarClient()].filter(x => x !== false);
-	}
-	else if (await os.platform() === 'linux') {
-		return [await getMinecraftLauncher(), await getLunarClient()].filter(x => x !== false);
-	}
-	else {
-		return [];
-	}
+	const platform = await os.platform();
+	if (platform === 'win32' || platform === 'linux') 
+	return [await getMinecraftLauncher(), await getLunarClient()].filter(x => x !== false);
+	else return [];
 }
 
 async function getMinecraftLauncher() {
-	if (await os.platform() === 'win32') {
+	const platform = await os.platform();
+	if (platform === 'win32') {
 		const out = await new shell.Command('cmd', ['/C', 'Reg', 'query', 'HKEY_CLASSES_ROOT\\Applications\\MinecraftLauncher.exe\\shell\\open\\command', '/ve']).execute().catch(() => null);
 		if (out?.stderr) {
-			const isInstalled = (await new shell.Command('cmd', ['/C', 'Get-appxpackage', 'Microsoft.4297127D64EC6']).execute().catch(() => null))?.stdout;
+			const isInstalled = (await new shell.Command('cmd', ['/C', 'powershell', 'Get-appxpackage', 'Microsoft.4297127D64EC6']).execute().catch(() => null))?.stdout;
 			if (!isInstalled?.length > 1) return false;
-			const Location = isInstalled.split(window.__TAURI__.os.EOL).find(x => x.startsWith('InstallLocation')).split(':').trim();
+			const ObjectLocation = isInstalled.split(window.__TAURI__.os.EOL).find(x => x.startsWith('InstallLocation')).split(':')
+			const ArrayLocation = Array.from(ObjectLocation);
+			const stillArrayLocation = ArrayLocation.splice(1, 2)
+			stillArrayLocation[0] = ` ${stillArrayLocation[0]}:`;
+			const Location = `${stillArrayLocation.join("").trim()}`;
+			// const Location = isInstalled.split(window.__TAURI__.os.EOL).find(x => x.startsWith('InstallLocation')).split(':').trim();
 			if (!(await fs.readDir(Location).catch(() => null))) return false;
 			const Executable = 'Minecraft.exe';
 			return {
@@ -35,9 +36,7 @@ async function getMinecraftLauncher() {
 			};
 		}
 		else {
-			console.warn(out);
 			const Location = out?.stdout.split('REG_SZ')[1].split('\r\n\r\n')[0].trim().split('" "')[0].split('"').join('').split('\\').slice(0, -1).join('\\');
-			console.warn(Location);
 			const Args = out?.stdout.split('REG_SZ')[1].split('\r\n\r\n')[0].trim().split('" "')[1].split('"').join('');
 			const Executable = out?.stdout.split('REG_SZ')[1].split('\r\n\r\n')[0].trim().split('" "')[0].split('"').join('').split('\\').slice(-1)[0];
 			if (!(await fs.readDir(Location).catch(() => null))) return false;
@@ -52,7 +51,7 @@ async function getMinecraftLauncher() {
 			};
 		}
 	}
-	else if (await os.platform() === 'linux') {
+	else if (platform === 'linux') {
 		try {
 			const output = await new shell.Command('which', "minecraft-launcher").execute();
 
@@ -88,7 +87,8 @@ async function getMinecraftLauncher() {
 }
 
 async function getLunarClient() {
-	if (await os.platform() === 'win32') {
+	const platform = await os.platform();
+	if (platform === 'win32') {
 		const isLunarInstalled = await fs.readDir(`${await path.localDataDir()}Programs\\lunarclient`).catch(() => null);
 		if (!isLunarInstalled) return false;
 		const Location = `${await path.localDataDir()}Programs\\lunarclient`;
@@ -103,7 +103,7 @@ async function getLunarClient() {
 			Args: [],
 		};
 	}
-	else if (await os.platform() === 'linux') {
+	else if (platform === 'linux') {
 		try {
 			const output = await new shell.Command('which', "lunarclient").execute();
 
