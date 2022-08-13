@@ -42,7 +42,7 @@ async function getBanners(games) {
 
 	}
 
-	cacheBanners(games.filter(x => x.LauncherName !== 'EpicGames'), arr.filter(x => x));
+	cacheBanners(games.filter(x => !['Uplay', 'EpicGames'].includes(x.LauncherName)), arr.filter(x => x));
 	return arr;
 }
 
