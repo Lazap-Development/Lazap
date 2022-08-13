@@ -88,10 +88,10 @@ async function handleLaunch(game) {
 				res = createProcess('cmd', `/C start /min cmd /c start uplay://launch/${game.GameID}/0`, game.GameID);
 				break;
 			}
-			//  case 'Minecraft': {
-			//      res = createProcess('minecraft-launcher', [], game.GameID);
-			//      break;
-			//  }
+			case 'Minecraft': {
+				res = createProcess('cmd', `/C powershell start '${game.Location}\\${game.Executable}'`, game.GameID);
+				break;
+			}
 			default: {
 				res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
 				break;
@@ -156,6 +156,7 @@ async function addLaunch(GameID, LauncherName) {
 	if (!document.getElementById('recentGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`))
 	// eslint-disable-next-line no-undef
 	Elements.createGameElement(game, 'recentGamesList', recentGamesList);
+	if(Elements.getGameElement(game, 'recentGamesListMainPage')) return;
 	// eslint-disable-next-line no-undef
 	Elements.createGameElement(game, 'recentGamesListMainPage', recentGamesListMainPage);
 }
