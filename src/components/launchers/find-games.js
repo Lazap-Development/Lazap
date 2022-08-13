@@ -10,7 +10,7 @@ const processes = new Map();
 
 async function getInstalledGames() {
 	// Fetch all games
-	const launchers = ['EpicGames.js', 'FiveM.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js'];
+	const launchers = ['EpicGames.js', 'FiveM.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js', 'Uplay.js'];
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
 
 	return games;
@@ -40,7 +40,7 @@ async function filterAndSort(games, type, list, stored) {
 	else if (['recentGamesListMainPage', 'recentGamesList'].includes(type)) {
 		let final = [];
 		for (let i = 0; i < games.length; i++) {
-			const game = stored.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? stored.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName);
+			const game = stored?.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? stored.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName);
 			if (typeof game?.LastLaunch === 'number' && typeof game?.Launches === 'number') final.push(game);
 		}
 		return final;
@@ -48,7 +48,7 @@ async function filterAndSort(games, type, list, stored) {
 	else if (type === 'favGamesList') {
 		let final = [];
 		for (let i = 0; i < games.length; i++) {
-			const game = stored.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
+			const game = stored?.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
 			if (typeof game?.Favourite === 'boolean' && game.Favourite === true) final.push(game);
 		}
 		return final;

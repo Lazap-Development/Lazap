@@ -231,5 +231,11 @@ window.addEventListener('load', async function () {
       }
     });
   });
+
+  document.addEventListener('keydown', async function (e) {
+    if (e.ctrlKey && e.key === "r") {
+      window.location.reload();
+    }
+  })
 });
 </script>
