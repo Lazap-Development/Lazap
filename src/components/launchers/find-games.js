@@ -40,7 +40,7 @@ async function filterAndSort(games, type, list, stored) {
 	else if (['recentGamesListMainPage', 'recentGamesList'].includes(type)) {
 		let final = [];
 		for (let i = 0; i < games.length; i++) {
-			const game = stored?.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? stored.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName);
+			const game = stored?.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
 			if (typeof game?.LastLaunch === 'number' && typeof game?.Launches === 'number') final.push(game);
 		}
 		return final;
@@ -89,7 +89,11 @@ async function handleLaunch(game) {
 				break;
 			}
 			case 'Minecraft': {
-				res = createProcess('cmd', `/C powershell start '${game.Location}\\${game.Executable}'`, game.GameID);
+				res = createProcess('cmd', `/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
+				break;
+			}
+			case 'Lunar': {
+				res = createProcess('cmd', `/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
 				break;
 			}
 			default: {
@@ -153,16 +157,17 @@ async function addLaunch(GameID, LauncherName) {
 	game.LastLaunch = Date.now();
 	game.Launches = typeof game.Launches === 'number' ? game.Launches + 1 : 1;
 	setGames(data, 'add-launch');
-	if (!document.getElementById('recentGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`))
-	// eslint-disable-next-line no-undef
-	Elements.createGameElement(game, 'recentGamesList', recentGamesList);
-	if(Elements.getGameElement(game, 'recentGamesListMainPage')) return;
-	// eslint-disable-next-line no-undef
-	Elements.createGameElement(game, 'recentGamesListMainPage', recentGamesListMainPage);
+	if (!document.getElementById('recentGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
+		// eslint-disable-next-line no-undef
+		Elements.createGameElement(game, 'recentGamesList', recentGamesList);
+		// eslint-disable-next-line no-undef
+		Elements.createGameElement(game, 'recentGamesListMainPage', recentGamesListMainPage);
+	}
 }
 function createProcess(Command, Args, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
 	VisibilityState();
+	console.log(Args);
 	const instance = invoke('run_game', { exec: Command, args: Args })
 		.then(() => {
 			VisibilityState();
@@ -193,7 +198,7 @@ async function VisibilityState() {
 
 async function setGames(games, source) {
 	const appDirPath = await path.appDir();
-	const GAMES_DATA_BASE_PATH = appDirPath + 'storage/cache/games/Data.json';
+	const GAMES_DATA_BASE_PATH = appDirPath + 'storage/cache/games/data.json';
 	const data = JSON.parse(await fs.readTextFile(GAMES_DATA_BASE_PATH).catch(() => '[]'));
 
 	if (source === 'add-launch') {
@@ -226,7 +231,7 @@ async function setGames(games, source) {
 	}
 }
 async function getGames(GameID, LauncherName) {
-	const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/Data.json').catch(() => '[]'));
+	const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/data.json').catch(() => '[]'));
 
 	if (GameID && LauncherName) {
 		return data.find(x => (x.GameID === GameID) && (x.LauncherName === LauncherName));
@@ -297,7 +302,7 @@ class Elements {
 
 		gameBanner.addEventListener('mouseover', async () => {
 			const x = gameElement.getElementsByClassName('star');
-			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
+			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
 			for (let i = 0; i < x.length; i++) {
 				starIcon.classList.add('fade');
 				x[i].style.visibility = 'visible';
@@ -309,7 +314,7 @@ class Elements {
 		});
 		gameBanner.addEventListener('mouseout', async () => {
 			const x = gameElement.getElementsByClassName('star');
-			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
+			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
 			for (let i = 0; i < x.length; i++) {
 				if (!x[i].matches(':hover')) {
 					starIcon.classList.remove('fade');
