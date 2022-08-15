@@ -59,6 +59,8 @@ async function filterAndSort(games, type, list, stored) {
 }
 
 async function loadGames(id, data, stored) {
+	// eslint-disable-next-line no-undef
+	loadingbtn.style.opacity = '1';
 	const games = data ?? await getInstalledGames();
 	const list = document.getElementById(id);
 
@@ -70,6 +72,8 @@ async function loadGames(id, data, stored) {
 	if (id === 'allGamesList') {
 		require('../modules/banners').getBanners(await Promise.all(games));
 	}
+	// eslint-disable-next-line no-undef
+	loadingbtn.style.opacity = '0';
 }
 
 async function handleLaunch(game) {

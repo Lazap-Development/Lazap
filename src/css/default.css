@@ -204,6 +204,7 @@ body {
     cursor: pointer;
     animation-delay: 200ms;
     animation: settings-spin 1s linear;
+    filter: invert(17%) sepia(86%) saturate(3285%) hue-rotate(239deg) brightness(85%) contrast(101%);
 }
 
 .titlebar-account {
@@ -233,6 +234,17 @@ body {
 .titlebar-update:hover {
     cursor: pointer;
     filter: invert(65%) sepia(56%) saturate(4278%) hue-rotate(79deg) brightness(118%) contrast(130%);
+}
+
+.titlebar-loading {
+    -webkit-app-region: no-drag;
+    display: flex;
+    opacity: 0;
+    height: 24px;
+    width: 24px;
+    margin-top: -2px;
+    margin-left: 8px;
+    align-items: flex-start;
 }
 
 .mx-1 {

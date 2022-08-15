@@ -79,6 +79,7 @@
         <img class="titlebar-settings" src="./assets/settings.svg" id="settings-btn">
         <img class="titlebar-account" src="./assets/account.svg" id="account-btn">
         <img class="titlebar-update" src="./assets/download.svg" id="update-btn">
+        <img class="titlebar-loading" src="./assets/loading-spinner.svg" id="loadingbtn">
       </div>
       <div style="margin-top: 0px;" class="titlebar-icons">
         <div @click="min_window" class="titlebar-min mx-1"></div>
