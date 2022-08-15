@@ -332,7 +332,7 @@ class Elements {
 		});
 		starIcon.addEventListener('click', async () => {
 			const solidOrEmpty = await toggleFavourite(game.GameID, game.LauncherName);
-			starIcon.style.filter = solidOrEmpty ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
+			starIcon.style.filter = solidOrEmpty === 'solid' ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 
 			if (solidOrEmpty === "solid") {
 				starIcon.classList.add('star-fill');
@@ -341,7 +341,6 @@ class Elements {
 				}
 			} else {
 				starIcon.classList.remove('star-fill');
-				starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 			}
 		});
 		document.addEventListener('mousemove', () => {
