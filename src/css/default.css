@@ -736,24 +736,25 @@ img,
 }
 
 .settings-background {
-    transform-origin: 0 0;
     position: absolute;
     width: 100%;
     height: 100%;
     z-index: 1999;
     background-color: #0f10136e;
-    animation-duration: 0.5s;
+    animation-duration: 0.4s;
     backdrop-filter: blur(10px);
     display: none;
-    margin-top: -10px;
-    margin-left: -10px;
+
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
 
 .settings {
     position: absolute;
     height: 570px;
     width: 440px;
-    display: none;
+    display: flex;
     background: #1e1f27;
     animation-duration: 0.3s;
     z-index: 2000;
@@ -791,6 +792,14 @@ img,
     text-decoration: none;
     text-shadow: none;
     cursor: default;
+}
+
+.settings-info {
+    position: absolute;
+    color: rgb(141, 141, 141);
+
+    font-size: 18px;
+    margin-top: 8px;
 }
 
 .settings-footer {

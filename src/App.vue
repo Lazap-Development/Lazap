@@ -1,5 +1,10 @@
 <template>
-  <div class="settings-background fadeInDownNoDelay" id="settings-backblur"></div>
+  <div class="settings-background fadeInDownNoDelay" id="settings-backblur">
+    <div class="settings-info">
+      Click anywhere outside to exit settings
+    </div>
+  </div>
+
   <div class="settings fadeInDown" id="settings-popup">
     <div>
       <h1>
