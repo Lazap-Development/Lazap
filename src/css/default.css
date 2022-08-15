@@ -745,7 +745,6 @@ img,
     backdrop-filter: blur(10px);
     display: none;
 
-    display: flex;
     justify-content: center;
     align-content: center;
 }
@@ -754,7 +753,7 @@ img,
     position: absolute;
     height: 570px;
     width: 440px;
-    display: flex;
+    display: none;
     background: #1e1f27;
     animation-duration: 0.3s;
     z-index: 2000;
