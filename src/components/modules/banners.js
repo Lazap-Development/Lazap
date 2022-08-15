@@ -37,12 +37,15 @@ async function getBanners(games) {
 				case 'XboxGames': {
 					return games[i].Banner;
 				}
+				case 'Osu' : {
+					return "https://cdn2.steamgriddb.com/file/sgdb-cdn/grid/a5d7420f9fdc41087377b4d58c5fe94b.png";
+				}
 			}
 		})());
 
 	}
 
-	cacheBanners(games.filter(x => !['Uplay', 'EpicGames'].includes(x.LauncherName)), arr.filter(x => x));
+	cacheBanners(games.filter(x => !['Uplay'].includes(x.LauncherName)), arr.filter(x => x));
 	return arr;
 }
 
