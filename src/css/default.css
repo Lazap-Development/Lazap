@@ -118,7 +118,6 @@ body {
     background: #181A1F;
     overflow: hidden;
     font-family: Dosis;
-    -webkit-overflow-scrolling: touch;
 }
 
 .bg {
@@ -791,6 +790,7 @@ img,
 
     text-decoration: none;
     text-shadow: none;
+    cursor: default;
 }
 
 .settings-footer {
@@ -818,7 +818,7 @@ img,
     align-items: center;
     justify-content: center;
     z-index: 1;
-    background: #202126
+    background-color: #1c1d22;
 }
 
 .leftbar-overlay {
