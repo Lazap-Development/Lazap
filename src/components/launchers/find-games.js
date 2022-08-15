@@ -10,7 +10,7 @@ const processes = new Map();
 
 async function getInstalledGames() {
 	// Fetch all games
-	const launchers = ['EpicGames.js', 'FiveM.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js', 'Uplay.js', 'Osu.js'];
+	const launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js', 'Uplay.js'];
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
 
 	return games;
@@ -59,6 +59,8 @@ async function filterAndSort(games, type, list, stored) {
 }
 
 async function loadGames(id, data, stored) {
+	// eslint-disable-next-line no-undef
+	loadingbtn.style.opacity = '1';
 	const games = data ?? await getInstalledGames();
 	const list = document.getElementById(id);
 
@@ -70,6 +72,8 @@ async function loadGames(id, data, stored) {
 	if (id === 'allGamesList') {
 		require('../modules/banners').getBanners(await Promise.all(games));
 	}
+	// eslint-disable-next-line no-undef
+	loadingbtn.style.opacity = '0';
 }
 
 async function handleLaunch(game) {
