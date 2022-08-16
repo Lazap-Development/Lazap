@@ -23,7 +23,7 @@ async function getMinecraftLauncher() {
 			const isInstalled = (await new shell.Command('cmd', ['/C', 'powershell', 'Get-appxpackage', 'Microsoft.4297127D64EC6']).execute().catch(() => null))?.stdout;
 			console.warn(isInstalled);
 			if (!isInstalled?.length > 1) return false;
-			const Location = isInstalled.split('\n').find(x => x.startsWith('InstallLocation')).split(':').slice(1).join(':').trim();
+			const Location = isInstalled.split('\r\n').find(x => x.startsWith('InstallLocation')).split(':').slice(1).join(':').trim();
 			if (!(await fs.readDir(Location).catch(() => null))) return false;
 			const Executable = 'Minecraft.exe';
 			return {
