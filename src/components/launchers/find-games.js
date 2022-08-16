@@ -10,7 +10,7 @@ const processes = new Map();
 
 async function getInstalledGames() {
 	// Fetch all games
-	const launchers = ['EpicGames.js', 'FiveM.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js'];
+	const launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js', 'Uplay.js'];
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
 
 	return games;
@@ -40,7 +40,7 @@ async function filterAndSort(games, type, list, stored) {
 	else if (['recentGamesListMainPage', 'recentGamesList'].includes(type)) {
 		let final = [];
 		for (let i = 0; i < games.length; i++) {
-			const game = stored.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? stored.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName);
+			const game = stored?.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
 			if (typeof game?.LastLaunch === 'number' && typeof game?.Launches === 'number') final.push(game);
 		}
 		return final;
@@ -48,7 +48,7 @@ async function filterAndSort(games, type, list, stored) {
 	else if (type === 'favGamesList') {
 		let final = [];
 		for (let i = 0; i < games.length; i++) {
-			const game = stored.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
+			const game = stored?.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
 			if (typeof game?.Favourite === 'boolean' && game.Favourite === true) final.push(game);
 		}
 		return final;
@@ -59,6 +59,8 @@ async function filterAndSort(games, type, list, stored) {
 }
 
 async function loadGames(id, data, stored) {
+	// eslint-disable-next-line no-undef
+	loadingbtn.style.opacity = '1';
 	const games = data ?? await getInstalledGames();
 	const list = document.getElementById(id);
 
@@ -70,6 +72,8 @@ async function loadGames(id, data, stored) {
 	if (id === 'allGamesList') {
 		require('../modules/banners').getBanners(await Promise.all(games));
 	}
+	// eslint-disable-next-line no-undef
+	loadingbtn.style.opacity = '0';
 }
 
 async function handleLaunch(game) {
@@ -88,10 +92,14 @@ async function handleLaunch(game) {
 				res = createProcess('cmd', `/C start /min cmd /c start uplay://launch/${game.GameID}/0`, game.GameID);
 				break;
 			}
-			//  case 'Minecraft': {
-			//      res = createProcess('minecraft-launcher', [], game.GameID);
-			//      break;
-			//  }
+			case 'Minecraft': {
+				res = createProcess('cmd', `/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
+				break;
+			}
+			case 'Lunar': {
+				res = createProcess('cmd', `/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
+				break;
+			}
 			default: {
 				res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
 				break;
@@ -153,15 +161,17 @@ async function addLaunch(GameID, LauncherName) {
 	game.LastLaunch = Date.now();
 	game.Launches = typeof game.Launches === 'number' ? game.Launches + 1 : 1;
 	setGames(data, 'add-launch');
-	if (!document.getElementById('recentGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`))
-	// eslint-disable-next-line no-undef
-	Elements.createGameElement(game, 'recentGamesList', recentGamesList);
-	// eslint-disable-next-line no-undef
-	Elements.createGameElement(game, 'recentGamesListMainPage', recentGamesListMainPage);
+	if (!document.getElementById('recentGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
+		// eslint-disable-next-line no-undef
+		Elements.createGameElement(game, 'recentGamesList', recentGamesList);
+		// eslint-disable-next-line no-undef
+		Elements.createGameElement(game, 'recentGamesListMainPage', recentGamesListMainPage);
+	}
 }
 function createProcess(Command, Args, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
 	VisibilityState();
+	console.log(Args);
 	const instance = invoke('run_game', { exec: Command, args: Args })
 		.then(() => {
 			VisibilityState();
@@ -192,7 +202,7 @@ async function VisibilityState() {
 
 async function setGames(games, source) {
 	const appDirPath = await path.appDir();
-	const GAMES_DATA_BASE_PATH = appDirPath + 'storage/cache/games/Data.json';
+	const GAMES_DATA_BASE_PATH = appDirPath + 'storage/cache/games/data.json';
 	const data = JSON.parse(await fs.readTextFile(GAMES_DATA_BASE_PATH).catch(() => '[]'));
 
 	if (source === 'add-launch') {
@@ -225,7 +235,7 @@ async function setGames(games, source) {
 	}
 }
 async function getGames(GameID, LauncherName) {
-	const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/Data.json').catch(() => '[]'));
+	const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/data.json').catch(() => '[]'));
 
 	if (GameID && LauncherName) {
 		return data.find(x => (x.GameID === GameID) && (x.LauncherName === LauncherName));
@@ -296,7 +306,7 @@ class Elements {
 
 		gameBanner.addEventListener('mouseover', async () => {
 			const x = gameElement.getElementsByClassName('star');
-			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
+			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
 			for (let i = 0; i < x.length; i++) {
 				starIcon.classList.add('fade');
 				x[i].style.visibility = 'visible';
@@ -308,7 +318,7 @@ class Elements {
 		});
 		gameBanner.addEventListener('mouseout', async () => {
 			const x = gameElement.getElementsByClassName('star');
-			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/Data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
+			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
 			for (let i = 0; i < x.length; i++) {
 				if (!x[i].matches(':hover')) {
 					starIcon.classList.remove('fade');
@@ -322,7 +332,7 @@ class Elements {
 		});
 		starIcon.addEventListener('click', async () => {
 			const solidOrEmpty = await toggleFavourite(game.GameID, game.LauncherName);
-			starIcon.style.filter = solidOrEmpty ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
+			starIcon.style.filter = solidOrEmpty === 'solid' ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 
 			if (solidOrEmpty === "solid") {
 				starIcon.classList.add('star-fill');
@@ -331,7 +341,6 @@ class Elements {
 				}
 			} else {
 				starIcon.classList.remove('star-fill');
-				starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 			}
 		});
 		document.addEventListener('mousemove', () => {
