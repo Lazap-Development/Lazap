@@ -6,7 +6,7 @@ const tauri = window.__TAURI__.tauri;
 async function getBanners(games) {
 	const arr = [];
 	for (let i = 0; i < games.length; i++) {
-		arr.push((async () => {
+		arr.push((() => {
 			switch (games[i].LauncherName) {
 				case 'EpicGames': {
 					return;
@@ -42,7 +42,7 @@ async function getBanners(games) {
 
 	}
 
-	cacheBanners(games, arr.filter(async x => { return (await x) !== '../img/icons/icon.ico'; }));
+	cacheBanners(games.filter(x => !['Uplay', 'EpicGames'].includes(x.LauncherName)), arr.filter(x => x));
 	return arr;
 }
 
