@@ -740,6 +740,7 @@ img,
 .loading-spinner {
     animation: spinner 1s infinite linear;
     width: 36px;
+    margin-bottom: -10px;
 }
 
 .spinner-content {

@@ -71,6 +71,12 @@ async function cacheBanners(data, res) {
 		return console.log('[BANNER] Banners are already loaded. Skipping.');
 	}
 
+	if (res.length === 0) {
+		document.getElementById('game-loading-overlay').style.opacity = '0';
+		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
+		return console.log('[BANNER] No banners to load.');
+	}
+	
 	res.filter(async (x) => (await x)?.startsWith('http')).forEach(async (x, i) => {
 		await http.fetch(await x, {
 			method: 'GET',
