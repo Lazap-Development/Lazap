@@ -32,7 +32,7 @@ async function getBanners(games) {
 				case 'Lutris': {
 					if (games[i].DisplayName.replaceAll(' ', '_') === 'Epic_Games_Store') return 'https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png'
 					if (games[i].DisplayName.replaceAll(' ', '_') === 'Rockstar_Games_Launcher') return 'https://cdn.player.one/sites/player.one/files/2019/08/26/rockstar-games.png'
-					return `https://thumbnails.pcgamingwiki.com/5/53/${games[i].DisplayName.replaceAll(' ', '_')}_-_cover.png/300px-${games[i].DisplayName.replaceAll(' ', '_')}_-_cover.png`
+					return;
 				}
 				case 'XboxGames': {
 					return games[i].Banner;

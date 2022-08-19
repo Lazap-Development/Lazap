@@ -1,6 +1,5 @@
 <script>
 window.addEventListener('load', async function () {
-  const marker = document.getElementById('indicator');
   const home = document.getElementById('home');
   const recent = document.getElementById('recent');
   const games = document.getElementById('games');
@@ -53,9 +52,11 @@ window.addEventListener('load', async function () {
 
   document.getElementById('main-loading-overlay').style.opacity = '0';
   document.getElementById('main-loading-overlay').style.visibility = 'hidden';
-  marker.style.top = '0px';
 
   document.getElementById('home-btn').addEventListener('click', async function () {
+    this.appendChild(document.getElementById('indicator'));
+    toggleIndicatorAnim();
+
     home.style.display = 'flex';
     recent.style.display = 'none';
     games.style.display = 'none';
@@ -64,8 +65,6 @@ window.addEventListener('load', async function () {
     messages.style.display = 'none';
     activity.style.display = 'none';
 
-    marker.style.top = '0px';
-
     await require('./launchers/find-games').loadGames('recentGamesListMainPage')
       .catch((err) => {
         return console.log(err);
@@ -73,6 +72,9 @@ window.addEventListener('load', async function () {
   });
 
   document.getElementById('recent-btn').addEventListener('click', async function () {
+    this.appendChild(document.getElementById('indicator'));
+    toggleIndicatorAnim();
+
     home.style.display = 'none';
     recent.style.display = 'flex';
     games.style.display = 'none';
@@ -81,9 +83,6 @@ window.addEventListener('load', async function () {
     messages.style.display = 'none';
     activity.style.display = 'none';
 
-    marker.style.top = '81px';
-    marker.style.height = '30px';
-
     await require('./launchers/find-games').loadGames('recentGamesList')
       .catch((err) => {
         return console.log(err);
@@ -91,7 +90,8 @@ window.addEventListener('load', async function () {
   });
 
   document.getElementById('games-btn').addEventListener('click', async function () {
-    marker.style.top = '131px';
+    this.appendChild(document.getElementById('indicator'));
+    toggleIndicatorAnim();
 
     home.style.display = 'none';
     recent.style.display = 'none';
@@ -110,7 +110,8 @@ window.addEventListener('load', async function () {
   });
 
   document.getElementById('favs-btn').addEventListener('click', async function () {
-    marker.style.top = '180px';
+    this.appendChild(document.getElementById('indicator'));
+    toggleIndicatorAnim();
 
     home.style.display = 'none';
     recent.style.display = 'none';
@@ -129,7 +130,8 @@ window.addEventListener('load', async function () {
   });
 
   document.getElementById('messages-btn').addEventListener('click', async function () {
-    marker.style.top = '261px';
+    this.appendChild(document.getElementById('indicator'));
+    toggleIndicatorAnim();
 
     home.style.display = 'none';
     recent.style.display = 'none';
@@ -141,7 +143,8 @@ window.addEventListener('load', async function () {
   });
 
   document.getElementById('activity-btn').addEventListener('click', async function () {
-    marker.style.top = '311px';
+    this.appendChild(document.getElementById('indicator'));
+    toggleIndicatorAnim();
 
     home.style.display = 'none';
     recent.style.display = 'none';
@@ -153,7 +156,8 @@ window.addEventListener('load', async function () {
   });
 
   document.getElementById('friends-btn').addEventListener('click', async function () {
-    marker.style.top = '361px';
+    this.appendChild(document.getElementById('indicator'));
+    toggleIndicatorAnim();
 
     home.style.display = 'none';
     recent.style.display = 'none';
@@ -165,15 +169,12 @@ window.addEventListener('load', async function () {
   });
 
   document.getElementById('text').addEventListener('change', async (e) => {
+    this.appendChild(document.getElementById('indicator'))
+
     const appDirPath = await path.appDir();
     fs.writeTextFile(appDirPath + 'storage/cache/user/UserProfile.json', JSON.stringify({ username: e.target.value, }), (err) => {
       if (err) throw err;
     });
-  });
-
-  document.getElementById('settings-btn').addEventListener('click', async function () {
-    settingsbackblur.style.display = 'flex';
-    settings.style.display = 'flex';
   });
 
   settingsbackblur.addEventListener('click', function () {
@@ -181,7 +182,10 @@ window.addEventListener('load', async function () {
     settingsbackblur.style.display = 'none';
   });
 
-  document.querySelector('.titlebar-settings').addEventListener('click', async () => {
+  document.getElementById('settings-btn').addEventListener('click', async () => {
+    settingsbackblur.style.display = 'flex';
+    settings.style.display = 'flex';
+
     const appDirPath = await path.appDir();
     const Data = JSON.parse(await fs.readTextFile(appDirPath + 'storage/LauncherData.json'));
     document.querySelectorAll('input[id^=setting-]').forEach((input) => {
@@ -237,5 +241,15 @@ window.addEventListener('load', async function () {
       window.location.reload();
     }
   })
+
+  function toggleIndicatorAnim() {
+    let element = document.getElementById('indicator');
+
+    element.classList.add("anim-indicatorscaleY")
+    setTimeout(() => {
+      element.classList.remove("anim-indicatorscaleY")
+    }, 200);
+
+  }
 });
 </script>

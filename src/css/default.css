@@ -203,8 +203,7 @@ body {
 .titlebar-settings:hover {
     cursor: pointer;
     animation-delay: 200ms;
-    animation: settings-spin 1s linear;
-    filter: invert(17%) sepia(86%) saturate(3285%) hue-rotate(239deg) brightness(85%) contrast(101%);
+    animation: settings-spin 1.5s linear;
 }
 
 .titlebar-account {
@@ -375,9 +374,17 @@ body {
 .user-pfp {
     position: relative;
     margin-top: 50px;
-    width: 80px;
+    width: 88px;
     margin-left: auto;
     margin-right: auto;
+    transition: all 0.2s ease-in-out;
+}
+
+.user-pfp:hover {
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    border-radius: 14px;
+    scale: 1.1;
 }
 
 .user-pfp input {
@@ -385,16 +392,10 @@ body {
 }
 
 .user-pfp img {
-    transition: border-radius 0.2s ease-in-out;
     border-radius: 18px;
     image-rendering: auto;
     object-fit: cover;
     box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
-}
-
-.user-pfp:hover img {
-    transition: border-radius 0.2s ease-in-out;
-    border-radius: 14px;
 }
 
 .user-pfp label {
@@ -405,7 +406,7 @@ body {
 }
 
 .username {
-    margin-top: 10px;
+    margin-top: 6px;
     margin-bottom: 26px;
     text-align: center;
     font-size: 22px;
@@ -428,16 +429,35 @@ body {
     box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.2);
     height: 40px;
     width: 230px;
-    border-radius: 8px;
+    border-radius: 10px;
     display: flex;
     margin-bottom: 10px;
-    transition: background-color 0.05s;
+    z-index: 1;
+    transition: color 0.15s ease-out;
+}
+
+.side-tab:before {
+    background: rgb(30,30,34);
+    background: linear-gradient(90deg, rgba(30,30,34,1) 0%, rgba(30,30,34,1) 30%, rgba(81,41,156,1) 100%, rgba(120,50,250,1) 100%);
+    content: "";
+    height: 40px;
+    width: 230px;
+    border-radius: 10px;
+    display: flex;
+    margin-bottom: 10px;
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.15s ease-out;
+}
+
+.side-tab:hover:before {
+    opacity: 1;
 }
 
 .side-tab:hover {
-    cursor: pointer;
-    background-color: rgb(121, 52, 250);
-    transition: background-color 0.2s;
+    cursor: default;
+    color: #fff;
 }
 
 .side-tab img {
@@ -454,6 +474,7 @@ body {
     margin-left: 16px;
     align-self: center;
     margin-top: 4px;
+    cursor: default;
 }
 
 .category-name {
@@ -463,17 +484,36 @@ body {
     font-size: 15px;
 }
 
-#indicator {
+.category-name:hover {
+    cursor: default;
+}
+
+.indicator {
     transition: 0.3s;
     position: absolute;
-    margin-top: 5.3px;
+    margin-top: 5px;
     margin-left: 2px;
 
     background-color: rgb(121, 52, 250);
     height: 32px;
     width: 5px;
-    border-radius: 2px;
+    border-radius: 50px;
     display: inline;
+
+    
+}
+
+.anim-indicatorscaleY {
+    animation: indicatorscaleY 0.2s linear;
+}
+
+@keyframes indicatorscaleY {
+    0% {
+        transform: scaleY(0);
+    }
+    100% {
+        transform: scaleY(1);
+    }
 }
 
 .gamesList {
