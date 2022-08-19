@@ -21,7 +21,7 @@ async function getBanners(games) {
 					return;
 				}
 				case 'Minecraft': {
-					return 'https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png';
+					return 'https://i.imgur.com/PJFx3U2.jpg';
 				}
 				case 'FiveM': {
 					return 'https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png';

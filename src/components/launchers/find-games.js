@@ -61,6 +61,7 @@ async function filterAndSort(games, type, list, stored) {
 async function loadGames(id, data, stored) {
 	// eslint-disable-next-line no-undef
 	loadingbtn.style.opacity = '1';
+
 	const games = data ?? await getInstalledGames();
 	const list = document.getElementById(id);
 
@@ -68,9 +69,8 @@ async function loadGames(id, data, stored) {
 	if ((games.length > 0) && id === 'allGamesList') {
 		setGames(games, 'all-games');
 	}
-
 	if (id === 'allGamesList') {
-		require('../modules/banners').getBanners(await Promise.all(games));
+		require('../modules/banners').getBanners(await Promise.all(games.filter(x => !require('../blacklist.json')[0].includes(x.GameID))));
 	}
 	// eslint-disable-next-line no-undef
 	loadingbtn.style.opacity = '0';
