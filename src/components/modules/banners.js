@@ -21,7 +21,7 @@ async function getBanners(games) {
 					return;
 				}
 				case 'Minecraft': {
-					return 'https://image.api.playstation.com/vulcan/img/cfn/11307uYG0CXzRuA9aryByTHYrQLFz-HVQ3VVl7aAysxK15HMpqjkAIcC_R5vdfZt52hAXQNHoYhSuoSq_46_MT_tDBcLu49I.png';
+					return 'https://i.imgur.com/PJFx3U2.jpg';
 				}
 				case 'FiveM': {
 					return 'https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png';
@@ -32,7 +32,7 @@ async function getBanners(games) {
 				case 'Lutris': {
 					if (games[i].DisplayName.replaceAll(' ', '_') === 'Epic_Games_Store') return 'https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png'
 					if (games[i].DisplayName.replaceAll(' ', '_') === 'Rockstar_Games_Launcher') return 'https://cdn.player.one/sites/player.one/files/2019/08/26/rockstar-games.png'
-					return `https://thumbnails.pcgamingwiki.com/5/53/${games[i].DisplayName.replaceAll(' ', '_')}_-_cover.png/300px-${games[i].DisplayName.replaceAll(' ', '_')}_-_cover.png`
+					return;
 				}
 				case 'XboxGames': {
 					return games[i].Banner;
@@ -78,6 +78,12 @@ async function cacheBanners(data, res) {
 		return console.log('[BANNER] Banners are already loaded. Skipping.');
 	}
 
+	if (res.length === 0) {
+		document.getElementById('game-loading-overlay').style.opacity = '0';
+		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
+		return console.log('[BANNER] No banners to load.');
+	}
+	
 	res.filter(async (x) => (await x)?.startsWith('http')).forEach(async (x, i) => {
 		await http.fetch(await x, {
 			method: 'GET',

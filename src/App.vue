@@ -92,7 +92,6 @@
   <div id="main-loading-overlay">
     <div class="spinner-content">
       <img src="./assets/spinner.svg" alt="Loading..." class="loading-spinner">
-      <p class="fadeInDown">Loading...</p>
     </div>
   </div>
 
@@ -163,7 +162,7 @@
           <div class="user-pfp">
             <label for="file"></label>
             <input id="file" type="file" accept="image/png" @change="(event) => loadFile(event)" />
-            <img src="./assets/default-profile.svg" alt="Avatar" width="85" height="85" id="output">
+            <img src="./assets/default-profile.svg" alt="Avatar" width="88" id="output">
           </div>
           <input class="username" id="text" type="text" value="Lazap" spellcheck="false" maxlength="12" />
         </div>
@@ -172,7 +171,7 @@
       <div class="side-tabs">
         <div class="d-flex justify-content-center pb-2">
           <div class="side-tab" id="home-btn">
-            <div id="indicator"></div>
+            <div class="indicator" id="indicator"></div>
             <img src="./assets/home.svg" height="25" width="25">
             <div class="side-tab-text">
               Home

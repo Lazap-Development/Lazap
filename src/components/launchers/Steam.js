@@ -15,9 +15,10 @@ async function getSteamLocation() {
             let text;
             try {
                 text = await fs.readTextFile(steamDir + `\\steamapps\\libraryfolders.vdf`);
-            } catch {
+            } catch(e) {
                 return [];
             }
+
             const VDF = require('../modules/parseVDF');
             const parsed = VDF.parse(text);
             const toArray = Object.entries(parsed.libraryfolders).filter(x => x[1].path);
