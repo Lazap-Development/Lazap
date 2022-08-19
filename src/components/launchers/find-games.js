@@ -59,8 +59,7 @@ async function filterAndSort(games, type, list, stored) {
 }
 
 async function loadGames(id, data, stored) {
-	// eslint-disable-next-line no-undef
-	loadingbtn.style.opacity = '1';
+	document.getElementById("loadingbtn").style.opacity = '1';
 
 	const games = data ?? await getInstalledGames();
 	const list = document.getElementById(id);
@@ -72,8 +71,10 @@ async function loadGames(id, data, stored) {
 	if (id === 'allGamesList') {
 		require('../modules/banners').getBanners(await Promise.all(games.filter(x => !require('../blacklist.json')[0].includes(x.GameID))));
 	}
-	// eslint-disable-next-line no-undef
-	loadingbtn.style.opacity = '0';
+
+	setTimeout(() => {
+		document.getElementById("loadingbtn").style.opacity = '0';
+	}, 300);
 }
 
 async function handleLaunch(game) {
@@ -384,9 +385,8 @@ function particle(x, y) {
 	let destinationX = (Math.random() - 0.5) * 300;
 	let destinationY = (Math.random() - 0.5) * 300;
 	let rotation = Math.random() * 500;
-	let delay = Math.random() * 100;
 	particle.innerHTML = ['⭐', '💛'][Math.floor(Math.random() * 2)];
-	particle.style.fontSize = `${Math.random() * 24 + 10}px`;
+	particle.style.fontSize = `${Math.random() * 20 + 10}px`;
 	width = height = 'auto';
 
 	particle.style.width = `${width}px`;
@@ -401,9 +401,8 @@ function particle(x, y) {
 			opacity: 0
 		}
 	], {
-		duration: Math.random() * 1000 + 1000,
-		easing: 'cubic-bezier(0, .9, .57, 1)',
-		delay: delay
+		duration: Math.random() * 1000 + 800,
+
 	});
 	animation.onfinish = deleteParticle;
 }

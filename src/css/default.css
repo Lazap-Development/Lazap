@@ -14,105 +14,6 @@
     src: url('../assets/fonts/Nunito-Medium.ttf') format('truetype');
 }
 
-@keyframes fadeOutUp {
-    from {
-        transform: translate3d(0, 0, 0);
-    }
-
-    to {
-        transform: translate3d(0, -15px, 0);
-        opacity: 1;
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        transform: translate3d(0, -10px, 0);
-    }
-
-    to {
-        transform: translate3d(0, 0, 0);
-        opacity: 1;
-    }
-}
-
-@keyframes fadeInDown {
-    from {
-        transform: translate3d(0, 10px, 0);
-    }
-
-    to {
-        transform: translate3d(0, 0, 0);
-        opacity: 1;
-    }
-}
-
-@keyframes fadeInLeft {
-    0% {
-        transform: translate3d(10px, 0, 0);
-    }
-
-    100% {
-        transform: translate3d(0, 0, 0);
-        opacity: 1;
-
-    }
-}
-
-@keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
-@keyframes spinner {
-    0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes settings-spin {
-    0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-
-    10% {
-        -webkit-transform: rotate(18deg);
-        transform: rotate(18deg);
-    }
-
-    20% {
-        -webkit-transform: rotate(36deg);
-        transform: rotate(36deg);
-    }
-
-    80% {
-        -webkit-transform: rotate(324deg);
-        transform: rotate(324deg);
-    }
-
-    90% {
-        -webkit-transform: rotate(342deg);
-        transform: rotate(342deg);
-    }
-
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
-}
-
 body {
     zoom: 0.895;
     background: #181A1F;
@@ -505,15 +406,6 @@ body {
 
 .anim-indicatorscaleY {
     animation: indicatorscaleY 0.2s linear;
-}
-
-@keyframes indicatorscaleY {
-    0% {
-        transform: scaleY(0);
-    }
-    100% {
-        transform: scaleY(1);
-    }
 }
 
 .gamesList {
@@ -1099,4 +991,113 @@ particle {
     pointer-events: none;
     background-repeat: no-repeat;
     background-size: contain;
+}
+
+
+@keyframes fadeOutUp {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(0, -15px, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        transform: translate3d(0, -10px, 0);
+    }
+
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        transform: translate3d(0, 10px, 0);
+    }
+
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInLeft {
+    0% {
+        transform: translate3d(10px, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes spinner {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes settings-spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    10% {
+        -webkit-transform: rotate(18deg);
+        transform: rotate(18deg);
+    }
+
+    20% {
+        -webkit-transform: rotate(36deg);
+        transform: rotate(36deg);
+    }
+
+    80% {
+        -webkit-transform: rotate(324deg);
+        transform: rotate(324deg);
+    }
+
+    90% {
+        -webkit-transform: rotate(342deg);
+        transform: rotate(342deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes indicatorscaleY {
+    0% {
+        transform: scaleY(0);
+    }
+    100% {
+        transform: scaleY(1);
+    }
 }

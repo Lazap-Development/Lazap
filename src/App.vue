@@ -92,7 +92,6 @@
   <div id="main-loading-overlay">
     <div class="spinner-content">
       <img src="./assets/spinner.svg" alt="Loading..." class="loading-spinner">
-      <p class="fadeInDown">Loading...</p>
     </div>
   </div>
 
