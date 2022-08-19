@@ -67,6 +67,16 @@
         </label>
       </div>
 
+      <div>
+        <p>Accent Color</p>
+        <label class="color">
+          <input type="color" id="setting-accentColor">
+          <div>
+            <span></span>
+          </div>
+        </label>
+      </div>
+
       <div class="settings-footer">
         v0.5 (Tauri Release)
       </div>

@@ -11,7 +11,8 @@ const path = window.__TAURI__.path;
   data.skipLogin = false;
   data.trayMinLaunch = true;
   data.trayMinQuit = false;
-  data.checkForUpdates = false
+  data.checkForUpdates = false;
+  data.accentColor = "rgb(121, 52, 250)"
   let CONSTANTS = JSON.stringify(data);
 
   fs.createDir(appDirPath, { recursive: true }, (err) => {

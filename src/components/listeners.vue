@@ -24,6 +24,17 @@ window.addEventListener('load', async function () {
     console.log(err);
   }
 
+  try {
+    const uwudata = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
+    if(uwudata.accentColor) {
+      console.log(uwudata.accentColor);
+      document.getElementById('indicator').style.backgroundColor = uwudata.accentColor;
+      document.querySelector(":root").style.setProperty("--back", uwudata.accentColor);
+    }
+  } catch(e) {
+    console.error(e)
+  }
+
   const allGames = await require('./launchers/find-games').getInstalledGames()
     .catch((err) => {
       return console.log(err);
@@ -189,11 +200,26 @@ window.addEventListener('load', async function () {
     const appDirPath = await path.appDir();
     const Data = JSON.parse(await fs.readTextFile(appDirPath + 'storage/LauncherData.json'));
     document.querySelectorAll('input[id^=setting-]').forEach((input) => {
+      if(input.id === "setting-accentColor") {
+      input.value = "rgb(121, 52, 250)"
+    }
       input.checked = Data[input.id.split('-')[1]] ? true : false;
     });
   });
 
   document.querySelectorAll('input[id^=setting-]').forEach((input) => {
+    if(input.id === "setting-accentColor") {
+      input.addEventListener("input", async () => {
+        //const color = input.value;
+        const LauncherData = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
+        LauncherData[input.id.split("-")[1]] = document.querySelector(`input[id=${input.id}]`).value;
+        fs.writeTextFile(await path.appDir() + 'storage/LauncherData.json', JSON.stringify(LauncherData));
+
+        document.getElementById('indicator').style.backgroundColor = LauncherData.accentColor;
+        document.querySelector(":root").style.setProperty("--back", LauncherData.accentColor);
+      });
+      return;
+    }
     input.addEventListener('change', async () => {
       const appDirPath = await path.appDir();
 
