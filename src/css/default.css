@@ -343,7 +343,7 @@ body {
 
 .side-tab:before {
     background: rgb(30,30,34);
-    background: linear-gradient(16deg, rgba(30,30,34,1) 0%, rgba(30,30,34,1) 30%, var(--back) 100%);
+    background: linear-gradient(30deg, rgba(30,30,34,1) 0%, rgba(30,30,34,1) 30%, rgba(81,41,156,1) 100%, rgba(120,50,250,1) 100%);
     content: "";
     height: 40px;
     width: 230px;
