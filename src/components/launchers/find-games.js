@@ -11,8 +11,8 @@ const processes = new Map();
 async function getInstalledGames() {
 	// Fetch all games
 	const launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js', 'Uplay.js'];
-	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
-
+	const gamesWithDupes = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
+	const games = [...new Set(gamesWithDupes)]
 	return games;
 }
 
