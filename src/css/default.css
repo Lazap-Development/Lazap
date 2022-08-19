@@ -5,20 +5,20 @@
 }
 
 @font-face {
-    font-family: Dosis;
+    font-family: Nunito;
     src: url('../assets/fonts/Nunito-Medium.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: Dosis-Bold;
-    src: url('../assets/fonts/Nunito-Medium.ttf') format('truetype');
+    font-family: Nunito-Bold;
+    src: url('../assets/fonts/Nunito-SemiBold.ttf') format('truetype');
 }
 
 body {
     zoom: 0.895;
     background: #181A1F;
     overflow: hidden;
-    font-family: Dosis;
+    font-family: Nunito;
 }
 
 .bg {
@@ -311,7 +311,7 @@ body {
     margin-bottom: 26px;
     text-align: center;
     font-size: 22px;
-    font-family: Dosis-Bold;
+    font-family: Nunito-Bold;
     color: #b9b9b9;
     background-color: transparent;
     border: transparent;
@@ -427,13 +427,13 @@ body {
     margin-bottom: 30px;
     text-align: center;
     display: inline-block;
-    border-radius: 12px;
+    border-radius: 10px;
     transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
     margin-right: 10px;
     margin-left: 20px;
     height: 280px;
     width: 200px;
-    opacity: 0.7;
+    opacity: 0.8;
 }
 
 .gamebox:hover {
@@ -448,16 +448,27 @@ body {
     border-radius: 12px;
     image-rendering: auto;
     object-fit: cover;
-    -webkit-mask-image: -webkit-gradient(linear, left 70%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
     mask-image: -webkit-gradient(linear, left 70%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
 }
 
-.gamebox span {
+.gamebox .gamebox-bottom {
+    cursor: default;
+    position: relative;
+    margin-top: -24%;
+    width: 100%;
+    height: 15%;
     position: absolute;
-    margin-top: -28px;
+    background-color: #343434;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.gamebox .gamebox-bottom span {
+    font-family: Nunito-Bold;
+    position: absolute;
+    margin-top: 14px;
     margin-left: 10px;
-    font-size: 16px;
-    color: #d3d3d3;
+    font-size: 12px;
+    color: #dadada;
     display: block;
 }
 
@@ -519,15 +530,13 @@ body {
 
 .star {
     position: absolute;
-    margin-top: -270px;
-    margin-left: 10px;
+    
+    margin-left: 135px;
+    margin-top: 10px;
     display: block;
-    z-index: 10000000;
     content: url("../assets/star-empty.svg");
-    height: 25px;
-    width: 25px;
-    filter: invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%);
-    visibility: hidden;
+    height: 20px;
+    width: 20px;
 }
 
 .star-fill {
@@ -536,11 +545,19 @@ body {
 
 .star:hover {
     display: block;
-    z-index: 10000000;
     content: url("../assets/star-solid.svg") !important;
     cursor: pointer;
-    transform: scale(1.2);
-    filter: invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%) !important;
+}
+
+.menu {
+    position: absolute;
+    
+    margin-left: 165px;
+    margin-top: 13px;
+    display: block;
+    content: url("../assets/menu.svg");
+    height: 18px;
+    width: 18px;
 }
 
 .fade {
@@ -718,7 +735,7 @@ img,
 .settings h1 {
     font-size: 26px;
     text-align: center;
-    font-family: Dosis-Bold;
+    font-family: Nunito-Bold;
     font-weight: normal;
     color: rgb(201, 201, 201);
     margin-top: 45px;
@@ -730,7 +747,7 @@ img,
     font-size: 18px;
     position: relative;
 
-    font-family: Dosis;
+    font-family: Nunito;
     color: rgb(201, 201, 201);
 
     text-decoration: none;
@@ -880,7 +897,7 @@ img,
     border: none;
     background-color: #191a1d;
     border-radius: 6px;
-    font-family: Dosis;
+    font-family: Nunito;
     font-size: 15px;
     font-weight: 500;
     padding: 0 20px 0 40px;
@@ -892,7 +909,7 @@ img,
 }
 
 .search-bar input::placeholder {
-    font-family: Dosis;
+    font-family: Nunito;
     color: rgb(113 119 144 / 78%);
     font-size: 15px;
     font-weight: 500;

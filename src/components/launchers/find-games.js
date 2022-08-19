@@ -288,8 +288,8 @@ class Elements {
 	static getGameDisplayElement(game) {
 		// Set Game Display Name
 		const gameText = document.createElement('span');
-		if (game.DisplayName.length > 20) {
-			gameText.innerHTML = game.DisplayName.slice(0, 20);
+		if (game.DisplayName.length > 17) {
+			gameText.innerHTML = game.DisplayName.slice(0, 17);
 			gameText.innerHTML += '...';
 		}
 		else {
@@ -298,39 +298,27 @@ class Elements {
 
 		return gameText;
 	}
-	static async getStarElement(game, gameElement, gameBanner) {
+	static async getStarElement(game, gameElement) {
 		const appDirPath = await path.appDir();
 
 		const starIcon = document.createElement('div');
 		starIcon.classList.add('star');
 		starIcon.id = 'star';
 
-		gameBanner.addEventListener('mouseover', async () => {
-			const x = gameElement.getElementsByClassName('star');
-			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
-			for (let i = 0; i < x.length; i++) {
-				starIcon.classList.add('fade');
-				x[i].style.visibility = 'visible';
-				if (isFavourite) {
-					starIcon.classList.add('star-fill');
-					starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
-				}
+		const x = gameElement.getElementsByClassName('star');
+
+		const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
+		for (let i = 0; i < x.length; i++) {
+			console.log("test")
+			if (isFavourite) {
+				starIcon.classList.add('star-fill');
+				
+				starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
+			} else {
+				starIcon.classList.remove('star-fill')
+				starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 			}
-		});
-		gameBanner.addEventListener('mouseout', async () => {
-			const x = gameElement.getElementsByClassName('star');
-			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
-			for (let i = 0; i < x.length; i++) {
-				if (!x[i].matches(':hover')) {
-					starIcon.classList.remove('fade');
-					x[i].style.visibility = 'hidden';
-					if (!isFavourite) {
-						starIcon.classList.remove('star-fill')
-						starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
-					}
-				}
-			}
-		});
+		}
 		starIcon.addEventListener('click', async () => {
 			const solidOrEmpty = await toggleFavourite(game.GameID, game.LauncherName);
 			starIcon.style.filter = solidOrEmpty === 'solid' ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
@@ -344,11 +332,16 @@ class Elements {
 				starIcon.classList.remove('star-fill');
 			}
 		});
-		document.addEventListener('mousemove', () => {
-			if (!gameBanner.matches(':hover') && !starIcon.matches(':hover')) starIcon.style.visibility = 'hidden';
-		});
 
 		return starIcon;
+	}
+
+	static async getMenuElement() {
+		const menuIcon = document.createElement('div');
+		menuIcon.classList.add('menu');
+		menuIcon.id = 'menu';
+		
+		return menuIcon;
 	}
 
 	static async createGameElement(game, id, list) {
@@ -367,11 +360,18 @@ class Elements {
 
 		if (id.startsWith('recent') && id.includes('Main')) return game;
 
-		const gameText = Elements.getGameDisplayElement(game);
-		gameElement.appendChild(gameText);
+		const gameBottom = document.createElement('div');
+		gameBottom.classList.add("gamebox-bottom")
+		gameElement.appendChild(gameBottom);
 
-		const starIcon = await Elements.getStarElement(game, gameElement, gameBanner);
-		gameElement.appendChild(starIcon);
+		const gameText = Elements.getGameDisplayElement(game);
+		gameBottom.appendChild(gameText);
+
+		const starIcon = await Elements.getStarElement(game, gameElement);
+		gameBottom.appendChild(starIcon);
+
+		const gameMenu = await Elements.getMenuElement();
+		gameBottom.appendChild(gameMenu);
 
 		return game;
 	}
