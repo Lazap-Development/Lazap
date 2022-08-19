@@ -206,6 +206,17 @@ async function setGames(games, source) {
 	const GAMES_DATA_BASE_PATH = appDirPath + 'storage/cache/games/data.json';
 	const data = JSON.parse(await fs.readTextFile(GAMES_DATA_BASE_PATH).catch(() => '[]'));
 
+	data.forEach(d => {
+        Object.keys(d).forEach((x) => {
+            if ([undefined, null].includes(d[x])) delete d[x];
+        });
+    });
+    games.forEach(d => {
+        Object.keys(d).forEach((y) => {
+            if ([undefined, null].includes(d[y])) delete d[y];
+        })
+    });
+	
 	if (source === 'add-launch') {
 		fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
 	}
@@ -298,27 +309,23 @@ class Elements {
 
 		return gameText;
 	}
-	static async getStarElement(game, gameElement) {
+	static async getStarElement(game) {
 		const appDirPath = await path.appDir();
 
 		const starIcon = document.createElement('div');
 		starIcon.classList.add('star');
 		starIcon.id = 'star';
 
-		const x = gameElement.getElementsByClassName('star');
-
 		const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
-		for (let i = 0; i < x.length; i++) {
-			console.log("test")
-			if (isFavourite) {
-				starIcon.classList.add('star-fill');
-				
-				starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
-			} else {
-				starIcon.classList.remove('star-fill')
-				starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
-			}
+		if (isFavourite) {
+			starIcon.classList.add('star-fill');
+			starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
+		} else {
+			starIcon.classList.remove('star-fill')
+			starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 		}
+
+
 		starIcon.addEventListener('click', async () => {
 			const solidOrEmpty = await toggleFavourite(game.GameID, game.LauncherName);
 			starIcon.style.filter = solidOrEmpty === 'solid' ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
@@ -340,7 +347,7 @@ class Elements {
 		const menuIcon = document.createElement('div');
 		menuIcon.classList.add('menu');
 		menuIcon.id = 'menu';
-		
+
 		return menuIcon;
 	}
 
