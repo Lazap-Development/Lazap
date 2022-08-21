@@ -34,7 +34,7 @@ body {
     position: relative;
     overflow: hidden;
     border-radius: 10px;
-    background-color: #1e1f24;
+    background-color: #1c1d22;
     height: 35px;
     width: 100%;
     flex: auto;
@@ -410,8 +410,8 @@ body {
 
 .gamesList {
     position: absolute;
-    overflow-y: auto;
-    width: 99%;
+    overflow-y: scroll;
+    width: 97%;
     height: 81%;
     margin-top: 110px;
     display: flex;
@@ -419,7 +419,7 @@ body {
     align-content: flex-start;
     align-items: center;
     justify-content: flex-start;
-    margin-left: 2%;
+    margin-left: 1.5%;
 }
 
 .gamebox {
@@ -645,8 +645,34 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 0;
-    background: transparent;
+    width: 8px;
+    background: rgba(121, 121, 121, 0);
+    height: 8px;
+}
+
+::-webkit-scrollbar:hover {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #63636396;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #83838396;
+    height: 30px;
+    border-radius: 10px;
+    width: 120px !important;
+}
+
+::-webkit-scrollbar-track-piece {
+    display: none;
+}
+
+::-webkit-scrollbar-corner {
+    display: none;
 }
 
 :not(input):not(textarea),
