@@ -25,8 +25,7 @@ async function filterAndSort(games, type, list, stored) {
 	}
 
 	// Filter out new games and delete old games
-	const games_blacklist = require('../blacklist.json');
-	games = games.filter(x => !games_blacklist[0].includes(x.GameID) && !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`));
+	games = games.filter(x => !require('../blacklist.json')[0].includes(x.GameID) && !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`));
 	for (let i = 0; i < list.length; i++) {
 		if (!games.map(x => x.GameID.replaceAll(' ', '_')).includes(list.children[i].id.slice(9))) {
 			list.removeChild(list.children[i]);
@@ -332,9 +331,10 @@ class Elements {
 
 			if (solidOrEmpty === "solid") {
 				starIcon.classList.add('star-fill');
-				for (let i = 0; i < 20; i++) {
-					particle(starIcon.getBoundingClientRect().left, starIcon.getBoundingClientRect().top);
-				}
+				starIcon.classList.add("shake");
+				setTimeout(() => {
+					starIcon.classList.remove("shake");
+				}, 500);
 			} else {
 				starIcon.classList.remove('star-fill');
 			}
@@ -382,37 +382,4 @@ class Elements {
 
 		return game;
 	}
-}
-
-function particle(x, y) {
-	const particle = document.createElement('particle');
-	document.body.appendChild(particle);
-	let width = Math.floor(Math.random() * 30 + 8);
-	let height = width;
-	let destinationX = (Math.random() - 0.5) * 300;
-	let destinationY = (Math.random() - 0.5) * 300;
-	let rotation = Math.random() * 500;
-	particle.innerHTML = ['⭐', '💛'][Math.floor(Math.random() * 2)];
-	particle.style.fontSize = `${Math.random() * 20 + 10}px`;
-	width = height = 'auto';
-
-	particle.style.width = `${width}px`;
-	particle.style.height = `${height}px`;
-	const animation = particle.animate([
-		{
-			transform: `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(0deg)`,
-			opacity: 1
-		},
-		{
-			transform: `translate(-50%, -50%) translate(${x + destinationX}px, ${y + destinationY}px) rotate(${rotation}deg)`,
-			opacity: 0
-		}
-	], {
-		duration: Math.random() * 1000 + 800,
-
-	});
-	animation.onfinish = deleteParticle;
-}
-function deleteParticle(e) {
-	e.srcElement.effect.target.remove();
 }
