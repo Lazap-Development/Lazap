@@ -52,7 +52,7 @@ async function filterAndSort(games, type, list, stored) {
 				return 0;
 			}
 		});
-		return final.slice(0, type.includes('MainPage') ? 5 : final.length);
+		return final.slice(0, type.includes('MainPage') ? 5 - list.children.length : final.length);
 	}
 	else if (type === 'favGamesList') {
 		let final = [];
@@ -174,8 +174,10 @@ async function addLaunch(GameID, LauncherName) {
 	if (!document.getElementById('recentGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
 		// eslint-disable-next-line no-undef
 		Elements.createGameElement(game, 'recentGamesList', recentGamesList);
-		// eslint-disable-next-line no-undef
-		Elements.createGameElement(game, 'recentGamesListMainPage', recentGamesListMainPage);
+		if (document.getElementById('recentGamesListMainPage').children.length < 5) {
+			// eslint-disable-next-line no-undef
+			Elements.createGameElement(game, 'recentGamesListMainPage', recentGamesListMainPage);
+		}
 	}
 }
 function createProcess(Command, Args, GameID, force = false) {
