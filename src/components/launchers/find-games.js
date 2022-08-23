@@ -42,7 +42,17 @@ async function filterAndSort(games, type, list, stored) {
 			const game = stored?.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
 			if (typeof game?.LastLaunch === 'number' && typeof game?.Launches === 'number') final.push(game);
 		}
-		return final;
+		final.sort((a, b) => {
+			return b.Launches - a.Launches;
+		}).sort((a, b) => {
+			if (b.Launches - a.Launches === 0) {
+				return b.LastLaunch - a.LastLaunch;
+			}
+			else {
+				return 0;
+			}
+		});
+		return final.slice(0, type.includes('MainPage') ? 5 : final.length);
 	}
 	else if (type === 'favGamesList') {
 		let final = [];
@@ -215,7 +225,7 @@ async function setGames(games, source) {
             if ([undefined, null].includes(d[y])) delete d[y];
         })
     });
-	
+
 	if (source === 'add-launch') {
 		fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
 	}
