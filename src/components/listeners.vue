@@ -214,9 +214,9 @@ window.addEventListener('load', async function () {
   searchbars.item(0).addEventListener('keyup', () => {
     const query = searchbars.item(0).value;
     const allGames = document.querySelectorAll('#allGamesList > div[id^="game-div"]');
-
+    console.log(query)
     allGames.forEach((game) => {
-      if (game.id.split('-').slice(2).join('-').match(new RegExp(`${query}`, 'gi'))) {
+      if (game.id.split('-').slice(2).join('-').match(new RegExp(`${query.replaceAll(' ', '_')}`, 'gi'))) {
         game.style.display = 'block';
       }
       else if (query.length === 0) {
@@ -232,7 +232,7 @@ window.addEventListener('load', async function () {
     const allGames = document.querySelectorAll('#favGamesList > div[id^="game-div"]');
 
     allGames.forEach((game) => {
-      if (game.id.split('-').slice(2).join('-').match(new RegExp(`${query}`, 'gi'))) {
+      if (game.id.split('-').slice(2).join('-').match(new RegExp(`${query.replaceAll(' ', '_')}`, 'gi'))) {
         game.style.display = 'block';
       }
       else if (query.length === 0) {
