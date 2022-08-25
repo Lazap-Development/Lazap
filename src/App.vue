@@ -121,6 +121,10 @@
     </div>
 
     <div class="secondorybox" id="games">
+      <div class="addGamePopUp" id="addGamePopUp">
+        <img class="exit" src="./assets/exit.svg">
+      </div>
+
       <div id="game-loading-overlay" class="game-loading-overlay">
         <div class="spinner-content">
           <img src="./assets/spinner.svg" alt="Loading..." class="loading-spinner">
@@ -128,6 +132,7 @@
         </div>
       </div>
       <p>All Games</p>
+      <img src="./assets/add.svg" class="addGameBtn" id="addGameBtn">
       <div class="search-bar">
         <input type="text" placeholder="Search" id="gamesInput">
       </div>

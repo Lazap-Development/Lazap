@@ -203,6 +203,14 @@ window.addEventListener('load', async function () {
     });
   });
 
+  document.getElementById("addGameBtn").addEventListener('click', function () {
+    if (window.getComputedStyle(document.getElementById("addGamePopUp")).display === "flex") {
+      document.getElementById("addGamePopUp").style.display = "none";
+    } else {
+      document.getElementById("addGamePopUp").style.display = "flex";
+    }
+  })
+
   searchbars.item(0).addEventListener('keyup', () => {
     const query = searchbars.item(0).value;
     const allGames = document.querySelectorAll('#allGamesList > div[id^="game-div"]');
@@ -235,6 +243,7 @@ window.addEventListener('load', async function () {
       }
     });
   });
+
 
   document.addEventListener('keydown', async function (e) {
     if (e.ctrlKey && e.key === "r") {
