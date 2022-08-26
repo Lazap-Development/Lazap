@@ -1,7 +1,7 @@
 [package]
 name = "lazap"
-version = "0.5.1"
-description = "A Tauri App"
+version = "0.6.0"
+description = "Lazap Launcher"
 authors = ["Lazap-Development"]
 license = ""
 repository = "https://github.com/Lazap-Development/lazap"

@@ -68,7 +68,7 @@
       </div>
 
       <div class="settings-footer">
-        v0.5 (Tauri Release)
+        v0.6 (Tauri Release)
       </div>
     </div>
   </div>
