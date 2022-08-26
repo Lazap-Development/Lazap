@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-background fadeInDownNoDelay" id="settings-backblur"></div>
+  <div class="settings-background fadeInDown" id="settings-backblur"></div>
 
   <div class="settings fadeInDown" id="settings-popup">
     <div>
@@ -91,7 +91,7 @@
 
   <div id="main-loading-overlay">
     <div class="spinner-content">
-      <img src="./assets/spinner.svg" alt="Loading..." class="loading-spinner">
+      <img src="./assets/spinner.svg" class="loading-spinner">
     </div>
   </div>
 
@@ -128,7 +128,6 @@
       <div id="game-loading-overlay" class="game-loading-overlay">
         <div class="spinner-content">
           <img src="./assets/spinner.svg" alt="Loading..." class="loading-spinner">
-          <p class="fadeInDown">Loading your games...</p>
         </div>
       </div>
       <p>All Games</p>
@@ -257,8 +256,6 @@ export default {
 
     if (await os.platform() === "win32") {
       document.getElementById('bg').style.height = '111.5vh';
-      document.getElementById('main-loading-overlay').style.height = '111.5vh';
-      document.getElementById('main-loading-overlay').style.width = '111.7vw';
     }
   },
   listeners,

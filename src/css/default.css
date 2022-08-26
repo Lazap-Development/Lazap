@@ -612,7 +612,6 @@ body {
 
 .fadeInUp {
     animation-duration: 0.5s;
-    animation-delay: 0.25s;
     animation-fill-mode: both;
     backface-visibility: hidden;
     opacity: 0;
@@ -629,15 +628,6 @@ body {
 
 .fadeInDown {
     animation-duration: 0.5s;
-    animation-delay: 0.2s;
-    animation-fill-mode: both;
-    backface-visibility: hidden;
-    opacity: 0;
-    animation-name: fadeInDown;
-}
-
-.fadeInDownNoDelay {
-    animation-duration: 0.5s;
     animation-fill-mode: both;
     backface-visibility: hidden;
     opacity: 0;
@@ -646,7 +636,6 @@ body {
 
 .fadeInLeft {
     animation-duration: 0.5s;
-    animation-delay: 0.25s;
     animation-fill-mode: both;
     backface-visibility: hidden;
     opacity: 0;
@@ -745,8 +734,8 @@ img,
     visibility: visible;
     opacity: 1;
     display: flex;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     position: fixed;
     top: 0;
     left: 0;
@@ -759,7 +748,6 @@ img,
 .loading-spinner {
     animation: spinner 1s infinite linear;
     width: 36px;
-    margin-bottom: -10px;
 }
 
 .spinner-content {
