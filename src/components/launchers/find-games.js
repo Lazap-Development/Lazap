@@ -13,6 +13,8 @@ async function getInstalledGames() {
 	const launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js', 'Uplay.js'];
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
 
+	
+
 	return games;
 }
 
@@ -180,10 +182,9 @@ async function addLaunch(GameID, LauncherName) {
 		}
 	}
 }
-function createProcess(Command, Args, GameID, force = false) {
+async function createProcess(Command, Args, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
 	VisibilityState();
-	console.log(Args);
 	const instance = invoke('run_game', { exec: Command, args: Args })
 		.then(() => {
 			VisibilityState();
@@ -194,21 +195,15 @@ function createProcess(Command, Args, GameID, force = false) {
 	return instance;
 }
 async function VisibilityState() {
-	const appDirPath = await path.appDir();
 
 	try {
-		const LauncherData = JSON.parse(await fs.readTextFile(appDirPath + 'storage/LauncherData.json'));
-
+		const LauncherData = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
 		if (LauncherData.trayMinLaunch === true) {
-			if (await Window.appWindow.isVisible() === true) {
-				Window.appWindow.hide()
-			} else {
-				Window.appWindow.show()
-			}
-
+			if (await Window.appWindow.isVisible() === true) Window.appWindow.hide()
+			else Window.appWindow.show()
 		}
 	} catch (e) {
-		return console.log(e);
+		return console.error(e);
 	}
 }
 
@@ -360,6 +355,13 @@ class Elements {
 		const menuIcon = document.createElement('div');
 		menuIcon.classList.add('menu');
 		menuIcon.id = 'menu';
+
+		menuIcon.addEventListener("click", () => {
+			console.log(document.getElementById("gameMenu").style)
+			
+			document.getElementById("gameMenu").style.display === "flex" ? document.getElementById("gameMenu").style.display = "none"
+			:document.getElementById("gameMenu").style.display = "flex";
+		});
 
 		return menuIcon;
 	}
