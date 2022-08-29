@@ -26,17 +26,10 @@ window.addEventListener('load', async function () {
   }
 
   try {
-    let { loadingBackground } = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
-    loadingBackground ? updateLoadingBackground(loadingBackground) : document.getElementById("main-loading-overlay").style.backgroundImage = "linear-gradient(30deg, rgba(30,30,34,1) 0%, rgba(30,30,34,1) 30%, var(--back) 100%)";
-  } catch(error) {
-    console.error(error);
-  }
-
-  try {
     let { accentColor } = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
-    if(!accentColor) accentColor = "rgb(121, 52, 250)";
+    if (!accentColor) accentColor = "rgb(121, 52, 250)";
     updateAccentColor(accentColor);
-  } catch(error) {
+  } catch (error) {
     console.error(error);
   }
 
@@ -66,13 +59,7 @@ window.addEventListener('load', async function () {
       return console.error(err);
     });
 
-  document.getElementById("main-loading-overlay").style.animation = "closeOverlay .3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards";
-  this.setTimeout(() => {
-    document.getElementById('main-loading-overlay').style.visibility = "hidden";
-    document.getElementById('main-loading-overlay').style.opacity = "0";
-  }, 200)
-
-  document.getElementById('home-btn').addEventListener('click', async function() {
+  document.getElementById('home-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
     toggleIndicatorAnim();
 
@@ -90,7 +77,7 @@ window.addEventListener('load', async function () {
       });
   });
 
-  document.getElementById('recent-btn').addEventListener('click', async function() {
+  document.getElementById('recent-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
     toggleIndicatorAnim();
 
@@ -108,7 +95,7 @@ window.addEventListener('load', async function () {
       });
   });
 
-  document.getElementById('games-btn').addEventListener('click', async function() {
+  document.getElementById('games-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
     toggleIndicatorAnim();
 
@@ -128,7 +115,7 @@ window.addEventListener('load', async function () {
     document.getElementById('gamesInput').focus();
   });
 
-  document.getElementById('favs-btn').addEventListener('click', async function() {
+  document.getElementById('favs-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
     toggleIndicatorAnim();
 
@@ -148,7 +135,7 @@ window.addEventListener('load', async function () {
     document.getElementById('favsInput').focus();
   });
 
-  document.getElementById('messages-btn').addEventListener('click', async function() {
+  document.getElementById('messages-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
     toggleIndicatorAnim();
 
@@ -161,7 +148,7 @@ window.addEventListener('load', async function () {
     friends.style.display = 'none';
   });
 
-  document.getElementById('activity-btn').addEventListener('click', async function() {
+  document.getElementById('activity-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
     toggleIndicatorAnim();
 
@@ -174,7 +161,7 @@ window.addEventListener('load', async function () {
     friends.style.display = 'none';
   });
 
-  document.getElementById('friends-btn').addEventListener('click', async function() {
+  document.getElementById('friends-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
     toggleIndicatorAnim();
 
@@ -187,7 +174,7 @@ window.addEventListener('load', async function () {
     friends.style.display = 'flex';
   });
 
-  document.getElementById('text').addEventListener('change', async function(change) {
+  document.getElementById('text').addEventListener('change', async function (change) {
     this.appendChild(document.getElementById('indicator'))
     fs.writeTextFile(await path.appDir() + 'storage/cache/user/UserProfile.json', JSON.stringify({ username: change.target.value, }), (err) => {
       if (err) throw err;
@@ -209,7 +196,6 @@ window.addEventListener('load', async function () {
       // if(input.id === "setting-accentColor") return input.value = Data[input.id.split("-")[1]];
       // input.checked = Data[input.id.split('-')[1]] ? true : false;
       if (input.id === "setting-accentColor") input.value = Data[input.id.split("-")[1]]
-      else if (input.id === "setting-loadingBackground") input.value = Data[input.id.split("-")[1]]
       else input.checked = Data[input.id.split('-')[1]] ? true : false;
     });
   });
@@ -225,23 +211,13 @@ window.addEventListener('load', async function () {
   });
 
   document.querySelectorAll('input[id^=setting-]').forEach((input) => {
-    if(input.id === "setting-accentColor") {
+    if (input.id === "setting-accentColor") {
       input.addEventListener("input", async () => {
         const LauncherData = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
         LauncherData[input.id.split("-")[1]] = document.querySelector(`input[id=${input.id}]`).value;
         fs.writeTextFile(await path.appDir() + 'storage/LauncherData.json', JSON.stringify(LauncherData));
-        
-        updateAccentColor(LauncherData.accentColor);
-      });
-      return;
-    }
-    if(input.id === "setting-loadingBackground") {
-      input.addEventListener("input", async () => {
-        const LauncherData = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'))
-        LauncherData[input.id.split("-")[1]] = document.querySelector(`input[id=${input.id}]`).value;
-        fs.writeTextFile(await path.appDir() + 'storage/LauncherData.json', JSON.stringify(LauncherData));
 
-        updateLoadingBackground(LauncherData.loadingBackground);
+        updateAccentColor(LauncherData.accentColor);
       });
       return;
     }
@@ -321,12 +297,12 @@ window.addEventListener('load', async function () {
   document.getElementById("addGameFinalBtn").addEventListener("click", async function () {
     if (document.getElementById("inputGameName").value.length > 0 && newGameLocation) {
       let scheme = {
-          DisplayName: document.getElementById("inputGameName").value,
-					LauncherName: 'CustomGame',
-					GameID: 'CustomGame',
-					Executable: newGameLocation,
-					Args: [],
-        }
+        DisplayName: document.getElementById("inputGameName").value,
+        LauncherName: 'CustomGame',
+        GameID: 'CustomGame',
+        Executable: newGameLocation,
+        Args: [],
+      }
 
       try {
         await fs.renameFile(await path.appDir() + `storage/cache/games/banners/newcustombanner.png`, await path.appDir() + `storage/cache/games/banners/${require('./modules/sha256.js').sha256(document.getElementById("inputGameName").value)}.png`)
@@ -348,27 +324,15 @@ window.addEventListener('load', async function () {
 
 
   function toggleIndicatorAnim() {
-<<<<<<< HEAD
-    let element = document.getElementById('indicator');
-    element.classList.add("anim-indicatorscaleY")
-=======
     let indicator = document.getElementById('indicator');
     indicator.classList.add("anim-indicatorscaleY")
->>>>>>> 8363b8b8e0765483cc111162cbc35b945add954e
     setTimeout(() => {
       indicator.classList.remove("anim-indicatorscaleY")
     }, 200);
-<<<<<<< HEAD
-=======
   }
   function updateAccentColor(accentColor) {
     document.getElementById('indicator').style.backgroundColor = accentColor;
     document.querySelector(":root").style.setProperty("--back", accentColor);
-  }
-  function updateLoadingBackground(url) {
-    document.getElementById("main-loading-overlay").style.backgroundImage = "linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(" + url + ")";
-    document.getElementById("main-loading-overlay").style.backgroundSize = "cover";
->>>>>>> 8363b8b8e0765483cc111162cbc35b945add954e
   }
 });
 </script>

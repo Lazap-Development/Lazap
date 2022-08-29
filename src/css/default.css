@@ -973,19 +973,20 @@ img,
     margin-left: 20px;
 }
 
-#choser {
+.choser {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-#choser #generalbtn, #choser #appearancebtn {
+.choser .generalbtn, .choser #appearancebtn {
     font-family: Nunito;
     color: rgb(201, 201, 201);
 
     text-decoration: none;
     text-shadow: none;
     font-size: 18px;
+    border-radius: 10px;
 
     background: #1e1f27;
     width: 13.78rem;
@@ -994,23 +995,23 @@ img,
     padding: 0;
 }
 
-#choser #generalbtn:hover, #choser #appearancebtn:hover {
+.choser .generalbtn:hover, .choser #appearancebtn:hover {
     animation: settingsBtnAnimation .2s forwards;
     cursor: pointer;
 }
 
-#appearance-settings, #general-settings {
+.appearance-settings, .general-settings {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-#appearance-settings {
+.appearance-settings {
     display: none;
 }
 
-#appearance-settings>div, #general-settings>div {
+.appearance-settings>div, .general-settings>div {
     width: 80%;
 }
 

@@ -6,11 +6,11 @@
     <h1>
         Settings
     </h1>
-    <div id="choser">
-      <button id="generalbtn">General</button>
+    <div class="choser" id="choser">
+      <button class="generalbtn" id="generalbtn">General</button>
       <button id="appearancebtn">Appearance</button>
     </div>
-    <div id="general-settings">
+    <div class="general-settings" id="general-settings">
       <div>
         <p>Discord Rich Presence</p>
         <label class="switch">
@@ -71,21 +71,11 @@
         </label>
       </div>
     </div>
-    <div id="appearance-settings">
+    <div class="appearance-settings" id="appearance-settings">
       <div id="a">
         <p>Accent Color</p>
         <label class="color">
           <input type="color" id="setting-accentColor">
-          <div>
-            <span></span>
-          </div>
-        </label>
-      </div>
-
-      <div>
-        <p>Loading Background</p>
-        <label class="input">
-          <input type="text" id="setting-loadingBackground">
           <div>
             <span></span>
           </div>
@@ -112,13 +102,6 @@
         <div @click="max_window" class="titlebar-max mx-1"></div>
         <div @click="close_window" class="titlebar-exit mx-1"></div>
       </div>
-    </div>
-  </div>
-
-  <div id="main-loading-overlay">
-    <div class="spinner-content">
-      <img src="./assets/spinner.svg" class="loading-spinner">
-      <p id="spinnerLoading">Loading...</p>
     </div>
   </div>
   
