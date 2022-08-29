@@ -1,3 +1,7 @@
+:root {
+    --back: rgb(121, 52, 250);
+}
+
 ::selection {
     color: inherit;
     background: #2e3038;
@@ -118,7 +122,8 @@ body {
 
 .titlebar-account:hover {
     cursor: pointer;
-    filter: invert(36%) sepia(89%) saturate(4522%) hue-rotate(225deg) brightness(99%) contrast(99%);
+    /*filter: invert(36%) sepia(89%) saturate(4522%) hue-rotate(225deg) brightness(99%) contrast(99%);*/
+    background: var(--back);
 }
 
 .titlebar-update {
@@ -209,12 +214,12 @@ body {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient( 90deg,  rgba(150,93,233,1) 10.8%, rgba(99,88,238,1) 94.3% );
-	animation: gradient 20s infinite;
+    background-image: linear-gradient(30deg, rgba(30,30,34,1) 0%, rgba(30,30,34,1) 30%, var(--back) 100%);
+	animation: gradient 10s infinite;
     background-size: 400% 400%;
     display: none;
 
-    justify-content: center; 
+    justify-content: center;
     border-radius: 22px;
     z-index: 1;
 }
@@ -376,8 +381,8 @@ body {
 }
 
 .side-tab:before {
-    background: rgb(30, 30, 34);
-    background: linear-gradient(30deg, rgba(30, 30, 34, 1) 0%, rgba(30, 30, 34, 1) 30%, rgba(81, 41, 156, 1) 100%, rgba(120, 50, 250, 1) 100%);
+    background: rgb(30,30,34);
+    background: linear-gradient(30deg, rgba(30,30,34,1) 0%, rgba(30,30,34,1) 30%, var(--back) 100%);
     content: "";
     height: 40px;
     width: 230px;
@@ -596,6 +601,7 @@ body {
     content: url("../assets/menu.svg");
     height: 18px;
     width: 18px;
+    cursor: pointer;
 }
 
 .fade {
@@ -728,9 +734,9 @@ img,
 }
 
 #main-loading-overlay {
-    cursor: default !important;
+    cursor: wait;
     overflow: hidden;
-    transition: visibility 0s 0.5s, opacity 0.5s linear;
+    transition: visibility 0s .2s, opacity .2s ease-in;
     visibility: visible;
     opacity: 1;
     display: flex;
@@ -742,17 +748,49 @@ img,
     align-items: center;
     justify-content: center;
     z-index: 5;
-    background-color: #1e1f24;
+    animation: gradient 11s infinite linear;
+    background-size: 400% 400%;
 }
 
-.loading-spinner {
-    animation: spinner 1s infinite linear;
-    width: 36px;
+#setting-loadingBackground {
+    width: 	20rem;
+    height: 30px;
+    background: black;
+    color: white;
+    border: none;
 }
+
+#gameMenu {
+    display: none;
+    position: absolute;
+    right: 20px;
+    width: 30rem;
+    height: 90%;
+    z-index: 2001;
+    background: rgba(35, 35, 37, 1);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border: 3px, solid, var(--back);
+    animation: gameMenuAnimation .2s forwards ease-out;
+}
+
+/*.loading-spinner {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    animation: spinner .9s infinite linear;
+    width: 31px;
+}*/
 
 .spinner-content {
     text-align: center;
     color: #dadada;
+}
+
+#spinnerLoading {
+    position: absolute;
+    bottom: 9px;
+    left: 63px;
 }
 
 .settings-background {
@@ -797,8 +835,7 @@ img,
     font-weight: normal;
     color: rgb(201, 201, 201);
     margin-top: 45px;
-    margin-bottom: 60px;
-
+    margin-bottom: 20px;
 }
 
 .settings p {
@@ -811,6 +848,7 @@ img,
     text-decoration: none;
     text-shadow: none;
     cursor: default;
+    z-index: -15;
 }
 
 .settings-info {
@@ -830,8 +868,55 @@ img,
     margin-left: 20px;
 }
 
+#choser {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#choser #generalbtn, #choser #appearancebtn {
+    font-family: Nunito;
+    color: rgb(201, 201, 201);
+
+    text-decoration: none;
+    text-shadow: none;
+    font-size: 18px;
+
+    background: #1e1f27;
+    width: 13.78rem;
+    height: 50px;
+    border: none;
+    padding: 0;
+}
+
+#choser #generalbtn:hover, #choser #appearancebtn:hover {
+    animation: settingsBtnAnimation .2s forwards;
+    cursor: pointer;
+}
+
+#appearance-settings, #general-settings {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#appearance-settings {
+    display: none;
+}
+
+#appearance-settings>div, #general-settings>div {
+    width: 80%;
+}
+
+#a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .game-loading-overlay {
-    cursor: default !important;
+    cursor: wait;
     overflow: hidden;
     transition: visibility 0s .5s, opacity .5s linear;
     visibility: visible;
@@ -971,6 +1056,13 @@ img,
     color: rgb(113 119 144 / 78%);
     font-size: 15px;
     font-weight: 500;
+}
+
+.search-bar input:focus {
+    border: 3px solid var(--back);
+    animation-name: searchbox;
+    animation-duration: .2s;
+    animation-fill-mode: both;
 }
 
 .switch {
@@ -1128,11 +1220,22 @@ particle {
     0% {
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg);
+        bottom: 20px;
+        right: 20px;
     }
-
+    25% {
+        bottom: 19px;
+        right: 21px;
+    }
+    75% {
+        bottom: 21px;
+        right: 19px;
+    }
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
+        bottom: 20px;
+        right: 20px;
     }
 }
 
@@ -1213,4 +1316,46 @@ particle {
 	100% {
 		background-position: 0% 50%;
 	}
+}
+
+@keyframes searchbox {
+    0% {
+        width: 0%;
+        border-color: rgb(121, 52, 250);
+    }
+    100% {
+        width: 100%;
+        border-color: var(--back);
+    }
+}
+
+@keyframes settingsBtnAnimation {
+    0% {
+        border-bottom: rgb(121, 52, 250);
+        border-bottom-width: 0px;
+        border-bottom-style: none;
+    }
+    100% {
+        border-bottom: var(--back);
+        border-bottom-width: 3px;
+        border-bottom-style: solid;
+    }
+}
+
+@keyframes gameMenuAnimation {
+    0% {
+        width: 0px;
+    }
+    100% {
+        width: 30rem;
+    }
+}
+
+@keyframes closeOverlay {
+    0% {
+        height: 100%;
+    }
+    100% {
+        height: 0%;
+    }
 }
