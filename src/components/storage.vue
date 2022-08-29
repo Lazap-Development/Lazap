@@ -13,7 +13,6 @@ const path = window.__TAURI__.path;
   data.trayMinQuit = false;
   data.checkForUpdates = false;
   data.accentColor = "rgb(121, 52, 250)";
-  data.loading_background = "";
   let CONSTANTS = JSON.stringify(data);
 
   fs.createDir(appDirPath, { recursive: true }, (err) => {
