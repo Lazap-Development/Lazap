@@ -271,6 +271,7 @@ export {
 	getInstalledGames,
 	loadGames,
 	getGames,
+	Elements
 };
 
 class Elements {

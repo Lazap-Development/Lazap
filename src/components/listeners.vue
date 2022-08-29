@@ -12,6 +12,7 @@ window.addEventListener('load', async function () {
   const searchbars = document.querySelectorAll('div.search-bar > input[type="text"]');
   const fs = window.__TAURI__.fs;
   const path = window.__TAURI__.path;
+  const dialog = window.__TAURI__.dialog;
 
   const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/user/UserProfile.json', (err) => {
     if (err) throw err;
@@ -203,14 +204,6 @@ window.addEventListener('load', async function () {
     });
   });
 
-  document.getElementById("addGameBtn").addEventListener('click', function () {
-    if (window.getComputedStyle(document.getElementById("addGamePopUp")).display === "flex") {
-      document.getElementById("addGamePopUp").style.display = "none";
-    } else {
-      document.getElementById("addGamePopUp").style.display = "flex";
-    }
-  })
-
   searchbars.item(0).addEventListener('keyup', () => {
     const query = searchbars.item(0).value;
     const allGames = document.querySelectorAll('#allGamesList > div[id^="game-div"]');
@@ -251,14 +244,68 @@ window.addEventListener('load', async function () {
     }
   })
 
+  let newGameLocation;
+  document.getElementById("addGameLocation").addEventListener("click", async function () {
+    const selected = await dialog.open({
+      multiple: false,
+      filters: [{
+        name: 'Windows Executable',
+        extensions: ['exe']
+      }]
+    });
+    if (selected !== null) {
+      newGameLocation = selected;
+    }
+  })
+
+  document.getElementById("addGameBtn").addEventListener('click', async function () {
+    if (window.getComputedStyle(document.getElementById("addGamePopUp")).display === "flex") {
+      document.getElementById("addGamePopUp").style.display = "none";
+      try {
+        await fs.removeFile(await path.appDir() + `storage/cache/games/banners/newcustombanner.png`)
+      } catch (e) {
+        return e;
+      }
+    } else {
+      document.getElementById("addGamePopUp").style.display = "flex";
+    }
+  })
+
+  document.getElementById("addGameFinalBtn").addEventListener("click", async function () {
+    if (document.getElementById("inputGameName").value.length > 0 && newGameLocation) {
+      let scheme = {
+          DisplayName: document.getElementById("inputGameName").value,
+					LauncherName: 'CustomGame',
+					GameID: 'CustomGame',
+					Executable: newGameLocation,
+					Args: [],
+        }
+
+      try {
+        await fs.renameFile(await path.appDir() + `storage/cache/games/banners/newcustombanner.png`, await path.appDir() + `storage/cache/games/banners/${require('./modules/sha256.js').sha256(document.getElementById("inputGameName").value)}.png`)
+        require("./launchers/find-games").Elements.createGameElement(scheme, "allGamesList");
+      } catch (e) {
+        require("./launchers/find-games").Elements.createGameElement(scheme, "allGamesList");
+      }
+      document.getElementById("addGamePopUp").style.display = "none";
+      document.getElementById("inputGameName").value = ""
+      newGameLocation = "";
+    } else if (document.getElementById("inputGameName").value.length > 0 && !newGameLocation) {
+      return alert("You are missing the game location.");
+    } else if (document.getElementById("inputGameName").value.length < 0 && newGameLocation) {
+      return alert("You are missing the game name.");
+    } else {
+      return alert("You are missing the game name, and the game location.");
+    }
+  })
+
+
   function toggleIndicatorAnim() {
     let element = document.getElementById('indicator');
-
     element.classList.add("anim-indicatorscaleY")
     setTimeout(() => {
       element.classList.remove("anim-indicatorscaleY")
     }, 200);
-
   }
 });
 </script>

@@ -122,7 +122,21 @@
 
     <div class="secondorybox" id="games">
       <div class="addGamePopUp" id="addGamePopUp">
-        <img class="exit" src="./assets/exit.svg">
+        <div class="mainSection">
+          <div class="section">
+            <div class="title">Game Name</div>
+            <input maxlength="24" type="text" class="inputGameName" id="inputGameName">
+          </div>
+          <div class="section">
+            <button class="addGameLocation" id="addGameLocation">Locate Game</button>
+          </div>
+          <div class="section">
+            <button class="addGameFinalBtn" id="addGameFinalBtn">Add Game</button>
+          </div>
+        </div>
+        <label for="addGameCustomBanner"></label>
+        <input class="banner" id="addGameCustomBanner" type="file" accept="image/png" @change="(event) => loadCustomBanner(event)" />
+        <img src="./assets/default-banner.jpg" id="addGameCustomBannerOutput">
       </div>
 
       <div id="game-loading-overlay" class="game-loading-overlay">
@@ -165,7 +179,7 @@
         <div>
           <div class="user-pfp">
             <label for="file"></label>
-            <input id="file" type="file" accept="image/png" @change="(event) => loadFile(event)" />
+            <input id="file" type="file" accept="image/png" @change="(event) => loadPFP(event)" />
             <img src="./assets/default-profile.svg" alt="Avatar" width="88" id="output">
           </div>
           <input class="username" id="text" type="text" value="Lazap" spellcheck="false" maxlength="12" />
@@ -270,13 +284,23 @@ export default {
     close_window() {
       window.__TAURI__.window.appWindow.close()
     },
-    async loadFile(event) {
+    async loadPFP(event) {
       var selectedFile = event.target.files[0];
       var reader = new FileReader();
 
       reader.onload = async function () {
         await window.__TAURI__.fs.writeBinaryFile(await window.__TAURI__.path.appDir() + `storage/cache/user/pfp.png`, reader.result);
         document.getElementById("output").src = window.__TAURI__.tauri.convertFileSrc(await window.__TAURI__.path.appDir() + `storage/cache/user/pfp.png`) + `?${new Date().getSeconds()}`;
+      };
+      reader.readAsArrayBuffer(selectedFile);
+    },
+    async loadCustomBanner(event) {
+      var selectedFile = event.target.files[0];
+      var reader = new FileReader();
+
+      reader.onload = async function () {
+        await window.__TAURI__.fs.writeBinaryFile(await window.__TAURI__.path.appDir() + `storage/cache/games/banners/newcustombanner.png`, reader.result);
+        document.getElementById("addGameCustomBannerOutput").src = window.__TAURI__.tauri.convertFileSrc(await window.__TAURI__.path.appDir() + `storage/cache/games/banners/newcustombanner.png`) + `?${new Date().getSeconds()}`;
       };
       reader.readAsArrayBuffer(selectedFile);
     }
