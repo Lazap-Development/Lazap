@@ -838,7 +838,7 @@ img,
     outline: none;
 }
 
-#main-loading-overlay {
+.main-loading-overlay {
     cursor: wait;
     overflow: hidden;
     transition: visibility 0s .2s, opacity .2s ease-in;
@@ -853,8 +853,7 @@ img,
     align-items: center;
     justify-content: center;
     z-index: 5;
-    animation: gradient 11s infinite linear;
-    background-size: 400% 400%;
+    background-color: #1e1f24;
 }
 
 #setting-loadingBackground {
@@ -879,23 +878,16 @@ img,
     animation: gameMenuAnimation .2s forwards ease-out;
 }
 
-/*.loading-spinner {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    animation: spinner .9s infinite linear;
-    width: 31px;
-}*/
-
 .spinner-content {
     text-align: center;
     color: #dadada;
 }
 
-#spinnerLoading {
-    position: absolute;
-    bottom: 9px;
-    left: 63px;
+.loading-spinner {
+    bottom: 20px;
+    right: 20px;
+    animation: spinner .9s infinite linear;
+    width: 34px;
 }
 
 .settings-background {

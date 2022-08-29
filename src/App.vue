@@ -89,6 +89,13 @@
     </div>
   </div>
 
+  <div class="main-loading-overlay" id="main-loading-overlay">
+    <div class="spinner-content">
+      <img src="./assets/spinner.svg" class="loading-spinner">
+      <p id="spinnerLoading">Loading...</p>
+    </div>
+  </div>
+  
   <div data-tauri-drag-region class="titlebar">
     <div data-tauri-drag-region style="justify-content: space-between;" class="titlebar-icons">
       <div class="titlebar-options">
@@ -109,7 +116,7 @@
     <div class="outline"></div>
     <div class="homebox" id="home">
       <div class="children fadeInUp">
-        <img class="head-pic" src="./assets/main-banner.png">
+        <img class="head-pic" src="./assets/main-banner.png" id="head-pic">
       </div>
       <div class="children fadeInDown">
         <div class="jump-back">

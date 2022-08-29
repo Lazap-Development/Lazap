@@ -59,6 +59,9 @@ window.addEventListener('load', async function () {
       return console.error(err);
     });
 
+  document.getElementById('main-loading-overlay').style.opacity = '0';
+  document.getElementById('main-loading-overlay').style.visibility = 'hidden';
+
   document.getElementById('home-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
     toggleIndicatorAnim();
