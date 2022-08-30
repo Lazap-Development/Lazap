@@ -12,7 +12,7 @@ const path = window.__TAURI__.path;
   data.trayMinLaunch = true;
   data.trayMinQuit = false;
   data.checkForUpdates = false;
-  data.accentColor = "rgb(121, 52, 250)";
+  data.accentColor = "#7934FA";
   let CONSTANTS = JSON.stringify(data);
 
   fs.createDir(appDirPath, { recursive: true }, (err) => {

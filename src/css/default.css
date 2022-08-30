@@ -543,7 +543,7 @@ body {
     margin-top: 5px;
     margin-left: 2px;
 
-    background-color: rgb(121, 52, 250);
+    background-color: var(--back);
     height: 32px;
     width: 5px;
     border-radius: 50px;
@@ -1245,6 +1245,27 @@ img,
     --x: 28px;
     --s: 12px;
     --b: var(--dot);
+}
+
+.color {
+    display: flex;
+}
+
+.repeatButton {
+    height: 40px;
+    width: 40px;
+    filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
+}
+
+.repeatButton:hover {
+    cursor: pointer;
+}
+
+.btnInput {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 particle {
