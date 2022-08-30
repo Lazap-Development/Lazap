@@ -1160,6 +1160,13 @@
   resolved "https://registry.yarnpkg.com/@soda/get-current-script/-/get-current-script-1.0.2.tgz#a53515db25d8038374381b73af20bb4f2e508d87"
   integrity sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==
 
+"@tauri-apps/api@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@tauri-apps/api/-/api-1.0.0.tgz#944b1faf1cf3f916b4ff5a23b6a49a83d7b60003"
+  integrity sha512-sPnq8/WQumCnyHERTeqKQiryRoM8X4ImMT7K+BJ3zT7bmp/n5162fZS/ZqYIFxKHgQqzwWqT7C96Sb0/CL7WsA==
+  dependencies:
+    type-fest "2.13.1"
+
 "@tauri-apps/api@^1.0.0", "@tauri-apps/api@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@tauri-apps/api/-/api-1.0.2.tgz#5228720e35d50fd08df87067dc29e7306c1f7a10"
@@ -5956,6 +5963,13 @@ tapable@^2.0.0, tapable@^2.1.1, tapable@^2.2.0:
   resolved "https://registry.yarnpkg.com/tapable/-/tapable-2.2.1.tgz#1967a73ef4060a82f12ab96af86d52fdb76eeca0"
   integrity sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==
 
+"tauri-plugin-fs-extra-api@github:tauri-apps/tauri-plugin-fs-extra":
+  version "0.0.0"
+  resolved "https://codeload.github.com/tauri-apps/tauri-plugin-fs-extra/tar.gz/0bafb6d596c78e23100c5f97d8b317cb3bcb5c32"
+  dependencies:
+    "@tauri-apps/api" "1.0.0"
+    tslib "2.4.0"
+
 "tauri-plugin-sql-api@github:tauri-apps/tauri-plugin-sql":
   version "0.1.0"
   resolved "https://codeload.github.com/tauri-apps/tauri-plugin-sql/tar.gz/dd4b336982e1c40af33860ec30e17cfd9400c6cc"
@@ -6077,6 +6091,11 @@ type-check@^0.4.0, type-check@~0.4.0:
   integrity sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==
   dependencies:
     prelude-ls "^1.2.1"
+
+type-fest@2.13.1:
+  version "2.13.1"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.13.1.tgz#621c84220df0e01a8469002594fc005714f0cfba"
+  integrity sha512-hXYyrPFwETT2swFLHeoKtJrvSF/ftG/sA15/8nGaLuaDGfVAaq8DYFpu4yOyV4tzp082WqnTEoMsm3flKMI2FQ==
 
 type-fest@^0.20.2:
   version "0.20.2"

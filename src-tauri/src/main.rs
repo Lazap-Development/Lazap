@@ -15,6 +15,7 @@ fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
         tauri::Builder::default()
             .system_tray(tray)
+            .plugin(tauri_plugin_fs_extra::FsExtra::default())
             .on_system_tray_event(|app, event| match event {
                 SystemTrayEvent::LeftClick {
                     position: _,
@@ -61,6 +62,7 @@ fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
         tauri::Builder::default()
             .plugin(tauri_plugin_sql::TauriSql::default())
+            .plugin(tauri_plugin_fs_extra::FsExtra::default())
             .system_tray(tray)
             .on_system_tray_event(|app, event| match event {
                 SystemTrayEvent::LeftClick {

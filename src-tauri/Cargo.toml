@@ -16,7 +16,10 @@ tauri-build = { version = "1.0.4", features = [] }
 
 [dependencies.tauri-plugin-sql]
 git = "https://github.com/tauri-apps/tauri-plugin-sql"
-features = ["sqlite"] # or "postgres", or "mysql"
+features = ["sqlite"]
+
+[dependencies.tauri-plugin-fs-extra]
+git = "https://github.com/tauri-apps/tauri-plugin-fs-extra"
 
 [dependencies]
 serde_json = "1.0.83"
