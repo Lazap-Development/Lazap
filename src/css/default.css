@@ -1004,7 +1004,7 @@ img,
 .choser .generalbtn, .choser #appearancebtn {
     font-family: Nunito;
     color: rgb(201, 201, 201);
-
+    border-radius: 8px;
     text-decoration: none;
     text-shadow: none;
     font-size: 18px;
