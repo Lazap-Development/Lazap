@@ -2,7 +2,7 @@ name: "lazap-nightly-publish"
 on:
   push:
     branches:
-      - releases
+      - nightly
 
 jobs:
   publish-tauri:
