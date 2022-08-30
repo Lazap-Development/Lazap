@@ -109,6 +109,7 @@ body {
     cursor: pointer;
     animation-delay: 200ms;
     animation: settings-spin 1.5s linear;
+    filter: invert(17%) sepia(86%) saturate(3285%) hue-rotate(239deg) brightness(85%) contrast(101%);
 }
 
 .titlebar-account {
@@ -583,7 +584,7 @@ body {
 }
 
 .anim-indicatorscaleY {
-    animation: indicatorscaleY 0.2s linear;
+    animation: indicatorscaleY 0.5s linear;
 }
 
 .gamesList {
@@ -1007,7 +1008,6 @@ img,
     text-decoration: none;
     text-shadow: none;
     font-size: 18px;
-    border-radius: 10px;
 
     background: #1e1f27;
     width: 13.78rem;
@@ -1423,7 +1423,21 @@ particle {
     0% {
         transform: scaleY(0);
     }
-
+    20% {
+        transform: scaleY(0.2);
+    }
+    40% {
+        transform: scaleY(0.3);
+    }
+    50% {
+        transform: scaleY(0.4);
+    }
+    70% {
+        transform: scaleY(0.5);
+    }
+    80% {
+        transform: scaleY(0.6);
+    }
     100% {
         transform: scaleY(1);
     }

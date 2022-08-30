@@ -64,7 +64,9 @@ window.addEventListener('load', async function () {
 
   document.getElementById('home-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
-    toggleIndicatorAnim();
+    if (home.style.display !== 'flex') {
+      toggleIndicatorAnim();
+    }
 
     home.style.display = 'flex';
     recent.style.display = 'none';
@@ -82,7 +84,9 @@ window.addEventListener('load', async function () {
 
   document.getElementById('recent-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
-    toggleIndicatorAnim();
+    if (recent.style.display !== 'flex') {
+      toggleIndicatorAnim();
+    }
 
     home.style.display = 'none';
     recent.style.display = 'flex';
@@ -100,7 +104,11 @@ window.addEventListener('load', async function () {
 
   document.getElementById('games-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
-    toggleIndicatorAnim();
+
+    if (games.style.display !== 'flex') {
+      setTimeout(() => document.getElementById('gamesInput').focus(), 100);
+      toggleIndicatorAnim();
+    }
 
     home.style.display = 'none';
     recent.style.display = 'none';
@@ -114,13 +122,15 @@ window.addEventListener('load', async function () {
       .catch((err) => {
         return console.error(err);
       });
-
-    document.getElementById('gamesInput').focus();
   });
 
   document.getElementById('favs-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
-    toggleIndicatorAnim();
+
+    if (favs.style.display !== 'flex') {
+      setTimeout(() => document.getElementById('favsInput').focus(), 100);
+      toggleIndicatorAnim();
+    }
 
     home.style.display = 'none';
     recent.style.display = 'none';
@@ -134,13 +144,13 @@ window.addEventListener('load', async function () {
       .catch((err) => {
         return console.error(err);
       });
-
-    document.getElementById('favsInput').focus();
   });
 
   document.getElementById('messages-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
-    toggleIndicatorAnim();
+    if (messages.style.display !== 'flex') {
+      toggleIndicatorAnim();
+    }
 
     home.style.display = 'none';
     recent.style.display = 'none';
@@ -153,7 +163,9 @@ window.addEventListener('load', async function () {
 
   document.getElementById('activity-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
-    toggleIndicatorAnim();
+    if (activity.style.display !== 'flex') {
+      toggleIndicatorAnim();
+    }
 
     home.style.display = 'none';
     recent.style.display = 'none';
@@ -166,7 +178,9 @@ window.addEventListener('load', async function () {
 
   document.getElementById('friends-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
-    toggleIndicatorAnim();
+    if (friends.style.display !== 'flex') {
+      toggleIndicatorAnim();
+    }
 
     home.style.display = 'none';
     recent.style.display = 'none';
@@ -280,7 +294,6 @@ window.addEventListener('load', async function () {
 
   document.getElementById("addGameBtn").addEventListener('click', async function () {
     if (window.getComputedStyle(document.getElementById("addGamePopUp")).display === "flex") {
-      document.getElementById("addGamePopUp").style.display = "none";
       document.getElementById("addGameCustomBannerOutput").style.backgroundImage = "url()";
       document.getElementById("addGamePopUp").style.display = "none";
       document.getElementById("inputGameName").value = "";
@@ -310,7 +323,7 @@ window.addEventListener('load', async function () {
   })
 
   document.getElementById("addGameFinalBtn").addEventListener("click", async function () {
-    if (document.getElementById("inputGameName").value.length > 0 && newGameLocation) {
+    if (document.getElementById("inputGameName").value.trim().length > 0 && newGameLocation) {
       let scheme = {
         DisplayName: document.getElementById("inputGameName").value,
         LauncherName: 'CustomGame',
@@ -330,7 +343,7 @@ window.addEventListener('load', async function () {
       document.getElementById("inputGameName").value = "";
       document.getElementById("addGameCustomBannerTxt").style.opacity = "1"
       newGameLocation = "";
-    } else if (document.getElementById("inputGameName").value.length > 0 && !newGameLocation) {
+    } else if (document.getElementById("inputGameName").value.trim().length > 0 && !newGameLocation) {
       return alert("You are missing the game location.");
     } else if (document.getElementById("inputGameName").value.length < 0 && newGameLocation) {
       return alert("You are missing the game name.");
