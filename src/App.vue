@@ -74,12 +74,12 @@
     <div class="appearance-settings" id="appearance-settings">
       <div id="a">
         <p>Accent Color</p>
-        <label class="color">
-          <input type="color" id="setting-accentColor">
-          <div>
-            <span></span>
-          </div>
-        </label>
+        <div class="btnInput">
+          <label class="color">
+            <input type="color" id="setting-accentColor">
+          </label>
+          <img class="repeatButton" src="https://i.pinimg.com/originals/86/16/9a/86169a7c0ea169c3aa1f5e8bf9555220.png">
+        </div>
       </div>
     </div>
 

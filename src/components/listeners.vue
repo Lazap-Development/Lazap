@@ -27,7 +27,7 @@ window.addEventListener('load', async function () {
 
   try {
     let { accentColor } = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
-    if (!accentColor) accentColor = "rgb(121, 52, 250)";
+    if (!accentColor) accentColor = "#7934FA";
     updateAccentColor(accentColor);
   } catch (error) {
     console.error(error);
@@ -208,6 +208,14 @@ window.addEventListener('load', async function () {
   document.getElementById("appearancebtn").addEventListener("click", () => {
     document.getElementById("general-settings").style.display = "none";
     document.getElementById("appearance-settings").style.display = "flex";
+  });
+
+  document.querySelector(".repeatButton").addEventListener("click", async () => {
+    let LauncherData = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
+    LauncherData["accentColor"] = "#7934FA";
+    fs.writeTextFile(await path.appDir() + 'storage/LauncherData.json', JSON.stringify(LauncherData));
+    document.querySelector("input[id=setting-accentColor]").value = LauncherData["accentColor"];
+    updateAccentColor(LauncherData["accentColor"]);
   });
 
   document.querySelectorAll('input[id^=setting-]').forEach((input) => {
