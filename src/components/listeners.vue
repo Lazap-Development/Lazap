@@ -278,6 +278,23 @@ window.addEventListener('load', async function () {
     }
   })
 
+  document.getElementById("addGameBtn").addEventListener('click', async function () {
+    if (window.getComputedStyle(document.getElementById("addGamePopUp")).display === "flex") {
+      document.getElementById("addGamePopUp").style.display = "none";
+      document.getElementById("addGameCustomBannerOutput").style.backgroundImage = "url()";
+      document.getElementById("addGamePopUp").style.display = "none";
+      document.getElementById("inputGameName").value = "";
+      document.getElementById("addGameCustomBannerTxt").style.opacity = "1"
+      try {
+        await fs.removeFile(await path.appDir() + `storage/cache/games/banners/newcustombanner.png`)
+      } catch (e) {
+        return e;
+      }
+    } else {
+      document.getElementById("addGamePopUp").style.display = "flex";
+    }
+  })
+
   let newGameLocation;
   document.getElementById("addGameLocation").addEventListener("click", async function () {
     const selected = await dialog.open({
@@ -289,19 +306,6 @@ window.addEventListener('load', async function () {
     });
     if (selected !== null) {
       newGameLocation = selected;
-    }
-  })
-
-  document.getElementById("addGameBtn").addEventListener('click', async function () {
-    if (window.getComputedStyle(document.getElementById("addGamePopUp")).display === "flex") {
-      document.getElementById("addGamePopUp").style.display = "none";
-      try {
-        await fs.removeFile(await path.appDir() + `storage/cache/games/banners/newcustombanner.png`)
-      } catch (e) {
-        return e;
-      }
-    } else {
-      document.getElementById("addGamePopUp").style.display = "flex";
     }
   })
 
@@ -321,8 +325,10 @@ window.addEventListener('load', async function () {
       } catch (e) {
         require("./launchers/find-games").Elements.createGameElement(scheme, "allGamesList");
       }
+      document.getElementById("addGameCustomBannerOutput").style.backgroundImage = "url()";
       document.getElementById("addGamePopUp").style.display = "none";
-      document.getElementById("inputGameName").value = ""
+      document.getElementById("inputGameName").value = "";
+      document.getElementById("addGameCustomBannerTxt").style.opacity = "1"
       newGameLocation = "";
     } else if (document.getElementById("inputGameName").value.length > 0 && !newGameLocation) {
       return alert("You are missing the game location.");

@@ -227,32 +227,62 @@ body {
     z-index: 1;
 }
 
-
-.secondorybox .addGamePopUp .banner {
+.secondorybox .addGamePopUp .addGameBannerSection .banner {
+    position: absolute;
     width: 150px;
     height: 150px;
-    margin-left: auto; 
-    margin-right: 25px; 
-    display: none;
+    opacity: 0
 }
 
-.secondorybox .addGamePopUp img {
+.secondorybox .addGamePopUp .addGameBannerSection .banner:hover {
+    cursor: pointer;
+}
+
+.secondorybox .addGamePopUp .addGameBannerSection .addGameCustomBannerOutput {
     border-radius: 10px;
     width: 150px;
     height: 150px;
     image-rendering: auto;
+    border: none;
+    outline:none;
     object-fit: cover;
     margin-left: auto; 
     margin-right: 25px; 
     box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
+    background-position: center center;
+    background-size: cover;
+    text-align:center;
+    background-repeat: no-repeat;
+    padding:0;
+    background-color: #313131;
+    transition: all 0.1s ease-in-out;
+    z-index: 0;
 }
 
-.secondorybox .addGamePopUp label {
+.secondorybox .addGamePopUp .addGameBannerSection:hover {
+    border-radius: 10px;
+    transition: all 0.1s ease-in-out;
+    scale: 1.05;
+    cursor: pointer;
+}
+
+.secondorybox .addGamePopUp .addGameBannerSection p {
+    position: absolute;
+    margin-top: 64px;
+    margin-left: 25px;
+    font-size: 12px;
+    z-index: 2;
+    width: 100px;
+    text-align: center;
+    pointer-events: none;
+}
+
+.secondorybox .addGamePopUp .addGameBannerSection label {
     position: absolute;
     cursor: pointer;
-    width: 150px;
+    width: 30px;
     height: 150px;
-    margin-left: 180px; 
+
 }
 
 .secondorybox .mainSection {
@@ -643,7 +673,7 @@ body {
     width: 16.8%;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     opacity: 0.7;
-    border: solid rgb(162, 0, 255) 4px;
+    border: solid var(--back) 4px;
 }
 
 .mainPageGamebox:nth-last-child(-n+4) {
@@ -788,9 +818,9 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 5px;
+    width: 6px;
     background: rgba(121, 121, 121, 0);
-    height: 5px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar:hover {

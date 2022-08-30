@@ -3,85 +3,86 @@
 
   <div class="settings fadeInDown" id="settings-popup">
     <div>
-    <h1>
+      <h1>
         Settings
-    </h1>
-    <div class="choser" id="choser">
-      <button class="generalbtn" id="generalbtn">General</button>
-      <button id="appearancebtn">Appearance</button>
-    </div>
-    <div class="general-settings" id="general-settings">
-      <div>
-        <p>Discord Rich Presence</p>
-        <label class="switch">
-          <input type="checkbox" id="setting-enableRPC">
-          <div>
-            <span></span>
-          </div>
-        </label>
+      </h1>
+      <div class="choser" id="choser">
+        <button class="generalbtn" id="generalbtn">General</button>
+        <button id="appearancebtn">Appearance</button>
       </div>
-
-      <div>
-        <p>Launch on Startup</p>
-        <label class="switch">
-          <input type="checkbox" id="setting-launchOnStartup" disabled="readonly">
-          <div>
-            <span></span>
-          </div>
-        </label>
-      </div>
-
-      <div>
-        <p>Skip Login Menu</p>
-        <label class="switch">
-          <input type="checkbox" id="setting-skipLogin" disabled="readonly">
-          <div>
-            <span></span>
-          </div>
-        </label>
-      </div>
-
-      <div>
-        <p>Minimize to Tray on Launch</p>
-        <label class="switch">
-          <input type="checkbox" id="setting-trayMinLaunch">
-          <div>
-            <span></span>
-          </div>
-        </label>
-      </div>
-
-      <div>
-        <p>Minimize to Tray on Quit</p>
-        <label class="switch">
-          <input type="checkbox" id="setting-trayMinQuit">
-          <div>
-            <span></span>
-          </div>
-        </label>
-      </div>
-
-      <div>
-        <p>Check for Updates</p>
-        <label class="switch">
-          <input type="checkbox" id="setting-checkForUpdates" disabled="readonly">
-          <div>
-            <span></span>
-          </div>
-        </label>
-      </div>
-    </div>
-    <div class="appearance-settings" id="appearance-settings">
-      <div id="a">
-        <p>Accent Color</p>
-        <div class="btnInput">
-          <label class="color">
-            <input type="color" id="setting-accentColor">
+      <div class="general-settings" id="general-settings">
+        <div>
+          <p>Discord Rich Presence</p>
+          <label class="switch">
+            <input type="checkbox" id="setting-enableRPC">
+            <div>
+              <span></span>
+            </div>
           </label>
-          <img class="repeatButton" src="https://i.pinimg.com/originals/86/16/9a/86169a7c0ea169c3aa1f5e8bf9555220.png">
+        </div>
+
+        <div>
+          <p>Launch on Startup</p>
+          <label class="switch">
+            <input type="checkbox" id="setting-launchOnStartup" disabled="readonly">
+            <div>
+              <span></span>
+            </div>
+          </label>
+        </div>
+
+        <div>
+          <p>Skip Login Menu</p>
+          <label class="switch">
+            <input type="checkbox" id="setting-skipLogin" disabled="readonly">
+            <div>
+              <span></span>
+            </div>
+          </label>
+        </div>
+
+        <div>
+          <p>Minimize to Tray on Launch</p>
+          <label class="switch">
+            <input type="checkbox" id="setting-trayMinLaunch">
+            <div>
+              <span></span>
+            </div>
+          </label>
+        </div>
+
+        <div>
+          <p>Minimize to Tray on Quit</p>
+          <label class="switch">
+            <input type="checkbox" id="setting-trayMinQuit">
+            <div>
+              <span></span>
+            </div>
+          </label>
+        </div>
+
+        <div>
+          <p>Check for Updates</p>
+          <label class="switch">
+            <input type="checkbox" id="setting-checkForUpdates" disabled="readonly">
+            <div>
+              <span></span>
+            </div>
+          </label>
         </div>
       </div>
-    </div>
+      <div class="appearance-settings" id="appearance-settings">
+        <div id="a">
+          <p>Accent Color</p>
+          <div class="btnInput">
+            <label class="color">
+              <input type="color" id="setting-accentColor">
+            </label>
+            <img class="repeatButton"
+              src="https://i.pinimg.com/originals/86/16/9a/86169a7c0ea169c3aa1f5e8bf9555220.png">
+          </div>
+        </div>
+      </div>
 
       <div class="settings-footer">
         v0.6 (Tauri Release)
@@ -95,7 +96,7 @@
       <p id="spinnerLoading">Loading...</p>
     </div>
   </div>
-  
+
   <div data-tauri-drag-region class="titlebar">
     <div data-tauri-drag-region style="justify-content: space-between;" class="titlebar-icons">
       <div class="titlebar-options">
@@ -111,7 +112,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="bg" id="bg">
     <div class="outline"></div>
     <div class="homebox" id="home">
@@ -152,9 +153,14 @@
             <button class="addGameFinalBtn" id="addGameFinalBtn">Add Game</button>
           </div>
         </div>
-        <label for="addGameCustomBanner"></label>
-        <input class="banner" id="addGameCustomBanner" type="file" accept="image/png" @change="(event) => loadCustomBanner(event)" />
-        <img src="./assets/default-banner.jpg" id="addGameCustomBannerOutput">
+        <div class="addGameBannerSection">
+          <label for="addGameCustomBanner"></label>
+          <input class="banner" id="addGameCustomBanner" type="file" accept="image/png"
+            @change="(event) => loadCustomBanner(event)" />
+            <p id="addGameCustomBannerTxt">Hover & Click to Select Banner</p>
+          <div id="addGameCustomBannerOutput" class="addGameCustomBannerOutput"></div>
+
+        </div>
       </div>
 
       <div id="game-loading-overlay" class="game-loading-overlay">
@@ -320,8 +326,9 @@ export default {
 
       reader.onload = async function () {
         await window.__TAURI__.fs.writeBinaryFile(await window.__TAURI__.path.appDir() + `storage/cache/games/banners/newcustombanner.png`, reader.result);
-        document.getElementById("addGameCustomBannerOutput").src = window.__TAURI__.tauri.convertFileSrc(await window.__TAURI__.path.appDir() + `storage/cache/games/banners/newcustombanner.png`) + `?${new Date().getSeconds()}`;
+        document.getElementById("addGameCustomBannerOutput").style.backgroundImage = `url(` + window.__TAURI__.tauri.convertFileSrc(await window.__TAURI__.path.appDir() + `storage/cache/games/banners/newcustombanner.png`) + `?${new Date().getSeconds()}` + `)`;
       };
+      document.getElementById("addGameCustomBannerTxt").style.opacity = "0"
       reader.readAsArrayBuffer(selectedFile);
     }
   }
