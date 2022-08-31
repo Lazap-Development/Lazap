@@ -1,5 +1,5 @@
 <template>
-  <div class="settings-background fadeInDown" id="settings-backblur"></div>
+  <div class="settings-background" id="settings-backblur"></div>
 
   <div class="settings fadeInDown" id="settings-popup">
     <div>
@@ -141,7 +141,7 @@
 
     <div class="secondorybox" id="games">
       <div class="addGamePopUp" id="addGamePopUp">
-        <div class="mainSection">
+        <div class="mainSection fadeInDown">
           <div class="section">
             <div class="title">Game Name</div>
             <input maxlength="24" type="text" class="inputGameName" id="inputGameName">
@@ -153,11 +153,11 @@
             <button class="addGameFinalBtn" id="addGameFinalBtn">Add Game</button>
           </div>
         </div>
-        <div class="addGameBannerSection">
+        <div class="addGameBannerSection fadeInUp">
           <label for="addGameCustomBanner"></label>
           <input class="banner" id="addGameCustomBanner" type="file" accept="image/png"
             @change="(event) => loadCustomBanner(event)" />
-            <p id="addGameCustomBannerTxt">Hover & Click to Select Banner</p>
+          <p id="addGameCustomBannerTxt">Hover & Click to Select Banner</p>
           <div id="addGameCustomBannerOutput" class="addGameCustomBannerOutput"></div>
 
         </div>
@@ -169,7 +169,19 @@
         </div>
       </div>
       <p>All Games</p>
-      <img src="./assets/add.svg" class="addGameBtn" id="addGameBtn">
+      <svg id="addGameBtn" class="addGameBtn" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        x="0px" y="0px" width="459.325px" height="459.325px" viewBox="0 0 459.325 459.325"
+        style="enable-background:new 0 0 459.325 459.325;" xml:space="preserve">
+        <g>
+          <path fill="var(--svgcolor)" d="M459.319,229.668c0,22.201-17.992,40.193-40.205,40.193H269.85v149.271c0,22.207-17.998,40.199-40.196,40.193
+		c-11.101,0-21.149-4.492-28.416-11.763c-7.276-7.281-11.774-17.324-11.769-28.419l-0.006-149.288H40.181
+		c-11.094,0-21.134-4.492-28.416-11.774c-7.264-7.264-11.759-17.312-11.759-28.413C0,207.471,17.992,189.475,40.202,189.475h149.267
+		V40.202C189.469,17.998,207.471,0,229.671,0c22.192,0.006,40.178,17.986,40.19,40.187v149.288h149.282
+		C441.339,189.487,459.308,207.471,459.319,229.668z" />
+        </g>
+
+      </svg>
+
       <div class="search-bar">
         <input type="text" placeholder="Search" id="gamesInput">
       </div>
@@ -198,7 +210,12 @@
       <p>Friends</p>
     </div>
 
-    <div id="gameMenu"></div>
+    <div class="gameMenu" id="gameMenu">
+        <div class="gameMenuTitle" id="gameMenuTitle"></div>
+        <div class="gameMenuBtns">
+          <button class="gameMenuBtn" id="removeGame">Remove Game</button>
+        </div>
+    </div>
 
     <div class="leftbar">
       <div class="d-flex justify-content-center">

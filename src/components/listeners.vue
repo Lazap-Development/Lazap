@@ -305,6 +305,7 @@ window.addEventListener('load', async function () {
       }
     } else {
       document.getElementById("addGamePopUp").style.display = "flex";
+      document.getElementById('inputGameName').focus()
     }
   })
 
@@ -333,10 +334,16 @@ window.addEventListener('load', async function () {
       }
 
       try {
-        await fs.renameFile(await path.appDir() + `storage/cache/games/banners/newcustombanner.png`, await path.appDir() + `storage/cache/games/banners/${require('./modules/sha256.js').sha256(document.getElementById("inputGameName").value)}.png`)
+        await fs.renameFile(await path.appDir() + `storage/cache/games/banners/newcustombanner.png`, await path.appDir() + `storage/cache/games/banners/${require('./modules/sha256.js').sha256(document.getElementById("inputGameName").value.replaceAll(' ', '_'))}.png`)
         require("./launchers/find-games").Elements.createGameElement(scheme, "allGamesList");
+        let data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/data.json'));
+        data.push(scheme)
+        await fs.writeTextFile(await path.appDir() + 'storage/cache/games/data.json', JSON.stringify(data))
       } catch (e) {
         require("./launchers/find-games").Elements.createGameElement(scheme, "allGamesList");
+        let data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/data.json'));
+        data.push(scheme)
+        await fs.writeTextFile(await path.appDir() + 'storage/cache/games/data.json', JSON.stringify(data))
       }
       document.getElementById("addGameCustomBannerOutput").style.backgroundImage = "url()";
       document.getElementById("addGamePopUp").style.display = "none";
@@ -352,6 +359,13 @@ window.addEventListener('load', async function () {
     }
   })
 
+  document.getElementById("removeGame").addEventListener("click", async function () {
+    let data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/data.json'));
+    data = data.filter(a => a.DisplayName != document.getElementById("removeGame").parentNode.parentNode.firstChild.innerHTML)
+    await fs.writeTextFile(await path.appDir() + 'storage/cache/games/data.json', JSON.stringify(data));
+    document.getElementById(`game-div-${document.getElementById("removeGame").parentNode.parentNode.firstChild.innerHTML.replaceAll(' ', '_')}`).remove()
+    document.getElementById("removeGame").parentNode.parentNode.remove()
+  })
 
   function toggleIndicatorAnim() {
     let indicator = document.getElementById('indicator');

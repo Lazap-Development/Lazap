@@ -13,7 +13,15 @@ async function getInstalledGames() {
 	const launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js', 'Uplay.js'];
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
 
-	return games;
+	try {
+		let readDataJSON = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/data.json'));
+		readDataJSON.filter(a => a.LauncherName == "CustomGame").forEach(x => {
+			games.push(x);
+		});
+		return games;
+	} catch (e) {
+		return games;
+	}
 }
 
 async function filterAndSort(games, type, list, stored) {
@@ -213,15 +221,15 @@ async function setGames(games, source) {
 	const data = JSON.parse(await fs.readTextFile(GAMES_DATA_BASE_PATH).catch(() => '[]'));
 
 	data.forEach(d => {
-        Object.keys(d).forEach((x) => {
-            if ([undefined, null].includes(d[x])) delete d[x];
-        });
-    });
-    games.forEach(d => {
-        Object.keys(d).forEach((y) => {
-            if ([undefined, null].includes(d[y])) delete d[y];
-        })
-    });
+		Object.keys(d).forEach((x) => {
+			if ([undefined, null].includes(d[x])) delete d[x];
+		});
+	});
+	games.forEach(d => {
+		Object.keys(d).forEach((y) => {
+			if ([undefined, null].includes(d[y])) delete d[y];
+		})
+	});
 
 	if (source === 'add-launch') {
 		fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
@@ -351,16 +359,16 @@ class Elements {
 		return starIcon;
 	}
 
-	static async getMenuElement() {
+	static async getMenuElement(name) {
 		const menuIcon = document.createElement('div');
 		menuIcon.classList.add('menu');
 		menuIcon.id = 'menu';
 
 		menuIcon.addEventListener("click", () => {
-			console.log(document.getElementById("gameMenu").style)
-			
 			document.getElementById("gameMenu").style.display === "flex" ? document.getElementById("gameMenu").style.display = "none"
-			:document.getElementById("gameMenu").style.display = "flex";
+				: document.getElementById("gameMenu").style.display = "flex";
+				
+			document.getElementById("gameMenuTitle").innerHTML = name;
 		});
 
 		return menuIcon;
@@ -392,7 +400,7 @@ class Elements {
 		const starIcon = await Elements.getStarElement(game, gameElement);
 		gameBottom.appendChild(starIcon);
 
-		const gameMenu = await Elements.getMenuElement();
+		const gameMenu = await Elements.getMenuElement(game.DisplayName);
 		gameBottom.appendChild(gameMenu);
 
 		return game;

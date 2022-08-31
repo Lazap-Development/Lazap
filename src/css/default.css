@@ -1,4 +1,5 @@
 :root {
+    --svgcolor: #656565;
     --back: rgb(121, 52, 250);
 }
 
@@ -123,8 +124,7 @@ body {
 
 .titlebar-account:hover {
     cursor: pointer;
-    /*filter: invert(36%) sepia(89%) saturate(4522%) hue-rotate(225deg) brightness(99%) contrast(99%);*/
-    background: var(--back);
+    filter: invert(36%) sepia(89%) saturate(4522%) hue-rotate(225deg) brightness(99%) contrast(99%);
 }
 
 .titlebar-update {
@@ -202,12 +202,12 @@ body {
     height: 15px;
     margin-top: 36px;
     margin-left: 138px; 
-    transition: 0.2s filter linear;
-    
+    transition: 0.1s all linear;
+    color: rgb(255, 255, 255);
 }
 
 .secondorybox .addGameBtn:hover {
-    filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
+    --svgcolor: var(--back);
     cursor: pointer;
 }
 
@@ -606,8 +606,7 @@ body {
     margin-bottom: 30px;
     text-align: center;
     display: inline-block;
-    border-radius: 10px;
-    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+
     margin-right: 10px;
     margin-left: 20px;
     height: 280px;
@@ -649,6 +648,20 @@ body {
     font-size: 12px;
     color: #dadada;
     display: block;
+}
+
+
+.gamebox .gamebox-bottom .menu {
+    position: absolute;
+
+    margin-left: 165px;
+    margin-top: 13px;
+    display: block;
+    content: url("../assets/menu.svg");
+    height: 18px;
+    width: 18px;
+    cursor: pointer;
+    cursor: default;
 }
 
 .mainPageGamesList {
@@ -727,39 +740,11 @@ body {
     cursor: pointer;
 }
 
-.menu {
-    position: absolute;
-
-    margin-left: 165px;
-    margin-top: 13px;
-    display: block;
-    content: url("../assets/menu.svg");
-    height: 18px;
-    width: 18px;
-    cursor: pointer;
-}
-
 .fade {
     animation: fadeIn 0.5s;
 }
 
-.fadeOutUpNoDelay {
-    animation-duration: 0.5s;
-    animation-fill-mode: both;
-    backface-visibility: hidden;
-    opacity: 0;
-    animation-name: fadeOutUp;
-}
-
 .fadeInUp {
-    animation-duration: 0.5s;
-    animation-fill-mode: both;
-    backface-visibility: hidden;
-    opacity: 0;
-    animation-name: fadeInUp;
-}
-
-.fadeInUpNoDelay {
     animation-duration: 0.5s;
     animation-fill-mode: both;
     backface-visibility: hidden;
@@ -886,26 +871,52 @@ img,
     background-color: #1e1f24;
 }
 
-#setting-loadingBackground {
-    width: 	20rem;
-    height: 30px;
-    background: black;
-    color: white;
-    border: none;
-}
-
-#gameMenu {
+.gameMenu {
     display: none;
     position: absolute;
     right: 20px;
     width: 30rem;
     height: 90%;
-    z-index: 2001;
     background: rgba(35, 35, 37, 1);
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
-    border: 3px, solid, var(--back);
-    animation: gameMenuAnimation .2s forwards ease-out;
+    animation: gameMenuAnimation .2s both ease-out;
+    justify-content: center;
+}
+
+.gameMenu .gameMenuBtn {
+    font-family: Nunito;
+    color: rgb(201, 201, 201);
+    border-radius: 12px;
+    font-size: 18px;
+
+    background-color: #3e3e3e;
+    opacity: 0.9;
+    width: 13.78rem;
+    height: 50px;
+    border: none;
+    text-decoration: none;
+    text-shadow: none;
+    padding: 0;
+}
+
+.gameMenu .gameMenuBtns .gameMenuBtn:first-child {
+    margin-top: 100px;
+}
+
+.gameMenu .gameMenuTitle {
+    position: absolute;
+    font-size: 20px;
+    color: #cacaca;
+    text-align: center;
+    margin-top: 40px;
+    display: block;
+}
+
+.gameMenu .gameMenuBtn:hover {
+    background-color: #373737;
 }
 
 .spinner-content {
@@ -1492,9 +1503,11 @@ particle {
 @keyframes gameMenuAnimation {
     0% {
         width: 0px;
+        opacity: 0.5;
     }
     100% {
         width: 30rem;
+        opacity: 1;
     }
 }
 

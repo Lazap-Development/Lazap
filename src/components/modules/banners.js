@@ -8,17 +8,11 @@ async function getBanners(games) {
 	for (let i = 0; i < games.length; i++) {
 		arr.push((() => {
 			switch (games[i].LauncherName) {
-				case 'EpicGames': {
-					return "https://media.sidefx.com/uploads/article/epic-games-invests-in-sidefx/epic_logo_black_banner3.jpg";
-				}
 				case 'Steam': {
 					return `https://cdn.akamai.steamstatic.com/steam/apps/${games[i].GameID}/library_600x900.jpg`;
 				}
 				case 'RiotGames': {
 					return 'https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png';
-				}
-				case 'Uplay': {
-					return;
 				}
 				case 'Minecraft': {
 					return 'https://i.imgur.com/PJFx3U2.jpg';
@@ -50,6 +44,9 @@ async function getBanners(games) {
 }
 
 async function cacheBanners(data, res) {
+	// Filter not defined launchers for banners
+	data = data.filter(a => a.LauncherName != "CustomGame" && a.LauncherName != "Uplay" && a.LauncherName != "EpicGames");
+
 	if(data?.length === 0) {
 		document.getElementById('game-loading-overlay').style.opacity = '0';
 		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
@@ -60,6 +57,7 @@ async function cacheBanners(data, res) {
 	const bannerBasePath = appDirPath + 'storage/cache/games/banners';
 	const readBanners = (await fs.readDir(bannerBasePath)).map(x => x.name);
 
+	
 	let alreadyProcessed = false;
 	let existingProcessed = 0;
 	let fetchProcessed = 0;
