@@ -13,8 +13,6 @@ async function getInstalledGames() {
 	const launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js', 'Uplay.js'];
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
 
-	
-
 	return games;
 }
 
@@ -42,7 +40,7 @@ async function filterAndSort(games, type, list, stored) {
 		let final = [];
 		for (let i = 0; i < games.length; i++) {
 			const game = stored?.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
-			if (typeof game?.LastLaunch === 'number' && typeof game?.Launches === 'number') final.push(game);
+			if (typeof game?.LastLaunch === 'number' && typeof game?.Launches === 'number' && game?.Launches > 0) final.push(game);
 		}
 		final.sort((a, b) => {
 			return b.Launches - a.Launches;
@@ -62,7 +60,7 @@ async function filterAndSort(games, type, list, stored) {
 			const game = stored?.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
 			if (typeof game?.Favourite === 'boolean' && game.Favourite === true) final.push(game);
 		}
-		return final;
+		return final.map(x => x.DisplayName).sort().map(x => final[final.findIndex(y => y.DisplayName === x)]);
 	}
 	else {
 		return [];
@@ -75,7 +73,7 @@ async function loadGames(id, data, stored) {
 	const games = data ?? await getInstalledGames();
 	const list = document.getElementById(id);
 
-	(await filterAndSort(games, id, list, stored)).map(async (game) => Elements.createGameElement(game, id, list)).filter(async x => Object.keys(await x).length > 0);
+	(await filterAndSort(games, id, list, stored)).forEach(async (game) => Elements.createGameElement(game, id, list))
 	if ((games.length > 0) && id === 'allGamesList') {
 		setGames(games, 'all-games');
 	}
@@ -175,10 +173,12 @@ async function addLaunch(GameID, LauncherName) {
 	setGames(data, 'add-launch');
 	if (!document.getElementById('recentGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
 		// eslint-disable-next-line no-undef
-		Elements.createGameElement(game, 'recentGamesList', recentGamesList);
+		recentGamesList.replaceChildren([]);
+		loadGames('recentGamesList', null, data);
 		if (document.getElementById('recentGamesListMainPage').children.length < 5) {
 			// eslint-disable-next-line no-undef
-			Elements.createGameElement(game, 'recentGamesListMainPage', recentGamesListMainPage);
+			recentGamesListMainPage.replaceChildren([]);
+			loadGames('recentGamesListMainPage', null, data);
 		}
 	}
 }
