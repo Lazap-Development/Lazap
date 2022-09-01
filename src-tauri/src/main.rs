@@ -41,7 +41,7 @@ fn main() {
                 },
                 _ => {}
             })
-            .invoke_handler(tauri::generate_handler![run_game, parse])
+            .invoke_handler(tauri::generate_handler![run_game, parse, sysusername])
             .setup(|app| {
                 let window = app.get_window(&"main").unwrap();
                 window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
@@ -89,7 +89,7 @@ fn main() {
                 },
                 _ => {}
             })
-            .invoke_handler(tauri::generate_handler![run_game, parse])
+            .invoke_handler(tauri::generate_handler![run_game, parse, sysusername])
             .run(tauri::generate_context!())
             .expect("error while running lazap");
 }
@@ -130,7 +130,7 @@ fn main() {
                 },
                 _ => {}
             })
-            .invoke_handler(tauri::generate_handler![run_game, parse])
+            .invoke_handler(tauri::generate_handler![run_game, parse, sysusername])
             .setup(|app| {
                 let window = app.get_window(&"main").unwrap();
                 window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
@@ -152,6 +152,12 @@ async fn run_game(exec: String, args: String) {
 #[tauri::command]
 async fn parse(value: &str) -> Result<String, Error> {
     let lol = Dom::parse(value)?.to_json_pretty()?;
+    Ok(lol)
+}
+
+#[tauri::command]
+async fn sysusername() -> Result<String, Error> {
+    let lol = whoami::username();
     Ok(lol)
 }
 

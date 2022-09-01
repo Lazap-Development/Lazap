@@ -1,6 +1,7 @@
 <script>
 const fs = window.__TAURI__.fs;
 const path = window.__TAURI__.path;
+const invoke = window.__TAURI__.invoke;
 
 (async () => {
   const appDirPath = await path.appDir();
@@ -43,7 +44,7 @@ const path = window.__TAURI__.path;
   try {
     JSON.parse(await fs.readTextFile(appDirPath + "storage/cache/user/UserProfile.json"));
   } catch (e) {
-    fs.writeTextFile(appDirPath + "storage/cache/user/UserProfile.json", JSON.stringify({ username: "Lazap" }));
+    fs.writeTextFile(appDirPath + "storage/cache/user/UserProfile.json", JSON.stringify({ username: await invoke("sysusername") }));
   }
 
   try {
