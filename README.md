@@ -1,5 +1,5 @@
 <p align="center">
-<a href="#" target="_blank"><img src="https://media.discordapp.net/attachments/910422768045133869/914878042508251156/icon.png" width="130px" height="auto"/></a>
+<a href="#" target="_blank"><img src="https://media.discordapp.net/attachments/910422768045133869/914878042508251156/icon.png" width="110px" height="auto"/></a>
 </p>
 
 <h1 align="center">
