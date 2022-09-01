@@ -25,13 +25,10 @@
 
 ## ‍💻 Installation
 
-Installing Lazap is very straight forward. Depending on your operating system, we provided as much ease in terms of installation.<br>
-Currently, Mac Support is pending so we appreciate your paitence.<br>
+Depending on your operating system, we provide as much ease in terms of installation:<br>
 
-▸ **Windows**: Download and Install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
-
+▸ **Windows**: Download and Install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section. <br>
 ▸ **Linux**: Download either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
-
 
 ## 👾 Development
 
