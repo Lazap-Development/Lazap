@@ -1,8 +1,6 @@
 name: "lazap-nightly-publish"
 on:
-  push:
-    branches:
-      - nightly
+  workflow_dispatch:
 
 jobs:
   publish-tauri:
