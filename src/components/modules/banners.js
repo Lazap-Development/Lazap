@@ -5,13 +5,13 @@ const tauri = window.__TAURI__.tauri;
 const { sha256 } = require('../modules/sha256')
 
 async function getBanners(games) {
-	games = games.filter(x => !['Uplay', "CustomGame"].includes(x.LauncherName));
+	games = games.filter(x => !["CustomGame"].includes(x.LauncherName));
 	const bannerBasePath = await path.appDir() + 'storage/cache/games/banners';
 	const readBanners = (await fs.readDir(bannerBasePath)).map(x => x.name);
 
 	let alreadyProcessed = false;
 	let existingProcessed = 0;
-	let sus = games.filter(x => !['Uplay'].includes(x.LauncherName))
+	
 	for (let i = 0; i < sus.length; i++) {
 		if (readBanners.includes(`${sha256(sus[i].DisplayName.replaceAll(' ', '_'))}.png`)) {
 			existingProcessed++;
@@ -66,7 +66,19 @@ async function getBanners(games) {
 						},
 					});
 					if (!fetchEpicGame.data.results[0]) break;
-					return fetchEpicGame.data.results[0].background_image.slice(0, 27) + "/crop/600/400" + fetchEpicGame.data.results[0].background_image.slice(27)
+					return fetchEpicGame.data.results[0].background_image.slice(0, 27) + "/crop/600/400" + fetchEpicGame.data.results[0].background_image.slice(27);
+				}
+				case 'Uplay': {
+					const fetchUplay = await http.fetch(`https://api.rawg.io/api/games?key=f8854c401fed44b89f4e1e4faa56ccc8&search=${games[i].DisplayName.replaceAll(' ', '-')}&search_exact&search_precise`, {
+						method: 'GET',
+						mode: "no-cors",
+						headers: {
+							Accept: "application/json",
+							"Content-Type": "application/json"
+						},
+					});
+					if (!fetchUplay.data.results[0]) break;
+					return fetchUplay.data.results[0].background_image.slice(0, 27) + "/crop/600/400" + fetchUplay.data.results[0].background_image.slice(27);
 				}
 			}
 		})());
