@@ -201,7 +201,7 @@ body {
     width: 15px;
     height: 15px;
     margin-top: 36px;
-    margin-left: 138px; 
+    margin-left: 138px;
     transition: 0.1s all linear;
     color: rgb(255, 255, 255);
 }
@@ -218,12 +218,12 @@ body {
     margin-left: 170px;
     margin-top: 20px;
     background-color: #242424;
-	animation: gradient 20s infinite;
+    animation: gradient 20s infinite;
     display: none;
 
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
-    
+
     border-radius: 10px 20px 20px 20px;
     z-index: 1;
 }
@@ -245,16 +245,16 @@ body {
     height: 150px;
     image-rendering: auto;
     border: none;
-    outline:none;
+    outline: none;
     object-fit: cover;
-    margin-left: auto; 
-    margin-right: 25px; 
+    margin-left: auto;
+    margin-right: 25px;
     box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
     background-position: center center;
     background-size: cover;
-    text-align:center;
+    text-align: center;
     background-repeat: no-repeat;
-    padding:0;
+    padding: 0;
     background-color: #313131;
     transition: all 0.1s ease-in-out;
     z-index: 0;
@@ -319,7 +319,7 @@ body {
     border: none;
     align-self: flex-start;
     margin-right: 20px;
-    margin-top: 44px; 
+    margin-top: 44px;
 
     padding: 5px;
     background-color: #323232;
@@ -336,7 +336,7 @@ body {
     border: none;
     align-self: flex-start;
     margin-right: 20px;
-    margin-top: 14px; 
+    margin-top: 14px;
     background-color: #3e3e3e;
     color: rgb(194, 194, 194);
     padding: 10px;
@@ -356,7 +356,7 @@ body {
     border: none;
     align-self: flex-start;
     margin-right: 20px;
-    margin-top: 10px; 
+    margin-top: 10px;
     background-color: #7f3db5;
     color: rgb(216, 216, 216);
     border-radius: 12px;
@@ -517,8 +517,8 @@ body {
 }
 
 .side-tab:before {
-    background: rgb(30,30,34);
-    background: linear-gradient(30deg, rgba(30,30,34,1) 0%, rgba(30,30,34,1) 30%, var(--back) 100%);
+    background: rgb(30, 30, 34);
+    background: linear-gradient(30deg, rgba(30, 30, 34, 1) 0%, rgba(30, 30, 34, 1) 30%, var(--back) 100%);
     content: "";
     height: 40px;
     width: 230px;
@@ -1012,7 +1012,8 @@ img,
     align-items: center;
 }
 
-.choser .generalbtn, .choser #appearancebtn {
+.choser .generalbtn,
+.choser #appearancebtn {
     font-family: Nunito;
     color: rgb(201, 201, 201);
     border-radius: 8px;
@@ -1027,12 +1028,14 @@ img,
     padding: 0;
 }
 
-.choser .generalbtn:hover, .choser #appearancebtn:hover {
+.choser .generalbtn:hover,
+.choser #appearancebtn:hover {
     animation: settingsBtnAnimation .2s forwards;
     cursor: pointer;
 }
 
-.appearance-settings, .general-settings {
+.appearance-settings,
+.general-settings {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -1043,7 +1046,8 @@ img,
     display: none;
 }
 
-.appearance-settings>div, .general-settings>div {
+.appearance-settings>div,
+.general-settings>div {
     width: 80%;
 }
 
@@ -1189,6 +1193,11 @@ img,
     color: #f9fafb;
 }
 
+.search-bar input::selection {
+    color: var(--back);
+    background: rgb(255, 255, 255);
+}
+
 .search-bar input::placeholder {
     font-family: Nunito;
     color: rgb(113 119 144 / 78%);
@@ -1199,7 +1208,7 @@ img,
 .search-bar input:focus {
     border: 3px solid var(--back);
     animation-name: searchbox;
-    animation-duration: .2s;
+    animation-duration: .3s;
     animation-fill-mode: both;
 }
 
@@ -1382,14 +1391,17 @@ particle {
         bottom: 20px;
         right: 20px;
     }
+
     25% {
         bottom: 19px;
         right: 21px;
     }
+
     75% {
         bottom: 21px;
         right: 19px;
     }
+
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
@@ -1434,6 +1446,7 @@ particle {
     0% {
         transform: scaleY(0);
     }
+
     100% {
         transform: scaleY(1);
     }
@@ -1441,6 +1454,7 @@ particle {
 
 
 @keyframes shake {
+
     10%,
     90% {
         transform: translate3d(-1px, 0, 0);
@@ -1465,25 +1479,26 @@ particle {
 
 
 @keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 @keyframes searchbox {
     0% {
         width: 0%;
-        border-color: rgb(121, 52, 250);
     }
+
     100% {
         width: 100%;
-        border-color: var(--back);
     }
 }
 
@@ -1493,6 +1508,7 @@ particle {
         border-bottom-width: 0px;
         border-bottom-style: none;
     }
+
     100% {
         border-bottom: var(--back);
         border-bottom-width: 3px;
@@ -1505,6 +1521,7 @@ particle {
         width: 0px;
         opacity: 0.5;
     }
+
     100% {
         width: 30rem;
         opacity: 1;
@@ -1515,6 +1532,7 @@ particle {
     0% {
         height: 100%;
     }
+
     100% {
         height: 0%;
     }
