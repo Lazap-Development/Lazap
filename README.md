@@ -8,7 +8,7 @@
 
 <p align="center">
   Lazap, a lightweight cross-platform Games Client/Launcher <br>
-  All your games at one library with a modernish look and experience.
+  All your games at one library with a modernist look and experience.
 </p>
 
 <p align="center">
@@ -21,7 +21,7 @@
  </p>
 <br>
 
-**The new face of Open Source Game Launchers**, Lazap, unites all your games together in one place! Whether it's on Linux or Windows, we got you covered. Lazap connects with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam, and collects all of those games and deposits them inside of one place. Our team of Developers continuously corroborates that Lazap is deeply customizable, Meets up to the user's expectence, possess a glancing & modernish look, and isn't expensive on hardware consumption. 
+**The new face of Open Source Game Launchers**, Lazap, unites all your games together in one place! Whether it's on Linux or Windows, we got you covered. Lazap connects with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam, and collects all of those games and deposits them inside of one place. Our team of Developers continuously corroborates that Lazap is deeply customizable, Meets up to the user's expectence, possess a glancing & modernist look, and isn't expensive on hardware consumption. 
 
 ## ‍💻 Installation
 
