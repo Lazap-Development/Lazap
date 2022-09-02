@@ -2,11 +2,33 @@ const http = window.__TAURI__.http;
 const fs = window.__TAURI__.fs;
 const path = window.__TAURI__.path;
 const tauri = window.__TAURI__.tauri;
+const { sha256 } = require('../modules/sha256')
 
 async function getBanners(games) {
+	games = games.filter(x => !['Uplay', "CustomGame"].includes(x.LauncherName));
+	const bannerBasePath = await path.appDir() + 'storage/cache/games/banners';
+	const readBanners = (await fs.readDir(bannerBasePath)).map(x => x.name);
+
+	let alreadyProcessed = false;
+	let existingProcessed = 0;
+	let sus = games.filter(x => !['Uplay'].includes(x.LauncherName))
+	for (let i = 0; i < sus.length; i++) {
+		if (readBanners.includes(`${sha256(sus[i].DisplayName.replaceAll(' ', '_'))}.png`)) {
+			existingProcessed++;
+			if (existingProcessed === sus.length) {
+				alreadyProcessed = true;
+			}
+		}
+	}
+	if (alreadyProcessed === true) {
+		document.getElementById('game-loading-overlay').style.opacity = '0';
+		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
+		return console.log('%c[BANNER] ' + '%cBanners are already loaded. Skipping.', "color:blue", "color:white");
+	}
+
 	const arr = [];
 	for (let i = 0; i < games.length; i++) {
-		arr.push((() => {
+		arr.push((async () => {
 			switch (games[i].LauncherName) {
 				case 'Steam': {
 					return `https://cdn.akamai.steamstatic.com/steam/apps/${games[i].GameID}/library_600x900.jpg`;
@@ -31,57 +53,47 @@ async function getBanners(games) {
 				case 'XboxGames': {
 					return games[i].Banner;
 				}
-				case 'Osu' : {
+				case 'Osu': {
 					return "https://cdn2.steamgriddb.com/file/sgdb-cdn/grid/a5d7420f9fdc41087377b4d58c5fe94b.png";
+				}
+				case 'EpicGames': {
+					const fetchEpicGame = await http.fetch(`https://api.rawg.io/api/games?key=f8854c401fed44b89f4e1e4faa56ccc8&search=${games[i].DisplayName.replaceAll(' ', '-')}&search_exact&search_precise&stores=11`, {
+						method: 'GET',
+						mode: "no-cors",
+						headers: {
+							Accept: "application/json",
+							"Content-Type": "application/json"
+						},
+					});
+					if (!fetchEpicGame.data.results[0]) break;
+					return fetchEpicGame.data.results[0].background_image.slice(0, 27) + "/crop/600/400" + fetchEpicGame.data.results[0].background_image.slice(27)
 				}
 			}
 		})());
 
 	}
 
-	cacheBanners(games.filter(x => !['Uplay'].includes(x.LauncherName)), arr.filter(x => x));
+	cacheBanners(games, arr.filter(x => x));
 	return arr;
 }
 
 async function cacheBanners(data, res) {
-	// Filter not defined launchers for banners
-	data = data.filter(a => a.LauncherName != "CustomGame" && a.LauncherName != "Uplay" && a.LauncherName != "EpicGames");
+	const bannerBasePath = await path.appDir() + 'storage/cache/games/banners';
 
-	if(data?.length === 0) {
+	if (data?.length === 0) {
 		document.getElementById('game-loading-overlay').style.opacity = '0';
 		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
 		return console.log('%c[BANNER] ' + '%cNo games to process', "color:blue", "color:white");
 	}
-	const appDirPath = await path.appDir();
-	const { sha256 } = require('../modules/sha256')
-	const bannerBasePath = appDirPath + 'storage/cache/games/banners';
-	const readBanners = (await fs.readDir(bannerBasePath)).map(x => x.name);
 
-	
-	let alreadyProcessed = false;
-	let existingProcessed = 0;
 	let fetchProcessed = 0;
-
-	for (let i = 0; i < data.length; i++) {
-		if (readBanners.includes(`${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`)) {
-			existingProcessed++;
-			if (existingProcessed === data.length) {
-				alreadyProcessed = true;
-			}
-		}
-	}
-	if (alreadyProcessed === true) {
-		document.getElementById('game-loading-overlay').style.opacity = '0';
-		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
-		return console.log('%c[BANNER] ' + '%cBanners are already loaded. Skipping.', "color:blue", "color:white");
-	}
 
 	if (res.length === 0) {
 		document.getElementById('game-loading-overlay').style.opacity = '0';
 		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
 		return console.log('%c[BANNER] ' + '%cNo banners to load.', "color:blue", "color:white");
 	}
-	
+
 	res.filter(async (x) => (await x)?.startsWith('http')).forEach(async (x, i) => {
 		await http.fetch(await x, {
 			method: 'GET',
@@ -93,7 +105,7 @@ async function cacheBanners(data, res) {
 			if (response.status === 404 && data[i].LauncherName === 'Lutris') return;
 			await fs.writeBinaryFile(bannerBasePath + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`, response.data);
 			document.getElementById(`game-div-${data[i].DisplayName.replaceAll(' ', '_')}`)?.firstElementChild?.setAttribute('src', tauri.convertFileSrc(bannerBasePath + `/${sha256(data[i].DisplayName.replaceAll(' ', '_'))}.png`));
-		}).catch((e) => console.erro(e));
+		}).catch((e) => console.error(e));
 
 		fetchProcessed++;
 		if (fetchProcessed === data.length) {
