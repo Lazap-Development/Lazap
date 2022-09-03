@@ -7,12 +7,21 @@ const tauri = window.__TAURI__.tauri;
 const { sha256 } = require('../modules/sha256.js');
 
 const processes = new Map();
+let loads = 0;
 
-async function getInstalledGames() {
+async function getInstalledGames(launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js', 'Uplay.js']) {
+	loads++;
+	if (loads === 1) {
+		document.getElementById("loadingbtn").style.opacity = '1';
+	}
+	if (loads > 1) {
+		launchers = launchers.filter(x => x !== 'XboxGames.js');
+	}
+
 	// Fetch all games
-	const launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js', 'Uplay.js'];
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
 
+	loads--;
 	try {
 		let readDataJSON = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/data.json'));
 		readDataJSON.filter(a => a.LauncherName == "CustomGame").forEach(x => {
@@ -76,22 +85,25 @@ async function filterAndSort(games, type, list, stored) {
 }
 
 async function loadGames(id, data, stored) {
-	document.getElementById("loadingbtn").style.opacity = '1';
-
 	const games = data ?? await getInstalledGames();
 	const list = document.getElementById(id);
 
 	(await filterAndSort(games, id, list, stored)).forEach(async (game) => Elements.createGameElement(game, id, list))
 	if ((games.length > 0) && id === 'allGamesList') {
 		setGames(games, 'all-games');
-	}
-	if (id === 'allGamesList') {
 		require('../modules/banners').getBanners(await Promise.all(games.filter(x => !require('../blacklist.json')[0].includes(x.GameID))));
 	}
 
+	if (!data) {
+		loadGames(id, await getInstalledGames(['XboxGames.js'])).then((d) => require('../modules/banners.js').getBanners(d));
+	}
+
 	setTimeout(() => {
-		document.getElementById("loadingbtn").style.opacity = '0';
+		if (loads === 0) {
+			document.getElementById("loadingbtn").style.opacity = '0';
+		}
 	}, 300);
+	return games;
 }
 
 async function handleLaunch(game) {
