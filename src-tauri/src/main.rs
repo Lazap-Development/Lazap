@@ -142,11 +142,10 @@ fn main() {
 
 #[cfg(target_os = "windows")]
 #[tauri::command]
-async fn run_game_windows(exec: String, args: String) {
+async fn run_game_windows(exec: String) {
     use std::os::windows::process::CommandExt;
-
     let child = std::process::Command::new("cmd")
-        .arg(args)
+        .arg(exec)
         .creation_flags(0x00000008)
         .spawn()
         .expect("failed to run");

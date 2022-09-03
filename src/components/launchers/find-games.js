@@ -99,27 +99,27 @@ async function handleLaunch(game) {
 	if (await os.platform() === 'win32') {
 		switch (game.LauncherName) {
 			case 'EpicGames': {
-				res = createProcess_wintoes(`/C start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, game.GameID);
+				res = createProcess_windows(`/C start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, game.GameID);
 				break;
 			}
 			case 'Steam': {
-				res = createProcess_wintoes(`/C start steam://rungameid/${game.GameID}`, game.GameID);
+				res = createProcess_windows(`/C start steam://rungameid/${game.GameID}`, game.GameID);
 				break;
 			}
 			case 'Uplay': {
-				res = createProcess_wintoes(`/C start uplay://launch/${game.GameID}/0`, game.GameID);
+				res = createProcess_windows(`/C start uplay://launch/${game.GameID}/0`, game.GameID);
 				break;
 			}
 			case 'Minecraft': {
-				res = createProcess_wintoes(`/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
+				res = createProcess_windows(`/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
 				break;
 			}
 			case 'Lunar': {
-				res = createProcess_wintoes(`/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
+				res = createProcess_windows(`/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
 				break;
 			}
 			default: {
-				res = createProcess_wintoes(`/C start "${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+				res = createProcess_windows(`/C start "${game.Location}/${game.Executable}"`, game.Args, game.GameID);
 				break;
 			}
 		}
@@ -127,23 +127,23 @@ async function handleLaunch(game) {
 	else if (await os.platform() === 'linux') {
 		switch (game.LauncherName) {
 			case 'Steam': {
-				res = createProcess_binux('steam', `steam://rungameid/${game.GameID} -silent`, game.GameID);
+				res = createProcess_linux('steam', `steam://rungameid/${game.GameID} -silent`, game.GameID);
 				break;
 			}
 			case 'Minecraft': {
-				res = createProcess_binux('minecraft-launcher', '', game.GameID);
+				res = createProcess_linux('minecraft-launcher', '', game.GameID);
 				break;
 			}
 			case 'Lunar': {
-				res = createProcess_binux('lunarclient', '', game.gameID);
+				res = createProcess_linux('lunarclient', '', game.gameID);
 				break;
 			}
 			case 'Lutris': {
-				res = createProcess_binux('lutris', `lutris:rungameid/${game.LaunchID}`, game.gameID);
+				res = createProcess_linux('lutris', `lutris:rungameid/${game.LaunchID}`, game.gameID);
 				break;
 			}
 			default: {
-				res = createProcess_binux(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
+				res = createProcess_linux(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
 				break;
 			}
 		}
@@ -190,11 +190,11 @@ async function addLaunch(GameID, LauncherName) {
 		}
 	}
 }
-async function createProcess_binux(Command, Args, GameID, force = false) {
+async function createProcess_windows(Command, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
 	VisibilityState();
-
-	const instance = invoke('run_game_linux', { exec: Command, args: Args })
+	
+	const instance = invoke('run_game_windows', { exec: Command })
 		.then(() => {
 			VisibilityState();
 			processes.delete(GameID);
@@ -203,11 +203,11 @@ async function createProcess_binux(Command, Args, GameID, force = false) {
 
 	return instance;
 }
-async function createProcess_wintoes(Command, GameID, force = false) {
+async function createProcess_linux(Command, Args, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
 	VisibilityState();
-	
-	const instance = invoke('run_game_windows', { exec: Command })
+
+	const instance = invoke('run_game_linux', { exec: Command, args: Args })
 		.then(() => {
 			VisibilityState();
 			processes.delete(GameID);
