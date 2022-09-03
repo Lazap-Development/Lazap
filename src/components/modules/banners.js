@@ -13,9 +13,9 @@ async function getBanners(games) {
 	let existingProcessed = 0;
 	
 	for (let i = 0; i < games.length; i++) {
-		if (readBanners.includes(`${sha256(sus[i].DisplayName.replaceAll(' ', '_'))}.png`)) {
+		if (readBanners.includes(`${sha256(games[i].DisplayName.replaceAll(' ', '_'))}.png`)) {
 			existingProcessed++;
-			if (existingProcessed === sus.length) {
+			if (existingProcessed === games.length) {
 				alreadyProcessed = true;
 			}
 		}
