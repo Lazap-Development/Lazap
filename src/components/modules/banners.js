@@ -51,6 +51,7 @@ async function getBanners(games) {
 					return;
 				}
 				case 'XboxGames': {
+					console.log(games[i].Banner);
 					return games[i].Banner;
 				}
 				case 'Osu': {
