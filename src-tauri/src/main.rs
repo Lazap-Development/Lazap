@@ -41,7 +41,7 @@ fn main() {
                 },
                 _ => {}
             })
-            .invoke_handler(tauri::generate_handler![run_game, parse, sysusername])
+            .invoke_handler(tauri::generate_handler![run_game_windows, parse, sysusername])
             .setup(|app| {
                 let window = app.get_window(&"main").unwrap();
                 window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
@@ -89,7 +89,7 @@ fn main() {
                 },
                 _ => {}
             })
-            .invoke_handler(tauri::generate_handler![run_game, parse, sysusername])
+            .invoke_handler(tauri::generate_handler![run_game_linux, parse, sysusername])
             .run(tauri::generate_context!())
             .expect("error while running lazap");
 }
@@ -130,7 +130,7 @@ fn main() {
                 },
                 _ => {}
             })
-            .invoke_handler(tauri::generate_handler![run_game, parse, sysusername])
+            .invoke_handler(tauri::generate_handler![parse, sysusername])
             .setup(|app| {
                 let window = app.get_window(&"main").unwrap();
                 window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
@@ -140,8 +140,22 @@ fn main() {
             .expect("error while running lazap");
 }
 
+#[cfg(target_os = "windows")]
 #[tauri::command]
-async fn run_game(exec: String, args: String) {
+async fn run_game_windows(exec: String, args: String) {
+    use std::os::windows::process::CommandExt;
+
+    let child = std::process::Command::new("cmd")
+        .arg(args)
+        .creation_flags(0x00000008)
+        .spawn()
+        .expect("failed to run");
+    let _output = child.wait_with_output().expect("failed to wait on child");
+}
+
+#[cfg(target_os = "linux")]
+#[tauri::command]
+async fn run_game_linux(exec: String, args: String) {
     let child = std::process::Command::new(exec)
         .arg(args)
         .spawn()
