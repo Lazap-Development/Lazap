@@ -40,7 +40,7 @@ Depending on your operating system, we provide as much ease in terms of installa
 Once you have met the requirements, do the following:
 ```
 git clone https://github.com/Lazap-Development/Lazap.git 
-cd Lazap && yarn tauri:serve
+cd Lazap && yarn install && yarn tauri:serve
 ```
 Be aware that for the first time it might take some heafty amount of time for things to compile.
 
