@@ -9,7 +9,7 @@ const { sha256 } = require('../modules/sha256.js');
 const processes = new Map();
 let loads = 0;
 
-async function getInstalledGames(launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js', 'Uplay.js']) {
+async function getInstalledGames(launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'RockstarGames.js', 'Steam.js', 'Uplay.js']) {
 	loads++;
 	if (loads === 1) {
 		document.getElementById("loadingbtn").style.opacity = '1';

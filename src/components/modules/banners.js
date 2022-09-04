@@ -81,6 +81,9 @@ async function getBanners(games) {
 					if (!fetchUplay.data.results[0]) break;
 					return fetchUplay.data.results[0].background_image.slice(0, 27) + "/crop/600/400" + fetchUplay.data.results[0].background_image.slice(27);
 				}
+				case 'Rockstar': {
+					return `https://media-rockstargames-com.akamaized.net/rockstargames-newsite/img/global/games/fob/640/${games[i].bannerId}.jpg`;
+				}
 			}
 		})());
 
