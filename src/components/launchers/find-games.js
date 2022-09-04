@@ -95,7 +95,7 @@ async function loadGames(id, data, stored) {
 	}
 
 	if (!data) {
-		loadGames(id, await getInstalledGames(['XboxGames.js'])).then((d) => require('../modules/banners.js').getBanners(d));
+		loadGames(id, await getInstalledGames(['XboxGames.js'])).then((d) => require('../modules/banners.js').getBanners([...games, ...d]));
 	}
 
 	setTimeout(() => {
@@ -205,7 +205,7 @@ async function addLaunch(GameID, LauncherName) {
 async function createProcess_windows(Command, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
 	VisibilityState();
-	
+
 	const instance = invoke('run_game_windows', { exec: Command })
 		.then(() => {
 			VisibilityState();
@@ -321,13 +321,18 @@ class Elements {
 		const gameBanner = document.createElement('img');
 
 		let banner;
-		const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH).catch(() => []);
-		const img = dirs.find(x => x.name === `${sha256(game.DisplayName.replaceAll(' ', '_'))}.png`);
-		if (img) {
-			banner = img ? tauri.convertFileSrc(appDirPath + `storage/cache/games/banners/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
+		if (game.Banner) {
+			banner = game.Banner;
 		}
 		else {
-			banner = 'https://i.ibb.co/dK15dV3/e.jpg';
+			const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH).catch(() => []);
+			const img = dirs.find(x => x.name === `${sha256(game.DisplayName.replaceAll(' ', '_'))}.png`);
+			if (img) {
+				banner = img ? tauri.convertFileSrc(appDirPath + `storage/cache/games/banners/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
+			}
+			else {
+				banner = 'https://i.ibb.co/dK15dV3/e.jpg';
+			}
 		}
 
 		gameBanner.setAttribute('src', banner);
@@ -393,7 +398,7 @@ class Elements {
 		menuIcon.addEventListener("click", () => {
 			document.getElementById("gameMenu").style.display === "flex" ? document.getElementById("gameMenu").style.display = "none"
 				: document.getElementById("gameMenu").style.display = "flex";
-				
+
 			document.getElementById("gameMenuTitle").innerHTML = name;
 		});
 

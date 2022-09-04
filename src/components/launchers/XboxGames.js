@@ -72,7 +72,7 @@ function verifyGames(jsons) {
 
             json.Name = results[0].children[0].children.find(x => x.id?.startsWith('coreui')).children.find(x => x.name === 'h3').children[0];
 
-			json.Banner = results[0].children[0].children.find(x => !x.id?.startsWith('coreui')).children[0].children.find(x => x.name === 'img').attributes['data-src'].replaceAll('amp;', '');
+			json.Banner = results[0].children[0].children.find(x => !x.id?.startsWith('coreui')).children[0].children.find(x => x.name === 'img').attributes['data-src'].replaceAll('amp;', '').replace(/w=162/, 'w=600').replace(/h=300/, 'h=900');
 			return json;
 		})());
 	}
