@@ -14,6 +14,7 @@ const invoke = window.__TAURI__.invoke;
   data.trayMinQuit = false;
   data.checkForUpdates = false;
   data.accentColor = "#7934FA";
+  data.showLauncherIcons = true;
   let CONSTANTS = JSON.stringify(data);
 
   fs.createDir(appDirPath, { recursive: true }, (err) => {
