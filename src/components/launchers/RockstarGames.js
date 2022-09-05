@@ -8,6 +8,7 @@ async function getInstalledGames() {
 	}
 	else if (await os.platform() === 'win32') {
 		let allGames = (await new shell.Command('cmd', ['/C', 'Reg', 'query', 'HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Rockstar Games', '/s']).execute().catch(() => ''))?.stdout || '';
+        if(allGames === "") return [];
         allGames = allGames.split(window.__TAURI__.os.EOL.repeat(2)).map(x => {
             let res = x.split(window.__TAURI__.os.EOL).filter(x => x.length > 1);
             const name = res[0].split('HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Rockstar Games\\')[1];
