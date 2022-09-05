@@ -72,7 +72,7 @@
         </div>
       </div>
       <div class="appearance-settings" id="appearance-settings">
-        <div id="a">
+        <div class="a">
           <p>Accent Color</p>
           <div class="btnInput">
             <label class="color">
@@ -81,6 +81,18 @@
             <img class="repeatButton"
               src="https://i.pinimg.com/originals/86/16/9a/86169a7c0ea169c3aa1f5e8bf9555220.png">
           </div>
+        </div>
+        <div>
+          <div class="hover-box">
+            <bold>*Reload is required</bold>
+          </div>
+          <p>Show Launcher Icons*</p>
+          <label class="switch">
+            <input type="checkbox" id="setting-showLauncherIcons">
+            <div>
+              <span></span>
+            </div>
+          </label>
         </div>
       </div>
 

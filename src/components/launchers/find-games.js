@@ -131,7 +131,7 @@ async function handleLaunch(game) {
 				break;
 			}
 			default: {
-				res = createProcess_windows(`/C start "${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+				res = createProcess_windows(`/C powershell start "${game.Location ? game.Location + "/" : ""}${game.Executable}"`, game.Args, game.GameID);
 				break;
 			}
 		}
@@ -314,6 +314,19 @@ class Elements {
 		return gameElement;
 	}
 
+	static getGameLauncherIconElement(game) {
+		const gameLauncherIcon = document.createElement('img');
+		let banner = 'https://i.ibb.co/dK15dV3/e.jpg';
+
+		if(game.LauncherName === "Minecraft") banner = "https://img.freepik.com/free-psd/furniture-facebook-cover-page-template_237398-164.jpg?t=st=1662388319~exp=1662388919~hmac=2d54ec1259d2fc27f4e1f715413c0fa943be9bc78a4361b9bcc1ee361db3e818";
+
+		gameLauncherIcon.setAttribute('src', banner);
+		gameLauncherIcon.height = 40;
+		gameLauncherIcon.width = 40;
+
+		return gameLauncherIcon;
+	}
+
 	static async getGameBannerElement(game) {
 		const appDirPath = await path.appDir();
 		const GAME_BANNERS_BASE_PATH = `${appDirPath}storage/cache/games/banners`;
@@ -422,7 +435,19 @@ class Elements {
 		if (id.startsWith('recent') && id.includes('Main')) return game;
 
 		const gameBottom = document.createElement('div');
-		gameBottom.classList.add("gamebox-bottom")
+
+		const { showLauncherIcons } = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
+		
+		if(showLauncherIcons) {
+			const gameLauncherIcon = document.createElement("img");
+			const icon = await require("../modules/icons").getLauncherIcon(game);
+
+			gameLauncherIcon.classList.add("gamebox-icon");
+			gameLauncherIcon.setAttribute('src', icon);
+			gameElement.appendChild(gameLauncherIcon);
+		}
+
+		gameBottom.classList.add("gamebox-bottom");
 		gameElement.appendChild(gameBottom);
 
 		const gameText = Elements.getGameDisplayElement(game);
