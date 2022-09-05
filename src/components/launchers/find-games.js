@@ -22,7 +22,17 @@ async function getInstalledGames(launchers = ['EpicGames.js', 'Lutris.js', 'Mine
 	}
 
 	// Fetch all games
-	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
+	// const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
+
+	let time = Date.now();
+	const total = Date.now();
+	let games = [];
+	for (let i in launchers) {
+		games.push(...(await require(`./${launchers[i]}`).getInstalledGames()));
+		console.log(Date.now() - time, launchers[i]);
+		time = Date.now();
+	}
+	console.log(Date.now() - total, 'total fetch time');
 
 	loads--;
 	try {
