@@ -45,7 +45,7 @@ async function filterAndSort(games, type, list, stored, force = false) {
 	}
 
 	// Filter out new games and delete old games
-	games = games.filter(x => !require('../blacklist.json')[0].includes(x.GameID) && (force || !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`)));
+	games = games.filter(x => !require('../others/blacklist.json')[0].includes(x.GameID) && (force || !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`)));
 	for (let i = 0; i < list.length; i++) {
 		if (!games.map(x => x.GameID.replaceAll(' ', '_')).includes(list.children[i].id.slice(9))) {
 			list.removeChild(list.children[i]);
@@ -94,7 +94,7 @@ async function loadGames(id, data, stored, force = false) {
 	(await filterAndSort(games, id, list, stored, force)).forEach(async (game) => Elements.createGameElement(game, id, list, force));
 	if ((games.length > 0) && id === 'allGamesList') {
 		setGames(games, 'all-games');
-		require('../modules/banners').getBanners(await Promise.all(games.filter(x => !require('../blacklist.json')[0].includes(x.GameID))));
+		require('../modules/banners').getBanners(await Promise.all(games.filter(x => !require('../others/blacklist.json')[0].includes(x.GameID))));
 	}
 
 	if (!data) {

@@ -1,7 +1,7 @@
 const shell = window.__TAURI__.shell;
 const fs = window.__TAURI__.fs;
 const os = window.__TAURI__.os;
-const RockstarGamesData = require('../rockstargames.json');
+const RockstarGamesData = require('../others/rockstargames.json');
 async function getInstalledGames() {
 	if (await os.platform() === 'linux') {
 		return [];

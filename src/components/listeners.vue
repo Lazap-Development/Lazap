@@ -14,15 +14,16 @@ window.addEventListener('load', async function () {
   const path = window.__TAURI__.path;
   const dialog = window.__TAURI__.dialog;
 
-  const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/user/UserProfile.json', (err) => {
-    if (err) throw err;
-  }));
-  document.getElementById('text').value = data.username;
   try {
+    const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/user/UserProfile.json', (err) => {
+      if (err) throw err;
+    }));
+    document.getElementById('text').value = data.username;
+
     await fs.readBinaryFile(await path.appDir() + 'storage/cache/user/pfp.png');
     document.getElementById('output').src = window.__TAURI__.tauri.convertFileSrc(await path.appDir() + 'storage/cache/user/pfp.png') + `?${new Date().getSeconds()}`;
   } catch (err) {
-    //console.error(error)
+    //console.log(err)
   }
 
   try {
