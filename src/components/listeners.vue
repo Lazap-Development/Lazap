@@ -1,6 +1,5 @@
 <script>
 window.addEventListener('load', async function () {
-  const time = Date.now();
   const home = document.getElementById('home');
   const recent = document.getElementById('recent');
   const games = document.getElementById('games');
@@ -14,7 +13,6 @@ window.addEventListener('load', async function () {
   const fs = window.__TAURI__.fs;
   const path = window.__TAURI__.path;
   const dialog = window.__TAURI__.dialog;
-  console.log(Date.now() - time, 'imports')
 
   const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/user/UserProfile.json', (err) => {
     if (err) throw err;
@@ -26,7 +24,7 @@ window.addEventListener('load', async function () {
   } catch (err) {
     //console.error(error)
   }
-  console.log(Date.now() - time, 'pfp')
+
   try {
     let { accentColor } = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
     if (!accentColor) accentColor = "#7934FA";
@@ -34,18 +32,15 @@ window.addEventListener('load', async function () {
   } catch (error) {
     console.error(error);
   }
-  console.log(Date.now() - time, 'accent')
 
   const allGames = await require('./launchers/find-games').getInstalledGames()
     .catch((err) => {
       return console.error(err);
     });
-  console.log(Date.now() - time, 'game fetching')
   const gamesdata = await require('./launchers/find-games').getGames()
     .catch((err) => {
       return console.error(err);
     });
-  console.log(Date.now() - time, 'game data fetching')
 
   await require('./launchers/find-games').loadGames('recentGamesListMainPage', allGames, gamesdata)
     .catch((err) => {
@@ -63,11 +58,9 @@ window.addEventListener('load', async function () {
     .catch((err) => {
       return console.error(err);
     });
-  console.log(Date.now() - time, 'game loading')
 
   document.getElementById('main-loading-overlay').style.opacity = '0';
   document.getElementById('main-loading-overlay').style.visibility = 'hidden';
-  console.log(Date.now() - time);
 
   document.getElementById('home-btn').addEventListener('click', async function () {
     this.appendChild(document.getElementById('indicator'));
