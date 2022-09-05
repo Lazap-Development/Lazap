@@ -36,16 +36,16 @@ async function getInstalledGames(launchers = ['EpicGames.js', 'Lutris.js', 'Mine
 	}
 }
 
-async function filterAndSort(games, type, list, stored) {
+async function filterAndSort(games, type, list, stored, force = false) {
 	list = list ?? document.getElementById(type);
 
 	// Check if the list already has the games loaded and prevent further execution
-	if ((list.children.length === games.length) && list.children.length !== 0) {
+	if ((list.children.length === games.length) && list.children.length !== 0 && !force) {
 		if (games.every((x, i) => list.children.item(i).id === `game-div-${x.DisplayName.replaceAll(' ', '_')}`)) return [];
 	}
 
 	// Filter out new games and delete old games
-	games = games.filter(x => !require('../blacklist.json')[0].includes(x.GameID) && !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`));
+	games = games.filter(x => !require('../blacklist.json')[0].includes(x.GameID) && (force || !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`)));
 	for (let i = 0; i < list.length; i++) {
 		if (!games.map(x => x.GameID.replaceAll(' ', '_')).includes(list.children[i].id.slice(9))) {
 			list.removeChild(list.children[i]);
@@ -87,18 +87,18 @@ async function filterAndSort(games, type, list, stored) {
 	}
 }
 
-async function loadGames(id, data, stored) {
+async function loadGames(id, data, stored, force = false) {
 	const games = data ?? await getInstalledGames();
 	const list = document.getElementById(id);
 
-	(await filterAndSort(games, id, list, stored)).forEach(async (game) => Elements.createGameElement(game, id, list))
+	(await filterAndSort(games, id, list, stored, force)).forEach(async (game) => Elements.createGameElement(game, id, list, force));
 	if ((games.length > 0) && id === 'allGamesList') {
 		setGames(games, 'all-games');
 		require('../modules/banners').getBanners(await Promise.all(games.filter(x => !require('../blacklist.json')[0].includes(x.GameID))));
 	}
 
 	if (!data) {
-		loadGames(id, await getInstalledGames(['XboxGames.js'])).then((d) => require('../modules/banners.js').getBanners([...games, ...d]));
+		loadGames(id, [...games, ...(await getInstalledGames(['XboxGames.js']))], stored, true).then((d) => require('../modules/banners.js').getBanners([...games, ...d]));
 	}
 
 	setTimeout(() => {
@@ -407,9 +407,12 @@ class Elements {
 		return menuIcon;
 	}
 
-	static async createGameElement(game, id, list) {
+	static async createGameElement(game, id, list, force = false) {
 		list = list ?? document.getElementById(id);
 		const gameElement = Elements.getGameElement(game, id);
+		if (list.children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`) && force) {
+			list.removeChild(list.children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`));
+		}
 		list.appendChild(gameElement);
 
 		const gameBanner = await Elements.getGameBannerElement(game);

@@ -303,8 +303,8 @@
 </template>
 
 <script>
-import listeners from './components/listeners.vue'
 import storage from './components/storage.vue'
+import listeners from './components/listeners.vue'
 
 export default {
   async created() {
