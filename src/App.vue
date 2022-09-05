@@ -79,7 +79,7 @@
               <input type="color" id="setting-accentColor">
             </label>
             <img class="repeatButton"
-              src="https://i.pinimg.com/originals/86/16/9a/86169a7c0ea169c3aa1f5e8bf9555220.png">
+              src="./assets/icons/reset.png">
           </div>
         </div>
       </div>

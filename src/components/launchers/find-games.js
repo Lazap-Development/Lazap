@@ -17,6 +17,9 @@ async function getInstalledGames(launchers = ['EpicGames.js', 'Lutris.js', 'Mine
 	if (loads > 1) {
 		launchers = launchers.filter(x => x !== 'XboxGames.js');
 	}
+	if (loads > 2) {
+		return [];
+	}
 
 	// Fetch all games
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
@@ -321,19 +324,18 @@ class Elements {
 		const gameBanner = document.createElement('img');
 
 		let banner;
-		if (game.Banner) {
+		const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH).catch(() => []);
+		const img = dirs.find(x => x.name === `${sha256(game.DisplayName.replaceAll(' ', '_'))}.png`);
+		if (img) {
+			banner = img ? tauri.convertFileSrc(appDirPath + `storage/cache/games/banners/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
+		}
+		else if (game.Banner) {
 			banner = game.Banner;
 		}
 		else {
-			const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH).catch(() => []);
-			const img = dirs.find(x => x.name === `${sha256(game.DisplayName.replaceAll(' ', '_'))}.png`);
-			if (img) {
-				banner = img ? tauri.convertFileSrc(appDirPath + `storage/cache/games/banners/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
-			}
-			else {
-				banner = 'https://i.ibb.co/dK15dV3/e.jpg';
-			}
+			banner = 'https://i.ibb.co/dK15dV3/e.jpg';
 		}
+
 
 		gameBanner.setAttribute('src', banner);
 		gameBanner.height = 500;

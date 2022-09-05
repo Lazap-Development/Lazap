@@ -5,20 +5,22 @@ const path = window.__TAURI__.path;
 
 async function getInstalledGames() {
 	const platform = await os.platform();
-	if (platform === 'win32' || platform === 'linux') 
-	return [await getMinecraftLauncher(), await getLunarClient()].filter(x => x !== false);
-	else return [];
+	if (platform === 'win32' || platform === 'linux') {
+		const e = [await getMinecraftLauncher(platform), await getLunarClient(platform)].filter(x => x !== false);
+		return e;
+	}
+	else {
+		return [];
+	}
 }
 
-async function getMinecraftLauncher() {
-	const platform = await os.platform();
+async function getMinecraftLauncher(platform) {
 	if (platform === 'win32') {
-		const out = await new shell.Command('cmd', ['/C', 'Reg', 'query', 'HKEY_CLASSES_ROOT\\Applications\\MinecraftLauncher.exe\\shell\\open\\command', '/ve']).execute().catch(() => null);
+		const out = await new shell.Command('cmd', ['/C', 'Reg', 'query', 'HKEY_CLASSES_ROOT\\Applications\\MinecraftLauncher.exe\\shell\\open\\command']).execute().catch(() => null);
 		if (out?.stderr) {
 			const isInstalled = (await new shell.Command('cmd', ['/C', 'powershell', 'Get-appxpackage', 'Microsoft.4297127D64EC6']).execute().catch(() => null))?.stdout;
 			if (isInstalled?.length < 1) return false;
 			const Location = isInstalled.split('\r\n').find(x => x.trim().startsWith('InstallLocation')).split(':').slice(1).join(':').trim();
-			if (!(await fs.readDir(Location).catch(() => null))) return false;
 			const Executable = 'Minecraft.exe';
 			return {
 				DisplayName: 'Minecraft Launcher',
@@ -81,8 +83,7 @@ async function getMinecraftLauncher() {
 	}
 }
 
-async function getLunarClient() {
-	const platform = await os.platform();
+async function getLunarClient(platform) {
 	if (platform === 'win32') {
 		const isLunarInstalled = await fs.readDir(`${await path.localDataDir()}Programs\\lunarclient`).catch(() => null);
 		if (!isLunarInstalled) return false;
