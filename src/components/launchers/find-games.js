@@ -10,7 +10,6 @@ const processes = new Map();
 let loads = 0;
 
 async function getInstalledGames(launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'RockstarGames.js', 'Steam.js', 'Uplay.js']) {
-	loads++;
 	if (loads === 1) {
 		document.getElementById("loadingbtn").style.opacity = '1';
 	}
@@ -20,6 +19,7 @@ async function getInstalledGames(launchers = ['EpicGames.js', 'Lutris.js', 'Mine
 	if (loads > 2) {
 		return [];
 	}
+	loads++;
 
 	// Fetch all games
 	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
@@ -408,11 +408,10 @@ class Elements {
 	}
 
 	static async createGameElement(game, id, list, prev) {
-		console.log(game.DisplayName, prev?.DisplayName)
-		list = list ?? document.getElementById(id);
+		list = document.getElementById(id);
 		const gameElement = Elements.getGameElement(game, id);
 		if (prev && !list.children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
-			document.getElementById(`game-div-${prev.DisplayName.replaceAll(' ', '_')}`).insertAdjacentElement('beforebegin', gameElement);
+			list.children.namedItem(`game-div-${prev.DisplayName.replaceAll(' ', '_')}`).insertAdjacentElement('beforebegin', gameElement);
 		}
 		else if (list.children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
 			return;

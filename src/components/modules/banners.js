@@ -51,7 +51,6 @@ async function getBanners(games) {
 					return;
 				}
 				case 'XboxGames': {
-					console.log(games[i].Banner);
 					return games[i].Banner;
 				}
 				case 'Osu': {
@@ -70,7 +69,12 @@ async function getBanners(games) {
 					return fetchEpicGame.data.results[0].background_image.slice(0, 27) + "/crop/600/400" + fetchEpicGame.data.results[0].background_image.slice(27);
 				}
 				case 'Uplay': {
-					const fetchUplay = await http.fetch(`https://api.rawg.io/api/games?key=f8854c401fed44b89f4e1e4faa56ccc8&search=${games[i].DisplayName.replaceAll(' ', '-')}&search_exact&search_precise`, {
+					let title = games[i].DisplayName.replaceAll('_', ' ');
+					if (games[i].DisplayName.replaceAll('_', ' ').match(/\d$/ig) && !games[i].DisplayName.replaceAll('_', ' ').replaceAll('\\d', '').endsWith(' ')) {
+						const numlength = title.split('').reverse().join('').match(/\d/ig)[0].length;
+						title = title.slice(0, title.length - numlength) + ' ' + title.slice(title.length - numlength);
+					}
+					const fetchUplay = await http.fetch(`https://api.rawg.io/api/games?key=f8854c401fed44b89f4e1e4faa56ccc8&search=${title}&search_exact&search_precise`, {
 						method: 'GET',
 						mode: "no-cors",
 						headers: {
