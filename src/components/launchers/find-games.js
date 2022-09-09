@@ -13,10 +13,10 @@ async function getInstalledGames(launchers = ['EpicGames.js', 'Lutris.js', 'Mine
 	if (loads === 1) {
 		document.getElementById("loadingbtn").style.opacity = '1';
 	}
-	if (loads > 1) {
+	if (loads >= 1) {
 		launchers = launchers.filter(x => x !== 'XboxGames.js');
 	}
-	if (loads > 2) {
+	if (loads >= 2) {
 		return [];
 	}
 	loads++;
