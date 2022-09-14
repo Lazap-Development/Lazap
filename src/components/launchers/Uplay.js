@@ -39,11 +39,15 @@ async function parseGameObject(GameID, registry_res) {
 	const Location = registry_res.split('\r\n').map(x => x.trim()).filter(x => x.startsWith('InstallDir'))[0]?.split('REG_SZ')[1].trim();
 	if (!(await fs.readDir(Location).catch(() => null))) return;
 	const Executable = null;
-	const DisplayName = Location.split('/').slice(-2)[0];
+	let title = Location.split('/').slice(-2)[0].replaceAll('_', ' ');
+	if (title.match(/\d$/ig) && !title.replaceAll('\\d', '').endsWith(' ')) {
+		const numlength = title.split('').reverse().join('').match(/\d/ig)[0].length;
+		title = title.slice(0, title.length - numlength) + ' ' + title.slice(title.length - numlength);
+	}
 	return {
 		Executable,
 		Location,
-		DisplayName,
+		DisplayName: title,
 		GameID,
 		Size: null,
 		LauncherName: 'Uplay',

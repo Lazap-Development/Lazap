@@ -9,7 +9,7 @@ const { sha256 } = require('../modules/sha256.js');
 const processes = new Map();
 let loads = 0;
 
-async function getInstalledGames(launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'RockstarGames.js', 'Steam.js', 'Uplay.js']) {
+async function getInstalledGames(launchers = ['CustomGames', 'EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'RockstarGames.js', 'Steam.js', 'Uplay.js']) {
 	if (loads === 1) {
 		document.getElementById("loadingbtn").style.opacity = '1';
 	}
@@ -22,16 +22,21 @@ async function getInstalledGames(launchers = ['EpicGames.js', 'Lutris.js', 'Mine
 	loads++;
 
 	// Fetch all games
-	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
+	const games = (await Promise.all(launchers.filter(x => x.endsWith('.js')).map(x => require(`./${x}`)?.getInstalledGames()))).flat();
 
 	loads--;
-	try {
-		let readDataJSON = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/data.json'));
-		readDataJSON.filter(a => a.LauncherName == "CustomGame").forEach(x => {
-			games.push(x);
-		});
-		return games;
-	} catch (e) {
+	if (launchers.includes('CustomGames')) {
+		try {
+			let readDataJSON = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/data.json'));
+			readDataJSON.filter(a => a.LauncherName == "CustomGame").forEach(x => {
+				games.push(x);
+			});
+			return games;
+		} catch (e) {
+			return games;
+		}
+	}
+	else {
 		return games;
 	}
 }
@@ -408,6 +413,7 @@ class Elements {
 	}
 
 	static async createGameElement(game, id, list, prev) {
+		console.log(game.LauncherName);
 		list = document.getElementById(id);
 		const gameElement = Elements.getGameElement(game, id);
 		if (prev && !list.children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
