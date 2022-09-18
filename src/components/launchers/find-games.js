@@ -140,7 +140,8 @@ async function handleLaunch(game) {
 				break;
 			}
 			default: {
-				res = createProcess_windows(`/C start "${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+				console.log(game.Location, game.Executable);
+				res = createProcess_windows(`/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
 				break;
 			}
 		}
@@ -164,7 +165,7 @@ async function handleLaunch(game) {
 				break;
 			}
 			default: {
-				res = createProcess_linux(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
+				res = createProcess_linux(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
 				break;
 			}
 		}

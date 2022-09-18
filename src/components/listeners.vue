@@ -330,7 +330,8 @@ window.addEventListener('load', async function () {
         DisplayName: document.getElementById("inputGameName").value,
         LauncherName: 'CustomGame',
         GameID: 'CustomGame',
-        Executable: newGameLocation,
+        Executable: newGameLocation.split('\\').slice(-1)[0],
+        Location: newGameLocation.split('\\').slice(0, -1).join('\\'),
         Args: [],
       }
 
