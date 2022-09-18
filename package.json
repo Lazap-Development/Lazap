@@ -1,6 +1,6 @@
 {
   "name": "lazap",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -14,6 +14,7 @@
   "dependencies": {
     "@tauri-apps/api": "^1.0.2",
     "core-js": "^3.8.3",
+    "tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra",
     "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql",
     "vue": "^3.2.13"
   },

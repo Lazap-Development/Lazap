@@ -3,13 +3,13 @@
   "build": {
     "beforeBuildCommand": "",
     "beforeDevCommand": "",
-    "devPath": "Set automatically by Vue CLI plugin",
-    "distDir": "Set automatically by Vue CLI plugin",
+    "devPath": "http://localhost:8080/",
+    "distDir": "../dist",
     "withGlobalTauri": true
   },
   "package": {
     "productName": "Lazap",
-    "version": "0.5.1"
+    "version": "0.6.0"
   },
   "tauri": {
     "systemTray": {
@@ -17,16 +17,29 @@
       "iconAsTemplate": true
     },
     "allowlist": {
-      "all": true,
+      "dialog": {
+        "all": true
+      },
       "fs": {
+        "createDir": true,
+        "readDir": true,
+        "readFile": true,
+        "writeFile": true,
         "scope": [
           "**"
         ]
       },
+      "globalShortcut": {
+        "all": true
+      },
+      "os": {
+        "all": true
+      },
+      "path": {
+        "all": true
+      },
       "shell": {
-        "all": true,
         "execute": true,
-        "open": true,
         "scope": [
           {
             "name": "which",
@@ -43,15 +56,33 @@
             "cmd": "start",
             "args": true
           }
-        ],
-        "sidecar": true
+        ]
       },
       "http": {
-        "scope": ["https://**", "http://**"]
+        "request": true,
+        "scope": [
+          "https://**",
+          "http://**"
+        ]
       },
       "protocol": {
         "asset": true,
-        "assetScope": ["**"]
+        "assetScope": [
+          "**"
+        ]
+      },
+      "window": {
+        "center": true,
+        "create": true,
+        "close": true,
+        "hide": true,
+        "maximize": true,
+        "minimize": true,
+        "print": true,
+        "show": true,
+        "startDragging": true,
+        "unmaximize": true,
+        "unminimize": true
       }
     },
     "bundle": {
@@ -95,7 +126,7 @@
     },
     "windows": [
       {
-        "label":"main",
+        "label": "main",
         "fullscreen": false,
         "resizable": true,
         "title": "Lazap",

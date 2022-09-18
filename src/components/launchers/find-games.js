@@ -7,13 +7,38 @@ const tauri = window.__TAURI__.tauri;
 const { sha256 } = require('../modules/sha256.js');
 
 const processes = new Map();
+let loads = 0;
 
-async function getInstalledGames() {
+async function getInstalledGames(launchers = ['CustomGames', 'EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'RockstarGames.js', 'Steam.js', 'Uplay.js']) {
+	if (loads === 1) {
+		document.getElementById("loadingbtn").style.opacity = '1';
+	}
+	if (loads >= 1) {
+		launchers = launchers.filter(x => x !== 'XboxGames.js');
+	}
+	if (loads >= 2) {
+		return [];
+	}
+	loads++;
+
 	// Fetch all games
-	const launchers = ['EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'Steam.js', 'Uplay.js'];
-	const games = (await Promise.all(launchers.map(x => require(`./${x}`)?.getInstalledGames()))).flat();
+	const games = (await Promise.all(launchers.filter(x => x.endsWith('.js')).map(x => require(`./${x}`)?.getInstalledGames()))).flat();
 
-	return games;
+	loads--;
+	if (launchers.includes('CustomGames')) {
+		try {
+			let readDataJSON = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/games/data.json'));
+			readDataJSON.filter(a => a.LauncherName == "CustomGame").forEach(x => {
+				games.push(x);
+			});
+			return games;
+		} catch (e) {
+			return games;
+		}
+	}
+	else {
+		return games;
+	}
 }
 
 async function filterAndSort(games, type, list, stored) {
@@ -25,8 +50,7 @@ async function filterAndSort(games, type, list, stored) {
 	}
 
 	// Filter out new games and delete old games
-	const games_blacklist = require('../blacklist.json');
-	games = games.filter(x => !games_blacklist[0].includes(x.GameID) && !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`));
+	games = games.filter(x => !require('../others/blacklist.json')[0].includes(x.GameID)/* && !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`)*/);
 	for (let i = 0; i < list.length; i++) {
 		if (!games.map(x => x.GameID.replaceAll(' ', '_')).includes(list.children[i].id.slice(9))) {
 			list.removeChild(list.children[i]);
@@ -41,9 +65,19 @@ async function filterAndSort(games, type, list, stored) {
 		let final = [];
 		for (let i = 0; i < games.length; i++) {
 			const game = stored?.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
-			if (typeof game?.LastLaunch === 'number' && typeof game?.Launches === 'number') final.push(game);
+			if (typeof game?.LastLaunch === 'number' && typeof game?.Launches === 'number' && game?.Launches > 0) final.push(game);
 		}
-		return final;
+		final.sort((a, b) => {
+			return b.Launches - a.Launches;
+		}).sort((a, b) => {
+			if (b.Launches - a.Launches === 0) {
+				return b.LastLaunch - a.LastLaunch;
+			}
+			else {
+				return 0;
+			}
+		});
+		return final.slice(0, type.includes('MainPage') ? 5 - list.children.length : final.length);
 	}
 	else if (type === 'favGamesList') {
 		let final = [];
@@ -51,7 +85,7 @@ async function filterAndSort(games, type, list, stored) {
 			const game = stored?.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
 			if (typeof game?.Favourite === 'boolean' && game.Favourite === true) final.push(game);
 		}
-		return final;
+		return final.map(x => x.DisplayName).sort().map(x => final[final.findIndex(y => y.DisplayName === x)]);
 	}
 	else {
 		return [];
@@ -59,21 +93,25 @@ async function filterAndSort(games, type, list, stored) {
 }
 
 async function loadGames(id, data, stored) {
-	// eslint-disable-next-line no-undef
-	loadingbtn.style.opacity = '1';
 	const games = data ?? await getInstalledGames();
 	const list = document.getElementById(id);
 
-	(await filterAndSort(games, id, list, stored)).map(async (game) => Elements.createGameElement(game, id, list)).filter(async x => Object.keys(await x).length > 0);
+	(await filterAndSort(games, id, list, stored)).reverse().forEach(async (game, i, arr) => Elements.createGameElement(game, id, list, arr[i - 1]));
 	if ((games.length > 0) && id === 'allGamesList') {
 		setGames(games, 'all-games');
+		require('../modules/banners').getBanners(await Promise.all(games.filter(x => !require('../others/blacklist.json')[0].includes(x.GameID))));
 	}
 
-	if (id === 'allGamesList') {
-		require('../modules/banners').getBanners(await Promise.all(games));
+	if (!data) {
+		loadGames(id, [...games, ...(await getInstalledGames(['XboxGames.js']))]).then((d) => require('../modules/banners.js').getBanners([...games, ...d]));
 	}
-	// eslint-disable-next-line no-undef
-	loadingbtn.style.opacity = '0';
+
+	setTimeout(() => {
+		if (loads === 0) {
+			document.getElementById("loadingbtn").style.opacity = '0';
+		}
+	}, 300);
+	return games;
 }
 
 async function handleLaunch(game) {
@@ -81,27 +119,27 @@ async function handleLaunch(game) {
 	if (await os.platform() === 'win32') {
 		switch (game.LauncherName) {
 			case 'EpicGames': {
-				res = createProcess('cmd', `/C start /min cmd /c start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, game.GameID);
+				res = createProcess_windows(`/C start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, game.GameID);
 				break;
 			}
 			case 'Steam': {
-				res = createProcess('cmd', `/C start /min cmd /c start steam://rungameid/${game.GameID}`, game.GameID);
+				res = createProcess_windows(`/C start steam://rungameid/${game.GameID}`, game.GameID);
 				break;
 			}
 			case 'Uplay': {
-				res = createProcess('cmd', `/C start /min cmd /c start uplay://launch/${game.GameID}/0`, game.GameID);
+				res = createProcess_windows(`/C start uplay://launch/${game.GameID}/0`, game.GameID);
 				break;
 			}
 			case 'Minecraft': {
-				res = createProcess('cmd', `/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
+				res = createProcess_windows(`/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
 				break;
 			}
 			case 'Lunar': {
-				res = createProcess('cmd', `/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
+				res = createProcess_windows(`/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
 				break;
 			}
 			default: {
-				res = createProcess(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+				res = createProcess_windows(`/C start "${game.Location}/${game.Executable}"`, game.Args, game.GameID);
 				break;
 			}
 		}
@@ -109,23 +147,23 @@ async function handleLaunch(game) {
 	else if (await os.platform() === 'linux') {
 		switch (game.LauncherName) {
 			case 'Steam': {
-				res = createProcess('steam', `steam://rungameid/${game.GameID} -silent`, game.GameID);
+				res = createProcess_linux('steam', `steam://rungameid/${game.GameID} -silent`, game.GameID);
 				break;
 			}
 			case 'Minecraft': {
-				res = createProcess('minecraft-launcher', '', game.GameID);
+				res = createProcess_linux('minecraft-launcher', '', game.GameID);
 				break;
 			}
 			case 'Lunar': {
-				res = createProcess('lunarclient', '', game.gameID);
+				res = createProcess_linux('lunarclient', '', game.gameID);
 				break;
 			}
 			case 'Lutris': {
-				res = createProcess('lutris', `lutris:rungameid/${game.LaunchID}`, game.gameID);
+				res = createProcess_linux('lutris', `lutris:rungameid/${game.LaunchID}`, game.gameID);
 				break;
 			}
 			default: {
-				res = createProcess(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
+				res = createProcess_linux(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
 				break;
 			}
 		}
@@ -163,16 +201,33 @@ async function addLaunch(GameID, LauncherName) {
 	setGames(data, 'add-launch');
 	if (!document.getElementById('recentGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
 		// eslint-disable-next-line no-undef
-		Elements.createGameElement(game, 'recentGamesList', recentGamesList);
-		// eslint-disable-next-line no-undef
-		Elements.createGameElement(game, 'recentGamesListMainPage', recentGamesListMainPage);
+		recentGamesList.replaceChildren([]);
+		loadGames('recentGamesList', null, data);
+		if (document.getElementById('recentGamesListMainPage').children.length < 5) {
+			// eslint-disable-next-line no-undef
+			recentGamesListMainPage.replaceChildren([]);
+			loadGames('recentGamesListMainPage', null, data);
+		}
 	}
 }
-function createProcess(Command, Args, GameID, force = false) {
+async function createProcess_windows(Command, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
 	VisibilityState();
-	console.log(Args);
-	const instance = invoke('run_game', { exec: Command, args: Args })
+
+	const instance = invoke('run_game_windows', { exec: Command })
+		.then(() => {
+			VisibilityState();
+			processes.delete(GameID);
+		});
+	processes.set(GameID, instance);
+
+	return instance;
+}
+async function createProcess_linux(Command, Args, GameID, force = false) {
+	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
+	VisibilityState();
+
+	const instance = invoke('run_game_linux', { exec: Command, args: Args })
 		.then(() => {
 			VisibilityState();
 			processes.delete(GameID);
@@ -182,21 +237,15 @@ function createProcess(Command, Args, GameID, force = false) {
 	return instance;
 }
 async function VisibilityState() {
-	const appDirPath = await path.appDir();
 
 	try {
-		const LauncherData = JSON.parse(await fs.readTextFile(appDirPath + 'storage/LauncherData.json'));
-
+		const LauncherData = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
 		if (LauncherData.trayMinLaunch === true) {
-			if (await Window.appWindow.isVisible() === true) {
-				Window.appWindow.hide()
-			} else {
-				Window.appWindow.show()
-			}
-
+			if (await Window.appWindow.isVisible() === true) Window.appWindow.hide()
+			else Window.appWindow.show()
 		}
 	} catch (e) {
-		return console.log(e);
+		return console.error(e);
 	}
 }
 
@@ -204,6 +253,17 @@ async function setGames(games, source) {
 	const appDirPath = await path.appDir();
 	const GAMES_DATA_BASE_PATH = appDirPath + 'storage/cache/games/data.json';
 	const data = JSON.parse(await fs.readTextFile(GAMES_DATA_BASE_PATH).catch(() => '[]'));
+
+	data.forEach(d => {
+		Object.keys(d).forEach((x) => {
+			if ([undefined, null].includes(d[x])) delete d[x];
+		});
+	});
+	games.forEach(d => {
+		Object.keys(d).forEach((y) => {
+			if ([undefined, null].includes(d[y])) delete d[y];
+		})
+	});
 
 	if (source === 'add-launch') {
 		fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
@@ -248,6 +308,7 @@ export {
 	getInstalledGames,
 	loadGames,
 	getGames,
+	Elements
 };
 
 class Elements {
@@ -273,9 +334,13 @@ class Elements {
 		if (img) {
 			banner = img ? tauri.convertFileSrc(appDirPath + `storage/cache/games/banners/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
 		}
+		else if (game.Banner) {
+			banner = game.Banner;
+		}
 		else {
 			banner = 'https://i.ibb.co/dK15dV3/e.jpg';
 		}
+
 
 		gameBanner.setAttribute('src', banner);
 		gameBanner.height = 500;
@@ -287,8 +352,8 @@ class Elements {
 	static getGameDisplayElement(game) {
 		// Set Game Display Name
 		const gameText = document.createElement('span');
-		if (game.DisplayName.length > 20) {
-			gameText.innerHTML = game.DisplayName.slice(0, 20);
+		if (game.DisplayName.length > 17) {
+			gameText.innerHTML = game.DisplayName.slice(0, 17);
 			gameText.innerHTML += '...';
 		}
 		else {
@@ -297,63 +362,69 @@ class Elements {
 
 		return gameText;
 	}
-	static async getStarElement(game, gameElement, gameBanner) {
+	static async getStarElement(game) {
 		const appDirPath = await path.appDir();
 
 		const starIcon = document.createElement('div');
 		starIcon.classList.add('star');
 		starIcon.id = 'star';
 
-		gameBanner.addEventListener('mouseover', async () => {
-			const x = gameElement.getElementsByClassName('star');
-			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
-			for (let i = 0; i < x.length; i++) {
-				starIcon.classList.add('fade');
-				x[i].style.visibility = 'visible';
-				if (isFavourite) {
-					starIcon.classList.add('star-fill');
-					starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
-				}
-			}
-		});
-		gameBanner.addEventListener('mouseout', async () => {
-			const x = gameElement.getElementsByClassName('star');
-			const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
-			for (let i = 0; i < x.length; i++) {
-				if (!x[i].matches(':hover')) {
-					starIcon.classList.remove('fade');
-					x[i].style.visibility = 'hidden';
-					if (!isFavourite) {
-						starIcon.classList.remove('star-fill')
-						starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
-					}
-				}
-			}
-		});
+		const isFavourite = JSON.parse(await fs.readTextFile(appDirPath + 'storage/cache/games/data.json')).find(y => y.GameID === game.GameID && y.LauncherName === game.LauncherName && y.Favourite);
+		if (isFavourite) {
+			starIcon.classList.add('star-fill');
+			starIcon.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
+		} else {
+			starIcon.classList.remove('star-fill')
+			starIcon.style.filter = 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
+		}
+
+
 		starIcon.addEventListener('click', async () => {
 			const solidOrEmpty = await toggleFavourite(game.GameID, game.LauncherName);
 			starIcon.style.filter = solidOrEmpty === 'solid' ? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)' : 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
 
 			if (solidOrEmpty === "solid") {
 				starIcon.classList.add('star-fill');
-				for (let i = 0; i < 20; i++) {
-					particle(starIcon.getBoundingClientRect().left, starIcon.getBoundingClientRect().top);
-				}
+				starIcon.classList.add("shake");
+				setTimeout(() => {
+					starIcon.classList.remove("shake");
+				}, 500);
 			} else {
 				starIcon.classList.remove('star-fill');
 			}
-		});
-		document.addEventListener('mousemove', () => {
-			if (!gameBanner.matches(':hover') && !starIcon.matches(':hover')) starIcon.style.visibility = 'hidden';
 		});
 
 		return starIcon;
 	}
 
-	static async createGameElement(game, id, list) {
-		list = list ?? document.getElementById(id);
+	static async getMenuElement(name) {
+		const menuIcon = document.createElement('div');
+		menuIcon.classList.add('menu');
+		menuIcon.id = 'menu';
+
+		menuIcon.addEventListener("click", () => {
+			document.getElementById("gameMenu").style.display === "flex" ? document.getElementById("gameMenu").style.display = "none"
+				: document.getElementById("gameMenu").style.display = "flex";
+
+			document.getElementById("gameMenuTitle").innerHTML = name;
+		});
+
+		return menuIcon;
+	}
+
+	static async createGameElement(game, id, list, prev) {
+		console.log(game.LauncherName);
+		list = document.getElementById(id);
 		const gameElement = Elements.getGameElement(game, id);
-		list.appendChild(gameElement);
+		if (prev && !list.children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
+			list.children.namedItem(`game-div-${prev.DisplayName.replaceAll(' ', '_')}`).insertAdjacentElement('beforebegin', gameElement);
+		}
+		else if (list.children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
+			return;
+		}
+		else if (!prev) {
+			list.appendChild(gameElement);
+		}
 
 		const gameBanner = await Elements.getGameBannerElement(game);
 		gameElement.appendChild(gameBanner);
@@ -366,47 +437,19 @@ class Elements {
 
 		if (id.startsWith('recent') && id.includes('Main')) return game;
 
-		const gameText = Elements.getGameDisplayElement(game);
-		gameElement.appendChild(gameText);
+		const gameBottom = document.createElement('div');
+		gameBottom.classList.add("gamebox-bottom")
+		gameElement.appendChild(gameBottom);
 
-		const starIcon = await Elements.getStarElement(game, gameElement, gameBanner);
-		gameElement.appendChild(starIcon);
+		const gameText = Elements.getGameDisplayElement(game);
+		gameBottom.appendChild(gameText);
+
+		const starIcon = await Elements.getStarElement(game, gameElement);
+		gameBottom.appendChild(starIcon);
+
+		const gameMenu = await Elements.getMenuElement(game.DisplayName);
+		gameBottom.appendChild(gameMenu);
 
 		return game;
 	}
-}
-
-function particle(x, y) {
-	const particle = document.createElement('particle');
-	document.body.appendChild(particle);
-	let width = Math.floor(Math.random() * 30 + 8);
-	let height = width;
-	let destinationX = (Math.random() - 0.5) * 300;
-	let destinationY = (Math.random() - 0.5) * 300;
-	let rotation = Math.random() * 500;
-	let delay = Math.random() * 100;
-	particle.innerHTML = ['⭐', '💛'][Math.floor(Math.random() * 2)];
-	particle.style.fontSize = `${Math.random() * 24 + 10}px`;
-	width = height = 'auto';
-
-	particle.style.width = `${width}px`;
-	particle.style.height = `${height}px`;
-	const animation = particle.animate([
-		{
-			transform: `translate(-50%, -50%) translate(${x}px, ${y}px) rotate(0deg)`,
-			opacity: 1
-		},
-		{
-			transform: `translate(-50%, -50%) translate(${x + destinationX}px, ${y + destinationY}px) rotate(${rotation}deg)`,
-			opacity: 0
-		}
-	], {
-		duration: Math.random() * 1000 + 1000,
-		easing: 'cubic-bezier(0, .9, .57, 1)',
-		delay: delay
-	});
-	animation.onfinish = deleteParticle;
-}
-function deleteParticle(e) {
-	e.srcElement.effect.target.remove();
 }
