@@ -365,7 +365,7 @@ window.addEventListener('load', async function () {
     data = data.filter(a => a.DisplayName != document.getElementById("removeGame").parentNode.parentNode.firstChild.innerHTML)
     await fs.writeTextFile(await path.appDir() + 'storage/cache/games/data.json', JSON.stringify(data));
     document.getElementById(`game-div-${document.getElementById("removeGame").parentNode.parentNode.firstChild.innerHTML.replaceAll(' ', '_')}`).remove()
-    document.getElementById("removeGame").parentNode.parentNode.remove()
+    setTimeout(() => document.getElementById("removeGame").parentNode.parentNode.style = '', 200);
   })
 
   function toggleIndicatorAnim() {
