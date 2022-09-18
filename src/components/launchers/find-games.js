@@ -10,9 +10,7 @@ const processes = new Map();
 let loads = 0;
 
 async function getInstalledGames(launchers = ['CustomGames', 'EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'RockstarGames.js', 'Steam.js', 'Uplay.js']) {
-	if (loads === 1) {
-		document.getElementById("loadingbtn").style.opacity = '1';
-	}
+	document.getElementById("loadingbtn").style.opacity = '1';
 	if (loads >= 1) {
 		launchers = launchers.filter(x => x !== 'XboxGames.js');
 	}
