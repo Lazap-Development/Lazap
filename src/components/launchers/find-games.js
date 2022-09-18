@@ -413,7 +413,6 @@ class Elements {
 	}
 
 	static async createGameElement(game, id, list, prev) {
-		console.log(game.LauncherName);
 		list = document.getElementById(id);
 		const gameElement = Elements.getGameElement(game, id);
 		if (prev && !list.children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
