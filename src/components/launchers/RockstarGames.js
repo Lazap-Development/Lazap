@@ -11,7 +11,7 @@ async function getInstalledGames() {
         if(allGames === "") return [];
         allGames = allGames.split(window.__TAURI__.os.EOL.repeat(2)).map(x => {
             let res = x.split(window.__TAURI__.os.EOL).filter(x => x.length > 1);
-            const name = res[0].split('HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Rockstar Games\\')[1];
+            const name = res[0]?.split('HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Rockstar Games\\')[1];
             const paths = res.filter(x => x.trim().startsWith('Install')).filter(async x => await fs.readDir(x.split('REG_SZ')[1].trim()).catch(() => null));
             if (!paths[0]) return;
             const Install = paths[0].split('REG_SZ')[1].trim();
