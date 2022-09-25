@@ -36,8 +36,8 @@ async function getInstalledGames() {
 
 async function parseGameObject(GameID, registry_res) {
 	registry_res = registry_res.split(window.__TAURI__.os.EOL.repeat(2)).find(x => x.split(window.__TAURI__.os.EOL)[0].endsWith(GameID));
-	const Location = registry_res.split('\r\n').map(x => x.trim()).filter(x => x.startsWith('InstallDir'))[0]?.split('REG_SZ')[1].trim();
-	if (!(await fs.readDir(Location).catch(() => null))) return;
+	const Location = registry_res?.split('\r\n').map(x => x.trim()).filter(x => x.startsWith('InstallDir'))[0]?.split('REG_SZ')[1].trim();
+	if (!Location || !(await fs.readDir(Location).catch(() => null))) return;
 	const Executable = null;
 	let title = Location.split('/').slice(-2)[0].replaceAll('_', ' ');
 	if (title.match(/\d$/ig) && !title.replaceAll('\\d', '').endsWith(' ')) {

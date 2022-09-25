@@ -330,7 +330,8 @@ window.addEventListener('load', async function () {
         DisplayName: document.getElementById("inputGameName").value,
         LauncherName: 'CustomGame',
         GameID: 'CustomGame',
-        Executable: newGameLocation,
+        Executable: newGameLocation.split('\\').slice(-1)[0],
+        Location: newGameLocation.split('\\').slice(0, -1).join('\\'),
         Args: [],
       }
 
@@ -365,7 +366,7 @@ window.addEventListener('load', async function () {
     data = data.filter(a => a.DisplayName != document.getElementById("removeGame").parentNode.parentNode.firstChild.innerHTML)
     await fs.writeTextFile(await path.appDir() + 'storage/cache/games/data.json', JSON.stringify(data));
     document.getElementById(`game-div-${document.getElementById("removeGame").parentNode.parentNode.firstChild.innerHTML.replaceAll(' ', '_')}`).remove()
-    document.getElementById("removeGame").parentNode.parentNode.remove()
+    setTimeout(() => document.getElementById("removeGame").parentNode.parentNode.style = '', 200);
   })
 
   function toggleIndicatorAnim() {

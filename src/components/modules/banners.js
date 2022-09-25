@@ -23,7 +23,7 @@ async function getBanners(games) {
 	if (alreadyProcessed === true) {
 		document.getElementById('game-loading-overlay').style.opacity = '0';
 		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
-		return console.log('%c[BANNER] ' + '%cBanners are already loaded. Skipping.', "color:blue", "color:white");
+		return console.log('%c[BANNER] ' + 'Banners are already loaded. Skipping.', "color:blue");
 	}
 
 	const arr = [];
@@ -98,7 +98,7 @@ async function cacheBanners(data, res) {
 	if (data?.length === 0) {
 		document.getElementById('game-loading-overlay').style.opacity = '0';
 		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
-		return console.log('%c[BANNER] ' + '%cNo games to process', "color:blue", "color:white");
+		return console.log('%c[BANNER] ' + 'No games to process', "color:blue");
 	}
 
 	let fetchProcessed = 0;
@@ -106,7 +106,7 @@ async function cacheBanners(data, res) {
 	if (res.length === 0) {
 		document.getElementById('game-loading-overlay').style.opacity = '0';
 		document.getElementById('game-loading-overlay').style.visibility = 'hidden';
-		return console.log('%c[BANNER] ' + '%cNo banners to load.', "color:blue", "color:white");
+		return console.log('%c[BANNER] ' + 'No banners to load.', "color:blue");
 	}
 
 	res.filter(async (x) => (await x)?.startsWith('http')).forEach(async (x, i) => {
@@ -126,7 +126,7 @@ async function cacheBanners(data, res) {
 		if (fetchProcessed === data.length) {
 			document.getElementById('game-loading-overlay').style.opacity = '0';
 			document.getElementById('game-loading-overlay').style.visibility = 'hidden';
-			return console.log('%c[BANNER] ' + '%cJust finished processing banners.', "color:blue", "color:white");
+			return console.log('%c[BANNER] ' + 'Just finished processing banners.', "color:blue");
 		}
 	});
 }

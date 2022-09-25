@@ -8,11 +8,10 @@ const { sha256 } = require('../modules/sha256.js');
 
 const processes = new Map();
 let loads = 0;
+let __CACHE__ = [];
 
 async function getInstalledGames(launchers = ['CustomGames', 'EpicGames.js', 'Lutris.js', 'Minecraft.js', 'RiotGames.js', 'RockstarGames.js', 'Steam.js', 'Uplay.js']) {
-	if (loads === 1) {
-		document.getElementById("loadingbtn").style.opacity = '1';
-	}
+	document.getElementById("loadingbtn").style.opacity = '1';
 	if (loads >= 1) {
 		launchers = launchers.filter(x => x !== 'XboxGames.js');
 	}
@@ -59,7 +58,7 @@ async function filterAndSort(games, type, list, stored) {
 	}
 
 	if (type === 'allGamesList') {
-		return games.map(x => x.DisplayName).sort().map(x => games[games.findIndex(y => y.DisplayName === x)]);
+		games = games.map(x => x.DisplayName).sort().map(x => games[games.findIndex(y => y.DisplayName === x)]);
 	}
 	else if (['recentGamesListMainPage', 'recentGamesList'].includes(type)) {
 		let final = [];
@@ -77,7 +76,7 @@ async function filterAndSort(games, type, list, stored) {
 				return 0;
 			}
 		});
-		return final.slice(0, type.includes('MainPage') ? 5 - list.children.length : final.length);
+		games = final.slice(0, type.includes('MainPage') ? 5 - list.children.length : final.length);
 	}
 	else if (type === 'favGamesList') {
 		let final = [];
@@ -85,11 +84,13 @@ async function filterAndSort(games, type, list, stored) {
 			const game = stored?.find(x => x.GameID === games[i].GameID && x.LauncherName === games[i].LauncherName) ?? await getGames(games[i].GameID, games[i].LauncherName);
 			if (typeof game?.Favourite === 'boolean' && game.Favourite === true) final.push(game);
 		}
-		return final.map(x => x.DisplayName).sort().map(x => final[final.findIndex(y => y.DisplayName === x)]);
+		games = final.map(x => x.DisplayName).sort().map(x => final[final.findIndex(y => y.DisplayName === x)]);
 	}
 	else {
 		return [];
 	}
+	__CACHE__ = games;
+	return games;
 }
 
 async function loadGames(id, data, stored) {
@@ -139,7 +140,8 @@ async function handleLaunch(game) {
 				break;
 			}
 			default: {
-				res = createProcess_windows(`/C start "${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+				console.log(game.Location, game.Executable);
+				res = createProcess_windows(`/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
 				break;
 			}
 		}
@@ -163,7 +165,7 @@ async function handleLaunch(game) {
 				break;
 			}
 			default: {
-				res = createProcess_linux(`"${game.Location}	/${game.Executable}"`, game.Args, game.GameID);
+				res = createProcess_linux(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
 				break;
 			}
 		}
@@ -413,7 +415,12 @@ class Elements {
 	}
 
 	static async createGameElement(game, id, list, prev) {
-		console.log(game.LauncherName);
+		if (game.LauncherName === 'CustomGame' && !prev) {
+			prev = __CACHE__;
+			prev.push(game);
+			const filtered = (await filterAndSort(prev, 'allGamesList', list)).reverse();
+			prev = filtered[filtered.findIndex(x => Object.keys(game).every(y => game[y] === x[y])) - 1];
+		}
 		list = document.getElementById(id);
 		const gameElement = Elements.getGameElement(game, id);
 		if (prev && !list.children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)) {
