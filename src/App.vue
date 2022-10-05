@@ -83,9 +83,6 @@
           </div>
         </div>
         <div>
-          <div class="hover-box">
-            <bold>*Reload is required</bold>
-          </div>
           <p>Show Launcher Icons*</p>
           <label class="switch">
             <input type="checkbox" id="setting-showLauncherIcons">
@@ -98,6 +95,7 @@
 
       <div class="settings-footer">
         v0.6 (Tauri Release)
+        <bold>*Reload is required</bold>
       </div>
     </div>
   </div>

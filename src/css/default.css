@@ -645,8 +645,8 @@ body {
     width: 40px;
     height: 40px;
     z-index: 4000;
-    bottom: 18rem;
-    left: 5.2rem;
+    bottom: 289px;
+    left: 84px;
     border-radius: 50px/50px;
     mask-image: none;
 }
@@ -674,25 +674,17 @@ body {
     cursor: pointer;
 }
 
-.hover-box {
-    display: flex;
-    height: 30px;
-    width: 80%;
-    position: absolute;
-    background: #1e1f24;
-    top: 27rem;
-}
-
-.hover-box bold {
+.settings-footer bold {
     color: #817f7f;
 }
 
 #setting-accentColor {
-    background: #1e1f24;
-    padding: 0;
-    border-radius: 1rem;
-    width: 60px;
-    height: 33px;
+    background: var(--back);
+    padding: 0px;
+    border-radius: 10px;
+    border-width: 0px;
+    width: 57px;
+    height: 26px;
     cursor: pointer;
 }
 
@@ -1031,11 +1023,14 @@ img,
 
 .settings-footer {
     color: rgba(133, 133, 133, 0.446);
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
     position: absolute;
     bottom: 0;
     left: 0;
-    margin-bottom: 14px;
-    margin-left: 20px;
+    margin-bottom: 17px;
 }
 
 .choser {
@@ -1054,7 +1049,7 @@ img,
     font-size: 18px;
 
     background: #1e1f27;
-    width: 13.78rem;
+    width: 220px;
     height: 50px;
     border: none;
     padding: 0;
@@ -1063,6 +1058,7 @@ img,
 .choser .generalbtn:hover,
 .choser #appearancebtn:hover {
     animation: settingsBtnAnimation .2s forwards;
+    border-radius: 0px;
     cursor: pointer;
 }
 

@@ -49,7 +49,6 @@ async function getMinecraftLauncher() {
 	else if (platform === 'linux') {
 		try {
 			const output = await new shell.Command('which', "minecraft-launcher").execute();
-
 			if (output.stdout) {
 				const homedir = await path.homeDir();
 				try {
