@@ -7,6 +7,7 @@ window.addEventListener('load', async function () {
   const friends = document.getElementById('friends');
   const messages = document.getElementById('messages');
   const activity = document.getElementById('activity');
+  const gameMenu = document.getElementById('gameMenu');
   const settings = document.getElementById('settings-popup');
   const settingsbackblur = document.getElementById('settings-backblur');
   const searchbars = document.querySelectorAll('div.search-bar > input[type="text"]');
@@ -76,6 +77,7 @@ window.addEventListener('load', async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
+    gameMenu.style.display = 'none';
 
     await require('./launchers/find-games').loadGames('recentGamesListMainPage')
       .catch((err) => {
@@ -96,6 +98,7 @@ window.addEventListener('load', async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
+    gameMenu.style.display = 'none';
 
     await require('./launchers/find-games').loadGames('recentGamesList')
       .catch((err) => {
@@ -118,6 +121,7 @@ window.addEventListener('load', async function () {
     friends.style.display = 'none';
     messages.style.display = 'none';
     activity.style.display = 'none';
+    gameMenu.style.display = 'none';
 
     await require('./launchers/find-games').loadGames('allGamesList')
       .catch((err) => {
@@ -140,6 +144,7 @@ window.addEventListener('load', async function () {
     messages.style.display = 'none';
     activity.style.display = 'none';
     friends.style.display = 'none';
+    gameMenu.style.display = 'none';
 
     await require('./launchers/find-games').loadGames('favGamesList')
       .catch((err) => {
@@ -160,6 +165,7 @@ window.addEventListener('load', async function () {
     messages.style.display = 'flex';
     activity.style.display = 'none';
     friends.style.display = 'none';
+    gameMenu.style.display = 'none';
   });
 
   document.getElementById('activity-btn').addEventListener('click', async function () {
@@ -175,6 +181,7 @@ window.addEventListener('load', async function () {
     messages.style.display = 'none';
     activity.style.display = 'flex';
     friends.style.display = 'none';
+    gameMenu.style.display = 'none';
   });
 
   document.getElementById('friends-btn').addEventListener('click', async function () {
@@ -190,6 +197,7 @@ window.addEventListener('load', async function () {
     messages.style.display = 'none';
     activity.style.display = 'none';
     friends.style.display = 'flex';
+    gameMenu.style.display = 'none';
   });
 
   document.getElementById('text').addEventListener('change', async function (change) {
@@ -330,7 +338,8 @@ window.addEventListener('load', async function () {
         DisplayName: document.getElementById("inputGameName").value,
         LauncherName: 'CustomGame',
         GameID: 'CustomGame',
-        Executable: newGameLocation,
+        Executable: newGameLocation.split('\\').slice(-1)[0],
+        Location: newGameLocation.split('\\').slice(0, -1).join('\\'),
         Args: [],
       }
 
@@ -365,7 +374,7 @@ window.addEventListener('load', async function () {
     data = data.filter(a => a.DisplayName != document.getElementById("removeGame").parentNode.parentNode.firstChild.innerHTML)
     await fs.writeTextFile(await path.appDir() + 'storage/cache/games/data.json', JSON.stringify(data));
     document.getElementById(`game-div-${document.getElementById("removeGame").parentNode.parentNode.firstChild.innerHTML.replaceAll(' ', '_')}`).remove()
-    document.getElementById("removeGame").parentNode.parentNode.remove()
+    setTimeout(() => document.getElementById("removeGame").parentNode.parentNode.style = '', 200);
   })
 
   function toggleIndicatorAnim() {

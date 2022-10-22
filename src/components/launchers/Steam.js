@@ -111,7 +111,7 @@ async function parseGameObject(acf_object = {}) {
     };
 }
 
-async function acf_to_json(acf_content = '') {
+function acf_to_json(acf_content = '') {
     if (acf_content.length === 0) return;
     return JSON.parse(acf_content.split('\n').slice(1).map((x, i, arr) => {
         if (x.length === 0) return;
