@@ -27,13 +27,16 @@ const invoke = window.__TAURI__.invoke;
   });
   fs.createDir(appDirPath + "storage/cache/user", { recursive: true }, (err) => {
     if (err) throw err;
-  })
+  });
   fs.createDir(appDirPath + "storage/cache/games", { recursive: true }, (err) => {
+    if (err) throw err;
+  });
+  fs.createDir(appDirPath + "storage/cache/updates", { recursive: true }, (err) => {
     if (err) throw err;
   });
   fs.createDir(appDirPath + "storage/cache/games/banners", { recursive: true }, (err) => {
     if (err) throw err;
-  })
+  });
 
   try {
     JSON.parse(await fs.readTextFile(appDirPath + "storage/LauncherData.json"));
