@@ -56,6 +56,16 @@
             "name": "start",
             "cmd": "start",
             "args": true
+          },
+          {
+            "name": "gnome-terminal",
+            "cmd": "gnome-terminal",
+            "args": true
+          },
+          {
+            "name": "wget",
+            "cmd": "wget",
+            "args": true
           }
         ]
       },
