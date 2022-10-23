@@ -64,7 +64,7 @@
         <div>
           <p>Check for Updates</p>
           <label class="switch">
-            <input type="checkbox" id="setting-checkForUpdates" disabled="readonly">
+            <input type="checkbox" id="setting-checkForUpdates">
             <div>
               <span></span>
             </div>
