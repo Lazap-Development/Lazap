@@ -14,6 +14,7 @@ window.addEventListener('load', async function () {
   const fs = window.__TAURI__.fs;
   const path = window.__TAURI__.path;
   const dialog = window.__TAURI__.dialog;
+  const shell = window.__TAURI__.shell;
 
   try {
     const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/user/UserProfile.json', (err) => {
@@ -31,6 +32,13 @@ window.addEventListener('load', async function () {
     let { accentColor } = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
     if (!accentColor) accentColor = "#7934FA";
     updateAccentColor(accentColor);
+  } catch (error) {
+    console.error(error);
+  }
+
+  try {
+    let { checkForUpdates } = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
+    check(checkForUpdates);
   } catch (error) {
     console.error(error);
   }
@@ -388,5 +396,34 @@ window.addEventListener('load', async function () {
     document.getElementById('indicator').style.backgroundColor = accentColor;
     document.querySelector(":root").style.setProperty("--back", accentColor);
   }
+  async function check(checkForUpdates) {
+    if(!checkForUpdates) return;
+    const filee = await fs.readTextFile("/etc/os-release");
+    const os = filee.split("\n")[3].split("=")[1].split('"')[1];
+    const versione = document.querySelector(".settings-footer").innerHTML.split("(")[0].split("v")[1];
+    const version = versione.replace(/\s/g, '');
+    if(os !== "ubuntu debian") return;
+    const dora = await fetch("https://api.github.com/repos/Lazap-Development/lazap/releases", {
+      Accept: "application/vnd.github+json"
+    }); 
+    const data = await dora.json();
+    const url = data[0].html_url;
+
+    const newVer = url.split("/")[7].split("v")[1];
+    const newestVersion = newVer.replace(/['"]+/g, '');
+    if(version >= newestVersion) return;
+
+    const prompt = await confirm(`Theres a new update available. Do you want to Install it?\nLazap v${newestVersion} (Tauri Edition)`);
+    if(prompt === false) return;
+
+    //const downloadUrl = `https://github.com/Lazap-Development/lazap/releases/download/v${newestVersion}/lazap_${newestVersion}_amd64.deb`;
+    const appDirPath = await path.appDir();
+    const e = await fs.readDir(appDirPath + `storage/cache/updates/`);
+    console.log(e);
+    //const out = await new shell.Command("wget", [downloadUrl, "-O", appDirPath + `storage/cache/updates/lazap_${newestVersion}_amd64.deb`]).execute();
+    const dpkgTime = await new shell.Command("gnome-terminal", ["--", "sudo", "dpkg", "--install", appDirPath + `storage/cache/updates/lazap_${newestVersion}_amd64.deb`]).execute();
+    console.log((dpkgTime?.stderr));
+  }
+
 });
 </script>
