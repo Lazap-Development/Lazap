@@ -1,5 +1,5 @@
 <script>
-window.addEventListener('load', async function () {
+(async () => {
   const home = document.getElementById('home');
   const recent = document.getElementById('recent');
   const games = document.getElementById('games');
@@ -388,5 +388,5 @@ window.addEventListener('load', async function () {
     document.getElementById('indicator').style.backgroundColor = accentColor;
     document.querySelector(":root").style.setProperty("--back", accentColor);
   }
-});
+})()
 </script>
