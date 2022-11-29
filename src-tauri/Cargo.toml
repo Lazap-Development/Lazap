@@ -31,7 +31,7 @@ thiserror = "*"
 whoami = "*"
 
 [target.'cfg(unix)'.dependencies]
-openssl = { version = "0.10.41", features = ["vendored"] }
+openssl = { version = "0.10.43", features = ["vendored"] }
 
 [features]
 # by default Tauri runs in production mode
