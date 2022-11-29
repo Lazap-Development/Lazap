@@ -1,0 +1,16 @@
+version: 2
+updates:
+
+# cargo
+  - package-ecosystem: "cargo"
+    directory: "/src-tauri"
+    target-branch: "nightly"
+    schedule:
+      interval: "weekly"
+
+# npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    target-branch: "nightly"
+    schedule:
+      interval: "weekly"
