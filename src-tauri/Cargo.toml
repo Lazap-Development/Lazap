@@ -23,7 +23,7 @@ git = "https://github.com/tauri-apps/tauri-plugin-fs-extra"
 
 [dependencies]
 serde_json = "1.0.85"
-serde = { version = "1.0.144", features = ["derive"] }
+serde = { version = "1.0.148", features = ["derive"] }
 tauri = { version = "1.1.1", features = ["devtools", "dialog-all", "fs-create-dir", "fs-read-dir", "fs-read-file", "fs-rename-file", "fs-write-file", "global-shortcut-all", "http-request", "os-all", "path-all", "protocol-asset", "shell-execute", "system-tray", "window-center", "window-close", "window-create", "window-hide", "window-maximize", "window-minimize", "window-print", "window-show", "window-start-dragging", "window-unmaximize", "window-unminimize"] }
 window-shadows = "0.2.0"
 html_parser = "0.6.3"
