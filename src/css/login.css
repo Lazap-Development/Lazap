@@ -40,12 +40,12 @@
     }
 }
 
-* {
+.login-interface * {
     box-sizing: border-box;
     overflow: hidden;
 }
 
-.bg {
+.login-interface .bg {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -121,7 +121,7 @@
     background: #22ff00;
 }
 
-h1 {
+.login-interface h1 {
     font-weight: bold;
     margin: 0;
     margin-bottom: 20px;
@@ -130,11 +130,11 @@ h1 {
     -webkit-user-select: none;
 }
 
-h2 {
+.login-interface h2 {
     text-align: center;
 }
 
-p {
+.login-interface p {
     font-size: 16px;
     font-weight: 100;
     line-height: 20px;
@@ -146,11 +146,11 @@ p {
     -webkit-user-select: none;
 }
 
-span {
+.login-interface span {
     font-size: 12px;
 }
 
-a {
+.login-interface a {
     color: #333;
     font-size: 15px;
     text-decoration: none;
@@ -160,7 +160,7 @@ a {
     -webkit-user-select: none;
 }
 
-button {
+.login-interface button {
     margin-top: 15px;
     border-radius: 10px;
     border: none;
@@ -180,17 +180,17 @@ button {
     -webkit-user-select: none;
 }
 
-button:hover {
+.login-interface button:hover {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
-button.ghost {
+.login-interface button.ghost {
     background-color: transparent;
     border-color: #ffffff;
     font-size: 14px;
 }
 
-button.ghost2 {
+.login-interface button.ghost2 {
     margin-top: 20px;
     font-size: 18px;
     color: black;
@@ -199,19 +199,19 @@ button.ghost2 {
     border-color: #ffffff;
 }
 
-button.ignore {
+.login-interface button.ignore {
     margin-top: -15px;
     background-color: rgb(45, 119, 255);
     border-radius: 25px 25px 0px 0px;
 }
 
-button.ignore:hover {
+.login-interface button.ignore:hover {
     background-color: rgb(21, 103, 255);
     border-radius: 10px 10px 0px 0px;
 
 }
 
-button.ignore {
+.login-interface button.ignore {
     margin-top: -2px;
 }
 
@@ -226,7 +226,7 @@ button.ignore {
     text-align: center;
 }
 
-input {
+.login-interface input {
     border-radius: 10px;
     background-color: rgb(218, 218, 218);
     border: none;
@@ -238,11 +238,11 @@ input {
     -webkit-user-select: none;
 }
 
-input:focus {
+.login-interface input:focus {
     outline: none;
 }
 
-.container {
+.login-interface .container {
     margin-bottom: 20px;
     -moz-border-radius: 20px;
     -webkit-border-radius: 20px;
@@ -375,7 +375,7 @@ input:focus {
     margin-left: 0.25rem !important;
 }
 
-.fadeInUp {
+.login-interface .fadeInUp {
     animation-duration: 0.7s;
     animation-delay: 0.1s;
     animation-fill-mode: both;
@@ -384,7 +384,7 @@ input:focus {
     animation-name: fadeInUp;
 }
 
-.fadeInDown {
+.login-interface .fadeInDown {
     animation-duration: 0.7s;
     animation-delay: 0.1s;
     animation-fill-mode: both;

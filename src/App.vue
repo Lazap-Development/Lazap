@@ -21,7 +21,7 @@ export default {
 		console.info(`OS: ${await os.platform()} | Arch: ${await os.arch()}`);
 
 		if (!this.currentComponent) {
-			this.changeComponent('Login');
+			this.changeComponent('Main');
 		}
 	},
 	methods: {

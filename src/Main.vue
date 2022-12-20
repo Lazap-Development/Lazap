@@ -7,7 +7,7 @@
       </h1>
       <div class="choser" id="choser">
         <button class="generalbtn" id="generalbtn">General</button>
-        <button id="appearancebtn">Appearance</button>
+        <button id="appearancebtn" class="appearancebtn">Appearance</button>
       </div>
       <div class="general-settings" id="general-settings">
         <div>
@@ -71,7 +71,7 @@
         </div>
       </div>
       <div class="appearance-settings" id="appearance-settings">
-        <div id="a">
+        <div class="subSetting">
           <p>Accent Color</p>
           <div class="btnInput">
             <label class="color">
@@ -350,5 +350,5 @@ export default {
 
 
 <style scoped>
-@import './css/default.css';
+@import './css/main.css';
 </style>
