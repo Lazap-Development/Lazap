@@ -14,7 +14,7 @@
 <p align="center">
   <a href="https://github.com/Lazap-Development/lazap/releases">
      <img src="https://img.shields.io/github/downloads/Lazap-Development/lazap/total.svg?style=for-the-badge&color=ffffff&logo=windows" />
-  </a>⠀
+  </a>
   <a href="https://dashcruft.com/discord">
       <img src="https://img.shields.io/discord/836790685784211486?logo=discord&label=Discord&style=for-the-badge&color=228B22">
   </a>
@@ -38,9 +38,9 @@ Depending on your operating system, we provide as much ease in terms of installa
 ## 👾 Development
 
 **REQUIREMENTS**<br> 
-- node `v16` or higher (`v18` is tested on our end)<br>
-- Prerequisites in **[here](https://tauri.app/v1/guides/getting-started/prerequisites/)**
-- yarn (`npm install --global yarn`)
+- Tauri **[Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites/)**
+- Node.JS `v17` or higher<br>
+- **[Yarn](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)** (recommended but not required)
 
 Once you have met the requirements, do the following:
 ```
