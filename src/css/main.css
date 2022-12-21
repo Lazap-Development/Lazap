@@ -630,6 +630,7 @@ body {
     image-rendering: auto;
     object-fit: cover;
     mask-image: -webkit-gradient(linear, left 70%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
+    content: url('../assets/img/default-game-banner.png');
 }
 
 .gamebox .gamebox-bottom {

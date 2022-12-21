@@ -334,17 +334,28 @@ class Elements {
 		const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH).catch(() => []);
 		const img = dirs.find(x => x.name === `${sha256(game.DisplayName.replaceAll(' ', '_'))}.png`);
 		if (img) {
-			banner = img ? tauri.convertFileSrc(appDirPath + `storage/cache/games/banners/${JSON.stringify(img.name).slice(1, -1)}`) : 'https://i.ibb.co/dK15dV3/e.jpg';
+			banner = img ? tauri.convertFileSrc(appDirPath + `storage/cache/games/banners/${JSON.stringify(img.name).slice(1, -1)}`) : false;
 		}
 		else if (game.Banner) {
 			banner = game.Banner;
 		}
 		else {
-			banner = 'https://i.ibb.co/dK15dV3/e.jpg';
+			banner = false;
+		}
+		if (banner === false) {
+			gameBanner.classList.add('default-box');
 		}
 
+		gameBanner.addEventListener('error', () => {
+			gameBanner.setAttribute('src', '');
+			gameBanner.style.content = '';
+			gameBanner.classList.add('default-box');
+		});
 
-		gameBanner.setAttribute('src', banner);
+		if (banner !== false) {
+			gameBanner.setAttribute('src', banner);
+			gameBanner.style.content = 'none';
+		}
 		gameBanner.height = 500;
 		gameBanner.width = 500;
 		game.Banner = banner;
