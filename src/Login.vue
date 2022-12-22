@@ -63,8 +63,8 @@
 						<div class="overlay-panel overlay-right">
 							<h1 class="mt-4">Welcome Back!</h1>
 							<p>
-								We believe and respect complete privacy. We do
-								not sell your data! It is completely your choice
+								We believe in and respect privacy. We do
+								not sell or miss-use any of gathered data. Moreover, It is completely your choice
 								to sign up or login. <br /><br />
 								If you do not login or sign up, You will not
 								have access to some integerated features in this

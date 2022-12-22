@@ -17,12 +17,15 @@
   const invoke = window.__TAURI__.invoke;
 
   let sysInfoInvoke = JSON.parse("{" + (await invoke("get_sys_info")).replaceAll(`'`, `"`) + "}")
+  if (sysInfoInvoke.cpu.length > 22) {
+    sysInfoInvoke.cpu = sysInfoInvoke.cpu.slice(0, 22) + "..."
+  }
   document.getElementById("sysInfo").innerHTML = `
-  <div> Host: ${sysInfoInvoke.system_host}</div>
-  <div> OS: ${sysInfoInvoke.system_name}</div>
-  <div> Kernel: ${sysInfoInvoke.system_kernel}</div>
-  <div> RAM: ${sysInfoInvoke.memory}</div>
-  <div> CPU: ${sysInfoInvoke.cpu}</div>`
+  <div> <span style="margin-right: 4px;color:#A3BE8C;">  </span> ${sysInfoInvoke.system_host}</div>
+  <div> <span style="margin-right: 4px;color:#EBCB8B;">  </span>  ${sysInfoInvoke.system_name}</div>
+  <div> <span style="margin-right: 4px;color:#EBCB8B;">  </span> ${sysInfoInvoke.system_kernel}</div>
+  <div> <span style="margin-right: 4px;color:#5E81AC;">  </span> ${sysInfoInvoke.memory}</div>
+  <div> <span style="margin-right: 4px;color:#5E81AC;">  </span> ${sysInfoInvoke.cpu}</div>`
 
   try {
     const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/user/UserProfile.json', (err) => {

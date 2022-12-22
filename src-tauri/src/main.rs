@@ -202,7 +202,6 @@ async fn get_sys_info() -> Result<String, Error> {
     let converted_all_mem = data_all_mem / rate;
 
     let mut cpu_info = "";
-
     for cpu in sys.cpus() {
        cpu_info = cpu.brand();
     }
@@ -220,7 +219,7 @@ async fn get_sys_info() -> Result<String, Error> {
             + " / "
             + &converted_all_mem.to_string()
             + " MiB",
-        cpu: String::from(cpu_info)[0..24].to_string(),
+        cpu: cpu_info.to_string(),
         system_name: sys.name().unwrap().to_string(),
         system_kernel: sys.kernel_version().unwrap().to_string(),
         system_host: sys.host_name().unwrap().to_string(),
@@ -232,7 +231,7 @@ async fn get_sys_info() -> Result<String, Error> {
         sys_data.cpu,
         sys_data.system_name,
         sys_data.system_kernel,
-        sys_data.system_host
+        sys_data.system_host,
     ))
 }
 
