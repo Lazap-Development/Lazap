@@ -189,50 +189,51 @@ async fn launch_game(exec: String, args: String) {
 }
 
 #[tauri::command]
-async fn get_sys_info(
-    is_memory: bool,
-    is_cpu: bool,
-    is_systemname: bool,
-    is_systemkernel: bool,
-    is_systemhost: bool,
-) -> Result<String, Error> {
+async fn get_sys_info() -> Result<String, Error> {
     let mut sys = System::new_all();
     sys.refresh_all();
 
-    if is_memory == true {
-        // Rate = 1048576 Byte is 1MiB
-        let rate: i64 = 1048576;
+    // Rate = 1048576 Byte is 1MiB
+    let rate: i64 = 1048576;
 
-        let data_used_mem: i64 = sys.used_memory().try_into().unwrap();
-        let data_all_mem: i64 = sys.total_memory().try_into().unwrap();
-        let converted_used_mem = data_used_mem / rate;
-        let converted_all_mem = data_all_mem / rate;
-        return Ok(converted_used_mem.to_string()
+    let data_used_mem: i64 = sys.used_memory().try_into().unwrap();
+    let data_all_mem: i64 = sys.total_memory().try_into().unwrap();
+    let converted_used_mem = data_used_mem / rate;
+    let converted_all_mem = data_all_mem / rate;
+
+    let mut cpu_info = "";
+
+    for cpu in sys.cpus() {
+       cpu_info = cpu.brand();
+    }
+
+    struct SysStruct {
+        memory: String,
+        cpu: String,
+        system_name: String,
+        system_kernel: String,
+        system_host: String,
+    }
+    let sys_data = SysStruct {
+        memory: converted_used_mem.to_string()
             + " MiB"
             + " / "
             + &converted_all_mem.to_string()
-            + " MiB");
-    }
+            + " MiB",
+        cpu: String::from(cpu_info)[0..24].to_string(),
+        system_name: sys.name().unwrap().to_string(),
+        system_kernel: sys.kernel_version().unwrap().to_string(),
+        system_host: sys.host_name().unwrap().to_string(),
+    };
 
-    if is_cpu == true {
-        for cpu in sys.cpus() {
-            return Ok(cpu.brand().to_string());
-        }
-    }
-
-    if is_systemname == true {
-        return Ok(sys.name().unwrap().to_string());
-    }
-
-    if is_systemkernel == true {
-        return Ok(sys.kernel_version().unwrap().to_string());
-    }
-
-    if is_systemhost == true {
-        return Ok(sys.host_name().unwrap().to_string());
-    }
-
-    Ok("".to_string())
+    Ok(format!(
+        "'memory': '{}', 'cpu': '{}', 'system_name': '{}', 'system_kernel': '{}', 'system_host': '{}'",
+        sys_data.memory,
+        sys_data.cpu,
+        sys_data.system_name,
+        sys_data.system_kernel,
+        sys_data.system_host
+    ))
 }
 
 #[derive(Debug, thiserror::Error)]

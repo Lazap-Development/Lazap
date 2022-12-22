@@ -16,13 +16,14 @@
   const dialog = window.__TAURI__.dialog;
   const invoke = window.__TAURI__.invoke;
 
+  let sysInfoInvoke = JSON.parse("{" + (await invoke("get_sys_info")).replaceAll(`'`, `"`) + "}")
   document.getElementById("sysInfo").innerHTML = `
-  <div> Host: ${(await invoke("get_sys_info", { isMemory: false, isCpu: false, isSystemname: false, isSystemkernel: false, isSystemhost: true }))}</div>
-  <div> OS: ${(await invoke("get_sys_info", { isMemory: false, isCpu: false, isSystemname: true, isSystemkernel: false, isSystemhost: false }))}</div>
-  <div> Kernel: ${(await invoke("get_sys_info", { isMemory: false, isCpu: false, isSystemname: false, isSystemkernel: true, isSystemhost: false }))}</div>
-  <div> RAM: ${(await invoke("get_sys_info", { isMemory: true, isCpu: false, isSystemname: false, isSystemkernel: false, isSystemhost: false }))}</div>
-  <div> CPU: ${(await invoke("get_sys_info", { isMemory: false, isCpu: true, isSystemname: false, isSystemkernel: false, isSystemhost: false })).slice(0, 25)}</div>`
-  
+  <div> Host: ${sysInfoInvoke.system_host}</div>
+  <div> OS: ${sysInfoInvoke.system_name}</div>
+  <div> Kernel: ${sysInfoInvoke.system_kernel}</div>
+  <div> RAM: ${sysInfoInvoke.memory}</div>
+  <div> CPU: ${sysInfoInvoke.cpu}</div>`
+
   try {
     const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/user/UserProfile.json', (err) => {
       if (err) throw err;
