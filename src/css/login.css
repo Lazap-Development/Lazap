@@ -1,11 +1,11 @@
-::selection {
-    color: black;
-    background: skyblue;
+@font-face {
+    font-family: Nunito;
+    src: url('../assets/fonts/Nunito-Medium.ttf') format('truetype');
 }
 
 @font-face {
-    font-family: Comfortaa;
-    src: url('../assets/fonts/Nunito-Medium.ttf') format('truetype');
+    font-family: Nunito-Bold;
+    src: url('../assets/fonts/Nunito-SemiBold.ttf') format('truetype');
 }
 
 @keyframes fadeInUp {
@@ -50,7 +50,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    font-family: Comfortaa;
+    font-family: Nunito;
     height: 100vh;
     margin: -20px 0 50px;
 }
@@ -122,7 +122,7 @@
 }
 
 .login-interface h1 {
-    font-weight: bold;
+    font-family: Nunito-Bold;
     margin: 0;
     margin-bottom: 20px;
     margin-top: 10px;
@@ -173,8 +173,8 @@
     text-transform: uppercase;
     transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
     cursor: pointer;
-    font-weight: bolder;
-    font-family: Comfortaa;
+    font-family: Nunito-Bold;
+    font-family: Nunito;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     user-select: none;
     -webkit-user-select: none;
@@ -194,7 +194,7 @@
     margin-top: 20px;
     font-size: 18px;
     color: black;
-    font-weight: bolder;
+    font-family: Nunito-Bold;
     background-color: transparent;
     border-color: #ffffff;
 }
@@ -233,7 +233,7 @@
     padding: 12px 15px;
     margin: 8px 0;
     width: 100%;
-    font-family: Comfortaa;
+    font-family: Nunito;
     user-select: none;
     -webkit-user-select: none;
 }
@@ -376,8 +376,7 @@
 }
 
 .login-interface .fadeInUp {
-    animation-duration: 0.7s;
-    animation-delay: 0.1s;
+    animation-duration: 0.4s;
     animation-fill-mode: both;
     backface-visibility: hidden;
     opacity: 0;
@@ -385,8 +384,7 @@
 }
 
 .login-interface .fadeInDown {
-    animation-duration: 0.7s;
-    animation-delay: 0.1s;
+    animation-duration: 0.4s;
     animation-fill-mode: both;
     backface-visibility: hidden;
     opacity: 0;
@@ -461,7 +459,7 @@
     margin-block-end: 0px;
     color: rgb(197, 197, 197);
     font-size: 20px;
-    font-family: Comfortaa;
+    font-family: Nunito;
 }
 
 .alert-box-exclamation {
@@ -506,11 +504,16 @@
     margin-left: 0px;
     margin-right: 0px;
     text-align: center;
-    font-family: Comfortaa;
+    font-family: Nunito;
     overflow-y: auto; /* TODO - Make the scroll speed slower */
     user-select: text;
     -webkit-user-select: text;
 }
 .alert-box-message::-webkit-scrollbar {
     display: none;
+}
+
+::selection {
+    color: black;
+    background: skyblue;
 }

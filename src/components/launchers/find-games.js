@@ -216,7 +216,7 @@ async function createProcess_windows(Command, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
 	VisibilityState();
 
-	const instance = invoke('run_game_windows', { exec: Command })
+	const instance = invoke('launch_game', { exec: Command, args: "" })
 		.then(() => {
 			VisibilityState();
 			processes.delete(GameID);
@@ -229,7 +229,7 @@ async function createProcess_linux(Command, Args, GameID, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
 	VisibilityState();
 
-	const instance = invoke('run_game_linux', { exec: Command, args: Args })
+	const instance = invoke('launch_game', { exec: Command, args: Args })
 		.then(() => {
 			VisibilityState();
 			processes.delete(GameID);

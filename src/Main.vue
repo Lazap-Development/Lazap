@@ -6,8 +6,9 @@
         Settings
       </h1>
       <div class="choser" id="choser">
-        <button class="generalbtn" id="generalbtn">General</button>
-        <button id="appearancebtn" class="appearancebtn">Appearance</button>
+        <button id="generalbtn">General</button>
+        <button id="appearancebtn">Appearance</button>
+        <button id="winerunnersbtn">Wine Runners</button>
       </div>
       <div class="general-settings" id="general-settings">
         <div>
@@ -124,9 +125,9 @@
         </div>
       </div>
       <div class="children fadeInLeft">
-        <div class="online-friends">
-          <p>Online Friends</p>
-          <div class="CMS">Coming Soon...</div>
+        <div class="rightbar">
+          <p>System Specification</p>
+          <div id="sysInfo" class="sysInfo"></div>
         </div>
       </div>
     </div>
