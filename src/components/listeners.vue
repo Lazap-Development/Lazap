@@ -15,6 +15,30 @@
   const path = window.__TAURI__.path;
   const dialog = window.__TAURI__.dialog;
   const invoke = window.__TAURI__.invoke;
+  const updater = window.__TAURI__.updater;
+  const { listen } = window.__TAURI__.event;
+
+  listen('tauri://update-available', async () => {
+    try {
+      const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json', () => {
+        return;
+      }));
+      if (data.checkForUpdates === true) {
+        document.getElementById('update-btn').style = 'display: block;';
+      }
+    }
+    catch (e) {
+      // console.log(e);
+    }
+  });
+  document.getElementById('update-btn').addEventListener('click', () => {
+    updater.checkUpdate().then((res) => {
+      if (res.shouldUpdate) {
+        console.log(`Installing version: ${res.manifest?.version}`);
+        updater.installUpdate();
+      }
+    }).catch(() => '');
+  });
 
   let sysInfoInvoke = JSON.parse("{" + (await invoke("get_sys_info")).replaceAll(`'`, `"`) + "}")
   if (sysInfoInvoke.cpu.length > 22) {

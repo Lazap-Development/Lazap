@@ -123,7 +123,15 @@
       "csp": null
     },
     "updater": {
-      "active": false
+      "active": true,
+      "dialog": false,
+      "endpoints": [
+        "https://github.com/Lazap-Development/lazap/release_data.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEFEM0M2MUQ5RjA2RkZCQUIKUldTcisyL3cyV0U4cllSSGMxK1BZbitmNDFOeThqRGRwQTNwQXUrUkloVWUwWWtFUUozclhzUU8K",
+      "windows": {
+        "installMode": "passive"
+      }
     },
     "windows": [
       {
