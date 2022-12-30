@@ -6,7 +6,7 @@ const rpcOptions = {
         "details": "On main screen",
         "largeImage": "lazap_icon",
         "largeText": "Lazap",
-        "smallImage": "controller_icon",
+        "smallImage": "mushroom",
         "smallText": "Lazap",
         "id": "home"
     },
@@ -15,7 +15,7 @@ const rpcOptions = {
         "details": "Watching recent games",
         "largeImage": "lazap_icon",
         "largeText": "Lazap",
-        "smallImage": "controller_icon",
+        "smallImage": "mushroom",
         "smallText": "Lazap",
         "id": "recent"
     },
@@ -24,7 +24,7 @@ const rpcOptions = {
         "details": "Picking games",
         "largeImage": "lazap_icon",
         "largeText": "Lazap",
-        "smallImage": "controller_icon",
+        "smallImage": "mushroom",
         "smallText": "Lazap",
         "id": "games"
     },
@@ -33,7 +33,7 @@ const rpcOptions = {
         "details": "Watching favourite games",
         "largeImage": "lazap_icon",
         "largeText": "Lazap",
-        "smallImage": "controller_icon",
+        "smallImage": "mushroom",
         "smallText": "Lazap",
         "id": "favourites"
     },
@@ -42,7 +42,7 @@ const rpcOptions = {
         "details": "Watching messages",
         "largeImage": "lazap_icon",
         "largeText": "Lazap",
-        "smallImage": "controller_icon",
+        "smallImage": "mushroom",
         "smallText": "Lazap",
         "id": "messages"
     },
@@ -51,7 +51,7 @@ const rpcOptions = {
         "details": "Are activities even a thing?",
         "largeImage": "lazap_icon",
         "largeText": "Lazap",
-        "smallImage": "controller_icon",
+        "smallImage": "mushroom",
         "smallText": "Lazap",
         "id": "activity"
     },
@@ -60,7 +60,7 @@ const rpcOptions = {
         "details": "Scrolling through friends list",
         "largeImage": "lazap_icon",
         "largeText": "Lazap",
-        "smallImage": "controller_icon",
+        "smallImage": "mushroom",
         "smallText": "Lazap",
         "id": "friends"
     }

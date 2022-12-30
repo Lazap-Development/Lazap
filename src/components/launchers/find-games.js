@@ -150,7 +150,7 @@ async function handleLaunch(game) {
 	else if (await os.platform() === 'linux') {
 		switch (game.LauncherName) {
 			case 'Steam': {
-				res = createProcess_linux('steam', `steam://rungameid/${game} -silent`, game);
+				res = createProcess_linux('steam', `steam://rungameid/${game.GameID} -silent`, game);
 				break;
 			}
 			case 'Minecraft': {
@@ -249,9 +249,9 @@ async function VisibilityState({ LauncherName, DisplayName }) {
 					await invoke(`set_activity`, {
 						state: `Launcher: ${LauncherName}`,
 						details: DisplayName,
-						largeImage: "lazap_icon",
+						largeImage: LauncherName.toLowerCase(),
 						largeText: "Lazap",
-						smallImage: "controller_icon",
+						smallImage: "lazap_icon",
 						smallText: "Lazap"
 					})
 				} catch (error) {
