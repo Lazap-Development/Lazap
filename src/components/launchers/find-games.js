@@ -1,3 +1,4 @@
+import { currentRpc, selOption } from '../modules/rpcOptions.js';
 const os = window.__TAURI__.os;
 const fs = window.__TAURI__.fs;
 const invoke = window.__TAURI__.invoke;
@@ -120,28 +121,28 @@ async function handleLaunch(game) {
 	if (await os.platform() === 'win32') {
 		switch (game.LauncherName) {
 			case 'EpicGames': {
-				res = createProcess_windows(`/C start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, game.GameID);
+				res = createProcess_windows(`/C start com.epicgames.launcher://apps/${encodeURIComponent(game.LaunchID)}?action=launch&silent=true`, game);
 				break;
 			}
 			case 'Steam': {
-				res = createProcess_windows(`/C start steam://rungameid/${game.GameID}`, game.GameID);
+				res = createProcess_windows(`/C start steam://rungameid/${game.GameID}`, game);
 				break;
 			}
 			case 'Uplay': {
-				res = createProcess_windows(`/C start uplay://launch/${game.GameID}/0`, game.GameID);
+				res = createProcess_windows(`/C start uplay://launch/${game.GameID}/0`, game);
 				break;
 			}
 			case 'Minecraft': {
-				res = createProcess_windows(`/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
+				res = createProcess_windows(`/C powershell start "${game.Location}\\${game.Executable}"`, game);
 				break;
 			}
 			case 'Lunar': {
-				res = createProcess_windows(`/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
+				res = createProcess_windows(`/C powershell start "${game.Location}\\${game.Executable}"`, game);
 				break;
 			}
 			default: {
 				console.log(game.Location, game.Executable);
-				res = createProcess_windows(`/C powershell start "${game.Location}\\${game.Executable}"`, game.GameID);
+				res = createProcess_windows(`/C powershell start "${game.Location}\\${game.Executable}"`, game);
 				break;
 			}
 		}
@@ -149,23 +150,23 @@ async function handleLaunch(game) {
 	else if (await os.platform() === 'linux') {
 		switch (game.LauncherName) {
 			case 'Steam': {
-				res = createProcess_linux('steam', `steam://rungameid/${game.GameID} -silent`, game.GameID);
+				res = createProcess_linux('steam', `steam://rungameid/${game} -silent`, game);
 				break;
 			}
 			case 'Minecraft': {
-				res = createProcess_linux('minecraft-launcher', '', game.GameID);
+				res = createProcess_linux('minecraft-launcher', '', game);
 				break;
 			}
 			case 'Lunar': {
-				res = createProcess_linux('lunarclient', '', game.gameID);
+				res = createProcess_linux('lunarclient', '', game);
 				break;
 			}
 			case 'Lutris': {
-				res = createProcess_linux('lutris', `lutris:rungameid/${game.LaunchID}`, game.gameID);
+				res = createProcess_linux('lutris', `lutris:rungameid/${game.LaunchID}`, game);
 				break;
 			}
 			default: {
-				res = createProcess_linux(`"${game.Location}/${game.Executable}"`, game.Args, game.GameID);
+				res = createProcess_linux(`"${game.Location}/${game.Executable}"`, game.Args, game);
 				break;
 			}
 		}
@@ -212,39 +213,62 @@ async function addLaunch(GameID, LauncherName) {
 		}
 	}
 }
-async function createProcess_windows(Command, GameID, force = false) {
+async function createProcess_windows(Command, { GameID, DisplayName, LauncherName }, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
-	VisibilityState();
+	VisibilityState({LauncherName, DisplayName});
 
 	const instance = invoke('launch_game', { exec: Command, args: "" })
 		.then(() => {
-			VisibilityState();
+			VisibilityState({LauncherName, DisplayName});
 			processes.delete(GameID);
 		});
 	processes.set(GameID, instance);
 
 	return instance;
 }
-async function createProcess_linux(Command, Args, GameID, force = false) {
+async function createProcess_linux(Command, Args, { GameID, LauncherName, DisplayName }, force = false) {
 	if (processes.get(GameID) && !force) return 'RUNNING_ALREADY';
-	VisibilityState();
+	VisibilityState({LauncherName, DisplayName});
 
 	const instance = invoke('launch_game', { exec: Command, args: Args })
 		.then(() => {
-			VisibilityState();
+			VisibilityState({LauncherName, DisplayName});
 			processes.delete(GameID);
 		});
 	processes.set(GameID, instance);
 
 	return instance;
 }
-async function VisibilityState() {
-
+async function VisibilityState({ LauncherName, DisplayName }) {
 	try {
 		const LauncherData = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
 		if (LauncherData.trayMinLaunch === true) {
-			if (await Window.appWindow.isVisible() === true) Window.appWindow.hide()
-			else Window.appWindow.show()
+			if (await Window.appWindow.isVisible() === true) {
+				Window.appWindow.hide();
+				try {
+					await invoke(`set_activity`, {
+						state: `Launcher: ${LauncherName}`,
+						details: DisplayName,
+						largeImage: "lazap_icon",
+						largeText: "Lazap",
+						smallImage: "controller_icon",
+						smallText: "Lazap"
+					})
+				} catch (error) {
+					console.error(error);
+				}
+			} else {
+				Window.appWindow.show();
+				
+				const { state, details, largeImage, largeText, smallImage, smallText } = selOption(currentRpc);
+				try {
+					await invoke(`set_activity`, {
+						state, details, largeImage, largeText, smallImage, smallText
+					})
+				} catch (error) {
+					console.error(error);
+				}
+			}
 		}
 	} catch (e) {
 		return console.error(e);

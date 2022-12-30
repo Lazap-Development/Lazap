@@ -2,8 +2,43 @@
 
 use html_parser::Dom;
 use sysinfo::{CpuExt, System, SystemExt};
-use tauri::Manager;
+use tauri::{Manager, State};
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
+use declarative_discord_rich_presence::DeclarativeDiscordIpcClient;
+use declarative_discord_rich_presence::activity::Activity;
+use declarative_discord_rich_presence::activity::Assets;
+
+#[tauri::command]
+fn set_activity(client: State<'_, DeclarativeDiscordIpcClient>, 
+    state : &str, 
+    details : &str,
+    largeImage : &str,
+    largeText : &str,
+    smallImage : &str,
+    smallText : &str
+) {
+    if let Err(why) =
+    client.set_activity(Activity::new()
+        .state(state)
+        .details(details)
+        .assets(Assets::new()
+            .large_image(largeImage)
+            .large_text(largeText)
+            .small_image(smallImage)
+            .small_text(smallText)
+        )) {
+            println!("failed to set presence: {}", why)
+        }
+}
+
+#[tauri::command]
+fn disable_rpc(client: State<'_, DeclarativeDiscordIpcClient>, enable : bool) {
+    if enable {
+        client.enable();
+    } else {
+        client.disable();
+    }
+}
 
 #[cfg(target_os = "windows")]
 fn main() {
@@ -15,6 +50,11 @@ fn main() {
         .add_item(quit);
     let tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
+        .setup(|app| {
+            let client = DeclarativeDiscordIpcClient::new("1058022807373627462");
+            app.manage(client);
+            Ok(())
+        })
         .system_tray(tray)
         .plugin(tauri_plugin_fs_extra::FsExtra::default())
         .on_system_tray_event(|app, event| match event {
@@ -46,7 +86,9 @@ fn main() {
             launch_game,
             parse,
             sysusername,
-            get_sys_info
+            get_sys_info,
+            set_activity,
+            disable_rpc
         ])
         .setup(|app| {
             let window = app.get_window(&"main").unwrap();
@@ -67,6 +109,11 @@ fn main() {
         .add_item(quit);
     let tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
+        .setup(|app| {
+            let client = DeclarativeDiscordIpcClient::new("1058022807373627462");
+            app.manage(client);
+            Ok(())
+        })
         .plugin(tauri_plugin_sql::TauriSql::default())
         .plugin(tauri_plugin_fs_extra::FsExtra::default())
         .system_tray(tray)
@@ -99,7 +146,9 @@ fn main() {
             launch_game,
             parse,
             sysusername,
-            get_sys_info
+            get_sys_info,
+            set_activity,
+            disable_rpc
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -115,6 +164,11 @@ fn main() {
         .add_item(quit);
     let tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
+        .setup(|app| {
+            let client = DeclarativeDiscordIpcClient::new("1058022807373627462");
+            app.manage(client);
+            Ok(())
+        })
         .system_tray(tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {
@@ -145,7 +199,9 @@ fn main() {
             launch_game,
             parse,
             sysusername,
-            get_sys_info
+            get_sys_info,
+            set_activity,
+            disable_rpc
         ])
         .setup(|app| {
             let window = app.get_window(&"main").unwrap();

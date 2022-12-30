@@ -1349,6 +1349,26 @@ particle {
     background-size: contain;
 }
 
+.titlebar-rpc {
+    display: block;
+    height: 18px;
+    width: 18px;
+    margin-left: 14px;
+    align-items: flex-start;
+    filter: invert(50%);
+}
+
+.titlebar-rpc:hover {
+    cursor: pointer;
+}
+
+#rpc {
+    display: flex;
+    color: darkgray;
+    justify-content: center;
+    align-items: center;
+    margin-left: 14px;
+}
 
 @keyframes fadeOutUp {
     from {

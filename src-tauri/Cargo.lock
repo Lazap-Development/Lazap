@@ -534,6 +534,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "declarative-discord-rich-presence"
+version = "0.1.0"
+source = "git+https://github.com/KPidS/declarative-discord-rich-presence#bbe5f1193c595f195e8b61c055a552bf65d70eef"
+dependencies = [
+ "discord-rich-presence",
+]
+
+[[package]]
 name = "derive_more"
 version = "0.99.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -575,6 +583,17 @@ dependencies = [
  "libc",
  "redox_users",
  "winapi",
+]
+
+[[package]]
+name = "discord-rich-presence"
+version = "0.2.3"
+source = "git+https://github.com/KPidS/declarative-discord-rich-presence#bbe5f1193c595f195e8b61c055a552bf65d70eef"
+dependencies = [
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "uuid 0.8.2",
 ]
 
 [[package]]
@@ -1397,6 +1416,7 @@ dependencies = [
 name = "lazap"
 version = "0.6.1"
 dependencies = [
+ "declarative-discord-rich-presence",
  "html_parser",
  "openssl",
  "serde",
@@ -3602,6 +3622,9 @@ name = "uuid"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bc5cf98d8186244414c848017f0e2676b3fcb46807f6668a97dfe67359a3c4b7"
+dependencies = [
+ "getrandom 0.2.8",
+]
 
 [[package]]
 name = "uuid"
