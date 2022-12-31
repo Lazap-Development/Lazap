@@ -7,6 +7,7 @@ use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemT
 use declarative_discord_rich_presence::DeclarativeDiscordIpcClient;
 use declarative_discord_rich_presence::activity::Activity;
 use declarative_discord_rich_presence::activity::Assets;
+use declarative_discord_rich_presence::activity::Timestamps;
 const DISCORD_RPC_CLIENT_ID:&str = "1058022807373627462";
 
 #[tauri::command]
@@ -16,7 +17,8 @@ fn set_activity(client: State<'_, DeclarativeDiscordIpcClient>,
     large_image : &str,
     large_text : &str,
     small_image : &str,
-    small_text : &str
+    small_text : &str,
+    timestamp : i64
 ) {
     if let Err(why) =
     client.set_activity(Activity::new()
@@ -27,6 +29,9 @@ fn set_activity(client: State<'_, DeclarativeDiscordIpcClient>,
             .large_text(large_text)
             .small_image(small_image)
             .small_text(small_text)
+        )
+        .timestamps(Timestamps::new()
+            .start(timestamp)
         )) {
             println!("failed to set presence: {}", why)
         }

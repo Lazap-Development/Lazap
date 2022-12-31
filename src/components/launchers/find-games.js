@@ -6,6 +6,7 @@ const path = window.__TAURI__.path;
 const Window = window.__TAURI__.window
 const tauri = window.__TAURI__.tauri;
 const { sha256 } = require('../modules/sha256.js');
+let timestamp = null;
 
 const processes = new Map();
 let loads = 0;
@@ -245,6 +246,8 @@ async function VisibilityState({ LauncherName, DisplayName }) {
 		if (LauncherData.trayMinLaunch === true) {
 			if (await Window.appWindow.isVisible() === true) {
 				Window.appWindow.hide();
+				if(timestamp === null) timestamp = Date.now();
+
 				try {
 					await invoke(`set_activity`, {
 						state: `Launcher: ${LauncherName}`,
@@ -252,18 +255,20 @@ async function VisibilityState({ LauncherName, DisplayName }) {
 						largeImage: LauncherName.toLowerCase(),
 						largeText: "Lazap",
 						smallImage: "lazap_icon",
-						smallText: "Lazap"
+						smallText: "Lazap",
+						timestamp: timestamp === null ? Date.now() : timestamp
 					})
 				} catch (error) {
 					console.error(error);
 				}
 			} else {
 				Window.appWindow.show();
+				timestamp = Date.now();
 				
 				const { state, details, largeImage, largeText, smallImage, smallText } = selOption(currentRpc);
 				try {
 					await invoke(`set_activity`, {
-						state, details, largeImage, largeText, smallImage, smallText
+						state, details, largeImage, largeText, smallImage, smallText, timestamp: timestamp === null ? Date.now() : timestamp
 					})
 				} catch (error) {
 					console.error(error);

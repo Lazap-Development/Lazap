@@ -16,6 +16,7 @@ import { selOption } from './modules/rpcOptions';
   const path = window.__TAURI__.path;
   const dialog = window.__TAURI__.dialog;
   const invoke = window.__TAURI__.invoke;
+  let timestamp = null;
 
   let sysInfoInvoke = JSON.parse("{" + (await invoke("get_sys_info")).replaceAll(`'`, `"`) + "}")
   if (sysInfoInvoke.cpu.length > 22) {
@@ -425,10 +426,10 @@ import { selOption } from './modules/rpcOptions';
   }
   async function setActivity(tab) {
     const { state, details, largeImage, largeText, smallImage, smallText } = selOption(tab);
-    
+    if(timestamp === null) timestamp = Date.now();
     try {
       await invoke(`set_activity`, {
-        state, details, largeImage, largeText, smallImage, smallText
+        state, details, largeImage, largeText, smallImage, smallText, timestamp: timestamp === null ? Date.now() : timestamp
       })
     } catch (error) {
       console.error(error);
