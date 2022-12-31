@@ -11,7 +11,7 @@ const getLauncherIcon = (game => {
             icon = "https://www.gamingonlinux.com/uploads/tagline_gallery/lutris.jpg";
             break;
         case "Lunar":
-            icon = "https://pbs.twimg.com/profile_images/1479900487814205448/SLinOoFW_400x400.jpg";
+            icon = "https://static.planetminecraft.com/files/image/minecraft/texture-pack/2022/051/15323163-actmsw-x_l.webp";
             break;
         case "RiotGames":
             icon = "https://static.wikia.nocookie.net/leagueoflegends/images/5/53/Riot_Games_logo_icon.png/revision/latest?cb=20220302144707";
