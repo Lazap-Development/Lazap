@@ -7,25 +7,26 @@ use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemT
 use declarative_discord_rich_presence::DeclarativeDiscordIpcClient;
 use declarative_discord_rich_presence::activity::Activity;
 use declarative_discord_rich_presence::activity::Assets;
+const DISCORD_RPC_CLIENT_ID:&str = "1058022807373627462";
 
 #[tauri::command]
 fn set_activity(client: State<'_, DeclarativeDiscordIpcClient>, 
     state : &str, 
     details : &str,
-    largeImage : &str,
-    largeText : &str,
-    smallImage : &str,
-    smallText : &str
+    large_image : &str,
+    large_text : &str,
+    small_image : &str,
+    small_text : &str
 ) {
     if let Err(why) =
     client.set_activity(Activity::new()
         .state(state)
         .details(details)
         .assets(Assets::new()
-            .large_image(largeImage)
-            .large_text(largeText)
-            .small_image(smallImage)
-            .small_text(smallText)
+            .large_image(large_image)
+            .large_text(large_text)
+            .small_image(small_image)
+            .small_text(small_text)
         )) {
             println!("failed to set presence: {}", why)
         }
@@ -51,7 +52,7 @@ fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
         .setup(|app| {
-            let client = DeclarativeDiscordIpcClient::new("1058022807373627462");
+            let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
             Ok(())
         })
@@ -110,7 +111,7 @@ fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
         .setup(|app| {
-            let client = DeclarativeDiscordIpcClient::new("1058022807373627462");
+            let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
             Ok(())
         })
@@ -165,7 +166,7 @@ fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
         .setup(|app| {
-            let client = DeclarativeDiscordIpcClient::new("1058022807373627462");
+            let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
             Ok(())
         })
