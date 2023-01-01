@@ -1,4 +1,5 @@
 <script>
+import { selOption } from './modules/rpcOptions';
 (async () => {
   const home = document.getElementById('home');
   const recent = document.getElementById('recent');
@@ -15,6 +16,7 @@
   const path = window.__TAURI__.path;
   const dialog = window.__TAURI__.dialog;
   const invoke = window.__TAURI__.invoke;
+  let timestamp = null;
 
   let sysInfoInvoke = JSON.parse("{" + (await invoke("get_sys_info")).replaceAll(`'`, `"`) + "}")
   if (sysInfoInvoke.cpu.length > 22) {
@@ -26,6 +28,9 @@
   <div> <span style="margin-right: 4px;color:#EBCB8B;">  </span> ${sysInfoInvoke.system_kernel}</div>
   <div> <span style="margin-right: 4px;color:#5E81AC;">  </span> ${sysInfoInvoke.memory}</div>
   <div> <span style="margin-right: 4px;color:#5E81AC;">  </span> ${sysInfoInvoke.cpu}</div>`
+
+  /** Start Rich Presence if enabled */
+  await startRPC();
 
   try {
     const data = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/cache/user/UserProfile.json', (err) => {
@@ -95,6 +100,8 @@
       .catch((err) => {
         return console.error(err);
       });
+
+    setActivity("home")
   });
 
   document.getElementById('recent-btn').addEventListener('click', async function () {
@@ -116,6 +123,8 @@
       .catch((err) => {
         return console.error(err);
       });
+
+    setActivity("recent")
   });
 
   document.getElementById('games-btn').addEventListener('click', async function () {
@@ -139,6 +148,8 @@
       .catch((err) => {
         return console.error(err);
       });
+
+    setActivity("games")
   });
 
   document.getElementById('favs-btn').addEventListener('click', async function () {
@@ -162,6 +173,8 @@
       .catch((err) => {
         return console.error(err);
       });
+
+    setActivity("favourites");
   });
 
   document.getElementById('messages-btn').addEventListener('click', async function () {
@@ -178,6 +191,8 @@
     activity.style.display = 'none';
     friends.style.display = 'none';
     gameMenu.style.display = 'none';
+
+    setActivity("messages")
   });
 
   document.getElementById('activity-btn').addEventListener('click', async function () {
@@ -194,6 +209,8 @@
     activity.style.display = 'flex';
     friends.style.display = 'none';
     gameMenu.style.display = 'none';
+
+    setActivity("activity")
   });
 
   document.getElementById('friends-btn').addEventListener('click', async function () {
@@ -210,6 +227,8 @@
     activity.style.display = 'none';
     friends.style.display = 'flex';
     gameMenu.style.display = 'none';
+
+    setActivity("friends")
   });
 
   document.getElementById('text').addEventListener('change', async function (change) {
@@ -231,9 +250,7 @@
     const appDirPath = await path.appDir();
     const Data = JSON.parse(await fs.readTextFile(appDirPath + 'storage/LauncherData.json'));
     document.querySelectorAll('input[id^=setting-]').forEach((input) => {
-      // if(input.id === "setting-accentColor") return input.value = Data[input.id.split("-")[1]];
-      // input.checked = Data[input.id.split('-')[1]] ? true : false;
-      if (input.id === "setting-accentColor") input.value = Data[input.id.split("-")[1]]
+      if(input.id === "setting-accentColor") input.value = Data[input.id.split("-")[1]]
       else input.checked = Data[input.id.split('-')[1]] ? true : false;
     });
   });
@@ -276,6 +293,8 @@
       const LauncherData = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
       LauncherData[input.id.split('-')[1]] = document.querySelector(`input[id=${input.id}]`).checked;
       fs.writeTextFile(await path.appDir() + 'storage/LauncherData.json', JSON.stringify(LauncherData));
+
+      if(input.id === "setting-enableRPC") startRPC();
     });
   });
 
@@ -404,6 +423,34 @@
   function updateAccentColor(accentColor) {
     document.getElementById('indicator').style.backgroundColor = accentColor;
     document.querySelector(":root").style.setProperty("--back", accentColor);
+  }
+  async function setActivity(tab) {
+    const { state, details, largeImage, largeText, smallImage, smallText } = selOption(tab);
+    if(timestamp === null) timestamp = Date.now();
+    try {
+      await invoke(`set_activity`, {
+        state, details, largeImage, largeText, smallImage, smallText, timestamp: timestamp === null ? Date.now() : timestamp
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async function startRPC() {
+    const { enableRPC } = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
+    
+    try {
+      if(!enableRPC) throw Error("RPC must not be enabled");
+      invoke("disable_rpc", { enable: true })
+      setActivity("home");
+
+        /** Initial RPC stuff */
+        document.getElementById("rpc").innerHTML = "Connected to Discord"
+    } catch (error) {
+      invoke("disable_rpc", { enable: false })
+      console.error(error);
+      //document.getElementById("rpcbtn").style.display = "none";
+      document.getElementById("rpc").innerHTML = "Disconnected"
+    }
   }
 })()
 </script>

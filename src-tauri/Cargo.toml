@@ -30,6 +30,7 @@ html_parser = "0.6.3"
 thiserror = "*"
 whoami = "*"
 sysinfo = "*"
+declarative-discord-rich-presence = { git = "https://github.com/KPidS/declarative-discord-rich-presence" }
 
 [target.'cfg(unix)'.dependencies]
 openssl = { version = "0.10.41", features = ["vendored"] }

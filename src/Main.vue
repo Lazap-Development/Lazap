@@ -103,6 +103,8 @@
         <img @click="changeComponent('Login')" class="titlebar-account" src="./assets/svg/account.svg" id="account-btn">
         <img class="titlebar-update" src="./assets/svg/download.svg" id="update-btn">
         <img class="titlebar-loading" src="./assets/svg/loading-spinner.svg" id="loadingbtn">
+        <img class="titlebar-rpc" src="https://i.ibb.co/LPzstFW/world-icon-png-3008.png" alt="world" id="rpcbtn">
+        <span id="rpc"></span>
       </div>
       <div style="margin-top: 0px;" class="titlebar-icons">
         <div @click="min_window" class="titlebar-min mx-1"></div>
