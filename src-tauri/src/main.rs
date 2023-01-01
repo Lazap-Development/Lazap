@@ -1,44 +1,45 @@
 #![windows_subsystem = "windows"]
 
-use html_parser::Dom;
-use sysinfo::{CpuExt, System, SystemExt};
-use tauri::{Manager, State};
-use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
-use declarative_discord_rich_presence::DeclarativeDiscordIpcClient;
 use declarative_discord_rich_presence::activity::Activity;
 use declarative_discord_rich_presence::activity::Assets;
 use declarative_discord_rich_presence::activity::Timestamps;
-const DISCORD_RPC_CLIENT_ID:&str = "1058022807373627462";
+use declarative_discord_rich_presence::DeclarativeDiscordIpcClient;
+use html_parser::Dom;
+use sysinfo::{CpuExt, System, SystemExt};
+use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
+use tauri::{Manager, State};
+const DISCORD_RPC_CLIENT_ID: &str = "1058022807373627462";
 
 #[tauri::command]
-fn set_activity(client: State<'_, DeclarativeDiscordIpcClient>, 
-    state : &str, 
-    details : &str,
-    large_image : &str,
-    large_text : &str,
-    small_image : &str,
-    small_text : &str,
-    timestamp : i64
+fn set_activity(
+    client: State<'_, DeclarativeDiscordIpcClient>,
+    state: &str,
+    details: &str,
+    large_image: &str,
+    large_text: &str,
+    small_image: &str,
+    small_text: &str,
+    timestamp: i64,
 ) {
-    if let Err(why) =
-    client.set_activity(Activity::new()
-        .state(state)
-        .details(details)
-        .assets(Assets::new()
-            .large_image(large_image)
-            .large_text(large_text)
-            .small_image(small_image)
-            .small_text(small_text)
-        )
-        .timestamps(Timestamps::new()
-            .start(timestamp)
-        )) {
-            println!("failed to set presence: {}", why)
-        }
+    if let Err(why) = client.set_activity(
+        Activity::new()
+            .state(state)
+            .details(details)
+            .assets(
+                Assets::new()
+                    .large_image(large_image)
+                    .large_text(large_text)
+                    .small_image(small_image)
+                    .small_text(small_text),
+            )
+            .timestamps(Timestamps::new().start(timestamp)),
+    ) {
+        println!("failed to set presence: {}", why)
+    }
 }
 
 #[tauri::command]
-fn disable_rpc(client: State<'_, DeclarativeDiscordIpcClient>, enable : bool) {
+fn disable_rpc(client: State<'_, DeclarativeDiscordIpcClient>, enable: bool) {
     if enable {
         client.enable();
     } else {
@@ -265,7 +266,7 @@ async fn get_sys_info() -> Result<String, Error> {
 
     let mut cpu_info = "";
     for cpu in sys.cpus() {
-       cpu_info = cpu.brand();
+        cpu_info = cpu.brand();
     }
 
     struct SysStruct {
