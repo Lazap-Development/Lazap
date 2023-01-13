@@ -51,7 +51,7 @@ export default {
     },
     changeComponent(component) {
       this.currentComponent = this.components[component];
-      this.currentComponent.load();
+      this.currentComponent.mounted();
     },
   },
 };
