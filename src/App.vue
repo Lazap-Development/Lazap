@@ -51,7 +51,6 @@ export default {
     },
     changeComponent(component) {
       this.currentComponent = this.components[component];
-      this.currentComponent.mounted();
     },
   },
 };
