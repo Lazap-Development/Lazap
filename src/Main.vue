@@ -87,6 +87,15 @@
             <img class="repeatButton" src="./assets/icons/reset.png" />
           </div>
         </div>
+        <div class="subSetting">
+          <p>Enable Launcher Icons</p>
+          <label class="switch">
+            <input type="checkbox" id="setting-enableLauncherIcons" />
+            <div>
+              <span></span>
+            </div>
+          </label>
+        </div>
       </div>
 
       <div class="settings-footer">v0.6.1 (Tauri Release)</div>
@@ -889,6 +898,7 @@ export default {
           );
 
           if (input.id === "setting-enableRPC") startRPC();
+          if (input.id === "setting-enableLauncherIcons") window.location.reload();
         });
       });
 

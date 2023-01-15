@@ -556,6 +556,7 @@ class Elements {
     const GAME_BANNERS_BASE_PATH = `${appDirPath}storage/cache/games/banners`;
 
     const gameBanner = document.createElement("img");
+    gameBanner.classList.add("game_banner_img");
 
     let banner;
     const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH).catch(() => []);
@@ -674,6 +675,16 @@ class Elements {
     return menuIcon;
   }
 
+  static getLauncherIconElement(LauncherName) {
+      const gameLauncherIcon = document.createElement("img");
+			const icon = require("../modules/icons").getLauncherIcon(LauncherName);
+
+			gameLauncherIcon.classList.add("gamebox-icon");
+			gameLauncherIcon.setAttribute('src', icon);
+			
+      return gameLauncherIcon;
+  }
+
   static async createGameElement(game, id, list, prev) {
     if (game.LauncherName === "CustomGame" && !prev) {
       prev = __CACHE__;
@@ -720,6 +731,9 @@ class Elements {
 
     if (id.startsWith("recent") && id.includes("Main")) return game;
 
+    const { enableLauncherIcons } = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
+    if(enableLauncherIcons) gameElement.appendChild(Elements.getLauncherIconElement(game.LauncherName));
+    
     const gameBottom = document.createElement("div");
     gameBottom.classList.add("gamebox-bottom");
     gameElement.appendChild(gameBottom);
