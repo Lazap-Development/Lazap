@@ -92,6 +92,7 @@ fn init_storage() -> Result<(), std::io::Error> {
 
 #[cfg(target_os = "windows")]
 fn main() {
+    init_storage().expect("Failed to init storage fn.");
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()
@@ -215,6 +216,7 @@ fn main() {
 
 #[cfg(target_os = "macos")]
 fn main() {
+    init_storage().expect("Failed to init storage fn.");
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()
