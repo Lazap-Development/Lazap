@@ -1,4 +1,4 @@
-import { currentRpc, selOption } from "../modules/rpcOptions.js";
+import { currentRpc, selectOption } from "../modules/rpcOptions.js";
 const os = window.__TAURI__.os;
 const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
@@ -401,7 +401,7 @@ async function VisibilityState({ LauncherName, DisplayName }) {
         timestamp = Date.now();
 
         const { state, details, largeImage, largeText, smallImage, smallText } =
-          selOption(currentRpc);
+          selectOption(currentRpc);
         try {
           await invoke(`set_activity`, {
             state,
@@ -576,7 +576,7 @@ class Elements {
     let banner;
     const dirs = await invoke("read_dir_files", {
       dirPath: GAME_BANNERS_BASE_PATH,
-    })
+    });
     const img = dirs.find(
       (x) => x === `${sha256(game.DisplayName.replaceAll(" ", "_"))}.png`
     );
@@ -584,10 +584,7 @@ class Elements {
       banner = img
         ? tauri.convertFileSrc(
             appDirPath +
-              `cache/games/banners/${JSON.stringify(img).slice(
-                1,
-                -1
-              )}`
+              `cache/games/banners/${JSON.stringify(img).slice(1, -1)}`
           )
         : false;
     } else if (game.Banner) {

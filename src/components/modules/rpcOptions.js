@@ -66,7 +66,7 @@ const rpcOptions = {
   },
 };
 
-const selOption = (option) => {
+const selectOption = (option) => {
   const { home, recent, games, favourites, messages, activity, friends } =
     rpcOptions;
   switch (option) {
@@ -96,4 +96,4 @@ const selOption = (option) => {
   }
 };
 
-export { selOption, currentRpc };
+export { selectOption, currentRpc };
