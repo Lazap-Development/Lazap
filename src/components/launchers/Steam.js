@@ -2,6 +2,7 @@ const os = window.__TAURI__.os;
 const fs = window.__TAURI__.fs;
 const path = window.__TAURI__.path;
 const shell = window.__TAURI__.shell;
+const invoke = window.__TAURI__.invoke;
 
 async function getSteamLocation() {
   let launcher_location;
@@ -26,9 +27,9 @@ async function getSteamLocation() {
         .trim();
       let text;
       try {
-        text = await fs.readTextFile(
-          steamDir + `\\steamapps\\libraryfolders.vdf`
-        );
+        text = await invoke("read_file", {
+          filePath: steamDir + `\\steamapps\\libraryfolders.vdf`
+        })
       } catch (e) {
         return [];
       }
@@ -46,16 +47,17 @@ async function getSteamLocation() {
   } else if ((await os.platform()) === "linux") {
     const homedir = await path.homeDir();
     try {
-      await fs.readTextFile(
-        homedir + `.steam/steam/steamapps/libraryfolders.vdf`
-      );
+      await invoke("read_file", {
+        filePath: homedir + `.steam/steam/steamapps/libraryfolders.vdf`
+      })
     } catch (err) {
+      console.error(err)
       return [];
     }
 
-    const text = await fs.readTextFile(
-      homedir + `.steam/steam/steamapps/libraryfolders.vdf`
-    );
+    const text = await invoke("read_file", {
+      filePath: homedir + `.steam/steam/steamapps/libraryfolders.vdf`
+    })
     if (text.length === 0) return (launcher_location = []);
     const VDF = require("../modules/parseVDF");
     const parsed = VDF.parse(text);

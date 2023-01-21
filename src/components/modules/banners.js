@@ -1,13 +1,13 @@
 const http = window.__TAURI__.http;
-const fs = window.__TAURI__.fs;
+const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
 const tauri = window.__TAURI__.tauri;
 const { sha256 } = require("../modules/sha256");
 
 async function getBanners(games) {
   games = games.filter((x) => !["CustomGame"].includes(x.LauncherName));
-  const bannerBasePath = (await path.appDir()) + "storage/cache/games/banners";
-  const readBanners = (await fs.readDir(bannerBasePath)).map((x) => x.name);
+  const bannerBasePath = (await path.appDir()) + "cache/games/banners";
+  const readBanners = await invoke('read_dir_files', { dirPath: bannerBasePath })
 
   let alreadyProcessed = false;
   let existingProcessed = 0;
@@ -25,8 +25,6 @@ async function getBanners(games) {
     }
   }
   if (alreadyProcessed === true) {
-    document.getElementById("game-loading-overlay").style.opacity = "0";
-    document.getElementById("game-loading-overlay").style.visibility = "hidden";
     return console.log(
       "%c[BANNER] " + "Banners are already loaded. Skipping.",
       "color:blue"
@@ -132,19 +130,15 @@ async function getBanners(games) {
 }
 
 async function cacheBanners(data, res) {
-  const bannerBasePath = (await path.appDir()) + "storage/cache/games/banners";
+  const bannerBasePath = (await path.appDir()) + "cache/games/banners";
 
   if (data?.length === 0) {
-    document.getElementById("game-loading-overlay").style.opacity = "0";
-    document.getElementById("game-loading-overlay").style.visibility = "hidden";
     return console.log("%c[BANNER] " + "No games to process", "color:blue");
   }
 
   let fetchProcessed = 0;
 
   if (res.length === 0) {
-    document.getElementById("game-loading-overlay").style.opacity = "0";
-    document.getElementById("game-loading-overlay").style.visibility = "hidden";
     return console.log("%c[BANNER] " + "No banners to load.", "color:blue");
   }
 
@@ -162,11 +156,12 @@ async function cacheBanners(data, res) {
         .then(async (response) => {
           if (response.status === 404 && data[i].LauncherName === "Lutris")
             return;
-          await fs.writeBinaryFile(
-            bannerBasePath +
+          await invoke("write_binary_file", {
+            filePath:
+              bannerBasePath +
               `/${sha256(data[i].DisplayName.replaceAll(" ", "_"))}.png`,
-            response.data
-          );
+            fileContent: response.data,
+          });
           document
             .getElementById(
               `game-div-${data[i].DisplayName.replaceAll(" ", "_")}`
@@ -183,9 +178,6 @@ async function cacheBanners(data, res) {
 
       fetchProcessed++;
       if (fetchProcessed === data.length) {
-        document.getElementById("game-loading-overlay").style.opacity = "0";
-        document.getElementById("game-loading-overlay").style.visibility =
-          "hidden";
         return console.log(
           "%c[BANNER] " + "Just finished processing banners.",
           "color:blue"

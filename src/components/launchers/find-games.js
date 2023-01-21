@@ -1,6 +1,5 @@
 import { currentRpc, selOption } from "../modules/rpcOptions.js";
 const os = window.__TAURI__.os;
-const fs = window.__TAURI__.fs;
 const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
 const Window = window.__TAURI__.window;
@@ -45,9 +44,9 @@ async function getInstalledGames(
   if (launchers.includes("CustomGames")) {
     try {
       let readDataJSON = JSON.parse(
-        await fs.readTextFile(
-          (await path.appDir()) + "storage/cache/games/data.json"
-        )
+        await invoke("read_file", {
+          filePath: (await path.appDir()) + "cache/games/data.json",
+        })
       );
       readDataJSON
         .filter((a) => a.LauncherName == "CustomGame")
@@ -375,7 +374,9 @@ async function createProcess_linux(
 async function VisibilityState({ LauncherName, DisplayName }) {
   try {
     const LauncherData = JSON.parse(
-      await fs.readTextFile((await path.appDir()) + "storage/LauncherData.json")
+      await invoke("read_file", {
+        filePath: (await path.appDir()) + "LauncherData.json",
+      })
     );
     if (LauncherData.trayMinLaunch === true) {
       if ((await Window.appWindow.isVisible()) === true) {
@@ -423,9 +424,11 @@ async function VisibilityState({ LauncherName, DisplayName }) {
 
 async function setGames(games, source) {
   const appDirPath = await path.appDir();
-  const GAMES_DATA_BASE_PATH = appDirPath + "storage/cache/games/data.json";
+  const GAMES_DATA_BASE_PATH = appDirPath + "cache/games/data.json";
   const data = JSON.parse(
-    await fs.readTextFile(GAMES_DATA_BASE_PATH).catch(() => "[]")
+    await invoke("read_file", {
+      filePath: GAMES_DATA_BASE_PATH,
+    }).catch(() => "[]")
   );
 
   data.forEach((d) => {
@@ -440,9 +443,15 @@ async function setGames(games, source) {
   });
 
   if (source === "add-launch") {
-    fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
+    await invoke("write_file", {
+      filePath: GAMES_DATA_BASE_PATH,
+      fileContent: JSON.stringify(games),
+    });
   } else if (source === "toggle-favourite") {
-    fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
+    await invoke("write_file", {
+      filePath: GAMES_DATA_BASE_PATH,
+      fileContent: JSON.stringify(games),
+    });
   } else if (source === "all-games") {
     if (data.length > 0) {
       for (let i = 0; i < games.length; i++) {
@@ -515,16 +524,22 @@ async function setGames(games, source) {
         }
       }
     } else {
-      return fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(games));
+      return await invoke("write_file", {
+        filePath: GAMES_DATA_BASE_PATH,
+        fileContent: JSON.stringify(games),
+      });
     }
-    fs.writeTextFile(GAMES_DATA_BASE_PATH, JSON.stringify(data));
+    await invoke("write_file", {
+      filePath: GAMES_DATA_BASE_PATH,
+      fileContent: JSON.stringify(data),
+    });
   }
 }
 async function getGames(GameID, LauncherName) {
   const data = JSON.parse(
-    await fs
-      .readTextFile((await path.appDir()) + "storage/cache/games/data.json")
-      .catch(() => "[]")
+    await invoke("read_file", {
+      filePath: (await path.appDir()) + "cache/games/data.json",
+    })
   );
 
   if (GameID && LauncherName) {
@@ -553,21 +568,23 @@ class Elements {
 
   static async getGameBannerElement(game) {
     const appDirPath = await path.appDir();
-    const GAME_BANNERS_BASE_PATH = `${appDirPath}storage/cache/games/banners`;
+    const GAME_BANNERS_BASE_PATH = `${appDirPath}cache/games/banners`;
 
     const gameBanner = document.createElement("img");
     gameBanner.classList.add("game_banner_img");
 
     let banner;
-    const dirs = await fs.readDir(GAME_BANNERS_BASE_PATH).catch(() => []);
+    const dirs = await invoke("read_dir_files", {
+      dirPath: GAME_BANNERS_BASE_PATH,
+    })
     const img = dirs.find(
-      (x) => x.name === `${sha256(game.DisplayName.replaceAll(" ", "_"))}.png`
+      (x) => x === `${sha256(game.DisplayName.replaceAll(" ", "_"))}.png`
     );
     if (img) {
       banner = img
         ? tauri.convertFileSrc(
             appDirPath +
-              `storage/cache/games/banners/${JSON.stringify(img.name).slice(
+              `cache/games/banners/${JSON.stringify(img).slice(
                 1,
                 -1
               )}`
@@ -611,14 +628,14 @@ class Elements {
     return gameText;
   }
   static async getStarElement(game) {
-    const appDirPath = await path.appDir();
-
     const starIcon = document.createElement("div");
     starIcon.classList.add("star");
     starIcon.id = "star";
 
     const isFavourite = JSON.parse(
-      await fs.readTextFile(appDirPath + "storage/cache/games/data.json")
+      await invoke("read_file", {
+        filePath: (await path.appDir()) + "cache/games/data.json",
+      })
     ).find(
       (y) =>
         y.GameID === game.GameID &&
@@ -676,13 +693,13 @@ class Elements {
   }
 
   static getLauncherIconElement(LauncherName) {
-      const gameLauncherIcon = document.createElement("img");
-			const icon = require("../modules/icons").getLauncherIcon(LauncherName);
+    const gameLauncherIcon = document.createElement("img");
+    const icon = require("../modules/icons").getLauncherIcon(LauncherName);
 
-			gameLauncherIcon.classList.add("gamebox-icon");
-			gameLauncherIcon.setAttribute('src', icon);
-			
-      return gameLauncherIcon;
+    gameLauncherIcon.classList.add("gamebox-icon");
+    gameLauncherIcon.setAttribute("src", icon);
+
+    return gameLauncherIcon;
   }
 
   static async createGameElement(game, id, list, prev) {
@@ -731,9 +748,16 @@ class Elements {
 
     if (id.startsWith("recent") && id.includes("Main")) return game;
 
-    const { enableLauncherIcons } = JSON.parse(await fs.readTextFile(await path.appDir() + 'storage/LauncherData.json'));
-    if(enableLauncherIcons) gameElement.appendChild(Elements.getLauncherIconElement(game.LauncherName));
-    
+    const { enableLauncherIcons } = JSON.parse(
+      await invoke("read_file", {
+        filePath: (await path.appDir()) + "LauncherData.json",
+      })
+    );
+    if (enableLauncherIcons)
+      gameElement.appendChild(
+        Elements.getLauncherIconElement(game.LauncherName)
+      );
+
     const gameBottom = document.createElement("div");
     gameBottom.classList.add("gamebox-bottom");
     gameElement.appendChild(gameBottom);

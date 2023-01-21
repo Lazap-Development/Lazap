@@ -1,7 +1,8 @@
 const os = window.__TAURI__.os;
-const fs = window.__TAURI__.fs;
 const shell = window.__TAURI__.shell;
+const fs = window.__TAURI__.fs;
 const path = window.__TAURI__.path;
+const invoke = window.__TAURI__.invoke;
 
 async function getInstalledGames() {
   const platform = await os.platform();
@@ -101,12 +102,10 @@ async function getMinecraftLauncher(platform) {
       ).execute();
 
       if (output.stdout) {
-        const homedir = await path.homeDir();
-        try {
-          await fs.readDir(`${homedir}/.minecraft`);
-        } catch (e) {
-          return console.error(e);
+        if (!await invoke("d_f_exists", { filePath: `${await path.homeDir()}/.minecraft` })) {
+          return console.error("Minecraft directory is non-existent.");
         }
+
         const Location = "/usr/bin/minecraft-launcher";
         const Executable = "minecraft-launcher";
         return {

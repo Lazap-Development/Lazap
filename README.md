@@ -7,7 +7,7 @@
 </h1>
 
 <p align="center">
-  Lazap, a lightweight cross-platform Games Client/Launcher <br>
+  Lazap, a lightweight cross-platform launcher <br>
   All your games at one library with a modernist look and experience.
 </p>
 
@@ -26,7 +26,7 @@
 </div>
 <br>
 
-**The new face of Open Source Game Launchers**, Lazap, unites all your games together in one place! Whether it's on Linux or Windows, we got you covered. Lazap connects with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam, and collects all of those games and deposits them inside of one place. Our team of Developers continuously corroborates that Lazap is deeply customizable, Meets up to the user's expectence, possess a glancing & modernist look, and isn't expensive on hardware consumption. 
+**The new face of Open Source Game Launchers**, Lazap, unites all your games together in one place! Whether it's on Linux or Windows, we got you covered. Lazap connects with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam, and collects all of those games and deposits them inside of one place. Our team of Developers continuously corroborates that Lazap is deeply customizable, Meets up to the user's expectance, possess a glancing & modernist look, and isn't expensive on hardware consumption. 
 
 ## ‍💻 Installation
 
@@ -47,11 +47,17 @@ Once you have met the requirements, do the following:
 git clone https://github.com/Lazap-Development/Lazap.git 
 cd Lazap && yarn install && yarn tauri:serve
 ```
-Be aware that for the first time it might take some heafty amount of time for things to compile.
+Be aware that for the first time it might take some hefty amount of time for things to compile.
 
 ## 📚 Help & Support
-If you need assist or in need of technichal support for your Lazap installation, feel free to file an [issue](https://github.com/Lazap-Development/lazap/issues) so we can assist you.<br><br>
-**Want to help out insted of getting help?** We love Pull Requests and Issue Hunters. Open up a PR and fix some gears, we would love the community's help to improve lazap and make it more user friendly.
+If you need assist or in need of technical support for your Lazap installation, feel free to file an [issue](https://github.com/Lazap-Development/lazap/issues) so we can assist you.<br><br>
+**Want to help out instead of getting help?** We love Pull Requests and Issue Hunters. Open up a PR and fix some gears, we would love the community's help to improve lazap and make it more user friendly.
+
+## ⁉️ FAQ
+
+What is next up for this project?
+└ Our current priority is to support as many launchers as possible and optimize the software to its fullest potential. In the future, there is a possibility of the launcher becoming its own store (like steam). 
+
 
 ## 🛂 License
 Lazap is licensed under the terms of [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://github.com/DashCruft-Nation/lazap/blob/main/LICENSE.md) ("CC-BY-NC-SA-4.0"). Commercial use is not allowed under this license. This includes any kind of revenue made with or based upon the software, even donations.
