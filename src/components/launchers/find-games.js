@@ -574,7 +574,7 @@ class Elements {
     gameBanner.classList.add("game_banner_img");
 
     let banner;
-    const dirs = await invoke("read_dir_files", {
+    const dirs = await invoke("read_dir", {
       dirPath: GAME_BANNERS_BASE_PATH,
     });
     const img = dirs.find(

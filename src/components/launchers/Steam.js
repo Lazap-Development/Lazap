@@ -1,5 +1,4 @@
 const os = window.__TAURI__.os;
-const fs = window.__TAURI__.fs;
 const path = window.__TAURI__.path;
 const shell = window.__TAURI__.shell;
 const invoke = window.__TAURI__.invoke;
@@ -28,8 +27,8 @@ async function getSteamLocation() {
       let text;
       try {
         text = await invoke("read_file", {
-          filePath: steamDir + `\\steamapps\\libraryfolders.vdf`
-        })
+          filePath: steamDir + `\\steamapps\\libraryfolders.vdf`,
+        });
       } catch (e) {
         return [];
       }
@@ -48,16 +47,16 @@ async function getSteamLocation() {
     const homedir = await path.homeDir();
     try {
       await invoke("read_file", {
-        filePath: homedir + `.steam/steam/steamapps/libraryfolders.vdf`
-      })
+        filePath: homedir + `.steam/steam/steamapps/libraryfolders.vdf`,
+      });
     } catch (err) {
-      console.error(err)
+      console.error(err);
       return [];
     }
 
     const text = await invoke("read_file", {
-      filePath: homedir + `.steam/steam/steamapps/libraryfolders.vdf`
-    })
+      filePath: homedir + `.steam/steam/steamapps/libraryfolders.vdf`,
+    });
     if (text.length === 0) return (launcher_location = []);
     const VDF = require("../modules/parseVDF");
     const parsed = VDF.parse(text);
@@ -69,7 +68,9 @@ async function getSteamLocation() {
 
   for (const path of launcher_location) {
     try {
-      await fs.readDir(path);
+      await invoke("d_f_exists", {
+        path: path,
+      });
     } catch (err) {
       launcher_location = launcher_location.filter((e) => e !== path);
     }
@@ -91,21 +92,23 @@ async function getInstalledGames() {
       acf_basePath = `${location}/steamapps`;
     }
 
-    if (!(await fs.readDir(acf_basePath))) return [];
+    if (!(await invoke("d_f_exists", { path: acf_basePath }))) return [];
 
-    const readDirOfBasePath = await fs.readDir(acf_basePath);
+
+    const readDirOfBasePath = await invoke("read_dir", { dirPath: acf_basePath });
+
     const acf_files = await Promise.all(
       readDirOfBasePath
-        .filter((x) => x.name.split(".")[1] === "acf")
+        .filter((x) => x.split(".")[1] === "acf")
         .map(async (x) => {
           return parseGameObject(
             acf_to_json(
-              await fs.readTextFile(
-                `${acf_basePath}/${JSON.stringify(x.name).replace(
+              await invoke("read_file", {
+                filePath: `${acf_basePath}/${JSON.stringify(x).replace(
                   /['"]+/g,
                   ""
-                )}`
-              )
+                )}`,
+              })
             )
           );
         })
@@ -119,6 +122,7 @@ async function getInstalledGames() {
       }
       return unique;
     }, []);
+
     allGames = result;
   }
   return allGames;

@@ -144,7 +144,7 @@ fn main() {
             read_file,
             write_file,
             d_f_exists,
-            read_dir_files,
+            read_dir,
             write_binary_file
         ])
         .run(tauri::generate_context!())
@@ -204,7 +204,7 @@ fn main() {
             read_file,
             write_file,
             d_f_exists,
-            read_dir_files,
+            read_dir,
             write_binary_file
         ])
         .run(tauri::generate_context!())
@@ -265,7 +265,7 @@ fn main() {
             read_file,
             write_file,
             d_f_exists,
-            read_dir_files,
+            read_dir,
             write_binary_file
         ])
         .run(tauri::generate_context!())
@@ -357,12 +357,12 @@ async fn write_binary_file(file_path: String, file_content: Vec::<u8>) {
 }
 
 #[tauri::command]
-async fn d_f_exists(file_path: String) -> Result<bool, Error> {
-    Ok(Path::new(&file_path).exists())
+async fn d_f_exists(path: String) -> Result<bool, Error> {
+    Ok(Path::new(&path).exists())
 }
 
 #[tauri::command]
-async fn read_dir_files(dir_path: String) -> Vec<String> {
+async fn read_dir(dir_path: String) -> Vec<String> {
     let mut file_list = Vec::new();
     for entry in fs::read_dir(dir_path).unwrap() {
         let entry = entry.unwrap();

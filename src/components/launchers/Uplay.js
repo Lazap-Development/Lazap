@@ -1,5 +1,5 @@
 const shell = window.__TAURI__.shell;
-const fs = window.__TAURI__.fs;
+const invoke = window.__TAURI__.invoke;
 const os = window.__TAURI__.os;
 
 async function getUplayLocation(checkForUplay = true) {
@@ -44,9 +44,11 @@ async function getInstalledGames() {
     (await getUplayLocation()) ?? {};
   if (!path) return [];
   const dataPath = `${path}\\data`;
-  const games = (await fs.readDir(dataPath)).filter((x) => !isNaN(x.name));
+  const games = (await invoke("read_dir", { dirPath: dataPath })).filter(
+    (x) => !isNaN(x)
+  );
   return (
-    await Promise.all(games.map((x) => parseGameObject(x.name, registry_res)))
+    await Promise.all(games.map((x) => parseGameObject(x, registry_res)))
   ).filter((x) => typeof x === "object" && x !== null);
 }
 
@@ -60,7 +62,11 @@ async function parseGameObject(GameID, registry_res) {
     .filter((x) => x.startsWith("InstallDir"))[0]
     ?.split("REG_SZ")[1]
     .trim();
-  if (!Location || !(await fs.readDir(Location).catch(() => null))) return;
+  if (
+    !Location ||
+    !(await invoke("read_dir", { dirPath: Location }).catch(() => null))
+  )
+    return;
   const Executable = null;
   let title = Location.split("/").slice(-2)[0].replaceAll("_", " ");
   if (title.match(/\d$/gi) && !title.replaceAll("\\d", "").endsWith(" ")) {
@@ -85,7 +91,7 @@ async function parseGameObject(GameID, registry_res) {
 }
 
 async function isLauncherInstalled(path) {
-  return await fs.readDir(path).catch(() => null);
+  return await invoke("read_dir", { path: path }).catch(() => null);
 }
 
 module.exports = {

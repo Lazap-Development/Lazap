@@ -1,6 +1,5 @@
 const os = window.__TAURI__.os;
 const shell = window.__TAURI__.shell;
-const fs = window.__TAURI__.fs;
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
 
@@ -83,7 +82,7 @@ async function getMinecraftLauncher(platform) {
         .join("")
         .split("\\")
         .slice(-1)[0];
-      if (!(await fs.readDir(Location).catch(() => null))) return false;
+      if (!await invoke("d_f_exists", { path: Location }).catch(() => null)) return false;
       return {
         DisplayName: "Minecraft Launcher",
         LauncherName: "Minecraft",
@@ -102,7 +101,7 @@ async function getMinecraftLauncher(platform) {
       ).execute();
 
       if (output.stdout) {
-        if (!await invoke("d_f_exists", { filePath: `${await path.homeDir()}/.minecraft` })) {
+        if (!await invoke("d_f_exists", { path: `${await path.homeDir()}/.minecraft` })) {
           return console.error("Minecraft directory is non-existent.");
         }
 
@@ -129,9 +128,11 @@ async function getMinecraftLauncher(platform) {
 
 async function getLunarClient(platform) {
   if (platform === "win32") {
-    const isLunarInstalled = await fs
-      .readDir(`${await path.localDataDir()}Programs\\lunarclient`)
-      .catch(() => null);
+    const isLunarInstalled = await invoke("d_f_exists", {
+      path:
+        (await path.appDir()) +
+        `${await path.localDataDir()}Programs\\lunarclient`,
+    }).catch(() => null);
     if (!isLunarInstalled) return false;
     const Location = `${await path.localDataDir()}Programs\\lunarclient`;
     const Executable = "Lunar Client.exe";
@@ -149,9 +150,10 @@ async function getLunarClient(platform) {
       const output = await new shell.Command("which", "lunarclient").execute();
 
       if (output.stdout) {
-        const homedir = await path.homeDir();
         try {
-          await fs.readDir(`${homedir}/.lunarclient`);
+          await invoke("d_f_exists", {
+            path: (await path.appDir()) + `${await path.homeDir()}/.lunarclient`,
+          })
         } catch (e) {
           return console.error(e);
         }

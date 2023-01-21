@@ -1,7 +1,8 @@
 const shell = window.__TAURI__.shell;
-const fs = window.__TAURI__.fs;
+const invoke = window.__TAURI__.invoke;
 const os = window.__TAURI__.os;
 const RockstarGamesData = require("../others/rockstargames.json");
+
 async function getInstalledGames() {
   if ((await os.platform()) === "linux") {
     return [];
@@ -30,7 +31,9 @@ async function getInstalledGames() {
           .filter((x) => x.trim().startsWith("Install"))
           .filter(
             async (x) =>
-              await fs.readDir(x.split("REG_SZ")[1].trim()).catch(() => null)
+              await invoke("d_f_exists", {
+                path: x.split("REG_SZ")[1].trim(),
+              }).catch(() => null)
           );
         if (!paths[0]) return;
         const Install = paths[0].split("REG_SZ")[1].trim();
@@ -55,7 +58,7 @@ async function parseGameObject(data) {
   if (!game) return;
   let Executable;
   if (game.titleId === "gta5") {
-    const files = await fs.readDir(Location);
+    const files = await invoke("read_dir", { dirPath: Location });
     Executable =
       files.find((x) => game.modWhitelist.includes(x.name))?.name ??
       game.executable;

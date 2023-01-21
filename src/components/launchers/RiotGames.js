@@ -1,5 +1,5 @@
 const os = window.__TAURI__.os;
-const fs = window.__TAURI__.fs;
+const invoke = window.__TAURI__.invoke;
 const shell = window.__TAURI__.shell;
 
 function getRiotGamesLocation(launcher_location) {
@@ -21,12 +21,15 @@ async function getInstalledGames() {
   }
 
   try {
-    await fs.readDir(getRiotGamesLocation(launcher_location));
+    await invoke("d_f_exists", {
+      path: getRiotGamesLocation(launcher_location),
+    });
   } catch (err) {
     return [];
   }
-  const games = (await fs.readDir(getRiotGamesLocation(launcher_location)))
-    .map((x) => x.name)
+  const games = (await invoke("read_dir"),
+  { dirPath: getRiotGamesLocation(launcher_location) })
+    .map((x) => x)
     .filter((x) => x !== "Riot Client");
 
   if (games.includes("VALORANT")) {
@@ -59,7 +62,9 @@ async function parseGameObject(path, game = "") {
   ];
   const DisplayName = game;
   try {
-    await fs.readDir(Location.slice(0, -12) + correctPathName[game]);
+    await invoke("d_f_exists", {
+      path: Location.slice(0, -12) + correctPathName[game],
+    });
   } catch (err) {
     return;
   }

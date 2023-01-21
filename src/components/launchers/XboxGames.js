@@ -1,7 +1,6 @@
 const shell = window.__TAURI__.shell;
 const os = window.__TAURI__.os;
 const http = window.__TAURI__.http;
-const fs = window.__TAURI__.fs;
 const invoke = window.__TAURI__.invoke;
 
 async function getInstalledGames() {
@@ -68,7 +67,7 @@ async function parseGmeObject(obj) {
   const { Banner, InstallLocation } = obj;
   const Location = InstallLocation;
   const manifest = (
-    await fs.readTextFile(Location + "/AppxManifest.xml")
+    await invoke("read_file", {filePath: Location + "/AppxManifest.xml"})
   ).split("\r\n");
   const Executable = manifest
     .find((x) => x.trim().startsWith("<Application "))
@@ -87,7 +86,7 @@ async function parseGmeObject(obj) {
         .split(/<[/]{0,1}Application[>]{0,1}/)[1]
         .match(/Id="[a-z]{1,}"/i)[0]
     }`.replace('!Id="App"', "!App"),
-    Size: null, //fs.statSync(Location).size,
+    Size: null,
     Banner,
     LauncherName: "XboxGames",
   };

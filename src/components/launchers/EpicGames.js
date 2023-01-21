@@ -1,21 +1,21 @@
 const os = window.__TAURI__.os;
-const fs = window.__TAURI__.fs;
+const invoke = window.__TAURI__.invoke;
 
 async function getInstalledGames() {
   if ((await os.platform()) === "win32") {
     if (!(await isLauncherInstalled())) return [];
-    const read = await fs.readDir(
-      "C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests"
-    );
+    const read = await invoke("read_dir", {
+      dirPath: "C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests",
+    });
     const games = read
-      .filter((x) => x.name.split(".")[1]?.toLowerCase() === "item")
+      .filter((x) => x.split(".")[1]?.toLowerCase() === "item")
       .map(async (x) =>
         JSON.parse(
-          await fs.readTextFile(
-            `C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests\\${JSON.stringify(
-              x.name
-            ).replace(/['"]+/g, "")}`
-          )
+          await invoke("read_file", {
+            filePath: `C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests\\${JSON.stringify(
+              x
+            ).replace(/['"]+/g, "")}`,
+          })
         )
       );
 
@@ -28,7 +28,7 @@ async function isLauncherInstalled(
   path = "C:\\ProgramData\\Epic\\EpicGamesLauncher\\Data\\Manifests"
 ) {
   try {
-    return await fs.readDir(path);
+    return await invoke("d_f_exists", { path: path });
   } catch (err) {
     return false;
   }

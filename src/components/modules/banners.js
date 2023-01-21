@@ -7,7 +7,7 @@ const { sha256 } = require("../modules/sha256");
 async function getBanners(games) {
   games = games.filter((x) => !["CustomGame"].includes(x.LauncherName));
   const bannerBasePath = (await path.appDir()) + "cache/games/banners";
-  const readBanners = await invoke('read_dir_files', { dirPath: bannerBasePath })
+  const readBanners = await invoke('read_dir', { dirPath: bannerBasePath })
 
   let alreadyProcessed = false;
   let existingProcessed = 0;

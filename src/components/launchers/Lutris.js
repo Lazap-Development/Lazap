@@ -1,13 +1,15 @@
-const fs = window.__TAURI__.fs;
 import Database from "tauri-plugin-sql-api";
-const homedir = window.__TAURI__.path.homeDir();
+const invoke = window.__TAURI__.fs;
+const path = window.__TAURI__.path;
 
 async function getLutrisLocation(os = window.__TAURI__.os.platform()) {
   let launcher_location;
   if ((await os) === "linux")
-    launcher_location = `${await homedir}.local/share/lutris`;
+    launcher_location = `${await path.homeDir()}.local/share/lutris`;
   try {
-    await fs.readDir(launcher_location);
+    await invoke("d_f_exists", {
+      path: launcher_location,
+    });
   } catch (err) {
     return false;
   }

@@ -76,6 +76,7 @@ const fs = window.__TAURI__.fs;
 const invoke = window.__TAURI__.invoke;
 const dialog = window.__TAURI__.dialog;
 const path = window.__TAURI__.path;
+const tauri = window.__TAURI__.tauri;
 
 export default {
   name: "allgames-comp",
@@ -85,7 +86,7 @@ export default {
       let reader = new FileReader();
 
       reader.onload = async function () {
-        await window.__TAURI__.fs.writeBinaryFile(
+        await fs.write(
           (await path.appDir()) +
             `storage/cache/games/banners/newcustombanner.png`,
           reader.result
@@ -94,7 +95,7 @@ export default {
           "addGameCustomBannerOutput"
         ).style.backgroundImage =
           `url(` +
-          window.__TAURI__.tauri.convertFileSrc(
+          tauri.convertFileSrc(
             (await path.appDir()) +
               `storage/cache/games/banners/newcustombanner.png`
           ) +
