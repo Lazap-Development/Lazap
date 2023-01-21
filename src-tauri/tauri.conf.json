@@ -63,7 +63,7 @@
       },
       "protocol": {
         "asset": true,
-        "assetScope": ["**"]
+        "assetScope": ["$APPCONFIG/cache/games/banners/**"]
       },
       "window": {
         "center": true,
@@ -72,7 +72,7 @@
         "hide": true,
         "maximize": true,
         "minimize": true,
-        "print": true,
+        "print": false,
         "show": true,
         "startDragging": true,
         "unmaximize": true,
@@ -129,6 +129,7 @@
         "minHeight": 580,
         "minWidth": 1250,
         "center": true,
+        "visible": false,
         "decorations": false
       }
     ]
