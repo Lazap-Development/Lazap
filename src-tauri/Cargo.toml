@@ -1,13 +1,13 @@
 [package]
 name = "lazap"
-version = "0.6.1"
+version = "0.6.5"
 description = "Lazap Launcher"
 authors = ["Lazap-Development"]
 license = ""
 repository = "https://github.com/Lazap-Development/lazap"
 default-run = "lazap"
 edition = "2021"
-rust-version = "1.62.1"
+rust-version = "1.66.1"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
