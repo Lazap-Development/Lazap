@@ -7,7 +7,7 @@
 </h1>
 
 <p align="center">
-  Lazap, a lightweight cross-platform launcher <br>
+  Lazap, a lightweight cross-platform game launcher <br>
   All your games at one library with a modernist look and experience.
 </p>
 
@@ -55,8 +55,8 @@ If you need assist or in need of technical support for your Lazap installation, 
 
 ## ⁉️ FAQ
 
-What is next up for this project?
-└ Our current priority is to support as many launchers as possible and optimize the software to its fullest potential. In the future, there is a possibility of the launcher becoming its own store (like steam). 
+**What is next up for this project?** <br>
+Our current priority is to support as many launchers as possible and optimize the software to its fullest potential. In the future, there is a possibility of the launcher becoming its own store (like steam). 
 
 
 ## 🛂 License
