@@ -853,11 +853,17 @@ export default {
   src: url("./assets/fonts/Nunito-SemiBold.ttf") format("truetype");
 }
 
+html, 
 body {
-  zoom: 0.895;
+  zoom: 0.945;
   background: #181a1f;
   overflow: hidden;
   font-family: Nunito;
+  height: 100%;
+}
+
+#app {
+  height: 100%;
 }
 
 .bg {
@@ -865,7 +871,7 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   margin: -20px 0 50px;
 }
 

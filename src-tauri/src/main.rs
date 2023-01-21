@@ -102,6 +102,8 @@ fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
         .setup(|app| {
+            let window = app.get_window(&"main").unwrap();
+            window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
             let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
             Ok(())
@@ -145,11 +147,6 @@ fn main() {
             read_dir_files,
             write_binary_file
         ])
-        .setup(|app| {
-            let window = app.get_window(&"main").unwrap();
-            window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
-            Ok(())
-        })
         .run(tauri::generate_context!())
         .expect("error while running lazap");
 }
@@ -226,6 +223,8 @@ fn main() {
     let tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
         .setup(|app| {
+            let window = app.get_window(&"main").unwrap();
+            window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
             let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
             Ok(())
@@ -269,11 +268,6 @@ fn main() {
             read_dir_files,
             write_binary_file
         ])
-        .setup(|app| {
-            let window = app.get_window(&"main").unwrap();
-            window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
-            Ok(())
-        })
         .run(tauri::generate_context!())
         .expect("error while running lazap");
 }
