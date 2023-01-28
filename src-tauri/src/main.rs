@@ -342,7 +342,7 @@ async fn show_window(window: tauri::Window) {
 }
 
 #[tauri::command]
-async fn read_file(file_path: String) -> Result<String, Error>  {
+async fn read_file(file_path: String) -> Result<String, Error> {
     Ok(fs::read_to_string(file_path).unwrap())
 }
 
@@ -352,7 +352,7 @@ async fn write_file(file_path: String, file_content: String) {
 }
 
 #[tauri::command]
-async fn write_binary_file(file_path: String, file_content: Vec::<u8>) {
+async fn write_binary_file(file_path: String, file_content: Vec<u8>) {
     fs::write(file_path, file_content).expect("Unable to write file.");
 }
 
@@ -367,9 +367,15 @@ async fn read_dir(dir_path: String) -> Vec<String> {
     for entry in fs::read_dir(dir_path).unwrap() {
         let entry = entry.unwrap();
         let path = entry.path();
-        if !path.is_dir() {
-            file_list.push(Path::new(&path.display().to_string()).file_name().unwrap().to_os_string().into_string().unwrap());
-        }
+
+        file_list.push(
+            Path::new(&path.display().to_string())
+                .file_name()
+                .unwrap()
+                .to_os_string()
+                .into_string()
+                .unwrap(),
+        );
     }
     file_list
 }

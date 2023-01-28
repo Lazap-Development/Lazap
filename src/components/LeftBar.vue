@@ -108,14 +108,12 @@ export default {
 
       reader.onload = async function () {
         await invoke("write_binary_file", {
-          filePath:
-            (await path.appDir()) + `cache/user/pfp.png`,
-          fileContent: [...new Uint8Array(reader.result)]
+          filePath: (await path.appDir()) + `cache/user/pfp.png`,
+          fileContent: [...new Uint8Array(reader.result)],
         });
         document.getElementById("output").src =
           window.__TAURI__.tauri.convertFileSrc(
-            (await path.appDir()) +
-              `cache/user/pfp.png`
+            (await path.appDir()) + `cache/user/pfp.png`
           ) + `?${new Date().getSeconds()}`;
       };
       reader.readAsArrayBuffer(selectedFile);
@@ -131,22 +129,23 @@ export default {
     const messages = document.getElementById("messages");
     const activity = document.getElementById("activity");
     const gameMenu = document.getElementById("gameMenu");
+    const findGamesModule = this.$root.$refs.findGamesMod;
 
     try {
-        const data = JSON.parse(
-          await invoke("read_file", {
-            filePath: (await path.appDir()) + "cache/user/data.json",
-          })
-        );
-        document.getElementById("text").value = data.username;
+      const data = JSON.parse(
+        await invoke("read_file", {
+          filePath: (await path.appDir()) + "cache/user/data.json",
+        })
+      );
+      document.getElementById("text").value = data.username;
 
-        document.getElementById("output").src =
-          window.__TAURI__.tauri.convertFileSrc(
-            (await path.appDir()) + "cache/user/pfp.png"
-          ) + `?${new Date().getSeconds()}`;
-      } catch (err) {
-        //console.log(err)
-      }
+      document.getElementById("output").src =
+        window.__TAURI__.tauri.convertFileSrc(
+          (await path.appDir()) + "cache/user/pfp.png"
+        ) + `?${new Date().getSeconds()}`;
+    } catch (err) {
+      //console.log(err)
+    }
 
     document
       .getElementById("home-btn")
@@ -165,7 +164,7 @@ export default {
         activity.style.display = "none";
         gameMenu.style.display = "none";
 
-        await require("./launchers/find-games.js")
+        await findGamesModule
           .loadGames("recentGamesListMainPage")
           .catch((err) => {
             return console.error(err);
@@ -191,7 +190,7 @@ export default {
         activity.style.display = "none";
         gameMenu.style.display = "none";
 
-        await require("./launchers/find-games.js")
+        await findGamesModule
           .loadGames("recentGamesList")
           .catch((err) => {
             return console.error(err);
@@ -219,7 +218,7 @@ export default {
         activity.style.display = "none";
         gameMenu.style.display = "none";
 
-        await require("./launchers/find-games.js")
+        await findGamesModule
           .loadGames("allGamesList")
           .catch((err) => {
             return console.error(err);
@@ -247,7 +246,7 @@ export default {
         friends.style.display = "none";
         gameMenu.style.display = "none";
 
-        await require("./launchers/find-games.js")
+        await findGamesModule
           .loadGames("favGamesList")
           .catch((err) => {
             return console.error(err);
@@ -433,7 +432,7 @@ export default {
 .side-tab:before {
   background: rgb(30, 30, 34);
   background: linear-gradient(
-    30deg,
+    40deg,
     rgba(30, 30, 34, 1) 0%,
     rgba(30, 30, 34, 1) 30%,
     var(--back) 100%

@@ -162,7 +162,7 @@ export default {
                     .value.replaceAll(" ", "_")
                 )}.png`
             );
-            require("./launchers/find-games.js").Elements.createGameElement(
+            this.$root.$refs.findGamesMod.Elements.createGameElement(
               scheme,
               "allGamesList"
             );
@@ -177,7 +177,7 @@ export default {
               fileContent: JSON.stringify(data),
             });
           } catch (e) {
-            require("./launchers/find-games.js").Elements.createGameElement(
+            this.$root.$refs.findGamesMod.Elements.createGameElement(
               scheme,
               "allGamesList"
             );

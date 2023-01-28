@@ -1,4 +1,6 @@
 <template>
+  <find-games ref="findGamesMod"></find-games>
+
   <settings-comp></settings-comp>
   <titlebar-comp></titlebar-comp>
 
@@ -71,6 +73,7 @@ import Settings from "./components/Settings.vue";
 import Titlebar from "./components/Titlebar.vue";
 import AllGames from "./components/AllGames.vue";
 import LeftBar from "./components/LeftBar.vue";
+import findGames from "./components/launchers/find-games.vue";
 
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
@@ -82,6 +85,7 @@ export default {
     "titlebar-comp": Titlebar,
     "allgames-comp": AllGames,
     "leftbar-comp": LeftBar,
+    "find-games": findGames,
   },
   async mounted() {
     (async () => {
@@ -132,33 +136,33 @@ export default {
         document.getElementById("rpc").innerHTML = "Disconnected";
       }
 
-      const allGames = await require("./components/launchers/find-games.js")
+      const allGames = await this.$refs.findGamesMod
         .getInstalledGames()
         .catch((err) => {
           return console.error(err);
         });
-      const gamesdata = await require("./components/launchers/find-games.js")
+      const gamesdata = await this.$refs.findGamesMod
         .getGames()
         .catch((err) => {
           return console.error(err);
         });
 
-      await require("./components/launchers/find-games.js")
+      await this.$refs.findGamesMod
         .loadGames("recentGamesListMainPage", allGames, gamesdata)
         .catch((err) => {
           return console.error(err);
         });
-      await require("./components/launchers/find-games.js")
+      await this.$refs.findGamesMod
         .loadGames("recentGamesList", allGames, gamesdata)
         .catch((err) => {
           return console.error(err);
         });
-      await require("./components/launchers/find-games.js")
+      await this.$refs.findGamesMod
         .loadGames("allGamesList", allGames)
         .catch((err) => {
           return console.error(err);
         });
-      await require("./components/launchers/find-games.js")
+      await this.$refs.findGamesMod
         .loadGames("favGamesList", allGames, gamesdata)
         .catch((err) => {
           return console.error(err);
@@ -315,7 +319,7 @@ export default {
 
 html,
 body {
-  zoom: 0.945;
+  zoom: 0.944;
   background: #181a1f;
   overflow: hidden;
   font-family: Nunito;

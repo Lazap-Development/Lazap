@@ -266,7 +266,8 @@ export default {
   height: 500px;
   width: 600px;
   display: none;
-  background: #181a1f;
+  background: #1c1d22;
+  border: 3px solid var(--back);
   z-index: 2000;
   border-radius: 20px;
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
@@ -329,7 +330,7 @@ export default {
 }
 
 .choser button {
-  font-family: Nunito;
+  font-family: Nunito-Bold !important;
   color: rgb(201, 201, 201);
   border-radius: 12px;
   text-decoration: none;
