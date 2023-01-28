@@ -131,20 +131,22 @@ export default {
     const gameMenu = document.getElementById("gameMenu");
     const findGamesModule = this.$root.$refs.findGamesMod;
 
-    try {
-      const data = JSON.parse(
-        await invoke("read_file", {
-          filePath: (await path.appDir()) + "cache/user/data.json",
-        })
-      );
-      document.getElementById("text").value = data.username;
+    const data = JSON.parse(
+      await invoke("read_file", {
+        filePath: (await path.appDir()) + "cache/user/data.json",
+      })
+    );
+    document.getElementById("text").value = data.username;
 
+    if (
+      await invoke("d_f_exists", {
+        path: (await path.appDir()) + "cache/user/pfp.png",
+      })
+    ) {
       document.getElementById("output").src =
         window.__TAURI__.tauri.convertFileSrc(
           (await path.appDir()) + "cache/user/pfp.png"
         ) + `?${new Date().getSeconds()}`;
-    } catch (err) {
-      //console.log(err)
     }
 
     document
@@ -190,11 +192,9 @@ export default {
         activity.style.display = "none";
         gameMenu.style.display = "none";
 
-        await findGamesModule
-          .loadGames("recentGamesList")
-          .catch((err) => {
-            return console.error(err);
-          });
+        await findGamesModule.loadGames("recentGamesList").catch((err) => {
+          return console.error(err);
+        });
 
         setActivity("recent");
       });
@@ -218,11 +218,9 @@ export default {
         activity.style.display = "none";
         gameMenu.style.display = "none";
 
-        await findGamesModule
-          .loadGames("allGamesList")
-          .catch((err) => {
-            return console.error(err);
-          });
+        await findGamesModule.loadGames("allGamesList").catch((err) => {
+          return console.error(err);
+        });
 
         setActivity("games");
       });
@@ -246,11 +244,9 @@ export default {
         friends.style.display = "none";
         gameMenu.style.display = "none";
 
-        await findGamesModule
-          .loadGames("favGamesList")
-          .catch((err) => {
-            return console.error(err);
-          });
+        await findGamesModule.loadGames("favGamesList").catch((err) => {
+          return console.error(err);
+        });
 
         setActivity("favourites");
       });
@@ -394,8 +390,8 @@ export default {
 .user-pfp label {
   position: absolute;
   cursor: pointer;
-  height: 70px;
-  width: 70px;
+  height: 100%;
+  width: 100%;
 }
 
 .username {
