@@ -6,7 +6,6 @@
       <div class="choser" id="choser">
         <button id="generalbtn">General</button>
         <button id="appearancebtn">Appearance</button>
-        <button id="winerunnersbtn">Wine Runners</button>
       </div>
       <div class="general-settings" id="general-settings">
         <div>
@@ -277,7 +276,7 @@ export default {
   width: 600px;
   display: none;
   background: #1c1d22;
-  border: 3px solid var(--back);
+  border: 4px solid var(--back);
   z-index: 2000;
   border-radius: 20px;
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
@@ -342,7 +341,7 @@ export default {
 .choser button {
   font-family: Nunito-Bold !important;
   color: rgb(201, 201, 201);
-  border-radius: 12px;
+  border-radius: 10px;
   text-decoration: none;
   text-shadow: none;
   font-size: 18px;
