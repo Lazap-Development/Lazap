@@ -673,7 +673,18 @@ body {
   cursor: pointer;
 }
 
-.gamebox img {
+.gamebox .gamebox-icon {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  z-index: 4000;
+  bottom: 289px;
+  left: 84px;
+  border-radius: 50px/50px;
+  mask-image: none;
+}
+
+.gamebox .game_banner_img {
   height: 280px;
   width: 200px;
   border-radius: 12px;
