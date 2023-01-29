@@ -27,8 +27,8 @@ async function getInstalledGames() {
   } catch (err) {
     return [];
   }
-  const games = (await invoke("read_dir"),
-  { dirPath: getRiotGamesLocation(launcher_location) })
+  const games = (await invoke("read_dir",
+  { dirPath: getRiotGamesLocation(launcher_location) }))
     .map((x) => x)
     .filter((x) => x !== "Riot Client");
 

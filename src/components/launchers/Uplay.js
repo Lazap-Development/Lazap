@@ -91,7 +91,7 @@ async function parseGameObject(GameID, registry_res) {
 }
 
 async function isLauncherInstalled(path) {
-  return await invoke("read_dir", { path: path }).catch(() => null);
+  return await invoke("d_f_exists", { path: path }).catch(() => null);
 }
 
 module.exports = {
