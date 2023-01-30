@@ -656,7 +656,7 @@ body {
 
 .gamebox {
   position: relative;
-  margin-bottom: 30px;
+  margin-bottom: 60px;
   text-align: center;
   display: inline-block;
 
@@ -969,12 +969,6 @@ img,
   background-color: #373737;
 }
 
-.subSetting {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
 .leftbar-overlay {
   position: absolute;
   display: flex;
@@ -1217,7 +1211,7 @@ img,
   flex-direction: row-reverse;
   justify-content: space-evenly;
   align-items: center;
-  margin-left: 146px;
+  margin-left: 119px;
 }
 
 @keyframes fadeOutUp {

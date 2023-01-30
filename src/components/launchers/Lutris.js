@@ -1,5 +1,5 @@
 import Database from "tauri-plugin-sql-api";
-const invoke = window.__TAURI__.fs;
+const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
 
 async function getLutrisLocation(os = window.__TAURI__.os.platform()) {

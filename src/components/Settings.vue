@@ -81,7 +81,7 @@
         </div>
       </div>
       <div class="appearance-settings" id="appearance-settings">
-        <div class="subSetting">
+        <div class="colorSetting">
           <p>Accent Color</p>
           <div class="btnInput">
             <label class="color">
@@ -90,7 +90,7 @@
             <img class="repeatButton" src="../assets/icons/reset.png" />
           </div>
         </div>
-        <div class="subSetting">
+        <div>
           <p>Enable Launcher Icons</p>
           <label class="switch">
             <input type="checkbox" id="setting-enableLauncherIcons" />
@@ -369,5 +369,21 @@ export default {
 
 .appearance-settings {
   display: none;
+}
+
+.colorSetting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 335px;
+}
+
+.colorSetting p {
+  min-width: 105px;
+}
+
+#setting-accentColor {
+  height: 45px;
+  width: 65px;
 }
 </style>
