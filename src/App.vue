@@ -778,6 +778,7 @@ body {
   height: 100%;
   width: 100%;
   border-radius: 10px;
+  content: url("./assets/img/default-game-banner.png");
 }
 
 .mainPageGamebox span {

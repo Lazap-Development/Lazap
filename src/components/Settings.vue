@@ -149,11 +149,6 @@ export default {
       document.getElementById("appearance-settings").style.display = "flex";
     });
 
-    document.getElementById("winerunnersbtn").addEventListener("click", () => {
-      document.getElementById("general-settings").style.display = "none";
-      document.getElementById("appearance-settings").style.display = "flex";
-    });
-
     document
       .querySelector(".repeatButton")
       .addEventListener("click", async () => {
