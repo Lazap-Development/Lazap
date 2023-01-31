@@ -129,9 +129,7 @@ async function getMinecraftLauncher(platform) {
 async function getLunarClient(platform) {
   if (platform === "win32") {
     const isLunarInstalled = await invoke("d_f_exists", {
-      path:
-        (await path.appDir()) +
-        `${await path.localDataDir()}Programs\\lunarclient`,
+      path: `${await path.localDataDir()}Programs\\lunarclient`,
     }).catch(() => null);
     if (!isLunarInstalled) return false;
     const Location = `${await path.localDataDir()}Programs\\lunarclient`;
@@ -152,7 +150,7 @@ async function getLunarClient(platform) {
       if (output.stdout) {
         try {
           await invoke("d_f_exists", {
-            path: (await path.appDir()) + `${await path.homeDir()}/.lunarclient`,
+            path: `${await path.homeDir()}/.lunarclient`,
           })
         } catch (e) {
           return console.error(e);
