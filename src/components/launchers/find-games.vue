@@ -371,7 +371,7 @@ export default {
         })
       );
       if (enableLauncherIcons)
-        gameElement.appendChild(
+        gameElement.prepend(
           Elements.getLauncherIconElement(game.LauncherName)
         );
 

@@ -656,7 +656,7 @@ body {
 
 .gamebox {
   position: relative;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   text-align: center;
   display: inline-block;
 
@@ -674,14 +674,17 @@ body {
 }
 
 .gamebox .gamebox-icon {
-  position: relative;
-  width: 40px;
-  height: 40px;
+  position: absolute;
+  width: 32px;
+  height: 32px;
   z-index: 4000;
-  bottom: 289px;
-  left: 84px;
   border-radius: 50px/50px;
   mask-image: none;
+  display: block;
+  top: 0;
+  right: 0;
+  left: inherit;
+  margin: 5px;
 }
 
 .gamebox .game_banner_img {
