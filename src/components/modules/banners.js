@@ -162,17 +162,16 @@ async function cacheBanners(data, res) {
               `/${sha256(data[i].DisplayName.replaceAll(" ", "_"))}.png`,
             fileContent: response.data,
           });
-          document
-            .getElementById(
-              `game-div-${data[i].DisplayName.replaceAll(" ", "_")}`
+          const banner = document.getElementById(`game-div-${data[i].DisplayName.replaceAll(" ", "_")}`)?.firstElementChild;
+          banner?.setAttribute(
+            "src",
+            tauri.convertFileSrc(
+              bannerBasePath +
+              `/${sha256(data[i].DisplayName.replaceAll(" ", "_"))}.png`
             )
-            ?.firstElementChild?.setAttribute(
-              "src",
-              tauri.convertFileSrc(
-                bannerBasePath +
-                  `/${sha256(data[i].DisplayName.replaceAll(" ", "_"))}.png`
-              )
-            );
+          );
+          banner.style = 'content: none;';
+          banner.addEventListener('error', () => banner.style = '');
         })
         .catch((e) => console.error(e));
 

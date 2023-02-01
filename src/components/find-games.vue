@@ -52,15 +52,6 @@ class Elements {
     } else {
       banner = false;
     }
-    if (banner === false) {
-      gameBanner.classList.add("default-box");
-    }
-
-    gameBanner.addEventListener("error", () => {
-      gameBanner.setAttribute("src", "");
-      gameBanner.style.content = "";
-      gameBanner.classList.add("default-box");
-    });
 
     if (banner !== false) {
       gameBanner.setAttribute("src", banner);
@@ -495,22 +486,24 @@ export default {
         );
       if (games.length > 0 && id === "allGamesList") {
         setGames(games, "all-games");
-        require("./modules/banners").getBanners(
+        const banners = await require("./modules/banners").getBanners(
           await Promise.all(
             games.filter(
               (x) => !require("./others/blacklist.json")[0].includes(x.GameID)
             )
           )
         );
+        console.log(banners);
       }
 
       if (!data) {
         this.loadGames(id, [
           ...games,
           ...(await this.getInstalledGames(["XboxGames.js"])),
-        ]).then((d) =>
-          require("./modules/banners.js").getBanners([...games, ...d])
-        );
+        ]).then(async (d) => {
+          const banners = await require("./modules/banners.js").getBanners([...games, ...d])
+          console.log(banners);
+        });
       }
 
       return games;

@@ -30,13 +30,13 @@ fn init_storage() -> Result<(), std::io::Error> {
         .display()
         .to_string()
         + "com.lazap.config/cache/games";
-    let base_config_cache_games_banners_path =
+    let base_config_cache_user_path =
         tauri::api::path::app_config_dir(&tauri::Config::default())
             .unwrap()
             .display()
             .to_string()
             + "com.lazap.config/cache/user";
-    let base_config_cache_user_path = tauri::api::path::app_config_dir(&tauri::Config::default())
+    let base_config_cache_games_banners_path = tauri::api::path::app_config_dir(&tauri::Config::default())
         .unwrap()
         .display()
         .to_string()
