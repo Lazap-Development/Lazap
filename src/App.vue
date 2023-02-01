@@ -533,25 +533,6 @@ body {
   background-color: #393939;
 }
 
-.secondorybox .section .addGameFinalBtn {
-  width: 170px;
-  height: 30px;
-  margin-left: 20px;
-  outline: none;
-  border: none;
-  align-self: flex-start;
-  margin-right: 20px;
-  margin-top: 10px;
-  background-color: #7f3db5;
-  color: rgb(216, 216, 216);
-  border-radius: 12px;
-  font-family: Nunito-Bold;
-}
-
-.secondorybox .section .addGameFinalBtn:hover {
-  cursor: pointer;
-}
-
 .children {
   display: flex;
   height: 100%;

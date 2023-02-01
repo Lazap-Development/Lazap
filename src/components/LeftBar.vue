@@ -411,6 +411,7 @@ export default {
   position: absolute;
   height: 66%;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .side-tab {
