@@ -1,12 +1,12 @@
 <script>
-const currentRpc = require("../modules/rpcOptions.js").currentRpc;
-const selectOption = require("../modules/rpcOptions.js").selectOption;
+const currentRpc = require("./modules/rpcOptions.js").currentRpc;
+const selectOption = require("./modules/rpcOptions.js").selectOption;
 const os = window.__TAURI__.os;
 const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
 const Window = window.__TAURI__.window;
 const tauri = window.__TAURI__.tauri;
-const { sha256 } = require("../modules/sha256.js");
+const { sha256 } = require("./modules/sha256.js");
 let timestamp = null;
 let processes = new Map();
 let loads = 0;
@@ -103,7 +103,7 @@ class Elements {
 
   static getLauncherIconElement(LauncherName) {
     const gameLauncherIcon = document.createElement("img");
-    const icon = require("../modules/icons").getLauncherIcon(LauncherName);
+    const icon = require("./modules/icons").getLauncherIcon(LauncherName);
 
     gameLauncherIcon.classList.add("gamebox-icon");
     gameLauncherIcon.setAttribute("src", icon);
@@ -408,7 +408,7 @@ export default {
       // Filter out new games and delete old games
       games = games.filter(
         (x) =>
-          !require("../others/blacklist.json")[0].includes(
+          !require("./others/blacklist.json")[0].includes(
             x.GameID
           ) /* && !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`)*/
       );
@@ -495,10 +495,10 @@ export default {
         );
       if (games.length > 0 && id === "allGamesList") {
         setGames(games, "all-games");
-        require("../modules/banners").getBanners(
+        require("./modules/banners").getBanners(
           await Promise.all(
             games.filter(
-              (x) => !require("../others/blacklist.json")[0].includes(x.GameID)
+              (x) => !require("./others/blacklist.json")[0].includes(x.GameID)
             )
           )
         );
@@ -509,7 +509,7 @@ export default {
           ...games,
           ...(await this.getInstalledGames(["XboxGames.js"])),
         ]).then((d) =>
-          require("../modules/banners.js").getBanners([...games, ...d])
+          require("./modules/banners.js").getBanners([...games, ...d])
         );
       }
 
@@ -540,7 +540,7 @@ export default {
         await Promise.all(
           launchers
             .filter((x) => x.endsWith(".js"))
-            .map((x) => require(`./${x}`)?.getInstalledGames())
+            .map((x) => require(`./launchers/${x}`)?.getInstalledGames())
         )
       ).flat();
 

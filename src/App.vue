@@ -73,7 +73,7 @@ import Settings from "./components/Settings.vue";
 import Titlebar from "./components/Titlebar.vue";
 import AllGames from "./components/AllGames.vue";
 import LeftBar from "./components/LeftBar.vue";
-import findGames from "./components/launchers/find-games.vue";
+import findGames from "./components/find-games.vue";
 
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
@@ -656,7 +656,7 @@ body {
 
 .gamebox {
   position: relative;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   text-align: center;
   display: inline-block;
 
