@@ -20,14 +20,6 @@
       "dialog": {
         "all": true
       },
-      "fs": {
-        "createDir": true,
-        "readDir": true,
-        "readFile": true,
-        "renameFile": true,
-        "writeFile": true,
-        "scope": ["**"]
-      },
       "globalShortcut": {
         "all": true
       },
