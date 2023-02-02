@@ -1,6 +1,6 @@
 {
   "name": "lazap",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -13,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@tauri-apps/api": "^1.0.2",
-    "core-js": "^3.8.3",
+    "core-js": "^3.27.2",
     "tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra",
     "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql",
     "vue": "^3.2.13"
@@ -24,8 +24,8 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3",
+    "eslint": "^8.32.0",
+    "eslint-plugin-vue": "^9.8.0",
     "vue-cli-plugin-tauri": "~1.0.0"
   },
   "eslintConfig": {
