@@ -72,7 +72,6 @@
 </template>
 
 <script>
-const fs = window.__TAURI__.fs;
 const invoke = window.__TAURI__.invoke;
 const dialog = window.__TAURI__.dialog;
 const path = window.__TAURI__.path;
@@ -86,18 +85,19 @@ export default {
       let reader = new FileReader();
 
       reader.onload = async function () {
-        await fs.write(
-          (await path.appDir()) +
-            `storage/cache/games/banners/newcustombanner.png`,
-          reader.result
-        );
+        await invoke("write_binary_file", {
+          filePath:
+            (await path.appDir()) +
+            `cache/games/banners/newcustombanner.png`,
+          fileContent: [...new Uint8Array(reader.result)],
+        });
         document.getElementById(
           "addGameCustomBannerOutput"
         ).style.backgroundImage =
           `url(` +
           tauri.convertFileSrc(
             (await path.appDir()) +
-              `storage/cache/games/banners/newcustombanner.png`
+              `cache/games/banners/newcustombanner.png`
           ) +
           `?${new Date().getSeconds()}` +
           `)`;
@@ -108,6 +108,7 @@ export default {
   },
   async mounted() {
     let newGameLocation;
+    let createGameElement = this.$root.$refs.findGamesMod.createGameElement;
 
     document
       .getElementById("addGameBtn")
@@ -123,9 +124,11 @@ export default {
           document.getElementById("inputGameName").value = "";
           document.getElementById("addGameCustomBannerTxt").style.opacity = "1";
           try {
-            await fs.removeFile(
-              (await path.appDir()) + `cache/games/banners/newcustombanner.png`
-            );
+            await invoke("remove_file", {
+              file_path:
+                (await path.appDir()) +
+                `cache/games/banners/newcustombanner.png`,
+            });
           } catch (e) {
             return e;
           }
@@ -152,17 +155,19 @@ export default {
           };
 
           try {
-            await fs.renameFile(
-              (await path.appDir()) +
-                `storage/cache/games/banners/newcustombanner.png`,
-              (await path.appDir()) +
-                `storage/cache/games/banners/${require("./modules/sha256.js").sha256(
+            await invoke("rename_file", {
+              from:
+                (await path.appDir()) +
+                `cache/games/banners/newcustombanner.png`,
+              to:
+                (await path.appDir()) +
+                `cache/games/banners/${require("./modules/sha256.js").sha256(
                   document
                     .getElementById("inputGameName")
                     .value.replaceAll(" ", "_")
-                )}.png`
-            );
-            this.$root.$refs.findGamesMod.Elements.createGameElement(
+                )}.png`,
+            });
+            createGameElement(
               scheme,
               "allGamesList"
             );
@@ -177,7 +182,7 @@ export default {
               fileContent: JSON.stringify(data),
             });
           } catch (e) {
-            this.$root.$refs.findGamesMod.Elements.createGameElement(
+            createGameElement(
               scheme,
               "allGamesList"
             );

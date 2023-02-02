@@ -145,7 +145,9 @@ fn main() {
             write_file,
             d_f_exists,
             read_dir,
-            write_binary_file
+            write_binary_file,
+            rename_file,
+            remove_file
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -205,7 +207,9 @@ fn main() {
             write_file,
             d_f_exists,
             read_dir,
-            write_binary_file
+            write_binary_file,
+            rename_file,
+            remove_file
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -266,7 +270,9 @@ fn main() {
             write_file,
             d_f_exists,
             read_dir,
-            write_binary_file
+            write_binary_file,
+            rename_file,
+            remove_file
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -359,6 +365,16 @@ async fn write_binary_file(file_path: String, file_content: Vec<u8>) {
 #[tauri::command]
 async fn d_f_exists(path: String) -> Result<bool, Error> {
     Ok(Path::new(&path).exists())
+}
+
+#[tauri::command]
+async fn rename_file(from: String, to: String) {
+    fs::rename(from, to).expect("Unable to rename file.");
+}
+
+#[tauri::command]
+async fn remove_file(file_path: String) {
+    fs::remove_file(file_path).expect("Unable to remove file.");
 }
 
 #[tauri::command]
