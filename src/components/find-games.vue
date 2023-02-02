@@ -362,9 +362,7 @@ export default {
         })
       );
       if (enableLauncherIcons)
-        gameElement.prepend(
-          Elements.getLauncherIconElement(game.LauncherName)
-        );
+        gameElement.prepend(Elements.getLauncherIconElement(game.LauncherName));
 
       const gameBottom = document.createElement("div");
       gameBottom.classList.add("gamebox-bottom");
@@ -486,24 +484,13 @@ export default {
         );
       if (games.length > 0 && id === "allGamesList") {
         setGames(games, "all-games");
-        const banners = await require("./modules/banners").getBanners(
-          await Promise.all(
-            games.filter(
-              (x) => !require("./others/blacklist.json")[0].includes(x.GameID)
-            )
-          )
-        );
-        console.log(banners);
       }
 
       if (!data) {
         this.loadGames(id, [
           ...games,
           ...(await this.getInstalledGames(["XboxGames.js"])),
-        ]).then(async (d) => {
-          const banners = await require("./modules/banners.js").getBanners([...games, ...d])
-          console.log(banners);
-        });
+        ]);
       }
 
       return games;

@@ -131,7 +131,6 @@ export default {
             filePath: (await path.appDir()) + "LauncherData.json",
           })
         );
-        console.log(Data);
         document.querySelectorAll("input[id^=setting-]").forEach((input) => {
           if (input.id === "setting-accentColor")
             input.value = Data[input.id.split("-")[1]];
@@ -212,7 +211,7 @@ export default {
             invoke("disable_rpc", { enable: true });
             setActivity("home");
 
-            document.getElementById("rpc").innerHTML = "Connected to Discord";
+            document.getElementById("rpc").innerHTML = "Connected";
           } catch (error) {
             invoke("disable_rpc", { enable: false });
             document.getElementById("rpc").innerHTML = "Disconnected";

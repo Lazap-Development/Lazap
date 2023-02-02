@@ -18,7 +18,7 @@
         />
 
         <img class="titlebar-rpc" src="../assets/svg/discord.svg" id="rpcbtn" />
-        <span id="rpc"></span>
+        <span id="rpc" class="rpc"></span>
       </div>
       <div style="margin-top: 0px" class="titlebar-icons">
         <div @click="min_window" class="titlebar-min mx-1"></div>
@@ -30,6 +30,9 @@
 </template>
 
 <script>
+const path = window.__TAURI__.path;
+const invoke = window.__TAURI__.invoke;
+
 export default {
   name: "titlebar-comp",
   methods: {
@@ -42,6 +45,47 @@ export default {
     close_window() {
       window.__TAURI__.window.appWindow.close();
     },
+  },
+  async mounted() {
+    let timestamp = null;
+
+    try {
+      const { enable_rpc } = JSON.parse(
+        await invoke("read_file", {
+          filePath: (await path.appDir()) + "LauncherData.json",
+        })
+      );
+      if (!enable_rpc) throw console.log("RPC must not be enabled.");
+      invoke("disable_rpc", { enable: true });
+      setActivity("home");
+
+      document.getElementById("rpc").innerHTML = "Connected";
+      setTimeout(() => {
+        document.getElementById("rpc").classList.add("fadeAwayRPCTxt");
+      }, 1000);
+    } catch (error) {
+      invoke("disable_rpc", { enable: false });
+      document.getElementById("rpc").innerHTML = "Disconnected";
+    }
+
+    async function setActivity(tab) {
+      const { state, details, largeImage, largeText, smallImage, smallText } =
+        require("./modules/rpcOptions").selectOption(tab);
+      if (timestamp === null) timestamp = Date.now();
+      try {
+        await invoke(`set_activity`, {
+          state,
+          details,
+          largeImage,
+          largeText,
+          smallImage,
+          smallText,
+          timestamp: timestamp === null ? Date.now() : timestamp,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
   },
 };
 </script>
@@ -170,14 +214,14 @@ export default {
 
 .titlebar-rpc {
   display: block;
-  height: 19px;
-  width: 19px;
+  height: 20px;
+  width: 20px;
   margin-left: 14px;
   align-items: flex-start;
   filter: invert(50%);
 }
 
-#rpc {
+.rpc {
   display: flex;
   color: darkgray;
   font-family: Nunito-Bold;
@@ -186,5 +230,19 @@ export default {
   font-size: 14px;
   margin-left: 10px;
   cursor: default;
+}
+
+.fadeAwayRPCTxt {
+  animation: fadeAway 300ms forwards;
+}
+
+@keyframes fadeAway {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 </style>

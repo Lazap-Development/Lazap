@@ -2,8 +2,8 @@ let currentRpc = "home";
 
 const rpcOptions = {
   home: {
-    state: "__",
-    details: "On main screen",
+    state: "---",
+    details: "Home",
     largeImage: "lazap_icon",
     largeText: "Lazap",
     smallImage: "mushroom",
@@ -11,8 +11,8 @@ const rpcOptions = {
     id: "home",
   },
   recent: {
-    state: "__",
-    details: "Watching recent games",
+    state: "---",
+    details: "Recent Games",
     largeImage: "lazap_icon",
     largeText: "Lazap",
     smallImage: "mushroom",
@@ -20,8 +20,8 @@ const rpcOptions = {
     id: "recent",
   },
   games: {
-    state: "ask them to play with you",
-    details: "Picking games",
+    state: "Ask them to play with you",
+    details: "All Games",
     largeImage: "lazap_icon",
     largeText: "Lazap",
     smallImage: "mushroom",
@@ -29,8 +29,8 @@ const rpcOptions = {
     id: "games",
   },
   favourites: {
-    state: "__",
-    details: "Watching favourite games",
+    state: "---",
+    details: "Favourite Games",
     largeImage: "lazap_icon",
     largeText: "Lazap",
     smallImage: "mushroom",
@@ -38,8 +38,8 @@ const rpcOptions = {
     id: "favourites",
   },
   messages: {
-    state: "__",
-    details: "Watching messages",
+    state: "---",
+    details: "Messages",
     largeImage: "lazap_icon",
     largeText: "Lazap",
     smallImage: "mushroom",
@@ -47,8 +47,8 @@ const rpcOptions = {
     id: "messages",
   },
   activity: {
-    state: "don't think so",
-    details: "Are activities even a thing?",
+    state: "---",
+    details: "Activities",
     largeImage: "lazap_icon",
     largeText: "Lazap",
     smallImage: "mushroom",
@@ -56,8 +56,8 @@ const rpcOptions = {
     id: "activity",
   },
   friends: {
-    state: "bet you don't have any",
-    details: "Scrolling through friends list",
+    state: "---",
+    details: "All Friends",
     largeImage: "lazap_icon",
     largeText: "Lazap",
     smallImage: "mushroom",

@@ -93,8 +93,6 @@ export default {
         'div.search-bar > input[type="text"]'
       );
 
-      let timestamp = null;
-
       let sysInfoInvoke = JSON.parse(await invoke("get_sys_info"));
       if (sysInfoInvoke.cpu.length > 22) {
         sysInfoInvoke.cpu = sysInfoInvoke.cpu.slice(0, 22) + "...";
@@ -118,22 +116,6 @@ export default {
         updateAccentColor(accentColor);
       } catch (error) {
         console.error(error);
-      }
-
-      try {
-        const { enable_rpc } = JSON.parse(
-          await invoke("read_file", {
-            filePath: (await path.appDir()) + "LauncherData.json",
-          })
-        );
-        if (!enable_rpc) throw console.log("RPC must not be enabled.");
-        invoke("disable_rpc", { enable: true });
-        setActivity("home");
-
-        document.getElementById("rpc").innerHTML = "Connected to Discord";
-      } catch (error) {
-        invoke("disable_rpc", { enable: false });
-        document.getElementById("rpc").innerHTML = "Disconnected";
       }
 
       const allGames = await this.$refs.findGamesMod
@@ -272,24 +254,7 @@ export default {
           .querySelector(":root")
           .style.setProperty("--back", accentColor);
       }
-      async function setActivity(tab) {
-        const { state, details, largeImage, largeText, smallImage, smallText } =
-          require("./components/modules/rpcOptions").selectOption(tab);
-        if (timestamp === null) timestamp = Date.now();
-        try {
-          await invoke(`set_activity`, {
-            state,
-            details,
-            largeImage,
-            largeText,
-            smallImage,
-            smallText,
-            timestamp: timestamp === null ? Date.now() : timestamp,
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      }
+
     })();
   },
 };
