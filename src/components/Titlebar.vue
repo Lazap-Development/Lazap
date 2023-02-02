@@ -60,13 +60,14 @@ export default {
       setActivity("home");
 
       document.getElementById("rpc").innerHTML = "Connected";
-      setTimeout(() => {
-        document.getElementById("rpc").classList.add("fadeAwayRPCTxt");
-      }, 1000);
     } catch (error) {
       invoke("disable_rpc", { enable: false });
       document.getElementById("rpc").innerHTML = "Disconnected";
     }
+
+    setTimeout(() => {
+      document.getElementById("rpc").classList.add("fadeAwayRPCTxt");
+    }, 1000);
 
     async function setActivity(tab) {
       const { state, details, largeImage, largeText, smallImage, smallText } =
