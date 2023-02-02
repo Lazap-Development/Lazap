@@ -67,7 +67,7 @@ export default {
 
     setTimeout(() => {
       document.getElementById("rpc").classList.add("fadeAwayRPCTxt");
-    }, 1000);
+    }, 1500);
 
     async function setActivity(tab) {
       const { state, details, largeImage, largeText, smallImage, smallText } =

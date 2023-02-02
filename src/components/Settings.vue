@@ -216,6 +216,8 @@ export default {
             invoke("disable_rpc", { enable: false });
             document.getElementById("rpc").innerHTML = "Disconnected";
           }
+          
+          window.location.reload();
         }
         if (input.id === "setting-enableLauncherIcons") window.location.reload();
       });
