@@ -38,7 +38,7 @@ class Elements {
       dirPath: GAME_BANNERS_BASE_PATH,
     });
     const img = dirs.find(
-      (x) => x === `${sha256(game.DisplayName.replaceAll(" ", "_"))}.png`
+      (x) => x === `${sha256(game.DisplayName.replaceAll(" ", "_").replace(/[\u{0080}-\u{FFFF}]/gu,""))}.png`
     );
     if (img) {
       banner = img
@@ -474,7 +474,10 @@ export default {
       return games;
     },
     async loadGames(id, data, stored) {
-      const games = data ?? (await this.getInstalledGames());
+      const games =
+        (await this.getInstalledGames()).filter(
+          (x) => !require("./others/blacklist.json")[0].includes(x.GameID)
+        );
       const list = document.getElementById(id);
 
       (await this.filterAndSort(games, id, list, stored))
@@ -484,6 +487,7 @@ export default {
         );
       if (games.length > 0 && id === "allGamesList") {
         setGames(games, "all-games");
+        require("./modules/banners").getBanners(await Promise.all(games));
       }
 
       if (!data) {

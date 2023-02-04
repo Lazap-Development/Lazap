@@ -8,14 +8,14 @@ async function getBanners(games) {
   games = games.filter((x) => !["CustomGame"].includes(x.LauncherName));
   const bannerBasePath = (await path.appDir()) + "cache/games/banners";
   const readBanners = await invoke('read_dir', { dirPath: bannerBasePath })
-
+  
   let alreadyProcessed = false;
   let existingProcessed = 0;
 
   for (let i = 0; i < games.length; i++) {
     if (
       readBanners.includes(
-        `${sha256(games[i].DisplayName.replaceAll(" ", "_"))}.png`
+        `${sha256(games[i].DisplayName.replaceAll(" ", "_").replace(/[\u{0080}-\u{FFFF}]/gu,""))}.png`
       )
     ) {
       existingProcessed++;
@@ -49,7 +49,7 @@ async function getBanners(games) {
             return "https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png";
           }
           case "Lunar": {
-            return "https://www.lunarclient.com/assets/img/default-twitter-icon.webp";
+            return "https://pbs.twimg.com/profile_images/1608698913476812801/uLTLhANK_400x400.jpg";
           }
           case "Lutris": {
             if (
@@ -121,7 +121,7 @@ async function getBanners(games) {
       })()
     );
   }
-
+  
   cacheBanners(
     games,
     arr.filter((x) => x)
@@ -130,6 +130,7 @@ async function getBanners(games) {
 }
 
 async function cacheBanners(data, res) {
+
   const bannerBasePath = (await path.appDir()) + "cache/games/banners";
 
   if (data?.length === 0) {
@@ -159,15 +160,19 @@ async function cacheBanners(data, res) {
           await invoke("write_binary_file", {
             filePath:
               bannerBasePath +
-              `/${sha256(data[i].DisplayName.replaceAll(" ", "_"))}.png`,
+              `/${sha256(data[i].DisplayName.replaceAll(" ", "_").replace(/[\u{0080}-\u{FFFF}]/gu,""))}.png`,
             fileContent: response.data,
           });
           const banner = document.getElementById(`game-div-${data[i].DisplayName.replaceAll(" ", "_")}`)?.firstElementChild;
+          console.log(tauri.convertFileSrc(
+            bannerBasePath +
+            `/${sha256(data[i].DisplayName.replaceAll(" ", "_").replace(/[\u{0080}-\u{FFFF}]/gu,""))}.png`
+          ))
           banner?.setAttribute(
             "src",
             tauri.convertFileSrc(
               bannerBasePath +
-              `/${sha256(data[i].DisplayName.replaceAll(" ", "_"))}.png`
+              `/${sha256(data[i].DisplayName.replaceAll(" ", "_").replace(/[\u{0080}-\u{FFFF}]/gu,""))}.png`
             )
           );
           banner.style = 'content: none;';
