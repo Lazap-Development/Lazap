@@ -15,307 +15,6 @@ let processes = new Map();
 let loads = 0;
 let __CACHE__ = [];
 
-class Elements {
-  static getGameElement(game, id) {
-    const gameElement = document.createElement("div");
-
-    gameElement.id = `game-div-${game.DisplayName.replaceAll(" ", "_")}`;
-    gameElement.className +=
-      id.startsWith("recent") && id.includes("Main")
-        ? "mainPageGamebox"
-        : "gamebox";
-    gameElement.style.diplay = "table";
-
-    return gameElement;
-  }
-
-  static async getGameBannerElement(game) {
-    const appDirPath = await path.appDir();
-    const GAME_BANNERS_BASE_PATH = `${appDirPath}cache/games/banners`;
-
-    const gameBanner = document.createElement("img");
-    gameBanner.classList.add("game_banner_img");
-
-    let banner;
-    const dirs = await invoke("read_dir", {
-      dirPath: GAME_BANNERS_BASE_PATH,
-    });
-    const img = dirs.find(
-      (x) =>
-        x ===
-        `${sha256(
-          game.DisplayName.replaceAll(" ", "_").replace(
-            /[\u{0080}-\u{FFFF}]/gu,
-            ""
-          )
-        )}.png`
-    );
-    if (img) {
-      banner = img
-        ? tauri.convertFileSrc(
-            appDirPath +
-              `cache/games/banners/${JSON.stringify(img).slice(1, -1)}`
-          )
-        : false;
-    } else if (game.Banner) {
-      banner = game.Banner;
-    } else {
-      banner = false;
-    }
-
-    if (banner !== false) {
-      gameBanner.setAttribute("src", banner);
-      gameBanner.style.content = "none";
-    }
-    gameBanner.height = 500;
-    gameBanner.width = 500;
-    game.Banner = banner;
-
-    return gameBanner;
-  }
-  static getGameDisplayElement(game) {
-    // Set Game Display Name
-    const gameText = document.createElement("span");
-    if (game.DisplayName.length > 17) {
-      gameText.innerHTML = game.DisplayName.slice(0, 17);
-      gameText.innerHTML += "...";
-    } else {
-      gameText.innerHTML = game.DisplayName;
-    }
-
-    return gameText;
-  }
-
-  static async getMenuElement(name) {
-    const menuIcon = document.createElement("div");
-    menuIcon.classList.add("menu");
-    menuIcon.id = "menu";
-
-    menuIcon.addEventListener("click", () => {
-      document.getElementById("gameMenu").style.display === "flex"
-        ? (document.getElementById("gameMenu").style.display = "none")
-        : (document.getElementById("gameMenu").style.display = "flex");
-
-      document.getElementById("gameMenuTitle").innerHTML = name;
-    });
-
-    return menuIcon;
-  }
-
-  static getLauncherIconElement(LauncherName) {
-    const gameLauncherIcon = document.createElement("img");
-    const icon = require("./modules/icons").getLauncherIcon(LauncherName);
-
-    gameLauncherIcon.classList.add("gamebox-icon");
-    gameLauncherIcon.setAttribute("src", icon);
-
-    return gameLauncherIcon;
-  }
-}
-
-async function createProcess(
-  OS,
-  Command,
-  Args,
-  { GameID, DisplayName, LauncherName },
-  force = false
-) {
-  if (OS === "windows") {
-    if (processes.get(GameID) && !force) return "RUNNING_ALREADY";
-    VisibilityState({ LauncherName, DisplayName });
-
-    const instance = invoke("launch_game", {
-      exec: Command,
-      args: Args,
-    }).then(() => {
-      VisibilityState({ LauncherName, DisplayName });
-      processes.delete(GameID);
-    });
-    processes.set(GameID, instance);
-
-    return instance;
-  } else if (OS === "linux") {
-    if (processes.get(GameID) && !force) return "RUNNING_ALREADY";
-    VisibilityState({ LauncherName, DisplayName });
-
-    const instance = invoke("launch_game", {
-      exec: Command,
-      args: Args,
-    }).then(() => {
-      VisibilityState({ LauncherName, DisplayName });
-      processes.delete(GameID);
-    });
-    processes.set(GameID, instance);
-
-    return instance;
-  }
-}
-
-async function VisibilityState({ LauncherName, DisplayName }) {
-  try {
-    const LauncherData = JSON.parse(
-      await invoke("read_file", {
-        filePath: (await path.appDir()) + "LauncherData.json",
-      })
-    );
-    if (LauncherData.trayMinLaunch === true) {
-      if ((await Window.appWindow.isVisible()) === true) {
-        Window.appWindow.hide();
-        if (timestamp === null) timestamp = Date.now();
-
-        try {
-          await invoke(`set_rpc_activity`, {
-            state: `Launcher: ${LauncherName}`,
-            details: DisplayName,
-            largeImage: LauncherName.toLowerCase(),
-            largeText: "Lazap",
-            smallImage: "lazap_icon",
-            smallText: "Lazap",
-            timestamp: timestamp === null ? Date.now() : timestamp,
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      } else {
-        Window.appWindow.show();
-        timestamp = Date.now();
-
-        const { state, details, largeImage, largeText, smallImage, smallText } =
-          selectOption(currentRpc);
-        try {
-          await invoke(`set_rpc_activity`, {
-            state,
-            details,
-            largeImage,
-            largeText,
-            smallImage,
-            smallText,
-            timestamp: timestamp === null ? Date.now() : timestamp,
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    }
-  } catch (e) {
-    return console.error(e);
-  }
-}
-
-async function setGames(games, source) {
-  const appDirPath = await path.appDir();
-  const GAMES_DATA_BASE_PATH = appDirPath + "cache/games/data.json";
-  const data = JSON.parse(
-    await invoke("read_file", {
-      filePath: GAMES_DATA_BASE_PATH,
-    }).catch(() => "[]")
-  );
-
-  data.forEach((d) => {
-    Object.keys(d).forEach((x) => {
-      if ([undefined, null].includes(d[x])) delete d[x];
-    });
-  });
-  games.forEach((d) => {
-    Object.keys(d).forEach((y) => {
-      if ([undefined, null].includes(d[y])) delete d[y];
-    });
-  });
-
-  if (source === "add-launch") {
-    await invoke("write_file", {
-      filePath: GAMES_DATA_BASE_PATH,
-      fileContent: JSON.stringify(games),
-    });
-  } else if (source === "toggle-favourite") {
-    await invoke("write_file", {
-      filePath: GAMES_DATA_BASE_PATH,
-      fileContent: JSON.stringify(games),
-    });
-  } else if (source === "all-games") {
-    if (data.length > 0) {
-      for (let i = 0; i < games.length; i++) {
-        const game = data.find(
-          (x) =>
-            x.GameID === games[i].GameID &&
-            x.LauncherName === games[i].LauncherName
-        );
-        if (!game) {
-          data.push(games[i]);
-        } else if (
-          Object.keys(games[i]).length <
-          Object.keys(
-            data.find(
-              (x) =>
-                x.GameID === games[i].GameID &&
-                x.LauncherName === games[i].LauncherName
-            )
-          ).length
-        ) {
-          let obj = {
-            ...data.find(
-              (x) =>
-                x.GameID === games[i].GameID &&
-                x.LauncherName === games[i].LauncherName
-            ),
-          };
-          Object.keys(
-            data.find(
-              (x) =>
-                x.GameID === games[i].GameID &&
-                x.LauncherName === games[i].LauncherName
-            )
-          )
-            .filter((x) => !Object.keys(games[i]).includes(x))
-            .forEach(
-              (x) =>
-                (obj[x] = data.find(
-                  (x) =>
-                    x.GameID === games[i].GameID &&
-                    x.LauncherName === games[i].LauncherName
-                )[x])
-            );
-          data.splice(
-            data.findIndex(
-              (x) =>
-                x.GameID === games[i].GameID &&
-                x.LauncherName === games[i].LauncherName
-            ),
-            1,
-            obj
-          );
-        } else if (
-          Object.keys(games[i]).length >
-          Object.keys(
-            data.find(
-              (x) =>
-                x.GameID === games[i].GameID &&
-                x.LauncherName === games[i].LauncherName
-            )
-          ).length
-        ) {
-          data[
-            data.findIndex(
-              (x) =>
-                x.GameID === games[i].GameID &&
-                x.LauncherName === games[i].LauncherName
-            )
-          ] = games[i];
-        }
-      }
-    } else {
-      return await invoke("write_file", {
-        filePath: GAMES_DATA_BASE_PATH,
-        fileContent: JSON.stringify(games),
-      });
-    }
-    await invoke("write_file", {
-      filePath: GAMES_DATA_BASE_PATH,
-      fileContent: JSON.stringify(data),
-    });
-  }
-}
-
 export default {
   name: "find-games",
   methods: {
@@ -994,5 +693,352 @@ export default {
         });
     },
   },
+};
+
+class Elements {
+  static getGameElement(game, id) {
+    const gameElement = document.createElement("div");
+
+    gameElement.id = `game-div-${game.DisplayName.replaceAll(" ", "_")}`;
+    gameElement.className +=
+      id.startsWith("recent") && id.includes("Main")
+        ? "mainPageGamebox"
+        : "gamebox";
+    gameElement.style.diplay = "table";
+
+    return gameElement;
+  }
+
+  static async getGameBannerElement(game) {
+    const appDirPath = await path.appDir();
+    const GAME_BANNERS_BASE_PATH = `${appDirPath}cache/games/banners`;
+
+    const gameBanner = document.createElement("img");
+    gameBanner.classList.add("game_banner_img");
+
+    let banner;
+    const dirs = await invoke("read_dir", {
+      dirPath: GAME_BANNERS_BASE_PATH,
+    });
+    const img = dirs.find(
+      (x) =>
+        x ===
+        `${sha256(
+          game.DisplayName.replaceAll(" ", "_").replace(
+            /[\u{0080}-\u{FFFF}]/gu,
+            ""
+          )
+        )}.png`
+    );
+    if (img) {
+      banner = img
+        ? tauri.convertFileSrc(
+            appDirPath +
+              `cache/games/banners/${JSON.stringify(img).slice(1, -1)}`
+          )
+        : false;
+    } else if (game.Banner) {
+      banner = game.Banner;
+    } else {
+      banner = false;
+    }
+
+    if (banner !== false) {
+      gameBanner.setAttribute("src", banner);
+      gameBanner.style.content = "none";
+    }
+    gameBanner.height = 500;
+    gameBanner.width = 500;
+    game.Banner = banner;
+
+    return gameBanner;
+  }
+  static getGameDisplayElement(game) {
+    // Set Game Display Name
+    const gameText = document.createElement("span");
+    if (game.DisplayName.length > 17) {
+      gameText.innerHTML = game.DisplayName.slice(0, 17);
+      gameText.innerHTML += "...";
+    } else {
+      gameText.innerHTML = game.DisplayName;
+    }
+
+    return gameText;
+  }
+
+  static async getMenuElement(name) {
+    const menuIcon = document.createElement("div");
+    menuIcon.classList.add("menu");
+    menuIcon.id = "menu";
+
+    menuIcon.addEventListener("click", () => {
+      document.getElementById("gameMenu").style.display === "flex"
+        ? (document.getElementById("gameMenu").style.display = "none")
+        : (document.getElementById("gameMenu").style.display = "flex");
+
+      document.getElementById("gameMenuTitle").innerHTML = name;
+    });
+
+    return menuIcon;
+  }
+
+  static getLauncherIconElement(LauncherName) {
+    const gameLauncherIcon = document.createElement("img");
+    const icon = getLauncherIcon(LauncherName);
+
+    gameLauncherIcon.classList.add("gamebox-icon");
+    gameLauncherIcon.setAttribute("src", icon);
+
+    return gameLauncherIcon;
+  }
+}
+
+async function createProcess(
+  OS,
+  Command,
+  Args,
+  { GameID, DisplayName, LauncherName },
+  force = false
+) {
+  if (OS === "windows") {
+    if (processes.get(GameID) && !force) return "RUNNING_ALREADY";
+    VisibilityState({ LauncherName, DisplayName });
+
+    const instance = invoke("launch_game", {
+      exec: Command,
+      args: Args,
+    }).then(() => {
+      VisibilityState({ LauncherName, DisplayName });
+      processes.delete(GameID);
+    });
+    processes.set(GameID, instance);
+
+    return instance;
+  } else if (OS === "linux") {
+    if (processes.get(GameID) && !force) return "RUNNING_ALREADY";
+    VisibilityState({ LauncherName, DisplayName });
+
+    const instance = invoke("launch_game", {
+      exec: Command,
+      args: Args,
+    }).then(() => {
+      VisibilityState({ LauncherName, DisplayName });
+      processes.delete(GameID);
+    });
+    processes.set(GameID, instance);
+
+    return instance;
+  }
+}
+
+async function VisibilityState({ LauncherName, DisplayName }) {
+  try {
+    const LauncherData = JSON.parse(
+      await invoke("read_file", {
+        filePath: (await path.appDir()) + "LauncherData.json",
+      })
+    );
+    if (LauncherData.trayMinLaunch === true) {
+      if ((await Window.appWindow.isVisible()) === true) {
+        Window.appWindow.hide();
+        if (timestamp === null) timestamp = Date.now();
+
+        try {
+          await invoke(`set_rpc_activity`, {
+            state: `Launcher: ${LauncherName}`,
+            details: DisplayName,
+            largeImage: LauncherName.toLowerCase(),
+            largeText: "Lazap",
+            smallImage: "lazap_icon",
+            smallText: "Lazap",
+            timestamp: timestamp === null ? Date.now() : timestamp,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      } else {
+        Window.appWindow.show();
+        timestamp = Date.now();
+
+        const { state, details, largeImage, largeText, smallImage, smallText } =
+          selectOption(currentRpc);
+        try {
+          await invoke(`set_rpc_activity`, {
+            state,
+            details,
+            largeImage,
+            largeText,
+            smallImage,
+            smallText,
+            timestamp: timestamp === null ? Date.now() : timestamp,
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+  } catch (e) {
+    return console.error(e);
+  }
+}
+
+async function setGames(games, source) {
+  const appDirPath = await path.appDir();
+  const GAMES_DATA_BASE_PATH = appDirPath + "cache/games/data.json";
+  const data = JSON.parse(
+    await invoke("read_file", {
+      filePath: GAMES_DATA_BASE_PATH,
+    }).catch(() => "[]")
+  );
+
+  data.forEach((d) => {
+    Object.keys(d).forEach((x) => {
+      if ([undefined, null].includes(d[x])) delete d[x];
+    });
+  });
+  games.forEach((d) => {
+    Object.keys(d).forEach((y) => {
+      if ([undefined, null].includes(d[y])) delete d[y];
+    });
+  });
+
+  if (source === "add-launch") {
+    await invoke("write_file", {
+      filePath: GAMES_DATA_BASE_PATH,
+      fileContent: JSON.stringify(games),
+    });
+  } else if (source === "toggle-favourite") {
+    await invoke("write_file", {
+      filePath: GAMES_DATA_BASE_PATH,
+      fileContent: JSON.stringify(games),
+    });
+  } else if (source === "all-games") {
+    if (data.length > 0) {
+      for (let i = 0; i < games.length; i++) {
+        const game = data.find(
+          (x) =>
+            x.GameID === games[i].GameID &&
+            x.LauncherName === games[i].LauncherName
+        );
+        if (!game) {
+          data.push(games[i]);
+        } else if (
+          Object.keys(games[i]).length <
+          Object.keys(
+            data.find(
+              (x) =>
+                x.GameID === games[i].GameID &&
+                x.LauncherName === games[i].LauncherName
+            )
+          ).length
+        ) {
+          let obj = {
+            ...data.find(
+              (x) =>
+                x.GameID === games[i].GameID &&
+                x.LauncherName === games[i].LauncherName
+            ),
+          };
+          Object.keys(
+            data.find(
+              (x) =>
+                x.GameID === games[i].GameID &&
+                x.LauncherName === games[i].LauncherName
+            )
+          )
+            .filter((x) => !Object.keys(games[i]).includes(x))
+            .forEach(
+              (x) =>
+                (obj[x] = data.find(
+                  (x) =>
+                    x.GameID === games[i].GameID &&
+                    x.LauncherName === games[i].LauncherName
+                )[x])
+            );
+          data.splice(
+            data.findIndex(
+              (x) =>
+                x.GameID === games[i].GameID &&
+                x.LauncherName === games[i].LauncherName
+            ),
+            1,
+            obj
+          );
+        } else if (
+          Object.keys(games[i]).length >
+          Object.keys(
+            data.find(
+              (x) =>
+                x.GameID === games[i].GameID &&
+                x.LauncherName === games[i].LauncherName
+            )
+          ).length
+        ) {
+          data[
+            data.findIndex(
+              (x) =>
+                x.GameID === games[i].GameID &&
+                x.LauncherName === games[i].LauncherName
+            )
+          ] = games[i];
+        }
+      }
+    } else {
+      return await invoke("write_file", {
+        filePath: GAMES_DATA_BASE_PATH,
+        fileContent: JSON.stringify(games),
+      });
+    }
+    await invoke("write_file", {
+      filePath: GAMES_DATA_BASE_PATH,
+      fileContent: JSON.stringify(data),
+    });
+  }
+}
+
+const getLauncherIcon = (LauncherName) => {
+  let icon;
+  switch (LauncherName) {
+    case "Minecraft":
+      icon =
+        "https://cdn.iconscout.com/icon/free/png-256/minecraft-2752120-2284937.png";
+      break;
+    case "EpicGames":
+      icon =
+        "https://progameguides.com/wp-content/uploads/2022/06/Featured-EpicGames-Socket-Open-Error-on-Epic-Games-How-to-fix-900x506.jpg";
+      break;
+    case "Lutris":
+      icon =
+        "https://cdn2.steamgriddb.com/file/sgdb-cdn/logo_thumb/534b36b22aab256cdb15c38b66ea1a74.png";
+      break;
+    case "Lunar":
+      icon =
+        "https://static.planetminecraft.com/files/image/minecraft/texture-pack/2022/051/15323163-actmsw-x_l.webp";
+      break;
+    case "RiotGames":
+      icon =
+        "https://static.wikia.nocookie.net/leagueoflegends/images/5/53/Riot_Games_logo_icon.png/revision/latest?cb=20220302144707";
+      break;
+    case "RockstarGames":
+      icon =
+        "https://cdn.icon-icons.com/icons2/2407/PNG/512/rockstar_games_icon_146104.png";
+      break;
+    case "Steam":
+      icon =
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Steam_icon_logo.svg/512px-Steam_icon_logo.svg.png";
+      break;
+    case "Uplay":
+      icon =
+        "https://play-lh.googleusercontent.com/f868E2XQBpfl677hykMnZ4_HlKqrOs0fUhuwy0TC9ZI_PQLn99RtBV2kQ7Z50OtQkw=w240-h480";
+      break;
+    case "XboxGames":
+      icon = "https://www.freeiconspng.com/uploads/xbox-icon-8.jpg";
+      break;
+    default:
+      icon =
+        "https://icon-library.com/images/file-icon-size/file-icon-size-19.jpg";
+      break;
+  }
+  return icon;
 };
 </script>
