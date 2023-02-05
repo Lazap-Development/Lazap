@@ -164,7 +164,7 @@ async function VisibilityState({ LauncherName, DisplayName }) {
         if (timestamp === null) timestamp = Date.now();
 
         try {
-          await invoke(`set_activity`, {
+          await invoke(`set_rpc_activity`, {
             state: `Launcher: ${LauncherName}`,
             details: DisplayName,
             largeImage: LauncherName.toLowerCase(),
@@ -183,7 +183,7 @@ async function VisibilityState({ LauncherName, DisplayName }) {
         const { state, details, largeImage, largeText, smallImage, smallText } =
           selectOption(currentRpc);
         try {
-          await invoke(`set_activity`, {
+          await invoke(`set_rpc_activity`, {
             state,
             details,
             largeImage,

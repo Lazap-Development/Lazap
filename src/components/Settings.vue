@@ -234,7 +234,7 @@ export default {
         require("./modules/rpcOptions").selectOption(tab);
       if (timestamp === null) timestamp = Date.now();
       try {
-        await invoke(`set_activity`, {
+        await invoke(`set_rpc_activity`, {
           state,
           details,
           largeImage,

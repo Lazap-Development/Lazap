@@ -12,7 +12,7 @@ use sysinfo::{CpuExt, System, SystemExt};
 use tauri::{
     CustomMenuItem, Manager, State, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
-const DISCORD_RPC_CLIENT_ID: &str = "1058022807373627462";
+const DISCORD_RPC_CLIENT_ID: &str = "932504287337148417";
 
 fn init_storage() -> Result<(), std::io::Error> {
     let base_config_path = tauri::api::path::app_config_dir(&tauri::Config::default())
@@ -138,7 +138,7 @@ fn main() {
             launch_game,
             parse,
             get_sys_info,
-            set_activity,
+            set_rpc_activity,
             disable_rpc,
             show_window,
             read_file,
@@ -200,7 +200,7 @@ fn main() {
             launch_game,
             parse,
             get_sys_info,
-            set_activity,
+            set_rpc_activity,
             disable_rpc,
             show_window,
             read_file,
@@ -263,7 +263,7 @@ fn main() {
             launch_game,
             parse,
             get_sys_info,
-            set_activity,
+            set_rpc_activity,
             disable_rpc,
             show_window,
             read_file,
@@ -306,25 +306,20 @@ async fn launch_game(exec: String, args: String) {
 }
 
 #[tauri::command]
-fn set_activity(
+fn set_rpc_activity(
     client: State<'_, DeclarativeDiscordIpcClient>,
-    state: &str,
     details: &str,
-    large_image: &str,
     large_text: &str,
-    small_image: &str,
     small_text: &str,
     timestamp: i64,
 ) {
     if let Err(why) = client.set_activity(
         Activity::new()
-            .state(state)
             .details(details)
             .assets(
                 Assets::new()
-                    .large_image(large_image)
+                    .large_image("lazap")
                     .large_text(large_text)
-                    .small_image(small_image)
                     .small_text(small_text),
             )
             .timestamps(Timestamps::new().start(timestamp)),
