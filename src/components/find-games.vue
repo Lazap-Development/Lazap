@@ -1,12 +1,15 @@
 <script>
+const { sha256 } = require("./modules/sha256.js");
 const currentRpc = require("./modules/rpcOptions.js").currentRpc;
 const selectOption = require("./modules/rpcOptions.js").selectOption;
+
 const os = window.__TAURI__.os;
 const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
 const Window = window.__TAURI__.window;
 const tauri = window.__TAURI__.tauri;
-const { sha256 } = require("./modules/sha256.js");
+const http = window.__TAURI__.http;
+
 let timestamp = null;
 let processes = new Map();
 let loads = 0;
@@ -38,7 +41,14 @@ class Elements {
       dirPath: GAME_BANNERS_BASE_PATH,
     });
     const img = dirs.find(
-      (x) => x === `${sha256(game.DisplayName.replaceAll(" ", "_").replace(/[\u{0080}-\u{FFFF}]/gu,""))}.png`
+      (x) =>
+        x ===
+        `${sha256(
+          game.DisplayName.replaceAll(" ", "_").replace(
+            /[\u{0080}-\u{FFFF}]/gu,
+            ""
+          )
+        )}.png`
     );
     if (img) {
       banner = img
@@ -103,45 +113,44 @@ class Elements {
   }
 }
 
-async function createProcess_windows(
+async function createProcess(
+  OS,
   Command,
+  Args,
   { GameID, DisplayName, LauncherName },
   force = false
 ) {
-  if (processes.get(GameID) && !force) return "RUNNING_ALREADY";
-  VisibilityState({ LauncherName, DisplayName });
-
-  const instance = invoke("launch_game", {
-    exec: Command,
-    args: "",
-  }).then(() => {
+  if (OS === "windows") {
+    if (processes.get(GameID) && !force) return "RUNNING_ALREADY";
     VisibilityState({ LauncherName, DisplayName });
-    processes.delete(GameID);
-  });
-  processes.set(GameID, instance);
 
-  return instance;
-}
-async function createProcess_linux(
-  Command,
-  Args,
-  { GameID, LauncherName, DisplayName },
-  force = false
-) {
-  if (processes.get(GameID) && !force) return "RUNNING_ALREADY";
-  VisibilityState({ LauncherName, DisplayName });
+    const instance = invoke("launch_game", {
+      exec: Command,
+      args: Args,
+    }).then(() => {
+      VisibilityState({ LauncherName, DisplayName });
+      processes.delete(GameID);
+    });
+    processes.set(GameID, instance);
 
-  const instance = invoke("launch_game", {
-    exec: Command,
-    args: Args,
-  }).then(() => {
+    return instance;
+  } else if (OS === "linux") {
+    if (processes.get(GameID) && !force) return "RUNNING_ALREADY";
     VisibilityState({ LauncherName, DisplayName });
-    processes.delete(GameID);
-  });
-  processes.set(GameID, instance);
 
-  return instance;
+    const instance = invoke("launch_game", {
+      exec: Command,
+      args: Args,
+    }).then(() => {
+      VisibilityState({ LauncherName, DisplayName });
+      processes.delete(GameID);
+    });
+    processes.set(GameID, instance);
+
+    return instance;
+  }
 }
+
 async function VisibilityState({ LauncherName, DisplayName }) {
   try {
     const LauncherData = JSON.parse(
@@ -474,10 +483,9 @@ export default {
       return games;
     },
     async loadGames(id, data, stored) {
-      const games =
-        (await this.getInstalledGames()).filter(
-          (x) => !require("./others/blacklist.json")[0].includes(x.GameID)
-        );
+      const games = (await this.getInstalledGames()).filter(
+        (x) => !require("./others/blacklist.json")[0].includes(x.GameID)
+      );
       const list = document.getElementById(id);
 
       (await this.filterAndSort(games, id, list, stored))
@@ -487,7 +495,7 @@ export default {
         );
       if (games.length > 0 && id === "allGamesList") {
         setGames(games, "all-games");
-        require("./modules/banners").getBanners(await Promise.all(games));
+        this.getBanners(await Promise.all(games));
       }
 
       if (!data) {
@@ -680,46 +688,58 @@ export default {
       if ((await os.platform()) === "win32") {
         switch (game.LauncherName) {
           case "EpicGames": {
-            res = createProcess_windows(
+            res = createProcess(
+              `windows`,
               `/C start com.epicgames.launcher://apps/${encodeURIComponent(
                 game.LaunchID
               )}?action=launch&silent=true`,
+              "",
               game
             );
             break;
           }
           case "Steam": {
-            res = createProcess_windows(
+            res = createProcess(
+              `windows`,
               `/C start steam://rungameid/${game.GameID}`,
+              "",
               game
             );
             break;
           }
           case "Uplay": {
-            res = createProcess_windows(
+            res = createProcess(
+              `windows`,
               `/C start uplay://launch/${game.GameID}/0`,
+              "",
               game
             );
             break;
           }
           case "Minecraft": {
-            res = createProcess_windows(
+            res = createProcess(
+              `windows`,
               `/C powershell start "${game.Location}\\${game.Executable}"`,
+              "",
               game
             );
             break;
           }
           case "Lunar": {
-            res = createProcess_windows(
+            res = createProcess(
+              `windows`,
               `/C powershell start "${game.Location}\\${game.Executable}"`,
+              "",
               game
             );
             break;
           }
           default: {
             console.log(game.Location, game.Executable);
-            res = createProcess_windows(
+            res = createProcess(
+              `windows`,
               `/C powershell start "${game.Location}\\${game.Executable}"`,
+              "",
               game
             );
             break;
@@ -728,7 +748,8 @@ export default {
       } else if ((await os.platform()) === "linux") {
         switch (game.LauncherName) {
           case "Steam": {
-            res = createProcess_linux(
+            res = createProcess(
+              `linux`,
               "steam",
               `steam://rungameid/${game.GameID} -silent`,
               game
@@ -736,15 +757,16 @@ export default {
             break;
           }
           case "Minecraft": {
-            res = createProcess_linux("minecraft-launcher", "", game);
+            res = createProcess(`linux`, "minecraft-launcher", "", game);
             break;
           }
           case "Lunar": {
-            res = createProcess_linux("lunarclient", "", game);
+            res = createProcess(`linux`, "lunarclient", "", game);
             break;
           }
           case "Lutris": {
-            res = createProcess_linux(
+            res = createProcess(
+              `linux`,
               "lutris",
               `lutris:rungameid/${game.LaunchID}`,
               game
@@ -752,7 +774,8 @@ export default {
             break;
           }
           default: {
-            res = createProcess_linux(
+            res = createProcess(
+              `linux`,
               `"${game.Location}/${game.Executable}"`,
               game.Args,
               game
@@ -765,6 +788,210 @@ export default {
       if (res === "RUNNING_ALREADY") return;
 
       this.addLaunch(game.GameID, game.LauncherName);
+    },
+    async getBanners(games) {
+      games = games.filter((x) => !["CustomGame"].includes(x.LauncherName));
+      const bannerBasePath = (await path.appDir()) + "cache/games/banners";
+      const readBanners = await invoke("read_dir", { dirPath: bannerBasePath });
+
+      let alreadyProcessed = false;
+      let existingProcessed = 0;
+
+      for (let i = 0; i < games.length; i++) {
+        if (
+          readBanners.includes(
+            `${sha256(
+              games[i].DisplayName.replaceAll(" ", "_").replace(
+                /[\u{0080}-\u{FFFF}]/gu,
+                ""
+              )
+            )}.png`
+          )
+        ) {
+          existingProcessed++;
+          if (existingProcessed === games.length) {
+            alreadyProcessed = true;
+          }
+        }
+      }
+      if (alreadyProcessed === true) {
+        return console.log(
+          "%c[BANNER] " + "Banners are already loaded. Skipping.",
+          "color:blue"
+        );
+      }
+
+      const arr = [];
+      for (let i = 0; i < games.length; i++) {
+        arr.push(
+          (async () => {
+            switch (games[i].LauncherName) {
+              case "Steam": {
+                return `https://cdn.akamai.steamstatic.com/steam/apps/${games[i].GameID}/library_600x900.jpg`;
+              }
+              case "RiotGames": {
+                return "https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png";
+              }
+              case "Minecraft": {
+                return "https://i.imgur.com/PJFx3U2.jpg";
+              }
+              case "FiveM": {
+                return "https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png";
+              }
+              case "Lunar": {
+                return "https://pbs.twimg.com/profile_images/1608698913476812801/uLTLhANK_400x400.jpg";
+              }
+              case "Lutris": {
+                if (
+                  games[i].DisplayName.replaceAll(" ", "_") ===
+                  "Epic_Games_Store"
+                )
+                  return "https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png";
+                if (
+                  games[i].DisplayName.replaceAll(" ", "_") ===
+                  "Rockstar_Games_Launcher"
+                )
+                  return "https://cdn.player.one/sites/player.one/files/2019/08/26/rockstar-games.png";
+                return;
+              }
+              case "XboxGames": {
+                return games[i].Banner;
+              }
+              case "Osu": {
+                return "https://cdn2.steamgriddb.com/file/sgdb-cdn/grid/a5d7420f9fdc41087377b4d58c5fe94b.png";
+              }
+              case "EpicGames": {
+                const fetchEpicGame = await http.fetch(
+                  `https://api.rawg.io/api/games?key=f8854c401fed44b89f4e1e4faa56ccc8&search=${games[
+                    i
+                  ].DisplayName.replaceAll(
+                    " ",
+                    "-"
+                  )}&search_exact&search_precise&stores=11`,
+                  {
+                    method: "GET",
+                    mode: "no-cors",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                    },
+                  }
+                );
+                if (!fetchEpicGame.data.results[0]) break;
+                return (
+                  fetchEpicGame.data.results[0].background_image.slice(0, 27) +
+                  "/crop/600/400" +
+                  fetchEpicGame.data.results[0].background_image.slice(27)
+                );
+              }
+              case "Uplay": {
+                const fetchUplay = await http.fetch(
+                  `https://api.rawg.io/api/games?key=f8854c401fed44b89f4e1e4faa56ccc8&search=${games[
+                    i
+                  ].DisplayName.replaceAll(
+                    " ",
+                    "-"
+                  )}&search_exact&search_precise`,
+                  {
+                    method: "GET",
+                    mode: "no-cors",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                    },
+                  }
+                );
+                if (!fetchUplay.data.results[0]) break;
+                return (
+                  fetchUplay.data.results[0].background_image.slice(0, 27) +
+                  "/crop/600/400" +
+                  fetchUplay.data.results[0].background_image.slice(27)
+                );
+              }
+              case "Rockstar": {
+                return `https://media-rockstargames-com.akamaized.net/rockstargames-newsite/img/global/games/fob/640/${games[i].bannerId}.jpg`;
+              }
+            }
+          })()
+        );
+      }
+
+      let res = arr.filter((x) => x);
+
+      if (games?.length === 0) {
+        return console.log("%c[BANNER] " + "No games to process", "color:blue");
+      }
+
+      let fetchProcessed = 0;
+
+      if (res.length === 0) {
+        return console.log("%c[BANNER] " + "No banners to load.", "color:blue");
+      }
+
+      res
+        .filter(async (x) => (await x)?.startsWith("http"))
+        .forEach(async (x, i) => {
+          await http
+            .fetch(await x, {
+              method: "GET",
+              headers: {
+                "Content-Type": "text/plain; charset=utf-8",
+              },
+              responseType: 3,
+            })
+            .then(async (response) => {
+              if (response.status === 404 && games[i].LauncherName === "Lutris")
+                return;
+              await invoke("write_binary_file", {
+                filePath:
+                  bannerBasePath +
+                  `/${sha256(
+                    games[i].DisplayName.replaceAll(" ", "_").replace(
+                      /[\u{0080}-\u{FFFF}]/gu,
+                      ""
+                    )
+                  )}.png`,
+                fileContent: response.data,
+              });
+              const banner = document.getElementById(
+                `game-div-${games[i].DisplayName.replaceAll(" ", "_")}`
+              )?.firstElementChild;
+              console.log(
+                tauri.convertFileSrc(
+                  bannerBasePath +
+                    `/${sha256(
+                      games[i].DisplayName.replaceAll(" ", "_").replace(
+                        /[\u{0080}-\u{FFFF}]/gu,
+                        ""
+                      )
+                    )}.png`
+                )
+              );
+              banner?.setAttribute(
+                "src",
+                tauri.convertFileSrc(
+                  bannerBasePath +
+                    `/${sha256(
+                      games[i].DisplayName.replaceAll(" ", "_").replace(
+                        /[\u{0080}-\u{FFFF}]/gu,
+                        ""
+                      )
+                    )}.png`
+                )
+              );
+              banner.style = "content: none;";
+              banner.addEventListener("error", () => (banner.style = ""));
+            })
+            .catch((e) => console.error(e));
+
+          fetchProcessed++;
+          if (fetchProcessed === games.length) {
+            return console.log(
+              "%c[BANNER] " + "Just finished processing banners.",
+              "color:blue"
+            );
+          }
+        });
     },
   },
 };
