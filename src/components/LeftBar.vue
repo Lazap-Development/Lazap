@@ -196,6 +196,11 @@ export default {
           return console.error(err);
         });
 
+        if (document.getElementById("recentGamesList").childNodes.length > 0) {
+          document.getElementById("recentGamesPlaceholder").style.display =
+            "none";
+        }
+
         setActivity("recent");
       });
 
@@ -247,6 +252,11 @@ export default {
         await findGamesModule.loadGames("favGamesList").catch((err) => {
           return console.error(err);
         });
+
+        if (document.getElementById("favGamesList").childNodes.length > 0) {
+          document.getElementById("favGamesPlaceholder").style.display =
+            "none";
+        }
 
         setActivity("favourites");
       });
@@ -312,14 +322,12 @@ export default {
       });
 
     async function setActivity(tab) {
-      const { state, details, largeImage, largeText, smallImage, smallText } =
+      const { details, largeText, smallImage, smallText } =
         require("./modules/rpcOptions").selectOption(tab);
       if (timestamp === null) timestamp = Date.now();
       try {
         await invoke(`set_rpc_activity`, {
-          state,
           details,
-          largeImage,
           largeText,
           smallImage,
           smallText,
@@ -471,6 +479,7 @@ export default {
   align-self: center;
   margin-top: 4px;
   cursor: default;
+  font-family: Nunito-Bold;
 }
 
 .category-name {

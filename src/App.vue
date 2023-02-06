@@ -33,28 +33,34 @@
     <div class="secondorybox" id="recent">
       <p>Recently Played</p>
       <div id="recentGamesList" class="fadeInDown gamesList"></div>
+      <h2 class="fade" id="recentGamesPlaceholder">Looks empty here... start launching some games!</h2>
     </div>
 
     <allgames-comp></allgames-comp>
 
     <div class="secondorybox" id="favs">
       <p>Favourite Games</p>
+      
       <div class="search-bar">
         <input type="text" placeholder="Search" id="favsInput" />
       </div>
       <div id="favGamesList" class="fadeInDown gamesList"></div>
+      <h2 class="fade" id="favGamesPlaceholder">You currently have no game marked as a favourite...</h2>
     </div>
 
     <div class="secondorybox" id="messages">
       <p>Messages</p>
+      <h1 class="fade">Coming Soon...</h1>
     </div>
 
     <div class="secondorybox" id="activity">
       <p>Activity</p>
+      <h1 class="fade">Coming Soon...</h1>
     </div>
 
     <div class="secondorybox" id="friends">
-      <p>Friends</p>
+      <p>All Friends</p>
+      <h1 class="fade">Coming Soon...</h1>
     </div>
 
     <div class="gameMenu" id="gameMenu">
@@ -254,7 +260,6 @@ export default {
           .querySelector(":root")
           .style.setProperty("--back", accentColor);
       }
-
     })();
   },
 };
@@ -345,6 +350,28 @@ body {
   margin-top: 30px;
   font-size: 20px;
   float: left;
+}
+
+.secondorybox h1 {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  font-weight: normal;
+  color: rgba(164, 164, 164, 0.3);
+  font-size: 34px;
+}
+
+.secondorybox h2 {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  font-weight: normal;
+  color: rgba(164, 164, 164, 0.3);
+  font-size: 28px;
+  width: 360px;
+  text-align: center;
 }
 
 .secondorybox .addGameBtn {
@@ -691,7 +718,6 @@ body {
   align-content: center;
   justify-content: center;
   align-items: center;
-
   margin-top: -44px;
 }
 
@@ -702,15 +728,15 @@ body {
   display: inline-block;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-  height: 62%;
-  width: 16.8%;
+  height: 56%;
+  width: 16%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  opacity: 0.8;
-  border: solid var(--back) 4px;
+  opacity: 0.7;
+  border: solid var(--back) 6px;
 }
 
 .mainPageGamebox:nth-last-child(-n + 4) {
-  margin-left: 2%;
+  margin-left: 1.6%;
 }
 
 .mainPageGamebox:hover {
@@ -761,7 +787,7 @@ body {
 }
 
 .fade {
-  animation: fadeIn 0.5s;
+  animation: fadeIn 0.4s;
 }
 
 .fadeInUp {
@@ -820,48 +846,6 @@ body {
   color: rgb(197, 197, 197);
 
   font-size: 22px;
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-  background: rgba(121, 121, 121, 0);
-  height: 6px;
-}
-
-::-webkit-scrollbar:hover {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #63636396;
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #83838396;
-  height: 30px;
-  border-radius: 10px;
-  width: 120px !important;
-}
-
-::-webkit-scrollbar-track-piece {
-  display: none;
-}
-
-::-webkit-scrollbar-corner {
-  display: none;
-}
-
-:not(input):not(textarea),
-:not(input):not(textarea)::after,
-:not(input):not(textarea)::before {
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-user-drag: none;
-  user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
 }
 
 input,
@@ -1340,5 +1324,47 @@ img,
   100% {
     height: 0%;
   }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  background: rgba(121, 121, 121, 0);
+  height: 6px;
+}
+
+::-webkit-scrollbar:hover {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #63636396;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #83838396;
+  height: 30px;
+  border-radius: 10px;
+  width: 120px !important;
+}
+
+::-webkit-scrollbar-track-piece {
+  display: none;
+}
+
+::-webkit-scrollbar-corner {
+  display: none;
+}
+
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 </style>
