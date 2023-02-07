@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "Lazap",
-    "version": "0.6.1"
+    "version": "0.6.2"
   },
   "tauri": {
     "systemTray": {
@@ -19,16 +19,6 @@
     "allowlist": {
       "dialog": {
         "all": true
-      },
-      "fs": {
-        "createDir": true,
-        "readDir": true,
-        "readFile": true,
-        "renameFile": true,
-        "writeFile": true,
-        "scope": [
-          "**"
-        ]
       },
       "globalShortcut": {
         "all": true
@@ -61,16 +51,11 @@
       },
       "http": {
         "request": true,
-        "scope": [
-          "https://**",
-          "http://**"
-        ]
+        "scope": ["https://**", "http://**"]
       },
       "protocol": {
         "asset": true,
-        "assetScope": [
-          "**"
-        ]
+        "assetScope": ["$APPCONFIG/cache/games/banners/**", "$APPCONFIG/cache/user/**"]
       },
       "window": {
         "center": true,
@@ -79,7 +64,7 @@
         "hide": true,
         "maximize": true,
         "minimize": true,
-        "print": true,
+        "print": false,
         "show": true,
         "startDragging": true,
         "unmaximize": true,
@@ -141,9 +126,10 @@
         "title": "Lazap",
         "height": 630,
         "width": 1360,
-        "minHeight": 550,
-        "minWidth": 1150,
+        "minHeight": 580,
+        "minWidth": 1250,
         "center": true,
+        "visible": false,
         "decorations": false
       }
     ]
