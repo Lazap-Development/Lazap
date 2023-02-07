@@ -16,6 +16,7 @@
           src="../assets/svg/account.svg"
           id="account-btn"
         />
+        <img class="titlebar-update" src="../assets/svg/download.svg" id="update-btn" />
 
         <img class="titlebar-rpc" src="../assets/svg/discord.svg" id="rpcbtn" />
         <span id="rpc" class="rpc"></span>
@@ -47,7 +48,14 @@ export default {
     },
   },
   async mounted() {
-    document.getElementById('update-btn').addEventListener('click', window.__TAURI__.updater.installUpdate);
+    document.getElementById('update-btn').addEventListener('click', async () => {
+      if (await window.__TAURI__.os.platform() === 'win32') {
+        window.__TAURI__.updater.installUpdate();
+      }
+      else if (await window.__TAURI__.os.platform() === 'linux') {
+        window.open('https://github.com/Lazap-Development/lazap/releases/latest');
+      }
+    });
     let timestamp = null;
 
     try {
@@ -192,8 +200,7 @@ export default {
   display: none;
   height: 18px;
   width: 18px;
-  margin-top: 1px;
-  margin-left: 13px;
+  margin-left: 14px;
   align-items: flex-start;
 }
 
@@ -215,12 +222,16 @@ export default {
 }
 
 .titlebar-rpc {
-  display: block;
+  display: flex;
   height: 20px;
   width: 20px;
   margin-left: 14px;
   align-items: flex-start;
   filter: invert(50%);
+}
+
+.titlebar-rpc:hover {
+  filter: none;
 }
 
 .rpc {
