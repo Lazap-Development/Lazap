@@ -47,6 +47,7 @@ export default {
     },
   },
   async mounted() {
+    document.getElementById('update-btn').addEventListener('click', window.__TAURI__.updater.installUpdate);
     let timestamp = null;
 
     try {

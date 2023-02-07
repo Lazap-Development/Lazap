@@ -83,6 +83,7 @@ import findGames from "./components/find-games.vue";
 
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
+const { listen } = window.__TAURI__.event;
 
 export default {
   name: "App",
@@ -111,6 +112,20 @@ export default {
   <div> <span style="margin-right: 4px;color:#5E81AC;">  </span> ${sysInfoInvoke.cpu}</div>`;
 
       await invoke("show_window");
+
+      listen('tauri://update-available', async () => {
+        try {
+          const data = JSON.parse(await invoke('read_file', { filePath: await path.appDir() + 'storage/LauncherData.json' }));
+          if (data.checkForUpdates === true) {
+            document.getElementById('update-btn').style = 'display: block;';
+          }
+        }
+        catch (e) {
+          console.log(e);
+        }
+      });
+      window.setInterval(checkForUpdate, 600_000);
+      checkForUpdate();
 
       try {
         let { accentColor } = JSON.parse(
@@ -261,6 +276,11 @@ export default {
           .style.setProperty("--back", accentColor);
       }
     })();
+    function checkForUpdate() {
+      window.__TAURI__.updater.checkUpdate().then((res) => {
+        console.log(res);
+      }).catch(console.log);
+    }
   },
 };
 </script>
