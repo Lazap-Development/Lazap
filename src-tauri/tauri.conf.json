@@ -113,7 +113,7 @@
       "endpoints": [
         "https://gist.githubusercontent.com/LegItMate/f2b4d4ca0ee4783a1f5d3263d2758fbc/raw/test-win.json"
       ],
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEFEM0M2MUQ5RjA2RkZCQUIKUldTcisyL3cyV0U4cllSSGMxK1BZbitmNDFOeThqRGRwQTNwQXUrUkloVWUwWWtFUUozclhzUU8K",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IERERjFDMTQ1QjQwNTczM0IKUldRN2N3VzBSY0h4M2ZSZ0FSSVR4eis0YnBFS0wxVDQrQUdyUjNFd1lrM0g2akNETktuTGNPcXgK",
       "windows": {
         "installMode": "quiet"
       }
