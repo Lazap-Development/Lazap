@@ -351,7 +351,7 @@ export default {
 
 <style>
 .leftbar {
-  background-color: #1c1d22;
+  background-color: var(--allColorPrimary);
   border-radius: 15px;
   position: absolute;
   height: calc(100% - 71px);
@@ -423,7 +423,7 @@ export default {
 }
 
 .side-tab {
-  background-color: rgba(30, 30, 34, 0.5);
+  background-color: var(--allColorPrimary);
   box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.2);
   height: 40px;
   width: 230px;

@@ -289,6 +289,8 @@ export default {
 :root {
   --svgcolor: #656565;
   --back: rgb(121, 52, 250);
+  --allColorBack: #15161b;
+  --allColorPrimary: #18191f;
 }
 
 ::selection {
@@ -310,7 +312,7 @@ export default {
 html,
 body {
   zoom: 0.944;
-  background: #181a1f;
+  background: var(--allColorBack);
   overflow: hidden;
   font-family: Nunito;
   height: 100%;
@@ -354,7 +356,7 @@ body {
   flex-direction: column;
   flex-wrap: wrap;
 
-  background-color: #1c1d22;
+  background-color: var(--allColorPrimary);
   border-radius: 10px;
 
   height: calc(100% - 72px);
@@ -577,10 +579,9 @@ body {
 }
 
 .jump-back {
-  background-color: #1c1d22;
+  background-color: var(--allColorPrimary);
   width: 100%;
   height: 100%;
-
   border-radius: 10px;
 }
 
@@ -593,7 +594,7 @@ body {
 }
 
 .rightbar {
-  background-color: #1c1d22;
+  background-color: var(--allColorPrimary);
   width: 100%;
   height: 100%;
   border-radius: 10px;
@@ -1308,19 +1309,6 @@ img,
 
   100% {
     width: 100%;
-  }
-}
-
-@keyframes settingsBtnAnimation {
-  0% {
-    border-bottom-width: 0px;
-    border-bottom-style: none;
-  }
-
-  100% {
-    border-bottom: var(--back);
-    border-bottom-width: 3px;
-    border-bottom-style: solid;
   }
 }
 

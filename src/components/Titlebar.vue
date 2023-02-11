@@ -105,7 +105,7 @@ export default {
   position: relative;
   overflow: hidden;
   border-radius: 10px;
-  background-color: #1c1d22;
+  background-color: var(--allColorPrimary);
   height: 35px;
   width: 100%;
   flex: auto;

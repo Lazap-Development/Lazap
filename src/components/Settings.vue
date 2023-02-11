@@ -271,7 +271,7 @@ export default {
   height: 500px;
   width: 600px;
   display: none;
-  background: #1c1d22;
+  background: var(--allColorBack);
   border: 4px solid var(--back);
   z-index: 2000;
   border-radius: 20px;
@@ -337,12 +337,12 @@ export default {
 .choser button {
   font-family: Nunito-Bold !important;
   color: rgb(201, 201, 201);
-  border-radius: 10px;
+  border-radius: 4px;
   text-decoration: none;
   text-shadow: none;
   font-size: 18px;
 
-  background: #22242b;
+  background: var(--allColorPrimary);
   width: 180px;
   height: 40px;
   border: none;
@@ -381,5 +381,18 @@ export default {
 #setting-accentColor {
   height: 45px;
   width: 65px;
+}
+
+@keyframes settingsBtnAnimation {
+  0% {
+    border-bottom-width: 0px;
+    border-bottom-style: none;
+  }
+
+  100% {
+    border-bottom: var(--back);
+    border-bottom-width: 4px;
+    border-bottom-style: solid;
+  }
 }
 </style>
