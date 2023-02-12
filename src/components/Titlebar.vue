@@ -16,7 +16,11 @@
           src="../assets/svg/account.svg"
           id="account-btn"
         />
-        <img class="titlebar-update" src="../assets/svg/download.svg" id="update-btn" />
+        <img
+          class="titlebar-update"
+          src="../assets/svg/download.svg"
+          id="update-btn"
+        />
 
         <img class="titlebar-rpc" src="../assets/svg/discord.svg" id="rpcbtn" />
         <span id="rpc" class="rpc"></span>
@@ -49,14 +53,17 @@ export default {
     },
   },
   async mounted() {
-    document.getElementById('update-btn').addEventListener('click', async () => {
-      if (await os.platform() === 'win32') {
-        window.__TAURI__.updater.installUpdate();
-      }
-      else if (await os.platform() === 'linux') {
-        window.__TAURI__.shell.open('https://github.com/Lazap-Development/lazap/releases/latest');
-      }
-    });
+    document
+      .getElementById("update-btn")
+      .addEventListener("click", async () => {
+        if ((await os.platform()) === "win32") {
+          window.__TAURI__.updater.installUpdate();
+        } else {
+          window.__TAURI__.shell.open(
+            "https://github.com/Lazap-Development/lazap/releases/latest"
+          );
+        }
+      });
     let timestamp = null;
 
     try {

@@ -25,7 +25,23 @@
       <div class="children fadeInLeft">
         <div class="rightbar">
           <p>System Specification</p>
-          <div id="sysInfo" class="sysInfo"></div>
+          <div id="sysInfo" class="sysInfo">
+            <div id="system_host">
+              <span style="color: #a3be8c">  </span>
+            </div>
+            <div id="system_name">
+              <span style="color: #ebcb8b">  </span>
+            </div>
+            <div id="system_kernel">
+              <span style="color: #ebcb8b">  </span>
+            </div>
+            <div id="memory">
+              <span style="color: #5e81ac">  </span>
+            </div>
+            <div id="cpu">
+              <span style="color: #5e81ac">  </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -108,14 +124,21 @@ export default {
       if (sysInfoInvoke.cpu.length > 22) {
         sysInfoInvoke.cpu = sysInfoInvoke.cpu.slice(0, 22) + "...";
       }
-      document.getElementById("sysInfo").innerHTML = `
-  <div> <span style="margin-right: 4px;color:#A3BE8C;">  </span> ${sysInfoInvoke.system_host}</div>
-  <div> <span style="margin-right: 4px;color:#EBCB8B;">  </span>  ${sysInfoInvoke.system_name}</div>
-  <div> <span style="margin-right: 4px;color:#EBCB8B;">  </span> ${sysInfoInvoke.system_kernel}</div>
-  <div> <span style="margin-right: 4px;color:#5E81AC;">  </span> ${sysInfoInvoke.memory}</div>
-  <div> <span style="margin-right: 4px;color:#5E81AC;">  </span> ${sysInfoInvoke.cpu}</div>`;
-
-      await invoke("show_window");
+      document
+        .getElementById("system_host")
+        .insertAdjacentText("beforeend", sysInfoInvoke.system_name);
+      document
+        .getElementById("system_name")
+        .insertAdjacentText("beforeend", sysInfoInvoke.system_name);
+      document
+        .getElementById("system_kernel")
+        .insertAdjacentText("beforeend", sysInfoInvoke.system_kernel);
+      document
+        .getElementById("memory")
+        .insertAdjacentText("beforeend", sysInfoInvoke.memory);
+      document
+        .getElementById("cpu")
+        .insertAdjacentText("beforeend", sysInfoInvoke.cpu);
 
       event.listen("tauri://update-available", async () => {
         try {
@@ -133,6 +156,8 @@ export default {
       });
       window.setInterval(checkForUpdate, 600_000);
       checkForUpdate();
+
+      await invoke("show_window");
 
       try {
         let { accentColor } = JSON.parse(
@@ -628,10 +653,16 @@ body {
   width: 280px;
   font-size: 17px;
   color: rgb(138, 138, 138);
+  font-family: Nunito;
 }
 
 .rightbar .sysInfo div {
   margin-bottom: 4px;
+  margin-right: 4px;
+}
+
+.rightbar .sysInfo div span {
+  margin-right: 4px;
 }
 
 .rightbar .stickers {
