@@ -33,6 +33,7 @@
 <script>
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
+const os = window.__TAURI__.os;
 
 export default {
   name: "titlebar-comp",
@@ -49,11 +50,11 @@ export default {
   },
   async mounted() {
     document.getElementById('update-btn').addEventListener('click', async () => {
-      if (await window.__TAURI__.os.platform() === 'win32') {
+      if (await os.platform() === 'win32') {
         window.__TAURI__.updater.installUpdate();
       }
-      else if (await window.__TAURI__.os.platform() === 'linux') {
-        window.open('https://github.com/Lazap-Development/lazap/releases/latest');
+      else if (await os.platform() === 'linux') {
+        window.__TAURI__.shell.open('https://github.com/Lazap-Development/lazap/releases/latest');
       }
     });
     let timestamp = null;
