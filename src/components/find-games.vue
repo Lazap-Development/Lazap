@@ -838,7 +838,7 @@ async function VisibilityState({ LauncherName, DisplayName }) {
         filePath: (await path.appDir()) + "LauncherData.json",
       })
     );
-    if (LauncherData.trayMinLaunch === true) {
+    if (LauncherData.tray_min_launch === true) {
       if ((await Window.appWindow.isVisible()) === true) {
         Window.appWindow.hide();
         if (timestamp === null) timestamp = Date.now();
