@@ -198,10 +198,11 @@ export default {
 .titlebar-update {
   -webkit-app-region: no-drag;
   display: none;
-  height: 18px;
-  width: 18px;
+  height: 17px;
+  width: 17px;
   margin-left: 14px;
   align-items: flex-start;
+  filter: invert(50%);
 }
 
 .titlebar-update:hover {

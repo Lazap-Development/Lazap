@@ -124,7 +124,6 @@ export default {
               filePath: (await path.appDir()) + "LauncherData.json",
             })
           );
-          console.log(data.check_for_updates)
           if (data.check_for_updates === true) {
             document.getElementById("update-btn").style.display = "block";
           }
