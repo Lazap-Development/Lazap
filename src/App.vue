@@ -33,19 +33,23 @@
     <div class="secondorybox" id="recent">
       <p>Recently Played</p>
       <div id="recentGamesList" class="fadeInDown gamesList"></div>
-      <h2 class="fade" id="recentGamesPlaceholder">Looks empty here... start launching some games!</h2>
+      <h2 class="fade" id="recentGamesPlaceholder">
+        Looks empty here... start launching some games!
+      </h2>
     </div>
 
     <allgames-comp></allgames-comp>
 
     <div class="secondorybox" id="favs">
       <p>Favourite Games</p>
-      
+
       <div class="search-bar">
         <input type="text" placeholder="Search" id="favsInput" />
       </div>
       <div id="favGamesList" class="fadeInDown gamesList"></div>
-      <h2 class="fade" id="favGamesPlaceholder">You currently have no game marked as a favourite...</h2>
+      <h2 class="fade" id="favGamesPlaceholder">
+        You currently have no game marked as a favourite...
+      </h2>
     </div>
 
     <div class="secondorybox" id="messages">
@@ -83,6 +87,7 @@ import findGames from "./components/find-games.vue";
 
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
+const event = window.__TAURI__.event;
 
 export default {
   name: "App",
@@ -111,6 +116,23 @@ export default {
   <div> <span style="margin-right: 4px;color:#5E81AC;">  </span> ${sysInfoInvoke.cpu}</div>`;
 
       await invoke("show_window");
+
+      event.listen("tauri://update-available", async () => {
+        try {
+          const data = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+          if (data.check_for_updates === true) {
+            document.getElementById("update-btn").style.display = "block";
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      });
+      window.setInterval(checkForUpdate, 600_000);
+      checkForUpdate();
 
       try {
         let { accentColor } = JSON.parse(
@@ -261,6 +283,14 @@ export default {
           .style.setProperty("--back", accentColor);
       }
     })();
+    function checkForUpdate() {
+      window.__TAURI__.updater
+        .checkUpdate()
+        .then((res) => {
+          console.log(res);
+        })
+        .catch(console.log);
+    }
   },
 };
 </script>

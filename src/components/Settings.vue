@@ -72,7 +72,6 @@
             <input
               type="checkbox"
               id="setting-check_for_updates"
-              disabled="readonly"
             />
             <div>
               <span></span>

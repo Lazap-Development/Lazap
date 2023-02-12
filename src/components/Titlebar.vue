@@ -16,6 +16,7 @@
           src="../assets/svg/account.svg"
           id="account-btn"
         />
+        <img class="titlebar-update" src="../assets/svg/download.svg" id="update-btn" />
 
         <img class="titlebar-rpc" src="../assets/svg/discord.svg" id="rpcbtn" />
         <span id="rpc" class="rpc"></span>
@@ -32,6 +33,7 @@
 <script>
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
+const os = window.__TAURI__.os;
 
 export default {
   name: "titlebar-comp",
@@ -47,6 +49,14 @@ export default {
     },
   },
   async mounted() {
+    document.getElementById('update-btn').addEventListener('click', async () => {
+      if (await os.platform() === 'win32') {
+        window.__TAURI__.updater.installUpdate();
+      }
+      else if (await os.platform() === 'linux') {
+        window.__TAURI__.shell.open('https://github.com/Lazap-Development/lazap/releases/latest');
+      }
+    });
     let timestamp = null;
 
     try {
@@ -189,11 +199,11 @@ export default {
 .titlebar-update {
   -webkit-app-region: no-drag;
   display: none;
-  height: 18px;
-  width: 18px;
-  margin-top: 1px;
-  margin-left: 13px;
+  height: 17px;
+  width: 17px;
+  margin-left: 14px;
   align-items: flex-start;
+  filter: invert(50%);
 }
 
 .titlebar-update:hover {
@@ -214,12 +224,16 @@ export default {
 }
 
 .titlebar-rpc {
-  display: block;
+  display: flex;
   height: 20px;
   width: 20px;
   margin-left: 14px;
   align-items: flex-start;
   filter: invert(50%);
+}
+
+.titlebar-rpc:hover {
+  filter: none;
 }
 
 .rpc {
