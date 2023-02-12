@@ -76,7 +76,7 @@ fn init_storage() -> Result<(), std::io::Error> {
     }
     if !Path::new(&base_config_ld_file).exists() {
         let mut file = fs::File::create(base_config_ld_file)?;
-        writeln!(file, "{{ \"enable_rpc\": true, \"launch_on_startup\": false, \"skip_login\": false, \"tray_min_launch\": true, \"tray_min_quit\": false, \"check_for_updates\": false, \"accent_color\": \"#7934FA\" }}")?;
+        writeln!(file, "{{ \"enable_rpc\": true, \"launch_on_startup\": false, \"skip_login\": false, \"tray_min_launch\": true, \"tray_min_quit\": false, \"check_for_updates\": true, \"accent_color\": \"#7934FA\" }}")?;
     }
     if !Path::new(&base_config_cache_user_data_file).exists() {
         let mut file = fs::File::create(base_config_cache_user_data_file)?;
