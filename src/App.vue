@@ -280,7 +280,7 @@ export default {
           accentColor;
         document
           .querySelector(":root")
-          .style.setProperty("--back", accentColor);
+          .style.setProperty("--accentColor", accentColor);
       }
     })();
     function checkForUpdate() {
@@ -298,7 +298,7 @@ export default {
 <style>
 :root {
   --svgcolor: #656565;
-  --back: rgb(121, 52, 250);
+  --accentColor: rgb(121, 52, 250);
   --allColorBack: #15161b;
   --allColorPrimary: #18191f;
 }
@@ -417,7 +417,7 @@ body {
 }
 
 .secondorybox .addGameBtn:hover {
-  --svgcolor: var(--back);
+  --svgcolor: var(--accentColor);
   cursor: pointer;
 }
 
@@ -763,7 +763,7 @@ body {
   width: 16%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
-  border: solid var(--back) 6px;
+  border: solid var(--accentColor) 6px;
 }
 
 .mainPageGamebox:nth-last-child(-n + 4) {
@@ -1053,7 +1053,7 @@ img,
 }
 
 .search-bar input::selection {
-  color: var(--back);
+  color: var(--accentColor);
   background: rgb(255, 255, 255);
 }
 
@@ -1065,7 +1065,7 @@ img,
 }
 
 .search-bar input:focus {
-  border: 3px solid var(--back);
+  border: 3px solid var(--accentColor);
   animation-name: searchbox;
   animation-duration: 0.3s;
   animation-fill-mode: both;

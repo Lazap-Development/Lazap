@@ -224,7 +224,7 @@ export default {
 
     function updateAccentColor(accentColor) {
       document.getElementById("indicator").style.backgroundColor = accentColor;
-      document.querySelector(":root").style.setProperty("--back", accentColor);
+      document.querySelector(":root").style.setProperty("--accentColor", accentColor);
     }
 
     async function setActivity(tab) {
@@ -271,7 +271,7 @@ export default {
   width: 600px;
   display: none;
   background: var(--allColorBack);
-  border: 4px solid var(--back);
+  border: 4px solid var(--accentColor);
   z-index: 2000;
   border-radius: 20px;
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
@@ -389,7 +389,7 @@ export default {
   }
 
   100% {
-    border-bottom: var(--back);
+    border-bottom: var(--accentColor);
     border-bottom-width: 4px;
     border-bottom-style: solid;
   }

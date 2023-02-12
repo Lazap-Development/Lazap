@@ -440,7 +440,7 @@ export default {
     40deg,
     rgba(30, 30, 34, 1) 0%,
     rgba(30, 30, 34, 1) 30%,
-    var(--back) 100%
+    var(--accentColor) 100%
   );
   content: "";
   height: 40px;
@@ -499,7 +499,7 @@ export default {
   margin-top: 5px;
   margin-left: 2px;
 
-  background-color: var(--back);
+  background-color: var(--accentColor);
   height: 32px;
   width: 5px;
   border-radius: 50px;
