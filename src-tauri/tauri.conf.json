@@ -112,7 +112,7 @@
       "active": true,
       "dialog": false,
       "endpoints": [
-        "https://gist.githubusercontent.com/LegItMate/f2b4d4ca0ee4783a1f5d3263d2758fbc/raw/test-win.json"
+        "https://raw.githubusercontent.com/Lazap-Development/Lazap/updater-endpoint/uendpoint.json"
       ],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDFDMkMwNDVFQTJENDU3QUEKUldTcVY5U2lYZ1FzSE9FcXUyNzZ2Y1RiSkk1VnhXcEo3Tmg3M1F1aWVFWUV5bUZGUkQ2N2ZSS3gK",
       "windows": {
