@@ -1,5 +1,5 @@
 <p align="center">
-<a href="#" target="_blank"><img src="https://media.discordapp.net/attachments/910422768045133869/914878042508251156/icon.png" width="110px" height="auto"/></a>
+<a href="#" target="_blank"><img src="https://user-images.githubusercontent.com/59381835/216808462-0edf903c-b3d3-451b-a3fb-089b0ee31f82.png" width="90px" height="auto"/></a>
 </p>
 
 <h1 align="center">
@@ -7,8 +7,8 @@
 </h1>
 
 <p align="center">
-  Lazap, a lightweight cross-platform game launcher <br>
-  All your games at one library with a modernist look and experience.
+  Lazap, a lightweight cross-platform launcher <br>
+  Unifying your gaming world into a single, modern library.
 </p>
 
 <p align="center">
@@ -22,7 +22,7 @@
 
 
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/59381835/197649743-e32e951e-c43c-48c3-89c4-c434255b8a86.png">
+  <img src="https://user-images.githubusercontent.com/59381835/218298891-6501941c-a26f-40e0-be49-7884fb387e82.png">
 </div>
 <br>
 

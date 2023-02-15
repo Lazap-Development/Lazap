@@ -25,7 +25,23 @@
       <div class="children fadeInLeft">
         <div class="rightbar">
           <p>System Specification</p>
-          <div id="sysInfo" class="sysInfo"></div>
+          <div id="sysInfo" class="sysInfo">
+            <div id="system_host">
+              <span style="color: #a3be8c">  </span>
+            </div>
+            <div id="system_name">
+              <span style="color: #ebcb8b">  </span>
+            </div>
+            <div id="system_kernel">
+              <span style="color: #ebcb8b">  </span>
+            </div>
+            <div id="memory">
+              <span style="color: #5e81ac">  </span>
+            </div>
+            <div id="cpu">
+              <span style="color: #5e81ac">  </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -33,28 +49,38 @@
     <div class="secondorybox" id="recent">
       <p>Recently Played</p>
       <div id="recentGamesList" class="fadeInDown gamesList"></div>
+      <h2 class="fade" id="recentGamesPlaceholder">
+        Looks empty here... start launching some games!
+      </h2>
     </div>
 
     <allgames-comp></allgames-comp>
 
     <div class="secondorybox" id="favs">
       <p>Favourite Games</p>
+
       <div class="search-bar">
         <input type="text" placeholder="Search" id="favsInput" />
       </div>
       <div id="favGamesList" class="fadeInDown gamesList"></div>
+      <h2 class="fade" id="favGamesPlaceholder">
+        You currently have no game marked as a favourite...
+      </h2>
     </div>
 
     <div class="secondorybox" id="messages">
       <p>Messages</p>
+      <h1 class="fade">Coming Soon...</h1>
     </div>
 
     <div class="secondorybox" id="activity">
       <p>Activity</p>
+      <h1 class="fade">Coming Soon...</h1>
     </div>
 
     <div class="secondorybox" id="friends">
-      <p>Friends</p>
+      <p>All Friends</p>
+      <h1 class="fade">Coming Soon...</h1>
     </div>
 
     <div class="gameMenu" id="gameMenu">
@@ -77,6 +103,7 @@ import findGames from "./components/find-games.vue";
 
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
+const event = window.__TAURI__.event;
 
 export default {
   name: "App",
@@ -97,12 +124,38 @@ export default {
       if (sysInfoInvoke.cpu.length > 22) {
         sysInfoInvoke.cpu = sysInfoInvoke.cpu.slice(0, 22) + "...";
       }
-      document.getElementById("sysInfo").innerHTML = `
-  <div> <span style="margin-right: 4px;color:#A3BE8C;">  </span> ${sysInfoInvoke.system_host}</div>
-  <div> <span style="margin-right: 4px;color:#EBCB8B;">  </span>  ${sysInfoInvoke.system_name}</div>
-  <div> <span style="margin-right: 4px;color:#EBCB8B;">  </span> ${sysInfoInvoke.system_kernel}</div>
-  <div> <span style="margin-right: 4px;color:#5E81AC;">  </span> ${sysInfoInvoke.memory}</div>
-  <div> <span style="margin-right: 4px;color:#5E81AC;">  </span> ${sysInfoInvoke.cpu}</div>`;
+      document
+        .getElementById("system_host")
+        .insertAdjacentText("beforeend", sysInfoInvoke.system_name);
+      document
+        .getElementById("system_name")
+        .insertAdjacentText("beforeend", sysInfoInvoke.system_name);
+      document
+        .getElementById("system_kernel")
+        .insertAdjacentText("beforeend", sysInfoInvoke.system_kernel);
+      document
+        .getElementById("memory")
+        .insertAdjacentText("beforeend", sysInfoInvoke.memory);
+      document
+        .getElementById("cpu")
+        .insertAdjacentText("beforeend", sysInfoInvoke.cpu);
+
+      event.listen("tauri://update-available", async () => {
+        try {
+          const data = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+          if (data.check_for_updates === true) {
+            document.getElementById("update-btn").style.display = "block";
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      });
+      window.setInterval(checkForUpdate, 600_000);
+      checkForUpdate();
 
       await invoke("show_window");
 
@@ -252,10 +305,17 @@ export default {
           accentColor;
         document
           .querySelector(":root")
-          .style.setProperty("--back", accentColor);
+          .style.setProperty("--accentColor", accentColor);
       }
-
     })();
+    function checkForUpdate() {
+      window.__TAURI__.updater
+        .checkUpdate()
+        .then((res) => {
+          console.log(res);
+        })
+        .catch(console.log);
+    }
   },
 };
 </script>
@@ -263,7 +323,9 @@ export default {
 <style>
 :root {
   --svgcolor: #656565;
-  --back: rgb(121, 52, 250);
+  --accentColor: rgb(121, 52, 250);
+  --allColorBack: #15161b;
+  --allColorPrimary: #18191f;
 }
 
 ::selection {
@@ -285,7 +347,7 @@ export default {
 html,
 body {
   zoom: 0.944;
-  background: #181a1f;
+  background: var(--allColorBack);
   overflow: hidden;
   font-family: Nunito;
   height: 100%;
@@ -329,7 +391,7 @@ body {
   flex-direction: column;
   flex-wrap: wrap;
 
-  background-color: #1c1d22;
+  background-color: var(--allColorPrimary);
   border-radius: 10px;
 
   height: calc(100% - 72px);
@@ -347,6 +409,28 @@ body {
   float: left;
 }
 
+.secondorybox h1 {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  font-weight: normal;
+  color: rgba(164, 164, 164, 0.3);
+  font-size: 34px;
+}
+
+.secondorybox h2 {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+  font-weight: normal;
+  color: rgba(164, 164, 164, 0.3);
+  font-size: 28px;
+  width: 360px;
+  text-align: center;
+}
+
 .secondorybox .addGameBtn {
   position: absolute;
   width: 15px;
@@ -358,7 +442,7 @@ body {
 }
 
 .secondorybox .addGameBtn:hover {
-  --svgcolor: var(--back);
+  --svgcolor: var(--accentColor);
   cursor: pointer;
 }
 
@@ -530,10 +614,9 @@ body {
 }
 
 .jump-back {
-  background-color: #1c1d22;
+  background-color: var(--allColorPrimary);
   width: 100%;
   height: 100%;
-
   border-radius: 10px;
 }
 
@@ -546,7 +629,7 @@ body {
 }
 
 .rightbar {
-  background-color: #1c1d22;
+  background-color: var(--allColorPrimary);
   width: 100%;
   height: 100%;
   border-radius: 10px;
@@ -570,10 +653,16 @@ body {
   width: 280px;
   font-size: 17px;
   color: rgb(138, 138, 138);
+  font-family: Nunito;
 }
 
 .rightbar .sysInfo div {
   margin-bottom: 4px;
+  margin-right: 4px;
+}
+
+.rightbar .sysInfo div span {
+  margin-right: 4px;
 }
 
 .rightbar .stickers {
@@ -691,7 +780,6 @@ body {
   align-content: center;
   justify-content: center;
   align-items: center;
-
   margin-top: -44px;
 }
 
@@ -702,15 +790,15 @@ body {
   display: inline-block;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-  height: 62%;
-  width: 16.8%;
+  height: 56%;
+  width: 16%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  opacity: 0.8;
-  border: solid var(--back) 4px;
+  opacity: 0.7;
+  border: solid var(--accentColor) 6px;
 }
 
 .mainPageGamebox:nth-last-child(-n + 4) {
-  margin-left: 2%;
+  margin-left: 1.6%;
 }
 
 .mainPageGamebox:hover {
@@ -761,7 +849,7 @@ body {
 }
 
 .fade {
-  animation: fadeIn 0.5s;
+  animation: fadeIn 0.4s;
 }
 
 .fadeInUp {
@@ -820,48 +908,6 @@ body {
   color: rgb(197, 197, 197);
 
   font-size: 22px;
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-  background: rgba(121, 121, 121, 0);
-  height: 6px;
-}
-
-::-webkit-scrollbar:hover {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #63636396;
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #83838396;
-  height: 30px;
-  border-radius: 10px;
-  width: 120px !important;
-}
-
-::-webkit-scrollbar-track-piece {
-  display: none;
-}
-
-::-webkit-scrollbar-corner {
-  display: none;
-}
-
-:not(input):not(textarea),
-:not(input):not(textarea)::after,
-:not(input):not(textarea)::before {
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-user-drag: none;
-  user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
 }
 
 input,
@@ -1038,7 +1084,7 @@ img,
 }
 
 .search-bar input::selection {
-  color: var(--back);
+  color: var(--accentColor);
   background: rgb(255, 255, 255);
 }
 
@@ -1050,7 +1096,7 @@ img,
 }
 
 .search-bar input:focus {
-  border: 3px solid var(--back);
+  border: 3px solid var(--accentColor);
   animation-name: searchbox;
   animation-duration: 0.3s;
   animation-fill-mode: both;
@@ -1307,19 +1353,6 @@ img,
   }
 }
 
-@keyframes settingsBtnAnimation {
-  0% {
-    border-bottom-width: 0px;
-    border-bottom-style: none;
-  }
-
-  100% {
-    border-bottom: var(--back);
-    border-bottom-width: 3px;
-    border-bottom-style: solid;
-  }
-}
-
 @keyframes gameMenuAnimation {
   0% {
     width: 0px;
@@ -1340,5 +1373,47 @@ img,
   100% {
     height: 0%;
   }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  background: rgba(121, 121, 121, 0);
+  height: 6px;
+}
+
+::-webkit-scrollbar:hover {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #63636396;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #83838396;
+  height: 30px;
+  border-radius: 10px;
+  width: 120px !important;
+}
+
+::-webkit-scrollbar-track-piece {
+  display: none;
+}
+
+::-webkit-scrollbar-corner {
+  display: none;
+}
+
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 </style>

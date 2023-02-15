@@ -16,6 +16,11 @@
           src="../assets/svg/account.svg"
           id="account-btn"
         />
+        <img
+          class="titlebar-update"
+          src="../assets/svg/download.svg"
+          id="update-btn"
+        />
 
         <img class="titlebar-rpc" src="../assets/svg/discord.svg" id="rpcbtn" />
         <span id="rpc" class="rpc"></span>
@@ -32,6 +37,7 @@
 <script>
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
+const os = window.__TAURI__.os;
 
 export default {
   name: "titlebar-comp",
@@ -47,6 +53,17 @@ export default {
     },
   },
   async mounted() {
+    document
+      .getElementById("update-btn")
+      .addEventListener("click", async () => {
+        if ((await os.platform()) === "win32") {
+          window.__TAURI__.updater.installUpdate();
+        } else {
+          window.__TAURI__.shell.open(
+            "https://github.com/Lazap-Development/lazap/releases/latest"
+          );
+        }
+      });
     let timestamp = null;
 
     try {
@@ -69,12 +86,19 @@ export default {
       document.getElementById("rpc").classList.add("fadeAwayRPCTxt");
     }, 1500);
 
+    document.getElementById("rpcbtn").addEventListener("click", function() {
+      document.getElementById("rpc").classList.remove("fadeAwayRPCTxt");
+      setTimeout(() => {
+      document.getElementById("rpc").classList.add("fadeAwayRPCTxt");
+    }, 1000);
+    })
+    
     async function setActivity(tab) {
       const { state, details, largeImage, largeText, smallImage, smallText } =
         require("./modules/rpcOptions").selectOption(tab);
       if (timestamp === null) timestamp = Date.now();
       try {
-        await invoke(`set_activity`, {
+        await invoke(`set_rpc_activity`, {
           state,
           details,
           largeImage,
@@ -96,7 +120,7 @@ export default {
   position: relative;
   overflow: hidden;
   border-radius: 10px;
-  background-color: #1c1d22;
+  background-color: var(--allColorPrimary);
   height: 35px;
   width: 100%;
   flex: auto;
@@ -189,17 +213,16 @@ export default {
 .titlebar-update {
   -webkit-app-region: no-drag;
   display: none;
-  height: 18px;
-  width: 18px;
-  margin-top: 1px;
-  margin-left: 13px;
+  height: 17px;
+  width: 17px;
+  margin-left: 14px;
   align-items: flex-start;
+  filter: invert(50%);
 }
 
 .titlebar-update:hover {
   cursor: pointer;
-  filter: invert(65%) sepia(56%) saturate(4278%) hue-rotate(79deg)
-    brightness(118%) contrast(130%);
+  filter: invert(90%) sepia(7%) saturate(2944%) hue-rotate(60deg) brightness(101%) contrast(84%);
 }
 
 .titlebar-loading {
@@ -214,12 +237,16 @@ export default {
 }
 
 .titlebar-rpc {
-  display: block;
+  display: flex;
   height: 20px;
   width: 20px;
   margin-left: 14px;
   align-items: flex-start;
   filter: invert(50%);
+}
+
+.titlebar-rpc:hover {
+  filter: invert(50%) sepia(75%) saturate(4277%) hue-rotate(219deg) brightness(91%) contrast(109%);
 }
 
 .rpc {

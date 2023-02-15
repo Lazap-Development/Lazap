@@ -72,7 +72,6 @@
             <input
               type="checkbox"
               id="setting-check_for_updates"
-              disabled="readonly"
             />
             <div>
               <span></span>
@@ -101,7 +100,7 @@
         </div>
       </div>
 
-      <div class="settings-footer">v0.6.2 (Tauri Release)</div>
+      <div class="settings-footer">v0.6.3 (Tauri Release)</div>
     </div>
   </div>
 </template>
@@ -225,7 +224,7 @@ export default {
 
     function updateAccentColor(accentColor) {
       document.getElementById("indicator").style.backgroundColor = accentColor;
-      document.querySelector(":root").style.setProperty("--back", accentColor);
+      document.querySelector(":root").style.setProperty("--accentColor", accentColor);
     }
 
     async function setActivity(tab) {
@@ -234,7 +233,7 @@ export default {
         require("./modules/rpcOptions").selectOption(tab);
       if (timestamp === null) timestamp = Date.now();
       try {
-        await invoke(`set_activity`, {
+        await invoke(`set_rpc_activity`, {
           state,
           details,
           largeImage,
@@ -271,8 +270,8 @@ export default {
   height: 500px;
   width: 600px;
   display: none;
-  background: #1c1d22;
-  border: 4px solid var(--back);
+  background: var(--allColorBack);
+  border: 4px solid var(--accentColor);
   z-index: 2000;
   border-radius: 20px;
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
@@ -337,12 +336,12 @@ export default {
 .choser button {
   font-family: Nunito-Bold !important;
   color: rgb(201, 201, 201);
-  border-radius: 10px;
+  border-radius: 4px;
   text-decoration: none;
   text-shadow: none;
   font-size: 18px;
 
-  background: #22242b;
+  background: var(--allColorPrimary);
   width: 180px;
   height: 40px;
   border: none;
@@ -381,5 +380,18 @@ export default {
 #setting-accentColor {
   height: 45px;
   width: 65px;
+}
+
+@keyframes settingsBtnAnimation {
+  0% {
+    border-bottom-width: 0px;
+    border-bottom-style: none;
+  }
+
+  100% {
+    border-bottom: var(--accentColor);
+    border-bottom-width: 4px;
+    border-bottom-style: solid;
+  }
 }
 </style>

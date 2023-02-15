@@ -196,6 +196,11 @@ export default {
           return console.error(err);
         });
 
+        if (document.getElementById("recentGamesList").childNodes.length > 0) {
+          document.getElementById("recentGamesPlaceholder").style.display =
+            "none";
+        }
+
         setActivity("recent");
       });
 
@@ -247,6 +252,11 @@ export default {
         await findGamesModule.loadGames("favGamesList").catch((err) => {
           return console.error(err);
         });
+
+        if (document.getElementById("favGamesList").childNodes.length > 0) {
+          document.getElementById("favGamesPlaceholder").style.display =
+            "none";
+        }
 
         setActivity("favourites");
       });
@@ -312,14 +322,12 @@ export default {
       });
 
     async function setActivity(tab) {
-      const { state, details, largeImage, largeText, smallImage, smallText } =
+      const { details, largeText, smallImage, smallText } =
         require("./modules/rpcOptions").selectOption(tab);
       if (timestamp === null) timestamp = Date.now();
       try {
-        await invoke(`set_activity`, {
-          state,
+        await invoke(`set_rpc_activity`, {
           details,
-          largeImage,
           largeText,
           smallImage,
           smallText,
@@ -343,7 +351,7 @@ export default {
 
 <style>
 .leftbar {
-  background-color: #1c1d22;
+  background-color: var(--allColorPrimary);
   border-radius: 15px;
   position: absolute;
   height: calc(100% - 71px);
@@ -415,7 +423,7 @@ export default {
 }
 
 .side-tab {
-  background-color: rgba(30, 30, 34, 0.5);
+  background-color: var(--allColorPrimary);
   box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.2);
   height: 40px;
   width: 230px;
@@ -432,7 +440,7 @@ export default {
     40deg,
     rgba(30, 30, 34, 1) 0%,
     rgba(30, 30, 34, 1) 30%,
-    var(--back) 100%
+    var(--accentColor) 100%
   );
   content: "";
   height: 40px;
@@ -471,6 +479,7 @@ export default {
   align-self: center;
   margin-top: 4px;
   cursor: default;
+  font-family: Nunito-Bold;
 }
 
 .category-name {
@@ -490,7 +499,7 @@ export default {
   margin-top: 5px;
   margin-left: 2px;
 
-  background-color: var(--back);
+  background-color: var(--accentColor);
   height: 32px;
   width: 5px;
   border-radius: 50px;

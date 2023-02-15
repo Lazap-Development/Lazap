@@ -249,7 +249,7 @@ export default {
   align-self: flex-start;
   margin-right: 20px;
   margin-top: 10px;
-  background-color: var(--back);
+  background-color: var(--accentColor);
   color: rgb(216, 216, 216);
   border-radius: 12px;
   font-family: Nunito-Bold;
