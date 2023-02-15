@@ -86,6 +86,13 @@ export default {
       document.getElementById("rpc").classList.add("fadeAwayRPCTxt");
     }, 1500);
 
+    document.getElementById("rpcbtn").addEventListener("click", function() {
+      document.getElementById("rpc").classList.remove("fadeAwayRPCTxt");
+      setTimeout(() => {
+      document.getElementById("rpc").classList.add("fadeAwayRPCTxt");
+    }, 1000);
+    })
+    
     async function setActivity(tab) {
       const { state, details, largeImage, largeText, smallImage, smallText } =
         require("./modules/rpcOptions").selectOption(tab);
@@ -215,8 +222,7 @@ export default {
 
 .titlebar-update:hover {
   cursor: pointer;
-  filter: invert(65%) sepia(56%) saturate(4278%) hue-rotate(79deg)
-    brightness(118%) contrast(130%);
+  filter: invert(90%) sepia(7%) saturate(2944%) hue-rotate(60deg) brightness(101%) contrast(84%);
 }
 
 .titlebar-loading {
@@ -240,7 +246,7 @@ export default {
 }
 
 .titlebar-rpc:hover {
-  filter: none;
+  filter: invert(50%) sepia(75%) saturate(4277%) hue-rotate(219deg) brightness(91%) contrast(109%);
 }
 
 .rpc {
