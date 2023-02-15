@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "Lazap",
-    "version": "0.6.2"
+    "version": "0.6.3"
   },
   "tauri": {
     "systemTray": {
