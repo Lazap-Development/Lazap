@@ -13,10 +13,10 @@
   "license": "ISC",
   "dependencies": {
     "@tauri-apps/api": "^1.0.2",
-    "core-js": "^3.27.2",
+    "core-js": "^3.28.0",
     "tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra",
     "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql",
-    "vue": "^3.2.13"
+    "vue": "^3.2.47"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -24,7 +24,7 @@
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "eslint": "^8.32.0",
+    "eslint": "^8.34.0",
     "eslint-plugin-vue": "^9.8.0",
     "vue-cli-plugin-tauri": "~1.0.0"
   },
