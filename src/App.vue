@@ -318,7 +318,6 @@ export default {
 
 <style>
 :root {
-  --svgcolor: #656565;
   --accentColor: rgb(121, 52, 250);
   --allColorBack: #15161b;
   --allColorPrimary: #18191f;
@@ -425,21 +424,6 @@ body {
   font-size: 28px;
   width: 360px;
   text-align: center;
-}
-
-.secondorybox .addGameBtn {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  margin-top: 36px;
-  margin-left: 138px;
-  transition: 0.1s all linear;
-  color: rgb(255, 255, 255);
-}
-
-.secondorybox .addGameBtn:hover {
-  --svgcolor: var(--accentColor);
-  cursor: pointer;
 }
 
 .secondorybox .addGamePopUp {
