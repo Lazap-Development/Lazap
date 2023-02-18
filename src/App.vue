@@ -27,19 +27,19 @@
           <p>System Specification</p>
           <div id="sysInfo" class="sysInfo">
             <div id="system_host">
-              <span style="color: #a3be8c">  </span>
+              <img src="./assets/svg/user.svg" alt="user" />
             </div>
             <div id="system_name">
-              <span style="color: #ebcb8b">  </span>
+              <img src="./assets/svg/computer.svg" alt="user" />
             </div>
             <div id="system_kernel">
-              <span style="color: #ebcb8b">  </span>
+              <img src="./assets/svg/computer.svg" alt="user" />
             </div>
             <div id="memory">
-              <span style="color: #5e81ac">  </span>
+              <img src="./assets/svg/memory.svg" alt="user" />
             </div>
             <div id="cpu">
-              <span style="color: #5e81ac">  </span>
+              <img src="./assets/svg/microchip.svg" alt="user" />
             </div>
           </div>
         </div>
@@ -126,7 +126,7 @@ export default {
       }
       document
         .getElementById("system_host")
-        .insertAdjacentText("beforeend", sysInfoInvoke.system_name);
+        .insertAdjacentText("beforeend", sysInfoInvoke.system_host);
       document
         .getElementById("system_name")
         .insertAdjacentText("beforeend", sysInfoInvoke.system_name);
@@ -166,7 +166,11 @@ export default {
           })
         );
         if (!accentColor) accentColor = "#7934FA";
-        updateAccentColor(accentColor);
+        document.getElementById("indicator").style.backgroundColor =
+          accentColor;
+        document
+          .querySelector(":root")
+          .style.setProperty("--accentColor", accentColor);
       } catch (error) {
         console.error(error);
       }
@@ -299,14 +303,6 @@ export default {
             200
           );
         });
-
-      function updateAccentColor(accentColor) {
-        document.getElementById("indicator").style.backgroundColor =
-          accentColor;
-        document
-          .querySelector(":root")
-          .style.setProperty("--accentColor", accentColor);
-      }
     })();
     function checkForUpdate() {
       window.__TAURI__.updater
@@ -651,18 +647,18 @@ body {
   margin-left: 34px;
   margin-right: auto;
   width: 280px;
-  font-size: 17px;
+  font-size: 18px;
   color: rgb(138, 138, 138);
-  font-family: Nunito;
+  font-family: Nunito-Bold;
 }
 
 .rightbar .sysInfo div {
   margin-bottom: 4px;
-  margin-right: 4px;
 }
 
-.rightbar .sysInfo div span {
-  margin-right: 4px;
+.rightbar .sysInfo img {
+  width: 15px;
+  margin-right: 10px;
 }
 
 .rightbar .stickers {
