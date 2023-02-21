@@ -20,6 +20,14 @@
             id="recentGamesListMainPage"
             class="fadeInDown mainPageGamesList"
           ></div>
+
+          <div class="placeholderRecentMain" id="placeholderRecentMain">
+            <div class="placeholderGames"></div>
+            <div class="placeholderGames"></div>
+            <div class="placeholderGames"></div>
+            <div class="placeholderGames"></div>
+            <div class="placeholderGames"></div>
+          </div>
         </div>
       </div>
       <div class="children fadeInLeft">
@@ -761,6 +769,43 @@ body {
   justify-content: center;
   align-items: center;
   margin-top: -44px;
+}
+
+.placeholderRecentMain {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  margin-top: -44px;
+}
+
+.placeholderGames {
+  position: relative;
+
+  text-align: center;
+  display: inline-block;
+  border-radius: 14px;
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  height: 56%;
+  width: 16%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0.2;
+  border: solid var(--accentColor) 6px;
+  background-color: var(--accentColor);
+  mask-image: -webkit-gradient(
+    linear,
+    right 90%,
+    left top,
+    from(rgba(0, 0, 0, 1)),
+    to(rgba(0, 0, 0, 0))
+  );
+}
+
+.placeholderGames:nth-last-child(-n + 4) {
+  margin-left: 1.6%;
 }
 
 .mainPageGamebox {

@@ -159,6 +159,11 @@ export default {
           0,
           type.includes("MainPage") ? 5 - list.children.length : final.length
         );
+
+        if (games.length !== 0) {
+          document.getElementById("placeholderRecentMain").style.display =
+            "none";
+        }
       } else if (type === "favGamesList") {
         let final = [];
         for (let i = 0; i < games.length; i++) {
