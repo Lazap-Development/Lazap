@@ -761,7 +761,7 @@ body {
   display: flex;
   align-content: center;
   margin: 20px;
-  margin-left: 30px;
+  margin-left: 4%;
   align-items: center;
 }
 
