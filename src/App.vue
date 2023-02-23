@@ -19,7 +19,8 @@
           <div
             id="recentGamesListMainPage"
             class="fadeInDown mainPageGamesList"
-          ></div>
+          >
+          </div>
         </div>
       </div>
       <div class="children fadeInLeft">
@@ -27,19 +28,19 @@
           <p>System Specification</p>
           <div id="sysInfo" class="sysInfo">
             <div id="system_host">
-              <span style="color: #a3be8c">  </span>
+              <img src="./assets/svg/user.svg" alt="user" />
             </div>
             <div id="system_name">
-              <span style="color: #ebcb8b">  </span>
+              <img src="./assets/svg/computer.svg" alt="user" />
             </div>
             <div id="system_kernel">
-              <span style="color: #ebcb8b">  </span>
+              <img src="./assets/svg/computer.svg" alt="user" />
             </div>
             <div id="memory">
-              <span style="color: #5e81ac">  </span>
+              <img src="./assets/svg/memory.svg" alt="user" />
             </div>
             <div id="cpu">
-              <span style="color: #5e81ac">  </span>
+              <img src="./assets/svg/microchip.svg" alt="user" />
             </div>
           </div>
         </div>
@@ -126,7 +127,7 @@ export default {
       }
       document
         .getElementById("system_host")
-        .insertAdjacentText("beforeend", sysInfoInvoke.system_name);
+        .insertAdjacentText("beforeend", sysInfoInvoke.system_host);
       document
         .getElementById("system_name")
         .insertAdjacentText("beforeend", sysInfoInvoke.system_name);
@@ -166,7 +167,11 @@ export default {
           })
         );
         if (!accentColor) accentColor = "#7934FA";
-        updateAccentColor(accentColor);
+        document.getElementById("indicator").style.backgroundColor =
+          accentColor;
+        document
+          .querySelector(":root")
+          .style.setProperty("--accentColor", accentColor);
       } catch (error) {
         console.error(error);
       }
@@ -299,14 +304,6 @@ export default {
             200
           );
         });
-
-      function updateAccentColor(accentColor) {
-        document.getElementById("indicator").style.backgroundColor =
-          accentColor;
-        document
-          .querySelector(":root")
-          .style.setProperty("--accentColor", accentColor);
-      }
     })();
     function checkForUpdate() {
       window.__TAURI__.updater
@@ -322,7 +319,6 @@ export default {
 
 <style>
 :root {
-  --svgcolor: #656565;
   --accentColor: rgb(121, 52, 250);
   --allColorBack: #15161b;
   --allColorPrimary: #18191f;
@@ -429,21 +425,6 @@ body {
   font-size: 28px;
   width: 360px;
   text-align: center;
-}
-
-.secondorybox .addGameBtn {
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  margin-top: 36px;
-  margin-left: 138px;
-  transition: 0.1s all linear;
-  color: rgb(255, 255, 255);
-}
-
-.secondorybox .addGameBtn:hover {
-  --svgcolor: var(--accentColor);
-  cursor: pointer;
 }
 
 .secondorybox .addGamePopUp {
@@ -626,6 +607,7 @@ body {
   margin-top: 18px;
   font-size: 18px;
   font-family: Nunito-Bold;
+  position: absolute;
 }
 
 .rightbar {
@@ -651,18 +633,18 @@ body {
   margin-left: 34px;
   margin-right: auto;
   width: 280px;
-  font-size: 17px;
+  font-size: 18px;
   color: rgb(138, 138, 138);
-  font-family: Nunito;
+  font-family: Nunito-Bold;
 }
 
 .rightbar .sysInfo div {
   margin-bottom: 4px;
-  margin-right: 4px;
 }
 
-.rightbar .sysInfo div span {
-  margin-right: 4px;
+.rightbar .sysInfo img {
+  width: 15px;
+  margin-right: 10px;
 }
 
 .rightbar .stickers {
@@ -778,9 +760,35 @@ body {
   height: 100%;
   display: flex;
   align-content: center;
-  justify-content: center;
+  margin: 20px;
+  margin-left: 4%;
   align-items: center;
-  margin-top: -44px;
+}
+
+.placeholderGames {
+  position: relative;
+
+  text-align: center;
+  display: inline-block;
+  border-radius: 14px;
+  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  height: 56%;
+  width: 16%;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  opacity: 0.3;
+  border: solid var(--accentColor) 6px;
+  background-color: var(--accentColor);
+  mask-image: -webkit-gradient(
+    linear,
+    right 90%,
+    left top,
+    from(rgba(0, 0, 0, 1)),
+    to(rgba(0, 0, 0, 0))
+  );
+}
+
+.placeholderGames:nth-last-child(-n + 4) {
+  margin-left: 1.6%;
 }
 
 .mainPageGamebox {

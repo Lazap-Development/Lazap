@@ -38,31 +38,7 @@
     </div>
 
     <p>All Games</p>
-    <svg
-      id="addGameBtn"
-      class="addGameBtn"
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      x="0px"
-      y="0px"
-      width="459.325px"
-      height="459.325px"
-      viewBox="0 0 459.325 459.325"
-      style="enable-background: new 0 0 459.325 459.325"
-      xml:space="preserve"
-    >
-      <g>
-        <path
-          fill="var(--svgcolor)"
-          d="M459.319,229.668c0,22.201-17.992,40.193-40.205,40.193H269.85v149.271c0,22.207-17.998,40.199-40.196,40.193
-		c-11.101,0-21.149-4.492-28.416-11.763c-7.276-7.281-11.774-17.324-11.769-28.419l-0.006-149.288H40.181
-		c-11.094,0-21.134-4.492-28.416-11.774c-7.264-7.264-11.759-17.312-11.759-28.413C0,207.471,17.992,189.475,40.202,189.475h149.267
-		V40.202C189.469,17.998,207.471,0,229.671,0c22.192,0.006,40.178,17.986,40.19,40.187v149.288h149.282
-		C441.339,189.487,459.308,207.471,459.319,229.668z"
-        />
-      </g>
-    </svg>
+    <img id="addGameBtn" class="addGameBtn" src="../assets/svg/add.svg" />
 
     <div class="search-bar">
       <input type="text" placeholder="Search" id="gamesInput" />
@@ -87,8 +63,7 @@ export default {
       reader.onload = async function () {
         await invoke("write_binary_file", {
           filePath:
-            (await path.appDir()) +
-            `cache/games/banners/newcustombanner.png`,
+            (await path.appDir()) + `cache/games/banners/newcustombanner.png`,
           fileContent: [...new Uint8Array(reader.result)],
         });
         document.getElementById(
@@ -96,8 +71,7 @@ export default {
         ).style.backgroundImage =
           `url(` +
           tauri.convertFileSrc(
-            (await path.appDir()) +
-              `cache/games/banners/newcustombanner.png`
+            (await path.appDir()) + `cache/games/banners/newcustombanner.png`
           ) +
           `?${new Date().getSeconds()}` +
           `)`;
@@ -161,16 +135,13 @@ export default {
                 `cache/games/banners/newcustombanner.png`,
               to:
                 (await path.appDir()) +
-                `cache/games/banners/${require("./modules/sha256.js").sha256(
-                  document
+                `cache/games/banners/${await invoke("sha256", {
+                  content: document
                     .getElementById("inputGameName")
-                    .value.replaceAll(" ", "_")
-                )}.png`,
+                    .value.replaceAll(" ", "_"),
+                })}.png`,
             });
-            createGameElement(
-              scheme,
-              "allGamesList"
-            );
+            createGameElement(scheme, "allGamesList");
             let data = JSON.parse(
               await invoke("read_file", {
                 filePath: (await path.appDir()) + "cache/games/data.json",
@@ -182,10 +153,7 @@ export default {
               fileContent: JSON.stringify(data),
             });
           } catch (e) {
-            createGameElement(
-              scheme,
-              "allGamesList"
-            );
+            createGameElement(scheme, "allGamesList");
             let data = JSON.parse(
               await invoke("read_file", {
                 filePath: (await path.appDir()) + "cache/games/data.json",
@@ -256,6 +224,20 @@ export default {
 }
 
 .secondorybox .section .addGameFinalBtn:hover {
+  cursor: pointer;
+}
+
+.secondorybox .addGameBtn {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  margin-top: 36px;
+  margin-left: 138px;
+  transition: 0.1s all linear;
+  color: rgb(255, 255, 255);
+}
+
+.secondorybox .addGameBtn:hover {
   cursor: pointer;
 }
 </style>

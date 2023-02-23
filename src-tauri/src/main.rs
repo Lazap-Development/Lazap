@@ -5,6 +5,7 @@ use declarative_discord_rich_presence::activity::Assets;
 use declarative_discord_rich_presence::activity::Timestamps;
 use declarative_discord_rich_presence::DeclarativeDiscordIpcClient;
 use html_parser::Dom;
+use sha2::{Digest, Sha256};
 use std::fs;
 use std::io::Write;
 use std::path::Path;
@@ -12,6 +13,7 @@ use sysinfo::{CpuExt, System, SystemExt};
 use tauri::{
     CustomMenuItem, Manager, State, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
+
 const DISCORD_RPC_CLIENT_ID: &str = "932504287337148417";
 
 fn init_storage() -> Result<(), std::io::Error> {
@@ -30,17 +32,17 @@ fn init_storage() -> Result<(), std::io::Error> {
         .display()
         .to_string()
         + "com.lazap.config/cache/games";
-    let base_config_cache_user_path =
+    let base_config_cache_user_path = tauri::api::path::app_config_dir(&tauri::Config::default())
+        .unwrap()
+        .display()
+        .to_string()
+        + "com.lazap.config/cache/user";
+    let base_config_cache_games_banners_path =
         tauri::api::path::app_config_dir(&tauri::Config::default())
             .unwrap()
             .display()
             .to_string()
-            + "com.lazap.config/cache/user";
-    let base_config_cache_games_banners_path = tauri::api::path::app_config_dir(&tauri::Config::default())
-        .unwrap()
-        .display()
-        .to_string()
-        + "com.lazap.config/cache/games/banners";
+            + "com.lazap.config/cache/games/banners";
     let base_config_ld_file = tauri::api::path::app_config_dir(&tauri::Config::default())
         .unwrap()
         .display()
@@ -147,7 +149,8 @@ fn main() {
             read_dir,
             write_binary_file,
             rename_file,
-            remove_file
+            remove_file,
+            sha256
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -209,7 +212,8 @@ fn main() {
             read_dir,
             write_binary_file,
             rename_file,
-            remove_file
+            remove_file,
+            sha256
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -272,7 +276,8 @@ fn main() {
             read_dir,
             write_binary_file,
             rename_file,
-            remove_file
+            remove_file,
+            sha256
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -389,6 +394,13 @@ async fn read_dir(dir_path: String) -> Vec<String> {
         );
     }
     file_list
+}
+
+#[tauri::command]
+async fn sha256(content: String) -> Result<String, Error> {
+    let mut hasher = Sha256::new();
+    hasher.update(content);
+    Ok(format!("{:x}", hasher.finalize()))
 }
 
 #[tauri::command]
