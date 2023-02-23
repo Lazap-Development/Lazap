@@ -49,7 +49,7 @@ export default {
       ) {
         return;
       } else if (!prev) {
-        list.appendChild(gameElement);
+        list.prepend(gameElement);
       }
 
       const gameBanner = await Elements.getGameBannerElement(game);
@@ -159,9 +159,12 @@ export default {
           type.includes("MainPage") ? 5 - list.children.length : final.length
         );
 
-        if (games.length !== 0) {
-          document.getElementById("placeholderRecentMain").style.display =
-            "none";
+        if (document.getElementsByClassName("placeholderGames").length < 1) {
+          for (let i = 0; i < 5 - games.length; i++) {
+            let lol = document.createElement("div");
+            lol.classList.add("placeholderGames")
+            document.getElementById("recentGamesListMainPage").append(lol);
+          }
         }
       } else if (type === "favGamesList") {
         let final = [];

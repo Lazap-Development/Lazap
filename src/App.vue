@@ -19,14 +19,7 @@
           <div
             id="recentGamesListMainPage"
             class="fadeInDown mainPageGamesList"
-          ></div>
-
-          <div class="placeholderRecentMain" id="placeholderRecentMain">
-            <div class="placeholderGames"></div>
-            <div class="placeholderGames"></div>
-            <div class="placeholderGames"></div>
-            <div class="placeholderGames"></div>
-            <div class="placeholderGames"></div>
+          >
           </div>
         </div>
       </div>
@@ -614,6 +607,7 @@ body {
   margin-top: 18px;
   font-size: 18px;
   font-family: Nunito-Bold;
+  position: absolute;
 }
 
 .rightbar {
@@ -766,20 +760,9 @@ body {
   height: 100%;
   display: flex;
   align-content: center;
-  justify-content: center;
+  margin: 20px;
+  margin-left: 30px;
   align-items: center;
-  margin-top: -44px;
-}
-
-.placeholderRecentMain {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-  margin-top: -44px;
 }
 
 .placeholderGames {
