@@ -135,11 +135,11 @@ export default {
                 `cache/games/banners/newcustombanner.png`,
               to:
                 (await path.appDir()) +
-                `cache/games/banners/${require("./modules/sha256.js").sha256(
-                  document
+                `cache/games/banners/${await invoke("sha256", {
+                  content: document
                     .getElementById("inputGameName")
-                    .value.replaceAll(" ", "_")
-                )}.png`,
+                    .value.replaceAll(" ", "_"),
+                })}.png`,
             });
             createGameElement(scheme, "allGamesList");
             let data = JSON.parse(

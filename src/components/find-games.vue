@@ -1,5 +1,4 @@
 <script>
-const { sha256 } = require("./modules/sha256.js");
 const currentRpc = require("./modules/rpcOptions.js").currentRpc;
 const selectOption = require("./modules/rpcOptions.js").selectOption;
 
@@ -439,7 +438,6 @@ export default {
             break;
           }
           default: {
-            console.log(game.Location, game.Executable);
             res = createProcess(
               `windows`,
               `/C powershell start "${game.Location}\\${game.Executable}"`,
@@ -504,12 +502,12 @@ export default {
       for (let i = 0; i < games.length; i++) {
         if (
           readBanners.includes(
-            `${sha256(
-              games[i].DisplayName.replaceAll(" ", "_").replace(
+            `${await invoke("sha256", {
+              content: games[i].DisplayName.replaceAll(" ", "_").replace(
                 /[\u{0080}-\u{FFFF}]/gu,
                 ""
-              )
-            )}.png`
+              ),
+            })}.png`
           )
         ) {
           existingProcessed++;
@@ -646,41 +644,31 @@ export default {
             .then(async (response) => {
               if (response.status === 404 && games[i].LauncherName === "Lutris")
                 return;
+
               await invoke("write_binary_file", {
                 filePath:
                   bannerBasePath +
-                  `/${sha256(
-                    games[i].DisplayName.replaceAll(" ", "_").replace(
+                  `/${await invoke("sha256", {
+                    content: games[i].DisplayName.replaceAll(" ", "_").replace(
                       /[\u{0080}-\u{FFFF}]/gu,
                       ""
-                    )
-                  )}.png`,
+                    ),
+                  })}.png`,
                 fileContent: response.data,
               });
               const banner = document.getElementById(
                 `game-div-${games[i].DisplayName.replaceAll(" ", "_")}`
               )?.firstElementChild;
-              console.log(
-                tauri.convertFileSrc(
-                  bannerBasePath +
-                    `/${sha256(
-                      games[i].DisplayName.replaceAll(" ", "_").replace(
-                        /[\u{0080}-\u{FFFF}]/gu,
-                        ""
-                      )
-                    )}.png`
-                )
-              );
               banner?.setAttribute(
                 "src",
                 tauri.convertFileSrc(
                   bannerBasePath +
-                    `/${sha256(
-                      games[i].DisplayName.replaceAll(" ", "_").replace(
-                        /[\u{0080}-\u{FFFF}]/gu,
-                        ""
-                      )
-                    )}.png`
+                    `/${await invoke("sha256", {
+                      content: games[i].DisplayName.replaceAll(
+                        " ",
+                        "_"
+                      ).replace(/[\u{0080}-\u{FFFF}]/gu, ""),
+                    })}.png`
                 )
               );
               banner.style = "content: none;";
@@ -725,16 +713,18 @@ class Elements {
     const dirs = await invoke("read_dir", {
       dirPath: GAME_BANNERS_BASE_PATH,
     });
-    const img = dirs.find(
-      (x) =>
-        x ===
-        `${sha256(
-          game.DisplayName.replaceAll(" ", "_").replace(
-            /[\u{0080}-\u{FFFF}]/gu,
-            ""
-          )
-        )}.png`
-    );
+
+    let displayNameInSha256 = await invoke("sha256", {
+      content: game.DisplayName.replaceAll(" ", "_").replace(
+        /[\u{0080}-\u{FFFF}]/gu,
+        ""
+      ),
+    });
+
+    const img = dirs.find((x) => {
+      return x === `${displayNameInSha256}.png`;
+    });
+
     if (img) {
       banner = img
         ? tauri.convertFileSrc(
