@@ -775,7 +775,7 @@ body {
   height: 56%;
   width: 16%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  opacity: 0.2;
+  opacity: 0.3;
   border: solid var(--accentColor) 6px;
   background-color: var(--accentColor);
   mask-image: -webkit-gradient(
