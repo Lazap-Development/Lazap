@@ -66,42 +66,28 @@ export default {
             (await path.appDir()) + `cache/games/banners/newcustombanner.png`,
           fileContent: [...new Uint8Array(reader.result)],
         });
-        document.getElementById(
-          "addGameCustomBannerOutput"
-        ).style.backgroundImage =
-          `url(` +
-          tauri.convertFileSrc(
-            (await path.appDir()) + `cache/games/banners/newcustombanner.png`
-          ) +
-          `?${new Date().getSeconds()}` +
-          `)`;
+        document.getElementById("addGameCustomBannerOutput").style.backgroundImage =
+          `url(${tauri.convertFileSrc((await path.appDir()) + 'cache/games/banners/newcustombanner.png')}?${new Date().getSeconds()})`;
       };
       document.getElementById("addGameCustomBannerTxt").style.opacity = "0";
       reader.readAsArrayBuffer(selectedFile);
     },
   },
   async mounted() {
+    const appDir = await path.appDir();
     let newGameLocation;
     let createGameElement = this.$root.$refs.findGamesMod.createGameElement;
 
-    document
-      .getElementById("addGameBtn")
+    document.getElementById("addGameBtn")
       .addEventListener("click", async function () {
-        if (
-          window.getComputedStyle(document.getElementById("addGamePopUp"))
-            .display === "flex"
-        ) {
-          document.getElementById(
-            "addGameCustomBannerOutput"
-          ).style.backgroundImage = "url()";
+        if (window.getComputedStyle(document.getElementById("addGamePopUp")).display === "flex") {
+          document.getElementById("addGameCustomBannerOutput").style.backgroundImage = "url()";
           document.getElementById("addGamePopUp").style.display = "none";
           document.getElementById("inputGameName").value = "";
           document.getElementById("addGameCustomBannerTxt").style.opacity = "1";
           try {
             await invoke("remove_file", {
-              file_path:
-                (await path.appDir()) +
-                `cache/games/banners/newcustombanner.png`,
+              file_path: `${appDir}cache/games/banners/newcustombanner.png`,
             });
           } catch (e) {
             return e;
@@ -112,13 +98,9 @@ export default {
         }
       });
 
-    document
-      .getElementById("addGameFinalBtn")
+    document.getElementById("addGameFinalBtn")
       .addEventListener("click", async function () {
-        if (
-          document.getElementById("inputGameName").value.trim().length > 0 &&
-          newGameLocation
-        ) {
+        if (document.getElementById("inputGameName").value.trim().length > 0 && newGameLocation) {
           let scheme = {
             DisplayName: document.getElementById("inputGameName").value,
             LauncherName: "CustomGame",
@@ -131,11 +113,9 @@ export default {
           try {
             await invoke("rename_file", {
               from:
-                (await path.appDir()) +
-                `cache/games/banners/newcustombanner.png`,
+                `${appDir}cache/games/banners/newcustombanner.png`,
               to:
-                (await path.appDir()) +
-                `cache/games/banners/${await invoke("sha256", {
+                `${appDir}cache/games/banners/${await invoke("sha256", {
                   content: document
                     .getElementById("inputGameName")
                     .value.replaceAll(" ", "_"),
@@ -144,24 +124,24 @@ export default {
             createGameElement(scheme, "allGamesList");
             let data = JSON.parse(
               await invoke("read_file", {
-                filePath: (await path.appDir()) + "cache/games/data.json",
+                filePath: `${appDir}cache/games/data.json`,
               })
             );
             data.push(scheme);
             await invoke("write_file", {
-              filePath: (await path.appDir()) + "cache/games/data.json",
+              filePath: `${appDir}cache/games/data.json`,
               fileContent: JSON.stringify(data),
             });
           } catch (e) {
             createGameElement(scheme, "allGamesList");
             let data = JSON.parse(
               await invoke("read_file", {
-                filePath: (await path.appDir()) + "cache/games/data.json",
+                filePath: `${appDir}cache/games/data.json`,
               })
             );
             data.push(scheme);
             await invoke("write_file", {
-              filePath: (await path.appDir()) + "cache/games/data.json",
+              filePath: `${appDir}cache/games/data.json`,
               fileContent: JSON.stringify(data),
             });
           }
@@ -187,8 +167,7 @@ export default {
         }
       });
 
-    document
-      .getElementById("addGameLocation")
+    document.getElementById("addGameLocation")
       .addEventListener("click", async function () {
         const selected = await dialog.open({
           multiple: false,
