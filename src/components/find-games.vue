@@ -1,5 +1,5 @@
 <script>
-// TODO random dupe bug exists(add anti-dupe) DONE
+// TODO benchmark everything to see what's causing so much delay DONE
 // Classes
 class GameElement {
 	constructor(data, listID) {
@@ -41,22 +41,27 @@ class GameElement {
 	async getBannerElement() {
 		const element = document.createElement('img');
 
-		let banner = await this.getBanner();
-		this.data.Banner = banner;
+		const image = require('../assets/img/default-game-banner.png');
+		element.setAttribute('src', image);
 
 		element.classList.add('game_banner_img');
 		element.height = 500;
 		element.width = 500;
 
+		let banner;
 		let block = false;
 		element.addEventListener('error', () => {
 			block = true;
-			console.warn(`${this.data.DisplayName}'s banner did not load successfully`);
+			if (this.data.LauncherName !== 'CustomGame' && banner) console.warn(`${this.data.DisplayName}'s banner did not load successfully`);
 			const image = require('../assets/img/default-game-banner.png');
 			element.setAttribute('src', image);
 		});
-		element.addEventListener('load', () => {
+		element.addEventListener('load', async () => {
 			if (block) return;
+			// Load banner from getBanner() after default banner has loaded
+			banner = await this.getBanner();
+			element.setAttribute('src', banner);
+			element.style.content = 'none';
 			this.cacheBanner(banner);
 			block = true;
 		});
@@ -64,11 +69,6 @@ class GameElement {
 			this.handleLaunch();
 			storage.addLaunch(this.data.GameID, this.data.LauncherName);
 		});
-
-		if (typeof banner === 'string') {
-			element.setAttribute('src', banner);
-			element.style.content = 'none';
-		}
 
 		return element;
 	}
@@ -225,6 +225,7 @@ class GameElement {
 	}
 
 	async cacheBanner(banner) {
+		if (this.data.LauncherName === 'CustomGame' || !banner) return;
 		const bannersDir = await storage.readBannersDir();
 		const dispsha256 = await invoke('sha256', { content: this.data.DisplayName.replaceAll(' ', '_').replace(/[\u{0080}-\u{FFFF}/]/gu, '') });
 
@@ -245,7 +246,7 @@ class GameElement {
 					filePath: `${storage.bannersDir}/${dispsha256}.png`,
 					fileContent: response.data,
 				});
-				const banner = document.getElementById(`game-div-${this.data.DisplayName.replaceAll(" ", "_")}`)?.firstElementChild;
+				const banner = document.getElementById(`game-div-${this.data.DisplayName.replaceAll(' ', '_')}`)?.firstElementChild;
 				banner?.setAttribute('src', tauri.convertFileSrc(`${storage.bannersDir}/${dispsha256}.png`));
 				banner.style = 'content: none;';
 				banner.addEventListener('error', () => (banner.style = ''));
@@ -364,8 +365,8 @@ class GameElement {
 
 class Elements {
 	static async createGameElement(data, listID) {
-		const element = new GameElement(data, listID).getHTMLElement();
-		return await element;
+		const element = await new GameElement(data, listID).getHTMLElement();
+		return element;
 	}
 }
 
@@ -563,8 +564,7 @@ export default {
 				return data;
 			}
 			else if (listID === 'allGamesList') {
-				let data = await this.getInstalledGames();
-				return data.map(x => x.DisplayName).sort().map(x => data.find(y => y.DisplayName === x));
+				return games.map(x => x.DisplayName).sort().map(x => games.find(y => y.DisplayName === x));
 			}
 			else if (listID === 'favGamesList') {
 				let data = await storage.getGamesData();
@@ -572,10 +572,9 @@ export default {
 				return data;
 			}
 		},
-		async loadGames(listID) {
-			const allgames = await this.getGames(listID);
+		async loadGames(listID, games) {
+			const allgames = await this.getGames(listID, games);
 			const list = document.getElementById(listID);
-			// const newgames = allgames.filter(x => !list.children.namedItem(`game-div-${x.DisplayName.replaceAll(' ', '_')}`));
 			const elements = [];
 
 			if (loads[listID] === true) {
@@ -588,6 +587,14 @@ export default {
 			for (let i = 0; i < allgames.length; i++) {
 				const element = list.children.namedItem(`game-div-${allgames[i].DisplayName.replaceAll(' ', '_')}`) ?? await Elements.createGameElement(allgames[i], listID);
 				elements.push(element);
+			}
+
+			if (listID === 'recentGamesListMainPage' && document.getElementsByClassName('placeholderGames').length < 1) {
+				for (let i = 0; i < 5 - allgames.length; i++) {
+					let element = document.createElement('div');
+					element.classList.add('placeholderGames')
+					elements.push(element);
+				}
 			}
 
 			list.replaceChildren(...elements);
