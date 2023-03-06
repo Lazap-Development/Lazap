@@ -377,9 +377,22 @@ export default {
   min-width: 105px;
 }
 
-#setting-accentColor {
+#setting-accentColor::-webkit-color-swatch {
   height: 45px;
-  width: 65px;
+  width: 45px;
+  overflow: hidden;
+  border-radius: 50%;
+  border-color: var(--allColorBack);
+  cursor: pointer;
+}
+
+#setting-accentColor {
+  background-color: var(--allColorBack);
+  color: var(--allColorBack);
+  padding: 0;
+  margin: 0;
+  margin-top: -27px;
+  border: none;
 }
 
 @keyframes settingsBtnAnimation {

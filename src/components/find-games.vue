@@ -2,8 +2,11 @@
 // TODO benchmark everything to see what's causing so much delay DONE
 // Classes
 class GameElement {
-	constructor(data, listID) {
+	constructor(data, listID, jsondata, settings, bannerdirarr) {
 		this.data = data;
+		this.jsondata = jsondata; // Not to be used in events, only during initialisation(getHTMLElement)
+		this.settings = settings; // Not to be used in events, only during initialisation(getHTMLElement)
+		this.bannerdirarr = bannerdirarr;
 		this.listID = listID;
 		this.process = null;
 	}
@@ -15,7 +18,7 @@ class GameElement {
 		// eslint-disable-next-line no-self-assign
 		this.data.Banner = this.data.Banner;
 		if (this.listID.startsWith('recent') && this.listID.includes('Main')) return gameElement;
-		const { enableLauncherIcons } = await storage.getSettings();
+		const { enableLauncherIcons } = this.settings;
 		if (enableLauncherIcons) gameElement.prepend(this.getLauncherIconElement());
 
 		const gameBottom = document.createElement('div');
@@ -106,7 +109,7 @@ class GameElement {
 		element.id = 'star';
 
 		// Check whether the game is starred or not
-		const isFav = (await storage.getGamesData()).find(x => x.LauncherName === this.data.LauncherName && x.GameID === this.data.GameID && x.Favourite) || false;
+		const isFav = this.jsondata?.Favourite || false;
 		if (isFav) {
 			element.classList.add('star-fill');
 			element.style.filter = 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)';
@@ -147,7 +150,7 @@ class GameElement {
 	}
 
 	async getBanner() {
-		const bannersDir = await storage.readBannersDir();
+		const bannersDir = this.bannerdirarr;
 		const dispsha256 = await invoke('sha256', { content: this.data.DisplayName.replaceAll(' ', '_').replace(/[\u{0080}-\u{FFFF}/]/gu, '') });
 
 		if (bannersDir.includes(`${dispsha256}.png`)) {
@@ -364,8 +367,8 @@ class GameElement {
 }
 
 class Elements {
-	static async createGameElement(data, listID) {
-		const element = await new GameElement(data, listID).getHTMLElement();
+	static async createGameElement(data, listID, jsondata, settings, bannersdirarr) {
+		const element = await new GameElement(data, listID, jsondata, settings, bannersdirarr).getHTMLElement();
 		return element;
 	}
 }
@@ -573,6 +576,9 @@ export default {
 			}
 		},
 		async loadGames(listID, games) {
+			const gamesdata = await storage.getGamesData();
+			const bannerdirarr = await storage.readBannersDir();
+			const settings = await storage.getSettings();
 			const allgames = await this.getGames(listID, games);
 			const list = document.getElementById(listID);
 			const elements = [];
@@ -585,7 +591,8 @@ export default {
 			}
 
 			for (let i = 0; i < allgames.length; i++) {
-				const element = list.children.namedItem(`game-div-${allgames[i].DisplayName.replaceAll(' ', '_')}`) ?? await Elements.createGameElement(allgames[i], listID);
+				const element = list.children.namedItem(`game-div-${allgames[i].DisplayName.replaceAll(' ', '_')}`)
+				?? await Elements.createGameElement(allgames[i], listID, gamesdata.find(x => x.GameID === allgames[i].GameID && x.LauncherName === allgames[i].LauncherName), settings, bannerdirarr);
 				elements.push(element);
 			}
 
