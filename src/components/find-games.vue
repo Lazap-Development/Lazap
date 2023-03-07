@@ -596,7 +596,7 @@ export default {
 				elements.push(element);
 			}
 
-			if (listID === 'recentGamesListMainPage' && document.getElementsByClassName('placeholderGames').length < 1) {
+			if (listID === 'recentGamesListMainPage' && allgames.length < 5) {
 				for (let i = 0; i < 5 - allgames.length; i++) {
 					let element = document.createElement('div');
 					element.classList.add('placeholderGames')
