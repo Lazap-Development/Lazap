@@ -1421,7 +1421,7 @@ dependencies = [
 
 [[package]]
 name = "lazap"
-version = "0.6.4"
+version = "0.6.5"
 dependencies = [
  "declarative-discord-rich-presence",
  "html_parser",

@@ -100,7 +100,7 @@
         </div>
       </div>
 
-      <div class="settings-footer">v0.6.4 (Tauri Release)</div>
+      <div class="settings-footer">v0.6.5 (Tauri Release)</div>
     </div>
   </div>
 </template>
@@ -377,21 +377,13 @@ export default {
   min-width: 105px;
 }
 
-#setting-accentColor::-webkit-color-swatch {
-  height: 45px;
-  width: 45px;
-  overflow: hidden;
-  border-radius: 50%;
-  border-color: var(--allColorBack);
-  cursor: pointer;
-}
-
 #setting-accentColor {
   background-color: var(--allColorBack);
   color: var(--allColorBack);
   padding: 0;
-  margin: 0;
-  margin-top: -27px;
+  margin: 4px;
+  height: 40px;
+  width: 60px;
   border: none;
 }
 

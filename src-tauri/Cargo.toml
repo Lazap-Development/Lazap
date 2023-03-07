@@ -1,6 +1,6 @@
 [package]
 name = "lazap"
-version = "0.6.4"
+version = "0.6.5"
 description = "Lazap Launcher"
 authors = ["Lazap-Development"]
 license = "CC BY-NC-SA 4.0"
