@@ -7,19 +7,12 @@
   <div class="bg" id="bg">
     <div class="homebox" id="home">
       <div class="children fadeInUp">
-        <img
-          class="head-pic"
-          src="./assets/img/main-banner.png"
-          id="head-pic"
-        />
+        <img class="head-pic" src="./assets/img/main-banner.png" id="head-pic" />
       </div>
       <div class="children fadeInDown">
         <div class="jump-back">
           <p>Recently Launched</p>
-          <div
-            id="recentGamesListMainPage"
-            class="fadeInDown mainPageGamesList"
-          >
+          <div id="recentGamesListMainPage" class="fadeInDown mainPageGamesList">
           </div>
         </div>
       </div>
@@ -181,19 +174,14 @@ export default {
         .catch((err) => {
           return console.error(err);
         });
-      const gamesdata = await this.$refs.findGamesMod
-        .getGames()
-        .catch((err) => {
-          return console.error(err);
-        });
 
       await this.$refs.findGamesMod
-        .loadGames("recentGamesListMainPage", allGames, gamesdata)
+        .loadGames("recentGamesListMainPage", allGames)
         .catch((err) => {
           return console.error(err);
         });
       await this.$refs.findGamesMod
-        .loadGames("recentGamesList", allGames, gamesdata)
+        .loadGames("recentGamesList", allGames)
         .catch((err) => {
           return console.error(err);
         });
@@ -203,7 +191,7 @@ export default {
           return console.error(err);
         });
       await this.$refs.findGamesMod
-        .loadGames("favGamesList", allGames, gamesdata)
+        .loadGames("favGamesList", allGames)
         .catch((err) => {
           return console.error(err);
         });
@@ -298,9 +286,9 @@ export default {
             .remove();
           setTimeout(
             () =>
-              (document.getElementById(
-                "removeGame"
-              ).parentNode.parentNode.style = ""),
+            (document.getElementById(
+              "removeGame"
+            ).parentNode.parentNode.style = ""),
             200
           );
         });
@@ -676,7 +664,7 @@ body {
   margin-bottom: 30px;
   text-align: center;
   display: inline-block;
-
+  border-radius: 0 0 10px 10px;
   margin-right: 10px;
   margin-left: 20px;
   height: 280px;
@@ -710,13 +698,11 @@ body {
   border-radius: 12px;
   image-rendering: auto;
   object-fit: cover;
-  mask-image: -webkit-gradient(
-    linear,
-    left 70%,
-    left bottom,
-    from(rgba(0, 0, 0, 1)),
-    to(rgba(0, 0, 0, 0))
-  );
+  mask-image: -webkit-gradient(linear,
+      left 70%,
+      left bottom,
+      from(rgba(0, 0, 0, 1)),
+      to(rgba(0, 0, 0, 0)));
   content: url("./assets/img/default-game-banner.png");
 }
 
@@ -778,13 +764,11 @@ body {
   opacity: 0.3;
   border: solid var(--accentColor) 6px;
   background-color: var(--accentColor);
-  mask-image: -webkit-gradient(
-    linear,
-    right 90%,
-    left top,
-    from(rgba(0, 0, 0, 1)),
-    to(rgba(0, 0, 0, 0))
-  );
+  mask-image: -webkit-gradient(linear,
+      right 90%,
+      left top,
+      from(rgba(0, 0, 0, 1)),
+      to(rgba(0, 0, 0, 0)));
 }
 
 .placeholderGames:nth-last-child(-n + 4) {
@@ -1022,8 +1006,7 @@ img,
   height: 25px;
   width: 25px;
   display: flex;
-  filter: invert(12%) sepia(78%) saturate(4656%) hue-rotate(1deg)
-    brightness(108%) contrast(128%);
+  filter: invert(12%) sepia(78%) saturate(4656%) hue-rotate(1deg) brightness(108%) contrast(128%);
 }
 
 .alert-box-cross {
@@ -1037,8 +1020,7 @@ img,
 }
 
 .alert-box-cross:hover {
-  filter: invert(21%) sepia(70%) saturate(3776%) hue-rotate(255deg)
-    brightness(97%) contrast(101%);
+  filter: invert(21%) sepia(70%) saturate(3776%) hue-rotate(255deg) brightness(97%) contrast(101%);
 }
 
 .alert-box-divider {
@@ -1123,14 +1105,14 @@ img,
   display: none;
 }
 
-.switch input + div {
+.switch input+div {
   margin-top: -41px;
   margin-left: 280px;
   position: relative;
 }
 
-.switch input + div:before,
-.switch input + div:after {
+.switch input+div:before,
+.switch input+div:after {
   --s: 1;
   content: "";
   position: absolute;
@@ -1142,26 +1124,26 @@ img,
   transition: transform var(--duration) ease;
 }
 
-.switch input + div:before {
+.switch input+div:before {
   --s: 0;
   left: 0;
   transform-origin: 0 50%;
   border-radius: 2px 0 0 2px;
 }
 
-.switch input + div:after {
+.switch input+div:after {
   left: 28px;
   transform-origin: 100% 50%;
   border-radius: 0 2px 2px 0;
 }
 
-.switch input + div span {
+.switch input+div span {
   padding-left: 56px;
   line-height: 24px;
   color: var(--text);
 }
 
-.switch input + div span:before {
+.switch input+div span:before {
   --x: 0;
   --b: var(--circle);
   --s: 4px;
@@ -1177,19 +1159,19 @@ img,
   transition: box-shadow var(--duration) ease, transform var(--duration) ease;
 }
 
-.switch input + div span:not(:empty) {
+.switch input+div span:not(:empty) {
   padding-left: 64px;
 }
 
-.switch input:checked + div:before {
+.switch input:checked+div:before {
   --s: 1;
 }
 
-.switch input:checked + div:after {
+.switch input:checked+div:after {
   --s: 0;
 }
 
-.switch input:checked + div span:before {
+.switch input:checked+div span:before {
   --x: 28px;
   --s: 12px;
   --b: var(--dot);
@@ -1202,8 +1184,7 @@ img,
 .repeatButton {
   height: 40px;
   width: 40px;
-  filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg)
-    brightness(108%) contrast(108%);
+  filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
 }
 
 .repeatButton:hover {
@@ -1315,6 +1296,7 @@ img,
 }
 
 @keyframes shake {
+
   10%,
   90% {
     transform: translate3d(-1px, 0, 0);

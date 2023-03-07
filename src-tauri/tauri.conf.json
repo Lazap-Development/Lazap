@@ -9,7 +9,7 @@
   },
   "package": {
     "productName": "Lazap",
-    "version": "0.6.4"
+    "version": "0.6.5"
   },
   "tauri": {
     "systemTray": {
@@ -116,7 +116,7 @@
       ],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDFDMkMwNDVFQTJENDU3QUEKUldTcVY5U2lYZ1FzSE9FcXUyNzZ2Y1RiSkk1VnhXcEo3Tmg3M1F1aWVFWUV5bUZGUkQ2N2ZSS3gK",
       "windows": {
-        "installMode": "quiet"
+        "installMode": "passive"
       }
     },
     "windows": [

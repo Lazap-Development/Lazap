@@ -100,7 +100,7 @@
         </div>
       </div>
 
-      <div class="settings-footer">v0.6.4 (Tauri Release)</div>
+      <div class="settings-footer">v0.6.5 (Tauri Release)</div>
     </div>
   </div>
 </template>
@@ -378,8 +378,13 @@ export default {
 }
 
 #setting-accentColor {
-  height: 45px;
-  width: 65px;
+  background-color: var(--allColorBack);
+  color: var(--allColorBack);
+  padding: 0;
+  margin: 4px;
+  height: 40px;
+  width: 60px;
+  border: none;
 }
 
 @keyframes settingsBtnAnimation {
