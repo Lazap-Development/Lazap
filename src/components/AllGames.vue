@@ -4,12 +4,7 @@
       <div class="mainSection fadeInDown">
         <div class="section">
           <div class="title">Game Name</div>
-          <input
-            maxlength="24"
-            type="text"
-            class="inputGameName"
-            id="inputGameName"
-          />
+          <input maxlength="24" type="text" class="inputGameName" id="inputGameName" />
         </div>
         <div class="section">
           <button class="addGameLocation" id="addGameLocation">
@@ -22,18 +17,10 @@
       </div>
       <div class="addGameBannerSection fadeInUp">
         <label for="addGameCustomBanner"></label>
-        <input
-          class="banner"
-          id="addGameCustomBanner"
-          type="file"
-          accept="image/png"
-          @change="(event) => loadCustomBanner(event)"
-        />
+        <input class="banner" id="addGameCustomBanner" type="file" accept="image/png"
+          @change="(event) => loadCustomBanner(event)" />
         <p id="addGameCustomBannerTxt">Hover & Click to Select Banner</p>
-        <div
-          id="addGameCustomBannerOutput"
-          class="addGameCustomBannerOutput"
-        ></div>
+        <div id="addGameCustomBannerOutput" class="addGameCustomBannerOutput"></div>
       </div>
     </div>
 
@@ -76,7 +63,7 @@ export default {
   async mounted() {
     const appDir = await path.appDir();
     let newGameLocation;
-    let createGameElement = this.$root.$refs.findGamesMod.createGameElement;
+    let loadGames = this.$root.$refs.findGamesMod.loadGames;
 
     document.getElementById("addGameBtn")
       .addEventListener("click", async function () {
@@ -121,7 +108,6 @@ export default {
                     .value.replaceAll(" ", "_"),
                 })}.png`,
             });
-            createGameElement(scheme, "allGamesList");
             let data = JSON.parse(
               await invoke("read_file", {
                 filePath: `${appDir}cache/games/data.json`,
@@ -132,8 +118,8 @@ export default {
               filePath: `${appDir}cache/games/data.json`,
               fileContent: JSON.stringify(data),
             });
+            loadGames("allGamesList");
           } catch (e) {
-            createGameElement(scheme, "allGamesList");
             let data = JSON.parse(
               await invoke("read_file", {
                 filePath: `${appDir}cache/games/data.json`,
@@ -144,6 +130,7 @@ export default {
               filePath: `${appDir}cache/games/data.json`,
               fileContent: JSON.stringify(data),
             });
+            loadGames("allGamesList");
           }
           document.getElementById(
             "addGameCustomBannerOutput"
@@ -158,7 +145,7 @@ export default {
         ) {
           return alert("You are missing the game location.");
         } else if (
-          document.getElementById("inputGameName").value.length < 0 &&
+          document.getElementById("inputGameName").value.length < 1 &&
           newGameLocation
         ) {
           return alert("You are missing the game name.");
