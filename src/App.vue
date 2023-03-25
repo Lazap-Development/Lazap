@@ -3,6 +3,7 @@
 
   <settings-comp></settings-comp>
   <titlebar-comp></titlebar-comp>
+  <welcome-comp></welcome-comp>
 
   <div class="bg" id="bg">
     <div class="homebox" id="home">
@@ -94,6 +95,7 @@ import Titlebar from "./components/Titlebar.vue";
 import AllGames from "./components/AllGames.vue";
 import LeftBar from "./components/LeftBar.vue";
 import findGames from "./components/find-games.vue";
+import WelcomeCard from "./components/WelcomeCard.vue"
 
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
@@ -107,6 +109,7 @@ export default {
     "allgames-comp": AllGames,
     "leftbar-comp": LeftBar,
     "find-games": findGames,
+    "welcome-comp": WelcomeCard
   },
   async mounted() {
     (async () => {
@@ -165,6 +168,27 @@ export default {
         document
           .querySelector(":root")
           .style.setProperty("--accentColor", accentColor);
+      } catch (error) {
+        console.error(error);
+      }
+
+      try {
+        let data = JSON.parse(
+          await invoke("read_file", {
+            filePath: (await path.appDir()) + "LauncherData.json",
+          })
+        );
+        
+        if(data.first_launch) { 
+          data.first_launch = false;
+          //document.getElementById("welcome-popup").style.display = "flex";
+          //document.getElementById("welcome-backblur").style.display = "flex";
+
+          await invoke("write_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+              fileContent: JSON.stringify(data),
+          });
+        }
       } catch (error) {
         console.error(error);
       }
