@@ -2,12 +2,13 @@
   <div class="welcome-background" id="welcome-backblur"></div>
   <div class="welcome" id="welcome-popup">
       <section class="start-page" id="start-page">
-        <h1>Welcome to Lazap</h1>
+        <h1>Welcome to <span id="big-text">Lazap</span></h1>
+        <p class="motivational-motto">Where all of your games unite</p>
       </section>
       <section class="all-games-page" id="all-games-page">
-        end
+        <p>Lazap will automatically detect all of the games on your system and display them under the all games tab</p>
       </section>
-      <div class="choser" id="choser">
+      <div class="welcome-choser" id="welcome-choser">
         <button id="previous">
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z" />
@@ -23,16 +24,30 @@
 </template>
 
 <script>
+const path = window.__TAURI__.path;
+const invoke = window.__TAURI__.invoke;
+
 export default {
   name: "welcome-comp",
   async mounted() {
     const welcome = document.getElementById("welcome-popup");
     const welcomebackblur = document.getElementById("welcome-backblur");
 
-    welcomebackblur.addEventListener("click", () => {
+    /*welcomebackblur.addEventListener("click", () => {
       welcome.style.display = "none";
       welcomebackblur.style.display = "none";
-    });
+    });*/
+
+    const {first_launch} = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+
+    if(first_launch) {
+      welcomebackblur.style.display = "flex";
+      welcome.style.display = "flex";
+    }
 
     welcomebackblur.style.display = "flex";
     welcome.style.display = "flex";
@@ -57,6 +72,9 @@ export default {
     function showNextSection() {
       if (currentSection < totalSections) {
         showSection(currentSection + 1);
+      } else {
+        welcome.style.display = "none";
+        welcomebackblur.style.display = "none";
       }
     }
 
@@ -73,6 +91,10 @@ export default {
 </script>
 
 <style>
+#big-text {
+  color: var(--accentColor);
+}
+
 .welcome-background {
   position: absolute;
   width: 100%;
@@ -132,14 +154,14 @@ export default {
   z-index: -15;
 }
 
-.choser {
+.welcome-choser {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   height: 10%;
 }
 
-.choser button {
+.welcome-choser button {
   font-family: Nunito-Bold !important;
   color: rgb(201, 201, 201);
   border-radius: 50%;
@@ -156,11 +178,11 @@ export default {
   margin: 0 5px;
 }
 
-.choser button svg {
+.welcome-choser button svg {
   filter: invert(100);
 }
 
-.choser button:hover {
+.welcome-choser button:hover {
   /*animation: settingsBtnAnimation 0.2s forwards;*/
   cursor: pointer;
 }
@@ -172,7 +194,6 @@ export default {
   align-items: center;
   justify-content: center;
   height: 90%;
-
   color: white;
 }
 
