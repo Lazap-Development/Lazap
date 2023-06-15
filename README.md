@@ -71,7 +71,7 @@ Ensure your operating system has WebView2. For windows, WebView2 gets shipped th
 </details>
 
 ## Help & Support
-If you need assist, in need of technical support, want to give feedback, or do a feature request, feel free to open an [issue](https://github.com/Lazap-Development/lazap/issues). 
+If are in need of technical support, want to give feedback, or do a feature request, feel free to open an [issue](https://github.com/Lazap-Development/lazap/issues). 
 We love to hear the community in order to improve lazap, make it more user friendly and add QOL features.
 
 ## License
