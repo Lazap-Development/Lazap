@@ -16,78 +16,50 @@ use tauri::{
 
 const DISCORD_RPC_CLIENT_ID: &str = "932504287337148417";
 
-fn init_storage() -> Result<(), std::io::Error> {
-    let base_config_path = tauri::api::path::app_config_dir(&tauri::Config::default())
-        .unwrap()
-        .display()
-        .to_string()
-        + "com.lazap.config";
-    let base_config_cache_path = tauri::api::path::app_config_dir(&tauri::Config::default())
-        .unwrap()
-        .display()
-        .to_string()
-        + "com.lazap.config/cache";
-    let base_config_cache_games_path = tauri::api::path::app_config_dir(&tauri::Config::default())
-        .unwrap()
-        .display()
-        .to_string()
-        + "com.lazap.config/cache/games";
-    let base_config_cache_user_path = tauri::api::path::app_config_dir(&tauri::Config::default())
-        .unwrap()
-        .display()
-        .to_string()
-        + "com.lazap.config/cache/user";
-    let base_config_cache_games_banners_path =
-        tauri::api::path::app_config_dir(&tauri::Config::default())
-            .unwrap()
-            .display()
-            .to_string()
-            + "com.lazap.config/cache/games/banners";
-    let base_config_ld_file = tauri::api::path::app_config_dir(&tauri::Config::default())
-        .unwrap()
-        .display()
-        .to_string()
-        + "com.lazap.config/LauncherData.json";
-    let base_config_cache_user_data_file =
-        tauri::api::path::app_config_dir(&tauri::Config::default())
-            .unwrap()
-            .display()
-            .to_string()
-            + "com.lazap.config/cache/user/data.json";
-    let base_config_cache_game_data_file =
-        tauri::api::path::app_config_dir(&tauri::Config::default())
-            .unwrap()
-            .display()
-            .to_string()
-            + "com.lazap.config/cache/games/data.json";
+fn create_dir_if_not_exists(path: &str) {
+    if !Path::new(path).exists() {
+        fs::create_dir_all(path).expect("Failed to create dir.");
+    }
+}
 
-    if !Path::new(&base_config_path).exists() {
-        fs::create_dir_all(base_config_path).expect("Failed to create dir.");
+fn create_file_if_not_exists(file_path: &str, content: &str) -> Result<(), std::io::Error> {
+    if !Path::new(file_path).exists() {
+        let mut file = fs::File::create(file_path)?;
+        writeln!(file, "{}", content)?;
     }
-    if !Path::new(&base_config_cache_path).exists() {
-        fs::create_dir_all(base_config_cache_path).expect("Failed to create dir.");
-    }
-    if !Path::new(&base_config_cache_games_path).exists() {
-        fs::create_dir_all(base_config_cache_games_path).expect("Failed to create dir.");
-    }
-    if !Path::new(&base_config_cache_games_banners_path).exists() {
-        fs::create_dir_all(base_config_cache_games_banners_path).expect("Failed to create dir.");
-    }
-    if !Path::new(&base_config_cache_user_path).exists() {
-        fs::create_dir_all(base_config_cache_user_path).expect("Failed to create dir.");
-    }
-    if !Path::new(&base_config_ld_file).exists() {
-        let mut file = fs::File::create(base_config_ld_file)?;
-        writeln!(file, "{{ \"enable_rpc\": true, \"launch_on_startup\": false, \"skip_login\": false, \"tray_min_launch\": true, \"tray_min_quit\": false, \"check_for_updates\": true, \"accent_color\": \"#7934FA\" }}")?;
-    }
-    if !Path::new(&base_config_cache_user_data_file).exists() {
-        let mut file = fs::File::create(base_config_cache_user_data_file)?;
-        writeln!(file, "{{  \"username\": \"{}\" }}", whoami::username())?;
-    }
-    if !Path::new(&base_config_cache_game_data_file).exists() {
-        let mut file = fs::File::create(base_config_cache_game_data_file)?;
-        writeln!(file, "[]")?;
-    }
+    Ok(())
+}
+
+fn init_storage() -> Result<(), std::io::Error> {
+    let base_config_path = format!("{}com.lazap.config", tauri::api::path::app_config_dir(&tauri::Config::default()).ok_or(std::io::Error::new(std::io::ErrorKind::Other, "Failed to retrieve app config dir"))?.display());
+    let base_config_cache_path = format!("{}/cache", base_config_path);
+    let base_config_cache_games_path = format!("{}/games", base_config_cache_path);
+    let base_config_cache_user_path = format!("{}/user", base_config_cache_path);
+    let base_config_cache_games_banners_path = format!("{}/banners", base_config_cache_games_path);
+    let base_config_ld_file = format!("{}/LauncherData.json", base_config_path);
+    let base_config_cache_user_data_file = format!("{}/data.json", base_config_cache_user_path);
+    let base_config_cache_game_data_file = format!("{}/data.json", base_config_cache_games_path);
+
+    create_dir_if_not_exists(&base_config_path);
+    create_dir_if_not_exists(&base_config_cache_path);
+    create_dir_if_not_exists(&base_config_cache_games_path);
+    create_dir_if_not_exists(&base_config_cache_games_banners_path);
+    create_dir_if_not_exists(&base_config_cache_user_path);
+
+    let json_content = "{ 
+        \"enable_rpc\": true, 
+        \"launch_on_startup\": false, 
+        \"skip_login\": false, 
+        \"tray_min_launch\": true, 
+        \"tray_min_quit\": false, 
+        \"check_for_updates\": true, 
+        \"accent_color\": \"#7934FA\" 
+    }";
+
+    create_file_if_not_exists(&base_config_ld_file, json_content)?;
+
+    create_file_if_not_exists(&base_config_cache_user_data_file, &format!("{{\"username\": \"{}\"}}", whoami::username()))?;
+    create_file_if_not_exists(&base_config_cache_game_data_file, "[]")?;
 
     Ok(())
 }
