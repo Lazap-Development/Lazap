@@ -40,7 +40,8 @@
 Depending on your operating system, we provide as much ease in terms of installation:<br>
 
 ▸ **Windows**: Download and Install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section. <br>
-▸ **Linux**: Download either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+▸ **Linux**: Download either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section. <br> 
+▸ **MacOS**: Soon..
 
 ## Development
 
@@ -56,15 +57,22 @@ cd Lazap && yarn install && yarn tauri:serve
 ```
 Be aware that for the first time it might take some hefty amount of time for dependencies to install and compile.
 
+## FAQ
+
+<details>
+<summary style="font-weight: bold;">What's next for this project?</summary>
+<br>
+Current priority is to support as many launchers as possible and optimize the software to its fullest potential. In the future, there is a possibility of the launcher becoming its own store (like steam).
+</details>
+<details>
+<summary>I can't install or launch lazap...</summary>
+<br>
+Ensure your operating system has WebView2. For windows, WebView2 gets shipped through <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section">Evergreen Standalone</a>.
+</details>
+
 ## Help & Support
 If you need assist, in need of technical support, want to give feedback, or do a feature request, feel free to open an [issue](https://github.com/Lazap-Development/lazap/issues). 
 We love to hear the community in order to improve lazap, make it more user friendly and add QOL features.
-
-## FAQ
-
-**What is next up for this project?** <br>
-Our current priority is to support as many launchers as possible and optimize the software to its fullest potential. In the future, there is a possibility of the launcher becoming its own store (like steam). 
-
 
 ## License
 Lazap is licensed under the terms of [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://github.com/DashCruft-Nation/lazap/blob/main/LICENSE.md) ("CC-BY-NC-SA-4.0"). Commercial use is not allowed under this license. This includes any kind of revenue made with or based upon the software, even donations.
