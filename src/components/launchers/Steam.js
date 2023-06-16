@@ -84,16 +84,17 @@ async function getInstalledGames() {
 
   let allGames = [];
 
+  console.log(path)
   for (const location of path) {
+
     let acf_basePath;
     if ((await os.platform()) === "win32") {
       acf_basePath = `${location}\\steamapps`;
     } else if ((await os.platform()) === "linux") {
       acf_basePath = `${location}/steamapps`;
     }
-
-    if (!(await invoke("d_f_exists", { path: acf_basePath }))) return [];
-
+    
+    if (!(await invoke("d_f_exists", { path: acf_basePath }))) continue;
 
     const readDirOfBasePath = await invoke("read_dir", { dirPath: acf_basePath });
 
