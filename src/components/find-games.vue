@@ -121,20 +121,18 @@ class GameElement {
 		// Handle onclick
 		element.addEventListener('click', async () => {
 			const isFavourite = await storage.toggleFavourite(this.data.GameID, this.data.LauncherName);
-			for (let i = 0; i < lists.length; i++) {
-				const ele = Array.from(lists[i].children.namedItem(`game-div-${this.data.DisplayName.replaceAll(' ', '_')}`).children).find(x => x.classList.contains('gamebox-bottom')).children.namedItem('star');
+			const ele = Array.from(document.getElementById(`game-div-${this.data.DisplayName.replaceAll(' ', '_')}`).children).find(x => x.classList.contains('gamebox-bottom')).children.namedItem('star');
 
-				ele.style.filter = isFavourite
-					? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)'
-					: 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
-				if (isFavourite) {
-					ele.classList.add('star-fill');
-					ele.classList.add('shake');
-					setTimeout(() => ele.classList.remove('shake'), 500);
-				}
-				else {
-					ele.classList.remove('star-fill');
-				}
+			ele.style.filter = isFavourite
+				? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)'
+				: 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
+			if (isFavourite) {
+				ele.classList.add('star-fill');
+				ele.classList.add('shake');
+				setTimeout(() => ele.classList.remove('shake'), 500);
+			}
+			else {
+				ele.classList.remove('star-fill');
 			}
 		});
 		return element;
@@ -592,7 +590,7 @@ export default {
 
 			for (let i = 0; i < allgames.length; i++) {
 				const element = list.children.namedItem(`game-div-${allgames[i].DisplayName.replaceAll(' ', '_')}`)
-				?? await Elements.createGameElement(allgames[i], listID, gamesdata.find(x => x.GameID === allgames[i].GameID && x.LauncherName === allgames[i].LauncherName), settings, bannerdirarr);
+					?? await Elements.createGameElement(allgames[i], listID, gamesdata.find(x => x.GameID === allgames[i].GameID && x.LauncherName === allgames[i].LauncherName), settings, bannerdirarr);
 				elements.push(element);
 			}
 

@@ -84,7 +84,6 @@ async function getInstalledGames() {
 
   let allGames = [];
 
-  console.log(path)
   for (const location of path) {
 
     let acf_basePath;
