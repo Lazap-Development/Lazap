@@ -7,8 +7,8 @@
 </h1>
 
 <p align="center">
-  Lightweight cross-platform launcher <br>
-  Unifying games into a single, modern library
+  Lazap, a lightweight cross-platform launcher <br>
+  Unifying your gaming world into a single, modern library.
 </p>
 
 <p align="center">
@@ -28,51 +28,36 @@
 
 **The new face of Open Source Game Launchers**, Lazap, unites all your games together in one place! Whether it's on Linux or Windows, we got you covered. Lazap connects with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam, and collects all of those games and deposits them inside of one place. Our team of Developers continuously corroborates that Lazap is deeply customizable, Meets up to the user's expectance, possess a glancing & modernist look, and isn't expensive on hardware consumption. 
 
-## ✨ Key Features
-- Support for Steam, Epic Games, Xbox Games, Uplay, R* Launcher, and Riot Games
-- Support for adding custom games to the launcher
-- Extremely lightweight & cheap on hardware consumption
-- Modern user interface with a wide range of theming and user-accessibility customizations
-- Discord Rich Presence, when launching a game or navigating through the menus
-  
-## 💻 Installation
+## ‍💻 Installation
 
 Depending on your operating system, we provide as much ease in terms of installation:<br>
 
 ▸ **Windows**: Download and Install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section. <br>
-▸ **Linux**: Download either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section. <br> 
-▸ **MacOS**: Soon..
+▸ **Linux**: Download either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
 ## 👾 Development
 
-**REQUIREMENTS**<br> 
 - Tauri **[Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites/)**
 - Node.JS `v17` or higher<br>
 - **[Yarn](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)** (recommended but not required)
-
-Once you have met the requirements, do the following:
-```
+  
+```bash
+# clone this repo 
 git clone https://github.com/Lazap-Development/Lazap.git 
+# change current dir, install deps & serve
 cd Lazap && yarn install && yarn tauri:serve
 ```
-Be aware that for the first time it might take some hefty amount of time for dependencies to install and compile.
+Be aware that for the first time it might take some hefty amount of time for things to compile.
+
+## 📚 Help & Support
+If you need assist or in need of technical support for your Lazap installation, feel free to file an [issue](https://github.com/Lazap-Development/lazap/issues) so we can assist you.<br><br>
+**Want to help out instead of getting help?** We love Pull Requests and Issue Hunters. Open up a PR and fix some gears, we would love the community's help to improve lazap and make it more user friendly.
 
 ## ⁉️ FAQ
 
-<details>
-<summary style="font-weight: bold;">What's next for this project?</summary>
-<br>
-Current priority is to support as many launchers as possible and optimize the software to its fullest potential. In the future, there is a possibility of the launcher becoming its own store (like steam).
-</details>
-<details>
-<summary>I can't install or launch lazap...</summary>
-<br>
-Ensure your operating system has WebView2. For windows, WebView2 gets shipped through <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section">Evergreen Standalone</a>.
-</details>
+**What is next up for this project?** <br>
+Our current priority is to support as many launchers as possible and optimize the software to its fullest potential. In the future, there is a possibility of the launcher becoming its own store (like steam). 
 
-## 📚 Help & Support
-If are in need of technical support, want to give feedback, or do a feature request, feel free to open an [issue](https://github.com/Lazap-Development/lazap/issues). 
-We love to hear the community in order to improve lazap, make it more user friendly and add QOL features.
 
 ## 🛂 License
 Lazap is licensed under the terms of [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://github.com/DashCruft-Nation/lazap/blob/main/LICENSE.md) ("CC-BY-NC-SA-4.0"). Commercial use is not allowed under this license. This includes any kind of revenue made with or based upon the software, even donations.
