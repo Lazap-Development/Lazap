@@ -28,14 +28,14 @@
 
 **The new face of Open Source Game Launchers**, Lazap, unites all your games together in one place! Whether it's on Linux or Windows, we got you covered. Lazap connects with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam, and collects all of those games and deposits them inside of one place. Our team of Developers continuously corroborates that Lazap is deeply customizable, Meets up to the user's expectance, possess a glancing & modernist look, and isn't expensive on hardware consumption. 
 
-## Key Features
+## ✨ Key Features
 - Support for Steam, Epic Games, Xbox Games, Uplay, R* Launcher, and Riot Games
 - Support for adding custom games to the launcher
 - Extremely lightweight & cheap on hardware consumption
 - Modern user interface with a wide range of theming and user-accessibility customizations
 - Discord Rich Presence, when launching a game or navigating through the menus
   
-## Installation
+## 💻 Installation
 
 Depending on your operating system, we provide as much ease in terms of installation:<br>
 
@@ -43,7 +43,7 @@ Depending on your operating system, we provide as much ease in terms of installa
 ▸ **Linux**: Download either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section. <br> 
 ▸ **MacOS**: Soon..
 
-## Development
+## 👾 Development
 
 **REQUIREMENTS**<br> 
 - Tauri **[Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites/)**
@@ -57,7 +57,7 @@ cd Lazap && yarn install && yarn tauri:serve
 ```
 Be aware that for the first time it might take some hefty amount of time for dependencies to install and compile.
 
-## FAQ
+## ⁉️ FAQ
 
 <details>
 <summary style="font-weight: bold;">What's next for this project?</summary>
@@ -70,11 +70,11 @@ Current priority is to support as many launchers as possible and optimize the so
 Ensure your operating system has WebView2. For windows, WebView2 gets shipped through <a href="https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section">Evergreen Standalone</a>.
 </details>
 
-## Help & Support
+## 📚 Help & Support
 If are in need of technical support, want to give feedback, or do a feature request, feel free to open an [issue](https://github.com/Lazap-Development/lazap/issues). 
 We love to hear the community in order to improve lazap, make it more user friendly and add QOL features.
 
-## License
+## 🛂 License
 Lazap is licensed under the terms of [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International](https://github.com/DashCruft-Nation/lazap/blob/main/LICENSE.md) ("CC-BY-NC-SA-4.0"). Commercial use is not allowed under this license. This includes any kind of revenue made with or based upon the software, even donations.
 
 The CC-BY-NC-SA-4.0 allows you to:
