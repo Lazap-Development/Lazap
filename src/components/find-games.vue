@@ -460,7 +460,13 @@ class Storage {
 		const element = list.children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`);
 		if (game.Favourite === false && element) {
 			element.classList.add('fadeOutUpNoDelay');
-			setTimeout(() => list.removeChild(element), 500);
+			setTimeout(() => {
+				list.removeChild(element)
+				if (document.getElementById("favGamesList").childNodes.length == 0) {
+					document.getElementById("favGamesPlaceholder").style.display =
+						"block";
+				}
+			}, 200);
 		}
 
 		return game.Favourite;

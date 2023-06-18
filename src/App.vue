@@ -58,7 +58,7 @@
       </div>
       <div id="favGamesList" class="fadeInDown gamesList"></div>
       <h2 class="fade" id="favGamesPlaceholder">
-        You currently have no game marked as a favourite...
+        You currently have no game marked as favourite...
       </h2>
     </div>
 
@@ -409,10 +409,10 @@ body {
   top: 45%;
   transform: translate(-50%, -50%);
   font-weight: normal;
-  color: rgba(164, 164, 164, 0.3);
-  font-size: 28px;
-  width: 360px;
+  color: rgba(98, 98, 98, 0.5);
+  width: 310px;
   text-align: center;
+  font-size: 22px;
 }
 
 .secondorybox .addGamePopUp {
@@ -841,7 +841,7 @@ body {
 }
 
 .fade {
-  animation: fadeIn 0.4s;
+  animation: fadeIn 0.3s;
 }
 
 .fadeInUp {
