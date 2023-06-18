@@ -7,8 +7,8 @@
 </h1>
 
 <p align="center">
-  Lazap, a lightweight cross-platform launcher <br>
-  Unifying your gaming world into a single, modern library.
+  Lazap, a lightweight cross-platform client <br>
+  Unifying games into a single, modern library.
 </p>
 
 <p align="center">
