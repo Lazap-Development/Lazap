@@ -68,12 +68,12 @@
     </div>
 
     <div class="secondorybox" id="activity">
-      <p>Activity</p>
+      <p>Monitor</p>
       <h1 class="fade">Coming Soon...</h1>
     </div>
 
     <div class="secondorybox" id="friends">
-      <p>All Friends</p>
+      <p>Benchmark</p>
       <h1 class="fade">Coming Soon...</h1>
     </div>
 
