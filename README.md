@@ -28,6 +28,14 @@
 
 **The new face of Open Source Game Launchers**, Lazap, unites all your games together in one place! Whether it's on Linux or Windows, we got you covered. Lazap connects with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam, and collects all of those games and deposits them inside of one place. Our team of Developers continuously corroborates that Lazap is deeply customizable, Meets up to the user's expectance, possess a glancing & modernist look, and isn't expensive on hardware consumption. 
 
+## ✨ Key Features
+- Extremely lightweight & cheap on hardware consumption
+- Support for Steam, Epic Games, Xbox Games, Uplay, R* Launcher, and Riot Games
+- Support for adding custom games to the launcher
+- `[Beta]` Overclocking, benchmarking and system monitor capabilities
+- Modern user interface with a wide range of theming and user-accessibility customizations
+- Discord Rich Presence, when launching a game or navigating through the menus
+  
 ## ‍💻 Installation
 
 Depending on your operating system, we provide as much ease in terms of installation:<br>
