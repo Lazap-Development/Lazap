@@ -758,7 +758,7 @@ body {
   display: inline-block;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-  height: 56%;
+  height: 174px;
   width: 16%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.3;
@@ -782,7 +782,7 @@ body {
   display: inline-block;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-  height: 56%;
+  height: 174px;
   width: 16%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
