@@ -100,7 +100,7 @@
         </div>
       </div>
 
-      <div class="settings-footer">v0.7.0 (Tauri Release)</div>
+      <div class="settings-footer">v0.7.0 (Mainline)</div>
     </div>
   </div>
 </template>
