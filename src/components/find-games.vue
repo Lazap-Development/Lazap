@@ -96,8 +96,7 @@ class GameElement {
 		element.addEventListener('click', () => {
 			const gamemenu = document.getElementById('gameMenu');
 			gamemenu.style.display = gamemenu.style.display === 'flex' ? 'none' : 'flex';
-
-			gamemenu.innerHTML = this.data.DisplayName;
+			document.getElementById("gameMenuTitle").innerHTML = this.data.DisplayName 
 		});
 
 		return element;
@@ -364,13 +363,6 @@ class GameElement {
 	}
 }
 
-class Elements {
-	static async createGameElement(data, listID, jsondata, settings, bannersdirarr) {
-		const element = await new GameElement(data, listID, jsondata, settings, bannersdirarr).getHTMLElement();
-		return element;
-	}
-}
-
 class Storage {
 	constructor() {
 		(async () => {
@@ -579,6 +571,10 @@ export default {
 				return data;
 			}
 		},
+		async createGameElement(data, listID, jsondata, settings, bannersdirarr) {
+			const element = await new GameElement(data, listID, jsondata, settings, bannersdirarr).getHTMLElement();
+			return element;
+		},
 		async loadGames(listID, games) {
 			const gamesdata = await storage.getGamesData();
 			const bannerdirarr = await storage.readBannersDir();
@@ -596,7 +592,7 @@ export default {
 
 			for (let i = 0; i < allgames.length; i++) {
 				const element = list.children.namedItem(`game-div-${allgames[i].DisplayName.replaceAll(' ', '_')}`)
-					?? await Elements.createGameElement(allgames[i], listID, gamesdata.find(x => x.GameID === allgames[i].GameID && x.LauncherName === allgames[i].LauncherName), settings, bannerdirarr);
+					?? await new GameElement(allgames[i], listID, gamesdata.find(x => x.GameID === allgames[i].GameID && x.LauncherName === allgames[i].LauncherName), settings, bannerdirarr).getHTMLElement();
 				elements.push(element);
 			}
 
