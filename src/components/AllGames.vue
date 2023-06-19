@@ -97,7 +97,8 @@ export default {
             Args: [],
           };
 
-          try {
+          const exists = await invoke("d_f_exists", { path: `${appDir}cache/games/banners/newcustombanner.png` });
+          if (exists) {
             await invoke("rename_file", {
               from:
                 `${appDir}cache/games/banners/newcustombanner.png`,
@@ -119,7 +120,7 @@ export default {
               fileContent: JSON.stringify(data),
             });
             loadGames("allGamesList");
-          } catch (e) {
+          } else {
             let data = JSON.parse(
               await invoke("read_file", {
                 filePath: `${appDir}cache/games/data.json`,
