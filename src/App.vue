@@ -154,14 +154,16 @@ export default {
       await invoke("show_window");
 
       try {
-        let { accentColor } = JSON.parse(
+        let { accentColor, backgroundColor, primaryColor } = JSON.parse(
           await invoke("read_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
           })
         );
         if (!accentColor) accentColor = "#7934FA";
-        document.getElementById("indicator").style.backgroundColor =
-          accentColor;
+        // document.getElementById("indicator").style.backgroundColor =
+        //   accentColor;
+        if (backgroundColor) document.querySelector(':root').style.setProperty('--allColorBack', backgroundColor);
+        if (primaryColor) document.querySelector(':root').style.setProperty('--allColorPrimary', primaryColor);
         document
           .querySelector(":root")
           .style.setProperty("--accentColor", accentColor);
@@ -310,6 +312,12 @@ export default {
   --accentColor: rgb(121, 52, 250);
   --allColorBack: #15161b;
   --allColorPrimary: #18191f;
+  --accentColorDark: rgb(121, 52, 250);
+  --allColorBackDark: #15161b;
+  --allColorPrimaryDark: #18191f;
+  --accentColorLight: #FFFF;
+  --allColorBackLight: #FFFF;
+  --allColorPrimaryLight: #FFFF;
 }
 
 ::selection {
@@ -1092,91 +1100,6 @@ img,
   animation-fill-mode: both;
 }
 
-.switch {
-  --line: #505162;
-  --dot: #f7f8ff;
-  --circle: #9ea0be;
-  --duration: 0.3s;
-  --text: #9ea0be;
-  cursor: pointer;
-}
-
-.switch input {
-  display: none;
-}
-
-.switch input+div {
-  margin-top: -41px;
-  margin-left: 280px;
-  position: relative;
-}
-
-.switch input+div:before,
-.switch input+div:after {
-  --s: 1;
-  content: "";
-  position: absolute;
-  height: 4px;
-  top: 10px;
-  width: 24px;
-  background: var(--line);
-  transform: scaleX(var(--s));
-  transition: transform var(--duration) ease;
-}
-
-.switch input+div:before {
-  --s: 0;
-  left: 0;
-  transform-origin: 0 50%;
-  border-radius: 2px 0 0 2px;
-}
-
-.switch input+div:after {
-  left: 28px;
-  transform-origin: 100% 50%;
-  border-radius: 0 2px 2px 0;
-}
-
-.switch input+div span {
-  padding-left: 56px;
-  line-height: 24px;
-  color: var(--text);
-}
-
-.switch input+div span:before {
-  --x: 0;
-  --b: var(--circle);
-  --s: 4px;
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 1px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 var(--s) var(--b);
-  transform: translateX(var(--x));
-  transition: box-shadow var(--duration) ease, transform var(--duration) ease;
-}
-
-.switch input+div span:not(:empty) {
-  padding-left: 64px;
-}
-
-.switch input:checked+div:before {
-  --s: 1;
-}
-
-.switch input:checked+div:after {
-  --s: 0;
-}
-
-.switch input:checked+div span:before {
-  --x: 28px;
-  --s: 12px;
-  --b: var(--dot);
-}
-
 .color {
   display: flex;
 }
@@ -1189,14 +1112,6 @@ img,
 
 .repeatButton:hover {
   cursor: pointer;
-}
-
-.btnInput {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-evenly;
-  align-items: center;
-  margin-left: 119px;
 }
 
 @keyframes fadeOutUp {

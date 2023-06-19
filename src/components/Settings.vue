@@ -8,79 +8,119 @@
         <button id="appearancebtn">Appearance</button>
       </div>
       <div class="general-settings" id="general-settings">
-        <div>
+        <div class="setting">
           <p>Discord Rich Presence</p>
-          <label class="switch">
-            <input type="checkbox" id="setting-enable_rpc" />
-            <div>
-              <span></span>
-            </div>
-          </label>
+          <div class="btnInput">
+            <label class="switch">
+              <input type="checkbox" id="setting-enable_rpc" />
+              <div>
+                <span></span>
+              </div>
+            </label>
+          </div>
         </div>
 
-        <div>
+        <div class="setting">
           <p>Launch on Startup</p>
-          <label class="switch">
-            <input
-              type="checkbox"
-              id="setting-launch_on_startup"
-              disabled="readonly"
-            />
-            <div>
-              <span></span>
-            </div>
-          </label>
+          <div class="btnInput">
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="setting-launch_on_startup"
+                disabled="readonly"
+              />
+              <div>
+                <span></span>
+              </div>
+            </label>
+          </div>
         </div>
 
-        <div>
+        <div class="setting">
           <p>Skip Login Menu</p>
-          <label class="switch">
-            <input
-              type="checkbox"
-              id="setting-skip_login"
-              disabled="readonly"
-            />
-            <div>
-              <span></span>
-            </div>
-          </label>
+          <div class="btnInput">
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="setting-skip_login"
+                disabled="readonly"
+              />
+              <div>
+                <span></span>
+              </div>
+            </label>
+          </div>
         </div>
 
-        <div>
+        <div class="setting">
           <p>Minimize to Tray on Launch</p>
-          <label class="switch">
-            <input type="checkbox" id="setting-tray_min_launch" />
-            <div>
-              <span></span>
-            </div>
-          </label>
+          <div class="btnInput">
+            <label class="switch">
+              <input type="checkbox" id="setting-tray_min_launch" />
+              <div>
+                <span></span>
+              </div>
+            </label>
+          </div>
         </div>
 
-        <div>
+        <div class="setting">
           <p>Minimize to Tray on Quit</p>
-          <label class="switch">
-            <input type="checkbox" id="setting-tray_min_quit" />
-            <div>
-              <span></span>
-            </div>
-          </label>
+          <div class="btnInput">
+            <label class="switch">
+              <input type="checkbox" id="setting-tray_min_quit" />
+              <div>
+                <span></span>
+              </div>
+            </label>
+          </div>
         </div>
 
-        <div>
+        <div class="setting">
           <p>Check for Updates</p>
-          <label class="switch">
-            <input
-              type="checkbox"
-              id="setting-check_for_updates"
-            />
-            <div>
-              <span></span>
-            </div>
-          </label>
+          <div class="btnInput">
+            <label class="switch">
+              <input
+                type="checkbox"
+                id="setting-check_for_updates"
+              />
+              <div>
+                <span></span>
+              </div>
+            </label>
+          </div>
         </div>
       </div>
       <div class="appearance-settings" id="appearance-settings">
-        <div class="colorSetting">
+        <div class="setting" style="justify-content: center;">
+          <div>
+            <label class="color">
+              <div class="theme-box" style="background-color: black;"></div>
+              <div class="theme-box" style="background-color: white;"></div>
+              <div class="theme-box" style="background-color: orangered;"></div>
+              <div class="theme-box" style="background-color: purple;"></div>
+            </label>
+          </div>
+        </div>
+        <div class="setting">
+          <p>Primary Color</p>
+          <div class="btnInput">
+            <label class="color">
+              <input type="color" id="setting-primaryColor" />
+            </label>
+            <img class="repeatButton" src="../assets/icons/reset.png" />
+          </div>
+        </div>
+        <div class="setting">
+          <p>Background Color</p>
+          <div class="btnInput">
+            <label class="color">
+              <input type="color" id="setting-backgroundColor" />
+            </label>
+            <img class="repeatButton" src="../assets/icons/reset.png" />
+          </div>
+        </div>
+        <div class="setting">
           <p>Accent Color</p>
           <div class="btnInput">
             <label class="color">
@@ -89,14 +129,16 @@
             <img class="repeatButton" src="../assets/icons/reset.png" />
           </div>
         </div>
-        <div>
+        <div class="setting">
           <p>Enable Launcher Icons</p>
-          <label class="switch">
-            <input type="checkbox" id="setting-enableLauncherIcons" />
-            <div>
-              <span></span>
-            </div>
-          </label>
+          <div class="btnInput">
+            <label class="switch">
+              <input type="checkbox" id="setting-enableLauncherIcons" />
+              <div>
+                <span></span>
+              </div>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -131,7 +173,7 @@ export default {
           })
         );
         document.querySelectorAll("input[id^=setting-]").forEach((input) => {
-          if (input.id === "setting-accentColor")
+          if (input.id.startsWith("setting") && input.id.endsWith("Color"))
             input.value = Data[input.id.split("-")[1]];
           else input.checked = Data[input.id.split("-")[1]] ? true : false;
         });
@@ -147,23 +189,24 @@ export default {
       document.getElementById("appearance-settings").style.display = "flex";
     });
 
-    document
-      .querySelector(".repeatButton")
-      .addEventListener("click", async () => {
+    const repeats = document.getElementsByClassName("repeatButton");
+    for (let i = 0; i < repeats.length; i++) {
+      const id = repeats.item(i).id.split('-')[1];
+      repeats.item(i).addEventListener("click", async () => {
         let LauncherData = JSON.parse(
           await invoke("read_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
           })
         );
-        LauncherData["accentColor"] = "#7934FA";
+        LauncherData[id] = "#7934FA";
         await invoke("write_file", {
           filePath: (await path.appDir()) + "LauncherData.json",
           fileContent: JSON.stringify(LauncherData),
         });
-        document.querySelector("input[id=setting-accentColor]").value =
-          LauncherData["accentColor"];
-        updateAccentColor(LauncherData["accentColor"]);
+        document.querySelector(`input[id=${id}]`).value = LauncherData[id];
+        updateColor(id, LauncherData[id]);
       });
+    }
 
     document.querySelectorAll("input[id^=setting-]").forEach((input) => {
       if (input.id === "setting-accentColor") {
@@ -181,7 +224,45 @@ export default {
             fileContent: JSON.stringify(LauncherData),
           });
 
-          updateAccentColor(LauncherData.accentColor);
+          updateColor('accentColor', LauncherData.accentColor);
+        });
+        return;
+      }
+      else if (input.id === 'setting-backgroundColor') {
+        input.addEventListener("input", async () => {
+          const LauncherData = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+          LauncherData[input.id.split("-")[1]] = document.querySelector(
+            `input[id=${input.id}]`
+          ).value;
+          await invoke("write_file", {
+            filePath: (await path.appDir()) + "LauncherData.json",
+            fileContent: JSON.stringify(LauncherData),
+          });
+
+          updateColor('backgroundColor', LauncherData.backgroundColor);
+        });
+        return;
+      }
+      else if (input.id === 'setting-primaryColor') {
+        input.addEventListener("input", async () => {
+          const LauncherData = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+          LauncherData[input.id.split("-")[1]] = document.querySelector(
+            `input[id=${input.id}]`
+          ).value;
+          await invoke("write_file", {
+            filePath: (await path.appDir()) + "LauncherData.json",
+            fileContent: JSON.stringify(LauncherData),
+          });
+
+          updateColor('primaryColor', LauncherData.primaryColor);
         });
         return;
       }
@@ -222,9 +303,14 @@ export default {
       });
     });
 
-    function updateAccentColor(accentColor) {
-      document.getElementById("indicator").style.backgroundColor = accentColor;
-      document.querySelector(":root").style.setProperty("--accentColor", accentColor);
+    function updateColor(id, color) {
+      const vals = {
+        primaryColor: 'allColorPrimary',
+        backgroundColor: 'allColorBack',
+        accentColor: 'accentColor',
+      };
+      // document.getElementById("indicator").style.backgroundColor = color;
+      document.querySelector(":root").style.setProperty(`--${vals[id]}`, color);
     }
 
     async function setActivity(tab) {
@@ -360,31 +446,134 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-left: auto;
+  overflow: auto;
+  height: 275px;
 }
 
 .appearance-settings {
   display: none;
 }
 
-.colorSetting {
+.appearance-settings .setting,
+.general-settings .setting {
   display: flex;
+  width: 335px;
+  height: 55px;
   justify-content: space-between;
   align-items: center;
-  width: 335px;
 }
 
-.colorSetting p {
+.appearance-settings div p,
+.general-settings div p {
   min-width: 105px;
 }
 
-#setting-accentColor {
+.btnInput {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 55px;
+  width: 120px;
+}
+
+input[type=color] {
   background-color: var(--allColorBack);
   color: var(--allColorBack);
   padding: 0;
   margin: 4px;
   height: 40px;
-  width: 60px;
+  width: 55px;
   border: none;
+}
+
+.switch {
+  --line: #505162;
+  --dot: #f7f8ff;
+  --circle: #9ea0be;
+  --duration: 0.3s;
+  --text: #9ea0be;
+  cursor: pointer;
+}
+
+.switch input {
+  display: none;
+}
+
+.switch input+div {
+  /* margin-top: -41px; */
+  margin-left: 280px;
+  position: relative;
+}
+
+.switch input+div:before,
+.switch input+div:after {
+  --s: 1;
+  content: "";
+  position: absolute;
+  height: 4px;
+  top: 10px;
+  width: 24px;
+  background: var(--line);
+  transform: scaleX(var(--s));
+  transition: transform var(--duration) ease;
+}
+
+.switch input+div:before {
+  --s: 0;
+  left: 0;
+  transform-origin: 0 50%;
+  border-radius: 2px 0 0 2px;
+}
+
+.switch input+div:after {
+  left: 28px;
+  transform-origin: 100% 50%;
+  border-radius: 0 2px 2px 0;
+}
+
+.switch input+div span {
+  padding-left: 56px;
+  line-height: 24px;
+  color: var(--text);
+}
+
+.switch input+div span:before {
+  --x: 0;
+  --b: var(--circle);
+  --s: 4px;
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 var(--s) var(--b);
+  transform: translateX(var(--x));
+  transition: box-shadow var(--duration) ease, transform var(--duration) ease;
+}
+
+.switch input+div span:not(:empty) {
+  padding-left: 64px;
+}
+
+.switch input:checked+div:before {
+  --s: 1;
+}
+
+.switch input:checked+div:after {
+  --s: 0;
+}
+
+.switch input:checked+div span:before {
+  --x: 28px;
+  --s: 12px;
+  --b: var(--dot);
+}
+
+.theme-box {
+  height: 60px;
+  width: 90px;
 }
 
 @keyframes settingsBtnAnimation {
