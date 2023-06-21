@@ -191,7 +191,7 @@ export default {
 
     const repeats = document.getElementsByClassName("repeatButton");
     for (let i = 0; i < repeats.length; i++) {
-      const id = repeats.item(i).id.split('-')[1];
+      const id = repeats.item(i).parentElement.children.item(0).children.item(0).id.split('-')[1];
       repeats.item(i).addEventListener("click", async () => {
         let LauncherData = JSON.parse(
           await invoke("read_file", {
@@ -203,7 +203,7 @@ export default {
           filePath: (await path.appDir()) + "LauncherData.json",
           fileContent: JSON.stringify(LauncherData),
         });
-        document.querySelector(`input[id=${id}]`).value = LauncherData[id];
+        document.getElementById(`setting-${id}`).value = LauncherData[id];
         updateColor(id, LauncherData[id]);
       });
     }
@@ -311,6 +311,7 @@ export default {
       };
       // document.getElementById("indicator").style.backgroundColor = color;
       document.querySelector(":root").style.setProperty(`--${vals[id]}`, color);
+      document.getElementById(`setting-${id}`).value = color;
     }
 
     async function setActivity(tab) {
