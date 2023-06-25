@@ -19,16 +19,6 @@
             "bannerId": "V"
         },
         {
-            "titleId": "launcher",
-            "rosTitleId": 21,
-            "friendlyName": "Rockstar Games Launcher",
-            "installFolderRegKey": "Rockstar Games\\Launcher",
-            "installFolderRegValueName": "InstallFolder",
-            "executable": "Launcher.exe",
-            "folder": "Launcher",
-            "ignore": true
-        },
-        {
             "titleId": "rdr2",
             "rosTitleId": 13,
             "friendlyName": "Red Dead Redemption 2",
