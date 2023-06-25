@@ -32,7 +32,7 @@
 - Extremely lightweight & cheap on hardware consumption
 - Support for Steam, Epic Games, Xbox Games, Uplay, R* Launcher, and Riot Games
 - Support for adding custom games to the launcher
-- `[Beta]` Overclocking, benchmarking and system monitor capabilities
+- `[Beta]` Overclocl, benchmark and system monitor capabilities
 - Modern user interface with a wide range of theming and user-accessibility customizations
 - Discord Rich Presence, when launching a game or navigating through the menus
   
