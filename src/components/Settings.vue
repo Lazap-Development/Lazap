@@ -24,11 +24,7 @@
           <p>Launch on Startup</p>
           <div class="btnInput">
             <label class="switch">
-              <input
-                type="checkbox"
-                id="setting-launch_on_startup"
-                disabled="readonly"
-              />
+              <input type="checkbox" id="setting-launch_on_startup" disabled="readonly" />
               <div>
                 <span></span>
               </div>
@@ -40,11 +36,7 @@
           <p>Skip Login Menu</p>
           <div class="btnInput">
             <label class="switch">
-              <input
-                type="checkbox"
-                id="setting-skip_login"
-                disabled="readonly"
-              />
+              <input type="checkbox" id="setting-skip_login" disabled="readonly" />
               <div>
                 <span></span>
               </div>
@@ -80,10 +72,7 @@
           <p>Check for Updates</p>
           <div class="btnInput">
             <label class="switch">
-              <input
-                type="checkbox"
-                id="setting-check_for_updates"
-              />
+              <input type="checkbox" id="setting-check_for_updates" />
               <div>
                 <span></span>
               </div>
@@ -189,15 +178,16 @@ export default {
       document.getElementById("appearance-settings").style.display = "flex";
     });
 
+    let LauncherData = JSON.parse(
+      await invoke("read_file", {
+        filePath: (await path.appDir()) + "LauncherData.json",
+      })
+    );
+
     const repeats = document.getElementsByClassName("repeatButton");
     for (let i = 0; i < repeats.length; i++) {
       const id = repeats.item(i).parentElement.children.item(0).children.item(0).id.split('-')[1];
       repeats.item(i).addEventListener("click", async () => {
-        let LauncherData = JSON.parse(
-          await invoke("read_file", {
-            filePath: (await path.appDir()) + "LauncherData.json",
-          })
-        );
         LauncherData[id] = "#7934FA";
         await invoke("write_file", {
           filePath: (await path.appDir()) + "LauncherData.json",
@@ -211,11 +201,6 @@ export default {
     document.querySelectorAll("input[id^=setting-]").forEach((input) => {
       if (input.id === "setting-accentColor") {
         input.addEventListener("input", async () => {
-          const LauncherData = JSON.parse(
-            await invoke("read_file", {
-              filePath: (await path.appDir()) + "LauncherData.json",
-            })
-          );
           LauncherData[input.id.split("-")[1]] = document.querySelector(
             `input[id=${input.id}]`
           ).value;
@@ -230,11 +215,6 @@ export default {
       }
       else if (input.id === 'setting-backgroundColor') {
         input.addEventListener("input", async () => {
-          const LauncherData = JSON.parse(
-            await invoke("read_file", {
-              filePath: (await path.appDir()) + "LauncherData.json",
-            })
-          );
           LauncherData[input.id.split("-")[1]] = document.querySelector(
             `input[id=${input.id}]`
           ).value;
@@ -249,11 +229,6 @@ export default {
       }
       else if (input.id === 'setting-primaryColor') {
         input.addEventListener("input", async () => {
-          const LauncherData = JSON.parse(
-            await invoke("read_file", {
-              filePath: (await path.appDir()) + "LauncherData.json",
-            })
-          );
           LauncherData[input.id.split("-")[1]] = document.querySelector(
             `input[id=${input.id}]`
           ).value;
@@ -267,11 +242,6 @@ export default {
         return;
       }
       input.addEventListener("change", async () => {
-        const LauncherData = JSON.parse(
-          await invoke("read_file", {
-            filePath: (await path.appDir()) + "LauncherData.json",
-          })
-        );
         LauncherData[input.id.split("-")[1]] = document.querySelector(
           `input[id=${input.id}]`
         ).checked;
@@ -296,7 +266,7 @@ export default {
             invoke("disable_rpc", { enable: false });
             document.getElementById("rpc").innerHTML = "Disconnected";
           }
-          
+
           window.location.reload();
         }
         if (input.id === "setting-enableLauncherIcons") window.location.reload();
