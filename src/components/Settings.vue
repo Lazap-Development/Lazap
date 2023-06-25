@@ -458,8 +458,8 @@ export default {
 .appearance-settings .setting,
 .general-settings .setting {
   display: flex;
-  width: 335px;
-  height: 55px;
+  width: 350px;
+  height: 45px;
   justify-content: space-between;
   align-items: center;
 }
