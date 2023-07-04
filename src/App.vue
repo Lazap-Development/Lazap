@@ -63,12 +63,12 @@
     </div>
 
     <div class="secondorybox" id="messages">
-      <p>Messages</p>
+      <p>Monitor</p>
       <h1 class="fade">Coming Soon...</h1>
     </div>
 
     <div class="secondorybox" id="activity">
-      <p>Monitor</p>
+      <p>Overclock</p>
       <h1 class="fade">Coming Soon...</h1>
     </div>
 
