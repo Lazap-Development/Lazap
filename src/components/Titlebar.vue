@@ -138,7 +138,7 @@ export default {
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   height: 18px;
   width: 18px;
-  background-color: rgb(70, 70, 70);
+  background-color: var(--accentColor);
   display: block;
 }
 
@@ -152,7 +152,7 @@ export default {
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   height: 18px;
   width: 18px;
-  background-color: rgb(70, 70, 70);
+  background-color: var(--accentColor);
   display: block;
 }
 
@@ -165,7 +165,7 @@ export default {
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   height: 18px;
   width: 18px;
-  background-color: rgb(70, 70, 70);
+  background-color: var(--accentColor);
   display: block;
 }
 

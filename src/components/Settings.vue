@@ -83,11 +83,10 @@
       <div class="appearance-settings" id="appearance-settings">
         <div class="setting" style="justify-content: center;">
           <div>
-            <label class="color">
-              <div class="theme-box" style="background-color: black;"></div>
-              <div class="theme-box" style="background-color: white;"></div>
-              <div class="theme-box" style="background-color: orangered;"></div>
-              <div class="theme-box" style="background-color: purple;"></div>
+            <label class="color" style="border: 3px solid var(--accentColor)">
+              <div class="theme-box" id="theme-box-default" style="background-color: #18191f;"></div>
+              <div class="theme-box" id="theme-box-crimson" style="background-color: #660708;"></div>
+              <div class="theme-box" id="theme-box-midnight" style="background-color: #240046;"></div>
             </label>
           </div>
         </div>
@@ -273,6 +272,44 @@ export default {
       });
     });
 
+    document.querySelectorAll('div[id^=theme-box-]').forEach((div) => {
+      const themes = {
+        default: {
+          primaryColor: '#18191f',
+          backgroundColor: '#15161b',
+          accentColor: '#7934FA',
+        },
+        midnight: {
+          primaryColor: '#240046',
+          backgroundColor: '#230264',
+          accentColor: '#7934FA',
+        },
+        crimson: {
+          primaryColor: '#660708',
+          backgroundColor: '#2b080e',
+          accentColor: '#2E094F',
+        },
+      };
+      div.addEventListener('click', async () => {
+        const name = div.id.split('-')[2];
+        const theme = themes[name];
+        let LauncherData = JSON.parse(
+          await invoke("read_file", {
+            filePath: (await path.appDir()) + "LauncherData.json",
+          })
+        );
+        LauncherData = {...LauncherData,...theme};
+        console.log(LauncherData);
+        await invoke("write_file", {
+          filePath: (await path.appDir()) + "LauncherData.json",
+          fileContent: JSON.stringify(LauncherData),
+        });
+
+        updateColor('primaryColor', theme.primaryColor);
+        updateColor('backgroundColor', theme.backgroundColor);
+        updateColor('accentColor', theme.accentColor);
+      });
+    });
     function updateColor(id, color) {
       const vals = {
         primaryColor: 'allColorPrimary',
@@ -545,6 +582,7 @@ input[type=color] {
 .theme-box {
   height: 60px;
   width: 90px;
+  cursor: pointer;
 }
 
 @keyframes settingsBtnAnimation {
