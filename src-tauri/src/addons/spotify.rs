@@ -5,8 +5,8 @@ use reqwest::{Client, Url};
 use serde::Deserialize;
 use tauri::{Manager, Window};
 
-const SPOTIFY_CLIENT_ID: &str = "da0205ce23514463901a3403589a3a52";
-const SPOTIFY_CLIENT_SECRET: &str = "48a4916b1bc04c77b6a810c84488ad12";
+const SPOTIFY_CLIENT_ID: &str = "";
+const SPOTIFY_CLIENT_SECRET: &str = "";
 
 static mut AVOID_SPAWN: bool = false;
 
