@@ -209,10 +209,15 @@ export default {
     );
 
     const repeats = document.getElementsByClassName("repeatButton");
+    const defaults = {
+      primaryColor: '#18191f',
+      backgroundColor: '#15161b',
+      accentColor: '#7934FA',
+    };
     for (let i = 0; i < repeats.length; i++) {
       const id = repeats.item(i).parentElement.children.item(0).children.item(0).id.split('-')[1];
       repeats.item(i).addEventListener("click", async () => {
-        LauncherData[id] = "#7934FA";
+        LauncherData[id] = defaults[id];
         await invoke("write_file", {
           filePath: (await path.appDir()) + "LauncherData.json",
           fileContent: JSON.stringify(LauncherData),
