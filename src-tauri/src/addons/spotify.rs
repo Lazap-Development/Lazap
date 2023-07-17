@@ -3,29 +3,18 @@ use base64;
 use rand::{self, Rng};
 use reqwest::{Client, Url};
 use serde::Deserialize;
-use std::net::TcpListener;
-use std::thread;
 use tauri::{Manager, Window};
 
-const SPOTIFY_CLIENT_ID: &str = "";
-const SPOTIFY_CLIENT_SECRET: &str = "";
+const SPOTIFY_CLIENT_ID: &str = "da0205ce23514463901a3403589a3a52";
+const SPOTIFY_CLIENT_SECRET: &str = "48a4916b1bc04c77b6a810c84488ad12";
 
 static mut AVOID_SPAWN: bool = false;
 
 static mut ACCESS_TOKEN: Option<String> = None;
 static mut EXTERNAL_WINDOW: Option<Window> = None;
 
-fn is_port_available(port: u16) -> bool {
-    if let Ok(listener) = TcpListener::bind(("localhost", port)) {
-        drop(listener);
-        true
-    } else {
-        false
-    }
-}
-
 #[actix_web::main]
-async fn init_main() -> std::io::Result<()> {
+pub async fn main() -> std::io::Result<()> {
     if SPOTIFY_CLIENT_ID.is_empty() && SPOTIFY_CLIENT_SECRET.is_empty() {
         println!(
             "{}",
@@ -34,10 +23,6 @@ async fn init_main() -> std::io::Result<()> {
         unsafe {
             AVOID_SPAWN = true;
         }
-        return Ok(());
-    }
-
-    if !is_port_available(3000) {
         return Ok(());
     }
 
@@ -160,30 +145,28 @@ pub async fn spotify_login(window: tauri::Window) -> Result<(), Error> {
         if let Some(_value) = &mut EXTERNAL_WINDOW {
             Ok(())
         } else {
-            thread::Builder::new()
-                .name("lazap_spotify".to_string())
-                .spawn(move || {
-                    init_main().expect("Failed to init spotify addon.");
-                    let ext_window = window.get_window("external").unwrap();
-                    ext_window
-                        .eval("window.location.replace('http://localhost:3000/auth/login')")
-                        .expect("Failed to set page to /auth/login");
-                    EXTERNAL_WINDOW = Some(window);
-                })
-                .expect("Failed to spawn thread (spotify).");
+            let ext_window = window.get_window("external").unwrap();
+            ext_window
+                .eval("window.location.replace('http://localhost:3000/auth/login')")
+                .expect("Failed to set page to /auth/login");
+            EXTERNAL_WINDOW = Some(window);
             Ok(())
         }
     }
 }
 
 #[tauri::command]
-pub async fn spotify_connect(window: tauri::Window) -> Result<(), Error> {
-    let ext_window = window.get_window("external").unwrap();
-    ext_window
-        .eval("window.location.replace('http://localhost:3000/auth/login')")
-        .expect("Failed to set page to /auth/login");
-    ext_window.show().unwrap();
-    Ok(())
+pub async fn spotify_connect() -> Result<(), Error> {
+    unsafe {
+        if let Some(ext_window) = &EXTERNAL_WINDOW {
+            let window = ext_window.get_window("external").unwrap();
+            window
+                .eval("window.location.replace('http://localhost:3000/auth/login')")
+                .expect("Failed to set page to /auth/login");
+            window.show().unwrap();
+        }
+        Ok(())
+    }
 }
 
 #[tauri::command]

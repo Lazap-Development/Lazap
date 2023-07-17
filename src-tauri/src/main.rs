@@ -8,9 +8,9 @@ use declarative_discord_rich_presence::activity::Timestamps;
 use declarative_discord_rich_presence::DeclarativeDiscordIpcClient;
 use html_parser::Dom;
 use sha2::{Digest, Sha256};
-use std::fs;
 use std::io::Write;
 use std::path::Path;
+use std::{fs, thread};
 use sysinfo::{CpuExt, System, SystemExt};
 use tauri::{
     CustomMenuItem, Manager, State, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
@@ -86,6 +86,13 @@ struct Payload {
 
 #[cfg(target_os = "windows")]
 fn main() {
+    thread::Builder::new()
+        .name("lazap_spotify".to_string())
+        .spawn(move || {
+            addons::spotify::main().expect("Failed to init spotify addon server.");
+        })
+        .expect("Failed to spawn thread.");
+
     init_storage().expect("Failed to init storage fn.");
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
@@ -165,6 +172,13 @@ fn main() {
 fn main() {
     std::env::set_var("GDK_BACKEND", "x11");
 
+    thread::Builder::new()
+        .name("lazap_spotify".to_string())
+        .spawn(move || {
+            addons::spotify::main().expect("Failed to init spotify addon server.");
+        })
+        .expect("Failed to spawn thread.");
+
     init_storage().expect("Failed to init storage fn.");
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
@@ -241,6 +255,13 @@ fn main() {
 
 #[cfg(target_os = "macos")]
 fn main() {
+    thread::Builder::new()
+        .name("lazap_spotify".to_string())
+        .spawn(move || {
+            addons::spotify::main().expect("Failed to init spotify addon server.");
+        })
+        .expect("Failed to spawn thread.");
+
     init_storage().expect("Failed to init storage fn.");
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");

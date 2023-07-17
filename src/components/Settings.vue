@@ -305,7 +305,9 @@ export default {
               filePath: (await path.appDir()) + "LauncherData.json",
             })
           );
+
           if (enable_spotify) {
+            await invoke("spotify_login"),
             await invoke("spotify_connect")
           }
         }
