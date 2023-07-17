@@ -4,10 +4,10 @@
         <div class="musicPlayer">
             <div class="bkg" id="song-big-cover">
                 <div class="middle">
-                    <img class="banner" id="song-cover" src="../assets/img/carti.png" alt="">
+                    <img class="banner" id="song-cover" src="../assets/img/blank.png" alt="">
                     <div class="nexto">
-                        <p id="song-name">Rockstar Made</p>
-                        <p id="artist-name">Playboi Carti</p>
+                        <p id="song-name">Lazap</p>
+                        <p id="artist-name">Lazap Development</p>
                         <div class="family">
                             <div class="button" id="MusicPlayer-backward-btn">
                                 <img src="../assets/svg/music/angle-left-solid.svg" alt="">
@@ -43,7 +43,7 @@ export default {
                 filePath: (await path.appDir()) + "LauncherData.json",
             })
         );
-        console.log(await invoke("spotify_info"))
+
         if (LauncherData.enable_spotify) {
             await invoke("spotify_login");
             updatePlayer(JSON.parse(await invoke("spotify_info")));
@@ -74,6 +74,8 @@ export default {
         })
 
         function updatePlayer(data) {
+            if (!data.cover) return;
+
             document.getElementById("song-name").innerHTML = data.song_name.substring(0, 12);
             if (data.song_name.length > 12) {
                 document.getElementById("song-name").innerHTML += "...";
@@ -88,9 +90,10 @@ export default {
 
             document.getElementById("music-progress").innerHTML = convertMillisecondsToMinutesSeconds(data.progress)
             document.getElementById("music-total").innerHTML = convertMillisecondsToMinutesSeconds(data.duration)
-            
+
             let status = data.is_playing
             if (status) {
+
                 let imageElement = document.getElementById("MusicPlayer-play-btn").getElementsByTagName('img')[0];
                 imageElement.src = `${require('../assets/svg/music/pause-solid.svg')}`
 
@@ -144,9 +147,7 @@ export default {
 
 .rightbar .musicPlayer .bkg {
     height: 100%;
-    background: filter(url(../assets/img/carti.png), blur(2px) opacity(90%) brightness(40%));
-    background-repeat: no-repeat;
-    background-size: cover;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgb(from var(--accentColor) r g b / 40%) 90%);
     width: 100%;
     overflow: hidden;
     object-fit: cover;
@@ -165,6 +166,8 @@ export default {
     width: 80px;
     height: 80px;
     border-radius: 10px;
+    background: linear-gradient(360deg, rgba(0, 0, 0, 0.4) 0%, rgb(from var(--accentColor) r g b / 100%) 90%);
+    margin: 0;
 }
 
 .rightbar .musicPlayer .middle {
@@ -196,6 +199,10 @@ export default {
     text-decoration: none;
     border: 4px solid var(--accentColor);
     margin: 3px;
+    box-shadow:
+  0px 5px 10px rgba(0, 0, 0, 0.35),
+  0px 40px 80px rgba(0, 0, 0, 0.7)
+;
 }
 
 .rightbar .musicPlayer .family .button:hover {
@@ -251,11 +258,11 @@ export default {
 .rightbar .musicPlayer .slider input::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 19px;
-    height: 19px;
+    width: 20px;
+    height: 20px;
     border-radius: 10px;
-    background-color: #ffffff1d;
-    backdrop-filter: blur(10px);
-    border: 3px solid var(--accentColor);
+    background-color: #00000055;
+    backdrop-filter: blur(12px);
+    border: 4px solid var(--accentColor);
 }
 </style>
