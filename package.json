@@ -13,10 +13,12 @@
   "license": "ISC",
   "dependencies": {
     "@tauri-apps/api": "^1.4.0",
+    "chart.js": "^4.3.0",
     "core-js": "^3.28.0",
     "tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra",
     "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql",
-    "vue": "^3.2.47"
+    "vue": "^3.2.47",
+    "vue-chartjs": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
