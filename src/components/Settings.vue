@@ -6,20 +6,9 @@
       <div class="choser" id="choser">
         <button id="generalbtn">General</button>
         <button id="appearancebtn">Appearance</button>
+        <button id="addonsbtn">Addons</button>
       </div>
       <div class="general-settings" id="general-settings">
-        <div class="setting">
-          <p>Discord Rich Presence</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-enable_rpc" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
         <div class="setting">
           <p>Launch on Startup</p>
           <div class="btnInput">
@@ -80,6 +69,7 @@
           </div>
         </div>
       </div>
+
       <div class="appearance-settings" id="appearance-settings">
         <div class="setting" style="justify-content: center;">
           <div>
@@ -130,7 +120,34 @@
         </div>
       </div>
 
-      <div class="settings-footer">v0.7.0 (Mainline)</div>
+      <div class="general-settings" id="addons-settings" style="display: none;">
+        <div class="setting">
+          <p>Discord Rich Presence</p>
+          <div class="btnInput">
+            <label class="switch">
+              <input type="checkbox" id="setting-enable_rpc" />
+              <div>
+                <span></span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting">
+          <p>Spotify Connection</p>
+          <div class="btnInput">
+            <label class="switch">
+              <input type="checkbox" id="setting-enable_spotify" />
+              <div>
+                <span></span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="settings-footer">Release v0.7.0</div>
     </div>
   </div>
 </template>
@@ -170,11 +187,19 @@ export default {
     document.getElementById("generalbtn").addEventListener("click", () => {
       document.getElementById("general-settings").style.display = "flex";
       document.getElementById("appearance-settings").style.display = "none";
+      document.getElementById("addons-settings").style.display = "none";
     });
 
     document.getElementById("appearancebtn").addEventListener("click", () => {
       document.getElementById("general-settings").style.display = "none";
       document.getElementById("appearance-settings").style.display = "flex";
+      document.getElementById("addons-settings").style.display = "none";
+    });
+
+    document.getElementById("addonsbtn").addEventListener("click", () => {
+      document.getElementById("general-settings").style.display = "none";
+      document.getElementById("appearance-settings").style.display = "none";
+      document.getElementById("addons-settings").style.display = "flex";
     });
 
     let LauncherData = JSON.parse(
@@ -268,6 +293,17 @@ export default {
 
           window.location.reload();
         }
+
+        if (input.id === "setting-enable_spotify") {
+          const { enable_spotify } = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+          if (enable_spotify) {
+            await invoke("spotify_connect")
+          }
+        }
         if (input.id === "setting-enableLauncherIcons") window.location.reload();
       });
     });
@@ -298,7 +334,7 @@ export default {
             filePath: (await path.appDir()) + "LauncherData.json",
           })
         );
-        LauncherData = {...LauncherData,...theme};
+        LauncherData = { ...LauncherData, ...theme };
         console.log(LauncherData);
         await invoke("write_file", {
           filePath: (await path.appDir()) + "LauncherData.json",
@@ -424,7 +460,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .choser button {
@@ -436,15 +472,18 @@ export default {
   font-size: 18px;
 
   background: var(--allColorPrimary);
-  width: 180px;
+  width: 150px;
   height: 40px;
+  border-radius: 10px;
   border: none;
   outline: none;
   padding: 0;
 }
 
 .choser button:hover {
-  animation: settingsBtnAnimation 0.2s forwards;
+  border: var(--accentColor);
+  border-width: 4px;
+  border-style: solid;
   cursor: pointer;
 }
 
@@ -583,18 +622,5 @@ input[type=color] {
   height: 60px;
   width: 90px;
   cursor: pointer;
-}
-
-@keyframes settingsBtnAnimation {
-  0% {
-    border-bottom-width: 0px;
-    border-bottom-style: none;
-  }
-
-  100% {
-    border-bottom: var(--accentColor);
-    border-bottom-width: 4px;
-    border-bottom-style: solid;
-  }
 }
 </style>

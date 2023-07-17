@@ -106,7 +106,14 @@
       }
     },
     "security": {
-      "csp": null
+      "csp": null,
+      "dangerousRemoteDomainIpcAccess": [
+        {
+          "domain": "localhost",
+          "windows": ["external"],
+          "enableTauriAPI": true
+        }
+      ]
     },
     "updater": {
       "active": true,
@@ -131,7 +138,22 @@
         "minWidth": 1250,
         "center": true,
         "visible": false,
+        "focus": true,
         "decorations": false
+      },
+      {
+        "label": "external",
+        "fullscreen": false,
+        "resizable": false,
+        "title": "External Lazap",
+        "height": 700,
+        "width": 450,
+        "maxHeight": 500,
+        "maxWidth": 250,
+        "center": false,
+        "visible": false,
+        "decorations": false,
+        "focus": false
       }
     ]
   }

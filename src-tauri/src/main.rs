@@ -1,5 +1,7 @@
 #![windows_subsystem = "windows"]
 
+mod addons;
+
 use declarative_discord_rich_presence::activity::Activity;
 use declarative_discord_rich_presence::activity::Assets;
 use declarative_discord_rich_presence::activity::Timestamps;
@@ -31,7 +33,15 @@ fn create_file_if_not_exists(file_path: &str, content: &str) -> Result<(), std::
 }
 
 fn init_storage() -> Result<(), std::io::Error> {
-    let base_config_path = format!("{}com.lazap.config", tauri::api::path::app_config_dir(&tauri::Config::default()).ok_or(std::io::Error::new(std::io::ErrorKind::Other, "Failed to retrieve app config dir"))?.display());
+    let base_config_path = format!(
+        "{}com.lazap.config",
+        tauri::api::path::app_config_dir(&tauri::Config::default())
+            .ok_or(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                "Failed to retrieve app config dir"
+            ))?
+            .display()
+    );
     let base_config_cache_path = format!("{}/cache", base_config_path);
     let base_config_cache_games_path = format!("{}/games", base_config_cache_path);
     let base_config_cache_user_path = format!("{}/user", base_config_cache_path);
@@ -48,6 +58,7 @@ fn init_storage() -> Result<(), std::io::Error> {
 
     let json_content = "{ 
         \"enable_rpc\": true, 
+        \"enable_spotify\": false, 
         \"launch_on_startup\": false, 
         \"skip_login\": false, 
         \"tray_min_launch\": true, 
@@ -58,10 +69,19 @@ fn init_storage() -> Result<(), std::io::Error> {
 
     create_file_if_not_exists(&base_config_ld_file, json_content)?;
 
-    create_file_if_not_exists(&base_config_cache_user_data_file, &format!("{{\"username\": \"{}\"}}", whoami::username()))?;
+    create_file_if_not_exists(
+        &base_config_cache_user_data_file,
+        &format!("{{\"username\": \"{}\"}}", whoami::username()),
+    )?;
     create_file_if_not_exists(&base_config_cache_game_data_file, "[]")?;
 
     Ok(())
+}
+
+#[derive(Clone, serde::Serialize)]
+struct Payload {
+    args: Vec<String>,
+    cwd: String,
 }
 
 #[cfg(target_os = "windows")]
@@ -82,6 +102,12 @@ fn main() {
             app.manage(client);
             Ok(())
         })
+        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+            println!("{}, {argv:?}, {cwd}", app.package_info().name);
+
+            app.emit_all("single-instance", Payload { args: argv, cwd })
+                .unwrap();
+        }))
         .system_tray(tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {
@@ -122,7 +148,14 @@ fn main() {
             write_binary_file,
             rename_file,
             remove_file,
-            sha256
+            sha256,
+            // Spotify Addon
+            addons::spotify::spotify_login,
+            addons::spotify::spotify_connect,
+            addons::spotify::spotify_toggle_playback,
+            addons::spotify::spotify_forward,
+            addons::spotify::spotify_backward,
+            addons::spotify::spotify_info,
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -130,6 +163,8 @@ fn main() {
 
 #[cfg(target_os = "linux")]
 fn main() {
+    std::env::set_var("GDK_BACKEND", "x11");
+
     init_storage().expect("Failed to init storage fn.");
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
@@ -145,6 +180,12 @@ fn main() {
             Ok(())
         })
         .plugin(tauri_plugin_sql::Builder::default().build())
+        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+            println!("{}, {argv:?}, {cwd}", app.package_info().name);
+
+            app.emit_all("single-instance", Payload { args: argv, cwd })
+                .unwrap();
+        }))
         .system_tray(tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {
@@ -185,7 +226,14 @@ fn main() {
             write_binary_file,
             rename_file,
             remove_file,
-            sha256
+            sha256,
+            // Spotify Addon
+            addons::spotify::spotify_login,
+            addons::spotify::spotify_connect,
+            addons::spotify::spotify_toggle_playback,
+            addons::spotify::spotify_forward,
+            addons::spotify::spotify_backward,
+            addons::spotify::spotify_info,
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -209,6 +257,12 @@ fn main() {
             app.manage(client);
             Ok(())
         })
+        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+            println!("{}, {argv:?}, {cwd}", app.package_info().name);
+
+            app.emit_all("single-instance", Payload { args: argv, cwd })
+                .unwrap();
+        }))
         .system_tray(tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {
@@ -249,7 +303,14 @@ fn main() {
             write_binary_file,
             rename_file,
             remove_file,
-            sha256
+            sha256,
+            // Spotify Addon
+            addons::spotify::spotify_login,
+            addons::spotify::spotify_connect,
+            addons::spotify::spotify_toggle_playback,
+            addons::spotify::spotify_forward,
+            addons::spotify::spotify_backward,
+            addons::spotify::spotify_info,
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");

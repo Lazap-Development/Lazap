@@ -16,7 +16,7 @@
           </div>
         </div>
       </div>
-      <div class="children fadeInLeft">
+      <div class="children fadeInLeft x2">
         <div class="rightbar">
           <p>System Specification</p>
           <div id="sysInfo" class="sysInfo">
@@ -37,6 +37,9 @@
             </div>
           </div>
         </div>
+
+        <player-comp></player-comp>
+
       </div>
     </div>
 
@@ -62,10 +65,8 @@
       </h2>
     </div>
 
-    <div class="secondorybox" id="messages">
-      <p>Monitor</p>
-      <h1 class="fade">Coming Soon...</h1>
-    </div>
+    <monitor-comp></monitor-comp>
+
 
     <div class="secondorybox" id="activity">
       <p>Overclock</p>
@@ -94,6 +95,8 @@ import Titlebar from "./components/Titlebar.vue";
 import AllGames from "./components/AllGames.vue";
 import LeftBar from "./components/LeftBar.vue";
 import findGames from "./components/find-games.vue";
+import MonitorTab from "./components/MonitorTab.vue";
+import MusicPlayer from "./components/MusicPlayer.vue";
 
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
@@ -107,6 +110,8 @@ export default {
     "allgames-comp": AllGames,
     "leftbar-comp": LeftBar,
     "find-games": findGames,
+    "monitor-comp": MonitorTab,
+    "player-comp": MusicPlayer
   },
   async mounted() {
     (async () => {
@@ -152,7 +157,7 @@ export default {
       checkForUpdate();
 
       await invoke("show_window");
-
+      
       try {
         let { accentColor, backgroundColor, primaryColor } = JSON.parse(
           await invoke("read_file", {
@@ -322,7 +327,7 @@ export default {
 
 ::selection {
   color: inherit;
-  background: #2e3038;
+  background: var(--accentColor);
   border-radius: 10px;
 }
 
@@ -334,6 +339,11 @@ export default {
 @font-face {
   font-family: Nunito-Bold;
   src: url("./assets/fonts/Nunito-SemiBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: Nunito-ExtraBold;
+  src: url("./assets/fonts/Nunito-Bold.ttf") format("truetype");
 }
 
 html,
@@ -564,7 +574,7 @@ body {
   height: 100%;
   width: 71%;
   overflow: hidden;
-  margin: 5px;
+  margin: 8px;
 
   flex: 1;
   justify-content: center;
@@ -584,7 +594,6 @@ body {
   position: relative;
   object-fit: cover;
   flex-shrink: 10;
-  min-width: calc(100% - 100px);
   min-height: 100%;
   border-radius: 10px;
   image-rendering: auto;
@@ -606,12 +615,26 @@ body {
   position: absolute;
 }
 
+.x2 {
+  display: flex;
+  flex-direction: column;
+}
+
 .rightbar {
   background-color: var(--allColorPrimary);
   width: 100%;
-  height: 100%;
+  height: 40%;
   border-radius: 10px;
   cursor: default;
+}
+
+.rightbar:first-child {
+  height: 60%;
+  margin-bottom: 15px;
+}
+
+.rightbar:nth-child(2) {
+  margin-bottom: 7px;
 }
 
 .rightbar p {
@@ -619,7 +642,7 @@ body {
   margin-left: 18px;
   margin-top: 18px;
   font-size: 18px;
-  font-family: Nunito-Bold;
+  font-family: Nunito-ExtraBold;
 }
 
 .rightbar .sysInfo {
@@ -717,11 +740,11 @@ body {
 .gamebox .gamebox-bottom {
   cursor: default;
   position: relative;
-  margin-top: -24%;
+  margin-top: -22%;
   width: 100%;
   height: 15%;
   position: absolute;
-  background-color: #292929;
+  background-color: var(--allColorBack);
   border-radius: 0px 0px 10px 10px;
 }
 
@@ -921,7 +944,7 @@ img,
   position: absolute;
   right: 20px;
   height: 90%;
-  background: rgba(35, 35, 37, 1);
+  background: var(--allColorBack);
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;
   border-top-left-radius: 20px;
@@ -936,7 +959,7 @@ img,
   border-radius: 12px;
   font-size: 18px;
 
-  background-color: #3e3e3e;
+  background-color: var(--allColorPrimary);
   opacity: 0.9;
   width: 13.78rem;
   height: 50px;
@@ -960,7 +983,7 @@ img,
 }
 
 .gameMenu .gameMenuBtn:hover {
-  background-color: #373737;
+  scale: 1.05;
 }
 
 .leftbar-overlay {
@@ -1066,7 +1089,7 @@ img,
   width: 100%;
   height: 100%;
   border: none;
-  background-color: #191a1d;
+  background-color: var(--allColorBack);
   border-radius: 6px;
   font-family: Nunito;
   font-size: 15px;
@@ -1077,6 +1100,7 @@ img,
   background-repeat: no-repeat;
   background-position: 16px 48%;
   color: #f9fafb;
+  border: 3px solid rgba(255, 255, 255, 0);
 }
 
 .search-bar input::selection {
@@ -1249,9 +1273,11 @@ img,
 @keyframes searchbox {
   0% {
     width: 0%;
+    opacity: 0;
   }
 
   100% {
+    opacity: 1;
     width: 100%;
   }
 }

@@ -359,10 +359,9 @@ export default {
 }
 
 .side-tab:before {
-  background: rgb(30, 30, 34);
-  background: linear-gradient(40deg,
-      rgba(30, 30, 34, 1) 0%,
-      rgba(30, 30, 34, 1) 30%,
+  background: linear-gradient(30deg,
+  var(--allColorPrimary) 0%,
+      var(--allColorPrimary) 30%,
       var(--accentColor) 100%);
   content: "";
   height: 40px;

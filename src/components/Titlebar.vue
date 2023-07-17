@@ -41,6 +41,7 @@ export default {
       if (LauncherData["tray_min_quit"] == true) {
         window.__TAURI__.window.appWindow.hide();
       } else {
+        window.__TAURI__.window.WebviewWindow.getByLabel('external').close();
         window.__TAURI__.window.appWindow.close();
       }
     },
