@@ -4,7 +4,10 @@
         <div class="musicPlayer">
             <div class="bkg" id="song-big-cover">
                 <div class="middle">
-                    <img class="banner" id="song-cover" src="../assets/img/blank.png" alt="">
+                    <div class="lol">
+                        <img class="banner" id="song-cover" src="../assets/img/blank.png" alt="">
+                        <img class="subbanner" id="song-subcover" src="../assets/icons/music.png" alt="">
+                    </div>
                     <div class="nexto">
                         <p id="song-name">Lazap</p>
                         <p id="artist-name">Lazap Development</p>
@@ -82,6 +85,7 @@ export default {
             }
             document.getElementById("artist-name").innerHTML = data.artist_name;
             document.getElementById("song-cover").src = data.cover;
+            document.getElementById("song-subcover").style.display = "none";
 
             document.getElementById("song-big-cover").style.background = `filter(url(${data.cover}), blur(2px) opacity(90%) brightness(40%))`
             document.getElementById("song-big-cover").style.backgroundSize = `cover`
@@ -93,7 +97,6 @@ export default {
 
             let status = data.is_playing
             if (status) {
-
                 let imageElement = document.getElementById("MusicPlayer-play-btn").getElementsByTagName('img')[0];
                 imageElement.src = `${require('../assets/svg/music/pause-solid.svg')}`
 
@@ -167,7 +170,15 @@ export default {
     height: 80px;
     border-radius: 10px;
     background: linear-gradient(360deg, rgba(0, 0, 0, 0.4) 0%, rgb(from var(--accentColor) r g b / 100%) 90%);
+    background-size: 100% auto;
     margin: 0;
+}
+
+.subbanner {
+    position: absolute !important;
+    left: 45px;
+    bottom: 90px;
+    opacity: 0.8;
 }
 
 .rightbar .musicPlayer .middle {
@@ -200,9 +211,8 @@ export default {
     border: 4px solid var(--accentColor);
     margin: 3px;
     box-shadow:
-  0px 5px 10px rgba(0, 0, 0, 0.35),
-  0px 40px 80px rgba(0, 0, 0, 0.7)
-;
+        0px 5px 10px rgba(0, 0, 0, 0.35),
+        0px 40px 80px rgba(0, 0, 0, 0.7);
 }
 
 .rightbar .musicPlayer .family .button:hover {
