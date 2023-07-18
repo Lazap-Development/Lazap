@@ -343,7 +343,7 @@ async fn parse(value: &str) -> Result<String, Error> {
 }
 
 #[tauri::command]
-async fn launch_game(exec: String, args: String) {
+async fn launch_game(exec: String, _args: String) {
     #[cfg(target_os = "windows")]
     use std::os::windows::process::CommandExt;
     #[cfg(target_os = "windows")]
@@ -357,7 +357,7 @@ async fn launch_game(exec: String, args: String) {
 
     #[cfg(target_os = "linux")]
     let child = std::process::Command::new(exec)
-        .arg(args)
+        .arg(_args)
         .spawn()
         .expect("failed to run");
     #[cfg(target_os = "linux")]
