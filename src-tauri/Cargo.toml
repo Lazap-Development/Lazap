@@ -40,7 +40,6 @@ base64 = "0.12.0"
 openssl = { version = "0.10.45", features = ["vendored"] }
 
 [profile.release]
-panic = "abort"
 codegen-units = 1 
 lto = true
 opt-level = "s"

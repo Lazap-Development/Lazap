@@ -219,12 +219,8 @@ pub async fn spotify_toggle_playback() -> Result<bool, Error> {
                 }
             }
 
-            HttpResponse::InternalServerError().finish();
-
             Ok(is_playing_glob)
         } else {
-            HttpResponse::InternalServerError().finish();
-
             Ok(false)
         }
     }
@@ -244,12 +240,8 @@ pub async fn spotify_backward() -> Result<(), Error> {
                 .header(reqwest::header::CONTENT_LENGTH, 0)
                 .send()
                 .await;
-
-            HttpResponse::InternalServerError().finish();
             Ok(())
         } else {
-            HttpResponse::InternalServerError().finish();
-
             Ok(())
         }
     }
@@ -347,7 +339,7 @@ pub async fn spotify_info() -> Result<String, Error> {
                 currently_playing.item.duration_ms
             );
 
-            HttpResponse::InternalServerError().finish();
+            HttpResponse::Found().finish();
 
             Ok(json_content)
         } else {
