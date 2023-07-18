@@ -71,14 +71,12 @@
       </div>
 
       <div class="appearance-settings" id="appearance-settings">
-        <div class="setting" style="justify-content: center;">
-          <div>
+        <div class="setting themes">
             <label class="color" style="border: 3px solid var(--accentColor)">
               <div class="theme-box" id="theme-box-default" style="background-color: #18191f;"></div>
               <div class="theme-box" id="theme-box-crimson" style="background-color: #660708;"></div>
               <div class="theme-box" id="theme-box-midnight" style="background-color: #240046;"></div>
             </label>
-          </div>
         </div>
         <div class="setting">
           <p>Primary Color</p>
@@ -473,7 +471,6 @@ export default {
 .choser button {
   font-family: Nunito-Bold !important;
   color: rgb(201, 201, 201);
-  border-radius: 4px;
   text-decoration: none;
   text-shadow: none;
   font-size: 18px;
@@ -481,10 +478,21 @@ export default {
   background: var(--allColorPrimary);
   width: 150px;
   height: 40px;
-  border-radius: 10px;
   border: none;
   outline: none;
   padding: 0;
+}
+
+.choser button:first-child {
+  border-radius: 10px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+}
+
+.choser button:last-child {
+  border-radius: 10px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 
 .choser button:hover {
@@ -506,6 +514,12 @@ export default {
 
 .appearance-settings {
   display: none;
+}
+
+.appearance-settings .themes {
+  height: 70px !important;
+  justify-content: center !important;
+  margin-bottom: 10px;
 }
 
 .appearance-settings .setting,

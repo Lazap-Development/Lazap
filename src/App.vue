@@ -439,7 +439,7 @@ body {
   height: 200px;
   margin-left: 170px;
   margin-top: 20px;
-  background-color: #242424;
+  background-color: var(--allColorBack);
   animation: gradient 20s infinite;
   display: none;
 
@@ -477,7 +477,7 @@ body {
   text-align: center;
   background-repeat: no-repeat;
   padding: 0;
-  background-color: #313131;
+  background-color: var(--allColorPrimary);
   transition: all 0.1s ease-in-out;
   z-index: 0;
 }
@@ -543,7 +543,7 @@ body {
   margin-top: 44px;
 
   padding: 5px;
-  background-color: #323232;
+  background-color: var(--allColorPrimary);
   color: rgb(180, 180, 180);
   border-radius: 8px;
   font-family: Nunito-Bold;
@@ -558,7 +558,7 @@ body {
   align-self: flex-start;
   margin-right: 20px;
   margin-top: 14px;
-  background-color: #3e3e3e;
+  background-color: var(--allColorPrimary);
   color: rgb(194, 194, 194);
   padding: 10px;
   border-radius: 12px;
@@ -566,7 +566,7 @@ body {
 }
 
 .secondorybox .section .addGameLocation:hover {
-  background-color: #393939;
+  scale: 1.06;
 }
 
 .children {
@@ -808,12 +808,12 @@ body {
 
 .mainPageGamebox {
   position: relative;
-
   text-align: center;
   display: inline-block;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
   width: 16%;
+  height: 61%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
   border: solid var(--accentColor) 6px;
@@ -825,18 +825,18 @@ body {
 
 .mainPageGamebox:hover {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  transform: scale(1.03);
+  transform: scale(1.02);
   cursor: pointer;
   opacity: 1;
 }
 
 .mainPageGamebox img {
-  object-fit: cover;
   display: block;
-  height: 174px;
+  height: 100%;
   width: 100%;
   border-radius: 10px;
-  content: url("./assets/img/default-game-banner.png");
+  object-position: 50% 25%;
+  object-fit: cover;
 }
 
 .mainPageGamebox span {

@@ -498,7 +498,7 @@ const blacklists = require('./others/blacklist.json')
 const invoke = window.__TAURI__.invoke;
 const tauri = window.__TAURI__.tauri;
 const http = window.__TAURI__.http;
-let os = window.__TAURI__.os;
+
 const Window = window.__TAURI__.window;
 // Objects
 const storage = new Storage();
@@ -507,12 +507,13 @@ let fetches = 0;
 const loads = {};
 let lists = ['allGamesList', 'recentGamesList', 'favGamesList'];
 let timestamp;
+let os;
 
 export default {
 	name: 'find-games',
 	async mounted() {
 		lists = lists.map(x => document.getElementById(x));
-		os = await os.platform();
+		os = await window.__TAURI__.os.platform();
 	},
 	methods: {
 		// Fetches all installed games in the disk according to the Launchers provided
