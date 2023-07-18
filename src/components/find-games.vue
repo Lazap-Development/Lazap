@@ -90,6 +90,11 @@ class GameElement {
 
 		this.cacheBanner(banner);
 
+		element.addEventListener('click', () => {
+			this.handleLaunch();
+			storage.addLaunch(this.data.GameID, this.data.LauncherName);
+		});
+		
 		return element;
 	}
 
