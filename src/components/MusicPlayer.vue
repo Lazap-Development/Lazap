@@ -3,32 +3,36 @@
     <div class="rightbar">
         <div class="musicPlayer">
             <div class="bkg" id="song-big-cover">
-                <div class="middle">
-                    <div class="lol">
-                        <img class="banner" id="song-cover" src="../assets/img/blank.png" alt="">
-                        <img class="subbanner" id="song-subcover" src="../assets/icons/music.png" alt="">
-                    </div>
-                    <div class="nexto">
-                        <p id="song-name">Lazap</p>
-                        <p id="artist-name">Lazap Development</p>
-                        <div class="family">
-                            <div class="button" id="MusicPlayer-backward-btn">
-                                <img src="../assets/svg/music/angle-left-solid.svg" alt="">
+                <div class="bkg-filter">
+                    <div class="middle">
+                        <div class="lol">
+                            <div class="banner" id="song-cover">
+                                <img class="subbanner" id="song-subcover" src="../assets/icons/music.png" alt="">
                             </div>
-                            <div class="button playback" id="MusicPlayer-play-btn">
-                                <img src="../assets/svg/music/play-solid.svg" alt="">
-                            </div>
-                            <div class="button" id="MusicPlayer-forward-btn">
-                                <img src="../assets/svg/music/angle-right-solid.svg" alt="">
+                        </div>
+                        <div class="nexto">
+                            <p id="song-name">Lazap</p>
+                            <p id="artist-name">Lazap Development</p>
+                            <div class="family">
+                                <div class="button" id="MusicPlayer-backward-btn">
+                                    <img src="../assets/svg/music/angle-left-solid.svg" alt="">
+                                </div>
+                                <div class="button playback" id="MusicPlayer-play-btn">
+                                    <img src="../assets/svg/music/play-solid.svg" alt="">
+                                </div>
+                                <div class="button" id="MusicPlayer-forward-btn">
+                                    <img src="../assets/svg/music/angle-right-solid.svg" alt="">
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="slider">
+                        <p id="music-progress">0:00</p>
+                        <input type="range" id="music-slider" min="1" max="100" value="0">
+                        <p id="music-total">0:00</p>
+                    </div>
                 </div>
-                <div class="slider">
-                    <p id="music-progress">0:00</p>
-                    <input type="range" id="music-slider" min="1" max="100" value="0">
-                    <p id="music-total">0:00</p>
-                </div>
+
             </div>
         </div>
     </div>
@@ -84,10 +88,10 @@ export default {
                 document.getElementById("song-name").innerHTML += "...";
             }
             document.getElementById("artist-name").innerHTML = data.artist_name;
-            document.getElementById("song-cover").src = data.cover;
+            document.getElementById("song-cover").style.background = `url(${data.cover}`;
             document.getElementById("song-subcover").style.display = "none";
 
-            document.getElementById("song-big-cover").style.background = `filter(url(${data.cover}), blur(2px) opacity(90%) brightness(40%))`
+            document.getElementById("song-big-cover").style.background = `url(${data.cover}`
             document.getElementById("song-big-cover").style.backgroundSize = `cover`
             document.getElementById("song-big-cover").style.backgroundRepeat = `no-repeat`
             document.getElementById("song-big-cover").style.backgroundPosition = `center`
@@ -150,35 +154,46 @@ export default {
 
 .rightbar .musicPlayer .bkg {
     height: 100%;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgb(from var(--accentColor) r g b / 40%) 90%);
     width: 100%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, var(--accentColor) 90%);
     overflow: hidden;
-    object-fit: cover;
     border-radius: 15px;
-    backdrop-filter: 2px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    justify-content: center;
+    align-items: center;
     box-shadow:
         0px 2.3px 4.6px rgba(0, 0, 0, 0.11),
         0px 18px 37px rgba(0, 0, 0, 0.22);
     padding: 10px;
 }
 
+.bkg-filter {
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(2px) opacity(90%) brightness(40%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 10px;
+    flex-shrink: 0;
+}
+
 .rightbar .musicPlayer .banner {
     width: 80px;
     height: 80px;
     border-radius: 10px;
-    background: linear-gradient(360deg, rgba(0, 0, 0, 0.4) 0%, rgb(from var(--accentColor) r g b / 100%) 90%);
-    background-size: 100% auto;
+    background: linear-gradient(360deg, rgba(0, 0, 0, 0.4) 0%, var(--accentColor) 90%);
+    background-size: 100% auto !important;
     margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .subbanner {
-    position: absolute !important;
-    left: 45px;
-    bottom: 90px;
-    opacity: 0.8;
+    opacity: 0.6;
+    width: 40px;
 }
 
 .rightbar .musicPlayer .middle {

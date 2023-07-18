@@ -13,11 +13,16 @@ class GameElement {
 
 	async getHTMLElement() {
 		const gameElement = this.getElement();
+
+		if (this.listID.startsWith('recent') && this.listID.includes('Main')) {
+			await this.getBannerElementv2(gameElement)
+			return gameElement;
+		}
+
 		const banner = await this.getBannerElement();
 		gameElement.appendChild(banner);
 		// eslint-disable-next-line no-self-assign
 		this.data.Banner = this.data.Banner;
-		if (this.listID.startsWith('recent') && this.listID.includes('Main')) return gameElement;
 		const { enableLauncherIcons } = this.settings;
 		if (enableLauncherIcons) gameElement.prepend(this.getLauncherIconElement());
 
@@ -48,8 +53,6 @@ class GameElement {
 		element.setAttribute('src', image);
 
 		element.classList.add('game_banner_img');
-		element.height = 500;
-		element.width = 500;
 
 		let banner;
 		let block = false;
@@ -76,6 +79,20 @@ class GameElement {
 		return element;
 	}
 
+	async getBannerElementv2(element) {
+		const image = require('../assets/img/default-game-banner.png');
+		element.style.background = `url(${image})`
+		element.style.backgroundSize = "cover"
+
+		let banner = await this.getBanner();
+		element.style.background = `url(${banner})`
+		element.style.backgroundSize = "cover"
+
+		this.cacheBanner(banner);
+
+		return element;
+	}
+
 	getTextElement() {
 		const element = document.createElement('span');
 
@@ -96,7 +113,7 @@ class GameElement {
 		element.addEventListener('click', () => {
 			const gamemenu = document.getElementById('gameMenu');
 			gamemenu.style.display = gamemenu.style.display === 'flex' ? 'none' : 'flex';
-			document.getElementById("gameMenuTitle").innerHTML = this.data.DisplayName 
+			document.getElementById("gameMenuTitle").innerHTML = this.data.DisplayName
 		});
 
 		return element;

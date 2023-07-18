@@ -789,10 +789,10 @@ body {
   display: inline-block;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-  height: 174px;
+  height: 61%;
   width: 16%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  opacity: 0.4;
+  opacity: 0.5;
   border: solid var(--accentColor) 6px;
   background-color: var(--accentColor);
   mask-image: -webkit-gradient(linear,
@@ -817,6 +817,7 @@ body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
   border: solid var(--accentColor) 6px;
+  background-position: 50% 40% !important;
 }
 
 .mainPageGamebox:nth-last-child(-n + 4) {
@@ -1088,9 +1089,8 @@ img,
 .search-bar input {
   width: 100%;
   height: 100%;
-  border: none;
   background-color: var(--allColorBack);
-  border-radius: 6px;
+  border-radius: 10px;
   font-family: Nunito;
   font-size: 15px;
   font-weight: 500;
@@ -1100,7 +1100,7 @@ img,
   background-repeat: no-repeat;
   background-position: 16px 48%;
   color: #f9fafb;
-  border: 3px solid rgba(255, 255, 255, 0);
+  border: 4px solid rgba(255, 255, 255, 0);
 }
 
 .search-bar input::selection {
@@ -1116,7 +1116,7 @@ img,
 }
 
 .search-bar input:focus {
-  border: 3px solid var(--accentColor);
+  border: 4px solid var(--accentColor);
   animation-name: searchbox;
   animation-duration: 0.3s;
   animation-fill-mode: both;
