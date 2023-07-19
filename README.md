@@ -30,11 +30,11 @@
 
 ## ✨ Key Features
 - Extremely lightweight & cheap on hardware consumption
-- Support for Steam, Epic Games, Xbox Games, Uplay, R* Launcher, and Riot Games
-- Support for adding custom games to the launcher
-- `[Beta]` Overclock, benchmark and system monitor capabilities
-- Modern user interface with a wide range of theming and user-accessibility customizations
+- Support for Steam, Epic Games, Xbox Games, Uplay, R* Launcher, Riot Games, and Custom Games
+- Sleek & Modern user interface with a wide range of theming and user-accessibility customizations
 - Discord Rich Presence, when launching a game or navigating through the menus
+- Spotify Integration with streamlined music control
+- `[Soon]` Cross-Platform Lazap Overlay
   
 ## ‍💻 Installation
 
@@ -47,7 +47,7 @@ Depending on your operating system, we provide as much ease in terms of installa
 ## 👾 Development
 
 - Tauri **[Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites/)**
-- Node.JS `v17` or higher<br>
+- Node.JS `v18` or higher<br>
 - **[Yarn](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)** (recommended but not required)
   
 ```bash
