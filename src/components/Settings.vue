@@ -72,11 +72,11 @@
 
       <div class="appearance-settings" id="appearance-settings">
         <div class="setting themes">
-            <label class="color" style="border: 3px solid var(--accentColor)">
-              <div class="theme-box" id="theme-box-default" style="background-color: #18191f;"></div>
-              <div class="theme-box" id="theme-box-crimson" style="background-color: #660708;"></div>
-              <div class="theme-box" id="theme-box-midnight" style="background-color: #240046;"></div>
-            </label>
+          <label class="color" style="border: 3px solid var(--accentColor)">
+            <div class="theme-box" id="theme-box-default" style="background-color: #18191f;"></div>
+            <div class="theme-box" id="theme-box-crimson" style="background-color: #660708;"></div>
+            <div class="theme-box" id="theme-box-midnight" style="background-color: #240046;"></div>
+          </label>
         </div>
         <div class="setting">
           <p>Primary Color</p>
@@ -143,6 +143,29 @@
           </div>
         </div>
 
+        <div class="setting">
+          <p>YouTube Music Connection</p>
+          <div class="btnInput">
+            <label class="switch">
+              <input type="checkbox" id="setting-enable_ytm" disabled="readonly" />
+              <div>
+                <span></span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="setting">
+          <p>Lazap Overlay [BETA]</p>
+          <div class="btnInput">
+            <label class="switch">
+              <input type="checkbox" id="setting-enable_overlay" />
+              <div>
+                <span></span>
+              </div>
+            </label>
+          </div>
+        </div>
       </div>
 
       <div class="settings-footer">Release v0.7.0</div>
@@ -298,17 +321,27 @@ export default {
         }
 
         if (input.id === "setting-enable_spotify") {
+          await invoke("launcherdata_threads_x")
+
           const { enable_spotify } = JSON.parse(
             await invoke("read_file", {
               filePath: (await path.appDir()) + "LauncherData.json",
             })
           );
 
-          if (enable_spotify) {
-            await invoke("spotify_login"),
-            await invoke("spotify_connect")
+          if (enable_spotify) {  
+            await invoke("spotify_login");
+            await invoke("spotify_connect");
           }
+
+          window.location.reload()
         }
+
+        if (input.id === "setting-enable_overlay") {
+          await invoke("launcherdata_threads_x")
+          alert("A restart is required.")
+        }
+
         if (input.id === "setting-enableLauncherIcons") window.location.reload();
       });
     });

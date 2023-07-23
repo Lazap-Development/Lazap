@@ -1,6 +1,7 @@
 #![windows_subsystem = "windows"]
 
 mod addons;
+mod modules;
 
 use declarative_discord_rich_presence::activity::Activity;
 use declarative_discord_rich_presence::activity::Assets;
@@ -8,75 +9,15 @@ use declarative_discord_rich_presence::activity::Timestamps;
 use declarative_discord_rich_presence::DeclarativeDiscordIpcClient;
 use html_parser::Dom;
 use sha2::{Digest, Sha256};
-use std::io::Write;
+
+use std::fs;
 use std::path::Path;
-use std::{fs, thread};
 use sysinfo::{CpuExt, System, SystemExt};
 use tauri::{
     CustomMenuItem, Manager, State, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
 
 const DISCORD_RPC_CLIENT_ID: &str = "932504287337148417";
-
-fn create_dir_if_not_exists(path: &str) {
-    if !Path::new(path).exists() {
-        fs::create_dir_all(path).expect("Failed to create dir.");
-    }
-}
-
-fn create_file_if_not_exists(file_path: &str, content: &str) -> Result<(), std::io::Error> {
-    if !Path::new(file_path).exists() {
-        let mut file = fs::File::create(file_path)?;
-        writeln!(file, "{}", content)?;
-    }
-    Ok(())
-}
-
-fn init_storage() -> Result<(), std::io::Error> {
-    let base_config_path = format!(
-        "{}com.lazap.config",
-        tauri::api::path::app_config_dir(&tauri::Config::default())
-            .ok_or(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "Failed to retrieve app config dir"
-            ))?
-            .display()
-    );
-    let base_config_cache_path = format!("{}/cache", base_config_path);
-    let base_config_cache_games_path = format!("{}/games", base_config_cache_path);
-    let base_config_cache_user_path = format!("{}/user", base_config_cache_path);
-    let base_config_cache_games_banners_path = format!("{}/banners", base_config_cache_games_path);
-    let base_config_ld_file = format!("{}/LauncherData.json", base_config_path);
-    let base_config_cache_user_data_file = format!("{}/data.json", base_config_cache_user_path);
-    let base_config_cache_game_data_file = format!("{}/data.json", base_config_cache_games_path);
-
-    create_dir_if_not_exists(&base_config_path);
-    create_dir_if_not_exists(&base_config_cache_path);
-    create_dir_if_not_exists(&base_config_cache_games_path);
-    create_dir_if_not_exists(&base_config_cache_games_banners_path);
-    create_dir_if_not_exists(&base_config_cache_user_path);
-
-    let json_content = "{ 
-        \"enable_rpc\": true, 
-        \"enable_spotify\": false, 
-        \"launch_on_startup\": false, 
-        \"skip_login\": false, 
-        \"tray_min_launch\": true, 
-        \"tray_min_quit\": false, 
-        \"check_for_updates\": true, 
-        \"accent_color\": \"#7934FA\" 
-    }";
-
-    create_file_if_not_exists(&base_config_ld_file, json_content)?;
-
-    create_file_if_not_exists(
-        &base_config_cache_user_data_file,
-        &format!("{{\"username\": \"{}\"}}", whoami::username()),
-    )?;
-    create_file_if_not_exists(&base_config_cache_game_data_file, "[]")?;
-
-    Ok(())
-}
 
 #[derive(Clone, serde::Serialize)]
 struct Payload {
@@ -86,14 +27,8 @@ struct Payload {
 
 #[cfg(target_os = "windows")]
 fn main() {
-    thread::Builder::new()
-        .name("lazap_spotify".to_string())
-        .spawn(move || {
-            addons::spotify::main().expect("Failed to init spotify addon server.");
-        })
-        .expect("Failed to spawn thread.");
+    modules::storage::init_storage().expect("Failed to init storage fn.");
 
-    init_storage().expect("Failed to init storage fn.");
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()
@@ -107,6 +42,8 @@ fn main() {
             window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
             let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
+            modules::storage::launcherdata_threads(app.get_window("main").unwrap())
+                .expect("Failed to init storage misc fn.");
             Ok(())
         })
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
@@ -156,6 +93,8 @@ fn main() {
             rename_file,
             remove_file,
             sha256,
+            // Storage Module
+            modules::storage::launcherdata_threads_x,
             // Spotify Addon
             addons::spotify::spotify_login,
             addons::spotify::spotify_connect,
@@ -172,14 +111,8 @@ fn main() {
 fn main() {
     std::env::set_var("GDK_BACKEND", "x11");
 
-    thread::Builder::new()
-        .name("lazap_spotify".to_string())
-        .spawn(move || {
-            addons::spotify::main().expect("Failed to init spotify addon server.");
-        })
-        .expect("Failed to spawn thread.");
+    modules::storage::init_storage().expect("Failed to init storage fn.");
 
-    init_storage().expect("Failed to init storage fn.");
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()
@@ -191,6 +124,8 @@ fn main() {
         .setup(|app| {
             let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
+            modules::storage::launcherdata_threads(app.get_window("main").unwrap())
+                .expect("Failed to init storage misc fn.");
             Ok(())
         })
         .plugin(tauri_plugin_sql::Builder::default().build())
@@ -241,6 +176,8 @@ fn main() {
             rename_file,
             remove_file,
             sha256,
+            // Storage Module
+            modules::storage::launcherdata_threads_x,
             // Spotify Addon
             addons::spotify::spotify_login,
             addons::spotify::spotify_connect,
@@ -248,6 +185,7 @@ fn main() {
             addons::spotify::spotify_forward,
             addons::spotify::spotify_backward,
             addons::spotify::spotify_info,
+            addons::spotify::spotify_remove_token,
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -255,14 +193,7 @@ fn main() {
 
 #[cfg(target_os = "macos")]
 fn main() {
-    thread::Builder::new()
-        .name("lazap_spotify".to_string())
-        .spawn(move || {
-            addons::spotify::main().expect("Failed to init spotify addon server.");
-        })
-        .expect("Failed to spawn thread.");
-
-    init_storage().expect("Failed to init storage fn.");
+    modules::storage::init_storage().expect("Failed to init storage fn.");
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()
@@ -276,6 +207,8 @@ fn main() {
             window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
             let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
+            modules::storage::launcherdata_threads(app.get_window("main").unwrap())
+                .expect("Failed to init storage misc fn.");
             Ok(())
         })
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
@@ -325,6 +258,8 @@ fn main() {
             rename_file,
             remove_file,
             sha256,
+            // Storage Module
+            modules::storage::launcherdata_threads_x,
             // Spotify Addon
             addons::spotify::spotify_login,
             addons::spotify::spotify_connect,

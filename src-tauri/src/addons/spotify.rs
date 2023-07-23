@@ -1,3 +1,4 @@
+use actix_web::rt::net::TcpListener;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use base64;
 use rand::{self, Rng};
@@ -24,6 +25,11 @@ pub async fn main() -> std::io::Result<()> {
             AVOID_SPAWN = true;
         }
         return Ok(());
+    }
+
+    match TcpListener::bind("localhost:3000").await {
+        Ok(_) => {}
+        Err(_) => return Ok(()),
     }
 
     HttpServer::new(|| App::new().service(login).service(callback).service(token))
@@ -143,6 +149,11 @@ pub async fn spotify_login(window: tauri::Window) -> Result<(), Error> {
             return Ok(());
         }
         if let Some(_value) = &mut EXTERNAL_WINDOW {
+            let ext_window = window.get_window("external").unwrap();
+            ext_window
+                .eval("window.location.replace('http://localhost:3000/auth/login')")
+                .expect("Failed to set page to /auth/login");
+            EXTERNAL_WINDOW = Some(window);
             Ok(())
         } else {
             let ext_window = window.get_window("external").unwrap();
@@ -355,6 +366,14 @@ pub async fn spotify_info() -> Result<String, Error> {
             }"
             .to_string())
         }
+    }
+}
+
+#[tauri::command]
+pub async fn spotify_remove_token() -> Result<(), Error> {
+    unsafe {
+        ACCESS_TOKEN = None;
+        Ok(())
     }
 }
 

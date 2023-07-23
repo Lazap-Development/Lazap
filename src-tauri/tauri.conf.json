@@ -139,7 +139,8 @@
         "center": true,
         "visible": false,
         "focus": true,
-        "decorations": false
+        "decorations": false,
+        "url": "index.html"
       },
       {
         "label": "external",
@@ -153,7 +154,23 @@
         "center": false,
         "visible": false,
         "decorations": false,
+        "url": "external.html",
         "focus": false
+      },
+      {
+        "label": "overlay",
+        "fullscreen": true,
+        "resizable": false,
+        "maximized": true,
+        "title": "Lazap Overlay",
+        "center": false,
+        "visible": false,
+        "transparent": true,
+        "decorations": false,
+        "focus": true,
+        "alwaysOnTop": true,
+        "url": "overlay.html",
+        "skipTaskbar": true
       }
     ]
   }

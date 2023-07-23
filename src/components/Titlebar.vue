@@ -42,6 +42,7 @@ export default {
         window.__TAURI__.window.appWindow.hide();
       } else {
         window.__TAURI__.window.WebviewWindow.getByLabel('external').close();
+        window.__TAURI__.window.WebviewWindow.getByLabel('overlay').close();
         window.__TAURI__.window.appWindow.close();
       }
     },

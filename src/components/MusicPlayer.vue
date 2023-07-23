@@ -4,35 +4,37 @@
         <div class="musicPlayer">
             <div class="bkg" id="song-big-cover">
                 <div class="bkg-filter">
-                    <div class="middle">
-                        <div class="lol">
-                            <div class="banner" id="song-cover">
-                                <img class="subbanner" id="song-subcover" src="../assets/icons/music.png" alt="">
-                            </div>
-                        </div>
-                        <div class="nexto">
-                            <p id="song-name">Lazap</p>
-                            <p id="artist-name">Lazap Development</p>
-                            <div class="family">
-                                <div class="button" id="MusicPlayer-backward-btn">
-                                    <img src="../assets/svg/music/angle-left-solid.svg" alt="">
-                                </div>
-                                <div class="button playback" id="MusicPlayer-play-btn">
-                                    <img src="../assets/svg/music/play-solid.svg" alt="">
-                                </div>
-                                <div class="button" id="MusicPlayer-forward-btn">
-                                    <img src="../assets/svg/music/angle-right-solid.svg" alt="">
+                    <div class="top" id="musicPlayer-Top"></div>
+                    <div class="bottom">
+                        <div class="middle">
+                            <div class="lol">
+                                <div class="banner" id="song-cover">
+                                    <img class="subbanner" id="song-subcover" src="../assets/icons/music.png" alt="">
                                 </div>
                             </div>
+                            <div class="nexto">
+                                <p id="song-name">Lazap</p>
+                                <p id="artist-name">Lazap Development</p>
+                                <div class="family">
+                                    <div class="button" id="MusicPlayer-backward-btn">
+                                        <img src="../assets/svg/music/angle-left-solid.svg" alt="">
+                                    </div>
+                                    <div class="button playback" id="MusicPlayer-play-btn">
+                                        <img src="../assets/svg/music/play-solid.svg" alt="">
+                                    </div>
+                                    <div class="button" id="MusicPlayer-forward-btn">
+                                        <img src="../assets/svg/music/angle-right-solid.svg" alt="">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="slider">
-                        <p id="music-progress">0:00</p>
-                        <input type="range" id="music-slider" min="1" max="100" value="0">
-                        <p id="music-total">0:00</p>
+                        <div class="slider">
+                            <p id="music-progress">0:00</p>
+                            <input type="range" id="music-slider" min="1" max="100" value="0">
+                            <p id="music-total">0:00</p>
+                        </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -54,9 +56,16 @@ export default {
         if (LauncherData.enable_spotify) {
             await invoke("spotify_login");
             updatePlayer(JSON.parse(await invoke("spotify_info")));
+
+            let spotifyIcon = document.createElement("img")
+            spotifyIcon.src = require("../assets/svg/music/spotify.svg")
+            document.getElementById("musicPlayer-Top").append(spotifyIcon)
+
             setInterval(async () => {
                 updatePlayer(JSON.parse(await invoke("spotify_info")));
             }, 1000);
+        } else {
+            await invoke("spotify_remove_token")
         }
 
         document.getElementById("MusicPlayer-play-btn").addEventListener("click", async function () {
@@ -174,7 +183,6 @@ export default {
     backdrop-filter: blur(2px) opacity(90%) brightness(40%);
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
     padding: 10px;
     flex-shrink: 0;
 }
@@ -194,6 +202,24 @@ export default {
 .subbanner {
     opacity: 0.6;
     width: 40px;
+}
+
+.rightbar .musicPlayer .top {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.rightbar .musicPlayer .top img {
+    width: 20px;
+}
+
+.rightbar .musicPlayer .bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 .rightbar .musicPlayer .middle {
