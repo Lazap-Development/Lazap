@@ -15,7 +15,7 @@
   <a href="https://github.com/Lazap-Development/lazap/releases">
      <img src="https://img.shields.io/github/downloads/Lazap-Development/lazap/total.svg?style=for-the-badge&color=ffffff&logo=windows" />
   </a>
-  <a href="https://dashcruft.com/discord">
+  <a href="https://discord.gg/dashcruft">
       <img src="https://img.shields.io/discord/836790685784211486?logo=discord&label=Discord&style=for-the-badge&color=228B22">
   </a>
  </p>
@@ -41,10 +41,13 @@
 Depending on your operating system, we provide as much ease in terms of installation:<br>
 
 ▸ **Windows**: 
-- Download and install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
-- Or install via Winget: `winget install LazapDevelopment.Lazap`
+- Download & install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+- Or install via Winget: 
+```
+winget install LazapDevelopment.Lazap
+```
 
-▸ **Linux**: Download either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section. <br>
+▸ **Linux**: Download & install either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section. <br>
 ▸ **MacOS**: Soon...
 
 ## 👾 Development
