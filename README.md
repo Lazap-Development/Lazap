@@ -40,7 +40,10 @@
 
 Depending on your operating system, we provide as much ease in terms of installation:<br>
 
-▸ **Windows**: Install via Winget: `winget install LazapDevelopment.Lazap` or download and install the `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.<br>
+▸ **Windows**: 
+- Download and install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+- Or install via Winget: `winget install LazapDevelopment.Lazap`
+
 ▸ **Linux**: Download either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section. <br>
 ▸ **MacOS**: Soon...
 
