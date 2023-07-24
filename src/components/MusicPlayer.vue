@@ -247,7 +247,7 @@ export default {
     border-radius: 20px;
     width: 14px;
     height: 14px;
-    background-color: #ffffff4a;
+    background-color: #ffffff67;
     text-decoration: none;
     border: 4px solid var(--accentColor);
     margin: 3px;
@@ -312,8 +312,8 @@ export default {
     width: 20px;
     height: 20px;
     border-radius: 10px;
-    background-color: #00000055;
-    backdrop-filter: blur(12px);
+    background-color: #2c2c2c;
+    backdrop-filter: blur(12px) !important;
     border: 4px solid var(--accentColor);
 }
 </style>

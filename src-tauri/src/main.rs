@@ -102,6 +102,7 @@ fn main() {
             addons::spotify::spotify_forward,
             addons::spotify::spotify_backward,
             addons::spotify::spotify_info,
+            addons::spotify::spotify_remove_token,
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -267,6 +268,7 @@ fn main() {
             addons::spotify::spotify_forward,
             addons::spotify::spotify_backward,
             addons::spotify::spotify_info,
+            addons::spotify::spotify_remove_token,
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
