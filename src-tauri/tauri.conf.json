@@ -102,7 +102,11 @@
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": ""
+        "timestampUrl": "", 
+        "wix": {
+          "bannerPath": "icons/wix/icon.png",
+          "dialogImagePath": "icons/wix/banner.png"
+        }
       }
     },
     "security": {
