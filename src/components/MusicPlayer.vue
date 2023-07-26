@@ -60,10 +60,15 @@ export default {
             let spotifyIcon = document.createElement("img")
             spotifyIcon.src = require("../assets/svg/music/spotify.svg")
             document.getElementById("musicPlayer-Top").append(spotifyIcon)
-
+            
             setInterval(async () => {
                 updatePlayer(JSON.parse(await invoke("spotify_info")));
             }, 1000);
+
+            setInterval(async () => {
+                await invoke("spotify_login");
+                alert("Spotify Token Obtained.")
+            }, 3600000);
         } else {
             await invoke("spotify_remove_token")
         }
