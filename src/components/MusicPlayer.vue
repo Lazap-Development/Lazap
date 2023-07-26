@@ -67,7 +67,6 @@ export default {
 
             setInterval(async () => {
                 await invoke("spotify_login");
-                alert("Spotify Token Obtained.")
             }, 3600000);
         } else {
             await invoke("spotify_remove_token")
