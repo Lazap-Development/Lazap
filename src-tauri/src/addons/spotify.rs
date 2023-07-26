@@ -201,11 +201,52 @@ pub async fn spotify_toggle_playback() -> Result<bool, Error> {
                 is_playing: bool,
             }
 
+            #[derive(Deserialize)]
+            struct DeviceStatus {
+                devices: Vec<Device>,
+            }
+
+            #[derive(Deserialize)]
+            struct Device {
+                id: String,
+            }
+
             if let Ok(currently_playing) = currently_playing {
-                let play_status: PlayStatus = currently_playing
-                    .json()
-                    .await
-                    .expect("Failed to get JSON (spotify).");
+                let play_status: PlayStatus = match currently_playing.json().await {
+                    Ok(status) => status,
+                    Err(_e) => {
+                        let devices_status = client
+                            .get("https://api.spotify.com/v1/me/player/devices")
+                            .header(
+                                reqwest::header::AUTHORIZATION,
+                                format!("Bearer {}", access_token),
+                            )
+                            .send()
+                            .await;
+
+                        if let Ok(devices_status) = devices_status {
+                            let device_status: DeviceStatus = match devices_status.json().await {
+                                Ok(status) => status,
+                                Err(_e) => return Ok(false),
+                            };
+                            if let Some(first_device) = device_status.devices.get(0) {
+                                let _response = client
+                                    .put(format!(
+                                        "https://api.spotify.com/v1/me/player/play?device_id={}",
+                                        &first_device.id
+                                    ))
+                                    .header(
+                                        reqwest::header::AUTHORIZATION,
+                                        format!("Bearer {}", access_token),
+                                    )
+                                    .header(reqwest::header::CONTENT_LENGTH, 0)
+                                    .send()
+                                    .await;
+                            }
+                        }
+                        return Ok(true);
+                    }
+                };
                 is_playing_glob = play_status.is_playing;
                 if play_status.is_playing {
                     let _response = client
