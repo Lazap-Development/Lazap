@@ -335,7 +335,7 @@ export default {
 .side-tabs {
   margin-left: 20px;
   position: absolute;
-  height: 66%;
+  height: 420px;
   overflow-y: auto;
   overflow-x: hidden;
 }

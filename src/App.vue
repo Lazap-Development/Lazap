@@ -632,7 +632,7 @@ body {
   flex-direction: column;
   margin-left: 34px;
   margin-right: auto;
-  width: 280px;
+  width: 300px;
   font-size: 18px;
   color: rgb(138, 138, 138);
   font-family: Nunito-Bold;

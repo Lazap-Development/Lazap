@@ -110,8 +110,6 @@ fn main() {
 
 #[cfg(target_os = "linux")]
 fn main() {
-    std::env::set_var("GDK_BACKEND", "x11");
-
     modules::storage::init_storage().expect("Failed to init storage fn.");
 
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
