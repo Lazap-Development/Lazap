@@ -72,7 +72,7 @@
 
       <div class="appearance-settings" id="appearance-settings">
         <div class="setting themes">
-          <label class="color" style="border: 3px solid var(--accentColor)">
+          <label class="color">
             <div class="theme-box" id="theme-box-default" style="background-color: #18191f;"></div>
             <div class="theme-box" id="theme-box-crimson" style="background-color: #660708;"></div>
             <div class="theme-box" id="theme-box-midnight" style="background-color: #240046;"></div>
@@ -231,9 +231,9 @@ export default {
 
     const repeats = document.getElementsByClassName("repeatButton");
     const defaults = {
-      primaryColor: '#18191f',
-      backgroundColor: '#15161b',
-      accentColor: '#7934FA',
+      primaryColor: '#000000',
+      backgroundColor: '#201238',
+      accentColor: '#7934fa',
     };
     for (let i = 0; i < repeats.length; i++) {
       const id = repeats.item(i).parentElement.children.item(0).children.item(0).id.split('-')[1];
@@ -329,7 +329,7 @@ export default {
             })
           );
 
-          if (enable_spotify) {  
+          if (enable_spotify) {
             await invoke("spotify_login");
             await invoke("spotify_connect");
           }
@@ -349,9 +349,9 @@ export default {
     document.querySelectorAll('div[id^=theme-box-]').forEach((div) => {
       const themes = {
         default: {
-          primaryColor: '#18191f',
-          backgroundColor: '#15161b',
-          accentColor: '#7934FA',
+          primaryColor: '#000000',
+          backgroundColor: '#201238',
+          accentColor: '#7934fa',
         },
         midnight: {
           primaryColor: '#240046',
@@ -553,6 +553,21 @@ export default {
   height: 70px !important;
   justify-content: center !important;
   margin-bottom: 10px;
+}
+
+.appearance-settings .themes .color .theme-box {
+  border: 4px solid var(--accentColor);
+  border-right: 0px;
+}
+
+.appearance-settings .themes .color .theme-box:first-child {
+  border-radius: 10px 0px 0px 10px;
+  border-right: 0px;
+}
+
+.appearance-settings .themes .color .theme-box:last-child {
+  border-radius: 0px 10px 10px 0px;
+  border-right: 4px solid var(--accentColor);
 }
 
 .appearance-settings .setting,

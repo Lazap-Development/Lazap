@@ -57,10 +57,13 @@ export default {
             await invoke("spotify_login");
             updatePlayer(JSON.parse(await invoke("spotify_info")));
 
-            let spotifyIcon = document.createElement("img")
-            spotifyIcon.src = require("../assets/svg/music/spotify.svg")
-            document.getElementById("musicPlayer-Top").append(spotifyIcon)
-            
+            if (!document.getElementById("spotifyIcon")) {
+                let spotifyIcon = document.createElement("img")
+                spotifyIcon.src = require("../assets/svg/music/spotify.svg")
+                spotifyIcon.id = "spotifyIcon"
+                document.getElementById("musicPlayer-Top").append(spotifyIcon)
+            }
+
             setInterval(async () => {
                 updatePlayer(JSON.parse(await invoke("spotify_info")));
             }, 1000);

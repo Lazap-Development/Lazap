@@ -5,14 +5,18 @@
   <titlebar-comp></titlebar-comp>
 
   <div class="bg" id="bg">
+    <leftbar-comp></leftbar-comp>
+
     <div class="homebox" id="home">
-      <div class="children fadeInUp">
-        <img class="head-pic" src="./assets/img/main-banner.png" id="head-pic" />
-      </div>
-      <div class="children fadeInDown">
-        <div class="jump-back">
-          <p>Recently Launched</p>
-          <div id="recentGamesListMainPage" class="fadeInDown mainPageGamesList">
+      <div class="centerchildren">
+        <div class="children fadeInUp">
+          <img class="head-pic" src="./assets/img/main-banner.png" id="head-pic" />
+        </div>
+        <div class="children fadeInDown">
+          <div class="jump-back">
+            <p>Recently Launched</p>
+            <div id="recentGamesListMainPage" class="fadeInDown mainPageGamesList">
+            </div>
           </div>
         </div>
       </div>
@@ -84,8 +88,6 @@
         <button class="gameMenuBtn" id="removeGame">Remove Game</button>
       </div>
     </div>
-
-    <leftbar-comp></leftbar-comp>
   </div>
 </template>
 
@@ -157,7 +159,7 @@ export default {
       checkForUpdate();
 
       await invoke("show_window");
-      
+
       try {
         let { accentColor, backgroundColor, primaryColor } = JSON.parse(
           await invoke("read_file", {
@@ -315,19 +317,13 @@ export default {
 <style>
 :root {
   --accentColor: rgb(121, 52, 250);
-  --allColorBack: #15161b;
-  --allColorPrimary: #18191f;
-  --accentColorDark: rgb(121, 52, 250);
-  --allColorBackDark: #15161b;
-  --allColorPrimaryDark: #18191f;
-  --accentColorLight: #FFFF;
-  --allColorBackLight: #FFFF;
-  --allColorPrimaryLight: #FFFF;
+  --allColorBack: rgb(32, 18, 56);
+  --allColorPrimary: rgb(0, 0, 0);
 }
 
 ::selection {
-  color: inherit;
-  background: var(--accentColor);
+  color: inherit !important;
+  background: var(--accentColor) !important;
   border-radius: 10px;
 }
 
@@ -348,24 +344,25 @@ export default {
 
 html,
 body {
-  zoom: 0.944;
+  zoom: 0.945;
   background: var(--allColorBack);
-  overflow: hidden;
   font-family: Nunito;
   height: 100%;
+  overflow: hidden;
 }
 
 #app {
-  height: 100%;
+  height: calc(100% - 70px);
 }
 
 .bg {
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  align-items: flex-start;
+  flex-direction: row;
+  margin-top: 100px;
   height: 100%;
-  margin: -20px 0 50px;
+  margin: 10px;
 }
 
 .mx-1 {
@@ -374,32 +371,22 @@ body {
 }
 
 .homebox {
-  position: absolute;
-
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-direction: row;
 
-  height: calc(100% - 65px);
-  width: calc(100% - 300px);
-  margin-bottom: 5px;
-  margin-left: 285px;
+  height: 100%;
+  width: 100%;
 }
 
 .secondorybox {
-  position: absolute;
-
   display: none;
-  flex-direction: column;
-  flex-wrap: wrap;
 
   background-color: var(--allColorPrimary);
-  border-radius: 10px;
+  border-radius: 20px;
 
-  height: calc(100% - 72px);
-  width: calc(100% - 310px);
-  margin-bottom: 5px;
-  margin-left: 285px;
+  height: 100%;
+  width: 100%;
+  margin-left: 15px;
   cursor: default;
 }
 
@@ -569,41 +556,38 @@ body {
   scale: 1.06;
 }
 
-.children {
+.centerchildren {
   display: flex;
-  height: 100%;
-  width: 71%;
-  overflow: hidden;
-  margin: 8px;
-
-  flex: 1;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  width: 100% !important;
 }
 
-.children:last-child {
-  position: relative;
-  width: 27%;
-  flex: 0 0 calc(100% - 10px);
+.children {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  margin-left: 15px;
+  display: flex;
+}
+
+.children:first-child {
+  margin-bottom: 15px !important;
 }
 
 .head-pic {
-  width: 200%;
+  width: 100%;
   height: 100%;
-  overflow: unset;
   position: relative;
   object-fit: cover;
-  flex-shrink: 10;
-  min-height: 100%;
-  border-radius: 10px;
+  border-radius: 20px;
   image-rendering: auto;
 }
 
 .jump-back {
   background-color: var(--allColorPrimary);
   width: 100%;
-  height: 100%;
-  border-radius: 10px;
+  height: 100% !important;
+  border-radius: 20px;
 }
 
 .jump-back p {
@@ -618,23 +602,20 @@ body {
 .x2 {
   display: flex;
   flex-direction: column;
+  margin-left: 30px;
+  width: 40%;
 }
 
 .rightbar {
   background-color: var(--allColorPrimary);
-  width: 100%;
   height: 40%;
-  border-radius: 10px;
+  border-radius: 20px;
   cursor: default;
 }
 
 .rightbar:first-child {
   height: 60%;
   margin-bottom: 15px;
-}
-
-.rightbar:nth-child(2) {
-  margin-bottom: 7px;
 }
 
 .rightbar p {
@@ -1076,7 +1057,7 @@ img,
 .search-bar {
   margin-left: auto;
   margin-right: 110px;
-  margin-top: -52px;
+  margin-top: 25px;
   height: 40px;
   display: flex;
   width: 100%;

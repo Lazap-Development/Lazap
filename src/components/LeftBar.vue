@@ -276,15 +276,9 @@ export default {
 <style>
 .leftbar {
   background-color: var(--allColorPrimary);
-  border-radius: 15px;
-  position: absolute;
-  height: calc(100% - 71px);
-  max-height: 100%;
+  border-radius: 20px;
   width: 270px;
-  top: 25px;
-  margin-top: 30px;
-  margin-right: 100%;
-  margin-left: 300px;
+  height: 100%;
   text-align: center;
   box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
 }

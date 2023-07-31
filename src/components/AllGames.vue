@@ -185,9 +185,10 @@ export default {
   margin-right: 20px;
   margin-top: 10px;
   background-color: var(--accentColor);
-  color: rgb(216, 216, 216);
+  color: rgb(255, 255, 255);
   border-radius: 12px;
-  font-family: Nunito-Bold;
+  font-family: Nunito-ExtraBold;
+  font-weight: 900;
 }
 
 .secondorybox .section .addGameFinalBtn:hover {
