@@ -22,8 +22,9 @@
 
 
 <div align="center">
-  <img src="https://github.com/Lazap-Development/Lazap/assets/59381835/ce775b28-19c7-4dd1-bd7e-530c4580de12">
+  <img src="https://github.com/Lazap-Development/Lazap/assets/59381835/0bd6c193-3e7a-41a4-bad4-26245d98af0f">
 </div>
+
 <br>
 
 **The new face of Open Source Game Launchers**, Lazap, unites all your games together in one place! Whether it's on Linux or Windows, we got you covered. Lazap connects with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam, and collects all of those games and deposits them inside of one place. Our team of Developers continuously corroborates that Lazap is deeply customizable, Meets up to the user's expectance, possess a glancing & modernist look, and isn't expensive on hardware consumption. 
