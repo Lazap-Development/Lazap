@@ -438,7 +438,7 @@ export default {
   height: 500px;
   width: 600px;
   display: none;
-  background: var(--allColorBack);
+  background: var(--allColorPrimary);
   border: 4px solid var(--accentColor);
   z-index: 2000;
   border-radius: 20px;
@@ -508,7 +508,7 @@ export default {
   text-shadow: none;
   font-size: 18px;
 
-  background: var(--allColorPrimary);
+  background: var(--allColorBack);
   width: 150px;
   height: 40px;
   border: none;
@@ -593,8 +593,8 @@ export default {
 }
 
 input[type=color] {
-  background-color: var(--allColorBack);
-  color: var(--allColorBack);
+  background-color: var(--allColorPrimary);
+  color: var(--allColorPrimary);
   padding: 0;
   margin: 4px;
   height: 40px;
