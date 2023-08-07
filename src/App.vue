@@ -51,7 +51,7 @@
       <p>Recently Played</p>
       <div id="recentGamesList" class="fadeInDown gamesList"></div>
       <h2 class="fade" id="recentGamesPlaceholder">
-        Looks empty here... start launching some games!
+        You haven't launched any games recently
       </h2>
     </div>
 
@@ -65,7 +65,7 @@
       </div>
       <div id="favGamesList" class="fadeInDown gamesList"></div>
       <h2 class="fade" id="favGamesPlaceholder">
-        You currently have no game marked as favourite...
+        You currently have no game marked as favorite 
       </h2>
     </div>
 
@@ -402,22 +402,21 @@ body {
   position: absolute;
   left: 50%;
   top: 45%;
-  transform: translate(-50%, -50%);
   font-weight: normal;
   color: rgba(164, 164, 164, 0.3);
   font-size: 34px;
+  text-align: center;
 }
 
 .secondorybox h2 {
   position: absolute;
   left: 50%;
   top: 45%;
-  transform: translate(-50%, -50%);
   font-weight: normal;
   color: rgba(98, 98, 98, 0.5);
   width: 310px;
   text-align: center;
-  font-size: 22px;
+  font-size: 26px;
 }
 
 .secondorybox .addGamePopUp {
@@ -771,10 +770,9 @@ body {
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
   height: 61%;
-  width: 16%;
+  width: 17%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.5;
-  border: solid var(--accentColor) 6px;
   background-color: var(--accentColor);
   mask-image: -webkit-gradient(linear,
       right 90%,

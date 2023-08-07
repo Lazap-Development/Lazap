@@ -7,7 +7,7 @@
         <div class="monitor-item">
           <div class="monitor-top">
             <div class="monitor-top-left">
-              <img src="../assets/svg/microchip.svg" width="35px" alt="">
+
             </div>
             <div class="monitor-top-right"></div>
           </div>
@@ -23,7 +23,7 @@
         <div class="monitor-item">
           <div class="monitor-top">
             <div class="monitor-top-left">
-              <img src="../assets/svg/gpu.svg" width="40px" alt="">
+
             </div>
             <div class="monitor-top-right"></div>
           </div>

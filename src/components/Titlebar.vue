@@ -118,7 +118,6 @@ export default {
   background-color: var(--allColorPrimary);
   height: 35px;
   width: 100%;
-  flex: auto;
 }
 
 .titlebar-icons {

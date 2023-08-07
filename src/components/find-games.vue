@@ -94,7 +94,7 @@ class GameElement {
 			this.handleLaunch();
 			storage.addLaunch(this.data.GameID, this.data.LauncherName);
 		});
-		
+
 		return element;
 	}
 
@@ -410,30 +410,9 @@ class Storage {
 
 		try {
 			if (source === 'getInstalledGames') {
-				if (data.length > 0) {
-					const newdata = [];
-					// data.filter(x => games.find(y => y.LauncherName === x.LauncherName && y.GameID === x.GameID));
-					for (let i = 0; i < games.length; i++) {
-						const gamedata = data.find(x => x.LauncherName === games[i].LauncherName && x.GameID === games[i].GameID);
-						if (!gamedata) {
-							newdata.push(gamedata);
-						}
-						else if (Object.keys(games[i]).length > Object.keys(gamedata).length) {
-							data[data.findIndex(x => x.LauncherName === games[i].LauncherName && x.GameID === games[i].GameID)] = games[i];
-						}
-						else if (Object.keys(games[i]).length < Object.keys(gamedata).length) {
-							let obj = {
-								...gamedata,
-							};
-							for (let j = 0; j < Object.keys(games[i]).length; j++) {
-								obj[Object.keys(games[i])[j]] = Object.values(games[i])[j];
-							}
-							data[data.findIndex(x => x.LauncherName === games[i].LauncherName && x.GameID === games[i].GameID)] = obj;
-						}
-					}
-					newdata.push(...games.filter(x => !data.find(y => y.LauncherName === x.LauncherName && y.GameID === x.GameID)));
-				}
-				else {
+				if (data.length != games.length) {
+					await invoke('write_file', { filePath: this.gamesDataJSON, fileContent: JSON.stringify(data.filter(x => games.find(y => y.LauncherName === x.LauncherName && y.GameID === x.GameID))) });
+				} else {
 					await invoke('write_file', { filePath: this.gamesDataJSON, fileContent: JSON.stringify(games) });
 				}
 			}
@@ -500,18 +479,6 @@ class Storage {
 		game.LastLaunch = Date.now();
 		game.Launches = typeof game.Launches === 'number' ? game.Launches + 1 : 1;
 		this.setGamesData(data, 'addLaunch');
-		if (
-			!document.getElementById('recentGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)
-		) {
-			// eslint-disable-next-line no-undef
-			// recentGamesList.replaceChildren([]);
-			// this.loadGames('recentGamesList', null, data);
-			// if (document.getElementById('recentGamesListMainPage').children.length < 5) {
-			// eslint-disable-next-line no-undef
-			//   recentGamesListMainPage.replaceChildren([]);
-			//   this.loadGames("recentGamesListMainPage", null, data);
-			// }
-		}
 	}
 }
 
