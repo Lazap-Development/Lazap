@@ -410,8 +410,10 @@ class Storage {
 
 		try {
 			if (source === 'getInstalledGames') {
-				if (data.length != games.length) {
-					await invoke('write_file', { filePath: this.gamesDataJSON, fileContent: JSON.stringify(data.filter(x => games.find(y => y.LauncherName === x.LauncherName && y.GameID === x.GameID))) });
+				if (data.length > 0) {
+					if (data.length != games.length) {
+						await invoke('write_file', { filePath: this.gamesDataJSON, fileContent: JSON.stringify(data.filter(x => games.find(y => y.LauncherName === x.LauncherName && y.GameID === x.GameID))) });
+					}
 				} else {
 					await invoke('write_file', { filePath: this.gamesDataJSON, fileContent: JSON.stringify(games) });
 				}
