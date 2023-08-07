@@ -114,10 +114,11 @@ export default {
 .titlebar {
   position: relative;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 15px;
   background-color: var(--allColorPrimary);
   height: 35px;
   width: 100%;
+  margin-top: 3px;
 }
 
 .titlebar-icons {

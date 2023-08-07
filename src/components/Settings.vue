@@ -73,7 +73,7 @@
       <div class="appearance-settings" id="appearance-settings">
         <div class="setting themes">
           <label class="color">
-            <div class="theme-box" id="theme-box-default" style="background-color: #18191f;"></div>
+            <div class="theme-box" id="theme-box-default" style="background-color: #000;"></div>
             <div class="theme-box" id="theme-box-crimson" style="background-color: #660708;"></div>
             <div class="theme-box" id="theme-box-midnight" style="background-color: #240046;"></div>
           </label>
