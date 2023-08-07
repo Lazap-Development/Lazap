@@ -22,7 +22,7 @@
 
 
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/59381835/218298891-6501941c-a26f-40e0-be49-7884fb387e82.png">
+  <img src="https://github.com/Lazap-Development/Lazap/assets/59381835/c0313a3b-0090-4a1e-90cd-c3bfc690d446">
 </div>
 <br>
 
@@ -34,7 +34,8 @@
 - Sleek & Modern user interface with a wide range of theming and user-accessibility customizations
 - Discord Rich Presence, when launching a game or navigating through the menus
 - Spotify Integration with streamlined music control
-- `[Soon]` Cross-Platform Lazap Overlay
+- `[Beta]` Cross-Platform Lazap Overlay
+- `[Soon]` System monitor, overclock, and benchmarking tools
   
 ## ‍💻 Installation
 
