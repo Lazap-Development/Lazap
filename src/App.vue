@@ -396,6 +396,7 @@ body {
   margin-top: 30px;
   font-size: 20px;
   float: left;
+  font-family: Nunito-ExtraBold;
 }
 
 .secondorybox h1 {
@@ -594,7 +595,7 @@ body {
   margin-left: 18px;
   margin-top: 18px;
   font-size: 18px;
-  font-family: Nunito-Bold;
+  font-family: Nunito-ExtraBold;
   position: absolute;
 }
 
