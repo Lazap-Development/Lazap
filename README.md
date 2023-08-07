@@ -22,7 +22,7 @@
 
 
 <div align="center">
-  <img src="https://github.com/Lazap-Development/Lazap/assets/59381835/c0313a3b-0090-4a1e-90cd-c3bfc690d446">
+  <img src="https://github.com/Lazap-Development/Lazap/assets/59381835/442e5dc0-0bba-4363-a730-74c3aff45d64">
 </div>
 <br>
 
