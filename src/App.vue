@@ -33,6 +33,9 @@
             <div id="system_kernel">
               <img src="./assets/svg/computer.svg" alt="user" />
             </div>
+            <div id="disk">
+              <img src="./assets/svg/disk.svg" alt="user" />
+            </div>
             <div id="memory">
               <img src="./assets/svg/memory.svg" alt="user" />
             </div>
@@ -65,7 +68,7 @@
       </div>
       <div id="favGamesList" class="fadeInDown gamesList"></div>
       <h2 class="fade" id="favGamesPlaceholder">
-        You currently have no game marked as favorite 
+        You currently have no game marked as favorite
       </h2>
     </div>
 
@@ -134,6 +137,9 @@ export default {
       document
         .getElementById("system_kernel")
         .insertAdjacentText("beforeend", sysInfoInvoke.system_kernel);
+      document
+        .getElementById("disk")
+        .insertAdjacentText("beforeend", sysInfoInvoke.disk_info);
       document
         .getElementById("memory")
         .insertAdjacentText("beforeend", sysInfoInvoke.memory);
