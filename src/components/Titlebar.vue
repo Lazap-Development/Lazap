@@ -118,7 +118,7 @@ export default {
   background-color: var(--allColorPrimary);
   height: 35px;
   width: 100%;
-  margin-top: 3px;
+  margin-top: 4px;
 }
 
 .titlebar-icons {
@@ -186,7 +186,6 @@ export default {
   cursor: pointer;
   animation-delay: 200ms;
   animation: settings-spin 1.5s linear;
-  filter: invert(17%) sepia(86%) saturate(3285%) hue-rotate(239deg) brightness(85%) contrast(101%);
 }
 
 .titlebar-account {

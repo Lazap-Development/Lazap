@@ -109,7 +109,7 @@
 }
 
 .monitor-item .monitor-top .monitor-top-left {
-  background-color: var(--allColorBack);
+  background-color: var(--allColorFront);
   width: 80px;
   height: 94%;
   border-radius: 20px;
@@ -122,7 +122,7 @@
 }
 
 .monitor-item .monitor-top .monitor-top-right {
-  background-color: var(--allColorBack);
+  background-color: var(--allColorFront);
   width: 100%;
   height: 35px;
   margin-left: 20px;
@@ -134,7 +134,7 @@
 
 .monitor-item .monitor-primary {
   margin-top: 10px;
-  background-color: var(--allColorBack);
+  background-color: var(--allColorFront);
   width: 100%;
   height: 73%;
   border-radius: 20px;
@@ -153,7 +153,7 @@
 }
 
 .monitor-item-besides .monitor-side {
-  background-color: var(--allColorBack);
+  background-color: var(--allColorFront);
   height: 100%;
   width: 100px;
   margin-left: 20px;

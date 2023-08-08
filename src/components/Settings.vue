@@ -97,6 +97,15 @@
           </div>
         </div>
         <div class="setting">
+          <p>Front Color</p>
+          <div class="btnInput">
+            <label class="color">
+              <input type="color" id="setting-frontColor" />
+            </label>
+            <img class="repeatButton" src="../assets/icons/reset.png" />
+          </div>
+        </div>
+        <div class="setting">
           <p>Accent Color</p>
           <div class="btnInput">
             <label class="color">
@@ -231,8 +240,9 @@ export default {
 
     const repeats = document.getElementsByClassName("repeatButton");
     const defaults = {
-      primaryColor: '#000000',
-      backgroundColor: '#201238',
+      primaryColor: '#0c0b0e',
+      backgroundColor: '#140e24',
+      frontColor: '#2a1051',
       accentColor: '#7934fa',
     };
     for (let i = 0; i < repeats.length; i++) {
@@ -274,6 +284,20 @@ export default {
           });
 
           updateColor('backgroundColor', LauncherData.backgroundColor);
+        });
+        return;
+      }
+      else if (input.id === 'setting-frontColor') {
+        input.addEventListener("input", async () => {
+          LauncherData[input.id.split("-")[1]] = document.querySelector(
+            `input[id=${input.id}]`
+          ).value;
+          await invoke("write_file", {
+            filePath: (await path.appDir()) + "LauncherData.json",
+            fileContent: JSON.stringify(LauncherData),
+          });
+
+          updateColor('frontColor', LauncherData.frontColor);
         });
         return;
       }
@@ -349,19 +373,22 @@ export default {
     document.querySelectorAll('div[id^=theme-box-]').forEach((div) => {
       const themes = {
         default: {
-          primaryColor: '#000000',
-          backgroundColor: '#201238',
+          primaryColor: '#0c0b0e',
+          backgroundColor: '#140e24',
+          frontColor: '#2a1051',
           accentColor: '#7934fa',
         },
         midnight: {
           primaryColor: '#240046',
           backgroundColor: '#230264',
+          frontColor: '#2a1051',
           accentColor: '#7934FA',
         },
         crimson: {
           primaryColor: '#660708',
           backgroundColor: '#2b080e',
-          accentColor: '#2E094F',
+          frontColor: '#390808',
+          accentColor: '#a51d2d',
         },
       };
       div.addEventListener('click', async () => {
@@ -381,6 +408,7 @@ export default {
 
         updateColor('primaryColor', theme.primaryColor);
         updateColor('backgroundColor', theme.backgroundColor);
+        updateColor('frontColor', theme.frontColor);
         updateColor('accentColor', theme.accentColor);
       });
     });
@@ -388,6 +416,7 @@ export default {
       const vals = {
         primaryColor: 'allColorPrimary',
         backgroundColor: 'allColorBack',
+        frontColor: 'allColorFront',
         accentColor: 'accentColor',
       };
       // document.getElementById("indicator").style.backgroundColor = color;
@@ -435,7 +464,7 @@ export default {
 
 .settings {
   position: absolute;
-  height: 500px;
+  height: 540px;
   width: 600px;
   display: none;
   background: var(--allColorPrimary);
@@ -508,7 +537,7 @@ export default {
   text-shadow: none;
   font-size: 18px;
 
-  background: var(--allColorBack);
+  background: var(--allColorFront);
   width: 150px;
   height: 40px;
   border: none;
@@ -542,7 +571,7 @@ export default {
   align-items: center;
   margin-left: auto;
   overflow: auto;
-  height: 275px;
+  height: 320px;
 }
 
 .appearance-settings {
@@ -688,8 +717,8 @@ input[type=color] {
 }
 
 .theme-box {
-  height: 60px;
-  width: 90px;
+  height: 45px;
+  width: 60px;
   cursor: pointer;
 }
 </style>
