@@ -52,8 +52,11 @@ async function getInstalledGames() {
 
 async function parseGameObject(data) {
   const Location = data.Install;
+  if (!await invoke("d_f_exists", {
+    path: Location,
+  })) return
   const game = RockstarGamesData.titles.find(
-    (x) => data.name === x.friendlyName || x.aliases?.includes(data.name)
+    (x) => data.name === x.friendlyName || x.aliases?.includes(data.name) || data.name === x.installFolderRegKey?.split("\\")[1]
   );
   if (!game) return;
   let Executable;

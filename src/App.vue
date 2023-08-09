@@ -5,18 +5,22 @@
   <titlebar-comp></titlebar-comp>
 
   <div class="bg" id="bg">
+    <leftbar-comp></leftbar-comp>
+
     <div class="homebox" id="home">
-      <div class="children fadeInUp">
-        <img class="head-pic" src="./assets/img/main-banner.png" id="head-pic" />
-      </div>
-      <div class="children fadeInDown">
-        <div class="jump-back">
-          <p>Recently Launched</p>
-          <div id="recentGamesListMainPage" class="fadeInDown mainPageGamesList">
+      <div class="centerchildren">
+        <div class="children fadeInUp">
+          <img class="head-pic" src="./assets/img/main-banner.png" id="head-pic" />
+        </div>
+        <div class="children fadeInDown">
+          <div class="jump-back">
+            <p>Recently Launched</p>
+            <div id="recentGamesListMainPage" class="fadeInDown mainPageGamesList">
+            </div>
           </div>
         </div>
       </div>
-      <div class="children fadeInLeft">
+      <div class="children fadeInLeft x2">
         <div class="rightbar">
           <p>System Specification</p>
           <div id="sysInfo" class="sysInfo">
@@ -29,6 +33,9 @@
             <div id="system_kernel">
               <img src="./assets/svg/computer.svg" alt="user" />
             </div>
+            <div id="disk">
+              <img src="./assets/svg/disk.svg" alt="user" />
+            </div>
             <div id="memory">
               <img src="./assets/svg/memory.svg" alt="user" />
             </div>
@@ -37,6 +44,9 @@
             </div>
           </div>
         </div>
+
+        <player-comp></player-comp>
+
       </div>
     </div>
 
@@ -44,7 +54,7 @@
       <p>Recently Played</p>
       <div id="recentGamesList" class="fadeInDown gamesList"></div>
       <h2 class="fade" id="recentGamesPlaceholder">
-        Looks empty here... start launching some games!
+        You haven't launched any games recently
       </h2>
     </div>
 
@@ -58,22 +68,20 @@
       </div>
       <div id="favGamesList" class="fadeInDown gamesList"></div>
       <h2 class="fade" id="favGamesPlaceholder">
-        You currently have no game marked as a favourite...
+        You currently have no game marked as favorite
       </h2>
     </div>
 
-    <div class="secondorybox" id="messages">
-      <p>Messages</p>
-      <h1 class="fade">Coming Soon...</h1>
-    </div>
+    <monitor-comp></monitor-comp>
+
 
     <div class="secondorybox" id="activity">
-      <p>Activity</p>
+      <p>Overclock</p>
       <h1 class="fade">Coming Soon...</h1>
     </div>
 
     <div class="secondorybox" id="friends">
-      <p>All Friends</p>
+      <p>Benchmark</p>
       <h1 class="fade">Coming Soon...</h1>
     </div>
 
@@ -83,8 +91,6 @@
         <button class="gameMenuBtn" id="removeGame">Remove Game</button>
       </div>
     </div>
-
-    <leftbar-comp></leftbar-comp>
   </div>
 </template>
 
@@ -94,6 +100,8 @@ import Titlebar from "./components/Titlebar.vue";
 import AllGames from "./components/AllGames.vue";
 import LeftBar from "./components/LeftBar.vue";
 import findGames from "./components/find-games.vue";
+import MonitorTab from "./components/MonitorTab.vue";
+import MusicPlayer from "./components/MusicPlayer.vue";
 
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
@@ -107,6 +115,8 @@ export default {
     "allgames-comp": AllGames,
     "leftbar-comp": LeftBar,
     "find-games": findGames,
+    "monitor-comp": MonitorTab,
+    "player-comp": MusicPlayer
   },
   async mounted() {
     (async () => {
@@ -127,6 +137,9 @@ export default {
       document
         .getElementById("system_kernel")
         .insertAdjacentText("beforeend", sysInfoInvoke.system_kernel);
+      document
+        .getElementById("disk")
+        .insertAdjacentText("beforeend", sysInfoInvoke.disk_info);
       document
         .getElementById("memory")
         .insertAdjacentText("beforeend", sysInfoInvoke.memory);
@@ -154,14 +167,16 @@ export default {
       await invoke("show_window");
 
       try {
-        let { accentColor } = JSON.parse(
+        let { accentColor, backgroundColor, primaryColor } = JSON.parse(
           await invoke("read_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
           })
         );
         if (!accentColor) accentColor = "#7934FA";
-        document.getElementById("indicator").style.backgroundColor =
-          accentColor;
+        // document.getElementById("indicator").style.backgroundColor =
+        //   accentColor;
+        if (backgroundColor) document.querySelector(':root').style.setProperty('--allColorBack', backgroundColor);
+        if (primaryColor) document.querySelector(':root').style.setProperty('--allColorPrimary', primaryColor);
         document
           .querySelector(":root")
           .style.setProperty("--accentColor", accentColor);
@@ -308,13 +323,14 @@ export default {
 <style>
 :root {
   --accentColor: rgb(121, 52, 250);
-  --allColorBack: #15161b;
-  --allColorPrimary: #18191f;
+  --allColorBack: rgb(20, 14, 36);
+  --allColorFront: rgb(42, 16, 81);
+  --allColorPrimary: #0c0b0e;
 }
 
 ::selection {
-  color: inherit;
-  background: #2e3038;
+  color: inherit !important;
+  background: var(--accentColor) !important;
   border-radius: 10px;
 }
 
@@ -328,26 +344,33 @@ export default {
   src: url("./assets/fonts/Nunito-SemiBold.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: Nunito-ExtraBold;
+  src: url("./assets/fonts/Nunito-Bold.ttf") format("truetype");
+}
+
 html,
 body {
-  zoom: 0.944;
+  zoom: 0.945;
   background: var(--allColorBack);
-  overflow: hidden;
   font-family: Nunito;
   height: 100%;
+  overflow: hidden;
 }
 
 #app {
-  height: 100%;
+  height: calc(100% - 70px);
 }
 
 .bg {
   display: flex;
   justify-content: center;
-  align-items: center;
-  flex-direction: column;
+  align-items: flex-start;
+  flex-direction: row;
+  margin-top: 100px;
   height: 100%;
-  margin: -20px 0 50px;
+  margin: 6px;
+  margin-top: 10px;
 }
 
 .mx-1 {
@@ -356,32 +379,22 @@ body {
 }
 
 .homebox {
-  position: absolute;
-
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+  flex-direction: row;
 
-  height: calc(100% - 65px);
-  width: calc(100% - 300px);
-  margin-bottom: 5px;
-  margin-left: 285px;
+  height: 100%;
+  width: 100%;
 }
 
 .secondorybox {
-  position: absolute;
-
   display: none;
-  flex-direction: column;
-  flex-wrap: wrap;
 
   background-color: var(--allColorPrimary);
-  border-radius: 10px;
+  border-radius: 20px;
 
-  height: calc(100% - 72px);
-  width: calc(100% - 310px);
-  margin-bottom: 5px;
-  margin-left: 285px;
+  height: 100%;
+  width: 100%;
+  margin-left: 14px;
   cursor: default;
 }
 
@@ -391,28 +404,28 @@ body {
   margin-top: 30px;
   font-size: 20px;
   float: left;
+  font-family: Nunito-ExtraBold;
 }
 
 .secondorybox h1 {
   position: absolute;
   left: 50%;
   top: 45%;
-  transform: translate(-50%, -50%);
   font-weight: normal;
   color: rgba(164, 164, 164, 0.3);
   font-size: 34px;
+  text-align: center;
 }
 
 .secondorybox h2 {
   position: absolute;
   left: 50%;
   top: 45%;
-  transform: translate(-50%, -50%);
   font-weight: normal;
-  color: rgba(164, 164, 164, 0.3);
-  font-size: 28px;
-  width: 360px;
+  color: rgba(98, 98, 98, 0.5);
+  width: 310px;
   text-align: center;
+  font-size: 26px;
 }
 
 .secondorybox .addGamePopUp {
@@ -421,7 +434,7 @@ body {
   height: 200px;
   margin-left: 170px;
   margin-top: 20px;
-  background-color: #242424;
+  background-color: var(--allColorFront);
   animation: gradient 20s infinite;
   display: none;
 
@@ -459,7 +472,7 @@ body {
   text-align: center;
   background-repeat: no-repeat;
   padding: 0;
-  background-color: #313131;
+  background-color: var(--allColorPrimary);
   transition: all 0.1s ease-in-out;
   z-index: 0;
 }
@@ -525,7 +538,7 @@ body {
   margin-top: 44px;
 
   padding: 5px;
-  background-color: #323232;
+  background-color: var(--allColorPrimary);
   color: rgb(180, 180, 180);
   border-radius: 8px;
   font-family: Nunito-Bold;
@@ -540,7 +553,7 @@ body {
   align-self: flex-start;
   margin-right: 20px;
   margin-top: 14px;
-  background-color: #3e3e3e;
+  background-color: var(--allColorPrimary);
   color: rgb(194, 194, 194);
   padding: 10px;
   border-radius: 12px;
@@ -548,45 +561,41 @@ body {
 }
 
 .secondorybox .section .addGameLocation:hover {
-  background-color: #393939;
+  scale: 1.06;
+}
+
+.centerchildren {
+  display: flex;
+  flex-direction: column;
+  width: 100% !important;
 }
 
 .children {
-  display: flex;
   height: 100%;
-  width: 71%;
+  width: 100%;
   overflow: hidden;
-  margin: 5px;
-
-  flex: 1;
-  justify-content: center;
-  align-items: center;
+  margin-left: 14px;
+  display: flex;
 }
 
-.children:last-child {
-  position: relative;
-  width: 27%;
-  flex: 0 0 calc(100% - 10px);
+.children:first-child {
+  margin-bottom: 15px !important;
 }
 
 .head-pic {
-  width: 200%;
+  width: 100%;
   height: 100%;
-  overflow: unset;
   position: relative;
   object-fit: cover;
-  flex-shrink: 10;
-  min-width: calc(100% - 100px);
-  min-height: 100%;
-  border-radius: 10px;
+  border-radius: 20px;
   image-rendering: auto;
 }
 
 .jump-back {
   background-color: var(--allColorPrimary);
   width: 100%;
-  height: 100%;
-  border-radius: 10px;
+  height: 100% !important;
+  border-radius: 20px;
 }
 
 .jump-back p {
@@ -594,16 +603,27 @@ body {
   margin-left: 18px;
   margin-top: 18px;
   font-size: 18px;
-  font-family: Nunito-Bold;
+  font-family: Nunito-ExtraBold;
   position: absolute;
+}
+
+.x2 {
+  display: flex;
+  flex-direction: column;
+  margin-left: 27px;
+  width: 40%;
 }
 
 .rightbar {
   background-color: var(--allColorPrimary);
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
+  height: 40%;
+  border-radius: 20px;
   cursor: default;
+}
+
+.rightbar:first-child {
+  height: 60%;
+  margin-bottom: 15px;
 }
 
 .rightbar p {
@@ -611,7 +631,7 @@ body {
   margin-left: 18px;
   margin-top: 18px;
   font-size: 18px;
-  font-family: Nunito-Bold;
+  font-family: Nunito-ExtraBold;
 }
 
 .rightbar .sysInfo {
@@ -620,7 +640,7 @@ body {
   flex-direction: column;
   margin-left: 34px;
   margin-right: auto;
-  width: 280px;
+  width: 300px;
   font-size: 18px;
   color: rgb(138, 138, 138);
   font-family: Nunito-Bold;
@@ -709,11 +729,11 @@ body {
 .gamebox .gamebox-bottom {
   cursor: default;
   position: relative;
-  margin-top: -24%;
+  margin-top: -22%;
   width: 100%;
   height: 15%;
   position: absolute;
-  background-color: #292929;
+  background-color: var(--allColorFront);
   border-radius: 0px 0px 10px 10px;
 }
 
@@ -758,11 +778,10 @@ body {
   display: inline-block;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-  height: 56%;
-  width: 16%;
+  height: 61%;
+  width: 17%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  opacity: 0.3;
-  border: solid var(--accentColor) 6px;
+  opacity: 0.5;
   background-color: var(--accentColor);
   mask-image: -webkit-gradient(linear,
       right 90%,
@@ -777,16 +796,16 @@ body {
 
 .mainPageGamebox {
   position: relative;
-
   text-align: center;
   display: inline-block;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
-  height: 56%;
   width: 16%;
+  height: 61%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
   border: solid var(--accentColor) 6px;
+  background-position: 50% 40% !important;
 }
 
 .mainPageGamebox:nth-last-child(-n + 4) {
@@ -795,19 +814,18 @@ body {
 
 .mainPageGamebox:hover {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  transform: scale(1.03);
+  transform: scale(1.02);
   cursor: pointer;
   opacity: 1;
 }
 
 .mainPageGamebox img {
-  object-fit: cover;
-  object-position: top;
   display: block;
   height: 100%;
   width: 100%;
   border-radius: 10px;
-  content: url("./assets/img/default-game-banner.png");
+  object-position: 50% 25%;
+  object-fit: cover;
 }
 
 .mainPageGamebox span {
@@ -841,7 +859,7 @@ body {
 }
 
 .fade {
-  animation: fadeIn 0.4s;
+  animation: fadeIn 0.3s;
 }
 
 .fadeInUp {
@@ -915,7 +933,7 @@ img,
   position: absolute;
   right: 20px;
   height: 90%;
-  background: rgba(35, 35, 37, 1);
+  background: var(--allColorBack);
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;
   border-top-left-radius: 20px;
@@ -930,7 +948,7 @@ img,
   border-radius: 12px;
   font-size: 18px;
 
-  background-color: #3e3e3e;
+  background-color: var(--allColorPrimary);
   opacity: 0.9;
   width: 13.78rem;
   height: 50px;
@@ -954,7 +972,7 @@ img,
 }
 
 .gameMenu .gameMenuBtn:hover {
-  background-color: #373737;
+  scale: 1.05;
 }
 
 .leftbar-overlay {
@@ -1046,7 +1064,7 @@ img,
 .search-bar {
   margin-left: auto;
   margin-right: 110px;
-  margin-top: -52px;
+  margin-top: 25px;
   height: 40px;
   display: flex;
   width: 100%;
@@ -1059,11 +1077,10 @@ img,
 .search-bar input {
   width: 100%;
   height: 100%;
-  border: none;
-  background-color: #191a1d;
-  border-radius: 6px;
+  background-color: var(--allColorFront);
+  border-radius: 10px;
   font-family: Nunito;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   padding: 0 20px 0 40px;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56.966 56.966' fill='%23717790c7'%3e%3cpath d='M55.146 51.887L41.588 37.786A22.926 22.926 0 0046.984 23c0-12.682-10.318-23-23-23s-23 10.318-23 23 10.318 23 23 23c4.761 0 9.298-1.436 13.177-4.162l13.661 14.208c.571.593 1.339.92 2.162.92.779 0 1.518-.297 2.079-.837a3.004 3.004 0 00.083-4.242zM23.984 6c9.374 0 17 7.626 17 17s-7.626 17-17 17-17-7.626-17-17 7.626-17 17-17z'/%3e%3c/svg%3e");
@@ -1071,6 +1088,7 @@ img,
   background-repeat: no-repeat;
   background-position: 16px 48%;
   color: #f9fafb;
+  border: 4px solid rgba(255, 255, 255, 0);
 }
 
 .search-bar input::selection {
@@ -1081,100 +1099,15 @@ img,
 .search-bar input::placeholder {
   font-family: Nunito;
   color: rgb(113 119 144 / 78%);
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 16px;
+  font-family: Nunito-ExtraBold;
 }
 
 .search-bar input:focus {
-  border: 3px solid var(--accentColor);
+  border: 4px solid var(--accentColor);
   animation-name: searchbox;
   animation-duration: 0.3s;
   animation-fill-mode: both;
-}
-
-.switch {
-  --line: #505162;
-  --dot: #f7f8ff;
-  --circle: #9ea0be;
-  --duration: 0.3s;
-  --text: #9ea0be;
-  cursor: pointer;
-}
-
-.switch input {
-  display: none;
-}
-
-.switch input+div {
-  margin-top: -41px;
-  margin-left: 280px;
-  position: relative;
-}
-
-.switch input+div:before,
-.switch input+div:after {
-  --s: 1;
-  content: "";
-  position: absolute;
-  height: 4px;
-  top: 10px;
-  width: 24px;
-  background: var(--line);
-  transform: scaleX(var(--s));
-  transition: transform var(--duration) ease;
-}
-
-.switch input+div:before {
-  --s: 0;
-  left: 0;
-  transform-origin: 0 50%;
-  border-radius: 2px 0 0 2px;
-}
-
-.switch input+div:after {
-  left: 28px;
-  transform-origin: 100% 50%;
-  border-radius: 0 2px 2px 0;
-}
-
-.switch input+div span {
-  padding-left: 56px;
-  line-height: 24px;
-  color: var(--text);
-}
-
-.switch input+div span:before {
-  --x: 0;
-  --b: var(--circle);
-  --s: 4px;
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 1px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 var(--s) var(--b);
-  transform: translateX(var(--x));
-  transition: box-shadow var(--duration) ease, transform var(--duration) ease;
-}
-
-.switch input+div span:not(:empty) {
-  padding-left: 64px;
-}
-
-.switch input:checked+div:before {
-  --s: 1;
-}
-
-.switch input:checked+div:after {
-  --s: 0;
-}
-
-.switch input:checked+div span:before {
-  --x: 28px;
-  --s: 12px;
-  --b: var(--dot);
 }
 
 .color {
@@ -1189,14 +1122,6 @@ img,
 
 .repeatButton:hover {
   cursor: pointer;
-}
-
-.btnInput {
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: space-evenly;
-  align-items: center;
-  margin-left: 119px;
 }
 
 @keyframes fadeOutUp {
@@ -1336,9 +1261,11 @@ img,
 @keyframes searchbox {
   0% {
     width: 0%;
+    opacity: 0;
   }
 
   100% {
+    opacity: 1;
     width: 100%;
   }
 }

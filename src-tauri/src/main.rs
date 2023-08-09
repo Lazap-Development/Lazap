@@ -1,13 +1,16 @@
 #![windows_subsystem = "windows"]
 
+mod addons;
+mod modules;
+
 use declarative_discord_rich_presence::activity::Activity;
 use declarative_discord_rich_presence::activity::Assets;
 use declarative_discord_rich_presence::activity::Timestamps;
 use declarative_discord_rich_presence::DeclarativeDiscordIpcClient;
 use html_parser::Dom;
 use sha2::{Digest, Sha256};
+
 use std::fs;
-use std::io::Write;
 use std::path::Path;
 use sysinfo::{CpuExt, System, SystemExt};
 use tauri::{
@@ -16,85 +19,16 @@ use tauri::{
 
 const DISCORD_RPC_CLIENT_ID: &str = "932504287337148417";
 
-fn init_storage() -> Result<(), std::io::Error> {
-    let base_config_path = tauri::api::path::app_config_dir(&tauri::Config::default())
-        .unwrap()
-        .display()
-        .to_string()
-        + "com.lazap.config";
-    let base_config_cache_path = tauri::api::path::app_config_dir(&tauri::Config::default())
-        .unwrap()
-        .display()
-        .to_string()
-        + "com.lazap.config/cache";
-    let base_config_cache_games_path = tauri::api::path::app_config_dir(&tauri::Config::default())
-        .unwrap()
-        .display()
-        .to_string()
-        + "com.lazap.config/cache/games";
-    let base_config_cache_user_path = tauri::api::path::app_config_dir(&tauri::Config::default())
-        .unwrap()
-        .display()
-        .to_string()
-        + "com.lazap.config/cache/user";
-    let base_config_cache_games_banners_path =
-        tauri::api::path::app_config_dir(&tauri::Config::default())
-            .unwrap()
-            .display()
-            .to_string()
-            + "com.lazap.config/cache/games/banners";
-    let base_config_ld_file = tauri::api::path::app_config_dir(&tauri::Config::default())
-        .unwrap()
-        .display()
-        .to_string()
-        + "com.lazap.config/LauncherData.json";
-    let base_config_cache_user_data_file =
-        tauri::api::path::app_config_dir(&tauri::Config::default())
-            .unwrap()
-            .display()
-            .to_string()
-            + "com.lazap.config/cache/user/data.json";
-    let base_config_cache_game_data_file =
-        tauri::api::path::app_config_dir(&tauri::Config::default())
-            .unwrap()
-            .display()
-            .to_string()
-            + "com.lazap.config/cache/games/data.json";
-
-    if !Path::new(&base_config_path).exists() {
-        fs::create_dir_all(base_config_path).expect("Failed to create dir.");
-    }
-    if !Path::new(&base_config_cache_path).exists() {
-        fs::create_dir_all(base_config_cache_path).expect("Failed to create dir.");
-    }
-    if !Path::new(&base_config_cache_games_path).exists() {
-        fs::create_dir_all(base_config_cache_games_path).expect("Failed to create dir.");
-    }
-    if !Path::new(&base_config_cache_games_banners_path).exists() {
-        fs::create_dir_all(base_config_cache_games_banners_path).expect("Failed to create dir.");
-    }
-    if !Path::new(&base_config_cache_user_path).exists() {
-        fs::create_dir_all(base_config_cache_user_path).expect("Failed to create dir.");
-    }
-    if !Path::new(&base_config_ld_file).exists() {
-        let mut file = fs::File::create(base_config_ld_file)?;
-        writeln!(file, "{{ \"enable_rpc\": true, \"launch_on_startup\": false, \"skip_login\": false, \"tray_min_launch\": true, \"tray_min_quit\": false, \"check_for_updates\": true, \"accent_color\": \"#7934FA\" }}")?;
-    }
-    if !Path::new(&base_config_cache_user_data_file).exists() {
-        let mut file = fs::File::create(base_config_cache_user_data_file)?;
-        writeln!(file, "{{  \"username\": \"{}\" }}", whoami::username())?;
-    }
-    if !Path::new(&base_config_cache_game_data_file).exists() {
-        let mut file = fs::File::create(base_config_cache_game_data_file)?;
-        writeln!(file, "[]")?;
-    }
-
-    Ok(())
+#[derive(Clone, serde::Serialize)]
+struct Payload {
+    args: Vec<String>,
+    cwd: String,
 }
 
 #[cfg(target_os = "windows")]
 fn main() {
-    init_storage().expect("Failed to init storage fn.");
+    modules::storage::init_storage().expect("Failed to init storage fn.");
+
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()
@@ -108,8 +42,16 @@ fn main() {
             window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
             let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
+            modules::storage::launcherdata_threads(app.get_window("main").unwrap())
+                .expect("Failed to init storage misc fn.");
             Ok(())
         })
+        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+            println!("{}, {argv:?}, {cwd}", app.package_info().name);
+
+            app.emit_all("single-instance", Payload { args: argv, cwd })
+                .unwrap();
+        }))
         .system_tray(tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {
@@ -150,7 +92,17 @@ fn main() {
             write_binary_file,
             rename_file,
             remove_file,
-            sha256
+            sha256,
+            // Storage Module
+            modules::storage::launcherdata_threads_x,
+            // Spotify Addon
+            addons::spotify::spotify_login,
+            addons::spotify::spotify_connect,
+            addons::spotify::spotify_toggle_playback,
+            addons::spotify::spotify_forward,
+            addons::spotify::spotify_backward,
+            addons::spotify::spotify_info,
+            addons::spotify::spotify_remove_token,
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -158,7 +110,8 @@ fn main() {
 
 #[cfg(target_os = "linux")]
 fn main() {
-    init_storage().expect("Failed to init storage fn.");
+    modules::storage::init_storage().expect("Failed to init storage fn.");
+
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()
@@ -170,9 +123,17 @@ fn main() {
         .setup(|app| {
             let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
+            modules::storage::launcherdata_threads(app.get_window("main").unwrap())
+                .expect("Failed to init storage misc fn.");
             Ok(())
         })
         .plugin(tauri_plugin_sql::Builder::default().build())
+        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+            println!("{}, {argv:?}, {cwd}", app.package_info().name);
+
+            app.emit_all("single-instance", Payload { args: argv, cwd })
+                .unwrap();
+        }))
         .system_tray(tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {
@@ -213,7 +174,17 @@ fn main() {
             write_binary_file,
             rename_file,
             remove_file,
-            sha256
+            sha256,
+            // Storage Module
+            modules::storage::launcherdata_threads_x,
+            // Spotify Addon
+            addons::spotify::spotify_login,
+            addons::spotify::spotify_connect,
+            addons::spotify::spotify_toggle_playback,
+            addons::spotify::spotify_forward,
+            addons::spotify::spotify_backward,
+            addons::spotify::spotify_info,
+            addons::spotify::spotify_remove_token,
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -221,7 +192,7 @@ fn main() {
 
 #[cfg(target_os = "macos")]
 fn main() {
-    init_storage().expect("Failed to init storage fn.");
+    modules::storage::init_storage().expect("Failed to init storage fn.");
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()
@@ -235,8 +206,16 @@ fn main() {
             window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
             let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
+            modules::storage::launcherdata_threads(app.get_window("main").unwrap())
+                .expect("Failed to init storage misc fn.");
             Ok(())
         })
+        .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
+            println!("{}, {argv:?}, {cwd}", app.package_info().name);
+
+            app.emit_all("single-instance", Payload { args: argv, cwd })
+                .unwrap();
+        }))
         .system_tray(tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {
@@ -277,7 +256,17 @@ fn main() {
             write_binary_file,
             rename_file,
             remove_file,
-            sha256
+            sha256,
+            // Storage Module
+            modules::storage::launcherdata_threads_x,
+            // Spotify Addon
+            addons::spotify::spotify_login,
+            addons::spotify::spotify_connect,
+            addons::spotify::spotify_toggle_playback,
+            addons::spotify::spotify_forward,
+            addons::spotify::spotify_backward,
+            addons::spotify::spotify_info,
+            addons::spotify::spotify_remove_token,
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
@@ -289,7 +278,7 @@ async fn parse(value: &str) -> Result<String, Error> {
 }
 
 #[tauri::command]
-async fn launch_game(exec: String, args: String) {
+async fn launch_game(exec: String, _args: String) {
     #[cfg(target_os = "windows")]
     use std::os::windows::process::CommandExt;
     #[cfg(target_os = "windows")]
@@ -303,7 +292,7 @@ async fn launch_game(exec: String, args: String) {
 
     #[cfg(target_os = "linux")]
     let child = std::process::Command::new(exec)
-        .arg(args)
+        .arg(_args)
         .spawn()
         .expect("failed to run");
     #[cfg(target_os = "linux")]
@@ -411,11 +400,26 @@ async fn get_sys_info() -> Result<String, Error> {
     // Rate = 1048576 Byte is 1MiB
     let rate: i64 = 1048576;
 
+    // Rate = 1073741824 Byte is 1GB
+    let rate2: u64 = 1000000000;
+
+    use sysinfo::DiskExt;
+
     let data_used_mem: i64 = sys.used_memory().try_into().unwrap();
     let data_all_mem: i64 = sys.total_memory().try_into().unwrap();
+
+    let mut data_used_disk: u64 = 0;
+    let mut data_all_disk: u64 = 0;
+    for disk in sys.disks() {
+        data_used_disk += disk.available_space();
+        data_all_disk += disk.total_space();
+    }
+
     let converted_used_mem = data_used_mem / rate;
     let converted_all_mem = data_all_mem / rate;
-
+    let converted_used_disk = data_used_disk / rate2;
+    let converted_all_disk = data_all_disk / rate2;
+    
     let mut cpu_info = "";
     for cpu in sys.cpus() {
         cpu_info = cpu.brand();
@@ -427,6 +431,7 @@ async fn get_sys_info() -> Result<String, Error> {
         system_name: String,
         system_kernel: String,
         system_host: String,
+        disk_info: String,
     }
     let sys_data = SysStruct {
         memory: converted_used_mem.to_string()
@@ -438,15 +443,21 @@ async fn get_sys_info() -> Result<String, Error> {
         system_name: sys.name().unwrap().to_string(),
         system_kernel: sys.kernel_version().unwrap().to_string(),
         system_host: sys.host_name().unwrap().to_string(),
+        disk_info: converted_used_disk.to_string()
+        + " GB"
+        + " / "
+        + &converted_all_disk.to_string()
+        + " GB"
     };
 
     Ok(format!(
-        "{{\"memory\": \"{}\", \"cpu\": \"{}\", \"system_name\": \"{}\", \"system_kernel\": \"{}\", \"system_host\": \"{}\"}}",
+        "{{\"memory\": \"{}\", \"cpu\": \"{}\", \"system_name\": \"{}\", \"system_kernel\": \"{}\", \"system_host\": \"{}\", \"disk_info\": \"{}\"}}",
         sys_data.memory,
         sys_data.cpu,
         sys_data.system_name,
         sys_data.system_kernel,
         sys_data.system_host,
+        sys_data.disk_info
     ))
 }
 

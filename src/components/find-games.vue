@@ -13,11 +13,16 @@ class GameElement {
 
 	async getHTMLElement() {
 		const gameElement = this.getElement();
+
+		if (this.listID.startsWith('recent') && this.listID.includes('Main')) {
+			await this.getBannerElementv2(gameElement)
+			return gameElement;
+		}
+
 		const banner = await this.getBannerElement();
 		gameElement.appendChild(banner);
 		// eslint-disable-next-line no-self-assign
 		this.data.Banner = this.data.Banner;
-		if (this.listID.startsWith('recent') && this.listID.includes('Main')) return gameElement;
 		const { enableLauncherIcons } = this.settings;
 		if (enableLauncherIcons) gameElement.prepend(this.getLauncherIconElement());
 
@@ -48,8 +53,6 @@ class GameElement {
 		element.setAttribute('src', image);
 
 		element.classList.add('game_banner_img');
-		element.height = 500;
-		element.width = 500;
 
 		let banner;
 		let block = false;
@@ -68,6 +71,25 @@ class GameElement {
 			this.cacheBanner(banner);
 			block = true;
 		});
+		element.addEventListener('click', () => {
+			this.handleLaunch();
+			storage.addLaunch(this.data.GameID, this.data.LauncherName);
+		});
+
+		return element;
+	}
+
+	async getBannerElementv2(element) {
+		const image = require('../assets/img/default-game-banner.png');
+		element.style.background = `url(${image})`
+		element.style.backgroundSize = "cover"
+
+		let banner = await this.getBanner();
+		element.style.background = `url(${banner})`
+		element.style.backgroundSize = "cover"
+
+		this.cacheBanner(banner);
+
 		element.addEventListener('click', () => {
 			this.handleLaunch();
 			storage.addLaunch(this.data.GameID, this.data.LauncherName);
@@ -96,8 +118,7 @@ class GameElement {
 		element.addEventListener('click', () => {
 			const gamemenu = document.getElementById('gameMenu');
 			gamemenu.style.display = gamemenu.style.display === 'flex' ? 'none' : 'flex';
-
-			gamemenu.innerHTML = this.data.DisplayName;
+			document.getElementById("gameMenuTitle").innerHTML = this.data.DisplayName
 		});
 
 		return element;
@@ -121,20 +142,18 @@ class GameElement {
 		// Handle onclick
 		element.addEventListener('click', async () => {
 			const isFavourite = await storage.toggleFavourite(this.data.GameID, this.data.LauncherName);
-			for (let i = 0; i < lists.length; i++) {
-				const ele = Array.from(lists[i].children.namedItem(`game-div-${this.data.DisplayName.replaceAll(' ', '_')}`).children).find(x => x.classList.contains('gamebox-bottom')).children.namedItem('star');
+			const ele = Array.from(document.getElementById(`game-div-${this.data.DisplayName.replaceAll(' ', '_')}`).children).find(x => x.classList.contains('gamebox-bottom')).children.namedItem('star');
 
-				ele.style.filter = isFavourite
-					? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)'
-					: 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
-				if (isFavourite) {
-					ele.classList.add('star-fill');
-					ele.classList.add('shake');
-					setTimeout(() => ele.classList.remove('shake'), 500);
-				}
-				else {
-					ele.classList.remove('star-fill');
-				}
+			ele.style.filter = isFavourite
+				? 'invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)'
+				: 'invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)';
+			if (isFavourite) {
+				ele.classList.add('star-fill');
+				ele.classList.add('shake');
+				setTimeout(() => ele.classList.remove('shake'), 500);
+			}
+			else {
+				ele.classList.remove('star-fill');
 			}
 		});
 		return element;
@@ -366,13 +385,6 @@ class GameElement {
 	}
 }
 
-class Elements {
-	static async createGameElement(data, listID, jsondata, settings, bannersdirarr) {
-		const element = await new GameElement(data, listID, jsondata, settings, bannersdirarr).getHTMLElement();
-		return element;
-	}
-}
-
 class Storage {
 	constructor() {
 		(async () => {
@@ -399,29 +411,10 @@ class Storage {
 		try {
 			if (source === 'getInstalledGames') {
 				if (data.length > 0) {
-					const newdata = [];
-					// data.filter(x => games.find(y => y.LauncherName === x.LauncherName && y.GameID === x.GameID));
-					for (let i = 0; i < games.length; i++) {
-						const gamedata = data.find(x => x.LauncherName === games[i].LauncherName && x.GameID === games[i].GameID);
-						if (!gamedata) {
-							newdata.push(gamedata);
-						}
-						else if (Object.keys(games[i]).length > Object.keys(gamedata).length) {
-							data[data.findIndex(x => x.LauncherName === games[i].LauncherName && x.GameID === games[i].GameID)] = games[i];
-						}
-						else if (Object.keys(games[i]).length < Object.keys(gamedata).length) {
-							let obj = {
-								...gamedata,
-							};
-							for (let j = 0; j < Object.keys(games[i]).length; j++) {
-								obj[Object.keys(games[i])[j]] = Object.values(games[i])[j];
-							}
-							data[data.findIndex(x => x.LauncherName === games[i].LauncherName && x.GameID === games[i].GameID)] = obj;
-						}
+					if (data.length != games.length) {
+						await invoke('write_file', { filePath: this.gamesDataJSON, fileContent: JSON.stringify(data.filter(x => games.find(y => y.LauncherName === x.LauncherName && y.GameID === x.GameID))) });
 					}
-					newdata.push(...games.filter(x => !data.find(y => y.LauncherName === x.LauncherName && y.GameID === x.GameID)));
-				}
-				else {
+				} else {
 					await invoke('write_file', { filePath: this.gamesDataJSON, fileContent: JSON.stringify(games) });
 				}
 			}
@@ -462,7 +455,13 @@ class Storage {
 		const element = list.children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`);
 		if (game.Favourite === false && element) {
 			element.classList.add('fadeOutUpNoDelay');
-			setTimeout(() => list.removeChild(element), 500);
+			setTimeout(() => {
+				list.removeChild(element)
+				if (document.getElementById("favGamesList").childNodes.length == 0) {
+					document.getElementById("favGamesPlaceholder").style.display =
+						"block";
+				}
+			}, 200);
 		}
 
 		return game.Favourite;
@@ -482,18 +481,6 @@ class Storage {
 		game.LastLaunch = Date.now();
 		game.Launches = typeof game.Launches === 'number' ? game.Launches + 1 : 1;
 		this.setGamesData(data, 'addLaunch');
-		if (
-			!document.getElementById('recentGamesList').children.namedItem(`game-div-${game.DisplayName.replaceAll(' ', '_')}`)
-		) {
-			// eslint-disable-next-line no-undef
-			// recentGamesList.replaceChildren([]);
-			// this.loadGames('recentGamesList', null, data);
-			// if (document.getElementById('recentGamesListMainPage').children.length < 5) {
-			// eslint-disable-next-line no-undef
-			//   recentGamesListMainPage.replaceChildren([]);
-			//   this.loadGames("recentGamesListMainPage", null, data);
-			// }
-		}
 	}
 }
 
@@ -502,7 +489,7 @@ const blacklists = require('./others/blacklist.json')
 const invoke = window.__TAURI__.invoke;
 const tauri = window.__TAURI__.tauri;
 const http = window.__TAURI__.http;
-let os = window.__TAURI__.os;
+
 const Window = window.__TAURI__.window;
 // Objects
 const storage = new Storage();
@@ -511,12 +498,13 @@ let fetches = 0;
 const loads = {};
 let lists = ['allGamesList', 'recentGamesList', 'favGamesList'];
 let timestamp;
+let os;
 
 export default {
 	name: 'find-games',
 	async mounted() {
 		lists = lists.map(x => document.getElementById(x));
-		os = await os.platform();
+		os = await window.__TAURI__.os.platform();
 	},
 	methods: {
 		// Fetches all installed games in the disk according to the Launchers provided
@@ -575,6 +563,10 @@ export default {
 				return data;
 			}
 		},
+		async createGameElement(data, listID, jsondata, settings, bannersdirarr) {
+			const element = await new GameElement(data, listID, jsondata, settings, bannersdirarr).getHTMLElement();
+			return element;
+		},
 		async loadGames(listID, games) {
 			const gamesdata = await storage.getGamesData();
 			const bannerdirarr = await storage.readBannersDir();
@@ -592,7 +584,7 @@ export default {
 
 			for (let i = 0; i < allgames.length; i++) {
 				const element = list.children.namedItem(`game-div-${allgames[i].DisplayName.replaceAll(' ', '_')}`)
-				?? await Elements.createGameElement(allgames[i], listID, gamesdata.find(x => x.GameID === allgames[i].GameID && x.LauncherName === allgames[i].LauncherName), settings, bannerdirarr);
+					?? await new GameElement(allgames[i], listID, gamesdata.find(x => x.GameID === allgames[i].GameID && x.LauncherName === allgames[i].LauncherName), settings, bannerdirarr).getHTMLElement();
 				elements.push(element);
 			}
 

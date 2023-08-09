@@ -1,26 +1,10 @@
 <template>
   <div data-tauri-drag-region class="titlebar">
-    <div
-      data-tauri-drag-region
-      style="justify-content: space-between"
-      class="titlebar-icons"
-    >
+    <div data-tauri-drag-region style="justify-content: space-between" class="titlebar-icons">
       <div class="titlebar-options">
-        <img
-          class="titlebar-settings"
-          src="../assets/svg/settings.svg"
-          id="settings-btn"
-        />
-        <img
-          class="titlebar-account"
-          src="../assets/svg/account.svg"
-          id="account-btn"
-        />
-        <img
-          class="titlebar-update"
-          src="../assets/svg/download.svg"
-          id="update-btn"
-        />
+        <img class="titlebar-settings" src="../assets/svg/settings.svg" id="settings-btn" />
+        <img class="titlebar-account" src="../assets/svg/account.svg" id="account-btn" />
+        <img class="titlebar-update" src="../assets/svg/download.svg" id="update-btn" />
 
         <img class="titlebar-rpc" src="../assets/svg/discord.svg" id="rpcbtn" />
         <span id="rpc" class="rpc"></span>
@@ -48,8 +32,19 @@ export default {
     max_window() {
       window.__TAURI__.window.appWindow.toggleMaximize();
     },
-    close_window() {
-      window.__TAURI__.window.appWindow.close();
+    async close_window() {
+      let LauncherData = JSON.parse(
+        await invoke("read_file", {
+          filePath: (await path.appDir()) + "LauncherData.json",
+        })
+      );
+      if (LauncherData["tray_min_quit"] == true) {
+        window.__TAURI__.window.appWindow.hide();
+      } else {
+        window.__TAURI__.window.WebviewWindow.getByLabel('external').close();
+        window.__TAURI__.window.WebviewWindow.getByLabel('overlay').close();
+        window.__TAURI__.window.appWindow.close();
+      }
     },
   },
   async mounted() {
@@ -86,13 +81,13 @@ export default {
       document.getElementById("rpc").classList.add("fadeAwayRPCTxt");
     }, 1500);
 
-    document.getElementById("rpcbtn").addEventListener("click", function() {
+    document.getElementById("rpcbtn").addEventListener("click", function () {
       document.getElementById("rpc").classList.remove("fadeAwayRPCTxt");
       setTimeout(() => {
-      document.getElementById("rpc").classList.add("fadeAwayRPCTxt");
-    }, 1000);
+        document.getElementById("rpc").classList.add("fadeAwayRPCTxt");
+      }, 1000);
     })
-    
+
     async function setActivity(tab) {
       const { state, details, largeImage, largeText, smallImage, smallText } =
         require("./modules/rpcOptions").selectOption(tab);
@@ -119,11 +114,11 @@ export default {
 .titlebar {
   position: relative;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 15px;
   background-color: var(--allColorPrimary);
   height: 35px;
   width: 100%;
-  flex: auto;
+  margin-top: 4px;
 }
 
 .titlebar-icons {
@@ -145,7 +140,7 @@ export default {
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   height: 18px;
   width: 18px;
-  background-color: rgb(70, 70, 70);
+  background-color: var(--accentColor);
   display: block;
 }
 
@@ -159,7 +154,7 @@ export default {
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   height: 18px;
   width: 18px;
-  background-color: rgb(70, 70, 70);
+  background-color: var(--accentColor);
   display: block;
 }
 
@@ -172,7 +167,7 @@ export default {
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   height: 18px;
   width: 18px;
-  background-color: rgb(70, 70, 70);
+  background-color: var(--accentColor);
   display: block;
 }
 
@@ -191,8 +186,6 @@ export default {
   cursor: pointer;
   animation-delay: 200ms;
   animation: settings-spin 1.5s linear;
-  filter: invert(17%) sepia(86%) saturate(3285%) hue-rotate(239deg)
-    brightness(85%) contrast(101%);
 }
 
 .titlebar-account {
@@ -206,8 +199,7 @@ export default {
 
 .titlebar-account:hover {
   cursor: pointer;
-  filter: invert(36%) sepia(89%) saturate(4522%) hue-rotate(225deg)
-    brightness(99%) contrast(99%);
+  filter: invert(36%) sepia(89%) saturate(4522%) hue-rotate(225deg) brightness(99%) contrast(99%);
 }
 
 .titlebar-update {

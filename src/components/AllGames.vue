@@ -97,7 +97,8 @@ export default {
             Args: [],
           };
 
-          try {
+          const exists = await invoke("d_f_exists", { path: `${appDir}cache/games/banners/newcustombanner.png` });
+          if (exists) {
             await invoke("rename_file", {
               from:
                 `${appDir}cache/games/banners/newcustombanner.png`,
@@ -119,7 +120,7 @@ export default {
               fileContent: JSON.stringify(data),
             });
             loadGames("allGamesList");
-          } catch (e) {
+          } else {
             let data = JSON.parse(
               await invoke("read_file", {
                 filePath: `${appDir}cache/games/data.json`,
@@ -184,9 +185,10 @@ export default {
   margin-right: 20px;
   margin-top: 10px;
   background-color: var(--accentColor);
-  color: rgb(216, 216, 216);
+  color: rgb(255, 255, 255);
   border-radius: 12px;
-  font-family: Nunito-Bold;
+  font-family: Nunito-ExtraBold;
+  font-weight: 900;
 }
 
 .secondorybox .section .addGameFinalBtn:hover {

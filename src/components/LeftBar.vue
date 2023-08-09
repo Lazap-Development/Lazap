@@ -40,23 +40,23 @@
         </div>
       </div>
 
-      <div class="category-name d-flex justify-content-start">Friends</div>
+      <div class="category-name d-flex justify-content-start">Tweaks</div>
       <div class="d-flex justify-content-center">
         <div class="side-tab" id="messages-btn">
-          <img src="../assets/svg/messages.svg" height="25" width="25" />
-          <div class="side-tab-text">Messages</div>
+          <img src="../assets/svg/wave-square.svg" height="25" width="25" />
+          <div class="side-tab-text">Monitor</div>
         </div>
       </div>
       <div class="d-flex justify-content-center">
         <div class="side-tab" id="activity-btn">
-          <img src="../assets/svg/activity.svg" height="25" width="25" />
-          <div class="side-tab-text">Activity</div>
+          <img src="../assets/svg/overclock.svg" height="25" width="25" />
+          <div class="side-tab-text">Overclock</div>
         </div>
       </div>
       <div class="d-flex justify-content-center">
         <div class="side-tab" id="friends-btn">
-          <img src="../assets/svg/friends.svg" height="25" width="25" />
-          <div class="side-tab-text">All Friends</div>
+          <img src="../assets/svg/chart-line.svg" height="25" width="25" />
+          <div class="side-tab-text">Benchmark</div>
         </div>
       </div>
     </div>
@@ -276,15 +276,9 @@ export default {
 <style>
 .leftbar {
   background-color: var(--allColorPrimary);
-  border-radius: 15px;
-  position: absolute;
-  height: calc(100% - 71px);
-  max-height: 100%;
+  border-radius: 20px;
   width: 270px;
-  top: 25px;
-  margin-top: 30px;
-  margin-right: 100%;
-  margin-left: 300px;
+  height: 100%;
   text-align: center;
   box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
 }
@@ -341,7 +335,7 @@ export default {
 .side-tabs {
   margin-left: 20px;
   position: absolute;
-  height: 66%;
+  height: 420px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -359,10 +353,9 @@ export default {
 }
 
 .side-tab:before {
-  background: rgb(30, 30, 34);
-  background: linear-gradient(40deg,
-      rgba(30, 30, 34, 1) 0%,
-      rgba(30, 30, 34, 1) 30%,
+  background: linear-gradient(30deg,
+  var(--allColorPrimary) 0%,
+      var(--allColorPrimary) 30%,
       var(--accentColor) 100%);
   content: "";
   height: 40px;
