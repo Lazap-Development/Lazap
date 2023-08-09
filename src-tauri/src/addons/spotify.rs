@@ -6,8 +6,8 @@ use reqwest::{Client, Url};
 use serde::Deserialize;
 use tauri::{Manager, Window};
 
-const SPOTIFY_CLIENT_ID: &str = "";
-const SPOTIFY_CLIENT_SECRET: &str = "";
+static mut SPOTIFY_CLIENT_ID: &str = "";
+static mut SPOTIFY_CLIENT_SECRET: &str = "";
 
 static mut AVOID_SPAWN: bool = false;
 
@@ -16,15 +16,18 @@ static mut EXTERNAL_WINDOW: Option<Window> = None;
 
 #[actix_web::main]
 pub async fn main() -> std::io::Result<()> {
-    if SPOTIFY_CLIENT_ID.is_empty() && SPOTIFY_CLIENT_SECRET.is_empty() {
-        println!(
-            "{}",
-            "SPOTIFY_CLIENT_ID or SPOTIFY_CLIENT_SECRET is not set. HttpServer not started."
-        );
-        unsafe {
+    unsafe {
+        SPOTIFY_CLIENT_ID = env!("SPOTIFY_CLIENT_ID");
+        SPOTIFY_CLIENT_SECRET = env!("SPOTIFY_CLIENT_SECRET");
+
+        if SPOTIFY_CLIENT_ID.is_empty() || SPOTIFY_CLIENT_SECRET.is_empty() {
+            println!(
+                "{}",
+                "SPOTIFY_CLIENT_ID or SPOTIFY_CLIENT_SECRET is not set. HttpServer not started."
+            );
             AVOID_SPAWN = true;
+            return Ok(());
         }
-        return Ok(());
     }
 
     match TcpListener::bind("localhost:3000").await {
@@ -47,7 +50,7 @@ async fn login() -> impl Responder {
     auth_query_parameters
         .query_pairs_mut()
         .append_pair("response_type", "code")
-        .append_pair("client_id", SPOTIFY_CLIENT_ID)
+        .append_pair("client_id", unsafe { SPOTIFY_CLIENT_ID })
         .append_pair("scope", scope)
         .append_pair("redirect_uri", "http://localhost:3000/auth/callback")
         .append_pair("state", &state);
@@ -73,7 +76,7 @@ async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
             reqwest::header::AUTHORIZATION,
             format!(
                 "Basic {}",
-                base64::encode(format!("{}:{}", SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET))
+                base64::encode(format!("{}:{}", unsafe { SPOTIFY_CLIENT_ID }, unsafe { SPOTIFY_CLIENT_SECRET }))
             ),
         )
         .header(
