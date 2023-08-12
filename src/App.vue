@@ -668,8 +668,8 @@ body {
 .gamesList {
   position: absolute;
   overflow-y: scroll;
-  width: 97%;
-  height: 81%;
+  width: 80%;
+  height: 72%;
   margin-top: 100px;
   margin-left: 18px;
   display: flex;
