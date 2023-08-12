@@ -411,7 +411,7 @@ async fn get_sys_info() -> Result<String, Error> {
     let mut data_used_disk: u64 = 0;
     let mut data_all_disk: u64 = 0;
     for disk in sys.disks() {
-        data_used_disk += disk.available_space();
+        data_used_disk += disk.total_space() - disk.available_space();
         data_all_disk += disk.total_space();
     }
 
