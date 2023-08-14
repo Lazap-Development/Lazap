@@ -1,6 +1,7 @@
 use crate::addons;
 
 use rdev::{listen, simulate, Button, EventType, Key, SimulateError};
+use serde_json::Value;
 use std::fs;
 use std::io::Write;
 use std::path::Path;
@@ -54,7 +55,10 @@ pub fn init_storage() -> Result<(), std::io::Error> {
         \"tray_min_launch\": true, 
         \"tray_min_quit\": false, 
         \"check_for_updates\": true, 
-        \"accent_color\": \"#7934FA\"
+        \"accentColor\": \"#7934FA\",
+        \"frontColor\": \"#2a1051\",
+        \"backgroundColor\": \"#140e24\",
+        \"primaryColor\": \"#0c0b0e\"
     }";
 
     create_file_if_not_exists(&base_config_ld_file, json_content)?;
@@ -65,7 +69,43 @@ pub fn init_storage() -> Result<(), std::io::Error> {
     )?;
     create_file_if_not_exists(&base_config_cache_game_data_file, "[]")?;
 
+    let expected_config: Value = serde_json::from_str(json_content)?;
+    let actual_config: Value =
+        serde_json::from_str(&fs::read_to_string(base_config_ld_file.clone()).unwrap())?;
+
+    let expected_keys = extract_keys(&expected_config);
+    let actual_keys = extract_keys(&actual_config);
+
+    if actual_keys != expected_keys {
+        let missing_keys: Vec<&String> = expected_keys
+            .iter()
+            .filter(|key| !actual_keys.contains(*key))
+            .collect();
+        for key in &missing_keys {
+            let mut config: Value =
+                serde_json::from_str(&fs::read_to_string(base_config_ld_file.clone()).unwrap())?;
+            if let Some(value) = expected_config[key].as_str() {
+                if let Value::Object(ref mut obj) = config {
+                    obj.insert(key.to_string(), value.into());
+                }
+                fs::write(base_config_ld_file.clone(), config.to_string())?;
+            } else if let Some(value) = expected_config[key].as_bool() {
+                if let Value::Object(ref mut obj) = config {
+                    obj.insert(key.to_string(), value.into());
+                }
+                fs::write(base_config_ld_file.clone(), config.to_string())?;
+            }
+        }
+    }
+
     Ok(())
+}
+
+fn extract_keys(json: &Value) -> Vec<String> {
+    match json {
+        Value::Object(obj) => obj.keys().map(|s| s.to_string()).collect(),
+        _ => Vec::new(),
+    }
 }
 
 pub fn launcherdata_threads(window: tauri::Window) -> Result<(), std::io::Error> {
@@ -148,7 +188,7 @@ pub fn launcherdata_threads(window: tauri::Window) -> Result<(), std::io::Error>
                                         }
                                         _ => {}
                                     }
-                                }
+                                },
                                 EventType::KeyRelease(key) => unsafe {
                                     thread::sleep(time::Duration::from_millis(70));
                                     match key {
@@ -156,7 +196,7 @@ pub fn launcherdata_threads(window: tauri::Window) -> Result<(), std::io::Error>
                                         Key::ShiftLeft => SHIFTPRESSED = false,
                                         _ => {}
                                     }
-                                }
+                                },
                                 _ => {}
                             }
 
