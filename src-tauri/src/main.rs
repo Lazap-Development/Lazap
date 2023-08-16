@@ -37,6 +37,12 @@ fn main() {
         .add_item(quit);
     let tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
+        .on_window_event(move |event| match event.event() {
+            tauri::WindowEvent::Destroyed => {
+                std::process::exit(0);
+            }
+            _ => {}
+        })
         .setup(|app| {
             let window = app.get_window(&"main").unwrap();
             window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
@@ -120,6 +126,12 @@ fn main() {
         .add_item(quit);
     let tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
+        .on_window_event(move |event| match event.event() {
+            tauri::WindowEvent::Destroyed => {
+                std::process::exit(0);
+            }
+            _ => {}
+        })
         .setup(|app| {
             let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
@@ -201,6 +213,12 @@ fn main() {
         .add_item(quit);
     let tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
+        .on_window_event(move |event| match event.event() {
+            tauri::WindowEvent::Destroyed => {
+                std::process::exit(0);
+            }
+            _ => {}
+        })
         .setup(|app| {
             let window = app.get_window(&"main").unwrap();
             window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
@@ -419,7 +437,7 @@ async fn get_sys_info() -> Result<String, Error> {
     let converted_all_mem = data_all_mem / rate;
     let converted_used_disk = data_used_disk / rate2;
     let converted_all_disk = data_all_disk / rate2;
-    
+
     let mut cpu_info = "";
     for cpu in sys.cpus() {
         cpu_info = cpu.brand();
@@ -444,10 +462,10 @@ async fn get_sys_info() -> Result<String, Error> {
         system_kernel: sys.kernel_version().unwrap().to_string(),
         system_host: sys.host_name().unwrap().to_string(),
         disk_info: converted_used_disk.to_string()
-        + " GB"
-        + " / "
-        + &converted_all_disk.to_string()
-        + " GB"
+            + " GB"
+            + " / "
+            + &converted_all_disk.to_string()
+            + " GB",
     };
 
     Ok(format!(
