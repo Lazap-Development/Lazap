@@ -55,21 +55,27 @@ winget install LazapDevelopment.Lazap
 
 ## 👾 Development
 
-- Tauri **[Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites/)**
-- Node.JS `v18` or higher<br>
-- **[Yarn](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)** (recommended but not required)
-  
+Lazap is fully open-source and can be compiled from source.
+
+### Prerequisites
+- [Tauri Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites/)
+- [Latest Node.JS](https://nodejs.org/en)
+- [Yet Another Resource Negotiator](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)
+
+Once you have the above preqs, you may continue with the following:
+
 ```bash
 # clone this repo 
 git clone https://github.com/Lazap-Development/Lazap.git 
 # change current dir, install deps & serve
 cd Lazap && yarn install && yarn tauri:serve
 ```
-Be aware that for the first time it might take some hefty amount of time for things to compile.
 
 ## 📚 Help & Support
+**Have a question/problem?**<br>
 If you need assist or in need of technical support for your Lazap installation, feel free to file an [issue](https://github.com/Lazap-Development/lazap/issues) so we can assist you.<br><br>
-**Want to help out instead of getting help?** We love Pull Requests and Issue Hunters. Open up a PR and fix some gears, we would love the community's help to improve lazap and make it more user friendly.
+**Want to help out instead of getting help?** <br>
+Open a [Pull Request](https://github.com/Lazap-Development/Lazap/pulls) and fix some gears, we would love the community's help to improve lazap and make it more user friendly.
 
 ## ⁉️ FAQ
 
