@@ -16,6 +16,7 @@ use sysinfo::{CpuExt, System, SystemExt};
 use tauri::{
     CustomMenuItem, Manager, State, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
+use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
 const DISCORD_RPC_CLIENT_ID: &str = "932504287337148417";
 
@@ -220,8 +221,12 @@ fn main() {
             _ => {}
         })
         .setup(|app| {
-            let window = app.get_window(&"main").unwrap();
+            let window = app.get_window("main").unwrap();
+            apply_vibrancy(&window, NSVisualEffectMaterial::HudWindow, None, Some(15.0))
+                .expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
+
             window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
+
             let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
             modules::storage::launcherdata_threads(app.get_window("main").unwrap())
@@ -296,12 +301,12 @@ async fn parse(value: &str) -> Result<String, Error> {
 }
 
 #[tauri::command]
-async fn launch_game(exec: String, _args: String) {
+async fn launch_game(_exec: String, _args: String) {
     #[cfg(target_os = "windows")]
     use std::os::windows::process::CommandExt;
     #[cfg(target_os = "windows")]
     let child = std::process::Command::new("cmd")
-        .arg(exec)
+        .arg(_exec)
         .creation_flags(0x00000008)
         .spawn()
         .expect("failed to run");
@@ -309,7 +314,7 @@ async fn launch_game(exec: String, _args: String) {
     let _output = child.wait_with_output().expect("failed to wait on child");
 
     #[cfg(target_os = "linux")]
-    let child = std::process::Command::new(exec)
+    let child = std::process::Command::new(_exec)
         .arg(_args)
         .spawn()
         .expect("failed to run");

@@ -275,9 +275,9 @@ export default {
 
 <style>
 .leftbar {
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   border-radius: 20px;
-  width: 270px;
+  width: 280px;
   height: 100%;
   text-align: center;
   box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
@@ -341,10 +341,9 @@ export default {
 }
 
 .side-tab {
-  background-color: var(--allColorPrimary);
   box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.2);
   height: 40px;
-  width: 230px;
+  width: 240px;
   border-radius: 10px;
   display: flex;
   margin-bottom: 10px;
@@ -354,12 +353,12 @@ export default {
 
 .side-tab:before {
   background: linear-gradient(30deg,
-  var(--allColorPrimary) 0%,
-      var(--allColorPrimary) 30%,
-      var(--accentColor) 100%);
+  rgba(var(--all-color-primary), 0.3) 0%,
+      rgba(var(--all-color-primary), 0.3) 30%,
+      rgba(var(--accent-color), 0.7) 100%);
   content: "";
   height: 40px;
-  width: 230px;
+  width: 240px;
   border-radius: 10px;
   display: flex;
   margin-bottom: 10px;
@@ -413,7 +412,7 @@ export default {
   margin-top: 5px;
   margin-left: 2px;
 
-  background-color: var(--accentColor);
+  background-color: rgba(var(--accent-color), 0.7);
   height: 32px;
   width: 5px;
   border-radius: 50px;

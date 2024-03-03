@@ -10,13 +10,19 @@
     <div class="homebox" id="home">
       <div class="centerchildren">
         <div class="children fadeInUp">
-          <img class="head-pic" src="./assets/img/main-banner.png" id="head-pic" />
+          <img
+            class="head-pic"
+            src="./assets/img/main-banner.png"
+            id="head-pic"
+          />
         </div>
         <div class="children fadeInDown">
           <div class="jump-back">
             <p>Recently Launched</p>
-            <div id="recentGamesListMainPage" class="fadeInDown mainPageGamesList">
-            </div>
+            <div
+              id="recentGamesListMainPage"
+              class="fadeInDown mainPageGamesList"
+            ></div>
           </div>
         </div>
       </div>
@@ -46,7 +52,6 @@
         </div>
 
         <player-comp></player-comp>
-
       </div>
     </div>
 
@@ -73,7 +78,6 @@
     </div>
 
     <monitor-comp></monitor-comp>
-
 
     <div class="secondorybox" id="activity">
       <p>Overclock</p>
@@ -116,7 +120,7 @@ export default {
     "leftbar-comp": LeftBar,
     "find-games": findGames,
     "monitor-comp": MonitorTab,
-    "player-comp": MusicPlayer
+    "player-comp": MusicPlayer,
   },
   async mounted() {
     (async () => {
@@ -174,12 +178,18 @@ export default {
         );
         if (!accentColor) accentColor = "#7934FA";
         // document.getElementById("indicator").style.backgroundColor =
-        //   accentColor;
-        if (backgroundColor) document.querySelector(':root').style.setProperty('--allColorBack', backgroundColor);
-        if (primaryColor) document.querySelector(':root').style.setProperty('--allColorPrimary', primaryColor);
+        //   accent-color;
+        if (backgroundColor)
+          document
+            .querySelector(":root")
+            .style.setProperty("--all-color-back", backgroundColor);
+        if (primaryColor)
+          document
+            .querySelector(":root")
+            .style.setProperty("--all-color-primary", primaryColor);
         document
           .querySelector(":root")
-          .style.setProperty("--accentColor", accentColor);
+          .style.setProperty("--accent-color", accentColor);
       } catch (error) {
         console.error(error);
       }
@@ -301,9 +311,9 @@ export default {
             .remove();
           setTimeout(
             () =>
-            (document.getElementById(
-              "removeGame"
-            ).parentNode.parentNode.style = ""),
+              (document.getElementById(
+                "removeGame"
+              ).parentNode.parentNode.style = ""),
             200
           );
         });
@@ -322,15 +332,15 @@ export default {
 
 <style>
 :root {
-  --accentColor: rgb(121, 52, 250);
-  --allColorBack: rgb(20, 14, 36);
-  --allColorFront: rgb(42, 16, 81);
-  --allColorPrimary: #0c0b0e;
+  --accent-color: 121, 52, 250;
+  --all-color-back: 20, 14, 36;
+  --all-color-front: 42, 16, 81;
+  --all-color-primary: #0c0b0e;
 }
 
 ::selection {
   color: inherit !important;
-  background: var(--accentColor) !important;
+  background: rgba(var(--accent-color), 0.7) !important;
   border-radius: 10px;
 }
 
@@ -352,10 +362,12 @@ export default {
 html,
 body {
   zoom: 0.945;
-  background: var(--allColorBack);
+  background-color: rgba(var(--all-color-back), 0.1);
   font-family: Nunito;
   height: 100%;
   overflow: hidden;
+  border-radius: 15px;
+  margin: 0px;
 }
 
 #app {
@@ -369,7 +381,7 @@ body {
   flex-direction: row;
   margin-top: 100px;
   height: 100%;
-  margin: 6px;
+  margin: 12px;
   margin-top: 10px;
 }
 
@@ -389,7 +401,7 @@ body {
 .secondorybox {
   display: none;
 
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   border-radius: 20px;
 
   height: 100%;
@@ -434,7 +446,7 @@ body {
   height: 200px;
   margin-left: 170px;
   margin-top: 20px;
-  background-color: var(--allColorFront);
+  background-color: rgba(var(--all-color-front), 0.7);
   animation: gradient 20s infinite;
   display: none;
 
@@ -472,7 +484,7 @@ body {
   text-align: center;
   background-repeat: no-repeat;
   padding: 0;
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   transition: all 0.1s ease-in-out;
   z-index: 0;
 }
@@ -538,7 +550,7 @@ body {
   margin-top: 44px;
 
   padding: 5px;
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   color: rgb(180, 180, 180);
   border-radius: 8px;
   font-family: Nunito-Bold;
@@ -553,7 +565,7 @@ body {
   align-self: flex-start;
   margin-right: 20px;
   margin-top: 14px;
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   color: rgb(194, 194, 194);
   padding: 10px;
   border-radius: 12px;
@@ -592,7 +604,7 @@ body {
 }
 
 .jump-back {
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   width: 100%;
   height: 100% !important;
   border-radius: 20px;
@@ -615,7 +627,7 @@ body {
 }
 
 .rightbar {
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   height: 40%;
   border-radius: 20px;
   cursor: default;
@@ -718,22 +730,24 @@ body {
   border-radius: 12px;
   image-rendering: auto;
   object-fit: cover;
-  mask-image: -webkit-gradient(linear,
-      left 70%,
-      left bottom,
-      from(rgba(0, 0, 0, 1)),
-      to(rgba(0, 0, 0, 0)));
+  mask-image: -webkit-gradient(
+    linear,
+    left 70%,
+    left bottom,
+    from(rgba(0, 0, 0, 1)),
+    to(rgba(0, 0, 0, 0))
+  );
   content: url("./assets/img/default-game-banner.png");
 }
 
 .gamebox .gamebox-bottom {
   cursor: default;
   position: relative;
-  margin-top: -22%;
+  margin-top: -21%;
   width: 100%;
   height: 15%;
   position: absolute;
-  background-color: var(--allColorFront);
+  background-color: rgba(var(--all-color-front), 1.0);
   border-radius: 0px 0px 10px 10px;
 }
 
@@ -777,17 +791,19 @@ body {
   text-align: center;
   display: inline-block;
   border-radius: 14px;
-  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
   height: 61%;
   width: 17%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.5;
-  background-color: var(--accentColor);
-  mask-image: -webkit-gradient(linear,
-      right 90%,
-      left top,
-      from(rgba(0, 0, 0, 1)),
-      to(rgba(0, 0, 0, 0)));
+  background-color: rgba(var(--accent-color), 0.7);
+  mask-image: -webkit-gradient(
+    linear,
+    right 90%,
+    left top,
+    from(rgba(0, 0, 0, 1)),
+    to(rgba(0, 0, 0, 0))
+  );
 }
 
 .placeholderGames:nth-last-child(-n + 4) {
@@ -799,12 +815,12 @@ body {
   text-align: center;
   display: inline-block;
   border-radius: 14px;
-  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
   width: 16%;
   height: 61%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
-  border: solid var(--accentColor) 6px;
+  border: solid rgba(var(--accent-color), 0.7) 6px;
   background-position: 50% 40% !important;
 }
 
@@ -933,7 +949,7 @@ img,
   position: absolute;
   right: 20px;
   height: 90%;
-  background: var(--allColorBack);
+  background: rgba(var(--all-color-back), 0.7);
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;
   border-top-left-radius: 20px;
@@ -948,7 +964,7 @@ img,
   border-radius: 12px;
   font-size: 18px;
 
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   opacity: 0.9;
   width: 13.78rem;
   height: 50px;
@@ -1024,7 +1040,8 @@ img,
   height: 25px;
   width: 25px;
   display: flex;
-  filter: invert(12%) sepia(78%) saturate(4656%) hue-rotate(1deg) brightness(108%) contrast(128%);
+  filter: invert(12%) sepia(78%) saturate(4656%) hue-rotate(1deg)
+    brightness(108%) contrast(128%);
 }
 
 .alert-box-cross {
@@ -1038,7 +1055,8 @@ img,
 }
 
 .alert-box-cross:hover {
-  filter: invert(21%) sepia(70%) saturate(3776%) hue-rotate(255deg) brightness(97%) contrast(101%);
+  filter: invert(21%) sepia(70%) saturate(3776%) hue-rotate(255deg)
+    brightness(97%) contrast(101%);
 }
 
 .alert-box-divider {
@@ -1077,7 +1095,7 @@ img,
 .search-bar input {
   width: 100%;
   height: 100%;
-  background-color: var(--allColorFront);
+  background-color: rgba(var(--all-color-front), 0.7);
   border-radius: 10px;
   font-family: Nunito;
   font-size: 16px;
@@ -1092,7 +1110,7 @@ img,
 }
 
 .search-bar input::selection {
-  color: var(--accentColor);
+  color: rgba(var(--all-color-back), 0.7);
   background: rgb(255, 255, 255);
 }
 
@@ -1104,7 +1122,7 @@ img,
 }
 
 .search-bar input:focus {
-  border: 4px solid var(--accentColor);
+  border: 4px solid rgba(var(--all-color-back), 0.7);
   animation-name: searchbox;
   animation-duration: 0.3s;
   animation-fill-mode: both;
@@ -1117,7 +1135,8 @@ img,
 .repeatButton {
   height: 40px;
   width: 40px;
-  filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
+  filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg)
+    brightness(108%) contrast(108%);
 }
 
 .repeatButton:hover {
@@ -1221,7 +1240,6 @@ img,
 }
 
 @keyframes shake {
-
   10%,
   90% {
     transform: translate3d(-1px, 0, 0);

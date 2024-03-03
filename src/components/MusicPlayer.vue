@@ -125,7 +125,7 @@ export default {
                 time += 1000
                 document.getElementById("music-slider").value = percentage;
                 let slider = document.getElementById("music-slider");
-                slider.style.background = `linear-gradient(to right, var(--accentColor) 0%, var(--accentColor) ${(slider.value - slider.min) / (slider.max - slider.min) * 100}%, white ${(slider.value - slider.min) / (slider.max - slider.min) * 100}%, white 100%)`;
+                slider.style.background = `linear-gradient(to right, rgba(var(--accent-color), 0.7) 0%, rgba(var(--accent-color), 0.7) ${(slider.value - slider.min) / (slider.max - slider.min) * 100}%, white ${(slider.value - slider.min) / (slider.max - slider.min) * 100}%, white 100%)`;
                 let event = new Event("change");
                 slider.dispatchEvent(event);
             } else {
@@ -147,7 +147,7 @@ export default {
         }
 
         // document.getElementById("music-slider").onchange = function () {
-        //    this.style.background = `linear-gradient(to right, var(--accentColor) 0%, var(--accentColor) ${(this.value - this.min) / (this.max - this.min) * 100}%, white ${(this.value - this.min) / (this.max - this.min) * 100}%, white 100%)`
+        //    this.style.background = `linear-gradient(to right, rgba(var(--accent-color), 0.7) 0%, rgba(var(--accent-color), 0.7) ${(this.value - this.min) / (this.max - this.min) * 100}%, white ${(this.value - this.min) / (this.max - this.min) * 100}%, white 100%)`
         //};
     }
 }
@@ -171,7 +171,7 @@ export default {
 .rightbar .musicPlayer .bkg {
     height: 100%;
     width: 100%;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, var(--accentColor) 90%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(var(--accent-color), 0.7) 90%);
     overflow: hidden;
     border-radius: 15px;
     display: flex;
@@ -198,7 +198,7 @@ export default {
     width: 80px;
     height: 80px;
     border-radius: 10px;
-    background: linear-gradient(360deg, rgba(0, 0, 0, 0.4) 0%, var(--accentColor) 90%);
+    background: linear-gradient(360deg, rgba(0, 0, 0, 0.4) 0%, rgba(var(--accent-color), 0.7) 90%);
     background-size: 100% auto !important;
     margin: 0;
     display: flex;
@@ -256,7 +256,7 @@ export default {
     height: 14px;
     background-color: #ffffff67;
     text-decoration: none;
-    border: 4px solid var(--accentColor);
+    border: 4px solid rgba(var(--accent-color), 0.7);
     margin: 3px;
     box-shadow:
         0px 5px 10px rgba(0, 0, 0, 0.35),
@@ -321,6 +321,6 @@ export default {
     border-radius: 10px;
     background-color: #2c2c2c;
     backdrop-filter: blur(12px) !important;
-    border: 4px solid var(--accentColor);
+    border: 4px solid rgba(var(--accent-color), 0.7);
 }
 </style>

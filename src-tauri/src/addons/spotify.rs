@@ -1,6 +1,6 @@
 use actix_web::rt::net::TcpListener;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
-use base64;
+use base64::{Engine as _, engine::{self, general_purpose}, alphabet};
 use rand::{self, Rng};
 use reqwest::{Client, Url};
 use serde::Deserialize;
@@ -13,6 +13,9 @@ static mut AVOID_SPAWN: bool = false;
 
 static mut ACCESS_TOKEN: Option<String> = None;
 static mut EXTERNAL_WINDOW: Option<Window> = None;
+
+const CUSTOM_ENGINE: engine::GeneralPurpose =
+engine::GeneralPurpose::new(&alphabet::URL_SAFE, general_purpose::NO_PAD);
 
 #[actix_web::main]
 pub async fn main() -> std::io::Result<()> {
@@ -76,7 +79,7 @@ async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
             reqwest::header::AUTHORIZATION,
             format!(
                 "Basic {}",
-                base64::encode(format!("{}:{}", unsafe { SPOTIFY_CLIENT_ID }, unsafe { SPOTIFY_CLIENT_SECRET }))
+                CUSTOM_ENGINE.encode(format!("{}:{}", unsafe { SPOTIFY_CLIENT_ID }, unsafe { SPOTIFY_CLIENT_SECRET }))
             ),
         )
         .header(

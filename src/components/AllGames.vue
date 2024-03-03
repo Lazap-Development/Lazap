@@ -184,7 +184,7 @@ export default {
   align-self: flex-start;
   margin-right: 20px;
   margin-top: 10px;
-  background-color: var(--accentColor);
+  background-color: rgba(var(--accent-color), 1.0);
   color: rgb(255, 255, 255);
   border-radius: 12px;
   font-family: Nunito-ExtraBold;

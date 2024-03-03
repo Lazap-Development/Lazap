@@ -55,7 +55,7 @@ pub fn init_storage() -> Result<(), std::io::Error> {
         \"tray_min_launch\": true, 
         \"tray_min_quit\": false, 
         \"check_for_updates\": true, 
-        \"accentColor\": \"#7934FA\",
+        \"accent-color\": \"#7934FA\",
         \"frontColor\": \"#2a1051\",
         \"backgroundColor\": \"#140e24\",
         \"primaryColor\": \"#0c0b0e\"

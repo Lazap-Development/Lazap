@@ -64,6 +64,32 @@ async function getSteamLocation() {
     launcher_location = toArray.map((item) => {
       return item[1].path;
     });
+  } else if ((await os.platform()) === "darwin") {
+    const homedir = await path.homeDir();
+    console.log(homedir);
+    try {
+      await invoke("read_file", {
+        filePath:
+          homedir +
+          `Library/Application Support/Steam/steamapps/libraryfolders.vdf`,
+      });
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+
+    const text = await invoke("read_file", {
+      filePath:
+        homedir +
+        `Library/Application Support/Steam/steamapps/libraryfolders.vdf`,
+    });
+    if (text.length === 0) return (launcher_location = []);
+    const VDF = require("../modules/parseVDF");
+    const parsed = VDF.parse(text);
+    const toArray = Object.entries(parsed.libraryfolders);
+    launcher_location = toArray.map((item) => {
+      return item[1].path;
+    });
   }
 
   for (const path of launcher_location) {
@@ -85,17 +111,20 @@ async function getInstalledGames() {
   let allGames = [];
 
   for (const location of path) {
-
     let acf_basePath;
     if ((await os.platform()) === "win32") {
       acf_basePath = `${location}\\steamapps`;
     } else if ((await os.platform()) === "linux") {
       acf_basePath = `${location}/steamapps`;
+    } else if ((await os.platform()) === "darwin") {
+      acf_basePath = `${location}/steamapps`;
     }
-    
+
     if (!(await invoke("d_f_exists", { path: acf_basePath }))) continue;
 
-    const readDirOfBasePath = await invoke("read_dir", { dirPath: acf_basePath });
+    const readDirOfBasePath = await invoke("read_dir", {
+      dirPath: acf_basePath,
+    });
 
     const acf_files = await Promise.all(
       readDirOfBasePath
