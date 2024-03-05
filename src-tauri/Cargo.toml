@@ -31,6 +31,7 @@ reqwest = { version = "0.11" }
 actix-web = { version = "4.3.1" }
 rdev = "0.5.3"
 window-vibrancy = "0.4.0"
+keyvalues-serde = "0.2.1"
 
 [dependencies.tauri-plugin-sql]
 git = "https://github.com/tauri-apps/plugins-workspace"

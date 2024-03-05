@@ -2,6 +2,7 @@
 
 mod addons;
 mod modules;
+mod launchers;
 
 use declarative_discord_rich_presence::activity::Activity;
 use declarative_discord_rich_presence::activity::Assets;
@@ -360,37 +361,37 @@ async fn show_window(window: tauri::Window) {
 }
 
 #[tauri::command]
-async fn read_file(file_path: String) -> Result<String, Error> {
+fn read_file(file_path: String) -> Result<String, Error> {
     Ok(fs::read_to_string(file_path).unwrap())
 }
 
 #[tauri::command]
-async fn write_file(file_path: String, file_content: String) {
+fn write_file(file_path: String, file_content: String) {
     fs::write(file_path, file_content).expect("Unable to write file.");
 }
 
 #[tauri::command]
-async fn write_binary_file(file_path: String, file_content: Vec<u8>) {
+fn write_binary_file(file_path: String, file_content: Vec<u8>) {
     fs::write(file_path, file_content).expect("Unable to write file.");
 }
 
 #[tauri::command]
-async fn d_f_exists(path: String) -> Result<bool, Error> {
+fn d_f_exists(path: &str) -> Result<bool, Error> {
     Ok(Path::new(&path).exists())
 }
 
 #[tauri::command]
-async fn rename_file(from: String, to: String) {
+fn rename_file(from: String, to: String) {
     fs::rename(from, to).expect("Unable to rename file.");
 }
 
 #[tauri::command]
-async fn remove_file(file_path: String) {
+fn remove_file(file_path: String) {
     fs::remove_file(file_path).expect("Unable to remove file.");
 }
 
 #[tauri::command]
-async fn read_dir(dir_path: String) -> Vec<String> {
+fn read_dir(dir_path: String) -> Vec<String> {
     let mut file_list = Vec::new();
     for entry in fs::read_dir(dir_path).unwrap() {
         let entry = entry.unwrap();
