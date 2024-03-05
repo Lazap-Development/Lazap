@@ -55,10 +55,10 @@ pub fn init_storage() -> Result<(), std::io::Error> {
         \"tray_min_launch\": true, 
         \"tray_min_quit\": false, 
         \"check_for_updates\": true, 
-        \"accent-color\": \"#7934FA\",
-        \"frontColor\": \"#2a1051\",
-        \"backgroundColor\": \"#140e24\",
-        \"primaryColor\": \"#0c0b0e\"
+        \"accentColor\": \"121, 52, 250\",
+        \"frontColor\": \"42, 16, 81\",
+        \"backgroundColor\": \"20, 14, 36\",
+        \"primaryColor\": \"12, 11, 14\"
     }";
 
     create_file_if_not_exists(&base_config_ld_file, json_content)?;

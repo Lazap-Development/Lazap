@@ -17,6 +17,8 @@ use sysinfo::{CpuExt, System, SystemExt};
 use tauri::{
     CustomMenuItem, Manager, State, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
+
+#[cfg(any(target_os = "macos", target_os = "windows"))]
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
 const DISCORD_RPC_CLIENT_ID: &str = "932504287337148417";

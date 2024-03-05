@@ -289,9 +289,15 @@ export default {
     document.querySelectorAll("input[id^=setting-]").forEach((input) => {
       if (input.id === "setting-accentColor") {
         input.addEventListener("input", async () => {
-          LauncherData[input.id.split("-")[1]] = document.querySelector(
-            `input[id=${input.id}]`
-          ).value;
+          let hexValue = document.querySelector(`input[id=${input.id}]`).value;
+          LauncherData[input.id.split("-")[1]] = `${parseInt(
+            hexValue.substr(1, 2),
+            16
+          )}, ${parseInt(hexValue.substr(3, 2), 16)},${parseInt(
+            hexValue.substr(5, 2),
+            16
+          )}`;
+
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
@@ -302,9 +308,15 @@ export default {
         return;
       } else if (input.id === "setting-backgroundColor") {
         input.addEventListener("input", async () => {
-          LauncherData[input.id.split("-")[1]] = document.querySelector(
-            `input[id=${input.id}]`
-          ).value;
+          let hexValue = document.querySelector(`input[id=${input.id}]`).value;
+          LauncherData[input.id.split("-")[1]] = `${parseInt(
+            hexValue.substr(1, 2),
+            16
+          )}, ${parseInt(hexValue.substr(3, 2), 16)},${parseInt(
+            hexValue.substr(5, 2),
+            16
+          )}`;
+
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
@@ -315,9 +327,15 @@ export default {
         return;
       } else if (input.id === "setting-frontColor") {
         input.addEventListener("input", async () => {
-          LauncherData[input.id.split("-")[1]] = document.querySelector(
-            `input[id=${input.id}]`
-          ).value;
+          let hexValue = document.querySelector(`input[id=${input.id}]`).value;
+          LauncherData[input.id.split("-")[1]] = `${parseInt(
+            hexValue.substr(1, 2),
+            16
+          )}, ${parseInt(hexValue.substr(3, 2), 16)},${parseInt(
+            hexValue.substr(5, 2),
+            16
+          )}`;
+
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
@@ -328,9 +346,15 @@ export default {
         return;
       } else if (input.id === "setting-primaryColor") {
         input.addEventListener("input", async () => {
-          LauncherData[input.id.split("-")[1]] = document.querySelector(
-            `input[id=${input.id}]`
-          ).value;
+          let hexValue = document.querySelector(`input[id=${input.id}]`).value;
+          LauncherData[input.id.split("-")[1]] = `${parseInt(
+            hexValue.substr(1, 2),
+            16
+          )}, ${parseInt(hexValue.substr(3, 2), 16)},${parseInt(
+            hexValue.substr(5, 2),
+            16
+          )}`;
+
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
