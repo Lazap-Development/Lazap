@@ -18,7 +18,7 @@ async function getSteamLocation() {
       "InstallPath",
     ]).execute();
     if (!output.stdout) return [];
-    else {
+
       registry_res = output.stdout;
       const steamDir = registry_res
         .split("REG_SZ")[1]
@@ -42,7 +42,7 @@ async function getSteamLocation() {
       launcher_location = toArray.map((item) => {
         return item[1].path;
       });
-    }
+
   } else if ((await os.platform()) === "linux") {
     const homedir = await path.homeDir();
     try {
