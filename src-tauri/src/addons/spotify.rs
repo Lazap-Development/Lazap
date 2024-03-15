@@ -1,13 +1,17 @@
 use actix_web::rt::net::TcpListener;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
-use base64::{Engine as _, engine::{self, general_purpose}, alphabet};
+use base64::{
+    alphabet,
+    engine::{self, general_purpose},
+    Engine as _,
+};
 use rand::{self, Rng};
 use reqwest::{Client, Url};
 use serde::Deserialize;
 use tauri::{Manager, Window};
 
-static mut SPOTIFY_CLIENT_ID: &str = "";
-static mut SPOTIFY_CLIENT_SECRET: &str = "";
+static mut SPOTIFY_CLIENT_ID: &str = "da0205ce23514463901a3403589a3a52";
+static mut SPOTIFY_CLIENT_SECRET: &str = "1df3953413df4adb890e5af7fdb74975";
 
 static mut AVOID_SPAWN: bool = false;
 
@@ -15,14 +19,11 @@ static mut ACCESS_TOKEN: Option<String> = None;
 static mut EXTERNAL_WINDOW: Option<Window> = None;
 
 const CUSTOM_ENGINE: engine::GeneralPurpose =
-engine::GeneralPurpose::new(&alphabet::URL_SAFE, general_purpose::NO_PAD);
+    engine::GeneralPurpose::new(&alphabet::URL_SAFE, general_purpose::NO_PAD);
 
 #[actix_web::main]
 pub async fn main() -> std::io::Result<()> {
     unsafe {
-        SPOTIFY_CLIENT_ID = env!("SPOTIFY_CLIENT_ID");
-        SPOTIFY_CLIENT_SECRET = env!("SPOTIFY_CLIENT_SECRET");
-
         if SPOTIFY_CLIENT_ID.is_empty() || SPOTIFY_CLIENT_SECRET.is_empty() {
             println!(
                 "{}",
@@ -79,7 +80,9 @@ async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
             reqwest::header::AUTHORIZATION,
             format!(
                 "Basic {}",
-                CUSTOM_ENGINE.encode(format!("{}:{}", unsafe { SPOTIFY_CLIENT_ID }, unsafe { SPOTIFY_CLIENT_SECRET }))
+                CUSTOM_ENGINE.encode(format!("{}:{}", unsafe { SPOTIFY_CLIENT_ID }, unsafe {
+                    SPOTIFY_CLIENT_SECRET
+                }))
             ),
         )
         .header(

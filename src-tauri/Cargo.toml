@@ -30,6 +30,7 @@ declarative-discord-rich-presence = { git = "https://github.com/KPidS/declarativ
 reqwest = { version = "0.11" }
 actix-web = { version = "4.3.1" }
 rdev = "0.5.3"
+keyvalues-serde = "0.2.1"
 
 [dependencies.tauri-plugin-sql]
 git = "https://github.com/tauri-apps/plugins-workspace"
@@ -40,8 +41,8 @@ features = ["sqlite"]
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v1"
 
-[target.'cfg(any(macos, windows))'.dependencies]
-window-vibrancy = "0.4.0"
+[target.'cfg(any(target_os = "macos", target_os = "windows"))'.dependencies]
+window-vibrancy = "0.4.3"
 
 [target.'cfg(unix)'.dependencies]
 openssl = { version = "0.10.60", features = ["vendored"] }

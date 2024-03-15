@@ -1,6 +1,7 @@
 #![windows_subsystem = "windows"]
 
 mod addons;
+mod launchers;
 mod modules;
 
 use declarative_discord_rich_presence::activity::Activity;
@@ -104,6 +105,8 @@ fn main() {
             sha256,
             // Storage Module
             modules::storage::launcherdata_threads_x,
+            // Launchers
+            launchers::fetch_installed_games,
             // Spotify Addon
             addons::spotify::spotify_login,
             addons::spotify::spotify_connect,
@@ -192,6 +195,8 @@ fn main() {
             sha256,
             // Storage Module
             modules::storage::launcherdata_threads_x,
+            // Launchers
+            launchers::fetch_installed_games,
             // Spotify Addon
             addons::spotify::spotify_login,
             addons::spotify::spotify_connect,
@@ -207,6 +212,7 @@ fn main() {
 
 #[cfg(target_os = "macos")]
 fn main() {
+    launchers::steam::get_installed_games();
     modules::storage::init_storage().expect("Failed to init storage fn.");
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
@@ -284,6 +290,8 @@ fn main() {
             sha256,
             // Storage Module
             modules::storage::launcherdata_threads_x,
+            // Launchers
+            launchers::fetch_installed_games,
             // Spotify Addon
             addons::spotify::spotify_login,
             addons::spotify::spotify_connect,
@@ -362,37 +370,37 @@ async fn show_window(window: tauri::Window) {
 }
 
 #[tauri::command]
-async fn read_file(file_path: String) -> Result<String, Error> {
+fn read_file(file_path: String) -> Result<String, Error> {
     Ok(fs::read_to_string(file_path).unwrap())
 }
 
 #[tauri::command]
-async fn write_file(file_path: String, file_content: String) {
+fn write_file(file_path: String, file_content: String) {
     fs::write(file_path, file_content).expect("Unable to write file.");
 }
 
 #[tauri::command]
-async fn write_binary_file(file_path: String, file_content: Vec<u8>) {
+fn write_binary_file(file_path: String, file_content: Vec<u8>) {
     fs::write(file_path, file_content).expect("Unable to write file.");
 }
 
 #[tauri::command]
-async fn d_f_exists(path: String) -> Result<bool, Error> {
+fn d_f_exists(path: &str) -> Result<bool, Error> {
     Ok(Path::new(&path).exists())
 }
 
 #[tauri::command]
-async fn rename_file(from: String, to: String) {
+fn rename_file(from: String, to: String) {
     fs::rename(from, to).expect("Unable to rename file.");
 }
 
 #[tauri::command]
-async fn remove_file(file_path: String) {
+fn remove_file(file_path: String) {
     fs::remove_file(file_path).expect("Unable to remove file.");
 }
 
 #[tauri::command]
-async fn read_dir(dir_path: String) -> Vec<String> {
+fn read_dir(dir_path: &str) -> Vec<String> {
     let mut file_list = Vec::new();
     for entry in fs::read_dir(dir_path).unwrap() {
         let entry = entry.unwrap();

@@ -1,0 +1,251 @@
+use crate::{d_f_exists, launchers::GameObject, read_dir, read_file};
+
+use serde::{Deserialize, Deserializer};
+use std::{collections::HashMap, fmt};
+
+#[cfg(target_os = "windows")]
+use std::process::Command;
+
+use tauri::api::path;
+
+fn blacklist_appid() -> Vec<i32> {
+    return vec![
+        228980, 231350, 1493710, 1391110, 1070560, 1826330, 1113280, 1245040, 1420170, 1580130,
+        1887720, 1628350, 2348590, 2180100,
+    ];
+}
+
+struct LibraryFolders {
+    folders: HashMap<String, Folder>,
+}
+
+#[derive(Deserialize)]
+struct Folder {
+    path: String,
+}
+
+#[cfg(target_os = "macos")]
+#[derive(Deserialize, Debug)]
+struct AppState {
+    appid: String,
+    name: String,
+    #[serde(rename = "SizeOnDisk")]
+    size_on_disk: String,
+    installdir: String,
+}
+
+#[cfg(target_os = "windows")]
+#[derive(Deserialize, Debug)]
+struct AppState {
+    appid: String,
+    name: String,
+    #[serde(rename = "SizeOnDisk")]
+    size_on_disk: String,
+    #[serde(rename = "LauncherExe")]
+    launcherexe: String,
+    #[serde(rename = "LauncherPath")]
+    launcherpath: String,
+}
+
+#[cfg(target_os = "linux")]
+#[derive(Deserialize, Debug)]
+struct AppState {
+    appid: String,
+    name: String,
+    #[serde(rename = "SizeOnDisk")]
+    size_on_disk: String,
+}
+
+impl<'de> Deserialize<'de> for LibraryFolders {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct LibraryFoldersVisitor;
+
+        impl<'de> serde::de::Visitor<'de> for LibraryFoldersVisitor {
+            type Value = LibraryFolders;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+                formatter.write_str("struct LibraryFolders")
+            }
+
+            fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
+            where
+                A: serde::de::MapAccess<'de>,
+            {
+                let mut folders = HashMap::new();
+                while let Some((key, value)) = map.next_entry::<String, Folder>()? {
+                    folders.insert(key, value);
+                }
+                Ok(LibraryFolders { folders })
+            }
+        }
+
+        deserializer.deserialize_map(LibraryFoldersVisitor)
+    }
+}
+
+pub fn get_installed_games() -> Vec<GameObject> {
+    let mut all_games: Vec<GameObject> = Vec::new();
+
+    let paths: Vec<String> = get_steam_location();
+    if paths.is_empty() {
+        return vec![];
+    }
+
+    for path in paths {
+        #[cfg(target_os = "windows")]
+        let acf_base_path = format!("{}\\steamapps", path);
+
+        #[cfg(target_os = "linux")]
+        let acf_base_path = format!("{}/steamapps", path);
+
+        #[cfg(target_os = "macos")]
+        let acf_base_path = format!("{}/steamapps", path);
+
+        if !d_f_exists(&acf_base_path).unwrap() {
+            continue;
+        }
+
+        let base_path_content = read_dir(&acf_base_path);
+
+        let acf_files: Vec<String> = base_path_content
+            .into_iter()
+            .filter(|filename| filename.ends_with(".acf"))
+            .collect();
+
+        for acf_file in acf_files {
+            let game_file: String = read_file(format!("{}/{}", acf_base_path, acf_file)).unwrap();
+            let game_file_parsed: AppState = keyvalues_serde::from_str(&game_file).unwrap();
+
+            if blacklist_appid()
+                .iter()
+                .any(|&item: &i32| item == game_file_parsed.appid.parse::<i32>().unwrap())
+            {
+                continue;
+            }
+
+            let mut temp_all_games: Vec<GameObject> = Vec::new();
+
+            #[cfg(target_os = "macos")]
+            temp_all_games.push(GameObject::new(
+                "".to_string(),
+                game_file_parsed.installdir.to_string(),
+                game_file_parsed.name,
+                game_file_parsed.appid.parse().unwrap(),
+                0,
+                game_file_parsed.size_on_disk.parse().unwrap(),
+                "".to_string(),
+                "Steam".to_string(),
+                vec![],
+            ));
+
+            #[cfg(target_os = "windows")]
+            temp_all_games.push(GameObject::new(
+                game_file_parsed.launcherexe.to_string(),
+                game_file_parsed.launcherpath.to_string(),
+                game_file_parsed.name,
+                game_file_parsed.appid.parse().unwrap(),
+                0,
+                game_file_parsed.size_on_disk.parse().unwrap(),
+                "".to_string(),
+                "Steam".to_string(),
+                vec![],
+            ));
+
+            #[cfg(target_os = "linux")]
+            temp_all_games.push(GameObject::new(
+                "".to_string(),
+                "".to_string(),
+                game_file_parsed.name,
+                game_file_parsed.appid.parse().unwrap(),
+                0,
+                game_file_parsed.size_on_disk.parse().unwrap(),
+                "".to_string(),
+                "Steam".to_string(),
+                vec![],
+            ));
+
+            for game in temp_all_games {
+                if !all_games
+                    .iter()
+                    .any(|obj| obj.display_name == game.display_name)
+                {
+                    all_games.push(game);
+                }
+            }
+        }
+    }
+
+    return all_games;
+}
+
+fn get_steam_location() -> Vec<String> {
+    let mut launcher_location: Vec<String> = Vec::new();
+    #[cfg(all(target_os = "windows", target_arch = "x86_64"))]
+    let output = Command::new("cmd")
+        .args(&[
+            "/C",
+            "Reg",
+            "Query",
+            "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Valve\\Steam",
+            "/v",
+            "InstallPath",
+        ])
+        .output()
+        .expect("failed to execute process.");
+
+    #[cfg(all(target_os = "windows", target_arch = "x86"))]
+    let output = Command::new("cmd")
+        .args(&[
+            "/C",
+            "Reg",
+            "Query",
+            "HKEY_LOCAL_MACHINE\\SOFTWARE\\Valve\\Steam",
+            "/v",
+            "InstallPath",
+        ])
+        .output()
+        .expect("failed to execute process.");
+
+    #[cfg(target_os = "windows")]
+    if output.stdout.is_empty() {
+        return vec![];
+    }
+
+    #[cfg(target_os = "windows")]
+    let path = String::from_utf8_lossy(&output.stdout);
+
+    #[cfg(target_os = "linux")]
+    let path: String = path::home_dir()
+        .unwrap()
+        .into_os_string()
+        .into_string()
+        .unwrap()
+        + "/.steam/steam/steamapps/libraryfolders.vdf";
+
+    #[cfg(target_os = "macos")]
+    let path: String = path::home_dir()
+        .unwrap()
+        .into_os_string()
+        .into_string()
+        .unwrap()
+        + "/Library/Application Support/Steam/steamapps/libraryfolders.vdf";
+
+    if d_f_exists(&path).expect("Something went wrong") {
+        let vdf_file = read_file(path).unwrap();
+        if vdf_file.is_empty() {
+            return vec![];
+        };
+
+        let parsed: LibraryFolders = keyvalues_serde::from_str(&vdf_file).unwrap();
+        for (_, folder) in parsed.folders.iter() {
+            launcher_location.push(folder.path.clone());
+        }
+    } else {
+        return vec![];
+    }
+
+    launcher_location
+}

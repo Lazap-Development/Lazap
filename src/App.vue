@@ -124,6 +124,8 @@ export default {
   },
   async mounted() {
     (async () => {
+      const findGamesModule = this.$root.$refs.findGamesMod;
+
       const searchbars = document.querySelectorAll(
         'div.search-bar > input[type="text"]'
       );
@@ -150,6 +152,12 @@ export default {
       document
         .getElementById("cpu")
         .insertAdjacentText("beforeend", sysInfoInvoke.cpu);
+
+      await findGamesModule
+        .loadGames("recentGamesListMainPage")
+        .catch((err) => {
+          return console.error(err);
+        });
 
       event.listen("tauri://update-available", async () => {
         try {
@@ -193,33 +201,6 @@ export default {
       } catch (error) {
         console.error(error);
       }
-
-      const allGames = await this.$refs.findGamesMod
-        .getInstalledGames()
-        .catch((err) => {
-          return console.error(err);
-        });
-
-      await this.$refs.findGamesMod
-        .loadGames("recentGamesListMainPage", allGames)
-        .catch((err) => {
-          return console.error(err);
-        });
-      await this.$refs.findGamesMod
-        .loadGames("recentGamesList", allGames)
-        .catch((err) => {
-          return console.error(err);
-        });
-      await this.$refs.findGamesMod
-        .loadGames("allGamesList", allGames)
-        .catch((err) => {
-          return console.error(err);
-        });
-      await this.$refs.findGamesMod
-        .loadGames("favGamesList", allGames)
-        .catch((err) => {
-          return console.error(err);
-        });
 
       document
         .getElementById("text")
@@ -335,7 +316,7 @@ export default {
   --accent-color: 121, 52, 250;
   --all-color-back: 20, 14, 36;
   --all-color-front: 42, 16, 81;
-  --all-color-primary: #0c0b0e;
+  --all-color-primary: 12, 11, 14;
 }
 
 ::selection {
@@ -747,7 +728,7 @@ body {
   width: 100%;
   height: 15%;
   position: absolute;
-  background-color: rgba(var(--all-color-front), 1.0);
+  background-color: rgba(var(--all-color-front), 1);
   border-radius: 0px 0px 10px 10px;
 }
 
@@ -1122,7 +1103,7 @@ img,
 }
 
 .search-bar input:focus {
-  border: 4px solid rgba(var(--all-color-back), 0.7);
+  border: 4px solid rgba(var(--accent-color), 1);
   animation-name: searchbox;
   animation-duration: 0.3s;
   animation-fill-mode: both;
