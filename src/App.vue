@@ -1103,7 +1103,7 @@ img,
 }
 
 .search-bar input:focus {
-  border: 4px solid rgba(var(--accent-color), 1);
+  border: 4px solid rgba(var(--accent-color), 1.0);
   animation-name: searchbox;
   animation-duration: 0.3s;
   animation-fill-mode: both;

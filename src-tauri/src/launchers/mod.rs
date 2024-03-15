@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 pub struct GameObject {
     executable: String,
     location: String,
-    display_name: String,
+    pub display_name: String,
     game_id: String,
     launch_id: i32,
     size: i64,
