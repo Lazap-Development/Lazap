@@ -3,6 +3,7 @@ use std::process::Command;
 
 #[cfg(target_os = "windows")]
 use std::str;
+use std::os::windows::process::CommandExt;
 
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 use tauri::api::path;
@@ -20,6 +21,9 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 }
 
 async fn get_minecraft_launcher() -> Option<GameObject> {
+    #[cfg(any(target_os = "macos"))]
+    return None;
+    
     #[cfg(target_os = "windows")]
     {
         let output = Command::new("cmd")
@@ -29,6 +33,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
                 "query",
                 "HKEY_CLASSES_ROOT\\Applications\\MinecraftLauncher.exe",
             ])
+            .creation_flags(0x08000000)
             .output()
             .ok()?;
 
@@ -74,6 +79,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
                     "Get-appxpackage",
                     "Microsoft.4297127D64EC6",
                 ])
+                .creation_flags(0x08000000)
                 .output()
                 .ok()?
                 .stdout;

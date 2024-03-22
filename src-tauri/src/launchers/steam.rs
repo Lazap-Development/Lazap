@@ -5,6 +5,7 @@ use std::{collections::HashMap, fmt};
 
 #[cfg(target_os = "windows")]
 use std::process::Command;
+use std::os::windows::process::CommandExt;
 
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 use tauri::api::path;
@@ -194,6 +195,7 @@ async fn get_steam_location() -> Vec<String> {
             "/v",
             "InstallPath",
         ])
+        .creation_flags(0x08000000)
         .output()
         .expect("failed to execute process.");
 
@@ -207,6 +209,7 @@ async fn get_steam_location() -> Vec<String> {
             "/v",
             "InstallPath",
         ])
+        .creation_flags(0x08000000)
         .output()
         .expect("failed to execute process.");
 

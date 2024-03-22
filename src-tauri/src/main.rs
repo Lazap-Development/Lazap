@@ -1,7 +1,4 @@
-#![cfg_attr(
-    all(not(debug_assertions), target_os = "windows"),
-    windows_subsystem = "windows"
-)]
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod addons;
 mod launchers;
@@ -215,7 +212,7 @@ fn main() {
 #[cfg(target_os = "macos")]
 fn main() {
     modules::storage::init_storage().expect("Failed to init storage fn.");
-    
+
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()
