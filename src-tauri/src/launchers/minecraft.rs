@@ -121,7 +121,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
                 .into_string()
                 .unwrap();
 
-            if !d_f_exists(&format!("{}/.minecraft", home_dir)).unwrap() {
+            if !d_f_exists(&format!("{}/.minecraft", home_dir)).await.unwrap() {
                 return None;
             }
 

@@ -31,11 +31,6 @@ actix-web = { version = "4.3.1" }
 rdev = "0.5.3"
 keyvalues-serde = "0.2.1"
 
-[dependencies.tauri-plugin-sql]
-git = "https://github.com/tauri-apps/plugins-workspace"
-branch = "v1"
-features = ["sqlite"]
-
 [dependencies.tauri-plugin-single-instance]
 git = "https://github.com/tauri-apps/plugins-workspace"
 branch = "v1"
