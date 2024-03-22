@@ -1,4 +1,7 @@
-#![windows_subsystem = "windows"]
+#![cfg_attr(
+    all(not(debug_assertions), target_os = "windows"),
+    windows_subsystem = "windows"
+)]
 
 mod addons;
 mod launchers;
@@ -18,9 +21,6 @@ use tauri::{
     CustomMenuItem, Manager, State, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
 
-#[cfg(any(target_os = "macos", target_os = "windows"))]
-use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
-
 const DISCORD_RPC_CLIENT_ID: &str = "932504287337148417";
 
 #[derive(Clone, serde::Serialize)]
@@ -31,6 +31,7 @@ struct Payload {
 
 #[cfg(target_os = "windows")]
 fn main() {
+    launchers::fetch_installed_games();
     modules::storage::init_storage().expect("Failed to init storage fn.");
 
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
@@ -49,6 +50,9 @@ fn main() {
         })
         .setup(|app| {
             let window = app.get_window(&"main").unwrap();
+            window_vibrancy::apply_acrylic(&window, Some((0, 0, 0, 25)))
+                .expect("Unsupported platform! 'apply_acrylic' is only supported on Windows 10/11");
+
             window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
             let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
@@ -230,8 +234,13 @@ fn main() {
         })
         .setup(|app| {
             let window = app.get_window("main").unwrap();
-            apply_vibrancy(&window, NSVisualEffectMaterial::HudWindow, None, Some(15.0))
-                .expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
+            window_vibrancy::apply_vibrancy(
+                &window,
+                window_vibrancy::NSVisualEffectMaterial::HudWindow,
+                None,
+                Some(15.0),
+            )
+            .expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
 
             window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
 
@@ -370,37 +379,37 @@ async fn show_window(window: tauri::Window) {
 }
 
 #[tauri::command]
-fn read_file(file_path: String) -> Result<String, Error> {
+async fn read_file(file_path: String) -> Result<String, Error> {
     Ok(fs::read_to_string(file_path).unwrap())
 }
 
 #[tauri::command]
-fn write_file(file_path: String, file_content: String) {
+async fn write_file(file_path: String, file_content: String) {
     fs::write(file_path, file_content).expect("Unable to write file.");
 }
 
 #[tauri::command]
-fn write_binary_file(file_path: String, file_content: Vec<u8>) {
+async fn write_binary_file(file_path: String, file_content: Vec<u8>) {
     fs::write(file_path, file_content).expect("Unable to write file.");
 }
 
 #[tauri::command]
-fn d_f_exists(path: &str) -> Result<bool, Error> {
+async fn d_f_exists(path: &str) -> Result<bool, Error> {
     Ok(Path::new(&path).exists())
 }
 
 #[tauri::command]
-fn rename_file(from: String, to: String) {
+async fn rename_file(from: String, to: String) {
     fs::rename(from, to).expect("Unable to rename file.");
 }
 
 #[tauri::command]
-fn remove_file(file_path: String) {
+async fn remove_file(file_path: String) {
     fs::remove_file(file_path).expect("Unable to remove file.");
 }
 
 #[tauri::command]
-fn read_dir(dir_path: &str) -> Vec<String> {
+async fn read_dir(dir_path: &str) -> Result<Vec<String>, Error> {
     let mut file_list = Vec::new();
     for entry in fs::read_dir(dir_path).unwrap() {
         let entry = entry.unwrap();
@@ -415,7 +424,7 @@ fn read_dir(dir_path: &str) -> Vec<String> {
                 .unwrap(),
         );
     }
-    file_list
+    Ok(file_list)
 }
 
 #[tauri::command]

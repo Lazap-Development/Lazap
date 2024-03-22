@@ -49,9 +49,9 @@ impl GameObject {
 }
 
 #[tauri::command]
-pub fn fetch_installed_games() -> Vec<GameObject> {
+pub async fn fetch_installed_games() -> Vec<GameObject> {
     let mut installed_games: Vec<GameObject> = Vec::new();
-    installed_games.extend(steam::get_installed_games());
-    installed_games.extend(minecraft::get_installed_games());
+    installed_games.extend(steam::get_installed_games().await);
+    installed_games.extend(minecraft::get_installed_games().await);
     installed_games
 }

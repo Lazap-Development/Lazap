@@ -4,21 +4,22 @@ use std::process::Command;
 #[cfg(target_os = "windows")]
 use std::str;
 
+#[cfg(any(target_os = "linux", target_os = "macos"))]
 use tauri::api::path;
 
-pub fn get_installed_games() -> Vec<GameObject> {
+pub async fn get_installed_games() -> Vec<GameObject> {
     let mut all_games: Vec<GameObject> = Vec::new();
 
-    if let Some(got_something) = get_minecraft_launcher() {
+    if let Some(got_something) = get_minecraft_launcher().await {
         all_games.push(got_something);
     }
-    
+
     //all_games.push(get_lunar_client().unwrap());
 
     return all_games;
 }
 
-fn get_minecraft_launcher() -> Option<GameObject> {
+async fn get_minecraft_launcher() -> Option<GameObject> {
     #[cfg(target_os = "windows")]
     {
         let output = Command::new("cmd")
@@ -26,7 +27,7 @@ fn get_minecraft_launcher() -> Option<GameObject> {
                 "/C",
                 "Reg",
                 "query",
-                "HKEY_CLASSES_ROOT\\Applications\\MinecraftLauncher.exe\\shell\\open\\command",
+                "HKEY_CLASSES_ROOT\\Applications\\MinecraftLauncher.exe",
             ])
             .output()
             .ok()?;
@@ -47,7 +48,7 @@ fn get_minecraft_launcher() -> Option<GameObject> {
                     .collect();
                 let executable = location.split("\\").last()?.to_string();
 
-                if !d_f_exists(&location).unwrap() {
+                if !d_f_exists(&location).await.unwrap() {
                     return None;
                 }
 
@@ -82,19 +83,18 @@ fn get_minecraft_launcher() -> Option<GameObject> {
             }
 
             let is_installed_str = str::from_utf8(&is_installed_output).ok()?;
+
             let location = is_installed_str
                 .split("\r\n")
                 .find(|x| x.trim().starts_with("InstallLocation"))
-                .map(|x| x.split(":").nth(1).unwrap_or("").trim().to_string())?;
+                .map(|x| x.split(" : ").nth(1).unwrap_or("").trim().to_string())?;
 
-            let executable = "Minecraft.exe".to_string();
-
-            if !d_f_exists(&location).unwrap() {
+            if !d_f_exists(&location).await.unwrap() {
                 return None;
             }
 
             return Some(GameObject::new(
-                executable,
+                "Minecraft.exe".to_string(),
                 location,
                 "Minecraft Launcher".to_string(),
                 "Minecraft".to_string(),
@@ -113,7 +113,7 @@ fn get_minecraft_launcher() -> Option<GameObject> {
             .arg("minecraft-launcher")
             .output()
             .expect("Failed to execute command");
-        
+
         if output.status.success() {
             let home_dir = path::home_dir()
                 .unwrap()

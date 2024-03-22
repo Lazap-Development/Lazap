@@ -176,7 +176,7 @@ export default {
       window.setInterval(checkForUpdate, 600_000);
       checkForUpdate();
 
-      await invoke("show_window");
+
 
       try {
         let { accentColor, backgroundColor, primaryColor } = JSON.parse(
@@ -202,6 +202,8 @@ export default {
         console.error(error);
       }
 
+      await invoke("show_window");
+      
       document
         .getElementById("text")
         .addEventListener("change", async function (change) {

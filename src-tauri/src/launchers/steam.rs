@@ -6,6 +6,7 @@ use std::{collections::HashMap, fmt};
 #[cfg(target_os = "windows")]
 use std::process::Command;
 
+#[cfg(any(target_os = "linux", target_os = "macos"))]
 use tauri::api::path;
 
 fn blacklist_appid() -> Vec<i32> {
@@ -86,10 +87,10 @@ impl<'de> Deserialize<'de> for LibraryFolders {
     }
 }
 
-pub fn get_installed_games() -> Vec<GameObject> {
+pub async fn get_installed_games() -> Vec<GameObject> {
     let mut all_games: Vec<GameObject> = Vec::new();
 
-    let paths: Vec<String> = get_steam_location();
+    let paths: Vec<String> = get_steam_location().await;
     if paths.is_empty() {
         return vec![];
     }
@@ -104,11 +105,11 @@ pub fn get_installed_games() -> Vec<GameObject> {
         #[cfg(target_os = "macos")]
         let acf_base_path = format!("{}/steamapps", path);
 
-        if !d_f_exists(&acf_base_path).unwrap() {
+        if !d_f_exists(&acf_base_path).await.unwrap() {
             continue;
         }
 
-        let base_path_content = read_dir(&acf_base_path);
+        let base_path_content = read_dir(&acf_base_path).await.unwrap();
 
         let acf_files: Vec<String> = base_path_content
             .into_iter()
@@ -116,7 +117,7 @@ pub fn get_installed_games() -> Vec<GameObject> {
             .collect();
 
         for acf_file in acf_files {
-            let game_file: String = read_file(format!("{}/{}", acf_base_path, acf_file)).unwrap();
+            let game_file: String = read_file(format!("{}/{}", acf_base_path, acf_file)).await.unwrap();
             let game_file_parsed: AppState = keyvalues_serde::from_str(&game_file).unwrap();
 
             if blacklist_appid()
@@ -181,7 +182,7 @@ pub fn get_installed_games() -> Vec<GameObject> {
     return all_games;
 }
 
-fn get_steam_location() -> Vec<String> {
+async fn get_steam_location() -> Vec<String> {
     let mut launcher_location: Vec<String> = Vec::new();
     #[cfg(all(target_os = "windows", target_arch = "x86_64"))]
     let output = Command::new("cmd")
@@ -233,8 +234,8 @@ fn get_steam_location() -> Vec<String> {
         .unwrap()
         + "/Library/Application Support/Steam/steamapps/libraryfolders.vdf";
 
-    if d_f_exists(&path).expect("Something went wrong") {
-        let vdf_file = read_file(path).unwrap();
+    if d_f_exists(&path).await.expect("Something went wrong") {
+        let vdf_file = read_file(path.to_string()).await.unwrap();
         if vdf_file.is_empty() {
             return vec![];
         };

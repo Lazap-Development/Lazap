@@ -375,7 +375,7 @@ export default {
 .side-tab {
   box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.2);
   height: 40px;
-  width: 240px;
+  width: 225px;
   border-radius: 10px;
   display: flex;
   margin-bottom: 10px;
@@ -392,7 +392,7 @@ export default {
   );
   content: "";
   height: 40px;
-  width: 240px;
+  width: 225px;
   border-radius: 10px;
   display: flex;
   margin-bottom: 10px;
