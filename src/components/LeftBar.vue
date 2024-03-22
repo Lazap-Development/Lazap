@@ -365,9 +365,8 @@ export default {
 }
 
 .side-tabs {
-  margin-left: 20px;
-  position: absolute;
   height: 420px;
+  width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -375,7 +374,7 @@ export default {
 .side-tab {
   box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.2);
   height: 40px;
-  width: 225px;
+  width: 235px;
   border-radius: 10px;
   display: flex;
   margin-bottom: 10px;
@@ -392,7 +391,7 @@ export default {
   );
   content: "";
   height: 40px;
-  width: 225px;
+  width: 235px;
   border-radius: 10px;
   display: flex;
   margin-bottom: 10px;
@@ -432,13 +431,10 @@ export default {
 
 .category-name {
   color: #7a7a7a;
-  margin-left: 10px;
+  margin-left: 28px;
   margin-bottom: 4px;
   font-size: 15px;
-}
-
-.category-name:hover {
-  cursor: default;
+  cursor: default !important;
 }
 
 .indicator {

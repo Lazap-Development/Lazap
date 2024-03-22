@@ -1,3 +1,5 @@
+use std::ptr::addr_of;
+
 use actix_web::rt::net::TcpListener;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use base64::{
@@ -110,7 +112,7 @@ async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
             }
 
             unsafe {
-                if let Some(ext_window) = &EXTERNAL_WINDOW {
+                if let Some(ext_window) = addr_of!(EXTERNAL_WINDOW).as_ref().unwrap() {
                     let window = ext_window.get_window("external").unwrap();
                     window.hide().unwrap();
                 }
@@ -128,7 +130,7 @@ async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
 #[get("/auth/token")]
 async fn token() -> impl Responder {
     unsafe {
-        if let Some(access_token) = &ACCESS_TOKEN {
+        if let Some(access_token) = addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             HttpResponse::Ok().json(serde_json::json!({
                 "access_token": access_token,
             }))
@@ -157,7 +159,7 @@ pub async fn spotify_login(window: tauri::Window) -> Result<(), Error> {
         if AVOID_SPAWN {
             return Ok(());
         }
-        if let Some(_value) = &mut EXTERNAL_WINDOW {
+        if let Some(_value) = &mut addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             let ext_window = window.get_window("external").unwrap();
             ext_window
                 .eval("window.location.replace('http://localhost:3000/auth/login')")
@@ -178,7 +180,7 @@ pub async fn spotify_login(window: tauri::Window) -> Result<(), Error> {
 #[tauri::command]
 pub async fn spotify_connect() -> Result<(), Error> {
     unsafe {
-        if let Some(ext_window) = &EXTERNAL_WINDOW {
+        if let Some(ext_window) = addr_of!(EXTERNAL_WINDOW).as_ref().unwrap() {
             let window = ext_window.get_window("external").unwrap();
             window
                 .eval("window.location.replace('http://localhost:3000/auth/login')")
@@ -192,7 +194,7 @@ pub async fn spotify_connect() -> Result<(), Error> {
 #[tauri::command]
 pub async fn spotify_toggle_playback() -> Result<bool, Error> {
     unsafe {
-        if let Some(access_token) = &ACCESS_TOKEN {
+        if let Some(access_token) = addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             let mut is_playing_glob: bool = false;
 
             let client = Client::new();
@@ -290,7 +292,7 @@ pub async fn spotify_toggle_playback() -> Result<bool, Error> {
 #[tauri::command]
 pub async fn spotify_backward() -> Result<(), Error> {
     unsafe {
-        if let Some(access_token) = &ACCESS_TOKEN {
+        if let Some(access_token) = addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             let client = Client::new();
             let _response = client
                 .post("https://api.spotify.com/v1/me/player/previous")
@@ -311,7 +313,7 @@ pub async fn spotify_backward() -> Result<(), Error> {
 #[tauri::command]
 pub async fn spotify_forward() -> Result<(), Error> {
     unsafe {
-        if let Some(access_token) = &ACCESS_TOKEN {
+        if let Some(access_token) = addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             let client = Client::new();
             let _response = client
                 .post("https://api.spotify.com/v1/me/player/next")
@@ -336,7 +338,7 @@ pub async fn spotify_forward() -> Result<(), Error> {
 #[tauri::command]
 pub async fn spotify_info() -> Result<String, Error> {
     unsafe {
-        if let Some(access_token) = &ACCESS_TOKEN {
+        if let Some(access_token) =  addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             let client = Client::new();
             let currently_playing_api = client
                 .get("https://api.spotify.com/v1/me/player/currently-playing")
