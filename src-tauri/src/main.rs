@@ -31,7 +31,6 @@ struct Payload {
 
 #[cfg(target_os = "windows")]
 fn main() {
-    launchers::fetch_installed_games();
     modules::storage::init_storage().expect("Failed to init storage fn.");
 
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
@@ -215,8 +214,8 @@ fn main() {
 
 #[cfg(target_os = "macos")]
 fn main() {
-    launchers::steam::get_installed_games();
     modules::storage::init_storage().expect("Failed to init storage fn.");
+    
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()

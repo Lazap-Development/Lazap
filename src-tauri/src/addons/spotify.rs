@@ -1,3 +1,4 @@
+use std::env;
 use std::ptr::addr_of;
 
 use actix_web::rt::net::TcpListener;
@@ -12,8 +13,8 @@ use reqwest::{Client, Url};
 use serde::Deserialize;
 use tauri::{Manager, Window};
 
-static mut SPOTIFY_CLIENT_ID: &str = "da0205ce23514463901a3403589a3a52";
-static mut SPOTIFY_CLIENT_SECRET: &str = "1df3953413df4adb890e5af7fdb74975";
+static mut SPOTIFY_CLIENT_ID: String = String::new();
+static mut SPOTIFY_CLIENT_SECRET: String = String::new();
 
 static mut AVOID_SPAWN: bool = false;
 
@@ -26,13 +27,33 @@ const CUSTOM_ENGINE: engine::GeneralPurpose =
 #[actix_web::main]
 pub async fn main() -> std::io::Result<()> {
     unsafe {
+        // SPOTIFY_CLIENT_ID = "".to_string();
+        // SPOTIFY_CLIENT_SECRET = "".to_string();
+
         if SPOTIFY_CLIENT_ID.is_empty() || SPOTIFY_CLIENT_SECRET.is_empty() {
-            println!(
-                "{}",
-                "SPOTIFY_CLIENT_ID or SPOTIFY_CLIENT_SECRET is not set. HttpServer not started."
-            );
-            AVOID_SPAWN = true;
-            return Ok(());
+            match env::var("SPOTIFY_CLIENT_ID") {
+                Ok(id) => SPOTIFY_CLIENT_ID = id,
+                _ => {
+                    println!(
+                        "{}",
+                        "SPOTIFY_CLIENT_ID is not set. HttpServer not started."
+                    );
+                    AVOID_SPAWN = true;
+                    return Ok(());
+                }
+            }
+
+            match env::var("SPOTIFY_CLIENT_SECRET") {
+                Ok(secret) => SPOTIFY_CLIENT_ID = secret,
+                _ => {
+                    println!(
+                        "{}",
+                        "SPOTIFY_CLIENT_SECRET is not set. HttpServer not started."
+                    );
+                    AVOID_SPAWN = true;
+                    return Ok(());
+                }
+            }
         }
     }
 
@@ -56,7 +77,9 @@ async fn login() -> impl Responder {
     auth_query_parameters
         .query_pairs_mut()
         .append_pair("response_type", "code")
-        .append_pair("client_id", unsafe { SPOTIFY_CLIENT_ID })
+        .append_pair("client_id", unsafe {
+            addr_of!(SPOTIFY_CLIENT_ID).as_ref().unwrap()
+        })
         .append_pair("scope", scope)
         .append_pair("redirect_uri", "http://localhost:3000/auth/callback")
         .append_pair("state", &state);
@@ -82,9 +105,11 @@ async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
             reqwest::header::AUTHORIZATION,
             format!(
                 "Basic {}",
-                CUSTOM_ENGINE.encode(format!("{}:{}", unsafe { SPOTIFY_CLIENT_ID }, unsafe {
-                    SPOTIFY_CLIENT_SECRET
-                }))
+                CUSTOM_ENGINE.encode(format!(
+                    "{}:{}",
+                    unsafe { addr_of!(SPOTIFY_CLIENT_ID).as_ref().unwrap() },
+                    unsafe { addr_of!(SPOTIFY_CLIENT_SECRET).as_ref().unwrap() }
+                ))
             ),
         )
         .header(
@@ -338,7 +363,7 @@ pub async fn spotify_forward() -> Result<(), Error> {
 #[tauri::command]
 pub async fn spotify_info() -> Result<String, Error> {
     unsafe {
-        if let Some(access_token) =  addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
+        if let Some(access_token) = addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             let client = Client::new();
             let currently_playing_api = client
                 .get("https://api.spotify.com/v1/me/player/currently-playing")
