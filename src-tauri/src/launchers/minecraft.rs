@@ -9,7 +9,10 @@ use tauri::api::path;
 pub fn get_installed_games() -> Vec<GameObject> {
     let mut all_games: Vec<GameObject> = Vec::new();
 
-    all_games.push(get_minecraft_launcher().unwrap());
+    if let Some(got_something) = get_minecraft_launcher() {
+        all_games.push(got_something);
+    }
+    
     //all_games.push(get_lunar_client().unwrap());
 
     return all_games;
@@ -110,7 +113,7 @@ fn get_minecraft_launcher() -> Option<GameObject> {
             .arg("minecraft-launcher")
             .output()
             .expect("Failed to execute command");
-
+        
         if output.status.success() {
             let home_dir = path::home_dir()
                 .unwrap()
