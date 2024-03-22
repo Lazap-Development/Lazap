@@ -18,7 +18,6 @@ tauri-build = { version = "1.5.1", features = [] }
 serde_json = "1.0.93"
 serde = { version = "1.0.152", features = ["derive"] }
 tauri = { version = "1.6.1", features = [ "macos-private-api", "window-create", "window-center", "window-unminimize", "window-close", "window-hide", "window-unmaximize", "window-minimize", "window-start-dragging", "window-show", "window-maximize", "dialog-all", "global-shortcut-all", "http-request", "os-all", "path-all", "protocol-asset", "shell-execute", "shell-open", "system-tray", "updater"] }
-window-shadows = "0.2.1"
 html_parser = "0.6.3"
 thiserror = "1.0.38"
 whoami = "1.5.0"
@@ -43,6 +42,7 @@ branch = "v1"
 
 [target.'cfg(any(target_os = "macos", target_os = "windows"))'.dependencies]
 window-vibrancy = "0.4.3"
+window-shadows = "0.2.2"
 
 [target.'cfg(unix)'.dependencies]
 openssl = { version = "0.10.60", features = ["vendored"] }
