@@ -1,4 +1,3 @@
-use std::env;
 use std::ptr::addr_of;
 
 use actix_web::rt::net::TcpListener;
@@ -31,25 +30,26 @@ pub async fn main() -> std::io::Result<()> {
         // SPOTIFY_CLIENT_SECRET = "".to_string();
 
         if SPOTIFY_CLIENT_ID.is_empty() || SPOTIFY_CLIENT_SECRET.is_empty() {
-            match env::var("SPOTIFY_CLIENT_ID") {
-                Ok(id) => SPOTIFY_CLIENT_ID = id,
-                _ => {
-                    println!(
-                        "{}",
-                        "SPOTIFY_CLIENT_ID is not set. HttpServer not started."
-                    );
+            let spotify_client_id = option_env!("SPOTIFY_CLIENT_ID");
+            let spotify_client_secret = option_env!("SPOTIFY_CLIENT_SECRET");
+
+            match spotify_client_id {
+                Some(id) => {
+                    SPOTIFY_CLIENT_ID = id.to_string();
+                }
+                None => {
+                    println!("SPOTIFY_CLIENT_ID is not set. HttpServer not started.");
                     AVOID_SPAWN = true;
                     return Ok(());
                 }
             }
 
-            match env::var("SPOTIFY_CLIENT_SECRET") {
-                Ok(secret) => SPOTIFY_CLIENT_ID = secret,
-                _ => {
-                    println!(
-                        "{}",
-                        "SPOTIFY_CLIENT_SECRET is not set. HttpServer not started."
-                    );
+            match spotify_client_secret {
+                Some(secret) => {
+                    SPOTIFY_CLIENT_SECRET = secret.to_string();
+                }
+                None => {
+                    println!("SPOTIFY_CLIENT_SECRET is not set. HttpServer not started.");
                     AVOID_SPAWN = true;
                     return Ok(());
                 }
