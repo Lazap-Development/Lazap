@@ -89,12 +89,12 @@ export default {
       .addEventListener("click", async function () {
         if (document.getElementById("inputGameName").value.trim().length > 0 && newGameLocation) {
           let scheme = {
-            DisplayName: document.getElementById("inputGameName").value,
-            LauncherName: "CustomGame",
-            GameID: "CustomGame",
-            Executable: newGameLocation.split("\\").slice(-1)[0],
-            Location: newGameLocation.split("\\").slice(0, -1).join("\\"),
-            Args: [],
+            display_name: document.getElementById("inputGameName").value,
+            launcher_name: "CustomGame",
+            game_id: "CustomGame",
+            executable: newGameLocation.split("\\").slice(-1)[0],
+            location: newGameLocation.split("\\").slice(0, -1).join("\\"),
+            args: [],
           };
 
           const exists = await invoke("d_f_exists", { path: `${appDir}cache/games/banners/newcustombanner.png` });

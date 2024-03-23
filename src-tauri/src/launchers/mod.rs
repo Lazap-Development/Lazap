@@ -1,5 +1,5 @@
 pub mod epic_games;
-pub mod lutirs;
+pub mod lutris;
 pub mod minecraft;
 pub mod riot_games;
 pub mod rockstar_games;

@@ -135,7 +135,7 @@ class GameElement {
     element.id = "star";
 
     // Check whether the game is starred or not
-    const isFav = this.jsondata?.Favourite || false;
+    const isFav = this.jsondata?.favourite || false;
     if (isFav) {
       element.classList.add("star-fill");
       element.style.filter =
@@ -148,7 +148,7 @@ class GameElement {
 
     // Handle onclick
     element.addEventListener("click", async () => {
-      const isFavourite = await storage.toggleFavourite(
+      const isfavourite = await storage.togglefavourite(
         this.data.game_id,
         this.data.launcher_name
       );
@@ -160,10 +160,10 @@ class GameElement {
         .find((x) => x.classList.contains("gamebox-bottom"))
         .children.namedItem("star");
 
-      ele.style.filter = isFavourite
+      ele.style.filter = isfavourite
         ? "invert(77%) sepia(68%) saturate(616%) hue-rotate(358deg) brightness(100%) contrast(104%)"
         : "invert(100%) sepia(0%) saturate(1489%) hue-rotate(35deg) brightness(116%) contrast(100%)";
-      if (isFavourite) {
+      if (isfavourite) {
         ele.classList.add("star-fill");
         ele.classList.add("shake");
         setTimeout(() => ele.classList.remove("shake"), 500);
@@ -351,19 +351,19 @@ class GameElement {
         }
         case "Minecraft": {
           res = this.createProcess(
-            `/C powershell start "${this.data.Location}\\${this.data.Executable}"`
+            `/C powershell start "${this.data.location}\\${this.data.executable}"`
           );
           break;
         }
         case "Lunar": {
           res = this.createProcess(
-            `/C powershell start "${this.data.Location}\\${this.data.Executable}"`
+            `/C powershell start "${this.data.location}\\${this.data.executable}"`
           );
           break;
         }
         default: {
           res = this.createProcess(
-            `/C powershell start "${this.data.Location}\\${this.data.Executable}"`
+            `/C powershell start "${this.data.location}\\${this.data.executable}"`
           );
           break;
         }
@@ -394,8 +394,8 @@ class GameElement {
         }
         default: {
           res = this.createProcess(
-            `"${this.data.Location}/${this.data.Executable}"`,
-            this.data.Args
+            `"${this.data.location}/${this.data.executable}"`,
+            this.data.args,
           );
           break;
         }
@@ -509,7 +509,7 @@ class Storage {
             fileContent: JSON.stringify(games),
           });
         }
-      } else if (["toggleFavourite", "addLaunch"].includes(source)) {
+      } else if (["togglefavourite", "addLaunch"].includes(source)) {
         await invoke("write_file", {
           filePath: this.gamesDataJSON,
           fileContent: JSON.stringify(games),
@@ -535,22 +535,22 @@ class Storage {
       console.error(e);
     }
   }
-  async toggleFavourite(game_id, launcher_name) {
+  async togglefavourite(game_id, launcher_name) {
     const data = await this.getGamesData();
 
-    // Invert Favourite field of the game and save the data
+    // Invert favourite field of the game and save the data
     const game = data.find(
       (x) => x.game_id === game_id && x.launcher_name === launcher_name
     );
-    game.Favourite = !game.Favourite;
-    this.setGamesData(data, "toggleFavourite");
+    game.favourite = !game.favourite;
+    this.setGamesData(data, "togglefavourite");
 
     // Check if game exists in favourites game list, if so delete the element
     const list = document.getElementById("favGamesList");
     const element = list.children.namedItem(
       `game-div-${game.display_name.replaceAll(" ", "_")}`
     );
-    if (game.Favourite === false && element) {
+    if (game.favourite === false && element) {
       element.classList.add("fadeOutUpNoDelay");
       setTimeout(() => {
         list.removeChild(element);
@@ -561,7 +561,7 @@ class Storage {
       }, 200);
     }
 
-    return game.Favourite;
+    return game.favourite;
   }
   async getSettings() {
     try {
@@ -578,8 +578,8 @@ class Storage {
     const game = data.find(
       (x) => x.game_id === game_id && x.launcher_name === launcher_name
     );
-    game.LastLaunch = Date.now();
-    game.Launches = typeof game.Launches === "number" ? game.Launches + 1 : 1;
+    game.lastlaunch = Date.now();
+    game.launches = typeof game.launches === "number" ? game.launches + 1 : 1;
     this.setGamesData(data, "addLaunch");
   }
 }
@@ -633,8 +633,8 @@ export default {
       if (listID === "recentGamesListMainPage") {
         let data = await storage.getGamesData();
         data = data
-          .filter((x) => typeof x.Launches === "number")
-          .sort((a, b) => b.Launches - a.Launches)
+          .filter((x) => typeof x.launches === "number")
+          .sort((a, b) => b.launches - a.launches)
           .slice(0, 5);
 
         // Add placeholder elements for the rest of the remaining spaces
@@ -650,8 +650,8 @@ export default {
       } else if (listID === "recentGamesList") {
         let data = await storage.getGamesData();
         data = data
-          .filter((x) => typeof x.Launches === "number")
-          .sort((a, b) => b.Launches - a.Launches);
+          .filter((x) => typeof x.launches === "number")
+          .sort((a, b) => b.launches - a.launches);
         return data;
       } else if (listID === "allGamesList") {
         return games
@@ -662,7 +662,7 @@ export default {
         let data = await storage.getGamesData();
         data = data
           .filter(
-            (x) => typeof x.Favourite === "boolean" && x.Favourite === true
+            (x) => typeof x.favourite === "boolean" && x.favourite === true
           )
           .map((x) => x.display_name)
           .sort()

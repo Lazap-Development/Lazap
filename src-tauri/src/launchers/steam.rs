@@ -42,8 +42,6 @@ struct AppState {
     name: String,
     #[serde(rename = "SizeOnDisk")]
     size_on_disk: String,
-    #[serde(rename = "LauncherExe")]
-    launcherexe: String,
     #[serde(rename = "LauncherPath")]
     launcherpath: String,
 }
@@ -146,7 +144,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 
             #[cfg(target_os = "windows")]
             temp_all_games.push(GameObject::new(
-                game_file_parsed.launcherexe.to_string(),
+                "".to_string(),
                 game_file_parsed.launcherpath.to_string(),
                 game_file_parsed.name,
                 game_file_parsed.appid.parse().unwrap(),
@@ -220,7 +218,12 @@ async fn get_steam_location() -> Vec<String> {
     }
 
     #[cfg(target_os = "windows")]
-    let path = String::from_utf8_lossy(&output.stdout);
+    let path = String::from_utf8_lossy(&output.stdout).to_string()
+        .split("REG_SZ").collect::<Vec<_>>()[1]
+        .split("\r\n\r\n").collect::<Vec<_>>()[0]
+        .trim()
+        .to_string()
+        + "\\steamapps\\libraryfolders.vdf";
 
     #[cfg(target_os = "linux")]
     let path: String = path::home_dir()
