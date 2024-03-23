@@ -1,11 +1,12 @@
-use crate::{d_f_exists, launchers::GameObject};
-use std::process::Command;
+use crate::launchers::GameObject;
+
+#[cfg(any(target_os = "windows", target_os = "linux"))]
+use crate::d_f_exists;
 
 #[cfg(target_os = "windows")]
-use std::str;
-use std::os::windows::process::CommandExt;
+use std::{os::windows::process::CommandExt, process::Command, str};
 
-#[cfg(any(target_os = "linux", target_os = "macos"))]
+#[cfg(any(target_os = "linux"))]
 use tauri::api::path;
 
 pub async fn get_installed_games() -> Vec<GameObject> {
@@ -15,15 +16,13 @@ pub async fn get_installed_games() -> Vec<GameObject> {
         all_games.push(got_something);
     }
 
-    //all_games.push(get_lunar_client().unwrap());
-
     return all_games;
 }
 
 async fn get_minecraft_launcher() -> Option<GameObject> {
     #[cfg(any(target_os = "macos"))]
     return None;
-    
+
     #[cfg(target_os = "windows")]
     {
         let output = Command::new("cmd")
@@ -127,7 +126,10 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
                 .into_string()
                 .unwrap();
 
-            if !d_f_exists(&format!("{}/.minecraft", home_dir)).await.unwrap() {
+            if !d_f_exists(&format!("{}/.minecraft", home_dir))
+                .await
+                .unwrap()
+            {
                 return None;
             }
 
@@ -150,5 +152,3 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
         }
     }
 }
-
-//fn get_minecraft_launcher() -> Option<GameObject> {}

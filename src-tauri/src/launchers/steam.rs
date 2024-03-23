@@ -4,8 +4,7 @@ use serde::{Deserialize, Deserializer};
 use std::{collections::HashMap, fmt};
 
 #[cfg(target_os = "windows")]
-use std::process::Command;
-use std::os::windows::process::CommandExt;
+use std::{os::windows::process::CommandExt, process::Command};
 
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 use tauri::api::path;
@@ -118,7 +117,9 @@ pub async fn get_installed_games() -> Vec<GameObject> {
             .collect();
 
         for acf_file in acf_files {
-            let game_file: String = read_file(format!("{}/{}", acf_base_path, acf_file)).await.unwrap();
+            let game_file: String = read_file(format!("{}/{}", acf_base_path, acf_file))
+                .await
+                .unwrap();
             let game_file_parsed: AppState = keyvalues_serde::from_str(&game_file).unwrap();
 
             if blacklist_appid()
