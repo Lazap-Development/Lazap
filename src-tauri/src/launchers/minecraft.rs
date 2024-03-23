@@ -9,6 +9,9 @@ use std::{os::windows::process::CommandExt, process::Command, str};
 #[cfg(any(target_os = "linux"))]
 use tauri::api::path;
 
+#[cfg(any(target_os = "linux"))]
+use std::process::Command;
+
 pub async fn get_installed_games() -> Vec<GameObject> {
     let mut all_games: Vec<GameObject> = Vec::new();
 
