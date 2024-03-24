@@ -34,6 +34,10 @@ async fn get_lutris_games() -> Option<Vec<GameObject>> {
                 .unwrap()
                 + "/lutris/pga.db";
 
+            if !d_f_exists(&db_path).await.unwrap() {
+                return None;
+            }
+
             struct Game {
                 display_name: String,
                 game_id: String,
@@ -79,3 +83,8 @@ async fn get_lutris_games() -> Option<Vec<GameObject>> {
         Err(_) => None,
     }
 }
+
+// TO-DO! Gather bottles games just like lutris (bottles is a wine manager)
+// async fn get_bottles_games() -> Option<Vec<GameObject>> {
+
+// }
