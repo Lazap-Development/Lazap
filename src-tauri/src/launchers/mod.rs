@@ -1,10 +1,11 @@
 pub mod epic_games;
-pub mod lutris;
 pub mod minecraft;
 pub mod riot_games;
 pub mod rockstar_games;
 pub mod steam;
 pub mod uplay;
+#[cfg(target_os = "linux")]
+pub mod wine_managers;
 pub mod xbox_games;
 
 use serde::{Deserialize, Serialize};
@@ -53,5 +54,7 @@ pub async fn fetch_installed_games() -> Vec<GameObject> {
     let mut installed_games: Vec<GameObject> = Vec::new();
     installed_games.extend(steam::get_installed_games().await);
     installed_games.extend(minecraft::get_installed_games().await);
+    #[cfg(target_os = "linux")]
+    installed_games.extend(wine_managers::get_installed_games().await);
     installed_games
 }

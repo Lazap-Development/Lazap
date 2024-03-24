@@ -58,6 +58,9 @@ keyvalues-serde = "0.2.1"
 window-vibrancy = "0.4.3"
 window-shadows = "0.2.2"
 
+[target.'cfg(target_os = "linux")'.dependencies]
+rusqlite = "0.31.0"
+
 [target.'cfg(unix)'.dependencies]
 openssl = { version = "0.10.60", features = ["vendored"] }
 
