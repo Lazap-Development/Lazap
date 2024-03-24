@@ -96,7 +96,7 @@ struct AuthCallbackQuery {
 
 #[get("/auth/callback")]
 async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
-    let code = query.code.clone();
+    let code = &query.code;
 
     let client = Client::new();
     let _response = client
@@ -120,9 +120,9 @@ async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
             ("code", code),
             (
                 "redirect_uri",
-                "http://localhost:3000/auth/callback".to_string(),
+                &"http://localhost:3000/auth/callback".to_string(),
             ),
-            ("grant_type", "authorization_code".to_string()),
+            ("grant_type", &"authorization_code".to_string()),
         ])
         .send()
         .await;

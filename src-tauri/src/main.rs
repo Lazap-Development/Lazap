@@ -3,19 +3,11 @@
 mod addons;
 mod launchers;
 mod modules;
+mod operations;
 
-use declarative_discord_rich_presence::activity::Activity;
-use declarative_discord_rich_presence::activity::Assets;
-use declarative_discord_rich_presence::activity::Timestamps;
 use declarative_discord_rich_presence::DeclarativeDiscordIpcClient;
-use html_parser::Dom;
-use sha2::{Digest, Sha256};
-
-use std::fs;
-use std::path::Path;
-use sysinfo::{CpuExt, System, SystemExt};
 use tauri::{
-    CustomMenuItem, Manager, State, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
+    CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
 
 const DISCORD_RPC_CLIENT_ID: &str = "932504287337148417";
@@ -89,20 +81,20 @@ fn main() {
             _ => {}
         })
         .invoke_handler(tauri::generate_handler![
-            launch_game,
-            parse,
-            get_sys_info,
-            set_rpc_activity,
-            disable_rpc,
-            show_window,
-            read_file,
-            write_file,
-            d_f_exists,
-            read_dir,
-            write_binary_file,
-            rename_file,
-            remove_file,
-            sha256,
+            operations::misc::launch_game,
+            operations::misc::parse,
+            operations::misc::get_sys_info,
+            operations::discord_rpc::set_rpc_activity,
+            operations::discord_rpc::disable_rpc,
+            operations::misc::show_window,
+            operations::custom_fs::read_file,
+            operations::custom_fs::write_file,
+            operations::custom_fs::d_f_exists,
+            operations::custom_fs::read_dir,
+            operations::custom_fs::write_binary_file,
+            operations::custom_fs::rename_file,
+            operations::custom_fs::remove_file,
+            operations::misc::sha256,
             // Storage Module
             modules::storage::launcherdata_threads_x,
             // Launchers
@@ -178,20 +170,20 @@ fn main() {
             _ => {}
         })
         .invoke_handler(tauri::generate_handler![
-            launch_game,
-            parse,
-            get_sys_info,
-            set_rpc_activity,
-            disable_rpc,
-            show_window,
-            read_file,
-            write_file,
-            d_f_exists,
-            read_dir,
-            write_binary_file,
-            rename_file,
-            remove_file,
-            sha256,
+            operations::misc::launch_game,
+            operations::misc::parse,
+            operations::misc::get_sys_info,
+            operations::discord_rpc::set_rpc_activity,
+            operations::discord_rpc::disable_rpc,
+            operations::misc::show_window,
+            operations::custom_fs::read_file,
+            operations::custom_fs::write_file,
+            operations::custom_fs::d_f_exists,
+            operations::custom_fs::read_dir,
+            operations::custom_fs::write_binary_file,
+            operations::custom_fs::rename_file,
+            operations::custom_fs::remove_file,
+            operations::misc::sha256,
             // Storage Module
             modules::storage::launcherdata_threads_x,
             // Launchers
@@ -278,20 +270,20 @@ fn main() {
             _ => {}
         })
         .invoke_handler(tauri::generate_handler![
-            launch_game,
-            parse,
-            get_sys_info,
-            set_rpc_activity,
-            disable_rpc,
-            show_window,
-            read_file,
-            write_file,
-            d_f_exists,
-            read_dir,
-            write_binary_file,
-            rename_file,
-            remove_file,
-            sha256,
+            operations::misc::launch_game,
+            operations::misc::parse,
+            operations::misc::get_sys_info,
+            operations::discord_rpc::set_rpc_activity,
+            operations::discord_rpc::disable_rpc,
+            operations::misc::show_window,
+            operations::custom_fs::read_file,
+            operations::custom_fs::write_file,
+            operations::custom_fs::d_f_exists,
+            operations::custom_fs::read_dir,
+            operations::custom_fs::write_binary_file,
+            operations::custom_fs::rename_file,
+            operations::custom_fs::remove_file,
+            operations::misc::sha256,
             // Storage Module
             modules::storage::launcherdata_threads_x,
             // Launchers
@@ -307,208 +299,4 @@ fn main() {
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
-}
-
-#[tauri::command]
-async fn parse(value: &str) -> Result<String, Error> {
-    Ok(Dom::parse(value)?.to_json_pretty()?)
-}
-
-#[tauri::command]
-async fn launch_game(_exec: String, _args: String) {
-    #[cfg(target_os = "windows")]
-    use std::os::windows::process::CommandExt;
-    #[cfg(target_os = "windows")]
-    let child = std::process::Command::new("cmd")
-        .arg(_exec)
-        .creation_flags(0x00000008)
-        .spawn()
-        .expect("failed to run");
-    #[cfg(target_os = "windows")]
-    let _output = child.wait_with_output().expect("failed to wait on child");
-
-    #[cfg(target_os = "linux")]
-    let child = std::process::Command::new(_exec)
-        .arg(_args)
-        .spawn()
-        .expect("failed to run");
-    #[cfg(target_os = "linux")]
-    let _output = child.wait_with_output().expect("failed to wait on child");
-}
-
-#[tauri::command]
-fn set_rpc_activity(
-    client: State<'_, DeclarativeDiscordIpcClient>,
-    details: &str,
-    large_text: &str,
-    small_text: &str,
-    timestamp: i64,
-) {
-    if let Err(why) = client.set_activity(
-        Activity::new()
-            .details(details)
-            .assets(
-                Assets::new()
-                    .large_image("lazap")
-                    .large_text(large_text)
-                    .small_text(small_text),
-            )
-            .timestamps(Timestamps::new().start(timestamp)),
-    ) {
-        println!("failed to set presence: {}", why)
-    }
-}
-
-#[tauri::command]
-fn disable_rpc(client: State<'_, DeclarativeDiscordIpcClient>, enable: bool) {
-    if enable {
-        client.enable();
-    } else {
-        client.disable();
-    }
-}
-
-#[tauri::command]
-async fn show_window(window: tauri::Window) {
-    window.get_window("main").unwrap().show().unwrap();
-}
-
-#[tauri::command]
-async fn read_file(file_path: String) -> Result<String, Error> {
-    Ok(fs::read_to_string(file_path).unwrap())
-}
-
-#[tauri::command]
-async fn write_file(file_path: String, file_content: String) {
-    fs::write(file_path, file_content).expect("Unable to write file.");
-}
-
-#[tauri::command]
-async fn write_binary_file(file_path: String, file_content: Vec<u8>) {
-    fs::write(file_path, file_content).expect("Unable to write file.");
-}
-
-#[tauri::command]
-async fn d_f_exists(path: &str) -> Result<bool, Error> {
-    Ok(Path::new(&path).exists())
-}
-
-#[tauri::command]
-async fn rename_file(from: String, to: String) {
-    fs::rename(from, to).expect("Unable to rename file.");
-}
-
-#[tauri::command]
-async fn remove_file(file_path: String) {
-    fs::remove_file(file_path).expect("Unable to remove file.");
-}
-
-#[tauri::command]
-async fn read_dir(dir_path: &str) -> Result<Vec<String>, Error> {
-    let mut file_list = Vec::new();
-    for entry in fs::read_dir(dir_path).unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
-
-        file_list.push(
-            Path::new(&path.display().to_string())
-                .file_name()
-                .unwrap()
-                .to_os_string()
-                .into_string()
-                .unwrap(),
-        );
-    }
-    Ok(file_list)
-}
-
-#[tauri::command]
-async fn sha256(content: String) -> Result<String, Error> {
-    let mut hasher = Sha256::new();
-    hasher.update(content);
-    Ok(format!("{:x}", hasher.finalize()))
-}
-
-#[tauri::command]
-async fn get_sys_info() -> Result<String, Error> {
-    let mut sys = System::new_all();
-    sys.refresh_all();
-
-    // Rate = 1048576 Byte is 1MiB
-    let rate: i64 = 1048576;
-
-    // Rate = 1073741824 Byte is 1GB
-    let rate2: u64 = 1000000000;
-
-    use sysinfo::DiskExt;
-
-    let data_used_mem: i64 = sys.used_memory().try_into().unwrap();
-    let data_all_mem: i64 = sys.total_memory().try_into().unwrap();
-
-    let mut data_used_disk: u64 = 0;
-    let mut data_all_disk: u64 = 0;
-    for disk in sys.disks() {
-        data_used_disk += disk.total_space() - disk.available_space();
-        data_all_disk += disk.total_space();
-    }
-
-    let converted_used_mem = data_used_mem / rate;
-    let converted_all_mem = data_all_mem / rate;
-    let converted_used_disk = data_used_disk / rate2;
-    let converted_all_disk = data_all_disk / rate2;
-
-    let mut cpu_info = "";
-    for cpu in sys.cpus() {
-        cpu_info = cpu.brand();
-    }
-
-    struct SysStruct {
-        memory: String,
-        cpu: String,
-        system_name: String,
-        system_kernel: String,
-        system_host: String,
-        disk_info: String,
-    }
-    let sys_data = SysStruct {
-        memory: converted_used_mem.to_string()
-            + " MiB"
-            + " / "
-            + &converted_all_mem.to_string()
-            + " MiB",
-        cpu: cpu_info.to_string(),
-        system_name: sys.name().unwrap().to_string(),
-        system_kernel: sys.kernel_version().unwrap().to_string(),
-        system_host: sys.host_name().unwrap().to_string(),
-        disk_info: converted_used_disk.to_string()
-            + " GB"
-            + " / "
-            + &converted_all_disk.to_string()
-            + " GB",
-    };
-
-    Ok(format!(
-        "{{\"memory\": \"{}\", \"cpu\": \"{}\", \"system_name\": \"{}\", \"system_kernel\": \"{}\", \"system_host\": \"{}\", \"disk_info\": \"{}\"}}",
-        sys_data.memory,
-        sys_data.cpu,
-        sys_data.system_name,
-        sys_data.system_kernel,
-        sys_data.system_host,
-        sys_data.disk_info
-    ))
-}
-
-#[derive(Debug, thiserror::Error)]
-enum Error {
-    #[error(transparent)]
-    Io(#[from] html_parser::Error),
-}
-
-impl serde::Serialize for Error {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::ser::Serializer,
-    {
-        serializer.serialize_str(self.to_string().as_ref())
-    }
 }

@@ -1,5 +1,5 @@
-use crate::{d_f_exists, launchers::GameObject, read_dir, read_file};
-
+use crate::launchers::GameObject;
+use crate::operations::custom_fs::{d_f_exists, read_dir, read_file};
 use serde::{Deserialize, Deserializer};
 use std::{collections::HashMap, fmt};
 
@@ -115,9 +115,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
             .collect();
 
         for acf_file in acf_files {
-            let game_file: String = read_file(format!("{}/{}", acf_base_path, acf_file))
-                .await
-                .unwrap();
+            let game_file: String = read_file(format!("{}/{}", acf_base_path, acf_file)).unwrap();
             let game_file_parsed: AppState = keyvalues_serde::from_str(&game_file).unwrap();
 
             if blacklist_appid()
@@ -218,9 +216,12 @@ async fn get_steam_location() -> Vec<String> {
     }
 
     #[cfg(target_os = "windows")]
-    let path = String::from_utf8_lossy(&output.stdout).to_string()
-        .split("REG_SZ").collect::<Vec<_>>()[1]
-        .split("\r\n\r\n").collect::<Vec<_>>()[0]
+    let path = String::from_utf8_lossy(&output.stdout)
+        .to_string()
+        .split("REG_SZ")
+        .collect::<Vec<_>>()[1]
+        .split("\r\n\r\n")
+        .collect::<Vec<_>>()[0]
         .trim()
         .to_string()
         + "\\steamapps\\libraryfolders.vdf";
@@ -242,7 +243,7 @@ async fn get_steam_location() -> Vec<String> {
         + "/Library/Application Support/Steam/steamapps/libraryfolders.vdf";
 
     if d_f_exists(&path).await.expect("Something went wrong") {
-        let vdf_file = read_file(path.to_string()).await.unwrap();
+        let vdf_file = read_file(path.to_string()).unwrap();
         if vdf_file.is_empty() {
             return vec![];
         };

@@ -1,7 +1,7 @@
 use crate::launchers::GameObject;
 
 #[cfg(any(target_os = "windows", target_os = "linux"))]
-use crate::d_f_exists;
+use crate::operations::custom_fs::d_f_exists;
 
 #[cfg(target_os = "windows")]
 use std::{os::windows::process::CommandExt, process::Command, str};

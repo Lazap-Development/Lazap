@@ -71,7 +71,7 @@ pub fn init_storage() -> Result<(), std::io::Error> {
 
     let expected_config: Value = serde_json::from_str(json_content)?;
     let actual_config: Value =
-        serde_json::from_str(&fs::read_to_string(base_config_ld_file.clone()).unwrap())?;
+        serde_json::from_str(&fs::read_to_string(&base_config_ld_file).unwrap())?;
 
     let expected_keys = extract_keys(&expected_config);
     let actual_keys = extract_keys(&actual_config);
@@ -83,17 +83,17 @@ pub fn init_storage() -> Result<(), std::io::Error> {
             .collect();
         for key in &missing_keys {
             let mut config: Value =
-                serde_json::from_str(&fs::read_to_string(base_config_ld_file.clone()).unwrap())?;
+                serde_json::from_str(&fs::read_to_string(&base_config_ld_file).unwrap())?;
             if let Some(value) = expected_config[key].as_str() {
                 if let Value::Object(ref mut obj) = config {
                     obj.insert(key.to_string(), value.into());
                 }
-                fs::write(base_config_ld_file.clone(), config.to_string())?;
+                fs::write(&base_config_ld_file, config.to_string())?;
             } else if let Some(value) = expected_config[key].as_bool() {
                 if let Value::Object(ref mut obj) = config {
                     obj.insert(key.to_string(), value.into());
                 }
-                fs::write(base_config_ld_file.clone(), config.to_string())?;
+                fs::write(&base_config_ld_file, config.to_string())?;
             }
         }
     }
