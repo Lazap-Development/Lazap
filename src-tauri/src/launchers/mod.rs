@@ -63,5 +63,6 @@ pub async fn fetch_installed_games() -> Vec<GameObject> {
     installed_games.extend(wine_managers::get_installed_games().await);
     #[cfg(target_os = "windows")]
     installed_games.extend(epic_games::get_installed_games().await);
+    installed_games.extend(riot_games::get_installed_games().await);
     installed_games
 }
