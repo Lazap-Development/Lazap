@@ -71,7 +71,7 @@ async fn get_lutris_games() -> Option<Vec<GameObject>> {
                     game_unwrapped.location,
                     game_unwrapped.display_name,
                     game_unwrapped.game_id,
-                    game_unwrapped.launch_id,
+                    game_unwrapped.launch_id.to_string(),
                     game_unwrapped.size,
                     "".to_string(),
                     "Lutris".to_string(),
