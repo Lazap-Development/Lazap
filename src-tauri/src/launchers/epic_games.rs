@@ -51,6 +51,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
                         "{}:{}:{}",
                         file_prased.catalog_namespace, file_prased.catalog_item_id, app_name_clone
                     ),
+                    "".to_string(),
                     file_prased.install_size,
                     file_prased.launch_command,
                     "EpicGames".to_string(),

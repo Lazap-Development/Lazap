@@ -86,6 +86,7 @@ pub fn parse_game_object(path: &str, game: &str) -> GameObject {
         display_name.to_string(),
         game.to_string(),
         0.to_string(),
+        "".to_string(),
         0,
         "".to_string(),
         "RiotGames".to_string(),

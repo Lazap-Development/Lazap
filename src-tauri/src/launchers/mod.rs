@@ -22,6 +22,7 @@ pub struct GameObject {
     pub display_name: String,
     game_id: String,
     launch_id: String,
+    banner_id: String,
     size: i64,
     launch_command: String,
     launcher_name: String,
@@ -35,6 +36,7 @@ impl GameObject {
         display_name: String,
         game_id: String,
         launch_id: String,
+        banner_id: String,
         size: i64,
         launch_command: String,
         launcher_name: String,
@@ -46,6 +48,7 @@ impl GameObject {
             display_name,
             game_id,
             launch_id,
+            banner_id,
             size,
             launch_command,
             launcher_name,
@@ -65,5 +68,7 @@ pub async fn fetch_installed_games() -> Vec<GameObject> {
     installed_games.extend(epic_games::get_installed_games().await);
     #[cfg(target_os = "windows")]
     installed_games.extend(riot_games::get_installed_games().await);
+    #[cfg(target_os = "windows")]
+    installed_games.extend(rockstar_games::get_installed_games().await);
     installed_games
 }

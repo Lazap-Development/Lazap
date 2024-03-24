@@ -90,7 +90,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 
     let paths: Vec<String> = get_steam_location().await;
     if paths.is_empty() {
-        return vec![];
+        return all_games;
     }
 
     for path in paths {
@@ -103,7 +103,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
         #[cfg(target_os = "macos")]
         let acf_base_path = format!("{}/steamapps", path);
 
-        if !d_f_exists(&acf_base_path).await.unwrap() {
+        if !d_f_exists(&acf_base_path).await.unwrap_or(false) {
             continue;
         }
 
@@ -134,6 +134,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
                 game_file_parsed.name,
                 game_file_parsed.appid.parse().unwrap(),
                 "0".to_string(),
+                "".to_string(),
                 game_file_parsed.size_on_disk.parse().unwrap(),
                 "".to_string(),
                 "Steam".to_string(),
@@ -147,6 +148,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
                 game_file_parsed.name,
                 game_file_parsed.appid.parse().unwrap(),
                 "0".to_string(),
+                "".to_string(),
                 game_file_parsed.size_on_disk.parse().unwrap(),
                 "".to_string(),
                 "Steam".to_string(),
@@ -160,6 +162,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
                 game_file_parsed.name,
                 game_file_parsed.appid.parse().unwrap(),
                 "0".to_string(),
+                "".to_string(),
                 game_file_parsed.size_on_disk.parse().unwrap(),
                 "".to_string(),
                 "Steam".to_string(),
@@ -212,7 +215,7 @@ async fn get_steam_location() -> Vec<String> {
 
     #[cfg(target_os = "windows")]
     if output.stdout.is_empty() {
-        return vec![];
+        return launcher_location;
     }
 
     #[cfg(target_os = "windows")]
@@ -242,10 +245,10 @@ async fn get_steam_location() -> Vec<String> {
         .unwrap()
         + "/Library/Application Support/Steam/steamapps/libraryfolders.vdf";
 
-    if d_f_exists(&path).await.expect("Something went wrong") {
+    if d_f_exists(&path).await.unwrap_or(false) {
         let vdf_file = read_file(path.to_string()).unwrap();
         if vdf_file.is_empty() {
-            return vec![];
+            return launcher_location;
         };
 
         let parsed: LibraryFolders = keyvalues_serde::from_str(&vdf_file).unwrap();
@@ -253,7 +256,7 @@ async fn get_steam_location() -> Vec<String> {
             launcher_location.push(folder.path.clone());
         }
     } else {
-        return vec![];
+        return launcher_location;
     }
 
     launcher_location

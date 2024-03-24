@@ -274,8 +274,8 @@ class GameElement {
             fetchUplay.data.results[0].background_image.slice(27)
           );
         }
-        case "Rockstar": {
-          return `https://media-rockstargames-com.akamaized.net/rockstargames-newsite/img/global/games/fob/640/${this.data.bannerId}.jpg`;
+        case "RockstarGames": {
+          return `https://media-rockstargames-com.akamaized.net/rockstargames-newsite/img/global/games/fob/640/${this.data.banner_id}.jpg`;
         }
       }
     }
