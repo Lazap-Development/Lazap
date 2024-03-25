@@ -233,7 +233,7 @@ export default {
         );
         document.querySelectorAll("input[id^=setting-]").forEach((input) => {
           if (input.id.startsWith("setting") && input.id.endsWith("Color"))
-            input.value = Data[input.id.split("-")[1]];
+            input.value = rgbToHex(Data[input.id.split("-")[1]]);
           else input.checked = Data[input.id.split("-")[1]] ? true : false;
         });
       });
@@ -281,7 +281,10 @@ export default {
           filePath: (await path.appDir()) + "LauncherData.json",
           fileContent: JSON.stringify(LauncherData),
         });
-        document.getElementById(`setting-${id}`).value = LauncherData[id];
+        console.log(rgbToHex(LauncherData[id]));
+        document.getElementById(`setting-${id}`).value = rgbToHex(
+          LauncherData[id]
+        );
         updateColor(id, LauncherData[id]);
       });
     }
@@ -471,7 +474,18 @@ export default {
       };
       // document.getElementById("indicator").style.backgroundColor = color;
       document.querySelector(":root").style.setProperty(`--${vals[id]}`, color);
-      document.getElementById(`setting-${id}`).value = color;
+
+      document.getElementById(`setting-${id}`).value = rgbToHex(color);
+    }
+
+    function rgbToHex(x) {
+      let str_array = x.split(", ");
+      return (
+        "#" +
+        ((1 << 24) | (str_array[0] << 16) | (str_array[1] << 8) | str_array[2])
+          .toString(16)
+          .slice(1)
+      );
     }
 
     async function setActivity(tab) {
