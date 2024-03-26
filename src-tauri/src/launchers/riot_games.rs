@@ -2,7 +2,7 @@ use crate::launchers::GameObject;
 use crate::operations::custom_fs::{d_f_exists, read_dir};
 use std::process::Command;
 
-pub fn get_riot_games_location(launcher_location: &str) -> String {
+fn get_riot_games_location(launcher_location: &str) -> String {
     let s = launcher_location.split("\\").collect::<Vec<_>>();
     return s[0..s.len() - 2].join("\\");
 }

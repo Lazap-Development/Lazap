@@ -1,25 +1,28 @@
 #[cfg(target_os = "windows")]
-pub mod epic_games;
-pub mod minecraft;
+mod epic_games;
+mod minecraft;
 #[cfg(target_os = "windows")]
-pub mod riot_games;
+mod riot_games;
 #[cfg(target_os = "windows")]
-pub mod rockstar_games;
-pub mod steam;
+mod rockstar_games;
+mod steam;
 #[cfg(target_os = "windows")]
-pub mod uplay;
+mod uplay;
 #[cfg(target_os = "linux")]
-pub mod wine_managers;
+mod wine_managers;
 #[cfg(target_os = "windows")]
-pub mod xbox_games;
+mod xbox_games;
 
 use serde::{Deserialize, Serialize};
+
+#[cfg(target_os = "windows")]
+const LINE_ENDING: &'static str = "\r\n";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GameObject {
     executable: String,
     location: String,
-    pub display_name: String,
+    display_name: String,
     game_id: String,
     launch_id: String,
     banner_id: String,
@@ -70,5 +73,7 @@ pub async fn fetch_installed_games() -> Vec<GameObject> {
     installed_games.extend(riot_games::get_installed_games().await);
     #[cfg(target_os = "windows")]
     installed_games.extend(rockstar_games::get_installed_games().await);
+    #[cfg(target_os = "windows")]
+    installed_games.extend(uplay::get_installed_games().await);
     installed_games
 }

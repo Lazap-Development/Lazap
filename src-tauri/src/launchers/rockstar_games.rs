@@ -2,7 +2,7 @@ use std::{os::windows::process::CommandExt, process::Command};
 
 use serde::Deserialize;
 
-use crate::launchers::GameObject;
+use crate::launchers::{GameObject, LINE_ENDING};
 use crate::operations::custom_fs::{d_f_exists, read_dir};
 
 static ROCKSTAR_JSON: &str = r#"{
@@ -197,8 +197,6 @@ pub async fn get_installed_games() -> Vec<GameObject> {
         return all_games;
     }
 
-    const LINE_ENDING: &'static str = "\r\n";
-
     for x in String::from_utf8_lossy(&output.stdout).split(&LINE_ENDING.repeat(2)) {
         let res: Vec<&str> = x.split(LINE_ENDING).filter(|x| x.len() > 1).collect();
         let name = match res.get(0) {
@@ -248,7 +246,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
     return all_games;
 }
 
-pub async fn parse_game_object(path: &str, name: &str) -> Option<GameObject> {
+async fn parse_game_object(path: &str, name: &str) -> Option<GameObject> {
     if !d_f_exists(path).await.unwrap_or(false) {
         return None;
     }

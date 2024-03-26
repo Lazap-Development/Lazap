@@ -256,8 +256,8 @@ class GameElement {
           const fetchUplay = await http.fetch(
             `https://api.rawg.io/api/games?key=f8854c401fed44b89f4e1e4faa56ccc8&search=${this.data.display_name.replaceAll(
               " ",
-              "-"
-            )}&search_exact&search_precise`,
+              "_"
+            ).replace(/\d/g, (match) => `-${match}`)}&search_precise`,
             {
               method: "GET",
               mode: "no-cors",
