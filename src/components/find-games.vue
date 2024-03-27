@@ -253,7 +253,7 @@ class GameElement {
         default: {
           res = this.createProcess(
             `"${this.data.location}/${this.data.executable}"`,
-            this.data.args,
+            this.data.args
           );
           break;
         }
@@ -478,6 +478,7 @@ export default {
       //	games.push(...data.filter(x => x.launcher_name === 'CustomGame'));
       //}
 
+      console.log(games);
       // Save all games into JSON
       storage.setGamesData(games, "getInstalledGames");
 
@@ -488,20 +489,19 @@ export default {
     async getGames(listID, allgames) {
       const games = allgames || (await this.getInstalledGames());
       if (listID === "recentGamesListMainPage") {
+        let recentGamesList = document.getElementById(
+          "recentGamesListMainPage"
+        );
+        let childCount = recentGamesList.childElementCount;
+        for (let i = 0; i < childCount - 5; i++) {
+          recentGamesList.removeChild(recentGamesList.firstChild);
+        }
+
         let data = await storage.getGamesData();
         data = data
           .filter((x) => typeof x.launches === "number")
           .sort((a, b) => b.launches - a.launches)
           .slice(0, 5);
-
-        // Add placeholder elements for the rest of the remaining spaces
-        if (document.getElementsByClassName("placeholderGames").length < 1) {
-          for (let i = 0; i < 5 - games.length; i++) {
-            let element = document.createElement("div");
-            element.classList.add("placeholderGames");
-            document.getElementById("recentGamesListMainPage").append(element);
-          }
-        }
 
         return data;
       } else if (listID === "recentGamesList") {

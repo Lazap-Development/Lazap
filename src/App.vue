@@ -22,7 +22,13 @@
             <div
               id="recentGamesListMainPage"
               class="fadeInDown mainPageGamesList"
-            ></div>
+            >
+              <div class="placeholderGames"></div>
+              <div class="placeholderGames"></div>
+              <div class="placeholderGames"></div>
+              <div class="placeholderGames"></div>
+              <div class="placeholderGames"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -176,8 +182,6 @@ export default {
       window.setInterval(checkForUpdate, 600_000);
       checkForUpdate();
 
-
-
       try {
         let { accentColor, backgroundColor, primaryColor } = JSON.parse(
           await invoke("read_file", {
@@ -203,6 +207,10 @@ export default {
       }
 
       await invoke("show_window");
+
+      await findGamesModule.loadGames("allGamesList").catch((err) => {
+        return console.error(err);
+      });
       
       document
         .getElementById("text")
@@ -424,6 +432,7 @@ body {
 }
 
 .secondorybox .addGamePopUp {
+  backdrop-filter: blur(10px);
   position: absolute;
   width: 380px;
   height: 200px;
@@ -1105,7 +1114,7 @@ img,
 }
 
 .search-bar input:focus {
-  border: 4px solid rgba(var(--accent-color), 1.0);
+  border: 4px solid rgba(var(--accent-color), 1);
   animation-name: searchbox;
   animation-duration: 0.3s;
   animation-fill-mode: both;
