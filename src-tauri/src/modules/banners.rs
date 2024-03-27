@@ -111,7 +111,6 @@ struct GameWithinRawg {
 }
 
 async fn rawg_fetch_banner(display_name: &str) -> String {
-    println!("{}", display_name);
     let banners_dir = format!(
         "{}com.lazap.config/cache/games/banners",
         tauri::api::path::app_config_dir(&tauri::Config::default())

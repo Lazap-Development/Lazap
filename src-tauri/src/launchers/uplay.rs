@@ -1,7 +1,10 @@
 use std::{os::windows::process::CommandExt, process::Command};
 
-use crate::launchers::{GameObject, LINE_ENDING};
-use crate::operations::custom_fs::{d_f_exists, read_dir};
+use crate::{
+    launchers::{GameObject, LINE_ENDING},
+    modules::banners,
+    operations::custom_fs::{d_f_exists, read_dir},
+};
 
 pub async fn get_installed_games() -> Vec<GameObject> {
     let mut all_games: Vec<GameObject> = Vec::new();

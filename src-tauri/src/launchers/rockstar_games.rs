@@ -2,8 +2,11 @@ use std::{os::windows::process::CommandExt, process::Command};
 
 use serde::Deserialize;
 
-use crate::launchers::{GameObject, LINE_ENDING};
-use crate::operations::custom_fs::{d_f_exists, read_dir};
+use crate::{
+    launchers::{GameObject, LINE_ENDING},
+    modules::banners,
+    operations::custom_fs::{d_f_exists, read_dir},
+};
 
 static ROCKSTAR_JSON: &str = r#"{
     "titles": [

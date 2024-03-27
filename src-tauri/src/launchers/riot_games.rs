@@ -1,5 +1,8 @@
-use crate::launchers::GameObject;
-use crate::operations::custom_fs::{d_f_exists, read_dir};
+use crate::{
+    launchers::GameObject,
+    modules::banners,
+    operations::custom_fs::{d_f_exists, read_dir},
+};
 use std::process::Command;
 
 fn get_riot_games_location(launcher_location: &str) -> String {
@@ -8,7 +11,8 @@ fn get_riot_games_location(launcher_location: &str) -> String {
 }
 
 pub async fn get_installed_games() -> Vec<GameObject> {
-    #[cfg(target_os = "windows")]
+    let mut all_games: Vec<GameObject> = Vec::new();
+
     let output = Command::new("cmd")
         .args(&[
             "/C",
@@ -28,7 +32,6 @@ pub async fn get_installed_games() -> Vec<GameObject> {
         .collect::<Vec<_>>()[1]
         .to_string();
 
-    let gameobj: Vec<_>;
     if d_f_exists(&get_riot_games_location(&launcher_location))
         .await
         .expect("Something went wrong")
@@ -40,23 +43,17 @@ pub async fn get_installed_games() -> Vec<GameObject> {
             .filter(|x| x != "Riot Client")
             .collect::<Vec<_>>();
 
-        gameobj = games
-            .iter()
-            .map(|x| parse_game_object(&launcher_location, &x))
-            .collect::<Vec<_>>();
+        for game in games {
+            all_games.push(parse_game_object(&launcher_location, &game).await)
+        }
     } else {
         return vec![];
     }
 
-    let mut games: Vec<GameObject> = vec![];
-
-    for obj in gameobj.into_iter() {
-        games.push(obj);
-    }
-    return games;
+    return all_games;
 }
 
-pub fn parse_game_object(path: &str, game: &str) -> GameObject {
+pub async fn parse_game_object(path: &str, game: &str) -> GameObject {
     let correct_args: &str;
     const VALORANT: &str = "VALORANT";
     const LOL: &str = "League of Legends";
@@ -71,7 +68,7 @@ pub fn parse_game_object(path: &str, game: &str) -> GameObject {
         LOR => {
             correct_args = "bacon";
         }
-        &_ => todo!()
+        &_ => todo!(),
     }
     let executable = "RiotClientServices.exe";
     let location = &path[0..path.len() - 22];
@@ -91,7 +88,7 @@ pub fn parse_game_object(path: &str, game: &str) -> GameObject {
         "".to_string(),
         "RiotGames".to_string(),
         args,
-    )
+    );
 }
 
 // export { getInstalledGames, parseGameObject };

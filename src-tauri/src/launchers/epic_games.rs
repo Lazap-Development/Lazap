@@ -1,7 +1,10 @@
 use serde::Deserialize;
 
-use crate::launchers::GameObject;
-use crate::operations::custom_fs::{d_f_exists, read_dir, read_file};
+use crate::{
+    launchers::GameObject,
+    modules::banners,
+    operations::custom_fs::{d_f_exists, read_dir, read_file},
+};
 
 #[derive(Deserialize, Debug)]
 struct EpicGamesItem {
@@ -43,7 +46,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
                 let file_prased: EpicGamesItem = serde_json::from_str(&file.unwrap()).unwrap();
                 let app_name_clone = file_prased.app_name.clone();
                 all_games.push(GameObject::new(
-                    banners::get_banner(&file_prased.display_name, "", "RiotGames").await,
+                    banners::get_banner(&file_prased.display_name, "", "EpicGames").await,
                     file_prased.launch_executable,
                     file_prased.install_location,
                     file_prased.display_name,
