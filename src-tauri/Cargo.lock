@@ -1914,20 +1914,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "html_parser"
-version = "0.6.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec016cabcf7c9c48f9d5fdc6b03f273585bfce640a0f47a69552039e92b1959a"
-dependencies = [
- "pest",
- "pest_derive",
- "serde",
- "serde_derive",
- "serde_json",
- "thiserror",
-]
-
-[[package]]
 name = "http"
 version = "0.2.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2271,7 +2257,6 @@ dependencies = [
  "actix-web",
  "base64 0.22.0",
  "declarative-discord-rich-presence",
- "html_parser",
  "keyvalues-serde",
  "openssl",
  "rand 0.8.5",

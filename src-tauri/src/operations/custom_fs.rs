@@ -1,7 +1,7 @@
 use std::fs;
 use std::path::Path;
 
-use super::Error;
+use crate::Error;
 
 #[tauri::command]
 pub fn read_file(file_path: String) -> Result<String, Error> {

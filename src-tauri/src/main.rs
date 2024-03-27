@@ -82,7 +82,6 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             operations::misc::launch_game,
-            operations::misc::parse,
             operations::misc::get_sys_info,
             operations::discord_rpc::set_rpc_activity,
             operations::discord_rpc::disable_rpc,
@@ -299,4 +298,19 @@ fn main() {
         ])
         .run(tauri::generate_context!())
         .expect("error while running lazap");
+}
+
+#[derive(Debug, thiserror::Error)]
+enum Error {
+    #[error(transparent)]
+    Io(#[from] std::io::Error),
+}
+
+impl serde::Serialize for Error {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::ser::Serializer,
+    {
+        serializer.serialize_str(self.to_string().as_ref())
+    }
 }

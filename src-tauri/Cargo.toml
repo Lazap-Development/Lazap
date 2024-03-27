@@ -40,7 +40,6 @@ tauri = { version = "1.6.1", features = [
     "updater",
 ] }
 tauri-plugin-single-instance = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
-html_parser = "0.6.3"
 thiserror = "1.0.38"
 whoami = "1.5.0"
 sysinfo = "0.28.4"

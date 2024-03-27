@@ -1,14 +1,8 @@
-use html_parser::Dom;
 use sha2::{Digest, Sha256};
 use sysinfo::{CpuExt, System, SystemExt};
 use tauri::Manager;
 
-use super::Error;
-
-#[tauri::command]
-pub fn parse(value: &str) -> Result<String, Error> {
-    Ok(Dom::parse(value)?.to_json_pretty()?)
-}
+use crate::Error;
 
 #[tauri::command]
 pub async fn launch_game(_exec: String, _args: String) {

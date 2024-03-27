@@ -8,6 +8,8 @@ use std::path::Path;
 use std::{thread, time};
 use tauri::Manager;
 
+use crate::Error;
+
 fn create_dir_if_not_exists(path: &str) {
     if !Path::new(path).exists() {
         fs::create_dir_all(path).expect("Failed to create dir.");
@@ -227,19 +229,4 @@ pub fn launcherdata_threads(window: tauri::Window) -> Result<(), std::io::Error>
 pub async fn launcherdata_threads_x(window: tauri::Window) -> Result<(), Error> {
     launcherdata_threads(window).expect("Failed to call launcherdata_threads.");
     Ok(())
-}
-
-#[derive(Debug, thiserror::Error)]
-pub enum Error {
-    #[error(transparent)]
-    Io(#[from] html_parser::Error),
-}
-
-impl serde::Serialize for Error {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::ser::Serializer,
-    {
-        serializer.serialize_str(self.to_string().as_ref())
-    }
 }
