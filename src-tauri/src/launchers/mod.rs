@@ -20,12 +20,12 @@ const LINE_ENDING: &'static str = "\r\n";
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GameObject {
+    banner_path: String,
     executable: String,
     location: String,
     display_name: String,
     game_id: String,
     launch_id: String,
-    banner_id: String,
     size: i64,
     launch_command: String,
     launcher_name: String,
@@ -34,24 +34,24 @@ pub struct GameObject {
 
 impl GameObject {
     pub fn new(
+        banner_path: String,
         executable: String,
         location: String,
         display_name: String,
         game_id: String,
         launch_id: String,
-        banner_id: String,
         size: i64,
         launch_command: String,
         launcher_name: String,
         args: Vec<String>,
     ) -> Self {
         Self {
+            banner_path,
             executable,
             location,
             display_name,
             game_id,
             launch_id,
-            banner_id,
             size,
             launch_command,
             launcher_name,

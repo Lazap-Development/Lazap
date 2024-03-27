@@ -1,4 +1,4 @@
-use crate::launchers::GameObject;
+use crate::{launchers::GameObject, modules::banners};
 
 #[cfg(any(target_os = "windows", target_os = "linux"))]
 use crate::operations::custom_fs::d_f_exists;
@@ -60,12 +60,12 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
                 }
 
                 return Some(GameObject::new(
+                    banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft").await,
                     executable,
                     location,
                     "Minecraft Launcher".to_string(),
                     "Minecraft".to_string(),
                     "0".to_string(),
-                    "".to_string(),
                     0,
                     "".to_string(),
                     "Minecraft".to_string(),
@@ -103,12 +103,12 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
             }
 
             return Some(GameObject::new(
+                banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft").await,
                 "Minecraft.exe".to_string(),
                 location,
                 "Minecraft Launcher".to_string(),
                 "Minecraft".to_string(),
                 "0".to_string(),
-                "".to_string(),
                 0,
                 "".to_string(),
                 "Minecraft".to_string(),
@@ -142,12 +142,12 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
             let executable = "minecraft-launcher";
 
             return Some(GameObject::new(
+                banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft").await,
                 executable.to_string(),
                 location.to_string(),
                 "Minecraft Launcher".to_string(),
                 "Minecraft".to_string(),
                 "0".to_string(),
-                "".to_string(),
                 0,
                 "".to_string(),
                 "Minecraft".to_string(),

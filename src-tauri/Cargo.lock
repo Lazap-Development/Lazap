@@ -2286,6 +2286,7 @@ dependencies = [
  "tauri-build",
  "tauri-plugin-single-instance",
  "thiserror",
+ "tokio-rusqlite",
  "whoami",
  "window-shadows",
  "window-vibrancy",
@@ -4478,6 +4479,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bbae76ab933c85776efabc971569dd6119c580d8f5d448769dec1764bf796ef2"
 dependencies = [
  "native-tls",
+ "tokio",
+]
+
+[[package]]
+name = "tokio-rusqlite"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c2cc5f712424f089fc6549afe39773e9f8914ce170c45b546be24830b482b127"
+dependencies = [
+ "crossbeam-channel",
+ "rusqlite",
  "tokio",
 ]
 

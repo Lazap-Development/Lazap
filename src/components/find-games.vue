@@ -69,10 +69,11 @@ class GameElement {
     element.addEventListener("load", async () => {
       if (block) return;
       // Load banner from getBanner() after default banner has loaded
-      banner = await this.getBanner();
+      if (this.data.banner_path) {
+        banner = await tauri.convertFileSrc(await this.data.banner_path);
+      }
       element.setAttribute("src", banner);
       element.style.content = "none";
-      this.cacheBanner(banner);
       block = true;
     });
     element.addEventListener("click", async () => {
@@ -87,12 +88,11 @@ class GameElement {
     const image = require("../assets/img/default-game-banner.png");
     element.style.background = `url(${image})`;
     element.style.backgroundSize = "cover";
-
-    let banner = await this.getBanner();
-    element.style.background = `url(${banner})`;
-    element.style.backgroundSize = "cover";
-
-    this.cacheBanner(banner);
+    if (this.data.banner_path) {
+      let banner = await tauri.convertFileSrc(await this.data.banner_path);
+      element.style.background = `url(${banner})`;
+      element.style.backgroundSize = "cover";
+    }
 
     element.addEventListener("click", () => {
       this.handleLaunch();
@@ -181,148 +181,6 @@ class GameElement {
     element.classList.add("gamebox-icon");
 
     return element;
-  }
-
-  async getBanner() {
-    const bannersDir = this.bannerdirarr;
-    const dispsha256 = await invoke("sha256", {
-      content: this.data.display_name
-        .replaceAll(" ", "_")
-        .replace(/[\u{0080}-\u{FFFF}/]/gu, ""),
-    });
-
-    if (bannersDir.includes(`${dispsha256}.png`)) {
-      return await tauri.convertFileSrc(
-        `${storage.bannersDir}/${dispsha256}.png`
-      );
-    } else {
-      switch (this.data.launcher_name) {
-        case "Steam": {
-          return `https://cdn.akamai.steamstatic.com/steam/apps/${this.data.game_id}/library_600x900.jpg`;
-        }
-        case "RiotGames": {
-          return "https://valorant-config.fr/wp-content/uploads/2020/05/7d604cf06abf5866f5f3a2fbd0deacf9-200x300.png";
-        }
-        case "Minecraft": {
-          return "https://i.imgur.com/PJFx3U2.jpg";
-        }
-        case "FiveM": {
-          return "https://logos-world.net/wp-content/uploads/2021/03/FiveM-Symbol.png";
-        }
-        case "Lunar": {
-          return "https://pbs.twimg.com/profile_images/1608698913476812801/uLTLhANK_400x400.jpg";
-        }
-        case "Lutris": {
-          if (
-            this.data.display_name.replaceAll(" ", "_") === "Epic_Games_Store"
-          )
-            return "https://pcper.com/wp-content/uploads/2021/02/epic-games-store.png";
-          if (
-            this.data.display_name.replaceAll(" ", "_") ===
-            "Rockstar_Games_Launcher"
-          )
-            return "https://cdn.player.one/sites/player.one/files/2019/08/26/rockstar-games.png";
-          return;
-        }
-        case "XboxGames": {
-          return this.data.Banner;
-        }
-        case "Osu": {
-          return "https://cdn2.steamgriddb.com/file/sgdb-cdn/grid/a5d7420f9fdc41087377b4d58c5fe94b.png";
-        }
-        case "EpicGames": {
-          const fetchEpicGame = await http.fetch(
-            `https://api.rawg.io/api/games?key=f8854c401fed44b89f4e1e4faa56ccc8&search=${this.data.display_name.replaceAll(
-              " ",
-              "-"
-            )}&search_exact&search_precise&stores=11`,
-            {
-              method: "GET",
-              mode: "no-cors",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (!fetchEpicGame.data.results[0]) break;
-          return (
-            fetchEpicGame.data.results[0].background_image.slice(0, 27) +
-            "/crop/600/400" +
-            fetchEpicGame.data.results[0].background_image.slice(27)
-          );
-        }
-        case "Uplay": {
-          const fetchUplay = await http.fetch(
-            `https://api.rawg.io/api/games?key=f8854c401fed44b89f4e1e4faa56ccc8&search=${this.data.display_name.replaceAll(
-              " ",
-              "_"
-            ).replace(/\d/g, (match) => `-${match}`)}&search_precise`,
-            {
-              method: "GET",
-              mode: "no-cors",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (!fetchUplay.data.results[0]) break;
-          return (
-            fetchUplay.data.results[0].background_image.slice(0, 27) +
-            "/crop/600/400" +
-            fetchUplay.data.results[0].background_image.slice(27)
-          );
-        }
-        case "RockstarGames": {
-          return `https://media-rockstargames-com.akamaized.net/rockstargames-newsite/img/global/games/fob/640/${this.data.banner_id}.jpg`;
-        }
-      }
-    }
-  }
-
-  async cacheBanner(banner) {
-    if (this.data.launcher_name === "CustomGame" || !banner) return;
-    const bannersDir = await storage.readBannersDir();
-    const dispsha256 = await invoke("sha256", {
-      content: this.data.display_name
-        .replaceAll(" ", "_")
-        .replace(/[\u{0080}-\u{FFFF}/]/gu, ""),
-    });
-
-    if (bannersDir.includes(`${dispsha256}.png`)) {
-      return await tauri.convertFileSrc(
-        `${storage.bannersDir}/${dispsha256}.png`
-      );
-    } else {
-      http
-        .fetch(banner, {
-          method: "GET",
-          headers: {
-            "Content-Type": "text/plain; charset=utf-8",
-          },
-          responseType: 3,
-        })
-        .then(async (response) => {
-          if (response.status === 404 && this.data.launcher_name === "Lutris")
-            return;
-
-          await invoke("write_binary_file", {
-            filePath: `${storage.bannersDir}/${dispsha256}.png`,
-            fileContent: response.data,
-          });
-          const banner = document.getElementById(
-            `game-div-${this.data.display_name.replaceAll(" ", "_")}`
-          )?.firstElementChild;
-          banner?.setAttribute(
-            "src",
-            tauri.convertFileSrc(`${storage.bannersDir}/${dispsha256}.png`)
-          );
-          banner.style = "content: none;";
-          banner.addEventListener("error", () => (banner.style = ""));
-        })
-        .catch((e) => console.error(e));
-    }
   }
 
   async handleLaunch() {
@@ -587,7 +445,6 @@ class Storage {
 // Imports
 const invoke = window.__TAURI__.invoke;
 const tauri = window.__TAURI__.tauri;
-const http = window.__TAURI__.http;
 
 const Window = window.__TAURI__.window;
 // Objects
@@ -620,7 +477,7 @@ export default {
       //	const data = await storage.getGamesData();
       //	games.push(...data.filter(x => x.launcher_name === 'CustomGame'));
       //}
-        
+
       // Save all games into JSON
       storage.setGamesData(games, "getInstalledGames");
 

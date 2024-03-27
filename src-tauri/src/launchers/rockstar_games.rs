@@ -278,12 +278,12 @@ async fn parse_game_object(path: &str, name: &str) -> Option<GameObject> {
             }
 
             return Some(GameObject::new(
+                banners::get_banner(&game.friendly_name, &game.banner_id, "RockstarGames").await,
                 executable.to_string(),
                 path.to_string(),
                 game.friendly_name.clone(),
                 format!("{}-{}", game.title_id, game.ros_title_id),
                 "0".to_string(),
-                game.banner_id.clone(),
                 0,
                 "".to_string(),
                 "RockstarGames".to_string(),

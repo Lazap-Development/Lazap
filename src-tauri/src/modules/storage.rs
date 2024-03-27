@@ -14,7 +14,7 @@ fn create_dir_if_not_exists(path: &str) {
     }
 }
 
-fn create_file_if_not_exists(file_path: &str, content: &str) -> Result<(), std::io::Error> {
+pub fn create_file_if_not_exists(file_path: &str, content: &str) -> Result<(), std::io::Error> {
     if !Path::new(file_path).exists() {
         let mut file = fs::File::create(file_path)?;
         writeln!(file, "{}", content)?;

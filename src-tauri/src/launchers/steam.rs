@@ -1,4 +1,5 @@
 use crate::launchers::GameObject;
+use crate::modules::banners;
 use crate::operations::custom_fs::{d_f_exists, read_dir, read_file};
 use serde::{Deserialize, Deserializer};
 use std::{collections::HashMap, fmt};
@@ -129,12 +130,12 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 
             #[cfg(target_os = "macos")]
             temp_all_games.push(GameObject::new(
+                banners::get_banner(&game_file_parsed.name, &game_file_parsed.appid, "Steam").await,
                 "".to_string(),
                 game_file_parsed.installdir.to_string(),
                 game_file_parsed.name,
                 game_file_parsed.appid.parse().unwrap(),
                 "0".to_string(),
-                "".to_string(),
                 game_file_parsed.size_on_disk.parse().unwrap(),
                 "".to_string(),
                 "Steam".to_string(),
@@ -143,12 +144,12 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 
             #[cfg(target_os = "windows")]
             temp_all_games.push(GameObject::new(
+                banners::get_banner(&game_file_parsed.name, &game_file_parsed.appid, "Steam").await,
                 "".to_string(),
                 game_file_parsed.launcherpath.to_string(),
                 game_file_parsed.name,
                 game_file_parsed.appid.parse().unwrap(),
                 "0".to_string(),
-                "".to_string(),
                 game_file_parsed.size_on_disk.parse().unwrap(),
                 "".to_string(),
                 "Steam".to_string(),
@@ -157,12 +158,12 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 
             #[cfg(target_os = "linux")]
             temp_all_games.push(GameObject::new(
+                banners::get_banner(&game_file_parsed.name, &game_file_parsed.appid, "Steam").await,
                 "".to_string(),
                 "".to_string(),
                 game_file_parsed.name,
                 game_file_parsed.appid.parse().unwrap(),
                 "0".to_string(),
-                "".to_string(),
                 game_file_parsed.size_on_disk.parse().unwrap(),
                 "".to_string(),
                 "Steam".to_string(),

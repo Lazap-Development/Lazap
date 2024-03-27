@@ -51,10 +51,6 @@
           }
         ]
       },
-      "http": {
-        "request": true,
-        "scope": ["https://**", "http://**"]
-      },
       "protocol": {
         "asset": true,
         "assetScope": ["$APPCONFIG/cache/games/banners/**", "$APPCONFIG/cache/user/**"]
