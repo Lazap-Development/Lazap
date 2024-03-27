@@ -6,9 +6,12 @@ mod modules;
 mod operations;
 
 use declarative_discord_rich_presence::DeclarativeDiscordIpcClient;
+use std::sync::Mutex;
 use tauri::{
     CustomMenuItem, Manager, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem,
 };
+
+static CONFIG_DIR: Mutex<String> = Mutex::new(String::new());
 
 const DISCORD_RPC_CLIENT_ID: &str = "932504287337148417";
 
@@ -20,8 +23,6 @@ struct Payload {
 
 #[cfg(target_os = "windows")]
 fn main() {
-    modules::storage::init_storage().expect("Failed to init storage fn.");
-
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()
@@ -37,6 +38,15 @@ fn main() {
             _ => {}
         })
         .setup(|app| {
+            *CONFIG_DIR.lock().unwrap() = app
+                .path_resolver()
+                .app_config_dir()
+                .unwrap_or(std::path::PathBuf::new())
+                .to_string_lossy()
+                .to_string();
+
+            modules::storage::init_storage().expect("Failed to init storage fn.");
+
             let window = app.get_window(&"main").unwrap();
             window_vibrancy::apply_acrylic(&window, Some((0, 0, 0, 25)))
                 .expect("Unsupported platform! 'apply_acrylic' is only supported on Windows 10/11");
@@ -113,8 +123,6 @@ fn main() {
 
 #[cfg(target_os = "linux")]
 fn main() {
-    modules::storage::init_storage().expect("Failed to init storage fn.");
-
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()
@@ -130,6 +138,15 @@ fn main() {
             _ => {}
         })
         .setup(|app| {
+            *CONFIG_DIR.lock().unwrap() = app
+                .path_resolver()
+                .app_config_dir()
+                .unwrap_or(std::path::PathBuf::new())
+                .to_string_lossy()
+                .to_string();
+
+            modules::storage::init_storage().expect("Failed to init storage fn.");
+
             let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
             app.manage(client);
             modules::storage::launcherdata_threads(app.get_window("main").unwrap())
@@ -170,7 +187,6 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             operations::misc::launch_game,
-            operations::misc::parse,
             operations::misc::get_sys_info,
             operations::discord_rpc::set_rpc_activity,
             operations::discord_rpc::disable_rpc,
@@ -202,8 +218,6 @@ fn main() {
 
 #[cfg(target_os = "macos")]
 fn main() {
-    modules::storage::init_storage().expect("Failed to init storage fn.");
-
     let show = CustomMenuItem::new("show".to_string(), "Show Lazap");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit Lazap");
     let tray_menu = SystemTrayMenu::new()
@@ -219,6 +233,15 @@ fn main() {
             _ => {}
         })
         .setup(|app| {
+            *CONFIG_DIR.lock().unwrap() = app
+                .path_resolver()
+                .app_config_dir()
+                .unwrap_or(std::path::PathBuf::new())
+                .to_string_lossy()
+                .to_string();
+
+            modules::storage::init_storage().expect("Failed to init storage fn.");
+
             let window = app.get_window("main").unwrap();
             window_vibrancy::apply_vibrancy(
                 &window,
@@ -270,7 +293,6 @@ fn main() {
         })
         .invoke_handler(tauri::generate_handler![
             operations::misc::launch_game,
-            operations::misc::parse,
             operations::misc::get_sys_info,
             operations::discord_rpc::set_rpc_activity,
             operations::discord_rpc::disable_rpc,

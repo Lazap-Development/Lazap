@@ -6,7 +6,7 @@ use std::{
 use reqwest::header::{ACCEPT, CONTENT_TYPE};
 use serde::Deserialize;
 
-use crate::operations::{custom_fs::d_f_exists, misc::sha256};
+use crate::{operations::{custom_fs::d_f_exists, misc::sha256}, CONFIG_DIR};
 
 pub async fn get_banner(display_name: &str, game_id: &str, launcher_name: &str) -> String {
     match launcher_name {
@@ -75,14 +75,8 @@ pub async fn get_banner(display_name: &str, game_id: &str, launcher_name: &str) 
 
 async fn fetch_banner(url: String, display_name: &str) -> String {
     let banners_dir = format!(
-        "{}com.lazap.config/cache/games/banners",
-        tauri::api::path::app_config_dir(&tauri::Config::default())
-            .ok_or(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "Failed to retrieve app config dir"
-            ))
-            .unwrap_or_default()
-            .display()
+        "{}/cache/games/banners",
+        CONFIG_DIR.lock().unwrap()
     );
 
     let dispsha256 = sha256(display_name.replace(" ", "_")).await.unwrap();
@@ -112,14 +106,8 @@ struct GameWithinRawg {
 
 async fn rawg_fetch_banner(display_name: &str) -> String {
     let banners_dir = format!(
-        "{}com.lazap.config/cache/games/banners",
-        tauri::api::path::app_config_dir(&tauri::Config::default())
-            .ok_or(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "Failed to retrieve app config dir"
-            ))
-            .unwrap_or_default()
-            .display()
+        "{}/cache/games/banners",
+        CONFIG_DIR.lock().unwrap()
     );
 
     let dispsha256 = sha256(display_name.replace(" ", "_")).await.unwrap();

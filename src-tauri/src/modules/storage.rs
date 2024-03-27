@@ -1,4 +1,4 @@
-use crate::addons;
+use crate::{addons, CONFIG_DIR};
 
 use rdev::{listen, simulate, Button, EventType, Key, SimulateError};
 use serde_json::Value;
@@ -25,24 +25,17 @@ pub fn create_file_if_not_exists(file_path: &str, content: &str) -> Result<(), s
 }
 
 pub fn init_storage() -> Result<(), std::io::Error> {
-    let base_config_path = format!(
-        "{}com.lazap.config",
-        tauri::api::path::app_config_dir(&tauri::Config::default())
-            .ok_or(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "Failed to retrieve app config dir"
-            ))?
-            .display()
-    );
-    let base_config_cache_path = format!("{}/cache", base_config_path);
+    let config_dir = CONFIG_DIR.lock().unwrap();
+
+    let base_config_cache_path = format!("{}/cache", &config_dir);
     let base_config_cache_games_path = format!("{}/games", base_config_cache_path);
     let base_config_cache_user_path = format!("{}/user", base_config_cache_path);
     let base_config_cache_games_banners_path = format!("{}/banners", base_config_cache_games_path);
-    let base_config_ld_file = format!("{}/LauncherData.json", base_config_path);
+    let base_config_ld_file = format!("{}/LauncherData.json", &config_dir);
     let base_config_cache_user_data_file = format!("{}/data.json", base_config_cache_user_path);
     let base_config_cache_game_data_file = format!("{}/data.json", base_config_cache_games_path);
 
-    create_dir_if_not_exists(&base_config_path);
+    create_dir_if_not_exists(&config_dir);
     create_dir_if_not_exists(&base_config_cache_path);
     create_dir_if_not_exists(&base_config_cache_games_path);
     create_dir_if_not_exists(&base_config_cache_games_banners_path);
@@ -111,16 +104,9 @@ fn extract_keys(json: &Value) -> Vec<String> {
 }
 
 pub fn launcherdata_threads(window: tauri::Window) -> Result<(), std::io::Error> {
-    let base_config_path = format!(
-        "{}com.lazap.config",
-        tauri::api::path::app_config_dir(&tauri::Config::default())
-            .ok_or(std::io::Error::new(
-                std::io::ErrorKind::Other,
-                "Failed to retrieve app config dir"
-            ))?
-            .display()
-    );
-    let base_config_ld_file = format!("{}/LauncherData.json", base_config_path);
+    let config_dir = CONFIG_DIR.lock().unwrap();
+
+    let base_config_ld_file = format!("{}/LauncherData.json", &config_dir);
 
     #[derive(serde::Deserialize)]
     struct LauncherData {
