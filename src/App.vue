@@ -800,7 +800,7 @@ body {
   height: 61%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
-  border: solid rgba(var(--accent-color), 0.7) 6px;
+  border: solid rgba(var(--accent-color), 1.0) 6px;
   background-position: 50% 40% !important;
 }
 
@@ -812,7 +812,7 @@ body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   transform: scale(1.02);
   cursor: pointer;
-  opacity: 1;
+  opacity: 0.9;
 }
 
 .mainPageGamebox img {

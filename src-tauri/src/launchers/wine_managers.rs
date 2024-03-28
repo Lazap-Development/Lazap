@@ -1,7 +1,7 @@
 use tauri::api::path;
 use tokio_rusqlite::Connection;
 
-use crate::{launchers::GameObject, modules::banners, operations::custom_fs::d_f_exists};
+use crate::{launchers::{is_installed, GameObject}, modules::banners, operations::custom_fs::d_f_exists};
 
 pub async fn get_installed_games() -> Vec<GameObject> {
     let mut all_games: Vec<GameObject> = Vec::new();
@@ -18,23 +18,22 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 async fn get_lutris_games() -> Option<Vec<GameObject>> {
     let mut all_lutris_games = Vec::new();
 
-    let launcher_location: String = path::home_dir()
+    if !is_installed("lutris", "net.lutris.Lutris") {
+        return None;
+    }
+
+    let launcher_location: String = path::data_dir()
         .unwrap()
         .into_os_string()
         .into_string()
         .unwrap()
-        + "/.local/share/lutris";
+        + "/lutris";
 
     if !d_f_exists(&launcher_location).await.unwrap_or(false) {
         return None;
     }
 
-    let db_path: String = path::data_dir()
-        .unwrap()
-        .into_os_string()
-        .into_string()
-        .unwrap()
-        + "/lutris/pga.db";
+    let db_path: String = format!("{}/pga.db", launcher_location);
 
     if !d_f_exists(&db_path).await.unwrap() {
         return None;

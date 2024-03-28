@@ -13,6 +13,7 @@ mod wine_managers;
 #[cfg(target_os = "windows")]
 mod xbox_games;
 
+use std::process::Command;
 use serde::{Deserialize, Serialize};
 
 #[cfg(target_os = "windows")]
@@ -58,6 +59,29 @@ impl GameObject {
             args,
         }
     }
+}
+
+#[cfg(target_os = "linux")]
+fn is_installed(native_name: &str, flatpak_name: &str) -> bool {
+    let flatpak = String::from_utf8(Command::new("flatpak")
+        .arg("list")
+        .output()
+        .expect("Failed to execute command").stdout).unwrap_or_default();
+
+    let native = String::from_utf8(Command::new("which")
+        .arg(native_name)
+        .output()
+        .expect("Failed to execute command").stdout).unwrap_or_default();
+
+    if native.starts_with("/") {
+        return true;
+    } else {
+        if flatpak.contains(flatpak_name) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 #[tauri::command]

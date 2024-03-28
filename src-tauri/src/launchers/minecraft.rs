@@ -1,9 +1,5 @@
-use crate::{
-    launchers::GameObject,
-    modules::banners,
-};
+use crate::{launchers::GameObject, modules::banners};
 
-#[cfg(any(target_os = "windows", target_os = "linux"))]
 use crate::operations::custom_fs::d_f_exists;
 
 #[cfg(target_os = "windows")]
@@ -16,7 +12,7 @@ use crate::launchers::LINE_ENDING;
 use tauri::api::path;
 
 #[cfg(any(target_os = "linux"))]
-use std::process::Command;
+use crate::launchers::is_installed;
 
 pub async fn get_installed_games() -> Vec<GameObject> {
     let mut all_games: Vec<GameObject> = Vec::new();
@@ -29,9 +25,6 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 }
 
 async fn get_minecraft_launcher() -> Option<GameObject> {
-    #[cfg(any(target_os = "macos"))]
-    return None;
-
     #[cfg(target_os = "windows")]
     {
         let output = Command::new("cmd")
@@ -137,42 +130,37 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
 
     #[cfg(any(target_os = "linux"))]
     {
-        let output = Command::new("which")
-            .arg("minecraft-launcher")
-            .output()
-            .expect("Failed to execute command");
-
-        if output.status.success() {
-            let home_dir = path::home_dir()
-                .unwrap()
-                .into_os_string()
-                .into_string()
-                .unwrap();
-
-            if !d_f_exists(&format!("{}/.minecraft", home_dir))
-                .await
-                .unwrap()
-            {
-                return None;
-            }
-
-            let location = "/usr/bin/minecraft-launcher";
-            let executable = "minecraft-launcher";
-
-            return Some(GameObject::new(
-                banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft").await,
-                executable.to_string(),
-                location.to_string(),
-                "Minecraft Launcher".to_string(),
-                "Minecraft".to_string(),
-                "0".to_string(),
-                0,
-                "".to_string(),
-                "Minecraft".to_string(),
-                vec![],
-            ));
-        } else {
+        if !is_installed("minecraft-launcher", "com.mojang.Minecraft") {
             return None;
         }
+        
+        let home_dir = path::home_dir()
+            .unwrap()
+            .into_os_string()
+            .into_string()
+            .unwrap();
+
+        if !d_f_exists(&format!("{}/.minecraft", home_dir))
+            .await
+            .unwrap()
+        {
+            return None;
+        }
+
+        let location = "/usr/bin/minecraft-launcher";
+        let executable = "minecraft-launcher";
+
+        return Some(GameObject::new(
+            banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft").await,
+            executable.to_string(),
+            location.to_string(),
+            "Minecraft Launcher".to_string(),
+            "Minecraft".to_string(),
+            "0".to_string(),
+            0,
+            "".to_string(),
+            "Minecraft".to_string(),
+            vec![],
+        ));
     }
 }
