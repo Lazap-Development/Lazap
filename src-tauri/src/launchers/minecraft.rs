@@ -1,4 +1,7 @@
-use crate::{launchers::GameObject, modules::banners};
+use crate::{
+    launchers::{GameObject, LINE_ENDING},
+    modules::banners,
+};
 
 #[cfg(any(target_os = "windows", target_os = "linux"))]
 use crate::operations::custom_fs::d_f_exists;
@@ -78,29 +81,41 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
             let is_installed_output = Command::new("cmd")
                 .args(&[
                     "/C",
-                    "powershell",
-                    "Get-appxpackage",
-                    "Microsoft.4297127D64EC6",
+                    "Reg",
+                    "query",
+                    "HKEY_CURRENT_USER\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\AppModel\\Repository\\Packages",
+                    "/s",
+                    "/f",
+                    "Microsoft.4297127D64EC6*"
                 ])
                 .creation_flags(0x08000000)
                 .output()
                 .ok()?
                 .stdout;
 
-            if is_installed_output.len() < 1 {
-                return None;
-            }
-
             let is_installed_str = str::from_utf8(&is_installed_output).ok()?;
 
-            let location = is_installed_str
-                .split("\r\n")
-                .find(|x| x.trim().starts_with("InstallLocation"))
-                .map(|x| x.split(" : ").nth(1).unwrap_or("").trim().to_string())?;
-
-            if !d_f_exists(&location).await.unwrap() {
+            if is_installed_str.contains("0 match") {
                 return None;
             }
+
+            let minecraft_reg_output = Command::new("cmd")
+                .args(&[
+                    "/C",
+                    "Reg",
+                    "query",
+                    is_installed_str.split(&LINE_ENDING).nth(1).unwrap(),
+                ])
+                .creation_flags(0x08000000)
+                .output()
+                .ok()?
+                .stdout;
+
+            let location = str::from_utf8(&minecraft_reg_output)
+                .ok()?
+                .split(&LINE_ENDING)
+                .find(|x| x.trim().starts_with("PackageRootFolder"))
+                .map(|x| x.split(" : ").nth(1).unwrap_or("").trim().to_string())?;
 
             return Some(GameObject::new(
                 banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft").await,
