@@ -208,9 +208,9 @@ export default {
 
       await invoke("show_window");
 
-      await findGamesModule.loadGames("allGamesList").catch((err) => {
+      /* await findGamesModule.loadGames("allGamesList").catch((err) => {
         return console.error(err);
-      });
+      }); */
       
       document
         .getElementById("text")
