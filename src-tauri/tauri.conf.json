@@ -9,9 +9,10 @@
   },
   "package": {
     "productName": "Lazap",
-    "version": "0.7.0"
+    "version": "0.8.0"
   },
   "tauri": {
+    "macOSPrivateApi": true,
     "systemTray": {
       "iconPath": "icons/icon.ico",
       "iconAsTemplate": true
@@ -49,10 +50,6 @@
             "args": true
           }
         ]
-      },
-      "http": {
-        "request": true,
-        "scope": ["https://**", "http://**"]
       },
       "protocol": {
         "asset": true,
@@ -142,6 +139,7 @@
         "minWidth": 1330,
         "center": true,
         "visible": false,
+        "transparent": true,
         "focus": true,
         "decorations": false,
         "url": "index.html"
@@ -163,7 +161,7 @@
       },
       {
         "label": "overlay",
-        "fullscreen": true,
+        "fullscreen": false,
         "resizable": false,
         "maximized": true,
         "title": "Lazap Overlay",

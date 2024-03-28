@@ -44,15 +44,15 @@ export default {
 
 <style>
 :root {
-    --accentColor: rgb(121, 52, 250);
-    --allColorBack: #15161b;
-    --allColorPrimary: #18191f;
-    --accentColorDark: rgb(121, 52, 250);
-    --allColorBackDark: #15161b;
-    --allColorPrimaryDark: #18191f;
-    --accentColorLight: #FFFF;
-    --allColorBackLight: #FFFF;
-    --allColorPrimaryLight: #FFFF;
+    --accent-color: rgb(121, 52, 250);
+    --all-color-back: #15161b;
+    --all-color-primary: #18191f;
+    --accent-colorDark: rgb(121, 52, 250);
+    --all-color-backDark: #15161b;
+    --all-color-primaryDark: #18191f;
+    --accent-colorLight: #FFFF;
+    --all-color-backLight: #FFFF;
+    --all-color-primaryLight: #FFFF;
 }
 
 * {
@@ -83,7 +83,7 @@ body {
 
 .leftbar {
     position: relative;
-    background-color: var(--allColorBack);
+    background-color: var(--all-color-back);
     width: 150px;
     height: 600px;
     border-radius: 10px;

@@ -4,10 +4,27 @@
       <div>
         <div class="user-pfp">
           <label for="file"></label>
-          <input id="file" type="file" accept="image/png" @change="(event) => loadPFP(event)" />
-          <img src="../assets/svg/default-profile.svg" alt="Avatar" width="88" id="output" />
+          <input
+            id="file"
+            type="file"
+            accept="image/png"
+            @change="(event) => loadPFP(event)"
+          />
+          <img
+            src="../assets/svg/default-profile.svg"
+            alt="Avatar"
+            width="88"
+            id="output"
+          />
         </div>
-        <input class="username" id="text" type="text" value="Lazap" spellcheck="false" maxlength="12" />
+        <input
+          class="username"
+          id="text"
+          type="text"
+          value="Lazap"
+          spellcheck="false"
+          maxlength="12"
+        />
       </div>
     </div>
 
@@ -23,19 +40,34 @@
       <div class="category-name d-flex justify-content-left">Games</div>
       <div class="d-flex justify-content-center">
         <div class="side-tab" id="recent-btn">
-          <img id="recently-btn-img" src="../assets/svg/recent.svg" height="25" width="25" />
+          <img
+            id="recently-btn-img"
+            src="../assets/svg/recent.svg"
+            height="25"
+            width="25"
+          />
           <div class="side-tab-text">Recent</div>
         </div>
       </div>
       <div class="d-flex justify-content-center">
         <div class="side-tab" id="games-btn">
-          <img id="games-btn-img" src="../assets/svg/games.svg" height="25" width="25" />
+          <img
+            id="games-btn-img"
+            src="../assets/svg/games.svg"
+            height="25"
+            width="25"
+          />
           <div class="side-tab-text">All Games</div>
         </div>
       </div>
       <div class="d-flex justify-content-center pb-2">
         <div class="side-tab" id="favs-btn">
-          <img id="favs-btn-img" src="../assets/svg/favs.svg" height="25" width="25" />
+          <img
+            id="favs-btn-img"
+            src="../assets/svg/favs.svg"
+            height="25"
+            width="25"
+          />
           <div class="side-tab-text">Favourites</div>
         </div>
       </div>
@@ -125,7 +157,7 @@ export default {
           toggleIndicatorAnim();
         }
 
-        switchDisplay('home');
+        switchDisplay("home");
 
         await findGamesModule
           .loadGames("recentGamesListMainPage")
@@ -144,7 +176,7 @@ export default {
           toggleIndicatorAnim();
         }
 
-        switchDisplay('recent');
+        switchDisplay("recent");
 
         await findGamesModule.loadGames("recentGamesList").catch((err) => {
           return console.error(err);
@@ -168,7 +200,7 @@ export default {
           toggleIndicatorAnim();
         }
 
-        switchDisplay('games');
+        switchDisplay("games");
 
         await findGamesModule.loadGames("allGamesList").catch((err) => {
           return console.error(err);
@@ -187,15 +219,14 @@ export default {
           toggleIndicatorAnim();
         }
 
-        switchDisplay('favs');
+        switchDisplay("favs");
 
         await findGamesModule.loadGames("favGamesList").catch((err) => {
           return console.error(err);
         });
 
         if (document.getElementById("favGamesList").childNodes.length > 0) {
-          document.getElementById("favGamesPlaceholder").style.display =
-            "none";
+          document.getElementById("favGamesPlaceholder").style.display = "none";
         }
 
         setActivity("favourites");
@@ -209,7 +240,7 @@ export default {
           toggleIndicatorAnim();
         }
 
-        switchDisplay('messages');
+        switchDisplay("messages");
         setActivity("messages");
       });
 
@@ -221,7 +252,7 @@ export default {
           toggleIndicatorAnim();
         }
 
-        switchDisplay('activity');
+        switchDisplay("activity");
         setActivity("activity");
       });
 
@@ -233,22 +264,23 @@ export default {
           toggleIndicatorAnim();
         }
 
-        switchDisplay('friends');
+        switchDisplay("friends");
         setActivity("friends");
       });
 
     function switchDisplay(name) {
-      home.style.display = name === 'home' ? 'flex' : 'none';
-      recent.style.display = name === 'recent' ? 'flex' : 'none';
-      games.style.display = name === 'games' ? 'flex' : 'none';
-      favs.style.display = name === 'favs' ? 'flex' : 'none';
-      messages.style.display = name === 'messages' ? 'flex' : 'none';
-      activity.style.display = name === 'activity' ? 'flex' : 'none';
-      friends.style.display = name === 'friends' ? 'flex' : 'none';
-      gameMenu.style.display = name === 'gameMenu' ? 'flex' : 'none';
+      home.style.display = name === "home" ? "flex" : "none";
+      recent.style.display = name === "recent" ? "flex" : "none";
+      games.style.display = name === "games" ? "flex" : "none";
+      favs.style.display = name === "favs" ? "flex" : "none";
+      messages.style.display = name === "messages" ? "flex" : "none";
+      activity.style.display = name === "activity" ? "flex" : "none";
+      friends.style.display = name === "friends" ? "flex" : "none";
+      gameMenu.style.display = name === "gameMenu" ? "flex" : "none";
     }
     async function setActivity(tab) {
-      const { details, largeText, smallImage, smallText } = require("./modules/rpcOptions").selectOption(tab);
+      const { details, largeText, smallImage, smallText } =
+        require("./modules/rpcOptions").selectOption(tab);
       if (timestamp === null) timestamp = Date.now();
       try {
         await invoke(`set_rpc_activity`, {
@@ -275,9 +307,9 @@ export default {
 
 <style>
 .leftbar {
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   border-radius: 20px;
-  width: 270px;
+  width: 280px;
   height: 100%;
   text-align: center;
   box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
@@ -333,18 +365,16 @@ export default {
 }
 
 .side-tabs {
-  margin-left: 20px;
-  position: absolute;
   height: 420px;
+  width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
 .side-tab {
-  background-color: var(--allColorPrimary);
   box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.2);
   height: 40px;
-  width: 230px;
+  width: 235px;
   border-radius: 10px;
   display: flex;
   margin-bottom: 10px;
@@ -353,13 +383,15 @@ export default {
 }
 
 .side-tab:before {
-  background: linear-gradient(30deg,
-  var(--allColorPrimary) 0%,
-      var(--allColorPrimary) 30%,
-      var(--accentColor) 100%);
+  background: linear-gradient(
+    30deg,
+    rgba(var(--all-color-primary), 0.3) 0%,
+    rgba(var(--all-color-primary), 0.3) 30%,
+    rgba(var(--accent-color), 0.7) 100%
+  );
   content: "";
   height: 40px;
-  width: 230px;
+  width: 235px;
   border-radius: 10px;
   display: flex;
   margin-bottom: 10px;
@@ -379,7 +411,8 @@ export default {
 }
 
 .side-tab img {
-  filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
+  filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg)
+    brightness(108%) contrast(108%);
   margin-left: 25px;
   margin-top: 8px;
   margin-right: 5px;
@@ -398,13 +431,10 @@ export default {
 
 .category-name {
   color: #7a7a7a;
-  margin-left: 10px;
+  margin-left: 28px;
   margin-bottom: 4px;
   font-size: 15px;
-}
-
-.category-name:hover {
-  cursor: default;
+  cursor: default !important;
 }
 
 .indicator {
@@ -413,7 +443,7 @@ export default {
   margin-top: 5px;
   margin-left: 2px;
 
-  background-color: var(--accentColor);
+  background-color: rgba(var(--accent-color), 0.7);
   height: 32px;
   width: 5px;
   border-radius: 50px;

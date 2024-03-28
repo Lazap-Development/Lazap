@@ -13,7 +13,11 @@
           <p>Launch on Startup</p>
           <div class="btnInput">
             <label class="switch">
-              <input type="checkbox" id="setting-launch_on_startup" disabled="readonly" />
+              <input
+                type="checkbox"
+                id="setting-launch_on_startup"
+                disabled="readonly"
+              />
               <div>
                 <span></span>
               </div>
@@ -25,7 +29,11 @@
           <p>Skip Login Menu</p>
           <div class="btnInput">
             <label class="switch">
-              <input type="checkbox" id="setting-skip_login" disabled="readonly" />
+              <input
+                type="checkbox"
+                id="setting-skip_login"
+                disabled="readonly"
+              />
               <div>
                 <span></span>
               </div>
@@ -73,9 +81,21 @@
       <div class="appearance-settings" id="appearance-settings">
         <div class="setting themes">
           <label class="color">
-            <div class="theme-box" id="theme-box-default" style="background-color: #000;"></div>
-            <div class="theme-box" id="theme-box-crimson" style="background-color: #660708;"></div>
-            <div class="theme-box" id="theme-box-midnight" style="background-color: #240046;"></div>
+            <div
+              class="theme-box"
+              id="theme-box-default"
+              style="background-color: #000"
+            ></div>
+            <div
+              class="theme-box"
+              id="theme-box-crimson"
+              style="background-color: #660708"
+            ></div>
+            <div
+              class="theme-box"
+              id="theme-box-midnight"
+              style="background-color: #240046"
+            ></div>
           </label>
         </div>
         <div class="setting">
@@ -127,7 +147,7 @@
         </div>
       </div>
 
-      <div class="general-settings" id="addons-settings" style="display: none;">
+      <div class="general-settings" id="addons-settings" style="display: none">
         <div class="setting">
           <p>Discord Rich Presence</p>
           <div class="btnInput">
@@ -156,7 +176,11 @@
           <p>YouTube Music Connection</p>
           <div class="btnInput">
             <label class="switch">
-              <input type="checkbox" id="setting-enable_ytm" disabled="readonly" />
+              <input
+                type="checkbox"
+                id="setting-enable_ytm"
+                disabled="readonly"
+              />
               <div>
                 <span></span>
               </div>
@@ -177,7 +201,7 @@
         </div>
       </div>
 
-      <div class="settings-footer">Release v0.7.0</div>
+      <div class="settings-footer">Release v0.8.0</div>
     </div>
   </div>
 </template>
@@ -209,7 +233,7 @@ export default {
         );
         document.querySelectorAll("input[id^=setting-]").forEach((input) => {
           if (input.id.startsWith("setting") && input.id.endsWith("Color"))
-            input.value = Data[input.id.split("-")[1]];
+            input.value = rgbToHex(Data[input.id.split("-")[1]]);
           else input.checked = Data[input.id.split("-")[1]] ? true : false;
         });
       });
@@ -240,20 +264,27 @@ export default {
 
     const repeats = document.getElementsByClassName("repeatButton");
     const defaults = {
-      primaryColor: '#0c0b0e',
-      backgroundColor: '#140e24',
-      frontColor: '#2a1051',
-      accentColor: '#7934fa',
+      primaryColor: "12, 11, 14",
+      backgroundColor: "20, 14, 36",
+      frontColor: "42, 16, 81",
+      accentColor: "121, 52, 250",
     };
     for (let i = 0; i < repeats.length; i++) {
-      const id = repeats.item(i).parentElement.children.item(0).children.item(0).id.split('-')[1];
+      const id = repeats
+        .item(i)
+        .parentElement.children.item(0)
+        .children.item(0)
+        .id.split("-")[1];
       repeats.item(i).addEventListener("click", async () => {
         LauncherData[id] = defaults[id];
         await invoke("write_file", {
           filePath: (await path.appDir()) + "LauncherData.json",
           fileContent: JSON.stringify(LauncherData),
         });
-        document.getElementById(`setting-${id}`).value = LauncherData[id];
+        console.log(rgbToHex(LauncherData[id]));
+        document.getElementById(`setting-${id}`).value = rgbToHex(
+          LauncherData[id]
+        );
         updateColor(id, LauncherData[id]);
       });
     }
@@ -261,57 +292,78 @@ export default {
     document.querySelectorAll("input[id^=setting-]").forEach((input) => {
       if (input.id === "setting-accentColor") {
         input.addEventListener("input", async () => {
-          LauncherData[input.id.split("-")[1]] = document.querySelector(
-            `input[id=${input.id}]`
-          ).value;
+          let hexValue = document.querySelector(`input[id=${input.id}]`).value;
+          LauncherData[input.id.split("-")[1]] = `${parseInt(
+            hexValue.substr(1, 2),
+            16
+          )}, ${parseInt(hexValue.substr(3, 2), 16)},${parseInt(
+            hexValue.substr(5, 2),
+            16
+          )}`;
+
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
 
-          updateColor('accentColor', LauncherData.accentColor);
+          updateColor("accentColor", LauncherData.accentColor);
         });
         return;
-      }
-      else if (input.id === 'setting-backgroundColor') {
+      } else if (input.id === "setting-backgroundColor") {
         input.addEventListener("input", async () => {
-          LauncherData[input.id.split("-")[1]] = document.querySelector(
-            `input[id=${input.id}]`
-          ).value;
+          let hexValue = document.querySelector(`input[id=${input.id}]`).value;
+          LauncherData[input.id.split("-")[1]] = `${parseInt(
+            hexValue.substr(1, 2),
+            16
+          )}, ${parseInt(hexValue.substr(3, 2), 16)},${parseInt(
+            hexValue.substr(5, 2),
+            16
+          )}`;
+
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
 
-          updateColor('backgroundColor', LauncherData.backgroundColor);
+          updateColor("backgroundColor", LauncherData.backgroundColor);
         });
         return;
-      }
-      else if (input.id === 'setting-frontColor') {
+      } else if (input.id === "setting-frontColor") {
         input.addEventListener("input", async () => {
-          LauncherData[input.id.split("-")[1]] = document.querySelector(
-            `input[id=${input.id}]`
-          ).value;
+          let hexValue = document.querySelector(`input[id=${input.id}]`).value;
+          LauncherData[input.id.split("-")[1]] = `${parseInt(
+            hexValue.substr(1, 2),
+            16
+          )}, ${parseInt(hexValue.substr(3, 2), 16)},${parseInt(
+            hexValue.substr(5, 2),
+            16
+          )}`;
+
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
 
-          updateColor('frontColor', LauncherData.frontColor);
+          updateColor("frontColor", LauncherData.frontColor);
         });
         return;
-      }
-      else if (input.id === 'setting-primaryColor') {
+      } else if (input.id === "setting-primaryColor") {
         input.addEventListener("input", async () => {
-          LauncherData[input.id.split("-")[1]] = document.querySelector(
-            `input[id=${input.id}]`
-          ).value;
+          let hexValue = document.querySelector(`input[id=${input.id}]`).value;
+          LauncherData[input.id.split("-")[1]] = `${parseInt(
+            hexValue.substr(1, 2),
+            16
+          )}, ${parseInt(hexValue.substr(3, 2), 16)},${parseInt(
+            hexValue.substr(5, 2),
+            16
+          )}`;
+
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
 
-          updateColor('primaryColor', LauncherData.primaryColor);
+          updateColor("primaryColor", LauncherData.primaryColor);
         });
         return;
       }
@@ -345,7 +397,7 @@ export default {
         }
 
         if (input.id === "setting-enable_spotify") {
-          await invoke("launcherdata_threads_x")
+          await invoke("launcherdata_threads_x");
 
           const { enable_spotify } = JSON.parse(
             await invoke("read_file", {
@@ -358,41 +410,42 @@ export default {
             await invoke("spotify_connect");
           }
 
-          window.location.reload()
+          window.location.reload();
         }
 
         if (input.id === "setting-enable_overlay") {
-          await invoke("launcherdata_threads_x")
-          alert("A restart is required.")
+          await invoke("launcherdata_threads_x");
+          alert("A restart is required.");
         }
 
-        if (input.id === "setting-enableLauncherIcons") window.location.reload();
+        if (input.id === "setting-enableLauncherIcons")
+          window.location.reload();
       });
     });
 
-    document.querySelectorAll('div[id^=theme-box-]').forEach((div) => {
+    document.querySelectorAll("div[id^=theme-box-]").forEach((div) => {
       const themes = {
         default: {
-          primaryColor: '#0c0b0e',
-          backgroundColor: '#140e24',
-          frontColor: '#2a1051',
-          accentColor: '#7934fa',
+          primaryColor: "12, 11, 14",
+          backgroundColor: "20, 14, 36",
+          frontColor: "42, 16, 81",
+          accentColor: "121, 52, 250",
         },
         midnight: {
-          primaryColor: '#240046',
-          backgroundColor: '#230264',
-          frontColor: '#2a1051',
-          accentColor: '#7934FA',
+          primaryColor: "36, 0, 70",
+          backgroundColor: "35, 2, 100",
+          frontColor: "42, 16, 81",
+          accentColor: "121, 52, 250",
         },
         crimson: {
-          primaryColor: '#660708',
-          backgroundColor: '#2b080e',
-          frontColor: '#390808',
-          accentColor: '#a51d2d',
+          primaryColor: "102, 7, 8",
+          backgroundColor: "43, 8, 14",
+          frontColor: "57, 8, 8",
+          accentColor: "165, 29, 45",
         },
       };
-      div.addEventListener('click', async () => {
-        const name = div.id.split('-')[2];
+      div.addEventListener("click", async () => {
+        const name = div.id.split("-")[2];
         const theme = themes[name];
         let LauncherData = JSON.parse(
           await invoke("read_file", {
@@ -406,22 +459,33 @@ export default {
           fileContent: JSON.stringify(LauncherData),
         });
 
-        updateColor('primaryColor', theme.primaryColor);
-        updateColor('backgroundColor', theme.backgroundColor);
-        updateColor('frontColor', theme.frontColor);
-        updateColor('accentColor', theme.accentColor);
+        updateColor("primaryColor", theme.primaryColor);
+        updateColor("backgroundColor", theme.backgroundColor);
+        updateColor("frontColor", theme.frontColor);
+        updateColor("accentColor", theme.accentColor);
       });
     });
     function updateColor(id, color) {
       const vals = {
-        primaryColor: 'allColorPrimary',
-        backgroundColor: 'allColorBack',
-        frontColor: 'allColorFront',
-        accentColor: 'accentColor',
+        primaryColor: "all-color-primary",
+        backgroundColor: "all-color-back",
+        frontColor: "all-color-front",
+        accentColor: "accent-color",
       };
       // document.getElementById("indicator").style.backgroundColor = color;
       document.querySelector(":root").style.setProperty(`--${vals[id]}`, color);
-      document.getElementById(`setting-${id}`).value = color;
+
+      document.getElementById(`setting-${id}`).value = rgbToHex(color);
+    }
+
+    function rgbToHex(x) {
+      let str_array = x.split(", ");
+      return (
+        "#" +
+        ((1 << 24) | (str_array[0] << 16) | (str_array[1] << 8) | str_array[2])
+          .toString(16)
+          .slice(1)
+      );
     }
 
     async function setActivity(tab) {
@@ -456,10 +520,10 @@ export default {
   background-color: #0f10136e;
   backdrop-filter: blur(10px);
   display: none;
-  margin-top: -8px;
-  margin-left: -8px;
+  margin-top: -10px;
   justify-content: center;
   align-content: center;
+  border-radius: 16px !important;
 }
 
 .settings {
@@ -467,8 +531,8 @@ export default {
   height: 540px;
   width: 600px;
   display: none;
-  background: var(--allColorPrimary);
-  border: 4px solid var(--accentColor);
+  background: rgba(var(--all-color-primary), 0.7);
+  border: 4px solid rgba(var(--accent-color), 0.7);
   z-index: 2000;
   border-radius: 20px;
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
@@ -537,7 +601,7 @@ export default {
   text-shadow: none;
   font-size: 18px;
 
-  background: var(--allColorFront);
+  background: rgba(var(--all-color-front), 0.7);
   width: 150px;
   height: 40px;
   border: none;
@@ -558,7 +622,7 @@ export default {
 }
 
 .choser button:hover {
-  border: var(--accentColor);
+  border: rgba(var(--accent-color), 0.7);
   border-width: 4px;
   border-style: solid;
   cursor: pointer;
@@ -585,7 +649,7 @@ export default {
 }
 
 .appearance-settings .themes .color .theme-box {
-  border: 4px solid var(--accentColor);
+  border: 4px solid rgba(var(--accent-color), 0.7);
   border-right: 0px;
 }
 
@@ -596,7 +660,7 @@ export default {
 
 .appearance-settings .themes .color .theme-box:last-child {
   border-radius: 0px 10px 10px 0px;
-  border-right: 4px solid var(--accentColor);
+  border-right: 4px solid rgba(var(--accent-color), 0.7);
 }
 
 .appearance-settings .setting,
@@ -621,9 +685,9 @@ export default {
   width: 120px;
 }
 
-input[type=color] {
-  background-color: var(--allColorPrimary);
-  color: var(--allColorPrimary);
+input[type="color"] {
+  background-color: rgba(var(--all-color-primary), 0.7);
+  color: rgba(var(--all-color-primary), 0.7);
   padding: 0;
   margin: 4px;
   height: 40px;
@@ -644,14 +708,14 @@ input[type=color] {
   display: none;
 }
 
-.switch input+div {
+.switch input + div {
   /* margin-top: -41px; */
   margin-left: 280px;
   position: relative;
 }
 
-.switch input+div:before,
-.switch input+div:after {
+.switch input + div:before,
+.switch input + div:after {
   --s: 1;
   content: "";
   position: absolute;
@@ -663,26 +727,26 @@ input[type=color] {
   transition: transform var(--duration) ease;
 }
 
-.switch input+div:before {
+.switch input + div:before {
   --s: 0;
   left: 0;
   transform-origin: 0 50%;
   border-radius: 2px 0 0 2px;
 }
 
-.switch input+div:after {
+.switch input + div:after {
   left: 28px;
   transform-origin: 100% 50%;
   border-radius: 0 2px 2px 0;
 }
 
-.switch input+div span {
+.switch input + div span {
   padding-left: 56px;
   line-height: 24px;
   color: var(--text);
 }
 
-.switch input+div span:before {
+.switch input + div span:before {
   --x: 0;
   --b: var(--circle);
   --s: 4px;
@@ -698,19 +762,19 @@ input[type=color] {
   transition: box-shadow var(--duration) ease, transform var(--duration) ease;
 }
 
-.switch input+div span:not(:empty) {
+.switch input + div span:not(:empty) {
   padding-left: 64px;
 }
 
-.switch input:checked+div:before {
+.switch input:checked + div:before {
   --s: 1;
 }
 
-.switch input:checked+div:after {
+.switch input:checked + div:after {
   --s: 0;
 }
 
-.switch input:checked+div span:before {
+.switch input:checked + div span:before {
   --x: 28px;
   --s: 12px;
   --b: var(--dot);
