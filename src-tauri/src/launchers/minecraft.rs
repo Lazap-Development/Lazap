@@ -1,5 +1,5 @@
 use crate::{
-    launchers::{GameObject, LINE_ENDING},
+    launchers::GameObject,
     modules::banners,
 };
 
@@ -8,6 +8,9 @@ use crate::operations::custom_fs::d_f_exists;
 
 #[cfg(target_os = "windows")]
 use std::{os::windows::process::CommandExt, process::Command, str};
+
+#[cfg(target_os = "windows")]
+use crate::launchers::LINE_ENDING;
 
 #[cfg(any(target_os = "linux"))]
 use tauri::api::path;

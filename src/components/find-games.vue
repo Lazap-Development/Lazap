@@ -325,9 +325,9 @@ class Storage {
   constructor() {
     (async () => {
       this.appDataDir = await window.__TAURI__.path.appDir();
-      this.gamesDataJSON = `${this.appDataDir}/cache/games/data.json`;
-      this.bannersDir = `${this.appDataDir}/cache/games/banners`;
-      this.settingsJSON = `${this.appDataDir}/LauncherData.json`;
+      this.gamesDataJSON = `${this.appDataDir}cache/games/data.json`;
+      this.bannersDir = `${this.appDataDir}cache/games/banners`;
+      this.settingsJSON = `${this.appDataDir}LauncherData.json`;
     })();
   }
   async setGamesData(games, source) {

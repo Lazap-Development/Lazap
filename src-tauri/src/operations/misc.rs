@@ -78,7 +78,7 @@ pub async fn get_sys_info() -> Result<String, Error> {
         system_name: String,
         system_kernel: String,
         system_host: String,
-        disk_info: String,
+        disk: String,
     }
     let sys_data = SysStruct {
         memory: converted_used_mem.to_string()
@@ -90,7 +90,7 @@ pub async fn get_sys_info() -> Result<String, Error> {
         system_name: sys.name().unwrap().to_string(),
         system_kernel: sys.kernel_version().unwrap().to_string(),
         system_host: sys.host_name().unwrap().to_string(),
-        disk_info: converted_used_disk.to_string()
+        disk: converted_used_disk.to_string()
             + " GB"
             + " / "
             + &converted_all_disk.to_string()
@@ -98,12 +98,12 @@ pub async fn get_sys_info() -> Result<String, Error> {
     };
 
     Ok(format!(
-        "{{\"memory\": \"{}\", \"cpu\": \"{}\", \"system_name\": \"{}\", \"system_kernel\": \"{}\", \"system_host\": \"{}\", \"disk_info\": \"{}\"}}",
+        r#"{{"memory": "{}", "cpu": "{}", "system_name": "{}", "system_kernel": "{}", "system_host": "{}", "disk": "{}"}}"#,
         sys_data.memory,
         sys_data.cpu,
         sys_data.system_name,
         sys_data.system_kernel,
         sys_data.system_host,
-        sys_data.disk_info
+        sys_data.disk
     ))
 }

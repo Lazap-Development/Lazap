@@ -136,28 +136,16 @@ export default {
         'div.search-bar > input[type="text"]'
       );
 
-      let sysInfoInvoke = JSON.parse(await invoke("get_sys_info"));
-      if (sysInfoInvoke.cpu.length > 22) {
-        sysInfoInvoke.cpu = sysInfoInvoke.cpu.slice(0, 22) + "...";
-      }
-      document
-        .getElementById("system_host")
-        .insertAdjacentText("beforeend", sysInfoInvoke.system_host);
-      document
-        .getElementById("system_name")
-        .insertAdjacentText("beforeend", sysInfoInvoke.system_name);
-      document
-        .getElementById("system_kernel")
-        .insertAdjacentText("beforeend", sysInfoInvoke.system_kernel);
-      document
-        .getElementById("disk")
-        .insertAdjacentText("beforeend", sysInfoInvoke.disk_info);
-      document
-        .getElementById("memory")
-        .insertAdjacentText("beforeend", sysInfoInvoke.memory);
-      document
-        .getElementById("cpu")
-        .insertAdjacentText("beforeend", sysInfoInvoke.cpu);
+      const sysInfoInvoke = JSON.parse(await invoke("get_sys_info"));
+      Object.keys(sysInfoInvoke).forEach((elementId) => {
+        let data = sysInfoInvoke[elementId];
+        if (elementId === "cpu" && data.length > 22) {
+          data = data.slice(0, 22) + "...";
+        }
+        document
+          .getElementById(elementId)
+          .insertAdjacentText("beforeend", data);
+      });
 
       await findGamesModule
         .loadGames("recentGamesListMainPage")
@@ -939,9 +927,10 @@ img,
 .gameMenu {
   display: none;
   position: absolute;
+  backdrop-filter: blur(10px);
   right: 20px;
   height: 90%;
-  background: rgba(var(--all-color-back), 0.7);
+  background: rgba(var(--all-color-primary), 0.8);
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;
   border-top-left-radius: 20px;
