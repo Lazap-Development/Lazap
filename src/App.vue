@@ -12,7 +12,7 @@
         <div class="children fadeInUp">
           <img
             class="head-pic"
-            src="https://staticg.sportskeeda.com/editor/2023/12/c71b0-17020242501049-1920.jpg"
+            src="./assets/img/main_banner.png"
             id="head-pic"
           />
         </div>

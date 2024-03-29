@@ -91,7 +91,7 @@ class GameElement {
       let banner = await tauri.convertFileSrc(await this.data.banner_path);
       element.style.background = `url(${banner}) no-repeat`;
     }
-    element.style.backgroundSize = "150% 110%";
+    element.style.backgroundSize = "cover";
 
     element.addEventListener("click", () => {
       this.handleLaunch();
