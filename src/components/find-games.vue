@@ -87,12 +87,11 @@ class GameElement {
   async getBannerElementv2(element) {
     const image = require("../assets/img/default-game-banner.png");
     element.style.background = `url(${image})`;
-    element.style.backgroundSize = "cover";
     if (this.data.banner_path) {
       let banner = await tauri.convertFileSrc(await this.data.banner_path);
-      element.style.background = `url(${banner})`;
-      element.style.backgroundSize = "cover";
+      element.style.background = `url(${banner}) no-repeat`;
     }
+    element.style.backgroundSize = "150% 110%";
 
     element.addEventListener("click", () => {
       this.handleLaunch();

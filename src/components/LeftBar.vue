@@ -104,19 +104,21 @@ export default {
   methods: {
     async loadPFP(event) {
       let selectedFile = event.target.files[0];
-      let reader = new FileReader();
+      if (selectedFile) {
+        let reader = new FileReader();
 
-      reader.onload = async function () {
-        await invoke("write_binary_file", {
-          filePath: (await path.appDir()) + `cache/user/pfp.png`,
-          fileContent: [...new Uint8Array(reader.result)],
-        });
-        document.getElementById("output").src =
-          window.__TAURI__.tauri.convertFileSrc(
-            (await path.appDir()) + `cache/user/pfp.png`
-          ) + `?${new Date().getSeconds()}`;
-      };
-      reader.readAsArrayBuffer(selectedFile);
+        reader.onload = async function () {
+          await invoke("write_binary_file", {
+            filePath: (await path.appDir()) + `cache/user/pfp.png`,
+            fileContent: [...new Uint8Array(reader.result)],
+          });
+          document.getElementById("output").src =
+            window.__TAURI__.tauri.convertFileSrc(
+              (await path.appDir()) + `cache/user/pfp.png`
+            ) + `?${new Date().getSeconds()}`;
+        };
+        reader.readAsArrayBuffer(selectedFile);
+      }
     },
   },
   async mounted() {
@@ -323,14 +325,15 @@ export default {
   margin-left: auto;
   margin-right: auto;
   transition: all 0.2s ease-in-out;
-  border-radius: 60px;
-  border: 5px solid rgba(var(--accent-color), 1.0);
+  border-radius: 50%;
+  border: 5px solid rgba(var(--accent-color), 1);
+  box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
+  overflow: hidden;
 }
 
 .user-pfp:hover {
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  border-radius: 30px;
+  border-radius: 30%;
 }
 
 .user-pfp input {
@@ -338,12 +341,13 @@ export default {
 }
 
 .user-pfp img {
-  border-radius: inherit;
   image-rendering: auto;
+  width: 100%;
+  height: 100%;
   width: 88px;
   height: 88px;
   object-fit: cover;
-  box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
+  background-color: rgb(var(--accent-color));
 }
 
 .user-pfp label {
@@ -355,7 +359,7 @@ export default {
 
 .username {
   margin-top: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
   text-align: center;
   font-size: 22px;
   font-family: Nunito-Bold;

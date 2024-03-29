@@ -12,7 +12,7 @@
         <div class="children fadeInUp">
           <img
             class="head-pic"
-            src="./assets/img/main-banner.png"
+            src="https://staticg.sportskeeda.com/editor/2023/12/c71b0-17020242501049-1920.jpg"
             id="head-pic"
           />
         </div>
@@ -37,22 +37,52 @@
           <p>System Specification</p>
           <div id="sysInfo" class="sysInfo">
             <div id="system_host">
-              <img src="./assets/svg/user.svg" alt="user" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path
+                  fill="currentColor"
+                  d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
+                />
+              </svg>
             </div>
             <div id="system_name">
-              <img src="./assets/svg/computer.svg" alt="user" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                <path
+                  fill="currentColor"
+                  d="M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64H240l-10.7 32H160c-17.7 0-32 14.3-32 32s14.3 32 32 32H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H346.7L336 416H512c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64zM512 64V288H64V64H512z"
+                />
+              </svg>
             </div>
             <div id="system_kernel">
-              <img src="./assets/svg/computer.svg" alt="user" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                <path
+                  fill="currentColor"
+                  d="M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64H240l-10.7 32H160c-17.7 0-32 14.3-32 32s14.3 32 32 32H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H346.7L336 416H512c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64zM512 64V288H64V64H512z"
+                />
+              </svg>
             </div>
             <div id="disk">
-              <img src="./assets/svg/disk.svg" alt="user" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path
+                  fill="currentColor"
+                  d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V280.4c-17-15.2-39.4-24.4-64-24.4H64c-24.6 0-47 9.2-64 24.4V96zM64 288H448c35.3 0 64 28.7 64 64v64c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V352c0-35.3 28.7-64 64-64zM320 416a32 32 0 1 0 0-64 32 32 0 1 0 0 64zm128-32a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
+                />
+              </svg>
             </div>
             <div id="memory">
-              <img src="./assets/svg/memory.svg" alt="user" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                <path
+                  fill="currentColor"
+                  d="M64 64C28.7 64 0 92.7 0 128v7.4c0 6.8 4.4 12.6 10.1 16.3C23.3 160.3 32 175.1 32 192s-8.7 31.7-21.9 40.3C4.4 236 0 241.8 0 248.6V320H576V248.6c0-6.8-4.4-12.6-10.1-16.3C552.7 223.7 544 208.9 544 192s8.7-31.7 21.9-40.3c5.7-3.7 10.1-9.5 10.1-16.3V128c0-35.3-28.7-64-64-64H64zM576 352H0v64c0 17.7 14.3 32 32 32H80V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h96V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h96V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h96V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h48c17.7 0 32-14.3 32-32V352zM192 160v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32zm128 0v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32zm128 0v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32z"
+                />
+              </svg>
             </div>
             <div id="cpu">
-              <img src="./assets/svg/microchip.svg" alt="user" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path
+                  fill="currentColor"
+                  d="M176 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64c-35.3 0-64 28.7-64 64H24c-13.3 0-24 10.7-24 24s10.7 24 24 24H64v56H24c-13.3 0-24 10.7-24 24s10.7 24 24 24H64v56H24c-13.3 0-24 10.7-24 24s10.7 24 24 24H64c0 35.3 28.7 64 64 64v40c0 13.3 10.7 24 24 24s24-10.7 24-24V448h56v40c0 13.3 10.7 24 24 24s24-10.7 24-24V448h56v40c0 13.3 10.7 24 24 24s24-10.7 24-24V448c35.3 0 64-28.7 64-64h40c13.3 0 24-10.7 24-24s-10.7-24-24-24H448V280h40c13.3 0 24-10.7 24-24s-10.7-24-24-24H448V176h40c13.3 0 24-10.7 24-24s-10.7-24-24-24H448c0-35.3-28.7-64-64-64V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H280V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H176V24zM160 128H352c17.7 0 32 14.3 32 32V352c0 17.7-14.3 32-32 32H160c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32zm192 32H160V352H352V160z"
+                />
+              </svg>
             </div>
           </div>
         </div>
@@ -193,7 +223,7 @@ export default {
       });
       window.setInterval(checkForUpdate, 600_000);
       checkForUpdate();
-      
+
       await invoke("show_window");
 
       await findGamesModule.loadGames("allGamesList").catch((err) => {
@@ -634,7 +664,7 @@ body {
   margin-right: auto;
   width: 300px;
   font-size: 18px;
-  color: rgb(138, 138, 138);
+  color: rgb(197, 197, 197);
   font-family: Nunito-Bold;
 }
 
@@ -642,9 +672,11 @@ body {
   margin-bottom: 4px;
 }
 
-.rightbar .sysInfo img {
-  width: 15px;
+.rightbar .sysInfo svg {
+  width: 16px;
   margin-right: 10px;
+  transform: translate(0px, 3px);
+  color: rgb(var(--accent-color));
 }
 
 .rightbar .stickers {
@@ -792,6 +824,7 @@ body {
 
 .mainPageGamebox {
   position: relative;
+  image-rendering: auto;
   text-align: center;
   display: inline-block;
   border-radius: 14px;
@@ -800,9 +833,11 @@ body {
   height: 61%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
-  border: solid rgba(var(--accent-color), 1.0) 6px;
+  border: solid rgba(var(--accent-color), 1) 6px;
   background-position: 50% 40% !important;
+  object-fit: cover;
 }
+
 
 .mainPageGamebox:nth-last-child(-n + 4) {
   margin-left: 1.6%;
@@ -810,27 +845,8 @@ body {
 
 .mainPageGamebox:hover {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  transform: scale(1.02);
   cursor: pointer;
   opacity: 0.9;
-}
-
-.mainPageGamebox img {
-  display: block;
-  height: 100%;
-  width: 100%;
-  border-radius: 10px;
-  object-position: 50% 25%;
-  object-fit: cover;
-}
-
-.mainPageGamebox span {
-  position: absolute;
-  margin-top: -28px;
-  margin-left: 10px;
-  font-size: 14px;
-  color: #d3d3d3;
-  display: block;
 }
 
 .star {

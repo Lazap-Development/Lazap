@@ -5,7 +5,6 @@ use crate::Error;
 
 #[tauri::command]
 pub fn read_file(file_path: String) -> Result<String, Error> {
-    println!("{}", file_path);
     Ok(fs::read_to_string(file_path).unwrap())
 }
 
