@@ -10,8 +10,8 @@ mod steam;
 mod uplay;
 #[cfg(target_os = "linux")]
 mod wine_managers;
-#[cfg(target_os = "windows")]
-mod xbox_games;
+// #[cfg(target_os = "windows")]
+// mod xbox_games;
 
 use serde::{Deserialize, Serialize};
 
@@ -98,7 +98,7 @@ pub async fn fetch_installed_games() -> Vec<GameObject> {
     installed_games.extend(rockstar_games::get_installed_games().await);
     #[cfg(target_os = "windows")]
     installed_games.extend(uplay::get_installed_games().await);
-    #[cfg(target_os = "windows")]
-    installed_games.extend(xbox_games::get_installed_games().await);
+    // #[cfg(target_os = "windows")]
+    // installed_games.extend(xbox_games::get_installed_games().await);
     installed_games
 }
