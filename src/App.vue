@@ -153,23 +153,6 @@ export default {
           return console.error(err);
         });
 
-      event.listen("tauri://update-available", async () => {
-        try {
-          const data = JSON.parse(
-            await invoke("read_file", {
-              filePath: (await path.appDir()) + "LauncherData.json",
-            })
-          );
-          if (data.check_for_updates === true) {
-            document.getElementById("update-btn").style.display = "block";
-          }
-        } catch (e) {
-          console.log(e);
-        }
-      });
-      window.setInterval(checkForUpdate, 600_000);
-      checkForUpdate();
-
       try {
         let { accentColor, backgroundColor, primaryColor } = JSON.parse(
           await invoke("read_file", {
@@ -194,6 +177,23 @@ export default {
         console.error(error);
       }
 
+      event.listen("tauri://update-available", async () => {
+        try {
+          const data = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+          if (data.check_for_updates === true) {
+            document.getElementById("update-btn").style.display = "block";
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      });
+      window.setInterval(checkForUpdate, 600_000);
+      checkForUpdate();
+      
       await invoke("show_window");
 
       await findGamesModule.loadGames("allGamesList").catch((err) => {

@@ -323,13 +323,14 @@ export default {
   margin-left: auto;
   margin-right: auto;
   transition: all 0.2s ease-in-out;
+  border-radius: 60px;
+  border: 5px solid rgba(var(--accent-color), 1.0);
 }
 
 .user-pfp:hover {
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  border-radius: 14px;
-  scale: 1.1;
+  border-radius: 30px;
 }
 
 .user-pfp input {
@@ -337,7 +338,7 @@ export default {
 }
 
 .user-pfp img {
-  border-radius: 18px;
+  border-radius: inherit;
   image-rendering: auto;
   width: 88px;
   height: 88px;
@@ -354,7 +355,7 @@ export default {
 
 .username {
   margin-top: 8px;
-  margin-bottom: 26px;
+  margin-bottom: 20px;
   text-align: center;
   font-size: 22px;
   font-family: Nunito-Bold;
