@@ -331,7 +331,6 @@ class Storage {
   }
   async setGamesData(games, source) {
     const data = await this.getGamesData();
-
     data.forEach((d) => {
       Object.keys(d).forEach((x) => {
         if ([undefined, null].includes(d[x])) delete d[x];
@@ -349,15 +348,7 @@ class Storage {
           if (data.length != games.length) {
             await invoke("write_file", {
               filePath: this.gamesDataJSON,
-              fileContent: JSON.stringify(
-                data.filter((x) =>
-                  games.find(
-                    (y) =>
-                      y.launcher_name === x.launcher_name &&
-                      y.game_id === x.game_id
-                  )
-                )
-              ),
+              fileContent: JSON.stringify(games),
             });
           }
         } else {
@@ -477,7 +468,6 @@ export default {
       //	games.push(...data.filter(x => x.launcher_name === 'CustomGame'));
       //}
 
-      console.log(games);
       // Save all games into JSON
       storage.setGamesData(games, "getInstalledGames");
 
