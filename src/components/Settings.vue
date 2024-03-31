@@ -288,7 +288,6 @@ export default {
           filePath: (await path.appDir()) + "LauncherData.json",
           fileContent: JSON.stringify(LauncherData),
         });
-        console.log(rgbToHex(LauncherData[id]));
         document.getElementById(`setting-${id}`).value = rgbToHex(
           LauncherData[id]
         );
@@ -299,11 +298,11 @@ export default {
     document.querySelectorAll("input[id^=setting-]").forEach((input) => {
       if (input.id === "setting-accentColor") {
         input.addEventListener("input", async () => {
-          let hexValue = document.querySelector(`input[id=${input.id}]`).value;
+          let hexValue = document.getElementById(input.id).value;
           LauncherData[input.id.split("-")[1]] = `${parseInt(
             hexValue.substr(1, 2),
             16
-          )}, ${parseInt(hexValue.substr(3, 2), 16)},${parseInt(
+          )}, ${parseInt(hexValue.substr(3, 2), 16)}, ${parseInt(
             hexValue.substr(5, 2),
             16
           )}`;
@@ -318,11 +317,11 @@ export default {
         return;
       } else if (input.id === "setting-backgroundColor") {
         input.addEventListener("input", async () => {
-          let hexValue = document.querySelector(`input[id=${input.id}]`).value;
+          let hexValue = document.getElementById(input.id).value;
           LauncherData[input.id.split("-")[1]] = `${parseInt(
             hexValue.substr(1, 2),
             16
-          )}, ${parseInt(hexValue.substr(3, 2), 16)},${parseInt(
+          )}, ${parseInt(hexValue.substr(3, 2), 16)}, ${parseInt(
             hexValue.substr(5, 2),
             16
           )}`;
@@ -337,11 +336,11 @@ export default {
         return;
       } else if (input.id === "setting-frontColor") {
         input.addEventListener("input", async () => {
-          let hexValue = document.querySelector(`input[id=${input.id}]`).value;
+          let hexValue = document.getElementById(input.id).value;
           LauncherData[input.id.split("-")[1]] = `${parseInt(
             hexValue.substr(1, 2),
             16
-          )}, ${parseInt(hexValue.substr(3, 2), 16)},${parseInt(
+          )}, ${parseInt(hexValue.substr(3, 2), 16)}, ${parseInt(
             hexValue.substr(5, 2),
             16
           )}`;
@@ -356,11 +355,11 @@ export default {
         return;
       } else if (input.id === "setting-primaryColor") {
         input.addEventListener("input", async () => {
-          let hexValue = document.querySelector(`input[id=${input.id}]`).value;
+          let hexValue = document.getElementById(input.id).value;
           LauncherData[input.id.split("-")[1]] = `${parseInt(
             hexValue.substr(1, 2),
             16
-          )}, ${parseInt(hexValue.substr(3, 2), 16)},${parseInt(
+          )}, ${parseInt(hexValue.substr(3, 2), 16)}, ${parseInt(
             hexValue.substr(5, 2),
             16
           )}`;
@@ -460,7 +459,6 @@ export default {
           })
         );
         LauncherData = { ...LauncherData, ...theme };
-        console.log(LauncherData);
         await invoke("write_file", {
           filePath: (await path.appDir()) + "LauncherData.json",
           fileContent: JSON.stringify(LauncherData),
@@ -482,7 +480,7 @@ export default {
       // document.getElementById("indicator").style.backgroundColor = color;
       document.querySelector(":root").style.setProperty(`--${vals[id]}`, color);
 
-      document.getElementById(`setting-${id}`).value = rgbToHex(color);
+      // document.getElementById(`setting-${id}`).value = rgbToHex(color);
     }
 
     function rgbToHex(x) {

@@ -51,7 +51,6 @@ pub async fn get_installed_games() -> Vec<GameObject> {
                 })
                 .unwrap()
                 .collect::<std::result::Result<Vec<InstalledGame>, rusqlite::Error>>();
-            println!("{}", installed_games.as_deref().unwrap()[0].product_id);
             Ok(installed_games)
         })
         .await
@@ -110,7 +109,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
             .unwrap();
         let img_data: ImageData = serde_json::from_str(&game_data.banner).unwrap();
         gameobjects.push(GameObject::new(
-            banners::get_banner(&game_data.title, &(product_id.to_string()), "GOG", &img_data.icon).await, // Link to the banner not the actual path on system
+            banners::get_banner(&game_data.title, &(product_id.to_string()), "GOG", &img_data.icon).await,
             "".to_string(),
             game.installation_path.to_string(),
             game_data.title.to_string(),
@@ -122,8 +121,6 @@ pub async fn get_installed_games() -> Vec<GameObject> {
             vec![],
         ));
     }
-
-    println!("{:?}", gameobjects[0]);
 
     return gameobjects;
 }
