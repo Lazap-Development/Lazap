@@ -111,7 +111,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
                 .ok()?
                 .split(&LINE_ENDING)
                 .find(|x| x.trim().starts_with("PackageRootFolder"))
-                .map(|x| x.split(" : ").nth(1).unwrap_or("").trim().to_string())?;
+                .map(|x| x.split("    ").nth(3).unwrap_or("").trim().to_string())?;
 
             return Some(GameObject::new(
                 banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft").await,
@@ -133,7 +133,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
         if !is_installed("minecraft-launcher", "com.mojang.Minecraft") {
             return None;
         }
-        
+
         let home_dir = path::home_dir()
             .unwrap()
             .into_os_string()
