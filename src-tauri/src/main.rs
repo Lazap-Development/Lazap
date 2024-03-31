@@ -61,6 +61,12 @@ fn main() {
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             println!("{}, {argv:?}, {cwd}", app.package_info().name);
 
+            let window = app.get_window("main").unwrap();
+
+            if !window.is_visible().unwrap() {
+                window.show().unwrap()
+            }
+
             app.emit_all("single-instance", Payload { args: argv, cwd })
                 .unwrap();
         }))
@@ -155,6 +161,12 @@ fn main() {
         })
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             println!("{}, {argv:?}, {cwd}", app.package_info().name);
+
+            let window = app.get_window("main").unwrap();
+
+            if !window.is_visible().unwrap() {
+                window.show().unwrap()
+            }
 
             app.emit_all("single-instance", Payload { args: argv, cwd })
                 .unwrap();
@@ -261,6 +273,12 @@ fn main() {
         })
         .plugin(tauri_plugin_single_instance::init(|app, argv, cwd| {
             println!("{}, {argv:?}, {cwd}", app.package_info().name);
+
+            let window = app.get_window("main").unwrap();
+
+            if !window.is_visible().unwrap() {
+                window.show().unwrap()
+            }
 
             app.emit_all("single-instance", Payload { args: argv, cwd })
                 .unwrap();
