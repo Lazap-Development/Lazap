@@ -31,27 +31,32 @@
 **The new face of Open Source Game Launchers**, Lazap, unites all your games together in one place! Whether it's on Windows, Linux or MacOS, we got you covered. Lazap connects with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam, and collects all of those games and deposits them inside of one place. Lazap is developed to be deeply customizable, meets up to the user's expectance, possess a glancing & modernist look, and isn't expensive at all on hardware consumption. 
 
 ## ✨ Key Features
-- Extremely lightweight & cheap on hardware consumption
-- Support for Steam, Epic Games, Xbox Games, Uplay, R* Launcher, Riot Games, and Custom Games
-- Sleek & Modern user interface with a wide range of theming and user-accessibility customizations
-- Discord Rich Presence, when launching a game or navigating through the menus
+- Remarkably lightweight and efficient on hardware resources
+- Compatibility across Windows, Linux, and MacOS platforms
+- Support includes Steam, Epic, Ubisoft, R*, Riot, and Lutris
+- Flexibility to add and personalize user-set custom games
+- Modern and Sleek user interface with extensive theming and customization
 - Spotify Integration with streamlined music control
 - `[Beta]` Cross-Platform Lazap Overlay
-- `[Soon]` System monitor, overclock, and benchmarking tools
+- `[WIP]` System monitor, overclock, and benchmarking tools
   
 ## ‍💻 Installation
 
-Depending on your operating system, we provide as much ease in terms of installation:<br>
+Depending on your operating system, we try provide as much ease in terms of installation:<br>
 
 ▸ **Windows**: 
-- Download & install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section
+- Download and install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 - Or install via Winget: 
 ```
 winget install LazapDevelopment.Lazap
 ```
 
-▸ **Linux**: Download & install either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section <br>
-▸ **MacOS**: Download & install the latest `.dmg` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section
+▸ **Linux**: 
+- Download and install either the `.deb` or `.tar.zst` in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+- Arch Linux users can directly install from the maintained `lazap-bin` [AUR](https://aur.archlinux.org/packages/lazap-bin).
+  
+▸ **MacOS**: 
+- Download and install the latest `.dmg` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
 ## 👾 Development
 
