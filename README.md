@@ -42,7 +42,7 @@
   
 ## ‍💻 Installation
 
-Depending on your operating system, we try provide as much ease in terms of installation:<br>
+Depending on your operating system, we try to provide as much ease in terms of installation:<br>
 
 ▸ **Windows**: 
 - Download and install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.

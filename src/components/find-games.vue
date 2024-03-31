@@ -117,8 +117,9 @@ class GameElement {
     element.classList.add("menu");
     element.id = "menu";
 
+    const gamemenu = document.getElementById("gameMenu");
+
     element.addEventListener("click", () => {
-      const gamemenu = document.getElementById("gameMenu");
       gamemenu.style.display =
         gamemenu.style.display === "flex" ? "none" : "flex";
       document.getElementById("gameMenuTitle").innerHTML =
@@ -230,7 +231,7 @@ class GameElement {
         case "Steam": {
           res = this.createProcess(
             "steam",
-            `steam://rungame_id/${this.data.game_id} -silent`
+            `-applaunch ${this.data.game_id} -silent`
           );
           break;
         }

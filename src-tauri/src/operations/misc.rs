@@ -20,7 +20,7 @@ pub async fn launch_game(_exec: String, _args: String) {
 
     #[cfg(target_os = "linux")]
     let child = std::process::Command::new(_exec)
-        .arg(_args)
+        .args(_args.split(" "))
         .spawn()
         .expect("failed to run");
     #[cfg(target_os = "linux")]
