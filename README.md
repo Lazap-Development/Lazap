@@ -33,9 +33,9 @@
 ## ✨ Key Features
 - Remarkably lightweight and efficient on hardware resources
 - Compatibility across Windows, Linux, and MacOS platforms
-- Support includes Steam, Epic, Ubisoft, R*, Riot, and Lutris
+- Support for Steam, Epic, Ubisoft, R*, Riot, Lutris, and etc
 - Flexibility to add and personalize user-set custom games
-- Modern and Sleek user interface with extensive theming and customization
+- Modern and Sleek user interface with theming customization
 - Spotify Integration with streamlined music control
 - `[Beta]` Cross-Platform Lazap Overlay
 - `[WIP]` System monitor, overclock, and benchmarking tools
