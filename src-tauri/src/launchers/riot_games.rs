@@ -78,7 +78,7 @@ pub async fn parse_game_object(path: &str, game: &str) -> GameObject {
     ];
     let display_name = game;
     return GameObject::new(
-        banners::get_banner(&display_name, "", "RiotGames").await,
+        banners::get_banner(&display_name, "", "RiotGames", "").await,
         executable.to_string(),
         location.to_string(),
         display_name.to_string(),

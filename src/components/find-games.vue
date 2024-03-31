@@ -219,6 +219,12 @@ class GameElement {
           );
           break;
         }
+        case "GOG": {
+          res = this.createProcess(
+            `/C start "" ${this.data.launch_id}`
+          );
+          break;
+        }
         default: {
           res = this.createProcess(
             `/C powershell start "${this.data.location}\\${this.data.executable}"`
@@ -264,15 +270,15 @@ class GameElement {
 
   async createProcess(exec, args = "") {
     // TODO: add back "ALREADY_RUNNING"
-    VisibilityState({
+    VisibilityState.bind(this, {
       launcher_name: this.data.launcher_name,
       display_name: this.data.display_name,
-    });
+    })();
     invoke("launch_game", { exec, args }).then(() => {
-      VisibilityState({
+      VisibilityState.bind(this, {
         launcher_name: this.data.launcher_name,
         display_name: this.data.display_name,
-      });
+      })();
     });
 
     async function VisibilityState() {

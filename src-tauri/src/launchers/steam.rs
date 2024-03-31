@@ -130,7 +130,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 
             #[cfg(target_os = "macos")]
             temp_all_games.push(GameObject::new(
-                banners::get_banner(&game_file_parsed.name, &game_file_parsed.appid, "Steam").await,
+                banners::get_banner(&game_file_parsed.name, &game_file_parsed.appid, "Steam", "").await,
                 "".to_string(),
                 game_file_parsed.installdir.to_string(),
                 game_file_parsed.name,
@@ -144,7 +144,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 
             #[cfg(target_os = "windows")]
             temp_all_games.push(GameObject::new(
-                banners::get_banner(&game_file_parsed.name, &game_file_parsed.appid, "Steam").await,
+                banners::get_banner(&game_file_parsed.name, &game_file_parsed.appid, "Steam", "").await,
                 "".to_string(),
                 game_file_parsed.launcherpath.to_string(),
                 game_file_parsed.name,
@@ -158,7 +158,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 
             #[cfg(target_os = "linux")]
             temp_all_games.push(GameObject::new(
-                banners::get_banner(&game_file_parsed.name, &game_file_parsed.appid, "Steam").await,
+                banners::get_banner(&game_file_parsed.name, &game_file_parsed.appid, "Steam", "").await,
                 "".to_string(),
                 "".to_string(),
                 game_file_parsed.name,

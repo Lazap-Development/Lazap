@@ -73,7 +73,7 @@ async fn get_lutris_games() -> Option<Vec<GameObject>> {
         .unwrap();
 
     for game in game_iter.unwrap() {
-        let banner = banners::get_banner(&game.display_name, &game.game_id, "Lutris").await;
+        let banner = banners::get_banner(&game.display_name, &game.game_id, "Lutris", "").await;
         all_lutris_games.push(GameObject::new(
             banner,
             game.executable,

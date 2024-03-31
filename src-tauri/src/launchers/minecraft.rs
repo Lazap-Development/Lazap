@@ -59,7 +59,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
                 }
 
                 return Some(GameObject::new(
-                    banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft").await,
+                    banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft", "").await,
                     executable,
                     location,
                     "Minecraft Launcher".to_string(),
@@ -114,7 +114,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
                 .map(|x| x.split("    ").nth(3).unwrap_or("").trim().to_string())?;
 
             return Some(GameObject::new(
-                banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft").await,
+                banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft", "").await,
                 "Minecraft.exe".to_string(),
                 location,
                 "Minecraft Launcher".to_string(),
@@ -151,7 +151,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
         let executable = "minecraft-launcher";
 
         return Some(GameObject::new(
-            banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft").await,
+            banners::get_banner("Minecraft Launcher", "Minecraft", "Minecraft", "").await,
             executable.to_string(),
             location.to_string(),
             "Minecraft Launcher".to_string(),

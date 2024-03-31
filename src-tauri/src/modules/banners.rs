@@ -8,7 +8,7 @@ use serde::Deserialize;
 
 use crate::{operations::{custom_fs::d_f_exists, misc::sha256}, CONFIG_DIR};
 
-pub async fn get_banner(display_name: &str, game_id: &str, launcher_name: &str) -> String {
+pub async fn get_banner(display_name: &str, game_id: &str, launcher_name: &str, url: &str) -> String {
     match launcher_name {
         "Steam" => {
             return fetch_banner(
@@ -55,7 +55,9 @@ pub async fn get_banner(display_name: &str, game_id: &str, launcher_name: &str) 
             }
             return "".to_string();
         }
-        "XboxGames" => return "".to_string(),
+        // "XboxGames" => {
+        //     return fetch_banner(url.to_string(), display_name).await;
+        // },
         "Osu" => {
             return fetch_banner(format!("https://cdn2.steamgriddb.com/file/sgdb-cdn/grid/a5d7420f9fdc41087377b4d58c5fe94b.png"), display_name).await;
         }
@@ -67,6 +69,9 @@ pub async fn get_banner(display_name: &str, game_id: &str, launcher_name: &str) 
         }
         "RockstarGames" => {
             return fetch_banner(format!("https://media-rockstargames-com.akamaized.net/rockstargames-newsite/img/global/games/fob/640/{}.jpg", game_id), display_name).await;
+        }
+        "GOG" => {
+            return fetch_banner(url.to_string(), display_name).await;
         }
 
         _ => return String::new(),

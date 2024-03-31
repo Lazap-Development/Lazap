@@ -31,7 +31,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 
                 if !game_res_loc.is_empty() {
                     all_games.push(GameObject::new(
-                        banners::get_banner(&y, "", "Uplay").await,
+                        banners::get_banner(&y, "", "Uplay", "").await,
                         "".to_string(),
                         game_res_loc,
                         y,

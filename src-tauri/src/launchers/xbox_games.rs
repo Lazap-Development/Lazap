@@ -1,6 +1,6 @@
 use std::process::Command;
 use serde::{Deserialize, Serialize};
-use crate::{launchers::GameObject, operations::{custom_fs::read_file}};
+use crate::{launchers::GameObject, operations::custom_fs::read_file, modules::banners};
 use reqwest::{Client, Url};
 use scraper::{Html, Selector};
 
@@ -155,21 +155,18 @@ pub async fn verify_games(games: Vec<XboxGame>) -> Vec<XboxGame> {
         game.name = title;
         game.banner = banner.to_string();
         arr.push(game);
-
-        // println!("{:?}", li_element);
-        // println!("{:?}", title);
-        // println!("{:?}", banner);
-        // println!("{}", Url::parse(&format!("https://www.microsoft.com/en-in/search/shop/games?q={}&devicetype=pc", game.name)).unwrap());
     }
 
     return arr;
 }
 
+// Not complete
 pub fn parse_game_object(game: XboxGame) -> Option<GameObject> {
     if game.install_location.len() == 0 {
         return None;
     }
     let gameobject: GameObject;
+    let regex = Regex::new();
     let location = &game.install_location;
     let manifeststr = read_file(location.to_string() + "/AppxManifest.xml").unwrap();
     let manifest = manifeststr
@@ -177,11 +174,10 @@ pub fn parse_game_object(game: XboxGame) -> Option<GameObject> {
     .find(|x| x.trim().starts_with("<Application "))
     .unwrap();
     // .split(/<[/]{0,1}Application[>]{0,1}/);
-    let executable = "";
-    println!("{}", manifest);
+    let executable = manifest.split("\"")[1].to_string();
     gameobject = GameObject::new(
-        game.banner,
-        executable.to_string(),
+        banners::get_banner(&game.name, "", "XboxGames", &game.banner),
+        executable,
         location.to_string(),
         game.name,
         game.package_full_name,
