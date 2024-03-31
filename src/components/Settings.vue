@@ -220,6 +220,13 @@ export default {
       settingsbackblur.style.display = "none";
     });
 
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" || event.key === "Esc") {
+        settings.style.display = "none";
+        settingsbackblur.style.display = "none";
+      }
+    });
+
     document
       .getElementById("settings-btn")
       .addEventListener("click", async () => {
