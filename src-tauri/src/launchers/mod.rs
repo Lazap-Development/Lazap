@@ -1,5 +1,7 @@
 #[cfg(target_os = "windows")]
 mod epic_games;
+#[cfg(target_os = "windows")]
+mod gog;
 mod minecraft;
 #[cfg(target_os = "windows")]
 mod riot_games;
@@ -10,8 +12,6 @@ mod steam;
 mod uplay;
 #[cfg(target_os = "linux")]
 mod wine_managers;
-#[cfg(target_os = "windows")]
-mod gog;
 
 use serde::{Deserialize, Serialize};
 
@@ -62,15 +62,34 @@ impl GameObject {
 
 #[cfg(target_os = "linux")]
 fn is_installed(native_name: &str, flatpak_name: &str) -> bool {
-    let flatpak = String::from_utf8(std::process::Command::new("flatpak")
-        .arg("list")
-        .output()
-        .expect("Failed to execute command").stdout).unwrap_or_default();
+    let flatpak = match std::process::Command::new("flatpak").arg("list").output() {
+        Ok(output) => {
+            if output.status.success() {
+                String::from_utf8(output.stdout).unwrap_or_default()
+            } else {
+                String::default()
+            }
+        }
+        Err(_e) => {
+            String::default()
+        }
+    };
 
-    let native = String::from_utf8(std::process::Command::new("which")
+    let native = match std::process::Command::new("which")
         .arg(native_name)
         .output()
-        .expect("Failed to execute command").stdout).unwrap_or_default();
+    {
+        Ok(output) => {
+            if output.status.success() {
+                String::from_utf8(output.stdout).unwrap_or_default()
+            } else {
+                String::default()
+            }
+        }
+        Err(_e) => {
+            String::default()
+        }
+    };
 
     if native.starts_with("/") {
         return true;
@@ -86,7 +105,6 @@ fn is_installed(native_name: &str, flatpak_name: &str) -> bool {
 #[tauri::command]
 pub async fn fetch_installed_games() -> Vec<GameObject> {
     let mut installed_games: Vec<GameObject> = Vec::new();
-    installed_games.extend(steam::get_installed_games().await);
     installed_games.extend(minecraft::get_installed_games().await);
     #[cfg(target_os = "linux")]
     installed_games.extend(wine_managers::get_installed_games().await);

@@ -25,6 +25,12 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 }
 
 async fn get_minecraft_launcher() -> Option<GameObject> {
+    // TO-DO: FINISH MACOS
+    #[cfg(target_os = "macos")]
+    {
+        return None
+    }
+
     #[cfg(target_os = "windows")]
     {
         let output = Command::new("cmd")

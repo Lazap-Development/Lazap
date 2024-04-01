@@ -220,9 +220,7 @@ class GameElement {
           break;
         }
         case "GOG": {
-          res = this.createProcess(
-            `/C start "" ${this.data.launch_id}`
-          );
+          res = this.createProcess(`/C start "" ${this.data.launch_id}`);
           break;
         }
         default: {
@@ -353,10 +351,20 @@ class Storage {
       if (source === "getInstalledGames") {
         if (data.length > 0) {
           if (data.length != games.length) {
-            await invoke("write_file", {
-              filePath: this.gamesDataJSON,
-              fileContent: JSON.stringify(games),
+            const newData = games.filter((game) => {
+              return !data.some(
+                (existingGame) =>
+                  existingGame.LauncherName === game.LauncherName &&
+                  existingGame.GameID === game.GameID
+              );
             });
+
+            if (newData.length > 0) {
+              await invoke("write_file", {
+                filePath: this.gamesDataJSON,
+                fileContent: JSON.stringify(newData),
+              });
+            }
           }
         } else {
           await invoke("write_file", {

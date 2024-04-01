@@ -690,7 +690,7 @@ input[type="color"] {
 
 .switch {
   --line: #505162;
-  --dot: #f7f8ff;
+  --dot: rgb(var(--accent-color));
   --circle: #9ea0be;
   --duration: 0.3s;
   --text: #9ea0be;
