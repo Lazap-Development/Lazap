@@ -105,6 +105,7 @@ fn is_installed(native_name: &str, flatpak_name: &str) -> bool {
 #[tauri::command]
 pub async fn fetch_installed_games() -> Vec<GameObject> {
     let mut installed_games: Vec<GameObject> = Vec::new();
+    installed_games.extend(steam::get_installed_games().await);
     installed_games.extend(minecraft::get_installed_games().await);
     #[cfg(target_os = "linux")]
     installed_games.extend(wine_managers::get_installed_games().await);

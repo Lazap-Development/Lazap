@@ -3,7 +3,7 @@ use crate::{
     modules::banners,
     operations::custom_fs::{d_f_exists, read_dir},
 };
-use std::process::Command;
+use std::{os::windows::process::CommandExt, process::Command};
 
 fn get_riot_games_location(launcher_location: &str) -> String {
     let s = launcher_location.split("\\").collect::<Vec<_>>();
@@ -20,6 +20,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
             "Query",
             "HKEY_CLASSES_ROOT\\riotclient\\DefaultIcon",
         ])
+        .creation_flags(0x08000000)
         .output()
         .expect("failed to execute process.");
     if output.stdout.is_empty() {

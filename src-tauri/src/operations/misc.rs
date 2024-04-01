@@ -12,7 +12,6 @@ pub async fn launch_game(_exec: String, _args: String) {
     let child = std::process::Command::new("cmd")
         .arg(_exec)
         .creation_flags(0x00000008)
-        .creation_flags(0x08000000)
         .spawn()
         .expect("failed to run");
     #[cfg(target_os = "windows")]

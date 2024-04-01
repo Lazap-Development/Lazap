@@ -1,4 +1,7 @@
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+#![cfg_attr(
+    all(not(debug_assertions), target_os = "windows"),
+    windows_subsystem = "windows"
+)]
 
 mod addons;
 mod launchers;
@@ -12,8 +15,6 @@ use tauri::{
 };
 
 static CONFIG_DIR: Mutex<String> = Mutex::new(String::new());
-
-const DISCORD_RPC_CLIENT_ID: &str = "932504287337148417";
 
 #[derive(Clone, serde::Serialize)]
 struct Payload {
@@ -52,7 +53,7 @@ fn main() {
                 .expect("Unsupported platform! 'apply_acrylic' is only supported on Windows 10/11");
 
             window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
-            let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
+            let client = DeclarativeDiscordIpcClient::new("932504287337148417");
             app.manage(client);
             modules::storage::launcherdata_threads(app.get_window("main").unwrap())
                 .expect("Failed to init storage misc fn.");
@@ -70,7 +71,10 @@ fn main() {
             app.emit_all("single-instance", Payload { args: argv, cwd })
                 .unwrap();
         }))
-        .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, Some(vec![])))
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            Some(vec![]),
+        ))
         .system_tray(tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {
@@ -154,7 +158,7 @@ fn main() {
 
             modules::storage::init_storage().expect("Failed to init storage fn.");
 
-            let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
+            let client = DeclarativeDiscordIpcClient::new("932504287337148417");
             app.manage(client);
             modules::storage::launcherdata_threads(app.get_window("main").unwrap())
                 .expect("Failed to init storage misc fn.");
@@ -172,7 +176,10 @@ fn main() {
             app.emit_all("single-instance", Payload { args: argv, cwd })
                 .unwrap();
         }))
-        .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, Some(vec![])))
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            Some(vec![]),
+        ))
         .system_tray(tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {
@@ -267,7 +274,7 @@ fn main() {
 
             window_shadows::set_shadow(&window, true).expect("Unsupported platform!");
 
-            let client = DeclarativeDiscordIpcClient::new(DISCORD_RPC_CLIENT_ID);
+            let client = DeclarativeDiscordIpcClient::new("932504287337148417");
             app.manage(client);
             modules::storage::launcherdata_threads(app.get_window("main").unwrap())
                 .expect("Failed to init storage misc fn.");
@@ -285,7 +292,10 @@ fn main() {
             app.emit_all("single-instance", Payload { args: argv, cwd })
                 .unwrap();
         }))
-        .plugin(tauri_plugin_autostart::init(tauri_plugin_autostart::MacosLauncher::LaunchAgent, Some(vec![])))
+        .plugin(tauri_plugin_autostart::init(
+            tauri_plugin_autostart::MacosLauncher::LaunchAgent,
+            Some(vec![]),
+        ))
         .system_tray(tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::LeftClick {

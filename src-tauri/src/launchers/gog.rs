@@ -7,7 +7,7 @@ use crate::{
     modules::banners,
 };
 use serde::{Deserialize, Serialize};
-use std::process::Command;
+use std::{os::windows::process::CommandExt, process::Command, str};
 use tokio_rusqlite::Connection;
 
 #[derive(Serialize, Deserialize)]
@@ -83,6 +83,7 @@ pub async fn get_installed_games() -> Vec<GameObject> {
             "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\GOG.com\\GalaxyClient",
             "/s",
         ])
+        .creation_flags(0x08000000)
         .output()
         .expect("failed to execute process.");
     if cmd.stdout.is_empty() {
