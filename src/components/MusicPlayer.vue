@@ -59,6 +59,7 @@
 <script>
 const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
+const shell = window.__TAURI__.shell;
 
 export default {
   name: "MusicPlayer",
@@ -68,6 +69,13 @@ export default {
         filePath: (await path.appDir()) + "LauncherData.json",
       })
     );
+
+    let url;
+    document
+      .getElementById("song-cover")
+      .addEventListener("click", async () => {
+        await shell.open(`https://open.spotify.com/album/${url}`);
+      });
 
     if (LauncherData.enable_spotify) {
       await invoke("spotify_login");
@@ -124,6 +132,8 @@ export default {
 
     function updatePlayer(data) {
       if (!data.cover) return;
+
+      url = data.uri.split(":")[2];
 
       document.getElementById("song-name").innerHTML = data.song_name.substring(
         0,
@@ -257,6 +267,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 
 .subbanner {
@@ -273,7 +284,7 @@ export default {
 }
 
 .rightbar .musicPlayer .top img {
-  width: 20px;
+  width: 25px;
 }
 
 .rightbar .musicPlayer .bottom {

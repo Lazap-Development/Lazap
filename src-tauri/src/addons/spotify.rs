@@ -400,6 +400,7 @@ pub async fn spotify_info() -> Result<String, Error> {
             #[derive(Deserialize)]
             struct Album {
                 images: Vec<Image>,
+                uri: String,
             }
 
             #[derive(Deserialize)]
@@ -419,6 +420,7 @@ pub async fn spotify_info() -> Result<String, Error> {
                     \"cover\": \"{}\",
                     \"is_playing\": {},
                     \"progress\": {},
+                    \"uri\": \"{}\",
                     \"duration\": {}
                 }}",
                 currently_playing.item.name,
@@ -426,6 +428,7 @@ pub async fn spotify_info() -> Result<String, Error> {
                 currently_playing.item.album.images[0].url,
                 currently_playing.is_playing,
                 currently_playing.progress_ms,
+                currently_playing.item.album.uri,
                 currently_playing.item.duration_ms
             );
 
