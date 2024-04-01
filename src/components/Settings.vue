@@ -13,27 +13,7 @@
           <p>Launch on Startup</p>
           <div class="btnInput">
             <label class="switch">
-              <input
-                type="checkbox"
-                id="setting-launch_on_startup"
-                disabled="readonly"
-              />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting">
-          <p>Skip Login Menu</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input
-                type="checkbox"
-                id="setting-skip_login"
-                disabled="readonly"
-              />
+              <input type="checkbox" id="setting-launch_on_startup" />
               <div>
                 <span></span>
               </div>
@@ -207,9 +187,11 @@
 </template>
 
 <script>
+import { enable, isEnabled, disable } from "tauri-plugin-autostart-api";
 export default {
   name: "settings-comp",
   async mounted() {
+    console.log(await isEnabled());
     const settings = document.getElementById("settings-popup");
     const settingsbackblur = document.getElementById("settings-backblur");
     const path = window.__TAURI__.path;
@@ -238,9 +220,12 @@ export default {
             filePath: (await path.appDir()) + "LauncherData.json",
           })
         );
-        document.querySelectorAll("input[id^=setting-]").forEach((input) => {
+        document.querySelectorAll("input[id^=setting-]").forEach(async (input) => {
           if (input.id.startsWith("setting") && input.id.endsWith("Color"))
             input.value = rgbToHex(Data[input.id.split("-")[1]]);
+          else if (input.id.endsWith("startup")) {
+            input.value = await isEnabled();
+          }
           else input.checked = Data[input.id.split("-")[1]] ? true : false;
         });
       });
@@ -374,15 +359,21 @@ export default {
         return;
       }
       input.addEventListener("change", async () => {
-        LauncherData[input.id.split("-")[1]] = document.querySelector(
-          `input[id=${input.id}]`
-        ).checked;
+        LauncherData[input.id.split("-")[1]] = document.getElementById(input.id).checked;
         await invoke("write_file", {
           filePath: (await path.appDir()) + "LauncherData.json",
           fileContent: JSON.stringify(LauncherData),
         });
 
-        if (input.id === "setting-enable_rpc") {
+        if (input.id === "setting-launch_on_startup") {
+          if (LauncherData[input.id.split("-")[1]] == true) {
+            await enable();
+          }
+          else {
+            await disable();
+          }
+        }
+        else if (input.id === "setting-enable_rpc") {
           try {
             const { enable_rpc } = JSON.parse(
               await invoke("read_file", {
@@ -401,8 +392,7 @@ export default {
 
           window.location.reload();
         }
-
-        if (input.id === "setting-enable_spotify") {
+        else if (input.id === "setting-enable_spotify") {
           await invoke("launcherdata_threads_x");
 
           const { enable_spotify } = JSON.parse(
@@ -418,13 +408,11 @@ export default {
 
           window.location.reload();
         }
-
-        if (input.id === "setting-enable_overlay") {
+        else if (input.id === "setting-enable_overlay") {
           await invoke("launcherdata_threads_x");
           alert("A restart is required.");
         }
-
-        if (input.id === "setting-enableLauncherIcons")
+        else if (input.id === "setting-enableLauncherIcons")
           window.location.reload();
       });
     });
