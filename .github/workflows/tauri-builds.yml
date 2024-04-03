@@ -1,4 +1,4 @@
-name: "lazap-nightly-publish"
+name: "lazap-build"
 on:
   workflow_dispatch:
 
