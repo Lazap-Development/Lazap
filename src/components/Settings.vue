@@ -187,6 +187,7 @@
 </template>
 
 <script>
+import { selectOption } from "./modules/rpcOptions.js";
 import { enable, isEnabled, disable } from "tauri-plugin-autostart-api";
 
 export default {
@@ -221,14 +222,15 @@ export default {
             filePath: (await path.appDir()) + "LauncherData.json",
           })
         );
-        document.querySelectorAll("input[id^=setting-]").forEach(async (input) => {
-          if (input.id.startsWith("setting") && input.id.endsWith("Color"))
-            input.value = rgbToHex(Data[input.id.split("-")[1]]);
-          else if (input.id.endsWith("startup")) {
-            input.value = await isEnabled();
-          }
-          else input.checked = Data[input.id.split("-")[1]] ? true : false;
-        });
+        document
+          .querySelectorAll("input[id^=setting-]")
+          .forEach(async (input) => {
+            if (input.id.startsWith("setting") && input.id.endsWith("Color"))
+              input.value = rgbToHex(Data[input.id.split("-")[1]]);
+            else if (input.id.endsWith("startup")) {
+              input.value = await isEnabled();
+            } else input.checked = Data[input.id.split("-")[1]] ? true : false;
+          });
       });
 
     document.getElementById("generalbtn").addEventListener("click", () => {
@@ -360,7 +362,9 @@ export default {
         return;
       }
       input.addEventListener("change", async () => {
-        LauncherData[input.id.split("-")[1]] = document.getElementById(input.id).checked;
+        LauncherData[input.id.split("-")[1]] = document.getElementById(
+          input.id
+        ).checked;
         await invoke("write_file", {
           filePath: (await path.appDir()) + "LauncherData.json",
           fileContent: JSON.stringify(LauncherData),
@@ -369,12 +373,10 @@ export default {
         if (input.id === "setting-launch_on_startup") {
           if (LauncherData[input.id.split("-")[1]] == true) {
             await enable();
-          }
-          else {
+          } else {
             await disable();
           }
-        }
-        else if (input.id === "setting-enable_rpc") {
+        } else if (input.id === "setting-enable_rpc") {
           try {
             const { enable_rpc } = JSON.parse(
               await invoke("read_file", {
@@ -392,8 +394,7 @@ export default {
           }
 
           window.location.reload();
-        }
-        else if (input.id === "setting-enable_spotify") {
+        } else if (input.id === "setting-enable_spotify") {
           await invoke("launcherdata_threads_x");
 
           const { enable_spotify } = JSON.parse(
@@ -408,12 +409,10 @@ export default {
           }
 
           window.location.reload();
-        }
-        else if (input.id === "setting-enable_overlay") {
+        } else if (input.id === "setting-enable_overlay") {
           await invoke("launcherdata_threads_x");
           alert("A restart is importd.");
-        }
-        else if (input.id === "setting-enableLauncherIcons")
+        } else if (input.id === "setting-enableLauncherIcons")
           window.location.reload();
       });
     });
@@ -485,7 +484,7 @@ export default {
     async function setActivity(tab) {
       let timestamp = null;
       const { state, details, largeImage, largeText, smallImage, smallText } =
-        import("./modules/rpcOptions").selectOption(tab);
+        selectOption(tab);
       if (timestamp === null) timestamp = Date.now();
       try {
         await invoke(`set_rpc_activity`, {

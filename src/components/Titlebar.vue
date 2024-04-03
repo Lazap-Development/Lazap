@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import { selectOption } from "./modules/rpcOptions.js";
+
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;
 const os = window.__TAURI__.os;
@@ -112,7 +114,7 @@ export default {
 
     async function setActivity(tab) {
       const { state, details, largeImage, largeText, smallImage, smallText } =
-        import("./modules/rpcOptions").selectOption(tab);
+        selectOption(tab);
       if (timestamp === null) timestamp = Date.now();
       try {
         await invoke(`set_rpc_activity`, {
@@ -173,7 +175,7 @@ export default {
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   height: 18px;
   width: 18px;
-  background-color: rgba(var(--accent-color), 1.0);
+  background-color: rgba(var(--accent-color), 1);
   display: block;
 }
 
@@ -187,7 +189,7 @@ export default {
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   height: 18px;
   width: 18px;
-  background-color: rgba(var(--accent-color), 1.0);
+  background-color: rgba(var(--accent-color), 1);
   display: block;
 }
 
@@ -200,7 +202,7 @@ export default {
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   height: 18px;
   width: 18px;
-  background-color: rgba(var(--accent-color), 1.0);
+  background-color: rgba(var(--accent-color), 1);
   display: block;
 }
 

@@ -96,6 +96,8 @@
 </template>
 
 <script>
+import { selectOption } from "./modules/rpcOptions.js";
+
 const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
 
@@ -281,8 +283,7 @@ export default {
       gameMenu.style.display = name === "gameMenu" ? "flex" : "none";
     }
     async function setActivity(tab) {
-      const { details, largeText, smallImage, smallText } =
-        import("./modules/rpcOptions").selectOption(tab);
+      const { details, largeText, smallImage, smallText } = selectOption(tab);
       if (timestamp === null) timestamp = Date.now();
       try {
         await invoke(`set_rpc_activity`, {
