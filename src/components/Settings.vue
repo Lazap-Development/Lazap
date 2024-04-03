@@ -188,6 +188,7 @@
 
 <script>
 import { enable, isEnabled, disable } from "tauri-plugin-autostart-api";
+
 export default {
   name: "settings-comp",
   async mounted() {
@@ -410,7 +411,7 @@ export default {
         }
         else if (input.id === "setting-enable_overlay") {
           await invoke("launcherdata_threads_x");
-          alert("A restart is required.");
+          alert("A restart is importd.");
         }
         else if (input.id === "setting-enableLauncherIcons")
           window.location.reload();
@@ -484,7 +485,7 @@ export default {
     async function setActivity(tab) {
       let timestamp = null;
       const { state, details, largeImage, largeText, smallImage, smallText } =
-        require("./modules/rpcOptions").selectOption(tab);
+        import("./modules/rpcOptions").selectOption(tab);
       if (timestamp === null) timestamp = Date.now();
       try {
         await invoke(`set_rpc_activity`, {
@@ -512,6 +513,7 @@ export default {
   z-index: 1999;
   background-color: #0f10136e;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: none;
   margin-top: -10px;
   justify-content: center;

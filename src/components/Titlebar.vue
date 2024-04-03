@@ -112,7 +112,7 @@ export default {
 
     async function setActivity(tab) {
       const { state, details, largeImage, largeText, smallImage, smallText } =
-        require("./modules/rpcOptions").selectOption(tab);
+        import("./modules/rpcOptions").selectOption(tab);
       if (timestamp === null) timestamp = Date.now();
       try {
         await invoke(`set_rpc_activity`, {

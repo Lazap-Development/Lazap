@@ -1,4 +1,6 @@
 <script>
+import image from "../assets/img/default-game-banner.png";
+
 // TODO benchmark everything to see what's causing so much delay DONE
 // Classes
 class GameElement {
@@ -50,7 +52,6 @@ class GameElement {
   async getBannerElement() {
     const element = document.createElement("img");
 
-    const image = require("../assets/img/default-game-banner.png");
     element.setAttribute("src", image);
 
     element.classList.add("game_banner_img");
@@ -63,7 +64,6 @@ class GameElement {
         console.warn(
           `${this.data.display_name}'s banner did not load successfully`
         );
-      const image = require("../assets/img/default-game-banner.png");
       element.setAttribute("src", image);
     });
     element.addEventListener("load", async () => {
@@ -85,7 +85,6 @@ class GameElement {
   }
 
   async getBannerElementv2(element) {
-    const image = require("../assets/img/default-game-banner.png");
     element.style.background = `url(${image})`;
     if (this.data.banner_path) {
       let banner = await tauri.convertFileSrc(await this.data.banner_path);
@@ -176,7 +175,7 @@ class GameElement {
 
   getLauncherIconElement() {
     const element = document.createElement("img");
-    const image = require(`../assets/icons/${this.data.launcher_name}.png`);
+    const image = import(`../assets/icons/${this.data.launcher_name}.png`);
     element.setAttribute("src", image);
     element.classList.add("gamebox-icon");
 
@@ -301,7 +300,7 @@ class GameElement {
             }
           } else {
             Window.appWindow.show();
-            const rpc = require("./modules/rpcOptions");
+            const rpc = import("./modules/rpcOptions");
             const { details, largeText, smallImage, smallText } =
               rpc.selectOption(rpc.currentRpc);
             if (timestamp === null) timestamp = Date.now();

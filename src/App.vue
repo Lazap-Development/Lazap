@@ -436,6 +436,7 @@ body {
 
 .secondorybox .addGamePopUp {
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   position: absolute;
   width: 380px;
   height: 200px;
@@ -925,6 +926,7 @@ img,
   display: none;
   position: absolute;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   right: 10px;
   height: 90%;
   background: rgba(var(--all-color-front), 0.7);
@@ -994,6 +996,7 @@ img,
   margin-top: -120px;
   background-color: none;
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   z-index: 3;
 }
 

@@ -24,11 +24,7 @@ pnpm-debug.log*
 package-lock.json
 .env
 
-.pnp.*
-.pnp
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
+.yarn
 !.yarn/releases
-!.yarn/sdks
-!.yarn/versions
+!.yarn/plugins
+.pnp.*

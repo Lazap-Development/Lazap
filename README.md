@@ -7,7 +7,7 @@
 </h1>
 
 <p align="center">
-  Lazap, a lightweight cross-platform client <br>
+  Lazap, a lightweight cross-platform software <br>
   Unifying games into a single, modern library
 </p>
 
@@ -65,15 +65,17 @@ Lazap is fully open-source and can be compiled from source.
 ### Prerequisites
 - [Tauri Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites/)
 - [Latest Node.JS](https://nodejs.org/en)
-- [Yet Another Resource Negotiator](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)
+- [Yet Another Resource Negotiator](https://yarnpkg.com/getting-started)
 
 Once you have the above preqs, you may continue with the following:
 
 ```bash
 # clone this repo 
 git clone https://github.com/Lazap-Development/Lazap.git 
-# change current dir, install deps & serve
-cd Lazap && yarn install && yarn tauri:serve
+# change current dir, install deps
+cd Lazap && yarn install
+# run in development mode
+yarn tauri dev
 ```
 
 ## 📚 Help & Support

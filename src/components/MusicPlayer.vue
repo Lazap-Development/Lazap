@@ -57,6 +57,10 @@
 </template>
 
 <script>
+import spotifyIconSrc from "../assets/svg/music/spotify.svg";
+import playSolidSvg from "../assets/svg/music/play-solid.svg";
+import pauseSolidSvg from "../assets/svg/music/pause-solid.svg";
+
 const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
 const shell = window.__TAURI__.shell;
@@ -64,6 +68,7 @@ const shell = window.__TAURI__.shell;
 export default {
   name: "MusicPlayer",
   async mounted() {
+
     let LauncherData = JSON.parse(
       await invoke("read_file", {
         filePath: (await path.appDir()) + "LauncherData.json",
@@ -83,7 +88,7 @@ export default {
 
       if (!document.getElementById("spotifyIcon")) {
         let spotifyIcon = document.createElement("img");
-        spotifyIcon.src = require("../assets/svg/music/spotify.svg");
+        spotifyIcon.src = spotifyIconSrc;
         spotifyIcon.id = "spotifyIcon";
         document.getElementById("musicPlayer-Top").append(spotifyIcon);
       }
@@ -107,12 +112,12 @@ export default {
           let imageElement = document
             .getElementById("MusicPlayer-play-btn")
             .getElementsByTagName("img")[0];
-          imageElement.src = `${require("../assets/svg/music/play-solid.svg")}`;
+          imageElement.src = playSolidSvg;
         } else {
           let imageElement = document
             .getElementById("MusicPlayer-play-btn")
             .getElementsByTagName("img")[0];
-          imageElement.src = `${require("../assets/svg/music/pause-solid.svg")}`;
+          imageElement.src = pauseSolidSvg;
         }
       });
 
@@ -169,7 +174,7 @@ export default {
         let imageElement = document
           .getElementById("MusicPlayer-play-btn")
           .getElementsByTagName("img")[0];
-        imageElement.src = `${require("../assets/svg/music/pause-solid.svg")}`;
+        imageElement.src = pauseSolidSvg;
 
         let time = data.progress;
         const percentage = (time / data.duration) * 100;
@@ -187,7 +192,7 @@ export default {
         let imageElement = document
           .getElementById("MusicPlayer-play-btn")
           .getElementsByTagName("img")[0];
-        imageElement.src = `${require("../assets/svg/music/play-solid.svg")}`;
+        imageElement.src = playSolidSvg;
       }
     }
 
@@ -247,6 +252,7 @@ export default {
   width: 100%;
   height: 100%;
   backdrop-filter: blur(2px) opacity(90%) brightness(40%);
+  -webkit-backdrop-filter: blur(2px) opacity(90%) brightness(40%);
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -383,6 +389,7 @@ export default {
   border-radius: 10px;
   background-color: #2c2c2c;
   backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
   border: 4px solid rgba(var(--accent-color), 0.7);
 }
 </style>
