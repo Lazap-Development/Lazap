@@ -20,10 +20,8 @@
   </a>
  </p>
 
-
 <div align="center">
-  <img src="https://github.com/Lazap-Development/Lazap/assets/59381835/04bb9c59-0ea2-47ab-bef0-0bc4cc216dfd">
-
+  <img src="https://github.com/Lazap-Development/Lazap/assets/59381835/ce70f368-de1b-4552-a371-b019bcb4eae1">
 </div>
 
 <br>
