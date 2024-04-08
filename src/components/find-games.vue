@@ -1,7 +1,6 @@
 <script>
 import image from "../assets/img/default-game-banner.png";
 
-// TODO benchmark everything to see what's causing so much delay DONE
 // Classes
 class GameElement {
   constructor(data, listID, jsondata, settings, bannerdirarr) {
@@ -195,9 +194,7 @@ class GameElement {
           break;
         }
         case "Steam": {
-          res = this.createProcess(
-            `/C start steam://rungame_id/${this.data.game_id}`
-          );
+          res = this.createProcess(`/C start steam://run/${this.data.game_id}`);
           break;
         }
         case "Uplay": {
@@ -334,8 +331,8 @@ class Storage {
     })();
   }
   async setGamesData(games, source) {
-    const data = await this.getGamesData();
-    data.forEach((d) => {
+    const file_data = await this.getGamesData();
+    file_data.forEach((d) => {
       Object.keys(d).forEach((x) => {
         if ([undefined, null].includes(d[x])) delete d[x];
       });
@@ -348,22 +345,32 @@ class Storage {
 
     try {
       if (source === "getInstalledGames") {
-        if (data.length > 0) {
-          if (data.length != games.length) {
+        if (file_data.length > 0) {
+          if (file_data.length != games.length) {
             const newData = games.filter((game) => {
-              return !data.some(
+              return !file_data.some(
                 (existingGame) =>
-                  existingGame.LauncherName === game.LauncherName &&
-                  existingGame.GameID === game.GameID
+                  existingGame.launcher_id === game.launcher_id &&
+                  existingGame.display_name === game.display_name
               );
             });
 
-            if (newData.length > 0) {
-              await invoke("write_file", {
-                filePath: this.gamesDataJSON,
-                fileContent: JSON.stringify(newData),
-              });
-            }
+            const removedData = file_data.filter((existingGame) => {
+              return !games.some(
+                (game) =>
+                  existingGame.launcher_id === game.launcher_id &&
+                  existingGame.display_name === game.display_name
+              );
+            });
+
+            const mergedData = file_data
+              .filter((existingGame) => !removedData.includes(existingGame))
+              .concat(newData);
+
+            await invoke("write_file", {
+              filePath: this.gamesDataJSON,
+              fileContent: JSON.stringify(mergedData),
+            });
           }
         } else {
           await invoke("write_file", {
