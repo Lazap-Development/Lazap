@@ -370,6 +370,7 @@ export default {
 
 .rightbar .musicPlayer .slider input {
   width: 100%;
+  appearance: none;
   -webkit-appearance: none;
   height: 3px;
   margin: 10px;

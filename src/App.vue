@@ -10,12 +10,19 @@
     <div class="homebox" id="home">
       <div class="centerchildren">
         <div class="children fadeInUp">
-          <img class="head-pic" src="./assets/img/main_banner.png" id="head-pic" />
+          <img
+            class="head-pic"
+            src="./assets/img/main_banner.png"
+            id="head-pic"
+          />
         </div>
         <div class="children fadeInDown">
           <div class="jump-back">
             <p>Recently Launched</p>
-            <div id="recentGamesListMainPage" class="fadeInDown mainPageGamesList">
+            <div
+              id="recentGamesListMainPage"
+              class="fadeInDown mainPageGamesList"
+            >
               <div class="placeholderGames"></div>
               <div class="placeholderGames"></div>
               <div class="placeholderGames"></div>
@@ -31,38 +38,50 @@
           <div id="sysInfo" class="sysInfo">
             <div id="system_host">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path fill="currentColor"
-                  d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" />
+                <path
+                  fill="currentColor"
+                  d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
+                />
               </svg>
             </div>
             <div id="system_name">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                <path fill="currentColor"
-                  d="M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64H240l-10.7 32H160c-17.7 0-32 14.3-32 32s14.3 32 32 32H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H346.7L336 416H512c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64zM512 64V288H64V64H512z" />
+                <path
+                  fill="currentColor"
+                  d="M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64H240l-10.7 32H160c-17.7 0-32 14.3-32 32s14.3 32 32 32H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H346.7L336 416H512c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64zM512 64V288H64V64H512z"
+                />
               </svg>
             </div>
             <div id="system_kernel">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                <path fill="currentColor"
-                  d="M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64H240l-10.7 32H160c-17.7 0-32 14.3-32 32s14.3 32 32 32H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H346.7L336 416H512c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64zM512 64V288H64V64H512z" />
+                <path
+                  fill="currentColor"
+                  d="M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64H240l-10.7 32H160c-17.7 0-32 14.3-32 32s14.3 32 32 32H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H346.7L336 416H512c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64zM512 64V288H64V64H512z"
+                />
               </svg>
             </div>
             <div id="disk">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path fill="currentColor"
-                  d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V280.4c-17-15.2-39.4-24.4-64-24.4H64c-24.6 0-47 9.2-64 24.4V96zM64 288H448c35.3 0 64 28.7 64 64v64c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V352c0-35.3 28.7-64 64-64zM320 416a32 32 0 1 0 0-64 32 32 0 1 0 0 64zm128-32a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z" />
+                <path
+                  fill="currentColor"
+                  d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V280.4c-17-15.2-39.4-24.4-64-24.4H64c-24.6 0-47 9.2-64 24.4V96zM64 288H448c35.3 0 64 28.7 64 64v64c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V352c0-35.3 28.7-64 64-64zM320 416a32 32 0 1 0 0-64 32 32 0 1 0 0 64zm128-32a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
+                />
               </svg>
             </div>
             <div id="memory">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                <path fill="currentColor"
-                  d="M64 64C28.7 64 0 92.7 0 128v7.4c0 6.8 4.4 12.6 10.1 16.3C23.3 160.3 32 175.1 32 192s-8.7 31.7-21.9 40.3C4.4 236 0 241.8 0 248.6V320H576V248.6c0-6.8-4.4-12.6-10.1-16.3C552.7 223.7 544 208.9 544 192s8.7-31.7 21.9-40.3c5.7-3.7 10.1-9.5 10.1-16.3V128c0-35.3-28.7-64-64-64H64zM576 352H0v64c0 17.7 14.3 32 32 32H80V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h96V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h96V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h96V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h48c17.7 0 32-14.3 32-32V352zM192 160v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32zm128 0v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32zm128 0v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32z" />
+                <path
+                  fill="currentColor"
+                  d="M64 64C28.7 64 0 92.7 0 128v7.4c0 6.8 4.4 12.6 10.1 16.3C23.3 160.3 32 175.1 32 192s-8.7 31.7-21.9 40.3C4.4 236 0 241.8 0 248.6V320H576V248.6c0-6.8-4.4-12.6-10.1-16.3C552.7 223.7 544 208.9 544 192s8.7-31.7 21.9-40.3c5.7-3.7 10.1-9.5 10.1-16.3V128c0-35.3-28.7-64-64-64H64zM576 352H0v64c0 17.7 14.3 32 32 32H80V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h96V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h96V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h96V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h48c17.7 0 32-14.3 32-32V352zM192 160v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32zm128 0v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32zm128 0v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32z"
+                />
               </svg>
             </div>
             <div id="cpu">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path fill="currentColor"
-                  d="M176 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64c-35.3 0-64 28.7-64 64H24c-13.3 0-24 10.7-24 24s10.7 24 24 24H64v56H24c-13.3 0-24 10.7-24 24s10.7 24 24 24H64v56H24c-13.3 0-24 10.7-24 24s10.7 24 24 24H64c0 35.3 28.7 64 64 64v40c0 13.3 10.7 24 24 24s24-10.7 24-24V448h56v40c0 13.3 10.7 24 24 24s24-10.7 24-24V448h56v40c0 13.3 10.7 24 24 24s24-10.7 24-24V448c35.3 0 64-28.7 64-64h40c13.3 0 24-10.7 24-24s-10.7-24-24-24H448V280h40c13.3 0 24-10.7 24-24s-10.7-24-24-24H448V176h40c13.3 0 24-10.7 24-24s-10.7-24-24-24H448c0-35.3-28.7-64-64-64V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H280V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H176V24zM160 128H352c17.7 0 32 14.3 32 32V352c0 17.7-14.3 32-32 32H160c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32zm192 32H160V352H352V160z" />
+                <path
+                  fill="currentColor"
+                  d="M176 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64c-35.3 0-64 28.7-64 64H24c-13.3 0-24 10.7-24 24s10.7 24 24 24H64v56H24c-13.3 0-24 10.7-24 24s10.7 24 24 24H64v56H24c-13.3 0-24 10.7-24 24s10.7 24 24 24H64c0 35.3 28.7 64 64 64v40c0 13.3 10.7 24 24 24s24-10.7 24-24V448h56v40c0 13.3 10.7 24 24 24s24-10.7 24-24V448h56v40c0 13.3 10.7 24 24 24s24-10.7 24-24V448c35.3 0 64-28.7 64-64h40c13.3 0 24-10.7 24-24s-10.7-24-24-24H448V280h40c13.3 0 24-10.7 24-24s-10.7-24-24-24H448V176h40c13.3 0 24-10.7 24-24s-10.7-24-24-24H448c0-35.3-28.7-64-64-64V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H280V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H176V24zM160 128H352c17.7 0 32 14.3 32 32V352c0 17.7-14.3 32-32 32H160c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32zm192 32H160V352H352V160z"
+                />
               </svg>
             </div>
           </div>
@@ -108,9 +127,15 @@
 
     <div class="gameMenu" id="gameMenu">
       <div class="gameMenuTitle" id="gameMenuTitle"></div>
-      <div class="gameMenuBtns">
+      <!-- <div class="gameMenuBody"> -->
+        <!-- <input
+          type="text"
+          class="launchOptions"
+          id="launchOptions"
+          placeholder="Launch Flags..."
+        /> -->
         <button class="gameMenuBtn" id="removeGame">Remove Game</button>
-      </div>
+      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -301,9 +326,9 @@ export default {
             .remove();
           setTimeout(
             () =>
-            (document.getElementById(
-              "removeGame"
-            ).parentNode.parentNode.style = ""),
+              (document.getElementById(
+                "removeGame"
+              ).parentNode.parentNode.style = ""),
             200
           );
         });
@@ -728,11 +753,13 @@ body {
   border-radius: 12px;
   image-rendering: auto;
   object-fit: cover;
-  mask-image: -webkit-gradient(linear,
-      left 70%,
-      left bottom,
-      from(rgba(0, 0, 0, 1)),
-      to(rgba(0, 0, 0, 0)));
+  mask-image: -webkit-gradient(
+    linear,
+    left 70%,
+    left bottom,
+    from(rgba(0, 0, 0, 1)),
+    to(rgba(0, 0, 0, 0))
+  );
   content: url("./assets/img/default-game-banner.png");
 }
 
@@ -793,11 +820,13 @@ body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.5;
   background-color: rgba(var(--accent-color), 0.7);
-  mask-image: -webkit-gradient(linear,
-      right 90%,
-      left top,
-      from(rgba(0, 0, 0, 1)),
-      to(rgba(0, 0, 0, 0)));
+  mask-image: -webkit-gradient(
+    linear,
+    right 90%,
+    left top,
+    from(rgba(0, 0, 0, 1)),
+    to(rgba(0, 0, 0, 0))
+  );
 }
 
 .placeholderGames:nth-last-child(-n + 4) {
@@ -819,7 +848,6 @@ body {
   background-position: 50% 40% !important;
   object-fit: cover;
 }
-
 
 .mainPageGamebox:nth-last-child(-n + 4) {
   margin-left: 1.6%;
@@ -929,13 +957,19 @@ img,
   -webkit-backdrop-filter: blur(10px);
   right: 10px;
   height: 90%;
-  background: rgba(var(--all-color-front), 0.7);
+  background: linear-gradient(
+    30deg,
+    rgba(var(--all-color-primary), 0.7) 0%,
+    rgba(var(--all-color-primary), 0.7) 30%,
+    rgba(var(--accent-color), 0.7) 100%
+  );
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   animation: gameMenuAnimation 0.2s both ease-out;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .gameMenu .gameMenuBtn {
@@ -952,19 +986,49 @@ img,
   text-decoration: none;
   text-shadow: none;
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.gameMenu .gameMenuBtns .gameMenuBtn:first-child {
+.gameMenu .gameMenuBody {
+  margin: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.gameMenu .gameMenuBody input[type="text"] {
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 30px;
+  outline: none;
+  border: none;
+  background-color: rgba(var(--all-color-primary), 0.7);
+  height: 40px;
+  color: rgb(201, 201, 201);
+  border-radius: 12px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.gameMenu .gameMenuBody input[type="text"]::placeholder {
+  color: #ffffff5b;
+}
+
+.gameMenu .gameMenuBody .gameMenuBtn:first-child {
   margin-top: 100px;
 }
 
 .gameMenu .gameMenuTitle {
-  position: absolute;
   font-size: 20px;
   color: #cacaca;
   text-align: center;
   margin-top: 40px;
   display: block;
+  margin-bottom: 50px;
 }
 
 .gameMenu .gameMenuBtn:hover {
@@ -1021,7 +1085,8 @@ img,
   height: 25px;
   width: 25px;
   display: flex;
-  filter: invert(12%) sepia(78%) saturate(4656%) hue-rotate(1deg) brightness(108%) contrast(128%);
+  filter: invert(12%) sepia(78%) saturate(4656%) hue-rotate(1deg)
+    brightness(108%) contrast(128%);
 }
 
 .alert-box-cross {
@@ -1035,7 +1100,8 @@ img,
 }
 
 .alert-box-cross:hover {
-  filter: invert(21%) sepia(70%) saturate(3776%) hue-rotate(255deg) brightness(97%) contrast(101%);
+  filter: invert(21%) sepia(70%) saturate(3776%) hue-rotate(255deg)
+    brightness(97%) contrast(101%);
 }
 
 .alert-box-divider {
@@ -1114,7 +1180,8 @@ img,
 .repeatButton {
   height: 40px;
   width: 40px;
-  filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
+  filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg)
+    brightness(108%) contrast(108%);
 }
 
 .repeatButton:hover {
@@ -1218,7 +1285,6 @@ img,
 }
 
 @keyframes shake {
-
   10%,
   90% {
     transform: translate3d(-1px, 0, 0);

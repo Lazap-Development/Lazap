@@ -3,184 +3,192 @@
   <div class="settings" id="settings-popup">
     <div>
       <h1>Settings</h1>
-      <div class="choser" id="choser">
-        <button id="generalbtn">General</button>
-        <button id="appearancebtn">Appearance</button>
-        <button id="addonsbtn">Addons</button>
-      </div>
-      <div class="general-settings" id="general-settings">
-        <div class="setting">
-          <p>Launch on Startup</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-launch_on_startup" />
-              <div>
-                <span></span>
-              </div>
-            </label>
+      <div class="settings-body">
+        <div class="choser" id="choser">
+          <button id="generalbtn">General</button>
+          <button id="appearancebtn">Appearance</button>
+          <button id="addonsbtn">Connections</button>
+          <button id="expbtn">Experimental</button>
+        </div>
+        <div class="general-settings" id="general-settings">
+          <div class="setting">
+            <p>Launch on Startup</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-launch_on_startup" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting">
+            <p>Minimize to Tray on Launch</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-tray_min_launch" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting">
+            <p>Minimize to Tray on Quit</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-tray_min_quit" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting">
+            <p>Check for Updates</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-check_for_updates" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
 
-        <div class="setting">
-          <p>Minimize to Tray on Launch</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-tray_min_launch" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting">
-          <p>Minimize to Tray on Quit</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-tray_min_quit" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting">
-          <p>Check for Updates</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-check_for_updates" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="appearance-settings" id="appearance-settings">
-        <div class="setting themes">
-          <label class="color">
-            <div
-              class="theme-box"
-              id="theme-box-default"
-              style="background-color: #000"
-            ></div>
-            <div
-              class="theme-box"
-              id="theme-box-crimson"
-              style="background-color: #660708"
-            ></div>
-            <div
-              class="theme-box"
-              id="theme-box-midnight"
-              style="background-color: #240046"
-            ></div>
-          </label>
-        </div>
-        <div class="setting">
-          <p>Primary Color</p>
-          <div class="btnInput">
+        <div class="appearance-settings" id="appearance-settings">
+          <div class="setting themes">
             <label class="color">
-              <input type="color" id="setting-primaryColor" />
+              <div
+                class="theme-box"
+                id="theme-box-default"
+                style="background-color: #000"
+              ></div>
+              <div
+                class="theme-box"
+                id="theme-box-crimson"
+                style="background-color: #660708"
+              ></div>
+              <div
+                class="theme-box"
+                id="theme-box-midnight"
+                style="background-color: #240046"
+              ></div>
             </label>
-            <img class="repeatButton" src="../assets/icons/reset.png" />
+          </div>
+          <div class="setting">
+            <p>Primary Color</p>
+            <div class="btnInput">
+              <label class="color">
+                <input type="color" id="setting-primaryColor" />
+              </label>
+              <img class="repeatButton" src="../assets/icons/reset.png" />
+            </div>
+          </div>
+          <div class="setting">
+            <p>Background Color</p>
+            <div class="btnInput">
+              <label class="color">
+                <input type="color" id="setting-backgroundColor" />
+              </label>
+              <img class="repeatButton" src="../assets/icons/reset.png" />
+            </div>
+          </div>
+          <div class="setting">
+            <p>Front Color</p>
+            <div class="btnInput">
+              <label class="color">
+                <input type="color" id="setting-frontColor" />
+              </label>
+              <img class="repeatButton" src="../assets/icons/reset.png" />
+            </div>
+          </div>
+          <div class="setting">
+            <p>Accent Color</p>
+            <div class="btnInput">
+              <label class="color">
+                <input type="color" id="setting-accentColor" />
+              </label>
+              <img class="repeatButton" src="../assets/icons/reset.png" />
+            </div>
+          </div>
+          <div class="setting">
+            <p>Enable Launcher Icons</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-enableLauncherIcons" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
-        <div class="setting">
-          <p>Background Color</p>
-          <div class="btnInput">
-            <label class="color">
-              <input type="color" id="setting-backgroundColor" />
-            </label>
-            <img class="repeatButton" src="../assets/icons/reset.png" />
+
+        <div
+          class="general-settings"
+          id="addons-settings"
+          style="display: none"
+        >
+          <div class="setting">
+            <p>Discord Rich Presence</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-enable_rpc" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting">
+            <p>Spotify Connection</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-enable_spotify" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting">
+            <p>YouTube Music Connection</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input
+                  type="checkbox"
+                  id="setting-enable_ytm"
+                  disabled="readonly"
+                />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
-        <div class="setting">
-          <p>Front Color</p>
-          <div class="btnInput">
-            <label class="color">
-              <input type="color" id="setting-frontColor" />
-            </label>
-            <img class="repeatButton" src="../assets/icons/reset.png" />
-          </div>
-        </div>
-        <div class="setting">
-          <p>Accent Color</p>
-          <div class="btnInput">
-            <label class="color">
-              <input type="color" id="setting-accentColor" />
-            </label>
-            <img class="repeatButton" src="../assets/icons/reset.png" />
-          </div>
-        </div>
-        <div class="setting">
-          <p>Enable Launcher Icons</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-enableLauncherIcons" />
-              <div>
-                <span></span>
-              </div>
-            </label>
+
+        <div class="general-settings" id="exp-settings" style="display: none">
+          <div class="setting">
+            <p>Lazap Overlay [BETA]</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-enable_overlay" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="general-settings" id="addons-settings" style="display: none">
-        <div class="setting">
-          <p>Discord Rich Presence</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-enable_rpc" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting">
-          <p>Spotify Connection</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-enable_spotify" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting">
-          <p>YouTube Music Connection</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input
-                type="checkbox"
-                id="setting-enable_ytm"
-                disabled="readonly"
-              />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting">
-          <p>Lazap Overlay [BETA]</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-enable_overlay" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-      </div>
-
       <div class="settings-footer">Release v0.8.0</div>
     </div>
   </div>
@@ -237,18 +245,29 @@ export default {
       document.getElementById("general-settings").style.display = "flex";
       document.getElementById("appearance-settings").style.display = "none";
       document.getElementById("addons-settings").style.display = "none";
+      document.getElementById("exp-settings").style.display = "none";
     });
 
     document.getElementById("appearancebtn").addEventListener("click", () => {
       document.getElementById("general-settings").style.display = "none";
       document.getElementById("appearance-settings").style.display = "flex";
       document.getElementById("addons-settings").style.display = "none";
+      document.getElementById("exp-settings").style.display = "none";
     });
 
     document.getElementById("addonsbtn").addEventListener("click", () => {
       document.getElementById("general-settings").style.display = "none";
       document.getElementById("appearance-settings").style.display = "none";
       document.getElementById("addons-settings").style.display = "flex";
+      document.getElementById("exp-settings").style.display = "none";
+
+    });
+
+    document.getElementById("expbtn").addEventListener("click", () => {
+      document.getElementById("general-settings").style.display = "none";
+      document.getElementById("appearance-settings").style.display = "none";
+      document.getElementById("addons-settings").style.display = "none";
+      document.getElementById("exp-settings").style.display = "flex";
     });
 
     let LauncherData = JSON.parse(
@@ -522,8 +541,8 @@ export default {
 
 .settings {
   position: absolute;
-  height: 540px;
-  width: 600px;
+  height: 500px;
+  width: 700px;
   display: none;
   background: rgba(var(--all-color-primary), 0.7);
   border: 4px solid rgba(var(--accent-color), 0.7);
@@ -572,8 +591,13 @@ export default {
   margin-top: 8px;
 }
 
+.settings-body {
+  display: flex;
+  flex-direction: row;
+}
+
 .settings-footer {
-  color: rgba(133, 133, 133, 0.446);
+  color: rgb(201, 201, 201, 0.7);
   position: absolute;
   bottom: 0;
   left: 0;
@@ -583,9 +607,10 @@ export default {
 
 .choser {
   display: flex;
-  justify-content: center;
   align-items: center;
+  flex-direction: column;
   margin-bottom: 30px;
+  margin-right: 40px;
 }
 
 .choser button {
@@ -596,7 +621,7 @@ export default {
   font-size: 18px;
 
   background: rgba(var(--all-color-front), 0.7);
-  width: 150px;
+  width: 180px;
   height: 40px;
   border: none;
   outline: none;
@@ -605,14 +630,14 @@ export default {
 
 .choser button:first-child {
   border-radius: 10px;
-  border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 
 .choser button:last-child {
   border-radius: 10px;
+  border-top-right-radius: 0px;
   border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
 }
 
 .choser button:hover {
@@ -629,7 +654,8 @@ export default {
   align-items: center;
   margin-left: auto;
   overflow: auto;
-  height: 320px;
+  height: 400px;
+  margin-right: 20px;
 }
 
 .appearance-settings {
