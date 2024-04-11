@@ -306,77 +306,90 @@ export default {
       if (input.id === "setting-accentColor") {
         input.addEventListener("input", async () => {
           let hexValue = document.getElementById(input.id).value;
-          LauncherData[input.id.split("-")[1]] = `${parseInt(
+          const clr = `${parseInt(
             hexValue.substr(1, 2),
             16
           )}, ${parseInt(hexValue.substr(3, 2), 16)}, ${parseInt(
             hexValue.substr(5, 2),
             16
           )}`;
+          updateColor("accentColor", clr);
+          LauncherData = JSON.parse(await invoke("read_file", {
+            filePath: (await path.appDir()) + "LauncherData.json",
+          }));
+          LauncherData[input.id.split("-")[1]] = clr;
 
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
-
-          updateColor("accentColor", LauncherData.accentColor);
         });
         return;
       } else if (input.id === "setting-backgroundColor") {
         input.addEventListener("input", async () => {
           let hexValue = document.getElementById(input.id).value;
-          LauncherData[input.id.split("-")[1]] = `${parseInt(
+          const clr = `${parseInt(
             hexValue.substr(1, 2),
             16
           )}, ${parseInt(hexValue.substr(3, 2), 16)}, ${parseInt(
             hexValue.substr(5, 2),
             16
           )}`;
+          updateColor("backgroundColor", clr);
+          LauncherData = JSON.parse(await invoke("read_file", {
+            filePath: (await path.appDir()) + "LauncherData.json",
+          }));
+          LauncherData[input.id.split("-")[1]] = clr;
 
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
 
-          updateColor("backgroundColor", LauncherData.backgroundColor);
         });
         return;
       } else if (input.id === "setting-frontColor") {
         input.addEventListener("input", async () => {
           let hexValue = document.getElementById(input.id).value;
-          LauncherData[input.id.split("-")[1]] = `${parseInt(
+          const clr = `${parseInt(
             hexValue.substr(1, 2),
             16
           )}, ${parseInt(hexValue.substr(3, 2), 16)}, ${parseInt(
             hexValue.substr(5, 2),
             16
           )}`;
+          updateColor("frontColor", clr);
+          LauncherData = JSON.parse(await invoke("read_file", {
+            filePath: (await path.appDir()) + "LauncherData.json",
+          }));
+          LauncherData[input.id.split("-")[1]] = clr;
 
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
-
-          updateColor("frontColor", LauncherData.frontColor);
         });
         return;
       } else if (input.id === "setting-primaryColor") {
         input.addEventListener("input", async () => {
           let hexValue = document.getElementById(input.id).value;
-          LauncherData[input.id.split("-")[1]] = `${parseInt(
+          const clr = `${parseInt(
             hexValue.substr(1, 2),
             16
           )}, ${parseInt(hexValue.substr(3, 2), 16)}, ${parseInt(
             hexValue.substr(5, 2),
             16
           )}`;
+          updateColor("primaryColor", clr);
+          LauncherData = JSON.parse(await invoke("read_file", {
+            filePath: (await path.appDir()) + "LauncherData.json",
+          }));
+          LauncherData[input.id.split("-")[1]] = clr;
 
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
-
-          updateColor("primaryColor", LauncherData.primaryColor);
         });
         return;
       }
