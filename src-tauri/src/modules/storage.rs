@@ -41,20 +41,28 @@ pub fn init_storage() -> Result<(), std::io::Error> {
     create_dir_if_not_exists(&base_config_cache_games_banners_path);
     create_dir_if_not_exists(&base_config_cache_user_path);
 
-    let json_content = "{ 
-        \"enable_rpc\": true, 
-        \"enable_spotify\": false, 
-        \"enable_overlay\": false,
-        \"launch_on_startup\": false, 
-        \"skip_login\": false, 
-        \"tray_min_launch\": true, 
-        \"tray_min_quit\": false, 
-        \"check_for_updates\": true, 
-        \"accentColor\": \"121, 52, 250\",
-        \"frontColor\": \"42, 16, 81\",
-        \"backgroundColor\": \"20, 14, 36\",
-        \"primaryColor\": \"12, 11, 14\"
-    }";
+    let mut json_content = r#"{
+            "enable_rpc": true,
+            "enable_spotify": false,
+            "enable_overlay": false,
+            "launch_on_startup": false,
+            "skip_login": false,
+            "tray_min_launch": true,
+            "tray_min_quit": false,
+            "enable_blur": true,
+            "check_for_updates": true,
+            "accentColor": "121, 52, 250",
+            "frontColor": "42, 16, 81",
+            "backgroundColor": "20, 14, 36",
+            "primaryColor": "12, 11, 14"
+        }"#;
+
+    let json_content_modify;
+    if cfg!(target_os = "linux") {
+        json_content_modify =
+            json_content.replace("\"enable_blur\": true,", "\"enable_blur\": false,");
+        json_content = &json_content_modify;
+    }
 
     create_file_if_not_exists(&base_config_ld_file, json_content)?;
 

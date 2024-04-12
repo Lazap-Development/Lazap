@@ -187,6 +187,17 @@
               </label>
             </div>
           </div>
+          <div class="setting">
+            <p>Window Blur</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-enable_blur" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
       <div class="settings-footer">Release v0.8.0</div>
@@ -206,16 +217,25 @@ export default {
     const settingsbackblur = document.getElementById("settings-backblur");
     const path = window.__TAURI__.path;
     const invoke = window.__TAURI__.invoke;
+    const os = window.__TAURI__.os;
 
     settingsbackblur.addEventListener("click", () => {
       settings.style.display = "none";
       settingsbackblur.style.display = "none";
+      document.getElementById("general-settings").style.display = "flex";
+      document.getElementById("appearance-settings").style.display = "none";
+      document.getElementById("addons-settings").style.display = "none";
+      document.getElementById("exp-settings").style.display = "none";
     });
 
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" || event.key === "Esc") {
         settings.style.display = "none";
         settingsbackblur.style.display = "none";
+        document.getElementById("general-settings").style.display = "flex";
+        document.getElementById("appearance-settings").style.display = "none";
+        document.getElementById("addons-settings").style.display = "none";
+        document.getElementById("exp-settings").style.display = "none";
       }
     });
 
@@ -260,7 +280,6 @@ export default {
       document.getElementById("appearance-settings").style.display = "none";
       document.getElementById("addons-settings").style.display = "flex";
       document.getElementById("exp-settings").style.display = "none";
-
     });
 
     document.getElementById("expbtn").addEventListener("click", () => {
@@ -306,17 +325,16 @@ export default {
       if (input.id === "setting-accentColor") {
         input.addEventListener("input", async () => {
           let hexValue = document.getElementById(input.id).value;
-          const clr = `${parseInt(
-            hexValue.substr(1, 2),
+          const clr = `${parseInt(hexValue.substr(1, 2), 16)}, ${parseInt(
+            hexValue.substr(3, 2),
             16
-          )}, ${parseInt(hexValue.substr(3, 2), 16)}, ${parseInt(
-            hexValue.substr(5, 2),
-            16
-          )}`;
+          )}, ${parseInt(hexValue.substr(5, 2), 16)}`;
           updateColor("accentColor", clr);
-          LauncherData = JSON.parse(await invoke("read_file", {
-            filePath: (await path.appDir()) + "LauncherData.json",
-          }));
+          LauncherData = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
           LauncherData[input.id.split("-")[1]] = clr;
 
           await invoke("write_file", {
@@ -328,40 +346,37 @@ export default {
       } else if (input.id === "setting-backgroundColor") {
         input.addEventListener("input", async () => {
           let hexValue = document.getElementById(input.id).value;
-          const clr = `${parseInt(
-            hexValue.substr(1, 2),
+          const clr = `${parseInt(hexValue.substr(1, 2), 16)}, ${parseInt(
+            hexValue.substr(3, 2),
             16
-          )}, ${parseInt(hexValue.substr(3, 2), 16)}, ${parseInt(
-            hexValue.substr(5, 2),
-            16
-          )}`;
+          )}, ${parseInt(hexValue.substr(5, 2), 16)}`;
           updateColor("backgroundColor", clr);
-          LauncherData = JSON.parse(await invoke("read_file", {
-            filePath: (await path.appDir()) + "LauncherData.json",
-          }));
+          LauncherData = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
           LauncherData[input.id.split("-")[1]] = clr;
 
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
-
         });
         return;
       } else if (input.id === "setting-frontColor") {
         input.addEventListener("input", async () => {
           let hexValue = document.getElementById(input.id).value;
-          const clr = `${parseInt(
-            hexValue.substr(1, 2),
+          const clr = `${parseInt(hexValue.substr(1, 2), 16)}, ${parseInt(
+            hexValue.substr(3, 2),
             16
-          )}, ${parseInt(hexValue.substr(3, 2), 16)}, ${parseInt(
-            hexValue.substr(5, 2),
-            16
-          )}`;
+          )}, ${parseInt(hexValue.substr(5, 2), 16)}`;
           updateColor("frontColor", clr);
-          LauncherData = JSON.parse(await invoke("read_file", {
-            filePath: (await path.appDir()) + "LauncherData.json",
-          }));
+          LauncherData = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
           LauncherData[input.id.split("-")[1]] = clr;
 
           await invoke("write_file", {
@@ -373,17 +388,16 @@ export default {
       } else if (input.id === "setting-primaryColor") {
         input.addEventListener("input", async () => {
           let hexValue = document.getElementById(input.id).value;
-          const clr = `${parseInt(
-            hexValue.substr(1, 2),
+          const clr = `${parseInt(hexValue.substr(1, 2), 16)}, ${parseInt(
+            hexValue.substr(3, 2),
             16
-          )}, ${parseInt(hexValue.substr(3, 2), 16)}, ${parseInt(
-            hexValue.substr(5, 2),
-            16
-          )}`;
+          )}, ${parseInt(hexValue.substr(5, 2), 16)}`;
           updateColor("primaryColor", clr);
-          LauncherData = JSON.parse(await invoke("read_file", {
-            filePath: (await path.appDir()) + "LauncherData.json",
-          }));
+          LauncherData = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
           LauncherData[input.id.split("-")[1]] = clr;
 
           await invoke("write_file", {
@@ -443,9 +457,57 @@ export default {
           window.location.reload();
         } else if (input.id === "setting-enable_overlay") {
           await invoke("launcherdata_threads_x");
-          alert("A restart is importd.");
-        } else if (input.id === "setting-enableLauncherIcons")
+          alert("A restart is required.");
+        } else if (input.id === "setting-enableLauncherIcons") {
           window.location.reload();
+        } else if (input.id === "setting-enable_blur") {
+          LauncherData = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+
+          if (!LauncherData[input.id.split("-")[1]]) {
+            document.getElementById;
+            document.querySelectorAll("body").forEach(function (element) {
+              var computedStyle = window.getComputedStyle(element);
+              var backgroundColor = computedStyle.backgroundColor;
+
+              if (
+                backgroundColor &&
+                backgroundColor !== "rgba(0, 0, 0, 0)" &&
+                backgroundColor !== "transparent"
+              ) {
+                if (backgroundColor.includes("rgba")) {
+                  var rgbaComponents = backgroundColor.match(/\d+/g);
+                  var opacity = rgbaComponents[3].trim();
+
+                  if (opacity < 1) {
+                    element.style.backgroundColor =
+                      "rgba(" +
+                      rgbaComponents[0] +
+                      "," +
+                      rgbaComponents[1] +
+                      "," +
+                      rgbaComponents[2] +
+                      ", 1.0)";
+                  }
+                } else if (backgroundColor.includes("rgb")) {
+                  element.style.backgroundColor = backgroundColor
+                    .replace("rgb", "rgba")
+                    .replace(")", ", 1.0)");
+                }
+              }
+            });
+          } else {
+            if ((await os.platform()) == "linux") {
+              alert(
+                "PLEASE NOTE:\n\n Window Blur on Linux depends on your WM or DE compositor settings!\n Usually, adding this application to blur whitelist should do the trick.\n\n Otheriwse, you will not see any blur effects on the window!"
+              );
+            }
+            window.location.reload();
+          }
+        }
       });
     });
 

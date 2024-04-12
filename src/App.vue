@@ -128,13 +128,13 @@
     <div class="gameMenu" id="gameMenu">
       <div class="gameMenuTitle" id="gameMenuTitle"></div>
       <!-- <div class="gameMenuBody"> -->
-        <!-- <input
+      <!-- <input
           type="text"
           class="launchOptions"
           id="launchOptions"
           placeholder="Launch Flags..."
         /> -->
-        <button class="gameMenuBtn" id="removeGame">Remove Game</button>
+      <button class="gameMenuBtn" id="removeGame">Remove Game</button>
       <!-- </div> -->
     </div>
   </div>
@@ -190,11 +190,45 @@ export default {
         });
 
       try {
-        let { accentColor, backgroundColor, primaryColor } = JSON.parse(
-          await invoke("read_file", {
-            filePath: (await path.appDir()) + "LauncherData.json",
-          })
-        );
+        let { accentColor, backgroundColor, primaryColor, enable_blur } =
+          JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+        if (!enable_blur) {
+          document.getElementById;
+          document.querySelectorAll("body").forEach(function (element) {
+            var computedStyle = window.getComputedStyle(element);
+            var backgroundColor = computedStyle.backgroundColor;
+
+            if (
+              backgroundColor &&
+              backgroundColor !== "rgba(0, 0, 0, 0)" &&
+              backgroundColor !== "transparent"
+            ) {
+              if (backgroundColor.includes("rgba")) {
+                var rgbaComponents = backgroundColor.match(/\d+/g);
+                var opacity = rgbaComponents[3].trim();
+
+                if (opacity < 1) {
+                  element.style.backgroundColor =
+                    "rgba(" +
+                    rgbaComponents[0] +
+                    "," +
+                    rgbaComponents[1] +
+                    "," +
+                    rgbaComponents[2] +
+                    ", 1.0)";
+                }
+              } else if (backgroundColor.includes("rgb")) {
+                element.style.backgroundColor = backgroundColor
+                  .replace("rgb", "rgba")
+                  .replace(")", ", 1.0)");
+              }
+            }
+          });
+        }
         if (!accentColor) accentColor = "#7934FA";
         // document.getElementById("indicator").style.backgroundColor =
         //   accent-color;
