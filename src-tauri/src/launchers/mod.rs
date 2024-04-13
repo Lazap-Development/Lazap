@@ -12,6 +12,7 @@ mod steam;
 mod uplay;
 #[cfg(target_os = "linux")]
 mod wine_managers;
+mod custom_games;
 
 use serde::{Deserialize, Serialize};
 
@@ -119,5 +120,6 @@ pub async fn fetch_installed_games() -> Vec<GameObject> {
     installed_games.extend(uplay::get_installed_games().await);
     #[cfg(target_os = "windows")]
     installed_games.extend(gog::get_installed_games().await);
+    installed_games.extend(custom_games::get_installed_games().await);
     installed_games
 }

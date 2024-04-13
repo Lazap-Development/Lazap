@@ -88,51 +88,13 @@ export default {
     document.getElementById("addGameFinalBtn")
       .addEventListener("click", async function () {
         if (document.getElementById("inputGameName").value.trim().length > 0 && newGameLocation) {
-          let scheme = {
-            display_name: document.getElementById("inputGameName").value,
-            launcher_name: "CustomGame",
-            game_id: "CustomGame",
-            executable: newGameLocation.split("\\").slice(-1)[0],
-            location: newGameLocation.split("\\").slice(0, -1).join("\\"),
-            args: [],
-          };
-
-          const exists = await invoke("d_f_exists", { path: `${appDir}cache/games/banners/newcustombanner.png` });
-          if (exists) {
-            await invoke("rename_file", {
-              from:
-                `${appDir}cache/games/banners/newcustombanner.png`,
-              to:
-                `${appDir}cache/games/banners/${await invoke("sha256", {
-                  content: document
-                    .getElementById("inputGameName")
-                    .value.replaceAll(" ", "_"),
-                })}.png`,
-            });
-            let data = JSON.parse(
-              await invoke("read_file", {
-                filePath: `${appDir}cache/games/data.json`,
-              })
-            );
-            data.push(scheme);
-            await invoke("write_file", {
-              filePath: `${appDir}cache/games/data.json`,
-              fileContent: JSON.stringify(data),
-            });
-            loadGames("allGamesList");
-          } else {
-            let data = JSON.parse(
-              await invoke("read_file", {
-                filePath: `${appDir}cache/games/data.json`,
-              })
-            );
-            data.push(scheme);
-            await invoke("write_file", {
-              filePath: `${appDir}cache/games/data.json`,
-              fileContent: JSON.stringify(data),
-            });
-            loadGames("allGamesList");
-          }
+          invoke("add_game", {
+            data: {
+              display_name: document.getElementById("inputGameName").value,
+              location: newGameLocation.split("\\").slice(0, -1).join("\\"),                
+            }
+          }); // TODO: FIX
+          loadGames("allGamesList");
           document.getElementById(
             "addGameCustomBannerOutput"
           ).style.backgroundImage = "url()";
