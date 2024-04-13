@@ -119,6 +119,7 @@ fn main() {
             modules::storage::launcherdata_threads_x,
             // Launchers
             launchers::fetch_installed_games,
+            launchers::custom_games::add_custom_game,
             // Spotify Addon
             addons::spotify::spotify_login,
             addons::spotify::spotify_connect,
@@ -224,6 +225,7 @@ fn main() {
             modules::storage::launcherdata_threads_x,
             // Launchers
             launchers::fetch_installed_games,
+            launchers::custom_games::add_custom_game,
             // Spotify Addon
             addons::spotify::spotify_login,
             addons::spotify::spotify_connect,
@@ -340,6 +342,7 @@ fn main() {
             modules::storage::launcherdata_threads_x,
             // Launchers
             launchers::fetch_installed_games,
+            launchers::custom_games::add_custom_game,
             // Spotify Addon
             addons::spotify::spotify_login,
             addons::spotify::spotify_connect,

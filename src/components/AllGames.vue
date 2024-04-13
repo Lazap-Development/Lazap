@@ -4,7 +4,12 @@
       <div class="mainSection fadeInDown">
         <div class="section">
           <div class="title">Game Name</div>
-          <input maxlength="24" type="text" class="inputGameName" id="inputGameName" />
+          <input
+            maxlength="24"
+            type="text"
+            class="inputGameName"
+            id="inputGameName"
+          />
         </div>
         <div class="section">
           <button class="addGameLocation" id="addGameLocation">
@@ -17,10 +22,18 @@
       </div>
       <div class="addGameBannerSection fadeInUp">
         <label for="addGameCustomBanner"></label>
-        <input class="banner" id="addGameCustomBanner" type="file" accept="image/png"
-          @change="(event) => loadCustomBanner(event)" />
+        <input
+          class="banner"
+          id="addGameCustomBanner"
+          type="file"
+          accept="image/png"
+          @change="(event) => loadCustomBanner(event)"
+        />
         <p id="addGameCustomBannerTxt">Hover & Click to Select Banner</p>
-        <div id="addGameCustomBannerOutput" class="addGameCustomBannerOutput"></div>
+        <div
+          id="addGameCustomBannerOutput"
+          class="addGameCustomBannerOutput"
+        ></div>
       </div>
     </div>
 
@@ -53,8 +66,11 @@ export default {
             (await path.appDir()) + `cache/games/banners/newcustombanner.png`,
           fileContent: [...new Uint8Array(reader.result)],
         });
-        document.getElementById("addGameCustomBannerOutput").style.backgroundImage =
-          `url(${tauri.convertFileSrc((await path.appDir()) + 'cache/games/banners/newcustombanner.png')}?${new Date().getSeconds()})`;
+        document.getElementById(
+          "addGameCustomBannerOutput"
+        ).style.backgroundImage = `url(${tauri.convertFileSrc(
+          (await path.appDir()) + "cache/games/banners/newcustombanner.png"
+        )}?${new Date().getSeconds()})`;
       };
       document.getElementById("addGameCustomBannerTxt").style.opacity = "0";
       reader.readAsArrayBuffer(selectedFile);
@@ -65,10 +81,16 @@ export default {
     let newGameLocation;
     let loadGames = this.$root.$refs.findGamesMod.loadGames;
 
-    document.getElementById("addGameBtn")
+    document
+      .getElementById("addGameBtn")
       .addEventListener("click", async function () {
-        if (window.getComputedStyle(document.getElementById("addGamePopUp")).display === "flex") {
-          document.getElementById("addGameCustomBannerOutput").style.backgroundImage = "url()";
+        if (
+          window.getComputedStyle(document.getElementById("addGamePopUp"))
+            .display === "flex"
+        ) {
+          document.getElementById(
+            "addGameCustomBannerOutput"
+          ).style.backgroundImage = "url()";
           document.getElementById("addGamePopUp").style.display = "none";
           document.getElementById("inputGameName").value = "";
           document.getElementById("addGameCustomBannerTxt").style.opacity = "1";
@@ -85,15 +107,17 @@ export default {
         }
       });
 
-    document.getElementById("addGameFinalBtn")
+    document
+      .getElementById("addGameFinalBtn")
       .addEventListener("click", async function () {
-        if (document.getElementById("inputGameName").value.trim().length > 0 && newGameLocation) {
-          invoke("add_game", {
-            data: {
-              display_name: document.getElementById("inputGameName").value,
-              location: newGameLocation.split("\\").slice(0, -1).join("\\"),                
-            }
-          }); // TODO: FIX
+        if (
+          document.getElementById("inputGameName").value.trim().length > 0 &&
+          newGameLocation
+        ) {
+          await invoke("add_custom_game", {
+            location: newGameLocation.split("\\").slice(0, -1).join("\\"),
+            displayName: document.getElementById("inputGameName").value,
+          });
           loadGames("allGamesList");
           document.getElementById(
             "addGameCustomBannerOutput"
@@ -117,7 +141,8 @@ export default {
         }
       });
 
-    document.getElementById("addGameLocation")
+    document
+      .getElementById("addGameLocation")
       .addEventListener("click", async function () {
         const selected = await dialog.open({
           multiple: false,
@@ -146,7 +171,7 @@ export default {
   align-self: flex-start;
   margin-right: 20px;
   margin-top: 10px;
-  background-color: rgba(var(--accent-color), 1.0);
+  background-color: rgba(var(--accent-color), 1);
   color: rgb(255, 255, 255);
   border-radius: 12px;
   font-family: Nunito-ExtraBold;

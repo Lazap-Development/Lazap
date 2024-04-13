@@ -12,7 +12,7 @@ mod steam;
 mod uplay;
 #[cfg(target_os = "linux")]
 mod wine_managers;
-mod custom_games;
+pub mod custom_games;
 
 use serde::{Deserialize, Serialize};
 

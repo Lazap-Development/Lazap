@@ -1,58 +1,91 @@
 use crate::{
     launchers::GameObject,
     operations::{
-        custom_fs::{
-            read_file,
-            write_file,
-            d_f_exists,
-        },
+        custom_fs::{d_f_exists, read_file, rename_file, write_file},
         misc::sha256,
-    }
+    },
+    CONFIG_DIR,
 };
-use std::fs;
-use tauri::api::path;
-
-struct CustomGameInput {
-    location: String,
-    display_name: String,
-}
-
 pub async fn get_installed_games() -> Vec<GameObject> {
-    #[cfg(target_os = "windows")]
-    let games_data = read_file(path::config_dir().unwrap().into_os_string().into_string().unwrap() + "\\com.lazap.config\\cache\\games\\data.json").unwrap();
-    #[cfg(target_os = "linux")]
-    let games_data = read_file(path::config_dir().unwrap().into_os_string().into_string().unwrap() + "\\com.lazap.config\\cache\\games\\data.json").unwrap();
-    #[cfg(target_os = "macos")]
-    return vec![];
+    let games_data = read_file(format!(
+        "{}/cache/games/data.json",
+        CONFIG_DIR.lock().unwrap()
+    ))
+    .unwrap();
+
     let games: Vec<GameObject> = serde_json::from_str(&games_data).unwrap();
-    let custom_games = games.into_iter().filter(|x| x.launcher_name == "CustomGame");
-    return custom_games.collect::<Vec<GameObject>>()
+    let custom_games = games
+        .into_iter()
+        .filter(|x| x.launcher_name == "CustomGame");
+    return custom_games.collect::<Vec<GameObject>>();
 }
 
 #[tauri::command]
-pub async fn add_game(data: CustomGameInput) {
+pub async fn add_custom_game(location: String, display_name: String) {
     let mut obj: GameObject = GameObject::new(
         "".to_string(),
         "".to_string(),
         "".to_string(),
-        data.display_name,
+        display_name,
         "CustomGame".to_string(),
-        "CustomGame".to_string(),
+        "".to_string(),
         0,
         "".to_string(),
-        "".to_string(),
-        vec![]
+        "CustomGame".to_string(),
+        vec![],
     );
-    obj.executable = data.location.split("\\").collect::<Vec<_>>().into_iter().rev().collect::<Vec<_>>()[0].to_string();
-    obj.location = data.location.split("\\").collect::<Vec<_>>().into_iter().filter(|x| x.to_string() != obj.executable).collect::<Vec<_>>().join("\\");
+    obj.executable = location
+        .split("\\")
+        .collect::<Vec<_>>()
+        .into_iter()
+        .rev()
+        .collect::<Vec<_>>()[0]
+        .to_string();
+    obj.location = location
+        .split("\\")
+        .collect::<Vec<_>>()
+        .into_iter()
+        .filter(|x| x.to_string() != obj.executable)
+        .collect::<Vec<_>>()
+        .join("\\");
 
-    let newbannerpath: String = path::config_dir().unwrap().into_os_string().into_string().unwrap();
-    if (d_f_exists(&(newbannerpath.to_string() + "\\com.lazap.config\\cache\\games\\banners\\newcustombanner.png")).await.expect("Something went wrong")) {
+    let newbannerpath: String = format!(
+        "{}/cache/games/banners/newcustombanner.png",
+        CONFIG_DIR.lock().unwrap()
+    );
+    if d_f_exists(&newbannerpath)
+        .await
+        .expect("Something went wrong")
+    {
         let bannername = sha256(obj.display_name.replace(" ", "_")).await.unwrap();
-        fs::rename(newbannerpath.to_string(), bannername.to_string());
-        obj.banner_path = newbannerpath + "\\com.lazap.config\\cache\\games\\banners\\" + &bannername;
+        let _rename = rename_file(
+            newbannerpath.clone(),
+            format!(
+                "{}/cache/games/banners/{}",
+                CONFIG_DIR.lock().unwrap(),
+                bannername.clone()
+            ),
+        )
+        .await;
+        obj.banner_path = format!(
+            "{}/cache/games/banners/{}",
+            CONFIG_DIR.lock().unwrap(),
+            bannername
+        );
     }
-    let mut games_data: Vec<GameObject> = serde_json::from_str(&read_file(path::config_dir().unwrap().into_os_string().into_string().unwrap() + "\\com.lazap.config\\cache\\games\\data.json").unwrap()).unwrap();
+    let mut games_data: Vec<GameObject> = serde_json::from_str(
+        &read_file(format!(
+            "{}/cache/games/data.json",
+            CONFIG_DIR.lock().unwrap()
+        ))
+        .unwrap(),
+    )
+    .unwrap();
     games_data.push(obj);
-    write_file(path::config_dir().unwrap().into_os_string().into_string().unwrap() + "\\com.lazap.config\\cache\\games\\data.json", serde_json::to_string(&games_data).unwrap());
+
+    write_file(
+        format!("{}/cache/games/data.json", CONFIG_DIR.lock().unwrap()),
+        serde_json::to_string(&games_data).unwrap(),
+    )
+    .await;
 }

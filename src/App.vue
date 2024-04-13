@@ -352,7 +352,7 @@ export default {
             .getElementById(
               `game-div-${document
                 .getElementById("removeGame")
-                .parentNode.parentNode.firstChild.innerHTML.replaceAll(
+                .parentNode.firstChild.innerHTML.replaceAll(
                   " ",
                   "_"
                 )}`

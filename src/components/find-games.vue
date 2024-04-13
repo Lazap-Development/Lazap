@@ -483,11 +483,6 @@ export default {
       fetches++;
 
       let games = await invoke("fetch_installed_games");
-      // Adds Custom Games to the array if requested
-      //if (Launchers.includes('CustomGames')) {
-      //	const data = await storage.getGamesData();
-      //	games.push(...data.filter(x => x.launcher_name === 'CustomGame'));
-      //}
 
       // Save all games into JSON
       storage.setGamesData(games, "getInstalledGames");
