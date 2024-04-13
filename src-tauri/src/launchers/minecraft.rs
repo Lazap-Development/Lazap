@@ -101,20 +101,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
                 return None;
             }
 
-            let minecraft_reg_output = Command::new("cmd")
-                .args(&[
-                    "/C",
-                    "Reg",
-                    "query",
-                    is_installed_str.split(&LINE_ENDING).nth(1).unwrap(),
-                ])
-                .creation_flags(0x08000000)
-                .output()
-                .ok()?
-                .stdout;
-
-            let location = str::from_utf8(&minecraft_reg_output)
-                .ok()?
+            let location = is_installed_str
                 .split(&LINE_ENDING)
                 .find(|x| x.trim().starts_with("PackageRootFolder"))
                 .map(|x| x.split("    ").nth(3).unwrap_or("").trim().to_string())?;
