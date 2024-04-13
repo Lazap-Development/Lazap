@@ -502,7 +502,7 @@ export default {
           } else {
             if ((await os.platform()) == "linux") {
               alert(
-                "PLEASE NOTE:\n\n Window Blur on Linux depends on your WM or DE compositor settings!\n Usually, adding this application to blur whitelist should do the trick.\n\n Otheriwse, you will not see any blur effects on the window!"
+                "PLEASE NOTE:\n\n Window Blur on Linux depends on your WM or DE compositor settings!\n Usually, adding lazap to window blur whitelist should do the trick.\n\n Otherwise, you will not see any blur effects on the window!"
               );
             }
             window.location.reload();
