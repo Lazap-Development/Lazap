@@ -686,8 +686,6 @@ export default {
   flex-direction: column;
   margin-bottom: 30px;
   margin-right: 40px;
-  justify-content: center;
-  margin-top: -90px;
 }
 
 .choser button {
