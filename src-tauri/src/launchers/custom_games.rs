@@ -6,6 +6,28 @@ use crate::{
     },
     CONFIG_DIR,
 };
+use serde::{Serialize, Deserialize};
+
+#[derive(Debug, Serialize, Deserialize)]
+struct GameData {
+    banner_path: String,
+    executable: String,
+    location: String,
+    display_name: String,
+    game_id: String,
+    launch_id: String,
+    size: i64,
+    launch_command: String,
+    launcher_name: String,
+    args: Vec<String>,
+    #[serde(default)]
+    lastlaunch: i64,
+    #[serde(default)]
+    launches: i32,
+    #[serde(default)]
+    favourite: bool,
+}
+
 pub async fn get_installed_games() -> Vec<GameObject> {
     let games_data = read_file(format!(
         "{}/cache/games/data.json",
@@ -22,18 +44,21 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 
 #[tauri::command]
 pub async fn add_custom_game(location: String, display_name: String) {
-    let mut obj: GameObject = GameObject::new(
-        "".to_string(),
-        "".to_string(),
-        "".to_string(),
-        display_name,
-        "CustomGame".to_string(),
-        "".to_string(),
-        0,
-        "".to_string(),
-        "CustomGame".to_string(),
-        vec![],
-    );
+    let mut obj: GameData = GameData {
+        banner_path: "".to_string(),
+        executable: "".to_string(),
+        location: "".to_string(),
+        display_name: display_name,
+        game_id: "CustomGame".to_string(),
+        launch_id: "".to_string(),
+        size: 0,
+        launch_command: "".to_string(),
+        launcher_name: "CustomGame".to_string(),
+        args: vec![],
+        lastlaunch: 0,
+        launches: 0,
+        favourite: false,
+    };
     obj.executable = location
         .split("\\")
         .collect::<Vec<_>>()
@@ -73,7 +98,7 @@ pub async fn add_custom_game(location: String, display_name: String) {
             bannername
         );
     }
-    let mut games_data: Vec<GameObject> = serde_json::from_str(
+    let mut games_data: Vec<GameData> = serde_json::from_str(
         &read_file(format!(
             "{}/cache/games/data.json",
             CONFIG_DIR.lock().unwrap()

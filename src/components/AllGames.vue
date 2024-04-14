@@ -115,7 +115,7 @@ export default {
           newGameLocation
         ) {
           await invoke("add_custom_game", {
-            location: newGameLocation.split("\\").slice(0, -1).join("\\"),
+            location: newGameLocation,
             displayName: document.getElementById("inputGameName").value,
           });
           loadGames("allGamesList");

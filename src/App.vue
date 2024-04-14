@@ -340,8 +340,8 @@ export default {
           );
           data = data.filter(
             (a) =>
-              a.DisplayName !=
-              document.getElementById("removeGame").parentNode.parentNode
+              a.display_name !=
+              document.getElementById("removeGame").parentNode
                 .firstChild.innerHTML
           );
           await invoke("write_file", {
