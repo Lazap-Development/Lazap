@@ -10,12 +10,24 @@
     <div class="homebox" id="home">
       <div class="centerchildren">
         <div class="children fadeInUp">
-          <img class="head-pic" src="./assets/img/main-banner.png" id="head-pic" />
+          <img
+            class="head-pic"
+            src="./assets/img/main_banner.png"
+            id="head-pic"
+          />
         </div>
         <div class="children fadeInDown">
           <div class="jump-back">
             <p>Recently Launched</p>
-            <div id="recentGamesListMainPage" class="fadeInDown mainPageGamesList">
+            <div
+              id="recentGamesListMainPage"
+              class="fadeInDown mainPageGamesList"
+            >
+              <div class="placeholderGames"></div>
+              <div class="placeholderGames"></div>
+              <div class="placeholderGames"></div>
+              <div class="placeholderGames"></div>
+              <div class="placeholderGames"></div>
             </div>
           </div>
         </div>
@@ -25,28 +37,57 @@
           <p>System Specification</p>
           <div id="sysInfo" class="sysInfo">
             <div id="system_host">
-              <img src="./assets/svg/user.svg" alt="user" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <path
+                  fill="currentColor"
+                  d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
+                />
+              </svg>
             </div>
             <div id="system_name">
-              <img src="./assets/svg/computer.svg" alt="user" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                <path
+                  fill="currentColor"
+                  d="M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64H240l-10.7 32H160c-17.7 0-32 14.3-32 32s14.3 32 32 32H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H346.7L336 416H512c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64zM512 64V288H64V64H512z"
+                />
+              </svg>
             </div>
             <div id="system_kernel">
-              <img src="./assets/svg/computer.svg" alt="user" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                <path
+                  fill="currentColor"
+                  d="M64 0C28.7 0 0 28.7 0 64V352c0 35.3 28.7 64 64 64H240l-10.7 32H160c-17.7 0-32 14.3-32 32s14.3 32 32 32H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H346.7L336 416H512c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64H64zM512 64V288H64V64H512z"
+                />
+              </svg>
             </div>
             <div id="disk">
-              <img src="./assets/svg/disk.svg" alt="user" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path
+                  fill="currentColor"
+                  d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V280.4c-17-15.2-39.4-24.4-64-24.4H64c-24.6 0-47 9.2-64 24.4V96zM64 288H448c35.3 0 64 28.7 64 64v64c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V352c0-35.3 28.7-64 64-64zM320 416a32 32 0 1 0 0-64 32 32 0 1 0 0 64zm128-32a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z"
+                />
+              </svg>
             </div>
             <div id="memory">
-              <img src="./assets/svg/memory.svg" alt="user" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                <path
+                  fill="currentColor"
+                  d="M64 64C28.7 64 0 92.7 0 128v7.4c0 6.8 4.4 12.6 10.1 16.3C23.3 160.3 32 175.1 32 192s-8.7 31.7-21.9 40.3C4.4 236 0 241.8 0 248.6V320H576V248.6c0-6.8-4.4-12.6-10.1-16.3C552.7 223.7 544 208.9 544 192s8.7-31.7 21.9-40.3c5.7-3.7 10.1-9.5 10.1-16.3V128c0-35.3-28.7-64-64-64H64zM576 352H0v64c0 17.7 14.3 32 32 32H80V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h96V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h96V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h96V416c0-8.8 7.2-16 16-16s16 7.2 16 16v32h48c17.7 0 32-14.3 32-32V352zM192 160v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32zm128 0v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32zm128 0v64c0 17.7-14.3 32-32 32s-32-14.3-32-32V160c0-17.7 14.3-32 32-32s32 14.3 32 32z"
+                />
+              </svg>
             </div>
             <div id="cpu">
-              <img src="./assets/svg/microchip.svg" alt="user" />
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <path
+                  fill="currentColor"
+                  d="M176 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64c-35.3 0-64 28.7-64 64H24c-13.3 0-24 10.7-24 24s10.7 24 24 24H64v56H24c-13.3 0-24 10.7-24 24s10.7 24 24 24H64v56H24c-13.3 0-24 10.7-24 24s10.7 24 24 24H64c0 35.3 28.7 64 64 64v40c0 13.3 10.7 24 24 24s24-10.7 24-24V448h56v40c0 13.3 10.7 24 24 24s24-10.7 24-24V448h56v40c0 13.3 10.7 24 24 24s24-10.7 24-24V448c35.3 0 64-28.7 64-64h40c13.3 0 24-10.7 24-24s-10.7-24-24-24H448V280h40c13.3 0 24-10.7 24-24s-10.7-24-24-24H448V176h40c13.3 0 24-10.7 24-24s-10.7-24-24-24H448c0-35.3-28.7-64-64-64V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H280V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H176V24zM160 128H352c17.7 0 32 14.3 32 32V352c0 17.7-14.3 32-32 32H160c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32zm192 32H160V352H352V160z"
+                />
+              </svg>
             </div>
           </div>
         </div>
 
         <player-comp></player-comp>
-
       </div>
     </div>
 
@@ -74,7 +115,6 @@
 
     <monitor-comp></monitor-comp>
 
-
     <div class="secondorybox" id="activity">
       <p>Overclock</p>
       <h1 class="fade">Coming Soon...</h1>
@@ -87,9 +127,15 @@
 
     <div class="gameMenu" id="gameMenu">
       <div class="gameMenuTitle" id="gameMenuTitle"></div>
-      <div class="gameMenuBtns">
-        <button class="gameMenuBtn" id="removeGame">Remove Game</button>
-      </div>
+      <!-- <div class="gameMenuBody"> -->
+      <!-- <input
+          type="text"
+          class="launchOptions"
+          id="launchOptions"
+          placeholder="Launch Flags..."
+        /> -->
+      <button class="gameMenuBtn" id="removeGame">Remove Game</button>
+      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -116,36 +162,90 @@ export default {
     "leftbar-comp": LeftBar,
     "find-games": findGames,
     "monitor-comp": MonitorTab,
-    "player-comp": MusicPlayer
+    "player-comp": MusicPlayer,
   },
   async mounted() {
     (async () => {
+      const findGamesModule = this.$root.$refs.findGamesMod;
+
       const searchbars = document.querySelectorAll(
         'div.search-bar > input[type="text"]'
       );
 
-      let sysInfoInvoke = JSON.parse(await invoke("get_sys_info"));
-      if (sysInfoInvoke.cpu.length > 22) {
-        sysInfoInvoke.cpu = sysInfoInvoke.cpu.slice(0, 22) + "...";
+      const sysInfoInvoke = JSON.parse(await invoke("get_sys_info"));
+      Object.keys(sysInfoInvoke).forEach((elementId) => {
+        let data = sysInfoInvoke[elementId];
+        if (elementId === "cpu" && data.length > 22) {
+          data = data.slice(0, 22) + "...";
+        }
+        document
+          .getElementById(elementId)
+          .insertAdjacentText("beforeend", data);
+      });
+
+      await findGamesModule
+        .loadGames("recentGamesListMainPage")
+        .catch((err) => {
+          return console.error(err);
+        });
+
+      try {
+        let { accentColor, backgroundColor, primaryColor, enable_blur } =
+          JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+        if (!enable_blur) {
+          document.getElementById;
+          document.querySelectorAll("body").forEach(function (element) {
+            var computedStyle = window.getComputedStyle(element);
+            var backgroundColor = computedStyle.backgroundColor;
+
+            if (
+              backgroundColor &&
+              backgroundColor !== "rgba(0, 0, 0, 0)" &&
+              backgroundColor !== "transparent"
+            ) {
+              if (backgroundColor.includes("rgba")) {
+                var rgbaComponents = backgroundColor.match(/\d+/g);
+                var opacity = rgbaComponents[3].trim();
+
+                if (opacity < 1) {
+                  element.style.backgroundColor =
+                    "rgba(" +
+                    rgbaComponents[0] +
+                    "," +
+                    rgbaComponents[1] +
+                    "," +
+                    rgbaComponents[2] +
+                    ", 1.0)";
+                }
+              } else if (backgroundColor.includes("rgb")) {
+                element.style.backgroundColor = backgroundColor
+                  .replace("rgb", "rgba")
+                  .replace(")", ", 1.0)");
+              }
+            }
+          });
+        }
+        if (!accentColor) accentColor = "#7934FA";
+        // document.getElementById("indicator").style.backgroundColor =
+        //   accent-color;
+        if (backgroundColor)
+          document
+            .querySelector(":root")
+            .style.setProperty("--all-color-back", backgroundColor);
+        if (primaryColor)
+          document
+            .querySelector(":root")
+            .style.setProperty("--all-color-primary", primaryColor);
+        document
+          .querySelector(":root")
+          .style.setProperty("--accent-color", accentColor);
+      } catch (error) {
+        console.error(error);
       }
-      document
-        .getElementById("system_host")
-        .insertAdjacentText("beforeend", sysInfoInvoke.system_host);
-      document
-        .getElementById("system_name")
-        .insertAdjacentText("beforeend", sysInfoInvoke.system_name);
-      document
-        .getElementById("system_kernel")
-        .insertAdjacentText("beforeend", sysInfoInvoke.system_kernel);
-      document
-        .getElementById("disk")
-        .insertAdjacentText("beforeend", sysInfoInvoke.disk_info);
-      document
-        .getElementById("memory")
-        .insertAdjacentText("beforeend", sysInfoInvoke.memory);
-      document
-        .getElementById("cpu")
-        .insertAdjacentText("beforeend", sysInfoInvoke.cpu);
 
       event.listen("tauri://update-available", async () => {
         try {
@@ -166,50 +266,9 @@ export default {
 
       await invoke("show_window");
 
-      try {
-        let { accentColor, backgroundColor, primaryColor } = JSON.parse(
-          await invoke("read_file", {
-            filePath: (await path.appDir()) + "LauncherData.json",
-          })
-        );
-        if (!accentColor) accentColor = "#7934FA";
-        // document.getElementById("indicator").style.backgroundColor =
-        //   accentColor;
-        if (backgroundColor) document.querySelector(':root').style.setProperty('--allColorBack', backgroundColor);
-        if (primaryColor) document.querySelector(':root').style.setProperty('--allColorPrimary', primaryColor);
-        document
-          .querySelector(":root")
-          .style.setProperty("--accentColor", accentColor);
-      } catch (error) {
-        console.error(error);
-      }
-
-      const allGames = await this.$refs.findGamesMod
-        .getInstalledGames()
-        .catch((err) => {
-          return console.error(err);
-        });
-
-      await this.$refs.findGamesMod
-        .loadGames("recentGamesListMainPage", allGames)
-        .catch((err) => {
-          return console.error(err);
-        });
-      await this.$refs.findGamesMod
-        .loadGames("recentGamesList", allGames)
-        .catch((err) => {
-          return console.error(err);
-        });
-      await this.$refs.findGamesMod
-        .loadGames("allGamesList", allGames)
-        .catch((err) => {
-          return console.error(err);
-        });
-      await this.$refs.findGamesMod
-        .loadGames("favGamesList", allGames)
-        .catch((err) => {
-          return console.error(err);
-        });
+      await findGamesModule.loadGames("allGamesList").catch((err) => {
+        return console.error(err);
+      });
 
       document
         .getElementById("text")
@@ -281,8 +340,8 @@ export default {
           );
           data = data.filter(
             (a) =>
-              a.DisplayName !=
-              document.getElementById("removeGame").parentNode.parentNode
+              a.display_name !=
+              document.getElementById("removeGame").parentNode
                 .firstChild.innerHTML
           );
           await invoke("write_file", {
@@ -293,7 +352,7 @@ export default {
             .getElementById(
               `game-div-${document
                 .getElementById("removeGame")
-                .parentNode.parentNode.firstChild.innerHTML.replaceAll(
+                .parentNode.firstChild.innerHTML.replaceAll(
                   " ",
                   "_"
                 )}`
@@ -301,9 +360,9 @@ export default {
             .remove();
           setTimeout(
             () =>
-            (document.getElementById(
-              "removeGame"
-            ).parentNode.parentNode.style = ""),
+              (document.getElementById(
+                "removeGame"
+              ).parentNode.parentNode.style = ""),
             200
           );
         });
@@ -322,16 +381,20 @@ export default {
 
 <style>
 :root {
-  --accentColor: rgb(121, 52, 250);
-  --allColorBack: rgb(20, 14, 36);
-  --allColorFront: rgb(42, 16, 81);
-  --allColorPrimary: #0c0b0e;
+  --accent-color: 121, 52, 250;
+  --all-color-back: 20, 14, 36;
+  --all-color-front: 42, 16, 81;
+  --all-color-primary: 12, 11, 14;
 }
 
 ::selection {
   color: inherit !important;
-  background: var(--accentColor) !important;
+  background: rgba(var(--accent-color), 0.7) !important;
   border-radius: 10px;
+}
+
+p {
+  cursor: default;
 }
 
 @font-face {
@@ -352,10 +415,12 @@ export default {
 html,
 body {
   zoom: 0.945;
-  background: var(--allColorBack);
+  background-color: rgba(var(--all-color-back), 0.1);
   font-family: Nunito;
   height: 100%;
   overflow: hidden;
+  border-radius: 15px;
+  margin: 0px;
 }
 
 #app {
@@ -369,7 +434,7 @@ body {
   flex-direction: row;
   margin-top: 100px;
   height: 100%;
-  margin: 6px;
+  margin: 12px;
   margin-top: 10px;
 }
 
@@ -389,7 +454,7 @@ body {
 .secondorybox {
   display: none;
 
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   border-radius: 20px;
 
   height: 100%;
@@ -429,12 +494,14 @@ body {
 }
 
 .secondorybox .addGamePopUp {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   position: absolute;
   width: 380px;
   height: 200px;
   margin-left: 170px;
   margin-top: 20px;
-  background-color: var(--allColorFront);
+  background-color: rgba(var(--all-color-front), 0.7);
   animation: gradient 20s infinite;
   display: none;
 
@@ -472,7 +539,7 @@ body {
   text-align: center;
   background-repeat: no-repeat;
   padding: 0;
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   transition: all 0.1s ease-in-out;
   z-index: 0;
 }
@@ -538,7 +605,7 @@ body {
   margin-top: 44px;
 
   padding: 5px;
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   color: rgb(180, 180, 180);
   border-radius: 8px;
   font-family: Nunito-Bold;
@@ -553,7 +620,7 @@ body {
   align-self: flex-start;
   margin-right: 20px;
   margin-top: 14px;
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   color: rgb(194, 194, 194);
   padding: 10px;
   border-radius: 12px;
@@ -592,7 +659,7 @@ body {
 }
 
 .jump-back {
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   width: 100%;
   height: 100% !important;
   border-radius: 20px;
@@ -615,7 +682,7 @@ body {
 }
 
 .rightbar {
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   height: 40%;
   border-radius: 20px;
   cursor: default;
@@ -642,7 +709,7 @@ body {
   margin-right: auto;
   width: 300px;
   font-size: 18px;
-  color: rgb(138, 138, 138);
+  color: rgb(197, 197, 197);
   font-family: Nunito-Bold;
 }
 
@@ -650,9 +717,11 @@ body {
   margin-bottom: 4px;
 }
 
-.rightbar .sysInfo img {
-  width: 15px;
+.rightbar .sysInfo svg {
+  width: 16px;
   margin-right: 10px;
+  transform: translate(0px, 3px);
+  color: rgb(var(--accent-color));
 }
 
 .rightbar .stickers {
@@ -718,22 +787,24 @@ body {
   border-radius: 12px;
   image-rendering: auto;
   object-fit: cover;
-  mask-image: -webkit-gradient(linear,
-      left 70%,
-      left bottom,
-      from(rgba(0, 0, 0, 1)),
-      to(rgba(0, 0, 0, 0)));
+  mask-image: -webkit-gradient(
+    linear,
+    left 70%,
+    left bottom,
+    from(rgba(0, 0, 0, 1)),
+    to(rgba(0, 0, 0, 0))
+  );
   content: url("./assets/img/default-game-banner.png");
 }
 
 .gamebox .gamebox-bottom {
   cursor: default;
   position: relative;
-  margin-top: -22%;
+  margin-top: -21%;
   width: 100%;
   height: 15%;
   position: absolute;
-  background-color: var(--allColorFront);
+  background-color: rgba(var(--all-color-front), 1);
   border-radius: 0px 0px 10px 10px;
 }
 
@@ -777,17 +848,19 @@ body {
   text-align: center;
   display: inline-block;
   border-radius: 14px;
-  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
   height: 61%;
   width: 17%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.5;
-  background-color: var(--accentColor);
-  mask-image: -webkit-gradient(linear,
-      right 90%,
-      left top,
-      from(rgba(0, 0, 0, 1)),
-      to(rgba(0, 0, 0, 0)));
+  background-color: rgba(var(--accent-color), 0.7);
+  mask-image: -webkit-gradient(
+    linear,
+    right 90%,
+    left top,
+    from(rgba(0, 0, 0, 1)),
+    to(rgba(0, 0, 0, 0))
+  );
 }
 
 .placeholderGames:nth-last-child(-n + 4) {
@@ -796,16 +869,18 @@ body {
 
 .mainPageGamebox {
   position: relative;
+  image-rendering: auto;
   text-align: center;
   display: inline-block;
   border-radius: 14px;
-  transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
   width: 16%;
   height: 61%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
-  border: solid var(--accentColor) 6px;
+  border: solid rgba(var(--accent-color), 1) 6px;
   background-position: 50% 40% !important;
+  object-fit: cover;
 }
 
 .mainPageGamebox:nth-last-child(-n + 4) {
@@ -814,27 +889,8 @@ body {
 
 .mainPageGamebox:hover {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-  transform: scale(1.02);
   cursor: pointer;
-  opacity: 1;
-}
-
-.mainPageGamebox img {
-  display: block;
-  height: 100%;
-  width: 100%;
-  border-radius: 10px;
-  object-position: 50% 25%;
-  object-fit: cover;
-}
-
-.mainPageGamebox span {
-  position: absolute;
-  margin-top: -28px;
-  margin-left: 10px;
-  font-size: 14px;
-  color: #d3d3d3;
-  display: block;
+  opacity: 0.9;
 }
 
 .star {
@@ -931,15 +987,23 @@ img,
 .gameMenu {
   display: none;
   position: absolute;
-  right: 20px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  right: 10px;
   height: 90%;
-  background: var(--allColorBack);
+  background: linear-gradient(
+    30deg,
+    rgba(var(--all-color-primary), 0.7) 0%,
+    rgba(var(--all-color-primary), 0.7) 30%,
+    rgba(var(--accent-color), 0.7) 100%
+  );
   border-bottom-right-radius: 10px;
   border-top-right-radius: 10px;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
   animation: gameMenuAnimation 0.2s both ease-out;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .gameMenu .gameMenuBtn {
@@ -948,7 +1012,7 @@ img,
   border-radius: 12px;
   font-size: 18px;
 
-  background-color: var(--allColorPrimary);
+  background-color: rgba(var(--all-color-primary), 0.7);
   opacity: 0.9;
   width: 13.78rem;
   height: 50px;
@@ -956,19 +1020,49 @@ img,
   text-decoration: none;
   text-shadow: none;
   padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.gameMenu .gameMenuBtns .gameMenuBtn:first-child {
+.gameMenu .gameMenuBody {
+  margin: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.gameMenu .gameMenuBody input[type="text"] {
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 30px;
+  outline: none;
+  border: none;
+  background-color: rgba(var(--all-color-primary), 0.7);
+  height: 40px;
+  color: rgb(201, 201, 201);
+  border-radius: 12px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.gameMenu .gameMenuBody input[type="text"]::placeholder {
+  color: #ffffff5b;
+}
+
+.gameMenu .gameMenuBody .gameMenuBtn:first-child {
   margin-top: 100px;
 }
 
 .gameMenu .gameMenuTitle {
-  position: absolute;
   font-size: 20px;
   color: #cacaca;
   text-align: center;
   margin-top: 40px;
   display: block;
+  margin-bottom: 50px;
 }
 
 .gameMenu .gameMenuBtn:hover {
@@ -1000,6 +1094,7 @@ img,
   margin-top: -120px;
   background-color: none;
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   z-index: 3;
 }
 
@@ -1024,7 +1119,8 @@ img,
   height: 25px;
   width: 25px;
   display: flex;
-  filter: invert(12%) sepia(78%) saturate(4656%) hue-rotate(1deg) brightness(108%) contrast(128%);
+  filter: invert(12%) sepia(78%) saturate(4656%) hue-rotate(1deg)
+    brightness(108%) contrast(128%);
 }
 
 .alert-box-cross {
@@ -1038,7 +1134,8 @@ img,
 }
 
 .alert-box-cross:hover {
-  filter: invert(21%) sepia(70%) saturate(3776%) hue-rotate(255deg) brightness(97%) contrast(101%);
+  filter: invert(21%) sepia(70%) saturate(3776%) hue-rotate(255deg)
+    brightness(97%) contrast(101%);
 }
 
 .alert-box-divider {
@@ -1077,7 +1174,7 @@ img,
 .search-bar input {
   width: 100%;
   height: 100%;
-  background-color: var(--allColorFront);
+  background-color: rgba(var(--all-color-front), 0.7);
   border-radius: 10px;
   font-family: Nunito;
   font-size: 16px;
@@ -1092,7 +1189,7 @@ img,
 }
 
 .search-bar input::selection {
-  color: var(--accentColor);
+  color: rgba(var(--all-color-back), 0.7);
   background: rgb(255, 255, 255);
 }
 
@@ -1104,7 +1201,7 @@ img,
 }
 
 .search-bar input:focus {
-  border: 4px solid var(--accentColor);
+  border: 4px solid rgba(var(--accent-color), 1);
   animation-name: searchbox;
   animation-duration: 0.3s;
   animation-fill-mode: both;
@@ -1117,7 +1214,8 @@ img,
 .repeatButton {
   height: 40px;
   width: 40px;
-  filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
+  filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg)
+    brightness(108%) contrast(108%);
 }
 
 .repeatButton:hover {
@@ -1221,7 +1319,6 @@ img,
 }
 
 @keyframes shake {
-
   10%,
   90% {
     transform: translate3d(-1px, 0, 0);

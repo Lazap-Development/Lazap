@@ -1,4 +1,14 @@
-{
+use std::{os::windows::process::CommandExt, process::Command};
+
+use serde::Deserialize;
+
+use crate::{
+    launchers::{GameObject, LINE_ENDING},
+    modules::banners,
+    operations::custom_fs::{d_f_exists, read_dir},
+};
+
+static ROCKSTAR_JSON: &str = r#"{
     "titles": [
         {
             "titleId": "gta5",
@@ -143,30 +153,146 @@
             "minRglVersion": "1.0.53.576",
             "minGameVersion": "1.0.0.14377",
             "bannerId": "GTATrilogy"
-        },
-        {
-            "titleId": "rdr2_sp",
-            "parentApp": "rdr2"
-        },
-        {
-            "titleId": "rdr2_rdo",
-            "parentApp": "rdr2"
-        },
-        {
-            "titleId": "rdr2_sp_rgl",
-            "parentApp": "rdr2"
-        },
-        {
-            "titleId": "rdr2_sp_steam",
-            "parentApp": "rdr2"
-        },
-        {
-            "titleId": "rdr2_sp_epic",
-            "parentApp": "rdr2"
-        },
-        {
-            "titleId": "gtatrilogy",
-            "parentApp": "gtasaunreal"
         }
     ]
+}"#;
+
+#[derive(Deserialize, Debug)]
+struct RockstarGameData {
+    titles: Vec<Titles>,
+}
+
+#[derive(Deserialize, Debug)]
+struct Titles {
+    #[serde(rename = "friendlyName")]
+    friendly_name: String,
+    #[serde(rename = "titleId")]
+    title_id: String,
+    #[serde(rename = "rosTitleId")]
+    ros_title_id: i64,
+    #[serde(rename = "bannerId")]
+    banner_id: String,
+    executable: String,
+    #[serde(rename = "installFolderRegKey")]
+    install_folder_reg_key: Option<String>,
+    aliases: Option<Vec<String>>,
+    #[serde(default)]
+    #[serde(rename = "modWhitelist")]
+    mod_whitelist: Vec<String>,
+}
+
+pub async fn get_installed_games() -> Vec<GameObject> {
+    let mut all_games: Vec<GameObject> = Vec::new();
+
+    let output = Command::new("cmd")
+        .args(&[
+            "/C",
+            "Reg",
+            "query",
+            "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Rockstar Games",
+            "/s",
+        ])
+        .creation_flags(0x08000000)
+        .output()
+        .expect("failed to execute regedit query.");
+
+    if output.stdout.is_empty() {
+        return all_games;
+    }
+
+    for x in String::from_utf8_lossy(&output.stdout).split(&LINE_ENDING.repeat(2)) {
+        let res: Vec<&str> = x.split(LINE_ENDING).filter(|x| x.len() > 1).collect();
+        let name = match res.get(0) {
+            Some(name) => {
+                if let Some(split_name) = name
+                    .split("HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Rockstar Games\\")
+                    .nth(1)
+                {
+                    split_name
+                } else {
+                    continue;
+                }
+            }
+            None => continue,
+        };
+        let base_paths = res.into_iter().filter(|x| x.trim().starts_with("Install"));
+        let mut real_paths: Vec<&str> = Vec::new();
+        for path in base_paths {
+            if d_f_exists(path.split("REG_SZ").nth(1).unwrap().trim())
+                .await
+                .unwrap_or(false)
+            {
+                real_paths.push(path);
+            }
+        }
+        if real_paths.is_empty() {
+            continue;
+        }
+
+        let game_option = parse_game_object(
+            &real_paths
+                .get(0)
+                .unwrap()
+                .split("REG_SZ")
+                .nth(1)
+                .unwrap()
+                .trim(),
+            &name,
+        )
+        .await;
+
+        if let Some(game_object) = game_option {
+            all_games.push(game_object);
+        }
+    }
+
+    return all_games;
+}
+
+async fn parse_game_object(path: &str, name: &str) -> Option<GameObject> {
+    if !d_f_exists(path).await.unwrap_or(false) {
+        return None;
+    }
+    let game_data: RockstarGameData = serde_json::from_str(ROCKSTAR_JSON).unwrap();
+    let game_opt = game_data.titles.iter().find(|x| {
+        name == x.friendly_name
+            || x.aliases
+                .as_ref()
+                .map_or(false, |aliases| aliases.contains(&name.to_string()))
+            || name
+                == x.install_folder_reg_key
+                    .as_ref()
+                    .map_or("", |key| key.split("\\").nth(1).unwrap_or(""))
+    });
+    match game_opt {
+        Some(game) => {
+            let mut executable: String = String::new();
+            if game.title_id == "gta5" {
+                if let Ok(files) = read_dir(path).await {
+                    if let Some(file) = files
+                        .into_iter()
+                        .find(|x| game.mod_whitelist.contains(&x.to_string()))
+                    {
+                        executable = file.to_string();
+                    }
+                }
+            } else {
+                executable = game.executable.clone();
+            }
+
+            return Some(GameObject::new(
+                banners::get_banner(&game.friendly_name, &game.banner_id, "RockstarGames", "").await,
+                executable.to_string(),
+                path.to_string(),
+                game.friendly_name.clone(),
+                format!("{}-{}", game.title_id, game.ros_title_id),
+                "0".to_string(),
+                0,
+                "".to_string(),
+                "RockstarGames".to_string(),
+                vec![],
+            ));
+        }
+        None => return None,
+    }
 }

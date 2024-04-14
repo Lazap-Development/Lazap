@@ -7,7 +7,7 @@
 </h1>
 
 <p align="center">
-  Lazap, a lightweight cross-platform client <br>
+  Lazap, a lightweight cross-platform software <br>
   Unifying games into a single, modern library
 </p>
 
@@ -20,56 +20,67 @@
   </a>
  </p>
 
-
 <div align="center">
-  <img src="https://github.com/Lazap-Development/Lazap/assets/59381835/04bb9c59-0ea2-47ab-bef0-0bc4cc216dfd">
-
+  <img src="https://github.com/Lazap-Development/Lazap/assets/59381835/ce70f368-de1b-4552-a371-b019bcb4eae1">
 </div>
 
 <br>
 
-**The new face of Open Source Game Launchers**, Lazap, unites all your games together in one place! Whether it's on Linux or Windows, we got you covered. Lazap connects with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam, and collects all of those games and deposits them inside of one place. Our team of Developers continuously corroborates that Lazap is deeply customizable, Meets up to the user's expectance, possess a glancing & modernist look, and isn't expensive on hardware consumption. 
+**The new face of Open Source Game Launchers**, Lazap, unites all your games together in one place! Whether it's on Windows, Linux or MacOS, we got you covered. Lazap connects with other proprietary game launchers such as Riot Games, Epic Games Launcher and Steam, and collects all of those games and deposits them inside of one place. Lazap is developed to be deeply customizable, meets up to the user's expectance, possess a glancing & modernist look, and isn't expensive at all on hardware consumption. 
 
 ## ✨ Key Features
-- Extremely lightweight & cheap on hardware consumption
-- Support for Steam, Epic Games, Xbox Games, Uplay, R* Launcher, Riot Games, and Custom Games
-- Sleek & Modern user interface with a wide range of theming and user-accessibility customizations
-- Discord Rich Presence, when launching a game or navigating through the menus
+- Remarkably lightweight and efficient on hardware resources
+- Compatibility across Windows, Linux, and MacOS platforms
+- Support for Steam, Epic, Ubisoft, R*, Riot, Lutris, and etc
+- Flexibility to add and personalize user-set custom games
+- Modern and Sleek user interface with theming customization
 - Spotify Integration with streamlined music control
 - `[Beta]` Cross-Platform Lazap Overlay
-- `[Soon]` System monitor, overclock, and benchmarking tools
+- `[WIP]` System monitor, overclock, and benchmarking tools
   
 ## ‍💻 Installation
 
-Depending on your operating system, we provide as much ease in terms of installation:<br>
+Depending on your operating system, we try to provide as much ease in terms of installation:<br>
 
 ▸ **Windows**: 
-- Download & install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section
+- Download and install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 - Or install via Winget: 
 ```
 winget install LazapDevelopment.Lazap
 ```
 
-▸ **Linux**: Download & install either the `.deb` or `.tar.zst` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section <br>
-▸ **MacOS**: Download & install the latest `.dmg` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section
+▸ **Linux**: 
+- Download and install either the `.deb` or `.tar.zst` in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+- Arch Linux users can directly install from the maintained `lazap-bin` [AUR](https://aur.archlinux.org/packages/lazap-bin).
+  
+▸ **MacOS**: 
+- Download and install the latest `.dmg` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
 ## 👾 Development
 
-- Tauri **[Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites/)**
-- Node.JS `v18` or higher<br>
-- **[Yarn](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)** (recommended but not required)
-  
+Lazap is fully open-source and can be compiled from source.
+
+### Prerequisites
+- [Tauri Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites/)
+- [Latest Node.JS](https://nodejs.org/en)
+- [Yet Another Resource Negotiator](https://yarnpkg.com/getting-started)
+
+Once you have the above preqs, you may continue with the following:
+
 ```bash
 # clone this repo 
 git clone https://github.com/Lazap-Development/Lazap.git 
-# change current dir, install deps & serve
-cd Lazap && yarn install && yarn tauri:serve
+# change current dir, install deps
+cd Lazap && yarn install
+# run in development mode
+yarn tauri dev
 ```
-Be aware that for the first time it might take some hefty amount of time for things to compile.
 
 ## 📚 Help & Support
+**Have a question/problem?**<br>
 If you need assist or in need of technical support for your Lazap installation, feel free to file an [issue](https://github.com/Lazap-Development/lazap/issues) so we can assist you.<br><br>
-**Want to help out instead of getting help?** We love Pull Requests and Issue Hunters. Open up a PR and fix some gears, we would love the community's help to improve lazap and make it more user friendly.
+**Want to help out instead of getting help?** <br>
+Open a [Pull Request](https://github.com/Lazap-Development/Lazap/pulls) and fix some gears, we would love the community's help to improve lazap and make it more user friendly.
 
 ## ⁉️ FAQ
 

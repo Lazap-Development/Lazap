@@ -1,53 +1,22 @@
 {
   "name": "lazap",
-  "version": "0.7.0",
-  "private": false,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "tauri:build": "vue-cli-service tauri:build",
-    "tauri:serve": "vue-cli-service tauri:serve"
-  },
+  "version": "0.8.0",
+  "type": "module",
   "author": "Lazap Development",
   "license": "ISC",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
-    "@tauri-apps/api": "^1.4.0",
-    "chart.js": "^4.3.0",
-    "core-js": "^3.28.0",
-    "tauri-plugin-fs-extra-api": "github:tauri-apps/tauri-plugin-fs-extra",
-    "tauri-plugin-sql-api": "github:tauri-apps/tauri-plugin-sql",
-    "vue": "^3.2.47",
-    "vue-chartjs": "^5.2.0"
+    "tauri-plugin-autostart-api": "https://github.com/tauri-apps/tauri-plugin-autostart#v1",
+    "vue": "^3.4.21"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "eslint": "^8.34.0",
-    "eslint-plugin-vue": "^9.8.0",
-    "vue-cli-plugin-tauri": "~1.0.0"
+    "@tauri-apps/cli": "^1.5.11",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.2.0"
   },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "@babel/eslint-parser"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead",
-    "not ie 11"
-  ]
+  "packageManager": "yarn@4.1.1"
 }

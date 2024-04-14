@@ -4,7 +4,12 @@
       <div class="mainSection fadeInDown">
         <div class="section">
           <div class="title">Game Name</div>
-          <input maxlength="24" type="text" class="inputGameName" id="inputGameName" />
+          <input
+            maxlength="24"
+            type="text"
+            class="inputGameName"
+            id="inputGameName"
+          />
         </div>
         <div class="section">
           <button class="addGameLocation" id="addGameLocation">
@@ -17,10 +22,18 @@
       </div>
       <div class="addGameBannerSection fadeInUp">
         <label for="addGameCustomBanner"></label>
-        <input class="banner" id="addGameCustomBanner" type="file" accept="image/png"
-          @change="(event) => loadCustomBanner(event)" />
+        <input
+          class="banner"
+          id="addGameCustomBanner"
+          type="file"
+          accept="image/png"
+          @change="(event) => loadCustomBanner(event)"
+        />
         <p id="addGameCustomBannerTxt">Hover & Click to Select Banner</p>
-        <div id="addGameCustomBannerOutput" class="addGameCustomBannerOutput"></div>
+        <div
+          id="addGameCustomBannerOutput"
+          class="addGameCustomBannerOutput"
+        ></div>
       </div>
     </div>
 
@@ -53,8 +66,11 @@ export default {
             (await path.appDir()) + `cache/games/banners/newcustombanner.png`,
           fileContent: [...new Uint8Array(reader.result)],
         });
-        document.getElementById("addGameCustomBannerOutput").style.backgroundImage =
-          `url(${tauri.convertFileSrc((await path.appDir()) + 'cache/games/banners/newcustombanner.png')}?${new Date().getSeconds()})`;
+        document.getElementById(
+          "addGameCustomBannerOutput"
+        ).style.backgroundImage = `url(${tauri.convertFileSrc(
+          (await path.appDir()) + "cache/games/banners/newcustombanner.png"
+        )}?${new Date().getSeconds()})`;
       };
       document.getElementById("addGameCustomBannerTxt").style.opacity = "0";
       reader.readAsArrayBuffer(selectedFile);
@@ -65,10 +81,16 @@ export default {
     let newGameLocation;
     let loadGames = this.$root.$refs.findGamesMod.loadGames;
 
-    document.getElementById("addGameBtn")
+    document
+      .getElementById("addGameBtn")
       .addEventListener("click", async function () {
-        if (window.getComputedStyle(document.getElementById("addGamePopUp")).display === "flex") {
-          document.getElementById("addGameCustomBannerOutput").style.backgroundImage = "url()";
+        if (
+          window.getComputedStyle(document.getElementById("addGamePopUp"))
+            .display === "flex"
+        ) {
+          document.getElementById(
+            "addGameCustomBannerOutput"
+          ).style.backgroundImage = "url()";
           document.getElementById("addGamePopUp").style.display = "none";
           document.getElementById("inputGameName").value = "";
           document.getElementById("addGameCustomBannerTxt").style.opacity = "1";
@@ -85,54 +107,18 @@ export default {
         }
       });
 
-    document.getElementById("addGameFinalBtn")
+    document
+      .getElementById("addGameFinalBtn")
       .addEventListener("click", async function () {
-        if (document.getElementById("inputGameName").value.trim().length > 0 && newGameLocation) {
-          let scheme = {
-            DisplayName: document.getElementById("inputGameName").value,
-            LauncherName: "CustomGame",
-            GameID: "CustomGame",
-            Executable: newGameLocation.split("\\").slice(-1)[0],
-            Location: newGameLocation.split("\\").slice(0, -1).join("\\"),
-            Args: [],
-          };
-
-          const exists = await invoke("d_f_exists", { path: `${appDir}cache/games/banners/newcustombanner.png` });
-          if (exists) {
-            await invoke("rename_file", {
-              from:
-                `${appDir}cache/games/banners/newcustombanner.png`,
-              to:
-                `${appDir}cache/games/banners/${await invoke("sha256", {
-                  content: document
-                    .getElementById("inputGameName")
-                    .value.replaceAll(" ", "_"),
-                })}.png`,
-            });
-            let data = JSON.parse(
-              await invoke("read_file", {
-                filePath: `${appDir}cache/games/data.json`,
-              })
-            );
-            data.push(scheme);
-            await invoke("write_file", {
-              filePath: `${appDir}cache/games/data.json`,
-              fileContent: JSON.stringify(data),
-            });
-            loadGames("allGamesList");
-          } else {
-            let data = JSON.parse(
-              await invoke("read_file", {
-                filePath: `${appDir}cache/games/data.json`,
-              })
-            );
-            data.push(scheme);
-            await invoke("write_file", {
-              filePath: `${appDir}cache/games/data.json`,
-              fileContent: JSON.stringify(data),
-            });
-            loadGames("allGamesList");
-          }
+        if (
+          document.getElementById("inputGameName").value.trim().length > 0 &&
+          newGameLocation
+        ) {
+          await invoke("add_custom_game", {
+            location: newGameLocation,
+            displayName: document.getElementById("inputGameName").value,
+          });
+          loadGames("allGamesList");
           document.getElementById(
             "addGameCustomBannerOutput"
           ).style.backgroundImage = "url()";
@@ -155,7 +141,8 @@ export default {
         }
       });
 
-    document.getElementById("addGameLocation")
+    document
+      .getElementById("addGameLocation")
       .addEventListener("click", async function () {
         const selected = await dialog.open({
           multiple: false,
@@ -184,7 +171,7 @@ export default {
   align-self: flex-start;
   margin-right: 20px;
   margin-top: 10px;
-  background-color: var(--accentColor);
+  background-color: rgba(var(--accent-color), 1);
   color: rgb(255, 255, 255);
   border-radius: 12px;
   font-family: Nunito-ExtraBold;

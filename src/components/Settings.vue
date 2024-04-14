@@ -3,197 +3,240 @@
   <div class="settings" id="settings-popup">
     <div>
       <h1>Settings</h1>
-      <div class="choser" id="choser">
-        <button id="generalbtn">General</button>
-        <button id="appearancebtn">Appearance</button>
-        <button id="addonsbtn">Addons</button>
-      </div>
-      <div class="general-settings" id="general-settings">
-        <div class="setting">
-          <p>Launch on Startup</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-launch_on_startup" disabled="readonly" />
-              <div>
-                <span></span>
-              </div>
-            </label>
+      <div class="settings-body">
+        <div class="choser" id="choser">
+          <button id="generalbtn">General</button>
+          <button id="appearancebtn">Appearance</button>
+          <button id="addonsbtn">Connections</button>
+          <button id="expbtn">Experimental</button>
+        </div>
+        <div class="general-settings" id="general-settings">
+          <div class="setting">
+            <p>Launch on Startup</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-launch_on_startup" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting">
+            <p>Minimize to Tray on Launch</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-tray_min_launch" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting">
+            <p>Minimize to Tray on Quit</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-tray_min_quit" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting">
+            <p>Check for Updates</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-check_for_updates" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
 
-        <div class="setting">
-          <p>Skip Login Menu</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-skip_login" disabled="readonly" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting">
-          <p>Minimize to Tray on Launch</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-tray_min_launch" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting">
-          <p>Minimize to Tray on Quit</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-tray_min_quit" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting">
-          <p>Check for Updates</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-check_for_updates" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="appearance-settings" id="appearance-settings">
-        <div class="setting themes">
-          <label class="color">
-            <div class="theme-box" id="theme-box-default" style="background-color: #000;"></div>
-            <div class="theme-box" id="theme-box-crimson" style="background-color: #660708;"></div>
-            <div class="theme-box" id="theme-box-midnight" style="background-color: #240046;"></div>
-          </label>
-        </div>
-        <div class="setting">
-          <p>Primary Color</p>
-          <div class="btnInput">
+        <div class="appearance-settings" id="appearance-settings">
+          <div class="setting themes">
             <label class="color">
-              <input type="color" id="setting-primaryColor" />
+              <div
+                class="theme-box"
+                id="theme-box-default"
+                style="background-color: #000"
+              ></div>
+              <div
+                class="theme-box"
+                id="theme-box-crimson"
+                style="background-color: #660708"
+              ></div>
+              <div
+                class="theme-box"
+                id="theme-box-midnight"
+                style="background-color: #240046"
+              ></div>
             </label>
-            <img class="repeatButton" src="../assets/icons/reset.png" />
+          </div>
+          <div class="setting">
+            <p>Primary Color</p>
+            <div class="btnInput">
+              <label class="color">
+                <input type="color" id="setting-primaryColor" />
+              </label>
+              <img class="repeatButton" src="../assets/icons/reset.png" />
+            </div>
+          </div>
+          <div class="setting">
+            <p>Background Color</p>
+            <div class="btnInput">
+              <label class="color">
+                <input type="color" id="setting-backgroundColor" />
+              </label>
+              <img class="repeatButton" src="../assets/icons/reset.png" />
+            </div>
+          </div>
+          <div class="setting">
+            <p>Front Color</p>
+            <div class="btnInput">
+              <label class="color">
+                <input type="color" id="setting-frontColor" />
+              </label>
+              <img class="repeatButton" src="../assets/icons/reset.png" />
+            </div>
+          </div>
+          <div class="setting">
+            <p>Accent Color</p>
+            <div class="btnInput">
+              <label class="color">
+                <input type="color" id="setting-accentColor" />
+              </label>
+              <img class="repeatButton" src="../assets/icons/reset.png" />
+            </div>
+          </div>
+          <div class="setting">
+            <p>Enable Launcher Icons</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-enableLauncherIcons" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
-        <div class="setting">
-          <p>Background Color</p>
-          <div class="btnInput">
-            <label class="color">
-              <input type="color" id="setting-backgroundColor" />
-            </label>
-            <img class="repeatButton" src="../assets/icons/reset.png" />
+
+        <div
+          class="general-settings"
+          id="addons-settings"
+          style="display: none"
+        >
+          <div class="setting">
+            <p>Discord Rich Presence</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-enable_rpc" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting">
+            <p>Spotify Connection</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-enable_spotify" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting">
+            <p>YouTube Music Connection</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input
+                  type="checkbox"
+                  id="setting-enable_ytm"
+                  disabled="readonly"
+                />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
-        <div class="setting">
-          <p>Front Color</p>
-          <div class="btnInput">
-            <label class="color">
-              <input type="color" id="setting-frontColor" />
-            </label>
-            <img class="repeatButton" src="../assets/icons/reset.png" />
+
+        <div class="general-settings" id="exp-settings" style="display: none">
+          <div class="setting">
+            <p>Lazap Overlay [BETA]</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-enable_overlay" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
           </div>
-        </div>
-        <div class="setting">
-          <p>Accent Color</p>
-          <div class="btnInput">
-            <label class="color">
-              <input type="color" id="setting-accentColor" />
-            </label>
-            <img class="repeatButton" src="../assets/icons/reset.png" />
-          </div>
-        </div>
-        <div class="setting">
-          <p>Enable Launcher Icons</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-enableLauncherIcons" />
-              <div>
-                <span></span>
-              </div>
-            </label>
+          <div class="setting">
+            <p>Window Blur</p>
+            <div class="btnInput">
+              <label class="switch">
+                <input type="checkbox" id="setting-enable_blur" />
+                <div>
+                  <span></span>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="general-settings" id="addons-settings" style="display: none;">
-        <div class="setting">
-          <p>Discord Rich Presence</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-enable_rpc" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting">
-          <p>Spotify Connection</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-enable_spotify" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting">
-          <p>YouTube Music Connection</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-enable_ytm" disabled="readonly" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div class="setting">
-          <p>Lazap Overlay [BETA]</p>
-          <div class="btnInput">
-            <label class="switch">
-              <input type="checkbox" id="setting-enable_overlay" />
-              <div>
-                <span></span>
-              </div>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <div class="settings-footer">Release v0.7.0</div>
+      <div class="settings-footer">Release v0.8.0</div>
     </div>
   </div>
 </template>
 
 <script>
+import { selectOption } from "./modules/rpcOptions.js";
+import { enable, isEnabled, disable } from "tauri-plugin-autostart-api";
+
 export default {
   name: "settings-comp",
   async mounted() {
+    console.log(await isEnabled());
     const settings = document.getElementById("settings-popup");
     const settingsbackblur = document.getElementById("settings-backblur");
     const path = window.__TAURI__.path;
     const invoke = window.__TAURI__.invoke;
+    const os = window.__TAURI__.os;
 
     settingsbackblur.addEventListener("click", () => {
       settings.style.display = "none";
       settingsbackblur.style.display = "none";
+      document.getElementById("general-settings").style.display = "flex";
+      document.getElementById("appearance-settings").style.display = "none";
+      document.getElementById("addons-settings").style.display = "none";
+      document.getElementById("exp-settings").style.display = "none";
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" || event.key === "Esc") {
+        settings.style.display = "none";
+        settingsbackblur.style.display = "none";
+        document.getElementById("general-settings").style.display = "flex";
+        document.getElementById("appearance-settings").style.display = "none";
+        document.getElementById("addons-settings").style.display = "none";
+        document.getElementById("exp-settings").style.display = "none";
+      }
     });
 
     document
@@ -207,29 +250,43 @@ export default {
             filePath: (await path.appDir()) + "LauncherData.json",
           })
         );
-        document.querySelectorAll("input[id^=setting-]").forEach((input) => {
-          if (input.id.startsWith("setting") && input.id.endsWith("Color"))
-            input.value = Data[input.id.split("-")[1]];
-          else input.checked = Data[input.id.split("-")[1]] ? true : false;
-        });
+        document
+          .querySelectorAll("input[id^=setting-]")
+          .forEach(async (input) => {
+            if (input.id.startsWith("setting") && input.id.endsWith("Color"))
+              input.value = rgbToHex(Data[input.id.split("-")[1]]);
+            else if (input.id.endsWith("startup")) {
+              input.value = await isEnabled();
+            } else input.checked = Data[input.id.split("-")[1]] ? true : false;
+          });
       });
 
     document.getElementById("generalbtn").addEventListener("click", () => {
       document.getElementById("general-settings").style.display = "flex";
       document.getElementById("appearance-settings").style.display = "none";
       document.getElementById("addons-settings").style.display = "none";
+      document.getElementById("exp-settings").style.display = "none";
     });
 
     document.getElementById("appearancebtn").addEventListener("click", () => {
       document.getElementById("general-settings").style.display = "none";
       document.getElementById("appearance-settings").style.display = "flex";
       document.getElementById("addons-settings").style.display = "none";
+      document.getElementById("exp-settings").style.display = "none";
     });
 
     document.getElementById("addonsbtn").addEventListener("click", () => {
       document.getElementById("general-settings").style.display = "none";
       document.getElementById("appearance-settings").style.display = "none";
       document.getElementById("addons-settings").style.display = "flex";
+      document.getElementById("exp-settings").style.display = "none";
+    });
+
+    document.getElementById("expbtn").addEventListener("click", () => {
+      document.getElementById("general-settings").style.display = "none";
+      document.getElementById("appearance-settings").style.display = "none";
+      document.getElementById("addons-settings").style.display = "none";
+      document.getElementById("exp-settings").style.display = "flex";
     });
 
     let LauncherData = JSON.parse(
@@ -240,20 +297,26 @@ export default {
 
     const repeats = document.getElementsByClassName("repeatButton");
     const defaults = {
-      primaryColor: '#0c0b0e',
-      backgroundColor: '#140e24',
-      frontColor: '#2a1051',
-      accentColor: '#7934fa',
+      primaryColor: "12, 11, 14",
+      backgroundColor: "20, 14, 36",
+      frontColor: "42, 16, 81",
+      accentColor: "121, 52, 250",
     };
     for (let i = 0; i < repeats.length; i++) {
-      const id = repeats.item(i).parentElement.children.item(0).children.item(0).id.split('-')[1];
+      const id = repeats
+        .item(i)
+        .parentElement.children.item(0)
+        .children.item(0)
+        .id.split("-")[1];
       repeats.item(i).addEventListener("click", async () => {
         LauncherData[id] = defaults[id];
         await invoke("write_file", {
           filePath: (await path.appDir()) + "LauncherData.json",
           fileContent: JSON.stringify(LauncherData),
         });
-        document.getElementById(`setting-${id}`).value = LauncherData[id];
+        document.getElementById(`setting-${id}`).value = rgbToHex(
+          LauncherData[id]
+        );
         updateColor(id, LauncherData[id]);
       });
     }
@@ -261,70 +324,105 @@ export default {
     document.querySelectorAll("input[id^=setting-]").forEach((input) => {
       if (input.id === "setting-accentColor") {
         input.addEventListener("input", async () => {
-          LauncherData[input.id.split("-")[1]] = document.querySelector(
-            `input[id=${input.id}]`
-          ).value;
+          let hexValue = document.getElementById(input.id).value;
+          const clr = `${parseInt(hexValue.substr(1, 2), 16)}, ${parseInt(
+            hexValue.substr(3, 2),
+            16
+          )}, ${parseInt(hexValue.substr(5, 2), 16)}`;
+          updateColor("accentColor", clr);
+          LauncherData = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+          LauncherData[input.id.split("-")[1]] = clr;
+
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
-
-          updateColor('accentColor', LauncherData.accentColor);
         });
         return;
-      }
-      else if (input.id === 'setting-backgroundColor') {
+      } else if (input.id === "setting-backgroundColor") {
         input.addEventListener("input", async () => {
-          LauncherData[input.id.split("-")[1]] = document.querySelector(
-            `input[id=${input.id}]`
-          ).value;
+          let hexValue = document.getElementById(input.id).value;
+          const clr = `${parseInt(hexValue.substr(1, 2), 16)}, ${parseInt(
+            hexValue.substr(3, 2),
+            16
+          )}, ${parseInt(hexValue.substr(5, 2), 16)}`;
+          updateColor("backgroundColor", clr);
+          LauncherData = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+          LauncherData[input.id.split("-")[1]] = clr;
+
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
-
-          updateColor('backgroundColor', LauncherData.backgroundColor);
         });
         return;
-      }
-      else if (input.id === 'setting-frontColor') {
+      } else if (input.id === "setting-frontColor") {
         input.addEventListener("input", async () => {
-          LauncherData[input.id.split("-")[1]] = document.querySelector(
-            `input[id=${input.id}]`
-          ).value;
+          let hexValue = document.getElementById(input.id).value;
+          const clr = `${parseInt(hexValue.substr(1, 2), 16)}, ${parseInt(
+            hexValue.substr(3, 2),
+            16
+          )}, ${parseInt(hexValue.substr(5, 2), 16)}`;
+          updateColor("frontColor", clr);
+          LauncherData = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+          LauncherData[input.id.split("-")[1]] = clr;
+
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
-
-          updateColor('frontColor', LauncherData.frontColor);
         });
         return;
-      }
-      else if (input.id === 'setting-primaryColor') {
+      } else if (input.id === "setting-primaryColor") {
         input.addEventListener("input", async () => {
-          LauncherData[input.id.split("-")[1]] = document.querySelector(
-            `input[id=${input.id}]`
-          ).value;
+          let hexValue = document.getElementById(input.id).value;
+          const clr = `${parseInt(hexValue.substr(1, 2), 16)}, ${parseInt(
+            hexValue.substr(3, 2),
+            16
+          )}, ${parseInt(hexValue.substr(5, 2), 16)}`;
+          updateColor("primaryColor", clr);
+          LauncherData = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
+          LauncherData[input.id.split("-")[1]] = clr;
+
           await invoke("write_file", {
             filePath: (await path.appDir()) + "LauncherData.json",
             fileContent: JSON.stringify(LauncherData),
           });
-
-          updateColor('primaryColor', LauncherData.primaryColor);
         });
         return;
       }
       input.addEventListener("change", async () => {
-        LauncherData[input.id.split("-")[1]] = document.querySelector(
-          `input[id=${input.id}]`
+        LauncherData[input.id.split("-")[1]] = document.getElementById(
+          input.id
         ).checked;
         await invoke("write_file", {
           filePath: (await path.appDir()) + "LauncherData.json",
           fileContent: JSON.stringify(LauncherData),
         });
 
-        if (input.id === "setting-enable_rpc") {
+        if (input.id === "setting-launch_on_startup") {
+          if (LauncherData[input.id.split("-")[1]] == true) {
+            await enable();
+          } else {
+            await disable();
+          }
+        } else if (input.id === "setting-enable_rpc") {
           try {
             const { enable_rpc } = JSON.parse(
               await invoke("read_file", {
@@ -342,10 +440,8 @@ export default {
           }
 
           window.location.reload();
-        }
-
-        if (input.id === "setting-enable_spotify") {
-          await invoke("launcherdata_threads_x")
+        } else if (input.id === "setting-enable_spotify") {
+          await invoke("launcherdata_threads_x");
 
           const { enable_spotify } = JSON.parse(
             await invoke("read_file", {
@@ -358,41 +454,86 @@ export default {
             await invoke("spotify_connect");
           }
 
-          window.location.reload()
-        }
+          window.location.reload();
+        } else if (input.id === "setting-enable_overlay") {
+          await invoke("launcherdata_threads_x");
+          alert("A restart is required.");
+        } else if (input.id === "setting-enableLauncherIcons") {
+          window.location.reload();
+        } else if (input.id === "setting-enable_blur") {
+          LauncherData = JSON.parse(
+            await invoke("read_file", {
+              filePath: (await path.appDir()) + "LauncherData.json",
+            })
+          );
 
-        if (input.id === "setting-enable_overlay") {
-          await invoke("launcherdata_threads_x")
-          alert("A restart is required.")
-        }
+          if (!LauncherData[input.id.split("-")[1]]) {
+            document.getElementById;
+            document.querySelectorAll("body").forEach(function (element) {
+              var computedStyle = window.getComputedStyle(element);
+              var backgroundColor = computedStyle.backgroundColor;
 
-        if (input.id === "setting-enableLauncherIcons") window.location.reload();
+              if (
+                backgroundColor &&
+                backgroundColor !== "rgba(0, 0, 0, 0)" &&
+                backgroundColor !== "transparent"
+              ) {
+                if (backgroundColor.includes("rgba")) {
+                  var rgbaComponents = backgroundColor.match(/\d+/g);
+                  var opacity = rgbaComponents[3].trim();
+
+                  if (opacity < 1) {
+                    element.style.backgroundColor =
+                      "rgba(" +
+                      rgbaComponents[0] +
+                      "," +
+                      rgbaComponents[1] +
+                      "," +
+                      rgbaComponents[2] +
+                      ", 1.0)";
+                  }
+                } else if (backgroundColor.includes("rgb")) {
+                  element.style.backgroundColor = backgroundColor
+                    .replace("rgb", "rgba")
+                    .replace(")", ", 1.0)");
+                }
+              }
+            });
+          } else {
+            if ((await os.platform()) == "linux") {
+              alert(
+                "PLEASE NOTE:\n\n Window Blur on Linux depends on your WM or DE compositor settings!\n Usually, adding lazap to window blur whitelist should do the trick.\n\n Otherwise, you will not see any blur effects on the window!"
+              );
+            }
+            window.location.reload();
+          }
+        }
       });
     });
 
-    document.querySelectorAll('div[id^=theme-box-]').forEach((div) => {
+    document.querySelectorAll("div[id^=theme-box-]").forEach((div) => {
       const themes = {
         default: {
-          primaryColor: '#0c0b0e',
-          backgroundColor: '#140e24',
-          frontColor: '#2a1051',
-          accentColor: '#7934fa',
+          primaryColor: "12, 11, 14",
+          backgroundColor: "20, 14, 36",
+          frontColor: "42, 16, 81",
+          accentColor: "121, 52, 250",
         },
         midnight: {
-          primaryColor: '#240046',
-          backgroundColor: '#230264',
-          frontColor: '#2a1051',
-          accentColor: '#7934FA',
+          primaryColor: "36, 0, 70",
+          backgroundColor: "35, 2, 100",
+          frontColor: "42, 16, 81",
+          accentColor: "121, 52, 250",
         },
         crimson: {
-          primaryColor: '#660708',
-          backgroundColor: '#2b080e',
-          frontColor: '#390808',
-          accentColor: '#a51d2d',
+          primaryColor: "102, 7, 8",
+          backgroundColor: "43, 8, 14",
+          frontColor: "57, 8, 8",
+          accentColor: "165, 29, 45",
         },
       };
-      div.addEventListener('click', async () => {
-        const name = div.id.split('-')[2];
+      div.addEventListener("click", async () => {
+        const name = div.id.split("-")[2];
         const theme = themes[name];
         let LauncherData = JSON.parse(
           await invoke("read_file", {
@@ -400,34 +541,44 @@ export default {
           })
         );
         LauncherData = { ...LauncherData, ...theme };
-        console.log(LauncherData);
         await invoke("write_file", {
           filePath: (await path.appDir()) + "LauncherData.json",
           fileContent: JSON.stringify(LauncherData),
         });
 
-        updateColor('primaryColor', theme.primaryColor);
-        updateColor('backgroundColor', theme.backgroundColor);
-        updateColor('frontColor', theme.frontColor);
-        updateColor('accentColor', theme.accentColor);
+        updateColor("primaryColor", theme.primaryColor);
+        updateColor("backgroundColor", theme.backgroundColor);
+        updateColor("frontColor", theme.frontColor);
+        updateColor("accentColor", theme.accentColor);
       });
     });
     function updateColor(id, color) {
       const vals = {
-        primaryColor: 'allColorPrimary',
-        backgroundColor: 'allColorBack',
-        frontColor: 'allColorFront',
-        accentColor: 'accentColor',
+        primaryColor: "all-color-primary",
+        backgroundColor: "all-color-back",
+        frontColor: "all-color-front",
+        accentColor: "accent-color",
       };
       // document.getElementById("indicator").style.backgroundColor = color;
       document.querySelector(":root").style.setProperty(`--${vals[id]}`, color);
-      document.getElementById(`setting-${id}`).value = color;
+
+      // document.getElementById(`setting-${id}`).value = rgbToHex(color);
+    }
+
+    function rgbToHex(x) {
+      let str_array = x.split(", ");
+      return (
+        "#" +
+        ((1 << 24) | (str_array[0] << 16) | (str_array[1] << 8) | str_array[2])
+          .toString(16)
+          .slice(1)
+      );
     }
 
     async function setActivity(tab) {
       let timestamp = null;
       const { state, details, largeImage, largeText, smallImage, smallText } =
-        require("./modules/rpcOptions").selectOption(tab);
+        selectOption(tab);
       if (timestamp === null) timestamp = Date.now();
       try {
         await invoke(`set_rpc_activity`, {
@@ -455,20 +606,21 @@ export default {
   z-index: 1999;
   background-color: #0f10136e;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   display: none;
-  margin-top: -8px;
-  margin-left: -8px;
+  margin-top: -10px;
   justify-content: center;
   align-content: center;
+  border-radius: 16px !important;
 }
 
 .settings {
   position: absolute;
-  height: 540px;
-  width: 600px;
+  height: 500px;
+  width: 700px;
   display: none;
-  background: var(--allColorPrimary);
-  border: 4px solid var(--accentColor);
+  background: rgba(var(--all-color-primary), 0.7);
+  border: 4px solid rgba(var(--accent-color), 0.7);
   z-index: 2000;
   border-radius: 20px;
   text-shadow: 2px 4px 3px rgba(0, 0, 0, 0.3);
@@ -514,8 +666,13 @@ export default {
   margin-top: 8px;
 }
 
+.settings-body {
+  display: flex;
+  flex-direction: row;
+}
+
 .settings-footer {
-  color: rgba(133, 133, 133, 0.446);
+  color: rgb(201, 201, 201, 0.7);
   position: absolute;
   bottom: 0;
   left: 0;
@@ -525,9 +682,10 @@ export default {
 
 .choser {
   display: flex;
-  justify-content: center;
   align-items: center;
+  flex-direction: column;
   margin-bottom: 30px;
+  margin-right: 40px;
 }
 
 .choser button {
@@ -537,8 +695,8 @@ export default {
   text-shadow: none;
   font-size: 18px;
 
-  background: var(--allColorFront);
-  width: 150px;
+  background: rgba(var(--all-color-front), 0.7);
+  width: 180px;
   height: 40px;
   border: none;
   outline: none;
@@ -547,18 +705,18 @@ export default {
 
 .choser button:first-child {
   border-radius: 10px;
-  border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
 }
 
 .choser button:last-child {
   border-radius: 10px;
+  border-top-right-radius: 0px;
   border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
 }
 
 .choser button:hover {
-  border: var(--accentColor);
+  border: rgba(var(--accent-color), 0.7);
   border-width: 4px;
   border-style: solid;
   cursor: pointer;
@@ -571,7 +729,8 @@ export default {
   align-items: center;
   margin-left: auto;
   overflow: auto;
-  height: 320px;
+  height: 400px;
+  margin-right: 20px;
 }
 
 .appearance-settings {
@@ -585,7 +744,7 @@ export default {
 }
 
 .appearance-settings .themes .color .theme-box {
-  border: 4px solid var(--accentColor);
+  border: 4px solid rgba(var(--accent-color), 0.7);
   border-right: 0px;
 }
 
@@ -596,7 +755,7 @@ export default {
 
 .appearance-settings .themes .color .theme-box:last-child {
   border-radius: 0px 10px 10px 0px;
-  border-right: 4px solid var(--accentColor);
+  border-right: 4px solid rgba(var(--accent-color), 0.7);
 }
 
 .appearance-settings .setting,
@@ -621,9 +780,9 @@ export default {
   width: 120px;
 }
 
-input[type=color] {
-  background-color: var(--allColorPrimary);
-  color: var(--allColorPrimary);
+input[type="color"] {
+  background-color: rgba(var(--all-color-primary), 0.7);
+  color: rgba(var(--all-color-primary), 0.7);
   padding: 0;
   margin: 4px;
   height: 40px;
@@ -633,7 +792,7 @@ input[type=color] {
 
 .switch {
   --line: #505162;
-  --dot: #f7f8ff;
+  --dot: rgb(var(--accent-color));
   --circle: #9ea0be;
   --duration: 0.3s;
   --text: #9ea0be;
@@ -644,14 +803,14 @@ input[type=color] {
   display: none;
 }
 
-.switch input+div {
+.switch input + div {
   /* margin-top: -41px; */
   margin-left: 280px;
   position: relative;
 }
 
-.switch input+div:before,
-.switch input+div:after {
+.switch input + div:before,
+.switch input + div:after {
   --s: 1;
   content: "";
   position: absolute;
@@ -663,26 +822,26 @@ input[type=color] {
   transition: transform var(--duration) ease;
 }
 
-.switch input+div:before {
+.switch input + div:before {
   --s: 0;
   left: 0;
   transform-origin: 0 50%;
   border-radius: 2px 0 0 2px;
 }
 
-.switch input+div:after {
+.switch input + div:after {
   left: 28px;
   transform-origin: 100% 50%;
   border-radius: 0 2px 2px 0;
 }
 
-.switch input+div span {
+.switch input + div span {
   padding-left: 56px;
   line-height: 24px;
   color: var(--text);
 }
 
-.switch input+div span:before {
+.switch input + div span:before {
   --x: 0;
   --b: var(--circle);
   --s: 4px;
@@ -698,19 +857,19 @@ input[type=color] {
   transition: box-shadow var(--duration) ease, transform var(--duration) ease;
 }
 
-.switch input+div span:not(:empty) {
+.switch input + div span:not(:empty) {
   padding-left: 64px;
 }
 
-.switch input:checked+div:before {
+.switch input:checked + div:before {
   --s: 1;
 }
 
-.switch input:checked+div:after {
+.switch input:checked + div:after {
   --s: 0;
 }
 
-.switch input:checked+div span:before {
+.switch input:checked + div span:before {
   --x: 28px;
   --s: 12px;
   --b: var(--dot);

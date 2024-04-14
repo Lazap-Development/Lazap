@@ -1,32 +1,61 @@
+use std::ptr::addr_of;
+
 use actix_web::rt::net::TcpListener;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
-use base64;
+use base64::{
+    alphabet,
+    engine::{self, general_purpose},
+    Engine as _,
+};
 use rand::{self, Rng};
 use reqwest::{Client, Url};
 use serde::Deserialize;
 use tauri::{Manager, Window};
 
-static mut SPOTIFY_CLIENT_ID: &str = "";
-static mut SPOTIFY_CLIENT_SECRET: &str = "";
+use crate::Error;
+
+static mut SPOTIFY_CLIENT_ID: String = String::new();
+static mut SPOTIFY_CLIENT_SECRET: String = String::new();
 
 static mut AVOID_SPAWN: bool = false;
 
 static mut ACCESS_TOKEN: Option<String> = None;
 static mut EXTERNAL_WINDOW: Option<Window> = None;
 
+const CUSTOM_ENGINE: engine::GeneralPurpose =
+    engine::GeneralPurpose::new(&alphabet::URL_SAFE, general_purpose::NO_PAD);
+
 #[actix_web::main]
 pub async fn main() -> std::io::Result<()> {
     unsafe {
-        SPOTIFY_CLIENT_ID = env!("SPOTIFY_CLIENT_ID");
-        SPOTIFY_CLIENT_SECRET = env!("SPOTIFY_CLIENT_SECRET");
+        // SPOTIFY_CLIENT_ID = "".to_string();
+        // SPOTIFY_CLIENT_SECRET = "".to_string();
 
         if SPOTIFY_CLIENT_ID.is_empty() || SPOTIFY_CLIENT_SECRET.is_empty() {
-            println!(
-                "{}",
-                "SPOTIFY_CLIENT_ID or SPOTIFY_CLIENT_SECRET is not set. HttpServer not started."
-            );
-            AVOID_SPAWN = true;
-            return Ok(());
+            let spotify_client_id = option_env!("SPOTIFY_CLIENT_ID");
+            let spotify_client_secret = option_env!("SPOTIFY_CLIENT_SECRET");
+
+            match spotify_client_id {
+                Some(id) => {
+                    SPOTIFY_CLIENT_ID = id.to_string();
+                }
+                None => {
+                    println!("SPOTIFY_CLIENT_ID is not set. HttpServer not started.");
+                    AVOID_SPAWN = true;
+                    return Ok(());
+                }
+            }
+
+            match spotify_client_secret {
+                Some(secret) => {
+                    SPOTIFY_CLIENT_SECRET = secret.to_string();
+                }
+                None => {
+                    println!("SPOTIFY_CLIENT_SECRET is not set. HttpServer not started.");
+                    AVOID_SPAWN = true;
+                    return Ok(());
+                }
+            }
         }
     }
 
@@ -50,7 +79,9 @@ async fn login() -> impl Responder {
     auth_query_parameters
         .query_pairs_mut()
         .append_pair("response_type", "code")
-        .append_pair("client_id", unsafe { SPOTIFY_CLIENT_ID })
+        .append_pair("client_id", unsafe {
+            addr_of!(SPOTIFY_CLIENT_ID).as_ref().unwrap()
+        })
         .append_pair("scope", scope)
         .append_pair("redirect_uri", "http://localhost:3000/auth/callback")
         .append_pair("state", &state);
@@ -67,7 +98,7 @@ struct AuthCallbackQuery {
 
 #[get("/auth/callback")]
 async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
-    let code = query.code.clone();
+    let code = &query.code;
 
     let client = Client::new();
     let _response = client
@@ -76,7 +107,11 @@ async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
             reqwest::header::AUTHORIZATION,
             format!(
                 "Basic {}",
-                base64::encode(format!("{}:{}", unsafe { SPOTIFY_CLIENT_ID }, unsafe { SPOTIFY_CLIENT_SECRET }))
+                CUSTOM_ENGINE.encode(format!(
+                    "{}:{}",
+                    unsafe { addr_of!(SPOTIFY_CLIENT_ID).as_ref().unwrap() },
+                    unsafe { addr_of!(SPOTIFY_CLIENT_SECRET).as_ref().unwrap() }
+                ))
             ),
         )
         .header(
@@ -87,9 +122,9 @@ async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
             ("code", code),
             (
                 "redirect_uri",
-                "http://localhost:3000/auth/callback".to_string(),
+                &"http://localhost:3000/auth/callback".to_string(),
             ),
-            ("grant_type", "authorization_code".to_string()),
+            ("grant_type", &"authorization_code".to_string()),
         ])
         .send()
         .await;
@@ -104,7 +139,7 @@ async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
             }
 
             unsafe {
-                if let Some(ext_window) = &EXTERNAL_WINDOW {
+                if let Some(ext_window) = addr_of!(EXTERNAL_WINDOW).as_ref().unwrap() {
                     let window = ext_window.get_window("external").unwrap();
                     window.hide().unwrap();
                 }
@@ -122,7 +157,7 @@ async fn callback(query: web::Query<AuthCallbackQuery>) -> impl Responder {
 #[get("/auth/token")]
 async fn token() -> impl Responder {
     unsafe {
-        if let Some(access_token) = &ACCESS_TOKEN {
+        if let Some(access_token) = addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             HttpResponse::Ok().json(serde_json::json!({
                 "access_token": access_token,
             }))
@@ -151,7 +186,7 @@ pub async fn spotify_login(window: tauri::Window) -> Result<(), Error> {
         if AVOID_SPAWN {
             return Ok(());
         }
-        if let Some(_value) = &mut EXTERNAL_WINDOW {
+        if let Some(_value) = &mut addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             let ext_window = window.get_window("external").unwrap();
             ext_window
                 .eval("window.location.replace('http://localhost:3000/auth/login')")
@@ -172,7 +207,7 @@ pub async fn spotify_login(window: tauri::Window) -> Result<(), Error> {
 #[tauri::command]
 pub async fn spotify_connect() -> Result<(), Error> {
     unsafe {
-        if let Some(ext_window) = &EXTERNAL_WINDOW {
+        if let Some(ext_window) = addr_of!(EXTERNAL_WINDOW).as_ref().unwrap() {
             let window = ext_window.get_window("external").unwrap();
             window
                 .eval("window.location.replace('http://localhost:3000/auth/login')")
@@ -186,7 +221,7 @@ pub async fn spotify_connect() -> Result<(), Error> {
 #[tauri::command]
 pub async fn spotify_toggle_playback() -> Result<bool, Error> {
     unsafe {
-        if let Some(access_token) = &ACCESS_TOKEN {
+        if let Some(access_token) = addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             let mut is_playing_glob: bool = false;
 
             let client = Client::new();
@@ -284,7 +319,7 @@ pub async fn spotify_toggle_playback() -> Result<bool, Error> {
 #[tauri::command]
 pub async fn spotify_backward() -> Result<(), Error> {
     unsafe {
-        if let Some(access_token) = &ACCESS_TOKEN {
+        if let Some(access_token) = addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             let client = Client::new();
             let _response = client
                 .post("https://api.spotify.com/v1/me/player/previous")
@@ -305,7 +340,7 @@ pub async fn spotify_backward() -> Result<(), Error> {
 #[tauri::command]
 pub async fn spotify_forward() -> Result<(), Error> {
     unsafe {
-        if let Some(access_token) = &ACCESS_TOKEN {
+        if let Some(access_token) = addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             let client = Client::new();
             let _response = client
                 .post("https://api.spotify.com/v1/me/player/next")
@@ -330,7 +365,7 @@ pub async fn spotify_forward() -> Result<(), Error> {
 #[tauri::command]
 pub async fn spotify_info() -> Result<String, Error> {
     unsafe {
-        if let Some(access_token) = &ACCESS_TOKEN {
+        if let Some(access_token) = addr_of!(ACCESS_TOKEN).as_ref().unwrap() {
             let client = Client::new();
             let currently_playing_api = client
                 .get("https://api.spotify.com/v1/me/player/currently-playing")
@@ -365,6 +400,7 @@ pub async fn spotify_info() -> Result<String, Error> {
             #[derive(Deserialize)]
             struct Album {
                 images: Vec<Image>,
+                uri: String,
             }
 
             #[derive(Deserialize)]
@@ -384,6 +420,7 @@ pub async fn spotify_info() -> Result<String, Error> {
                     \"cover\": \"{}\",
                     \"is_playing\": {},
                     \"progress\": {},
+                    \"uri\": \"{}\",
                     \"duration\": {}
                 }}",
                 currently_playing.item.name,
@@ -391,6 +428,7 @@ pub async fn spotify_info() -> Result<String, Error> {
                 currently_playing.item.album.images[0].url,
                 currently_playing.is_playing,
                 currently_playing.progress_ms,
+                currently_playing.item.album.uri,
                 currently_playing.item.duration_ms
             );
 
@@ -418,20 +456,5 @@ pub async fn spotify_remove_token() -> Result<(), Error> {
     unsafe {
         ACCESS_TOKEN = None;
         Ok(())
-    }
-}
-
-#[derive(Debug, thiserror::Error)]
-pub enum Error {
-    #[error(transparent)]
-    Io(#[from] html_parser::Error),
-}
-
-impl serde::Serialize for Error {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::ser::Serializer,
-    {
-        serializer.serialize_str(self.to_string().as_ref())
     }
 }
