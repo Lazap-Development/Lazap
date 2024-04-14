@@ -1,15 +1,15 @@
 {
-  "version": "0.7.0",
+  "version": "0.8.0",
   "notes": "It is recommended to update as soon as possible.",
-  "pub_date": "2023-08-14T19:05:51.467Z",
+  "pub_date": "2024-04-14T17:30:57.749Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTcVY5U2lYZ1FzSER1MHhQc1AyMlp0SG54QVlyMHA4b3A3UlV1ZjdLMC84RDZ0QmIwaFhFUnk1QjIxUWlvV0s2dlN3Nit2UVZNdXpPekJxSXNJTFNTZ3dDUW9FT3NPOEFzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkyMDM5NzM3CWZpbGU6TGF6YXBfMC43LjBfeDY0X2VuLVVTLm1zaS56aXAKSDlvdDNuSVdHTUNnaXpqRGVwaVQ4WjdDRmtRMjhjRW95SnpZQ2RoWFNCdC84RVZkcG0ybXhJc2I3KzhoQWxpeGt1M0JOWnpONFR6QmM0b1dQc3dYREE9PQo=",
-      "url": "https://github.com/Lazap-Development/Lazap/releases/download/v0.7.0/Lazap_0.7.0_x64_en-US.msi.zip"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTcVY5U2lYZ1FzSE1kS09TdURyWDVCYkw5V0h1YnlsSFVWRXlzUXF2aWlTc3hIYk5TcW9PYkNLOFlOSXpXYmVoM0E2TGg5U0hHMmk5M1dnRnJ3NnJYdkZLQjZTa0lWZVFvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzEzMTE1NTE5CWZpbGU6TGF6YXBfMC44LjBfeDY0X2VuLVVTLm1zaS56aXAKQlNDMkc5dGkzSGZuU0RmQ3ZpVVVTazVvRmlrQWluVmVRSE9YMmcvRXdFQkxVajV3SHZjSEdTeWI1aEY2cXoxcmgyQUlVVEVqV0tha3NTeDFMQmhuQkE9PQo=",
+      "url": "https://github.com/Lazap-Development/Lazap/releases/download/v0.8.0/Lazap_0.8.0_x64_en-US.msi.zip"
     },
     "darwin-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTcVY5U2lYZ1FzSEt3a0VXMFk1bjBEdS9TYUZXcVpSTHNBaXhHUnpFQmJPRmR6T2NncFoybExKWFdVUnlINVVUaWtYakxFaWtjemdJUi9uR1BJekVlSFFhRCsvdUJ4OUFjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNjkyMDM5OTQ4CWZpbGU6TGF6YXAuYXBwLnRhci5negp3cXRtUktuTXp0M2ZXdzRGcHlQZDVtRm1pazhIenFYVVErVnp5b0pSekFDcWJhYWVtNUt6QlNEdFJZbHNnV0lEL2ZYdS9BREZnVEF6V1ova0tDenhEdz09Cg==",
-      "url": "https://github.com/Lazap-Development/Lazap/releases/download/v0.7.0/Lazap_x64.app.tar.gz"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVTcVY5U2lYZ1FzSE1ITjl2SStFOFN2eVMzcmwyMGJPVk9VTm01MXpYcmttWW1EdmwzTTlFUFMrcEZYdklKRlJnMExmSWM5SVk1dkJpUkl1WnFUMDNyV3djZHNsNnFESUFnPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzEzMTE1ODU0CWZpbGU6TGF6YXAuYXBwLnRhci5negp2ZGpOV1BQcXpWK3JySktNbVoyUnVjb0ZkNGxDQkg2ckFYcHV5L2EzL0VIcG5sRmF2ZTM3anZGYzE3dC9MTHFsZzRobmlsclRza1doN2I1b0c5QjBBdz09Cg==",
+      "url": "https://github.com/Lazap-Development/Lazap/releases/download/v0.8.0/Lazap_x64.app.tar.gz"
     }
   }
 }
