@@ -174,7 +174,6 @@ class GameElement {
 
   getLauncherIconElement() {
     const element = document.createElement("img");
-    console.log(this.data.launcher_name);
     element.setAttribute(
       "src",
       `src/assets/icons/${this.data.launcher_name}.png`
