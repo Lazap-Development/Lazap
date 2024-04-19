@@ -45,14 +45,14 @@ pub async fn get_installed_games() -> Vec<GameObject> {
 #[tauri::command]
 pub async fn add_custom_game(location: String, display_name: String) {
     let mut obj: GameData = GameData {
-        banner_path: "".to_string(),
-        executable: "".to_string(),
-        location: "".to_string(),
+        banner_path: String::new(),
+        executable: String::new(),
+        location: String::new(),
         display_name: display_name,
         game_id: "CustomGame".to_string(),
-        launch_id: "".to_string(),
+        launch_id: String::new(),
         size: 0,
-        launch_command: "".to_string(),
+        launch_command: String::new(),
         launcher_name: "CustomGame".to_string(),
         args: vec![],
         lastlaunch: 0,

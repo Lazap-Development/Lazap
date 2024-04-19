@@ -288,7 +288,7 @@ async fn parse_game_object(path: &str, name: &str) -> Option<GameObject> {
                 format!("{}-{}", game.title_id, game.ros_title_id),
                 "0".to_string(),
                 0,
-                "".to_string(),
+                String::new(),
                 "RockstarGames".to_string(),
                 vec![],
             ));

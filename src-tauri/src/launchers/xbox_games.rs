@@ -181,9 +181,9 @@ pub fn parse_game_object(game: XboxGame) -> Option<GameObject> {
         location.to_string(),
         game.name,
         game.package_full_name,
-        "".to_string(),
+        String::new(),
         0,
-        "".to_string(),
+        String::new(),
         "XboxGames".to_string(),
         vec![],
     );
