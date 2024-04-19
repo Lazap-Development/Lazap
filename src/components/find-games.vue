@@ -485,11 +485,6 @@ export default {
       fetches++;
 
       let games = await invoke("fetch_installed_games");
-      // Adds Custom Games to the array if requested
-      //if (Launchers.includes('CustomGames')) {
-      //	const data = await storage.getGamesData();
-      //	games.push(...data.filter(x => x.launcher_name === 'CustomGame'));
-      //}
 
       // Save all games into JSON
       storage.setGamesData(games, "getInstalledGames");
@@ -511,7 +506,7 @@ export default {
 
         let data = await storage.getGamesData();
         data = data
-          .filter((x) => typeof x.launches === "number")
+          .filter((x) => typeof x.launches === "number" && x.launches != 0)
           .sort((a, b) => b.launches - a.launches)
           .slice(0, 5);
 
@@ -519,7 +514,7 @@ export default {
       } else if (listID === "recentGamesList") {
         let data = await storage.getGamesData();
         data = data
-          .filter((x) => typeof x.launches === "number")
+          .filter((x) => typeof x.launches === "number" && x.launches != 0)
           .sort((a, b) => b.launches - a.launches);
         return data;
       } else if (listID === "allGamesList") {
