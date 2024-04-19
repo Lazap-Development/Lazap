@@ -174,8 +174,11 @@ class GameElement {
 
   getLauncherIconElement() {
     const element = document.createElement("img");
-    const image = import(`../assets/icons/${this.data.launcher_name}.png`);
-    element.setAttribute("src", image);
+    console.log(this.data.launcher_name);
+    element.setAttribute(
+      "src",
+      `src/assets/icons/${this.data.launcher_name}.png`
+    );
     element.classList.add("gamebox-icon");
 
     return element;
@@ -483,6 +486,11 @@ export default {
       fetches++;
 
       let games = await invoke("fetch_installed_games");
+      // Adds Custom Games to the array if requested
+      //if (Launchers.includes('CustomGames')) {
+      //	const data = await storage.getGamesData();
+      //	games.push(...data.filter(x => x.launcher_name === 'CustomGame'));
+      //}
 
       // Save all games into JSON
       storage.setGamesData(games, "getInstalledGames");
@@ -504,7 +512,7 @@ export default {
 
         let data = await storage.getGamesData();
         data = data
-          .filter((x) => typeof x.launches === "number" && x.launches != 0)
+          .filter((x) => typeof x.launches === "number")
           .sort((a, b) => b.launches - a.launches)
           .slice(0, 5);
 
@@ -512,7 +520,7 @@ export default {
       } else if (listID === "recentGamesList") {
         let data = await storage.getGamesData();
         data = data
-          .filter((x) => typeof x.launches === "number" && x.launches != 0)
+          .filter((x) => typeof x.launches === "number")
           .sort((a, b) => b.launches - a.launches);
         return data;
       } else if (listID === "allGamesList") {
