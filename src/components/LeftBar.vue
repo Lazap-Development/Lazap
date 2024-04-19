@@ -18,6 +18,7 @@
           />
         </div>
         <input
+          autocomplete="off"
           class="username"
           id="text"
           type="text"
