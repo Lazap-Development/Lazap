@@ -1,32 +1,15 @@
 <template>
   <div class="leftbar">
-    <div class="d-flex justify-content-center">
-      <div>
-        <div class="user-pfp">
-          <label for="file"></label>
-          <input
-            id="file"
-            type="file"
-            accept="image/png"
-            @change="(event) => loadPFP(event)"
-          />
-          <img
-            src="../assets/svg/default-profile.svg"
-            alt="Avatar"
-            width="88"
-            id="output"
-          />
-        </div>
-        <input
-          autocomplete="off"
-          class="username"
-          id="text"
-          type="text"
-          value="Lazap"
-          spellcheck="false"
-          maxlength="12"
-        />
+    <div class="leftbar-top">
+
+      <div class="user-pfp">
+        <label for="file"></label>
+        <input id="file" type="file" accept="image/png" @change="(event) => loadPFP(event)" />
+        <img src="../assets/svg/default-profile.svg" alt="Avatar" width="88" id="output" />
       </div>
+      <input autocomplete="off" class="username" id="text" type="text" value="Lazap" spellcheck="false"
+        maxlength="12" />
+
     </div>
 
     <div class="side-tabs">
@@ -41,34 +24,19 @@
       <div class="category-name d-flex justify-content-left">Games</div>
       <div class="d-flex justify-content-center">
         <div class="side-tab" id="recent-btn">
-          <img
-            id="recently-btn-img"
-            src="../assets/svg/recent.svg"
-            height="25"
-            width="25"
-          />
+          <img id="recently-btn-img" src="../assets/svg/recent.svg" height="25" width="25" />
           <div class="side-tab-text">Recent</div>
         </div>
       </div>
       <div class="d-flex justify-content-center">
         <div class="side-tab" id="games-btn">
-          <img
-            id="games-btn-img"
-            src="../assets/svg/games.svg"
-            height="25"
-            width="25"
-          />
+          <img id="games-btn-img" src="../assets/svg/games.svg" height="25" width="25" />
           <div class="side-tab-text">All Games</div>
         </div>
       </div>
       <div class="d-flex justify-content-center pb-2">
         <div class="side-tab" id="favs-btn">
-          <img
-            id="favs-btn-img"
-            src="../assets/svg/favs.svg"
-            height="25"
-            width="25"
-          />
+          <img id="favs-btn-img" src="../assets/svg/favs.svg" height="25" width="25" />
           <div class="side-tab-text">Favourites</div>
         </div>
       </div>
@@ -319,13 +287,17 @@ export default {
   box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
 }
 
+.leftbar-top {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 200px;
+  justify-content: center;
+}
+
 .user-pfp {
-  position: relative;
-  margin-top: 50px;
   width: 88px;
   height: 88px;
-  margin-left: auto;
-  margin-right: auto;
   transition: all 0.2s ease-in-out;
   border-radius: 50%;
   border: 5px solid rgba(var(--accent-color), 1);
@@ -355,13 +327,11 @@ export default {
 .user-pfp label {
   position: absolute;
   cursor: pointer;
-  height: 100%;
-  width: 100%;
 }
 
 .username {
   margin-top: 8px;
-  margin-bottom: 22px;
+  
   text-align: center;
   font-size: 22px;
   font-family: Nunito-Bold;
@@ -371,12 +341,12 @@ export default {
   text-decoration: none;
 }
 
-.side-tabs {
+/* .side-tabs {
   height: 420px;
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-}
+} */
 
 .side-tab {
   box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.2);
@@ -390,12 +360,10 @@ export default {
 }
 
 .side-tab:before {
-  background: linear-gradient(
-    30deg,
-    rgba(var(--all-color-primary), 0.3) 0%,
-    rgba(var(--all-color-primary), 0.3) 30%,
-    rgba(var(--accent-color), 0.7) 100%
-  );
+  background: linear-gradient(30deg,
+      rgba(var(--all-color-primary), 0.3) 0%,
+      rgba(var(--all-color-primary), 0.3) 30%,
+      rgba(var(--accent-color), 0.7) 100%);
   content: "";
   height: 40px;
   width: 235px;
@@ -418,8 +386,7 @@ export default {
 }
 
 .side-tab img {
-  filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg)
-    brightness(108%) contrast(108%);
+  filter: invert(100%) sepia(6%) saturate(0%) hue-rotate(115deg) brightness(108%) contrast(108%);
   margin-left: 25px;
   margin-top: 8px;
   margin-right: 5px;

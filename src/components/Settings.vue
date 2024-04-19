@@ -668,7 +668,8 @@ export default {
 
 .settings-body {
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
+  gap: 40px;
 }
 
 .settings-footer {
@@ -684,8 +685,6 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-bottom: 30px;
-  margin-right: 40px;
 }
 
 .choser button {
