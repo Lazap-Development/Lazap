@@ -166,6 +166,7 @@ export default {
   },
   async mounted() {
     (async () => {
+      disableContextMenu();
       const findGamesModule = this.$root.$refs.findGamesMod;
 
       const searchbars = document.querySelectorAll(
@@ -341,8 +342,8 @@ export default {
           data = data.filter(
             (a) =>
               a.display_name !=
-              document.getElementById("removeGame").parentNode
-                .firstChild.innerHTML
+              document.getElementById("removeGame").parentNode.firstChild
+                .innerHTML
           );
           await invoke("write_file", {
             filePath: (await path.appDir()) + "cache/games/data.json",
@@ -352,10 +353,7 @@ export default {
             .getElementById(
               `game-div-${document
                 .getElementById("removeGame")
-                .parentNode.firstChild.innerHTML.replaceAll(
-                  " ",
-                  "_"
-                )}`
+                .parentNode.firstChild.innerHTML.replaceAll(" ", "_")}`
             )
             .remove();
           setTimeout(
@@ -374,6 +372,29 @@ export default {
           console.log(res);
         })
         .catch(console.log);
+    }
+    function disableContextMenu() {
+      if (window.location.hostname !== "tauri.localhost") {
+        return;
+      }
+
+      document.addEventListener(
+        "contextmenu",
+        (e) => {
+          e.preventDefault();
+          return false;
+        },
+        { capture: true }
+      );
+
+      document.addEventListener(
+        "selectstart",
+        (e) => {
+          e.preventDefault();
+          return false;
+        },
+        { capture: true }
+      );
     }
   },
 };
