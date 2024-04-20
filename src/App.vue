@@ -119,12 +119,16 @@
     <monitor-comp></monitor-comp>
 
     <div class="secondorybox" id="activity">
-      <p>Overclock</p>
+      <div class="secondary-top">
+        <p>Overclock</p>
+      </div>
       <h1 class="fade">Coming Soon...</h1>
     </div>
 
     <div class="secondorybox" id="friends">
-      <p>Benchmark</p>
+      <div class="secondary-top">
+        <p>Benchmark</p>
+      </div>
       <h1 class="fade">Coming Soon...</h1>
     </div>
 
@@ -468,6 +472,7 @@ body {
 .homebox {
   display: flex;
   height: 100%;
+  gap: 10px;
 }
 
 .secondorybox {
@@ -579,19 +584,11 @@ body {
 .centerchildren {
   display: flex;
   flex-direction: column;
-  width: 100% !important;
+  gap: 10px;
+  justify-content: space-between;
 }
-
 .children {
   height: 100%;
-  width: 100%;
-  overflow: hidden;
-  margin-left: 14px;
-  display: flex;
-}
-
-.children:first-child {
-  margin-bottom: 15px !important;
 }
 
 .head-pic {
@@ -604,8 +601,9 @@ body {
 }
 
 .jump-back {
+  display: flex;
+  flex-direction: column;
   background-color: rgba(var(--all-color-primary), 0.7);
-  width: 100%;
   height: 100% !important;
   border-radius: 20px;
 }
@@ -616,14 +614,13 @@ body {
   margin-top: 18px;
   font-size: 18px;
   font-family: Nunito-ExtraBold;
-  position: absolute;
 }
 
 .x2 {
   display: flex;
   flex-direction: column;
-  margin-left: 27px;
   width: 40%;
+  gap: 10px;
 }
 
 .rightbar {
@@ -635,7 +632,6 @@ body {
 
 .rightbar:first-child {
   height: 60%;
-  margin-bottom: 15px;
 }
 
 .rightbar p {
@@ -680,11 +676,51 @@ body {
 }
 
 .gamesList {
-  overflow-y: scroll;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  overflow-y: auto;
+  --grid-layout-gap: 1rem;
+  --grid-column-count: 6;
+  --grid-row-count: auto; /* Set the desired row count */
+  --grid-item--min-width: 6rem;
+  --grid-item--min-height: 18rem; /* Set your desired minimum height */
+  --gap-count: calc(var(--grid-column-count) - 1);
+  --total-gap-width: calc(var(--gap-count) * var(--grid-layout-gap));
+
+  --grid-item--max-width: calc(
+    (100% - var(--total-gap-width)) / var(--grid-column-count)
+  );
+
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(max(var(--grid-item--min-width), var(--grid-item--max-width)), 1fr)
+  );
+
+  grid-gap: var(--grid-layout-gap);
   padding: 1rem;
+}
+
+@media (min-width: 1440px) and (max-width: 1919px) {
+  .gamesList {
+    --grid-column-count: 7;
+  }
+}
+
+@media (min-width: 1920px) and (max-width: 2111px) {
+  .gamesList {
+    --grid-column-count: 8;
+  }
+}
+
+@media (min-width: 2112px) and (max-width: 2559px) {
+  .gamesList {
+    --grid-column-count: 9;
+  }
+}
+
+@media screen and (min-width: 2560px) {
+  .gamesList {
+    --grid-column-count: 10;
+  }
 }
 
 .gamesList::-webkit-scrollbar {
@@ -695,7 +731,8 @@ body {
   position: relative;
   border-radius: 0 0 10px 10px;
   height: 280px;
-  width: 200px;
+  width: 100%;
+  aspect-ratio: 2/3;
   opacity: 0.8;
 }
 
@@ -720,11 +757,11 @@ body {
 }
 
 .gamebox .game_banner_img {
-  height: 280px;
-  width: 200px;
+  width: 100%;
   border-radius: 12px;
   image-rendering: auto;
   object-fit: cover;
+  aspect-ratio: 2/3;
   mask-image: -webkit-gradient(
     linear,
     left 70%,
@@ -737,58 +774,50 @@ body {
 
 .gamebox .gamebox-bottom {
   cursor: default;
-  position: relative;
-  margin-top: -21%;
-  width: 100%;
-  height: 15%;
+
+  height: 40px;
   position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background-color: rgba(var(--all-color-front), 1);
   border-radius: 0px 0px 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.5rem;
 }
 
 .gamebox .gamebox-bottom span {
   font-family: Nunito-Bold;
-  position: absolute;
-  margin-top: 14px;
-  margin-left: 10px;
+
   font-size: 12px;
   color: #dadada;
-  display: block;
+  flex-grow: 1;
 }
 
 .gamebox .gamebox-bottom .menu {
-  position: absolute;
-
-  margin-left: 165px;
-  margin-top: 13px;
-  display: block;
   content: url("./assets/svg/menu.svg");
   height: 18px;
   width: 18px;
   cursor: pointer;
-  cursor: default;
+  margin-left: 0.5rem;
 }
 
 .mainPageGamesList {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-content: center;
-  margin: 20px;
-  margin-left: 4%;
-  align-items: center;
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+  overflow-y: scroll;
 }
 
 .placeholderGames {
-  position: relative;
-
-  text-align: center;
-  display: inline-block;
+  aspect-ratio: 2 / 3;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
-  height: 61%;
-  width: 17%;
+
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.5;
   background-color: rgba(var(--accent-color), 0.7);
@@ -801,10 +830,6 @@ body {
   );
 }
 
-.placeholderGames:nth-last-child(-n + 4) {
-  margin-left: 1.6%;
-}
-
 .mainPageGamebox {
   position: relative;
   image-rendering: auto;
@@ -812,17 +837,12 @@ body {
   display: inline-block;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
-  width: 16%;
-  height: 61%;
+  aspect-ratio: 2 / 3;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
-  border: solid rgba(var(--accent-color), 1) 6px;
+  outline: solid rgba(var(--accent-color), 1) 6px;
   background-position: 50% 40% !important;
   object-fit: cover;
-}
-
-.mainPageGamebox:nth-last-child(-n + 4) {
-  margin-left: 1.6%;
 }
 
 .mainPageGamebox:hover {
@@ -832,14 +852,10 @@ body {
 }
 
 .star {
-  position: absolute;
-
-  margin-left: 135px;
-  margin-top: 10px;
-  display: block;
   content: url("./assets/svg/star-empty.svg");
-  height: 20px;
-  width: 20px;
+  height: 18px;
+  width: 18px;
+  margin-bottom: 5px;
 }
 
 .star-fill {
