@@ -809,12 +809,13 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
   gap: 1.5rem;
-  padding: 1rem;
+  padding: 0 1rem;
   overflow-y: scroll;
+  align-items: center;
 }
 
 .placeholderGames {
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 3 / 4;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
 
@@ -837,7 +838,7 @@ body {
   display: inline-block;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 3 / 4;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.7;
   outline: solid rgba(var(--accent-color), 1) 6px;
