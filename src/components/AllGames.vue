@@ -6,30 +6,30 @@
         <p>All Games</p>
         <img id="addGameBtn" class="addGameBtn" src="../assets/svg/add.svg" />
         <div class="addGamePopUp" id="addGamePopUp">
-        <div class="mainSection fadeInDown">
-          <div class="section">
-            <div class="title">Game Name</div>
-            <input maxlength="24" type="text" class="inputGameName" id="inputGameName" />
+          <div class="mainSection fadeInDown">
+            <div class="section">
+              <div class="title">Game Name</div>
+              <input maxlength="24" type="text" class="inputGameName" id="inputGameName" />
+            </div>
+            <div class="section">
+              <button class="addGameLocation" id="addGameLocation">
+                Locate Game
+              </button>
+            </div>
+            <div class="section">
+              <button class="addGameFinalBtn" id="addGameFinalBtn">Add Game</button>
+            </div>
           </div>
-          <div class="section">
-            <button class="addGameLocation" id="addGameLocation">
-              Locate Game
-            </button>
-          </div>
-          <div class="section">
-            <button class="addGameFinalBtn" id="addGameFinalBtn">Add Game</button>
+          <div class="addGameBannerSection fadeInUp">
+            <label for="addGameCustomBanner"></label>
+            <input class="banner" id="addGameCustomBanner" type="file" accept="image/png"
+              @change="(event) => loadCustomBanner(event)" />
+            <p id="addGameCustomBannerTxt">Hover & Click to Select Banner</p>
+            <div id="addGameCustomBannerOutput" class="addGameCustomBannerOutput"></div>
           </div>
         </div>
-        <div class="addGameBannerSection fadeInUp">
-          <label for="addGameCustomBanner"></label>
-          <input class="banner" id="addGameCustomBanner" type="file" accept="image/png"
-            @change="(event) => loadCustomBanner(event)" />
-          <p id="addGameCustomBannerTxt">Hover & Click to Select Banner</p>
-          <div id="addGameCustomBannerOutput" class="addGameCustomBannerOutput"></div>
-        </div>
       </div>
-      </div>
-    
+
 
       <div class="search-bar">
         <input type="text" placeholder="Search" id="gamesInput" />
@@ -178,8 +178,8 @@ export default {
   position: absolute;
   width: 380px;
   height: 200px;
-margin-left: 100px;
-margin-top: 60px;
+  margin-left: 100px;
+  margin-top: 60px;
   background-color: rgba(var(--all-color-front), 0.7);
   animation: gradient 20s infinite;
   display: none;

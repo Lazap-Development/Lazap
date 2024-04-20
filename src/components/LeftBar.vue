@@ -1,7 +1,6 @@
 <template>
   <div class="leftbar">
     <div class="leftbar-top">
-
       <div class="user-pfp">
         <label for="file"></label>
         <input id="file" type="file" accept="image/png" @change="(event) => loadPFP(event)" />
@@ -9,7 +8,6 @@
       </div>
       <input autocomplete="off" class="username" id="text" type="text" value="Lazap" spellcheck="false"
         maxlength="12" />
-
     </div>
 
     <div class="side-tabs">
@@ -331,7 +329,6 @@ export default {
 
 .username {
   margin-top: 8px;
-  
   text-align: center;
   font-size: 22px;
   font-family: Nunito-Bold;
