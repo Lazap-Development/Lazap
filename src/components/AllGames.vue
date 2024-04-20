@@ -1,7 +1,6 @@
 <template>
   <div class="secondorybox" id="games">
     <div class="secondary-top">
-
       <div class="secondary-main">
         <p>All Games</p>
         <img id="addGameBtn" class="addGameBtn" src="../assets/svg/add.svg" />
@@ -9,7 +8,12 @@
           <div class="mainSection fadeInDown">
             <div class="section">
               <div class="title">Game Name</div>
-              <input maxlength="24" type="text" class="inputGameName" id="inputGameName" />
+              <input
+                maxlength="24"
+                type="text"
+                class="inputGameName"
+                id="inputGameName"
+              />
             </div>
             <div class="section">
               <button class="addGameLocation" id="addGameLocation">
@@ -17,19 +21,28 @@
               </button>
             </div>
             <div class="section">
-              <button class="addGameFinalBtn" id="addGameFinalBtn">Add Game</button>
+              <button class="addGameFinalBtn" id="addGameFinalBtn">
+                Add Game
+              </button>
             </div>
           </div>
           <div class="addGameBannerSection fadeInUp">
             <label for="addGameCustomBanner"></label>
-            <input class="banner" id="addGameCustomBanner" type="file" accept="image/png"
-              @change="(event) => loadCustomBanner(event)" />
+            <input
+              class="banner"
+              id="addGameCustomBanner"
+              type="file"
+              accept="image/png"
+              @change="(event) => loadCustomBanner(event)"
+            />
             <p id="addGameCustomBannerTxt">Hover & Click to Select Banner</p>
-            <div id="addGameCustomBannerOutput" class="addGameCustomBannerOutput"></div>
+            <div
+              id="addGameCustomBannerOutput"
+              class="addGameCustomBannerOutput"
+            ></div>
           </div>
         </div>
       </div>
-
 
       <div class="search-bar">
         <input type="text" placeholder="Search" id="gamesInput" />
@@ -156,7 +169,7 @@ export default {
 <style>
 .secondary-main {
   display: flex;
-  position: relative
+  position: relative;
 }
 
 .secondorybox .addGameBtn {
@@ -170,7 +183,6 @@ export default {
 .secondorybox .addGameBtn:hover {
   cursor: pointer;
 }
-
 
 .secondorybox .addGamePopUp {
   backdrop-filter: blur(10px);
@@ -245,7 +257,6 @@ export default {
   width: 30px;
   height: 150px;
 }
-
 
 .secondorybox .section .addGameFinalBtn {
   width: 170px;

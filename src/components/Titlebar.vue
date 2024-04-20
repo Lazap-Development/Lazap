@@ -3,11 +3,27 @@
     <div data-tauri-drag-region class="titlebar">
       <div data-tauri-drag-region class="titlebar-icons">
         <div class="titlebar-options">
-          <img class="titlebar-settings" src="../assets/svg/settings.svg" id="settings-btn" />
-          <img class="titlebar-account" src="../assets/svg/account.svg" id="account-btn" />
-          <img class="titlebar-update" src="../assets/svg/download.svg" id="update-btn" />
+          <img
+            class="titlebar-settings"
+            src="../assets/svg/settings.svg"
+            id="settings-btn"
+          />
+          <img
+            class="titlebar-account"
+            src="../assets/svg/account.svg"
+            id="account-btn"
+          />
+          <img
+            class="titlebar-update"
+            src="../assets/svg/download.svg"
+            id="update-btn"
+          />
 
-          <img class="titlebar-rpc" src="../assets/svg/discord.svg" id="rpcbtn" />
+          <img
+            class="titlebar-rpc"
+            src="../assets/svg/discord.svg"
+            id="rpcbtn"
+          />
           <span id="rpc" class="rpc"></span>
         </div>
         <div class="titlebar-options">
@@ -129,7 +145,6 @@ export default {
 .titlebar-icons {
   display: flex;
   justify-content: space-between;
-
 }
 
 .titlebar-options {
@@ -186,7 +201,8 @@ export default {
 
 .titlebar-account:hover {
   cursor: pointer;
-  filter: invert(36%) sepia(89%) saturate(4522%) hue-rotate(225deg) brightness(99%) contrast(99%);
+  filter: invert(36%) sepia(89%) saturate(4522%) hue-rotate(225deg)
+    brightness(99%) contrast(99%);
 }
 
 .titlebar-update {
@@ -201,7 +217,8 @@ export default {
 
 .titlebar-update:hover {
   cursor: pointer;
-  filter: invert(90%) sepia(7%) saturate(2944%) hue-rotate(60deg) brightness(101%) contrast(84%);
+  filter: invert(90%) sepia(7%) saturate(2944%) hue-rotate(60deg)
+    brightness(101%) contrast(84%);
 }
 
 .titlebar-loading {
@@ -225,7 +242,8 @@ export default {
 }
 
 .titlebar-rpc:hover {
-  filter: invert(50%) sepia(75%) saturate(4277%) hue-rotate(219deg) brightness(91%) contrast(109%);
+  filter: invert(50%) sepia(75%) saturate(4277%) hue-rotate(219deg)
+    brightness(91%) contrast(109%);
 }
 
 .rpc {

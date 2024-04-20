@@ -63,9 +63,21 @@
         <div class="appearance-settings" id="appearance-settings">
           <div class="setting themes">
             <label class="color">
-              <div class="theme-box" id="theme-box-default" style="background-color: #000"></div>
-              <div class="theme-box" id="theme-box-crimson" style="background-color: #660708"></div>
-              <div class="theme-box" id="theme-box-midnight" style="background-color: #240046"></div>
+              <div
+                class="theme-box"
+                id="theme-box-default"
+                style="background-color: #000"
+              ></div>
+              <div
+                class="theme-box"
+                id="theme-box-crimson"
+                style="background-color: #660708"
+              ></div>
+              <div
+                class="theme-box"
+                id="theme-box-midnight"
+                style="background-color: #240046"
+              ></div>
             </label>
           </div>
           <div class="setting">
@@ -117,7 +129,11 @@
           </div>
         </div>
 
-        <div class="general-settings" id="addons-settings" style="display: none">
+        <div
+          class="general-settings"
+          id="addons-settings"
+          style="display: none"
+        >
           <div class="setting">
             <p>Discord Rich Presence</p>
             <div class="btnInput">
@@ -146,7 +162,11 @@
             <p>YouTube Music Connection</p>
             <div class="btnInput">
               <label class="switch">
-                <input type="checkbox" id="setting-enable_ytm" disabled="readonly" />
+                <input
+                  type="checkbox"
+                  id="setting-enable_ytm"
+                  disabled="readonly"
+                />
                 <div>
                   <span></span>
                 </div>
@@ -782,14 +802,14 @@ input[type="color"] {
   display: none;
 }
 
-.switch input+div {
+.switch input + div {
   /* margin-top: -41px; */
   margin-left: 280px;
   position: relative;
 }
 
-.switch input+div:before,
-.switch input+div:after {
+.switch input + div:before,
+.switch input + div:after {
   --s: 1;
   content: "";
   position: absolute;
@@ -801,26 +821,26 @@ input[type="color"] {
   transition: transform var(--duration) ease;
 }
 
-.switch input+div:before {
+.switch input + div:before {
   --s: 0;
   left: 0;
   transform-origin: 0 50%;
   border-radius: 2px 0 0 2px;
 }
 
-.switch input+div:after {
+.switch input + div:after {
   left: 28px;
   transform-origin: 100% 50%;
   border-radius: 0 2px 2px 0;
 }
 
-.switch input+div span {
+.switch input + div span {
   padding-left: 56px;
   line-height: 24px;
   color: var(--text);
 }
 
-.switch input+div span:before {
+.switch input + div span:before {
   --x: 0;
   --b: var(--circle);
   --s: 4px;
@@ -836,19 +856,19 @@ input[type="color"] {
   transition: box-shadow var(--duration) ease, transform var(--duration) ease;
 }
 
-.switch input+div span:not(:empty) {
+.switch input + div span:not(:empty) {
   padding-left: 64px;
 }
 
-.switch input:checked+div:before {
+.switch input:checked + div:before {
   --s: 1;
 }
 
-.switch input:checked+div:after {
+.switch input:checked + div:after {
   --s: 0;
 }
 
-.switch input:checked+div span:before {
+.switch input:checked + div span:before {
   --x: 28px;
   --s: 12px;
   --b: var(--dot);
