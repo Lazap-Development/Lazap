@@ -810,7 +810,8 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
   gap: 1.5rem;
   padding: 1rem;
-  overflow-y: scroll;
+  overflow-y: scroll;  
+  align-items: center;
 }
 
 .placeholderGames {
