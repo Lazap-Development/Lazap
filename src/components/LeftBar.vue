@@ -357,6 +357,8 @@ export default {
 .user-pfp label {
   position: absolute;
   cursor: pointer;
+  width: 88px;
+  height: 88px;
 }
 
 .username {
