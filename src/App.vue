@@ -610,8 +610,8 @@ body {
 
 .jump-back p {
   color: rgb(197, 197, 197);
-  margin-left: 18px;
-  margin-top: 18px;
+  margin: 18px 0px 0 18px;
+  
   font-size: 18px;
   font-family: Nunito-ExtraBold;
 }

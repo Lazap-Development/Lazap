@@ -323,6 +323,7 @@ export default {
   flex-direction: column;
   height: 200px;
   justify-content: center;
+  margin-top: 15px;
 }
 
 .user-pfp {
