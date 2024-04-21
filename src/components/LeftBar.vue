@@ -1,32 +1,30 @@
 <template>
   <div class="leftbar">
-    <div class="d-flex justify-content-center">
-      <div>
-        <div class="user-pfp">
-          <label for="file"></label>
-          <input
-            id="file"
-            type="file"
-            accept="image/png"
-            @change="(event) => loadPFP(event)"
-          />
-          <img
-            src="../assets/svg/default-profile.svg"
-            alt="Avatar"
-            width="88"
-            id="output"
-          />
-        </div>
+    <div class="leftbar-top">
+      <div class="user-pfp">
+        <label for="file"></label>
         <input
-          autocomplete="off"
-          class="username"
-          id="text"
-          type="text"
-          value="Lazap"
-          spellcheck="false"
-          maxlength="12"
+          id="file"
+          type="file"
+          accept="image/png"
+          @change="(event) => loadPFP(event)"
+        />
+        <img
+          src="../assets/svg/default-profile.svg"
+          alt="Avatar"
+          width="88"
+          id="output"
         />
       </div>
+      <input
+        autocomplete="off"
+        class="username"
+        id="text"
+        type="text"
+        value="Lazap"
+        spellcheck="false"
+        maxlength="12"
+      />
     </div>
 
     <div class="side-tabs">
@@ -319,13 +317,18 @@ export default {
   box-shadow: 0 3px 16px -7px rgb(17 18 24 / 70%);
 }
 
+.leftbar-top {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 200px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
 .user-pfp {
-  position: relative;
-  margin-top: 50px;
   width: 88px;
   height: 88px;
-  margin-left: auto;
-  margin-right: auto;
   transition: all 0.2s ease-in-out;
   border-radius: 50%;
   border: 5px solid rgba(var(--accent-color), 1);
@@ -355,13 +358,12 @@ export default {
 .user-pfp label {
   position: absolute;
   cursor: pointer;
-  height: 100%;
-  width: 100%;
+  width: 88px;
+  height: 88px;
 }
 
 .username {
   margin-top: 8px;
-  margin-bottom: 22px;
   text-align: center;
   font-size: 22px;
   font-family: Nunito-Bold;
@@ -371,12 +373,12 @@ export default {
   text-decoration: none;
 }
 
-.side-tabs {
+/* .side-tabs {
   height: 420px;
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-}
+} */
 
 .side-tab {
   box-shadow: -1px 3px 8px -1px rgba(0, 0, 0, 0.2);

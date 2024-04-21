@@ -612,7 +612,6 @@ export default {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   display: none;
-  margin-top: -10px;
   justify-content: center;
   align-content: center;
   border-radius: 16px !important;
