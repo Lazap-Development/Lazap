@@ -55,9 +55,9 @@ winget install LazapDevelopment.Lazap
   
 ▸ **MacOS**: 
 > [!NOTE] 
-> Most modern MacOS systems are of `aarch` (also known as ARM) instead of `x64` architecture. <br>
+> Most modern MacOS systems are of `aarch64` (also known as ARM) instead of `x64` architecture. <br>
 > Execute the `arch` command in a new terminal to confirm your MacOS architecture.
-- Download and install the latest `[x64/aarch].dmg` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+- Download and install the latest `[x64/aarch64].dmg` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
 
 ## 👾 Development
