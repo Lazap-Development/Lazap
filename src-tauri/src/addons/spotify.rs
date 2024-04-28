@@ -28,8 +28,8 @@ const CUSTOM_ENGINE: engine::GeneralPurpose =
 #[actix_web::main]
 pub async fn main() -> std::io::Result<()> {
     unsafe {
-        // SPOTIFY_CLIENT_ID = "".to_string();
-        // SPOTIFY_CLIENT_SECRET = "".to_string();
+        // SPOTIFY_CLIENT_ID = String::new();
+        // SPOTIFY_CLIENT_SECRET = String::new();
 
         if SPOTIFY_CLIENT_ID.is_empty() || SPOTIFY_CLIENT_SECRET.is_empty() {
             let spotify_client_id = option_env!("SPOTIFY_CLIENT_ID");

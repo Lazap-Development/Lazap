@@ -82,7 +82,7 @@ async fn get_lutris_games() -> Option<Vec<GameObject>> {
             game.game_id,
             game.launch_id.to_string(),
             game.size,
-            "".to_string(),
+            String::new(),
             "Lutris".to_string(),
             vec![],
         ))

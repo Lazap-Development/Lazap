@@ -86,7 +86,7 @@ pub async fn parse_game_object(path: &str, game: &str) -> GameObject {
         game.to_string(),
         0.to_string(),
         0,
-        "".to_string(),
+        String::new(),
         "RiotGames".to_string(),
         args,
     );

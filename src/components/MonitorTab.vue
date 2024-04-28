@@ -1,35 +1,16 @@
-
 <template>
   <div class="secondorybox" id="messages">
-    <p>Monitor</p>
+    <div class="secondary-top">
+      <p>Monitor</p>
+    </div>
     <div class="monitor-section">
       <div class="monitor-parent">
         <div class="monitor-item">
           <div class="monitor-top">
-            <div class="monitor-top-left">
-
-            </div>
+            <div class="monitor-top-left"></div>
             <div class="monitor-top-right"></div>
           </div>
-          <div class="monitor-primary">
-            
-          </div>
-        </div>
-        <div class="monitor-item-besides">
-          <div class="monitor-side"></div>
-        </div>
-      </div>
-      <div class="monitor-parent">
-        <div class="monitor-item">
-          <div class="monitor-top">
-            <div class="monitor-top-left">
-
-            </div>
-            <div class="monitor-top-right"></div>
-          </div>
-          <div class="monitor-primary">
-
-          </div>
+          <div class="monitor-primary"></div>
         </div>
         <div class="monitor-item-besides">
           <div class="monitor-side"></div>
@@ -41,9 +22,7 @@
             <div class="monitor-top-left"></div>
             <div class="monitor-top-right"></div>
           </div>
-          <div class="monitor-primary">
-
-          </div>
+          <div class="monitor-primary"></div>
         </div>
         <div class="monitor-item-besides">
           <div class="monitor-side"></div>
@@ -55,9 +34,19 @@
             <div class="monitor-top-left"></div>
             <div class="monitor-top-right"></div>
           </div>
-          <div class="monitor-primary">
-
+          <div class="monitor-primary"></div>
+        </div>
+        <div class="monitor-item-besides">
+          <div class="monitor-side"></div>
+        </div>
+      </div>
+      <div class="monitor-parent">
+        <div class="monitor-item">
+          <div class="monitor-top">
+            <div class="monitor-top-left"></div>
+            <div class="monitor-top-right"></div>
           </div>
+          <div class="monitor-primary"></div>
         </div>
         <div class="monitor-item-besides">
           <div class="monitor-side"></div>
@@ -67,9 +56,7 @@
   </div>
 </template>
 
-<script>
-
-</script>
+<script></script>
 
 <style>
 .monitor-section {
@@ -109,12 +96,11 @@
 }
 
 .monitor-item .monitor-top .monitor-top-left {
-  background-color: rgba(var(--all-color-front), 1.0);
+  background-color: rgba(var(--all-color-front), 1);
   width: 80px;
   height: 94%;
   border-radius: 20px;
-  box-shadow:
-    0.5px 1px 1.3px rgba(0, 0, 0, 0.5),
+  box-shadow: 0.5px 1px 1.3px rgba(0, 0, 0, 0.5),
     4px 8px 10px rgba(0, 0, 0, 0.25);
   display: flex;
   justify-content: center;
@@ -122,24 +108,22 @@
 }
 
 .monitor-item .monitor-top .monitor-top-right {
-  background-color: rgba(var(--all-color-front), 1.0);
+  background-color: rgba(var(--all-color-front), 1);
   width: 100%;
   height: 35px;
   margin-left: 20px;
   border-radius: 20px;
-  box-shadow:
-    0.5px 1px 1.3px rgba(0, 0, 0, 0.5),
+  box-shadow: 0.5px 1px 1.3px rgba(0, 0, 0, 0.5),
     4px 8px 10px rgba(0, 0, 0, 0.25);
 }
 
 .monitor-item .monitor-primary {
   margin-top: 10px;
-  background-color: rgba(var(--all-color-front), 1.0);
+  background-color: rgba(var(--all-color-front), 1);
   width: 100%;
   height: 73%;
   border-radius: 20px;
-  box-shadow:
-    0.5px 1px 1.3px rgba(0, 0, 0, 0.5),
+  box-shadow: 0.5px 1px 1.3px rgba(0, 0, 0, 0.5),
     4px 8px 10px rgba(0, 0, 0, 0.25);
 }
 
@@ -153,13 +137,11 @@
 }
 
 .monitor-item-besides .monitor-side {
-  background-color: rgba(var(--all-color-front), 1.0);
+  background-color: rgba(var(--all-color-front), 1);
   height: 100%;
   width: 100px;
   margin-left: 20px;
   border-radius: 20px;
-  box-shadow:
-    0px 1px 1.3px rgba(0, 0, 0, 0.5),
-    0px 8px 10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 1px 1.3px rgba(0, 0, 0, 0.5), 0px 8px 10px rgba(0, 0, 0, 0.25);
 }
 </style>

@@ -67,7 +67,6 @@ fn main() {
             if !window.is_visible().unwrap() {
                 window.show().unwrap()
             }
-
             app.emit_all("single-instance", Payload { args: argv, cwd })
                 .unwrap();
         }))

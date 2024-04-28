@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "Lazap",
-    "version": "0.8.0"
+    "version": "0.8.1"
   },
   "tauri": {
     "macOSPrivateApi": true,
@@ -70,8 +70,8 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
+      "category": "Utility",
+      "copyright": "CC BY-NC-SA 4.0",
       "deb": {
         "depends": []
       },
@@ -93,7 +93,7 @@
         "signingIdentity": null
       },
       "resources": [],
-      "shortDescription": "",
+      "shortDescription": "Lazap",
       "targets": "all",
       "windows": {
         "certificateThumbprint": null,

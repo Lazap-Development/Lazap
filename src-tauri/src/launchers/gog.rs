@@ -111,13 +111,13 @@ pub async fn get_installed_games() -> Vec<GameObject> {
         let img_data: ImageData = serde_json::from_str(&game_data.banner).unwrap();
         gameobjects.push(GameObject::new(
             banners::get_banner(&game_data.title, &(product_id.to_string()), "GOG", &img_data.icon).await,
-            "".to_string(),
+            String::new(),
             game.installation_path.to_string(),
             game_data.title.to_string(),
             product_id.to_string(),
             format!("\"{}\"", launcher_location) + " /command=runGame" + &format!(" /gameId={}", game.product_id) + &format!(" /path=\"{}\"", game.installation_path),
             0,
-            "".to_string(),
+            String::new(),
             "GOG".to_string(),
             vec![],
         ));

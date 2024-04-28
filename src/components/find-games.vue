@@ -174,8 +174,10 @@ class GameElement {
 
   getLauncherIconElement() {
     const element = document.createElement("img");
-    const image = import(`../assets/icons/${this.data.launcher_name}.png`);
-    element.setAttribute("src", image);
+    element.setAttribute(
+      "src",
+      `src/assets/icons/${this.data.launcher_name}.png`
+    );
     element.classList.add("gamebox-icon");
 
     return element;

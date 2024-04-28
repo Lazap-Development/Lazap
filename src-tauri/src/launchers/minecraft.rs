@@ -72,7 +72,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
                     "Minecraft".to_string(),
                     "0".to_string(),
                     0,
-                    "".to_string(),
+                    String::new(),
                     "Minecraft".to_string(),
                     args,
                 ));
@@ -114,7 +114,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
                 "Minecraft".to_string(),
                 "0".to_string(),
                 0,
-                "".to_string(),
+                String::new(),
                 "Minecraft".to_string(),
                 vec![],
             ));
@@ -151,7 +151,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
             "Minecraft".to_string(),
             "0".to_string(),
             0,
-            "".to_string(),
+            String::new(),
             "Minecraft".to_string(),
             vec![],
         ));

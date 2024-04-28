@@ -6,9 +6,17 @@ use std::{
 use reqwest::header::{ACCEPT, CONTENT_TYPE};
 use serde::Deserialize;
 
-use crate::{operations::{custom_fs::d_f_exists, misc::sha256}, CONFIG_DIR};
+use crate::{
+    operations::{custom_fs::d_f_exists, misc::sha256},
+    CONFIG_DIR,
+};
 
-pub async fn get_banner(display_name: &str, game_id: &str, launcher_name: &str, url: &str) -> String {
+pub async fn get_banner(
+    display_name: &str,
+    game_id: &str,
+    launcher_name: &str,
+    url: &str,
+) -> String {
     match launcher_name {
         "Steam" => {
             return fetch_banner(
@@ -53,7 +61,7 @@ pub async fn get_banner(display_name: &str, game_id: &str, launcher_name: &str, 
             if display_name.replace(" ", "_") == "Rockstar_Games_Launcher" {
                 return fetch_banner(format!("https://cdn.player.one/sites/player.one/files/2019/08/26/rockstar-games.png"), display_name).await;
             }
-            return "".to_string();
+            return String::new();
         }
         // "XboxGames" => {
         //     return fetch_banner(url.to_string(), display_name).await;
@@ -79,10 +87,7 @@ pub async fn get_banner(display_name: &str, game_id: &str, launcher_name: &str, 
 }
 
 async fn fetch_banner(url: String, display_name: &str) -> String {
-    let banners_dir = format!(
-        "{}/cache/games/banners",
-        CONFIG_DIR.lock().unwrap()
-    );
+    let banners_dir = format!("{}/cache/games/banners", CONFIG_DIR.lock().unwrap());
 
     let dispsha256 = sha256(display_name.replace(" ", "_")).await.unwrap();
     let file_path: String = format!("{}/{}.png", banners_dir, dispsha256);
@@ -110,10 +115,7 @@ struct GameWithinRawg {
 }
 
 async fn rawg_fetch_banner(display_name: &str) -> String {
-    let banners_dir = format!(
-        "{}/cache/games/banners",
-        CONFIG_DIR.lock().unwrap()
-    );
+    let banners_dir = format!("{}/cache/games/banners", CONFIG_DIR.lock().unwrap());
 
     let dispsha256 = sha256(display_name.replace(" ", "_")).await.unwrap();
     let file_path: String = format!("{}/{}.png", banners_dir, dispsha256);
@@ -132,18 +134,19 @@ async fn rawg_fetch_banner(display_name: &str) -> String {
 
     match response.status() {
         reqwest::StatusCode::OK => {
-            let banner_response = reqwest::get(
-                &response
-                    .json::<RAWGApi>()
-                    .await
-                    .unwrap()
-                    .results
-                    .get(0)
-                    .unwrap()
-                    .background_image,
-            )
-            .await
-            .unwrap();
+            let background_image_url =
+                match response.json::<RAWGApi>().await.unwrap().results.get(0) {
+                    Some(result) => result.background_image.clone(),
+                    None => return String::new(),
+                };
+
+            let banner_response = match reqwest::get(&background_image_url).await {
+                Ok(response) => response,
+                Err(err) => {
+                    eprintln!("Error fetching background image: {}", err);
+                    return String::new();
+                }
+            };
             let mut file = File::create(&file_path).unwrap();
 
             let mut content = Cursor::new(banner_response.bytes().await.unwrap());
@@ -153,7 +156,7 @@ async fn rawg_fetch_banner(display_name: &str) -> String {
         }
         _ => {
             println!("Something unexpected happened... Trace -> init_reqwest");
-            return "".to_string();
+            return String::new();
         }
     }
 }

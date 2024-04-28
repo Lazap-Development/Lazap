@@ -1,11 +1,7 @@
 <template>
   <div data-tauri-drag-region class="titlebar-parent">
     <div data-tauri-drag-region class="titlebar">
-      <div
-        data-tauri-drag-region
-        style="justify-content: space-between"
-        class="titlebar-icons"
-      >
+      <div data-tauri-drag-region class="titlebar-icons">
         <div class="titlebar-options">
           <img
             class="titlebar-settings"
@@ -30,7 +26,7 @@
           />
           <span id="rpc" class="rpc"></span>
         </div>
-        <div style="margin-top: 0px" class="titlebar-icons">
+        <div class="titlebar-options">
           <div @click="min_window" class="titlebar-min mx-1"></div>
           <div @click="max_window" class="titlebar-max mx-1"></div>
           <div @click="close_window" class="titlebar-exit mx-1"></div>
@@ -137,40 +133,29 @@ export default {
 <style>
 .titlebar-parent {
   border-radius: 15px;
-  height: 35px;
-  width: 100%;
-  margin-top: 10px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  margin-bottom: 13px;
+  padding: 10px;
 }
 
 .titlebar {
-  position: relative;
-  overflow: hidden;
   border-radius: 15px;
   background-color: rgba(var(--all-color-primary), 0.7);
   height: 35px;
-  width: 99%;
-  margin-top: 5px;
 }
 
 .titlebar-icons {
-  margin-right: 6px !important;
-  margin-top: 9px;
-
-  display: flex !important;
+  display: flex;
   justify-content: space-between;
 }
 
 .titlebar-options {
-  margin-left: 14px;
   display: flex;
   justify-content: space-between;
+  padding: 8px 15px;
 }
 
-.titlebar-exit {
+.titlebar-exit,
+.titlebar-max,
+.titlebar-min {
   border-radius: 50px;
   transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
   height: 18px;
@@ -184,26 +169,8 @@ export default {
   background-size: cover;
 }
 
-.titlebar-max {
-  border-radius: 50px;
-  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
-  height: 18px;
-  width: 18px;
-  background-color: rgba(var(--accent-color), 1);
-  display: block;
-}
-
 .titlebar-max:hover {
   background: #ffc400;
-}
-
-.titlebar-min {
-  border-radius: 50px;
-  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
-  height: 18px;
-  width: 18px;
-  background-color: rgba(var(--accent-color), 1);
-  display: block;
 }
 
 .titlebar-min:hover {

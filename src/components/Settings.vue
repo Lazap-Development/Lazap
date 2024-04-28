@@ -5,7 +5,7 @@
       <h1>Settings</h1>
       <div class="settings-body">
         <div class="choser" id="choser">
-          <button id="generalbtn">General</button>
+          <button class="active" id="generalbtn">General</button>
           <button id="appearancebtn">Appearance</button>
           <button id="addonsbtn">Connections</button>
           <button id="expbtn">Experimental</button>
@@ -200,7 +200,7 @@
           </div>
         </div>
       </div>
-      <div class="settings-footer">Release v0.8.0</div>
+      <div class="settings-footer">Release v0.8.1</div>
     </div>
   </div>
 </template>
@@ -244,6 +244,7 @@ export default {
       .addEventListener("click", async () => {
         settingsbackblur.style.display = "flex";
         settings.style.display = "flex";
+        toggleSettings("general");
 
         const Data = JSON.parse(
           await invoke("read_file", {
@@ -262,31 +263,19 @@ export default {
       });
 
     document.getElementById("generalbtn").addEventListener("click", () => {
-      document.getElementById("general-settings").style.display = "flex";
-      document.getElementById("appearance-settings").style.display = "none";
-      document.getElementById("addons-settings").style.display = "none";
-      document.getElementById("exp-settings").style.display = "none";
+      toggleSettings("general");
     });
 
     document.getElementById("appearancebtn").addEventListener("click", () => {
-      document.getElementById("general-settings").style.display = "none";
-      document.getElementById("appearance-settings").style.display = "flex";
-      document.getElementById("addons-settings").style.display = "none";
-      document.getElementById("exp-settings").style.display = "none";
+      toggleSettings("appearance");
     });
 
     document.getElementById("addonsbtn").addEventListener("click", () => {
-      document.getElementById("general-settings").style.display = "none";
-      document.getElementById("appearance-settings").style.display = "none";
-      document.getElementById("addons-settings").style.display = "flex";
-      document.getElementById("exp-settings").style.display = "none";
+      toggleSettings("addons");
     });
 
     document.getElementById("expbtn").addEventListener("click", () => {
-      document.getElementById("general-settings").style.display = "none";
-      document.getElementById("appearance-settings").style.display = "none";
-      document.getElementById("addons-settings").style.display = "none";
-      document.getElementById("exp-settings").style.display = "flex";
+      toggleSettings("exp");
     });
 
     let LauncherData = JSON.parse(
@@ -594,6 +583,21 @@ export default {
         console.error(error);
       }
     }
+
+    function toggleSettings(settingsId) {
+      const settings = ["general", "appearance", "addons", "exp"];
+      settings.forEach((setting) => {
+        const element = document.getElementById(setting + "-settings");
+        const btn = document.getElementById(setting + "btn");
+        if (setting === settingsId) {
+          element.style.display = "flex";
+          btn.classList.add("active");
+        } else {
+          element.style.display = "none";
+          btn.classList.remove("active");
+        }
+      });
+    }
   },
 };
 </script>
@@ -608,7 +612,6 @@ export default {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   display: none;
-  margin-top: -10px;
   justify-content: center;
   align-content: center;
   border-radius: 16px !important;
@@ -668,7 +671,8 @@ export default {
 
 .settings-body {
   display: flex;
-  flex-direction: row;
+  /* flex-direction: row; */
+  gap: 40px;
 }
 
 .settings-footer {
@@ -684,8 +688,6 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-bottom: 30px;
-  margin-right: 40px;
 }
 
 .choser button {
@@ -701,6 +703,11 @@ export default {
   border: none;
   outline: none;
   padding: 0;
+  transition: all 0.15s cubic-bezier(0.165, 0.74, 0.44, 1);
+}
+
+.choser .active {
+  background-color: rgba(var(--accent-color), 0.4);
 }
 
 .choser button:first-child {
@@ -716,10 +723,8 @@ export default {
 }
 
 .choser button:hover {
-  border: rgba(var(--accent-color), 0.7);
-  border-width: 4px;
-  border-style: solid;
-  cursor: pointer;
+  background-color: rgba(var(--accent-color), 0.4);
+  transition: all 0.15s cubic-bezier(0.165, 0.74, 0.44, 1);
 }
 
 .appearance-settings,
