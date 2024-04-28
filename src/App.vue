@@ -1133,7 +1133,7 @@ img,
   background-size: 14px;
   background-repeat: no-repeat;
   background-position: 16px 48%;
-  color: #f9fafb;
+  color: rgb(197, 197, 197);
   border: 4px solid rgba(255, 255, 255, 0);
 }
 
