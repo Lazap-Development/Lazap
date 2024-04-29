@@ -1,3 +1,4 @@
+pub mod custom_games;
 #[cfg(target_os = "windows")]
 mod epic_games;
 #[cfg(target_os = "windows")]
@@ -12,7 +13,6 @@ mod steam;
 mod uplay;
 #[cfg(target_os = "linux")]
 mod wine_managers;
-pub mod custom_games;
 
 use serde::{Deserialize, Serialize};
 
@@ -71,9 +71,7 @@ fn is_installed(native_name: &str, flatpak_name: &str) -> bool {
                 String::default()
             }
         }
-        Err(_e) => {
-            String::default()
-        }
+        Err(_e) => String::default(),
     };
 
     let native = match std::process::Command::new("which")
@@ -87,9 +85,7 @@ fn is_installed(native_name: &str, flatpak_name: &str) -> bool {
                 String::default()
             }
         }
-        Err(_e) => {
-            String::default()
-        }
+        Err(_e) => String::default(),
     };
 
     if native.starts_with("/") {

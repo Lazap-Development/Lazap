@@ -1,8 +1,8 @@
-use std::process::Command;
-use serde::{Deserialize, Serialize};
-use crate::{launchers::GameObject, operations::custom_fs::read_file, modules::banners};
+use crate::{launchers::GameObject, modules::banners, operations::custom_fs::read_file};
 use reqwest::{Client, Url};
 use scraper::{Html, Selector};
+use serde::{Deserialize, Serialize};
+use std::process::Command;
 
 #[derive(Serialize, Deserialize)]
 pub struct XboxGame {
@@ -33,66 +33,80 @@ pub async fn get_installed_games() -> Vec<GameObject> {
         .output()
         .expect("failed to execute process.");
 
-    let games: Vec<XboxGame> = parse_raw_to_json(
-        String::from_utf8_lossy(&output.stdout).to_string()
-    )
-        .await
-        .into_iter()
-        .filter(
-            |x|
-                x.is_framework != "True" &&
-                x.signature_kind == "Store" &&
-                x.publisher_id != "8wekyb3d8bbwe" &&
-                !x.package_full_name.starts_with("MicrosoftWindows")
-        )
-        .collect::<Vec<XboxGame>>();
+    let games: Vec<XboxGame> =
+        parse_raw_to_json(String::from_utf8_lossy(&output.stdout).to_string())
+            .await
+            .into_iter()
+            .filter(|x| {
+                x.is_framework != "True"
+                    && x.signature_kind == "Store"
+                    && x.publisher_id != "8wekyb3d8bbwe"
+                    && !x.package_full_name.starts_with("MicrosoftWindows")
+            })
+            .collect::<Vec<XboxGame>>();
 
     let verified = verify_games(games).await;
 
-    let objs = verified.into_iter().map(|x| parse_game_object(x)).collect::<Vec<_>>();
+    let objs = verified
+        .into_iter()
+        .map(|x| parse_game_object(x))
+        .collect::<Vec<_>>();
 
     return vec![];
 }
 
 pub async fn parse_raw_to_json(stdout: String) -> Vec<XboxGame> {
     let mut arr: Vec<XboxGame> = vec![];
-    const VALUES: [&str;7] = ["Name", "PackageFullName", "InstallLocation", "IsFramework", "PackageFamilyName", "PublisherId", "SignatureKind"];
+    const VALUES: [&str; 7] = [
+        "Name",
+        "PackageFullName",
+        "InstallLocation",
+        "IsFramework",
+        "PackageFamilyName",
+        "PublisherId",
+        "SignatureKind",
+    ];
 
-    stdout
-    .split("\r\n\r\n")
-    .collect::<Vec<_>>()[1..]
-    .iter()
-    .map(
-        |x| x
-            .split("\r\n")
-            .filter(|y| !y.to_string().ends_with(" ") && VALUES.contains(&y.split(":").collect::<Vec<_>>()[0].trim()))
-            .map(
-                |y| {
+    stdout.split("\r\n\r\n").collect::<Vec<_>>()[1..]
+        .iter()
+        .map(|x| {
+            x.split("\r\n")
+                .filter(|y| {
+                    !y.to_string().ends_with(" ")
+                        && VALUES.contains(&y.split(":").collect::<Vec<_>>()[0].trim())
+                })
+                .map(|y| {
                     let splited = y.splitn(3, ":").collect::<Vec<_>>();
-                    return splited.iter().enumerate().map(
-                        |(i, z)| {
+                    return splited
+                        .iter()
+                        .enumerate()
+                        .map(|(i, z)| {
                             let mut val = z.trim().to_owned();
                             if splited.len() == 3 && i != 0 {
                                 if i == 2 {
                                     val = format!("{}\"", val);
-                                }
-                                else if i != 2 {
+                                } else if i != 2 {
                                     val = format!("\"{}", val);
                                 }
-                            }
-                            else {
+                            } else {
                                 val = format!("\"{}\"", val);
                             }
                             val
-                        }
-                    ).collect::<Vec<_>>().join(":");
-                }
-            ).collect::<Vec<_>>().join(",\n").replace("\\", "/")
-    )
-    .filter(|x| x.len() > 20)
-    .for_each(|x| {
-        arr.push(serde_json::from_str(&("{".to_string() + &x + &",\n\"banner\":\"\"}".to_string())).unwrap());
-    });
+                        })
+                        .collect::<Vec<_>>()
+                        .join(":");
+                })
+                .collect::<Vec<_>>()
+                .join(",\n")
+                .replace("\\", "/")
+        })
+        .filter(|x| x.len() > 20)
+        .for_each(|x| {
+            arr.push(
+                serde_json::from_str(&("{".to_string() + &x + &",\n\"banner\":\"\"}".to_string()))
+                    .unwrap(),
+            );
+        });
 
     return arr;
 }
@@ -104,22 +118,27 @@ pub async fn verify_games(games: Vec<XboxGame>) -> Vec<XboxGame> {
         game.name = game.name.split(".").collect::<Vec<_>>()[1].to_string();
         let client = Client::new();
         let response = client
-        .get(
-            Url::parse(&format!("https://www.microsoft.com/en-in/search/shop/games?q={}&devicetype=pc", game.name)).unwrap()
-        )
-        .send()
-        .await
-        .expect("");
+            .get(
+                Url::parse(&format!(
+                    "https://www.microsoft.com/en-in/search/shop/games?q={}&devicetype=pc",
+                    game.name
+                ))
+                .unwrap(),
+            )
+            .send()
+            .await
+            .expect("");
 
         let text = &response.text().await.unwrap();
         let document = Html::parse_document(text);
         let selector = Selector::parse(&"div[id=\"shopDetailsWrapper\"]").unwrap();
 
         let selected = document.select(&selector).collect::<Vec<_>>()[0];
-        let ul_element = selected
-        .child_elements().collect::<Vec<_>>()[0]
-        .child_elements().collect::<Vec<_>>()[2]
-        .child_elements().collect::<Vec<_>>();
+        let ul_element = selected.child_elements().collect::<Vec<_>>()[0]
+            .child_elements()
+            .collect::<Vec<_>>()[2]
+            .child_elements()
+            .collect::<Vec<_>>();
         // .child_elements().collect::<Vec<_>>();
 
         if ul_element.len() == 0 {
@@ -128,29 +147,35 @@ pub async fn verify_games(games: Vec<XboxGame>) -> Vec<XboxGame> {
 
         let li_element;
         if ul_element[0].first_child().is_some() {
-            li_element = ul_element[0]
-            .child_elements().collect::<Vec<_>>()[0];
-        }
-        else {
+            li_element = ul_element[0].child_elements().collect::<Vec<_>>()[0];
+        } else {
             continue;
         }
 
-        let title = li_element
-        .child_elements().collect::<Vec<_>>()[0]
-        .child_elements().collect::<Vec<_>>()[0]
-        .child_elements().collect::<Vec<_>>()[1]
-        .child_elements().collect::<Vec<_>>()[0]
-        .child_elements().collect::<Vec<_>>()[0].inner_html();
+        let title = li_element.child_elements().collect::<Vec<_>>()[0]
+            .child_elements()
+            .collect::<Vec<_>>()[0]
+            .child_elements()
+            .collect::<Vec<_>>()[1]
+            .child_elements()
+            .collect::<Vec<_>>()[0]
+            .child_elements()
+            .collect::<Vec<_>>()[0]
+            .inner_html();
 
-        let banner = li_element
-        .child_elements().collect::<Vec<_>>()[0]
-        .child_elements().collect::<Vec<_>>()[0]
-        .child_elements().collect::<Vec<_>>()[0]
-        .child_elements().collect::<Vec<_>>()[0]
-        .child_elements().collect::<Vec<_>>().last()
-        .unwrap()
-        .attr("src")
-        .unwrap();
+        let banner = li_element.child_elements().collect::<Vec<_>>()[0]
+            .child_elements()
+            .collect::<Vec<_>>()[0]
+            .child_elements()
+            .collect::<Vec<_>>()[0]
+            .child_elements()
+            .collect::<Vec<_>>()[0]
+            .child_elements()
+            .collect::<Vec<_>>()
+            .last()
+            .unwrap()
+            .attr("src")
+            .unwrap();
 
         game.name = title;
         game.banner = banner.to_string();
@@ -170,9 +195,9 @@ pub fn parse_game_object(game: XboxGame) -> Option<GameObject> {
     let location = &game.install_location;
     let manifeststr = read_file(location.to_string() + "/AppxManifest.xml").unwrap();
     let manifest = manifeststr
-    .split("\r\n")
-    .find(|x| x.trim().starts_with("<Application "))
-    .unwrap();
+        .split("\r\n")
+        .find(|x| x.trim().starts_with("<Application "))
+        .unwrap();
     // .split(/<[/]{0,1}Application[>]{0,1}/);
     let executable = manifest.split("\"")[1].to_string();
     gameobject = GameObject::new(
