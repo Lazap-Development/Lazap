@@ -76,13 +76,13 @@ pub async fn parse_raw_to_json(stdout: String) -> Vec<XboxGame> {
                         && VALUES.contains(&y.split(":").collect::<Vec<_>>()[0].trim())
                 })
                 .map(|y| {
-                    let splited = y.splitn(3, ":").collect::<Vec<_>>();
-                    return splited
+                    let split = y.splitn(3, ":").collect::<Vec<_>>();
+                    return split
                         .iter()
                         .enumerate()
                         .map(|(i, z)| {
                             let mut val = z.trim().to_owned();
-                            if splited.len() == 3 && i != 0 {
+                            if split.len() == 3 && i != 0 {
                                 if i == 2 {
                                     val = format!("{}\"", val);
                                 } else if i != 2 {
