@@ -6,7 +6,7 @@ use crate::{
     },
     CONFIG_DIR,
 };
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 struct GameData {

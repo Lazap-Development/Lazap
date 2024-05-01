@@ -1,7 +1,11 @@
 use tauri::api::path;
 use tokio_rusqlite::Connection;
 
-use crate::{launchers::{is_installed, GameObject}, modules::banners, operations::custom_fs::d_f_exists};
+use crate::{
+    launchers::{is_installed, GameObject},
+    modules::banners,
+    operations::custom_fs::d_f_exists,
+};
 
 pub async fn get_installed_games() -> Vec<GameObject> {
     let mut all_games: Vec<GameObject> = Vec::new();

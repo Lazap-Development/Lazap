@@ -28,7 +28,7 @@ async fn get_minecraft_launcher() -> Option<GameObject> {
     // TO-DO: FINISH MACOS
     #[cfg(target_os = "macos")]
     {
-        return None
+        return None;
     }
 
     #[cfg(target_os = "windows")]

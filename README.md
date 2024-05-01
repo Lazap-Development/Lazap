@@ -54,7 +54,11 @@ winget install LazapDevelopment.Lazap
 - Arch Linux users can directly install from the maintained `lazap-bin` [AUR](https://aur.archlinux.org/packages/lazap-bin).
   
 ▸ **MacOS**: 
-- Download and install the latest `.dmg` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+> [!NOTE] 
+> Most modern MacOS systems are of `aarch64` (also known as ARM) instead of `x64` architecture. <br>
+> Execute the `arch` command in a new terminal to confirm your MacOS architecture.
+- Download and install the latest `[x64/aarch64].dmg` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+
 
 ## 👾 Development
 

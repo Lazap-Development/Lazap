@@ -13,9 +13,13 @@ pub fn init_gamepad() {
                 println!("{} is {:?}", gamepad.name(), gamepad.power_info());
             }
 
-
             loop {
-                while let Some(Event { id, event: _, time: _ }) = gilrs.next_event() {
+                while let Some(Event {
+                    id,
+                    event: _,
+                    time: _,
+                }) = gilrs.next_event()
+                {
                     unsafe {
                         ACTIVE_GAMEPAD = Some(id);
                     }

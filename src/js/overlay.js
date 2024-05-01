@@ -1,4 +1,4 @@
-import { createApp } from 'vue'
-import AppOverlay from '../AppOverlay.vue'
+import { createApp } from "vue";
+import AppOverlay from "../AppOverlay.vue";
 
-createApp(App).mount('#overlay')
+createApp(App).mount("#overlay");

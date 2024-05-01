@@ -4,7 +4,7 @@
     <div>
       <h1>Settings</h1>
       <div class="settings-body">
-        <div class="choser" id="choser">
+        <div class="chooser" id="chooser">
           <button class="active" id="generalbtn">General</button>
           <button id="appearancebtn">Appearance</button>
           <button id="addonsbtn">Connections</button>
@@ -684,13 +684,13 @@ export default {
   margin-left: 20px;
 }
 
-.choser {
+.chooser {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
 
-.choser button {
+.chooser button {
   font-family: Nunito-Bold !important;
   color: rgb(201, 201, 201);
   text-decoration: none;
@@ -706,23 +706,23 @@ export default {
   transition: all 0.15s cubic-bezier(0.165, 0.74, 0.44, 1);
 }
 
-.choser .active {
+.chooser .active {
   background-color: rgba(var(--accent-color), 0.4);
 }
 
-.choser button:first-child {
+.chooser button:first-child {
   border-radius: 10px;
   border-bottom-right-radius: 0px;
   border-bottom-left-radius: 0px;
 }
 
-.choser button:last-child {
+.chooser button:last-child {
   border-radius: 10px;
   border-top-right-radius: 0px;
   border-top-left-radius: 0px;
 }
 
-.choser button:hover {
+.chooser button:hover {
   background-color: rgba(var(--accent-color), 0.4);
   transition: all 0.15s cubic-bezier(0.165, 0.74, 0.44, 1);
 }
