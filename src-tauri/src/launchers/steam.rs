@@ -15,6 +15,8 @@ const BLACKLIST_APPID: &[i32] = &[
     1887720, 1628350, 2348590, 2180100,
 ];
 
+#[derive(Deserialize)]
+#[serde(transparent)]
 struct LibraryFolders {
     folders: HashMap<String, Folder>,
 }
@@ -53,36 +55,6 @@ struct AppState {
     name: String,
     #[serde(rename = "SizeOnDisk")]
     size_on_disk: String,
-}
-
-impl<'de> Deserialize<'de> for LibraryFolders {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        struct LibraryFoldersVisitor;
-
-        impl<'de> serde::de::Visitor<'de> for LibraryFoldersVisitor {
-            type Value = LibraryFolders;
-
-            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-                formatter.write_str("struct LibraryFolders")
-            }
-
-            fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-            where
-                A: serde::de::MapAccess<'de>,
-            {
-                let mut folders = HashMap::new();
-                while let Some((key, value)) = map.next_entry::<String, Folder>()? {
-                    folders.insert(key, value);
-                }
-                Ok(LibraryFolders { folders })
-            }
-        }
-
-        deserializer.deserialize_map(LibraryFoldersVisitor)
-    }
 }
 
 pub async fn get_installed_games() -> Vec<GameObject> {
