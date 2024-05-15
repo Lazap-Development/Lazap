@@ -20,6 +20,7 @@ struct LibraryFolders {
 }
 
 #[derive(Deserialize)]
+
 struct Folder {
     path: String,
 }
@@ -117,9 +118,9 @@ pub async fn get_installed_games() -> Vec<GameObject> {
             let game_file: String = read_file(format!("{}/{}", acf_base_path, acf_file)).unwrap();
             let game_file_parsed: AppState = keyvalues_serde::from_str(&game_file).unwrap();
 
-            if blacklist_appid()
+            if BLACKLIST_APPID
                 .iter()
-                .any(|&item: &i32| item == game_file_parsed.appid.parse::<i32>().unwrap())
+                .any(|&x| x == game_file_parsed.appid.parse::<i32>().unwrap())
             {
                 continue;
             }
