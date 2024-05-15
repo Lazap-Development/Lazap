@@ -10,12 +10,10 @@ use std::{os::windows::process::CommandExt, process::Command};
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 use tauri::api::path;
 
-fn blacklist_appid() -> Vec<i32> {
-    return vec![
-        228980, 231350, 1493710, 1391110, 1070560, 1826330, 1113280, 1245040, 1420170, 1580130,
-        1887720, 1628350, 2348590, 2180100,
-    ];
-}
+const BLACKLIST_APPID: &[i32] = &[
+    228980, 231350, 1493710, 1391110, 1070560, 1826330, 1113280, 1245040, 1420170, 1580130,
+    1887720, 1628350, 2348590, 2180100,
+];
 
 struct LibraryFolders {
     folders: HashMap<String, Folder>,
