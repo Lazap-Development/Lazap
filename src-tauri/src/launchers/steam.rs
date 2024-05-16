@@ -1,8 +1,8 @@
 use crate::launchers::GameObject;
 use crate::modules::banners;
 use crate::operations::custom_fs::{d_f_exists, read_dir, read_file};
-use serde::{Deserialize, Deserializer};
-use std::{collections::HashMap, fmt};
+use serde::Deserialize;
+use std::collections::HashMap;
 
 #[cfg(target_os = "windows")]
 use std::{os::windows::process::CommandExt, process::Command};

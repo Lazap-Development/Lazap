@@ -587,8 +587,10 @@ body {
   gap: 10px;
   justify-content: space-between;
 }
+
 .children {
   height: 100%;
+  justify-content: center;
 }
 
 .head-pic {
@@ -611,7 +613,7 @@ body {
 .jump-back p {
   color: rgb(197, 197, 197);
   margin: 18px 0px 0 18px;
-  
+
   font-size: 18px;
   font-family: Nunito-ExtraBold;
 }
@@ -808,16 +810,17 @@ body {
   flex-grow: 1;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
-  gap: 1.5rem;
-  padding: 0 1rem;
-  overflow-y: scroll;
+  gap: 1rem;
+  padding: 0 1.3rem;
+  overflow-y: none;
   align-items: center;
 }
 
 .placeholderGames {
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 2.9 / 4;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
+  border: solid rgba(var(--accent-color), 0.4) 6px;
 
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   opacity: 0.5;
@@ -832,16 +835,14 @@ body {
 }
 
 .mainPageGamebox {
-  position: relative;
   image-rendering: auto;
   text-align: center;
-  display: inline-block;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
   aspect-ratio: 3 / 4;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: solid rgba(var(--accent-color), 1) 6px;
   opacity: 0.7;
-  outline: solid rgba(var(--accent-color), 1) 6px;
   background-position: 50% 40% !important;
   object-fit: cover;
 }
