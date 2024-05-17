@@ -1,5 +1,5 @@
 <template>
-  <div class="secondorybox" id="messages">
+  <div class="secondorybox" id="monitor">
     <div class="secondary-top">
       <p>Monitor</p>
     </div>

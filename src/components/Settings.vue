@@ -200,13 +200,13 @@
           </div>
         </div>
       </div>
-      <div class="settings-footer">Release v0.8.1</div>
+      <div class="settings-footer">Release v0.8.2</div>
     </div>
   </div>
 </template>
 
 <script>
-import { selectOption } from "./modules/rpcOptions.js";
+import { selectOption } from "./misc/rpcOptions.js";
 import { enable, isEnabled, disable } from "tauri-plugin-autostart-api";
 
 export default {

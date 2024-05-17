@@ -2311,7 +2311,7 @@ checksum = "d4345964bb142484797b161f473a503a434de77149dd8c7427788c6e13379388"
 
 [[package]]
 name = "lazap"
-version = "0.8.1"
+version = "0.8.2"
 dependencies = [
  "actix-web",
  "base64 0.22.0",

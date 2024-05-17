@@ -118,14 +118,14 @@
 
     <monitor-comp></monitor-comp>
 
-    <div class="secondorybox" id="activity">
+    <div class="secondorybox" id="overclock">
       <div class="secondary-top">
         <p>Overclock</p>
       </div>
       <h1 class="fade">Coming Soon...</h1>
     </div>
 
-    <div class="secondorybox" id="friends">
+    <div class="secondorybox" id="benchmark">
       <div class="secondary-top">
         <p>Benchmark</p>
       </div>

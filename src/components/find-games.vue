@@ -299,7 +299,7 @@ class GameElement {
             }
           } else {
             Window.appWindow.show();
-            const rpc = await import("./modules/rpcOptions");
+            const rpc = await import("./misc/rpcOptions");
             const { details, largeText, smallImage, smallText } =
               rpc.selectOption(rpc.currentRpc);
             if (timestamp === null) timestamp = Date.now();
