@@ -94,7 +94,7 @@
       },
       "resources": [],
       "shortDescription": "Lazap",
-      "targets": "all",
+      "targets": ["deb", "msi", "app", "dmg", "updater"],
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
