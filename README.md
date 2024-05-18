@@ -50,8 +50,8 @@ winget install LazapDevelopment.Lazap
 ```
 
 ▸ **Linux**: 
-- Download and install either the `.deb` or `.tar.zst` in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
-- Arch Linux users can directly install from the maintained `lazap-bin` [AUR](https://aur.archlinux.org/packages/lazap-bin).
+- Download and install one of `.deb`, `.tar.zst`, or `.rpm` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+- Arch Linux users can also directly install from the maintained `lazap-bin` [AUR](https://aur.archlinux.org/packages/lazap-bin) (Thanks to @begin-theadventure).
   
 ▸ **MacOS**: 
 > [!NOTE] 
