@@ -83,7 +83,7 @@ yarn tauri dev
 ```
 
 ### Windows Yarn (Yet Another Resource Negotiator) Error
-Sometimes, yarn doesn't works very well, this can be due to error during installation or oudated nodejs version a potential fixe fix given below:
+Sometimes, yarn doesn't works very well, this can be due to error during installation or oudated nodejs version a potential fix given below:
  
  _Note: Make sure you have latest nodejs and yarn installed correctly.if not then install yarn from [here](https://github.com/yarnpkg/yarn/releases), and add this to path._ 
 

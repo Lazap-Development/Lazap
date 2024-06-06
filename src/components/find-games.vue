@@ -125,7 +125,7 @@ class GameElement {
     const gamemenu = document.getElementById("gameMenu");
 
     element.addEventListener("click", () => {
-      //makes sure the usre can't spam click.
+      //makes sure the user can't spam click.
       if (!isTyping) {
         isTyping = true;
         gamemenu.style.display = "flex";
