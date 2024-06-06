@@ -23,7 +23,7 @@
         type="text"
         value="Lazap"
         spellcheck="false"
-        maxlength="12"
+        maxlength="20"
       />
     </div>
 
