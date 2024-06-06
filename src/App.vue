@@ -142,6 +142,7 @@
           placeholder="Launch Flags..."
         /> -->
       <button class="gameMenuBtn" id="removeGame">Remove Game</button>
+      <button class="gameMenuCloseBtn" id="closeMenu">Close Menu</button>
       <!-- </div> -->
     </div>
   </div>
@@ -341,6 +342,18 @@ export default {
       document
         .getElementById("removeGame")
         .addEventListener("click", async function () {
+
+          const gamemenu = document.getElementById("gameMenu");
+          gamemenu.classList.add("active");
+          let isGameMenuAlreadyActive = false
+          gamemenu.addEventListener("animationend", function () {
+              if (gamemenu.style.display === "flex" && isGameMenuAlreadyActive === false) {
+                gamemenu.classList.remove("active");
+                gamemenu.style.display = "none";
+                isGameMenuAlreadyActive = true;
+              }
+          })
+
           let data = JSON.parse(
             await invoke("read_file", {
               filePath: (await path.appDir()) + "cache/games/data.json",
@@ -372,6 +385,22 @@ export default {
           );
         });
     })();
+
+    document
+        .getElementById("closeMenu")
+        .addEventListener("click", async function () {
+          const gamemenu = document.getElementById("gameMenu");
+          gamemenu.classList.add("active");
+          let isGameMenuAlreadyActive = false
+          gamemenu.addEventListener("animationend", function () {
+              if (gamemenu.style.display === "flex" && isGameMenuAlreadyActive === false) {
+                gamemenu.classList.remove("active");
+                gamemenu.style.display = "none";
+                isGameMenuAlreadyActive = true;
+              }
+          })
+        });
+
     function checkForUpdate() {
       window.__TAURI__.updater
         .checkUpdate()
@@ -962,6 +991,10 @@ img,
   align-items: center;
 }
 
+.gameMenu.active {
+  animation: gameMenuAnimationReverse 0.2s both ease-out;
+}
+
 .gameMenu .gameMenuBtn {
   font-family: Nunito;
   color: rgb(201, 201, 201);
@@ -979,6 +1012,26 @@ img,
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.gameMenu .gameMenuCloseBtn {
+  font-family: Nunito;
+  color: rgb(201, 201, 201);
+  border: 4px solid rgba(var(--accent-color), 1);
+  border-radius: 12px;
+  font-size: 18px;
+  background-color: rgba(var(--all-color-primary), 0.7);
+  opacity: 0.9;
+  width: 13.78rem;
+  height: 50px;
+  text-decoration: none;
+  text-shadow: none;
+  padding: 10;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease-out;
 }
 
 .gameMenu .gameMenuBody {
@@ -1012,6 +1065,11 @@ img,
   margin-top: 100px;
 }
 
+.gameMenu .gameMenuBody .gameMenuCloseBtn:first-child {
+  margin-top: 100px;
+}
+
+
 .gameMenu .gameMenuTitle {
   font-size: 20px;
   color: #cacaca;
@@ -1019,6 +1077,11 @@ img,
   margin-top: 40px;
   display: block;
   margin-bottom: 50px;
+}
+
+.gameMenu .gameMenuCloseBtn:hover {
+  scale: 1.05;
+  background-color: rgba(var(--accent-color), 0.5);
 }
 
 .gameMenu .gameMenuBtn:hover {
@@ -1328,6 +1391,18 @@ img,
     opacity: 1;
   }
 }
+
+@keyframes gameMenuAnimationReverse {
+  0% {
+    width: 30rem;
+    opacity: 1;
+  }
+  100% {
+    width: 0px;
+    opacity: 0.5;
+  }
+}
+
 
 @keyframes closeOverlay {
   0% {

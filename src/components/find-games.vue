@@ -1,6 +1,14 @@
 <script>
 import image from "../assets/img/default-game-banner.png";
 
+/*
+  isTyping is very important as it is a fix for a bug where spam clicking makes the GameMenu title weird.
+  It is intended to be a global variable, as keeping it inside getMenuElement() resets it, which is not intended to happen.
+*/
+let isTyping = false;
+const typeSpeed = 50;
+
+
 // Classes
 class GameElement {
   constructor(data, listID, jsondata, settings, bannerdirarr) {
@@ -118,10 +126,22 @@ class GameElement {
     const gamemenu = document.getElementById("gameMenu");
 
     element.addEventListener("click", () => {
-      gamemenu.style.display =
-        gamemenu.style.display === "flex" ? "none" : "flex";
-      document.getElementById("gameMenuTitle").innerHTML =
-        this.data.display_name;
+      //makes sure the user can't spam click.
+      if (!isTyping) {
+        isTyping = true;
+        gamemenu.style.display = "flex";
+        const gameMenuTitle = document.getElementById("gameMenuTitle")
+        gameMenuTitle.innerHTML = " ";
+        const display_name = this.data.display_name;
+        for (let i = 0; i < display_name.length; i++) {
+          setTimeout(function() {
+            gameMenuTitle.innerHTML += display_name.charAt(i);
+            if (i === display_name.length - 1) {
+              isTyping = false; // Reset the flag when typing is finished
+            }
+          }, typeSpeed * i);
+        }
+      }
     });
 
     return element;

@@ -65,6 +65,8 @@ winget install LazapDevelopment.Lazap
 Lazap is fully open-source and can be compiled from source.
 
 ### Prerequisites
+- [Visual Studio Build Tools](https://visualstudio.microsoft.com/)
+- [Rust](https://www.rust-lang.org/tools/install)
 - [Tauri Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites/)
 - [Latest Node.JS](https://nodejs.org/en)
 - [Yet Another Resource Negotiator](https://yarnpkg.com/getting-started)
@@ -79,6 +81,35 @@ cd Lazap && yarn install
 # run in development mode
 yarn tauri dev
 ```
+
+### Windows Yarn (Yet Another Resource Negotiator) Error
+Sometimes, yarn doesn't works very well, this can be due to error during installation or oudated nodejs version a potential fix is given below:
+ 
+ _Note: Make sure you have latest nodejs and yarn installed correctly.if not then install yarn from [here](https://github.com/yarnpkg/yarn/releases), and add this to path._ 
+
+1. Remove .yarn and yarn.lock
+```ps1
+# remove .yarn
+Remove-Item -Recurse -Force .yarn
+# remove yarn.lock
+Remove-Item yarn.lock
+```
+2. Update `.yarnrc.yml`
+```yml
+#remove yarnPath from the .yarnrc.yml
+yarnPath: .yarn/releases/yarn-4.1.1.cjs
+#leave nodeLinker as is, its 100% correct
+```
+
+3. Install Dependencies
+```bash
+#install deps
+yarn install
+# run in development mode
+yarn tauri dev
+```
+
+Although the above should work perfectly, but if you still get any error feel free to ask for help from given below section.
 
 ## 📚 Help & Support
 **Have a question/problem?**<br>
