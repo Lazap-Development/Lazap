@@ -6,6 +6,7 @@ import image from "../assets/img/default-game-banner.png";
   It is intended to be a global variable, as keeping it inside getMenuElement() resets it, which is not intended to happen.
 */
 let isTyping = false;
+const typeSpeed = 50;
 
 
 // Classes
@@ -138,7 +139,7 @@ class GameElement {
             if (i === display_name.length - 1) {
               isTyping = false; // Reset the flag when typing is finished
             }
-          }, 50 * i);
+          }, typeSpeed * i);
         }
       }
     });
