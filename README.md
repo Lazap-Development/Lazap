@@ -65,9 +65,8 @@ winget install LazapDevelopment.Lazap
 Lazap is fully open-source and can be compiled from source.
 
 ### Prerequisites
-- [Visual Studio Build Tools](https://visualstudio.microsoft.com/)
 - [Rust](https://www.rust-lang.org/tools/install)
-- [Tauri Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites/)
+- [C++ Build Tools](https://visualstudio.microsoft.com/) (It should already come with Rust installation)
 - [Latest Node.JS](https://nodejs.org/en)
 - [Yet Another Resource Negotiator](https://yarnpkg.com/getting-started)
 
