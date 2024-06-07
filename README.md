@@ -101,7 +101,13 @@ yarnPath: .yarn/releases/yarn-4.1.1.cjs
 #leave nodeLinker as is, its 100% correct
 ```
 
-3. Install Dependencies
+3. Update package.json
+```json
+//remove the below given line from the package.json file.
+"packageManager": "yarn@4.1.1"
+```
+
+4. Install Dependencies
 ```bash
 #install deps
 yarn install
