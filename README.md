@@ -97,18 +97,18 @@ Remove-Item yarn.lock
 ```
 2. Update `.yarnrc.yml`
 ```yml
-#remove yarnPath from the .yarnrc.yml
+# remove yarnPath from the .yarnrc.yml
 yarnPath: .yarn/releases/yarn-4.1.1.cjs
-#leave nodeLinker as is, its 100% correct
+# leave nodeLinker as is, its 100% correct
 ```
 3. Update `package.json`
 ```json
-//remove the below given line from the package.json file
+// remove the below given line from the package.json file
 "packageManager": "yarn@4.1.1"
 ```
 4. Install Dependencies
 ```bash
-#install deps
+# install deps
 yarn install
 # run in development mode
 yarn tauri dev
