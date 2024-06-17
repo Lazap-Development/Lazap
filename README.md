@@ -81,41 +81,6 @@ cd Lazap && yarn install
 yarn tauri dev
 ```
 
-### Windows Yarn (Yet Another Resource Negotiator) Error
-Sometimes, yarn doesn't works very well, this can be due to error during installation or oudated nodejs version a potential fix is given below:
-
-> [!NOTE]
-> Make sure you have latest nodejs and yarn installed correctly.
-> If not, then install yarn from [here](https://github.com/yarnpkg/yarn/releases), and add this to path. 
- 
-1. Remove .yarn and yarn.lock
-```ps1
-# remove .yarn
-Remove-Item -Recurse -Force .yarn
-# remove yarn.lock
-Remove-Item yarn.lock
-```
-2. Update `.yarnrc.yml`
-```yml
-# remove yarnPath from the .yarnrc.yml
-yarnPath: .yarn/releases/yarn-4.1.1.cjs
-# leave nodeLinker as is, its 100% correct
-```
-3. Update `package.json`
-```json
-// remove the below given line from the package.json file
-"packageManager": "yarn@4.1.1"
-```
-4. Install Dependencies
-```bash
-# install deps
-yarn install
-# run in development mode
-yarn tauri dev
-```
-
-Although the above should work perfectly, but if you still get any error feel free to ask for help from given below section.
-
 ## 📚 Help & Support
 **Have a question/problem?**<br>
 If you need assist or in need of technical support for your Lazap installation, feel free to file an [issue](https://github.com/Lazap-Development/lazap/issues) so we can assist you.<br><br>
