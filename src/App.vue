@@ -846,7 +846,7 @@ body {
 }
 
 .placeholderGames {
-  aspect-ratio: 2.9 / 4;
+  height: 78%;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
   border: solid rgba(var(--accent-color), 0.4) 6px;
@@ -868,7 +868,7 @@ body {
   text-align: center;
   border-radius: 14px;
   transition: all 0.25s cubic-bezier(0.165, 0.74, 0.44, 1);
-  aspect-ratio: 3 / 4;
+  height: 78%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border: solid rgba(var(--accent-color), 1) 6px;
   opacity: 0.7;

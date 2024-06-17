@@ -14,8 +14,8 @@ mod uplay;
 #[cfg(target_os = "linux")]
 mod wine_managers;
 
-use std::process::Command;
 use serde::{Deserialize, Serialize};
+use std::process::Command;
 
 #[cfg(target_os = "windows")]
 const LINE_ENDING: &'static str = "\r\n";
