@@ -5,29 +5,6 @@ use tauri::Manager;
 use crate::Error;
 
 #[tauri::command]
-pub async fn launch_game(_exec: String, _args: String) {
-    #[cfg(target_os = "windows")]
-    use std::os::windows::process::CommandExt;
-    #[cfg(target_os = "windows")]
-    let child = std::process::Command::new("cmd")
-        .arg(_exec)
-        .creation_flags(0x00000008)
-        .creation_flags(0x08000000)
-        .spawn()
-        .expect("failed to run");
-    #[cfg(target_os = "windows")]
-    let _output = child.wait_with_output().expect("failed to wait on child");
-
-    #[cfg(target_os = "linux")]
-    let child = std::process::Command::new(_exec)
-        .args(_args.split(" "))
-        .spawn()
-        .expect("failed to run");
-    #[cfg(target_os = "linux")]
-    let _output = child.wait_with_output().expect("failed to wait on child");
-}
-
-#[tauri::command]
 pub async fn show_window(window: tauri::Window) {
     window.get_window("main").unwrap().show().unwrap();
 }

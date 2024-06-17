@@ -101,7 +101,6 @@ fn main() {
             _ => {}
         })
         .invoke_handler(tauri::generate_handler![
-            operations::misc::launch_game,
             operations::misc::get_sys_info,
             operations::discord_rpc::set_rpc_activity,
             operations::discord_rpc::disable_rpc,
@@ -118,6 +117,7 @@ fn main() {
             modules::storage::launcherdata_threads_x,
             // Launchers
             launchers::fetch_installed_games,
+            launchers::handle_launch,
             launchers::custom_games::add_custom_game,
             // Spotify Addon
             addons::spotify::spotify_login,
@@ -207,7 +207,6 @@ fn main() {
             _ => {}
         })
         .invoke_handler(tauri::generate_handler![
-            operations::misc::launch_game,
             operations::misc::get_sys_info,
             operations::discord_rpc::set_rpc_activity,
             operations::discord_rpc::disable_rpc,
@@ -224,6 +223,7 @@ fn main() {
             modules::storage::launcherdata_threads_x,
             // Launchers
             launchers::fetch_installed_games,
+            launchers::handle_launch,
             launchers::custom_games::add_custom_game,
             // Spotify Addon
             addons::spotify::spotify_login,
@@ -324,7 +324,6 @@ fn main() {
             _ => {}
         })
         .invoke_handler(tauri::generate_handler![
-            operations::misc::launch_game,
             operations::misc::get_sys_info,
             operations::discord_rpc::set_rpc_activity,
             operations::discord_rpc::disable_rpc,
@@ -341,6 +340,7 @@ fn main() {
             modules::storage::launcherdata_threads_x,
             // Launchers
             launchers::fetch_installed_games,
+            launchers::handle_launch,
             launchers::custom_games::add_custom_game,
             // Spotify Addon
             addons::spotify::spotify_login,

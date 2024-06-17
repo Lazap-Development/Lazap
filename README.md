@@ -13,10 +13,10 @@
 
 <p align="center">
   <a href="https://github.com/Lazap-Development/lazap/releases">
-     <img src="https://img.shields.io/github/downloads/Lazap-Development/lazap/total.svg?style=for-the-badge&color=ffffff&logo=windows" />
+     <img src="https://img.shields.io/github/downloads/Lazap-Development/lazap/total.svg?style=for-the-badge&color=ffffff&logo=docusign&logoColor=white" />
   </a>
-  <a href="https://discord.gg/dashcruft">
-      <img src="https://img.shields.io/discord/836790685784211486?logo=discord&label=Discord&style=for-the-badge&color=228B22">
+  <a href="https://github.com/Lazap-Development/lazap/releases">
+      <img src="https://img.shields.io/github/v/release/Lazap-Development/Lazap?style=for-the-badge&logo=Github&color=Green">
   </a>
  </p>
 
@@ -50,8 +50,8 @@ winget install LazapDevelopment.Lazap
 ```
 
 ▸ **Linux**: 
-- Download and install either the `.deb` or `.tar.zst` in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
-- Arch Linux users can directly install from the maintained `lazap-bin` [AUR](https://aur.archlinux.org/packages/lazap-bin).
+- Download and install one of `.deb`, `.tar.zst`, or `.rpm` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+- Arch Linux users can also directly install from the maintained `lazap-bin` [AUR](https://aur.archlinux.org/packages/lazap-bin) (Thanks to [@begin-theadventure](https://www.github.com/begin-theadventure)).
   
 ▸ **MacOS**: 
 > [!NOTE] 
@@ -65,9 +65,13 @@ winget install LazapDevelopment.Lazap
 Lazap is fully open-source and can be compiled from source.
 
 ### Prerequisites
-- [Tauri Prerequisites](https://tauri.app/v1/guides/getting-started/prerequisites/)
+- [Rust](https://www.rust-lang.org/tools/install)
+- [C++ Build Tools](https://visualstudio.microsoft.com/) (It should already come with Rust installation)
 - [Latest Node.JS](https://nodejs.org/en)
 - [Yet Another Resource Negotiator](https://yarnpkg.com/getting-started)
+
+> [!NOTE] 
+> Ensure you have **corepack** enabled in your system by running `corepack enable` as admin or root.
 
 Once you have the above preqs, you may continue with the following:
 

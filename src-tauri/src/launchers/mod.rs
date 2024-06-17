@@ -15,6 +15,7 @@ mod uplay;
 mod wine_managers;
 
 use serde::{Deserialize, Serialize};
+use std::process::Command;
 
 #[cfg(target_os = "windows")]
 const LINE_ENDING: &'static str = "\r\n";
@@ -118,4 +119,90 @@ pub async fn fetch_installed_games() -> Vec<GameObject> {
     installed_games.extend(gog::get_installed_games().await);
     installed_games.extend(custom_games::get_installed_games().await);
     installed_games
+}
+
+#[tauri::command]
+pub async fn handle_launch(data: GameObject) -> Result<(), crate::Error> {
+    match data.launcher_name.as_str() {
+        "EpicGames" => {
+            let command = format!(
+                "start com.epicgames.launcher://apps/{}?action=launch&silent=true",
+                urlencoding::encode(&data.launch_id)
+            );
+            Command::new("cmd")
+                .args(&["/C", &command])
+                .spawn()?
+                .wait()?;
+        }
+        "Steam" => {
+            #[cfg(target_os = "windows")]
+            Command::new("cmd")
+                .args(&["/C", &format!("start steam://run/{}", data.game_id)])
+                .spawn()?
+                .wait()?;
+
+            #[cfg(target_os = "linux")]
+            Command::new("steam")
+                .args(&["-applaunch", &data.game_id, "-silent"])
+                .spawn()?
+                .wait()?;
+        }
+        "Uplay" => {
+            let command = format!("start uplay://launch/{}/0", data.game_id);
+            Command::new("cmd")
+                .args(&["/C", &command])
+                .spawn()?
+                .wait()?;
+        }
+        "Minecraft" => {
+            #[cfg(target_os = "windows")]
+            Command::new("cmd")
+                .args(&[
+                    "/C",
+                    &format!(
+                        "powershell start \"{}\\{}\"",
+                        data.location, data.executable
+                    ),
+                ])
+                .spawn()?
+                .wait()?;
+
+            #[cfg(target_os = "linux")]
+            Command::new("minecraft-launcher").spawn()?.wait()?;
+        }
+        "Lutris" => {
+            Command::new("lutris")
+                .args(&[&format!("rungame/{}", data.game_id)])
+                .spawn()?
+                .wait()?;
+        }
+        "Lunar" => {
+            let command = format!(
+                "powershell start \"{}\\{}\"",
+                data.location, data.executable
+            );
+            Command::new("cmd")
+                .args(&["/C", &command])
+                .spawn()?
+                .wait()?;
+        }
+        "GOG" => {
+            let command = format!("start \"\" {}", data.launch_id);
+            Command::new("cmd")
+                .args(&["/C", &command])
+                .spawn()?
+                .wait()?;
+        }
+        _ => {
+            let command = format!(
+                "powershell start \"{}\\{}\"",
+                data.location, data.executable
+            );
+            Command::new("cmd")
+                .args(&["/C", &command])
+                .spawn()?
+                .wait()?;
+        }
+    }
+    Ok(())
 }

@@ -22,64 +22,43 @@ const rpcOptions = {
     smallText: "Lazap",
     id: "games",
   },
-  favourites: {
+  favs: {
     details: "Favourite Games",
     largeImage: "lazap_icon",
     largeText: "Lazap",
     smallText: "Lazap",
-    id: "favourites",
+    id: "favs",
   },
-  messages: {
-    details: "Messages",
+  monitor: {
+    details: "Monitoring",
     largeImage: "lazap_icon",
     largeText: "Lazap",
     smallText: "Lazap",
-    id: "messages",
+    id: "monitor",
   },
-  activity: {
-    details: "Activities",
+  overclock: {
+    details: "Overclocking",
     largeImage: "lazap_icon",
     largeText: "Lazap",
     smallText: "Lazap",
-    id: "activity",
+    id: "overclock",
   },
-  friends: {
-    details: "All Friends",
+  benchmark: {
+    details: "Benchmarking",
     largeImage: "lazap_icon",
     largeText: "Lazap",
     smallText: "Lazap",
-    id: "friends",
+    id: "benchmark",
   },
 };
 
 const selectOption = (option) => {
-  const { home, recent, games, favourites, messages, activity, friends } =
-    rpcOptions;
-  switch (option) {
-    case "home":
-      currentRpc = "home";
-      return home;
-    case "recent":
-      currentRpc = "recent";
-      return recent;
-    case "games":
-      currentRpc = "games";
-      return games;
-    case "favourites":
-      currentRpc = "favourites";
-      return favourites;
-    case "messages":
-      currentRpc = "messages";
-      return messages;
-    case "activity":
-      currentRpc = "activity";
-      return activity;
-    case "friends":
-      currentRpc = "friends";
-      return friends;
-    default:
-      throw Error("Invalid Option!");
+  const selectedOption = rpcOptions[option];
+  if (selectedOption) {
+    currentRpc = option;
+    return selectedOption;
   }
+  throw new Error("Invalid Option!");
 };
 
 export { selectOption, currentRpc };

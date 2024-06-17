@@ -23,7 +23,7 @@
         type="text"
         value="Lazap"
         spellcheck="false"
-        maxlength="12"
+        maxlength="20"
       />
     </div>
 
@@ -73,19 +73,19 @@
 
       <div class="category-name d-flex justify-content-start">Tweaks</div>
       <div class="d-flex justify-content-center">
-        <div class="side-tab" id="messages-btn">
+        <div class="side-tab" id="monitor-btn">
           <img src="../assets/svg/wave-square.svg" height="25" width="25" />
           <div class="side-tab-text">Monitor</div>
         </div>
       </div>
       <div class="d-flex justify-content-center">
-        <div class="side-tab" id="activity-btn">
+        <div class="side-tab" id="overclock-btn">
           <img src="../assets/svg/overclock.svg" height="25" width="25" />
           <div class="side-tab-text">Overclock</div>
         </div>
       </div>
       <div class="d-flex justify-content-center">
-        <div class="side-tab" id="friends-btn">
+        <div class="side-tab" id="benchmark-btn">
           <img src="../assets/svg/chart-line.svg" height="25" width="25" />
           <div class="side-tab-text">Benchmark</div>
         </div>
@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import { selectOption } from "./modules/rpcOptions.js";
+import { selectOption } from "./misc/rpcOptions.js";
 
 const invoke = window.__TAURI__.invoke;
 const path = window.__TAURI__.path;
@@ -124,14 +124,6 @@ export default {
   },
   async mounted() {
     let timestamp = null;
-    const home = document.getElementById("home");
-    const recent = document.getElementById("recent");
-    const games = document.getElementById("games");
-    const favs = document.getElementById("favs");
-    const friends = document.getElementById("friends");
-    const messages = document.getElementById("messages");
-    const activity = document.getElementById("activity");
-    const gameMenu = document.getElementById("gameMenu");
     const findGamesModule = this.$root.$refs.findGamesMod;
 
     const data = JSON.parse(
@@ -152,135 +144,91 @@ export default {
         ) + `?${new Date().getSeconds()}`;
     }
 
-    document
-      .getElementById("home-btn")
-      .addEventListener("click", async function () {
-        this.appendChild(document.getElementById("indicator"));
-        if (home.style.display !== "flex") {
-          toggleIndicatorAnim();
-        }
+    const buttonConfigs = [
+      {
+        displayId: "home",
+        gamesListId: "recentGamesListMainPage",
+        focusId: null,
+        placeholderId: null,
+      },
+      {
+        displayId: "recent",
+        gamesListId: "recentGamesList",
+        focusId: null,
+        placeholderId: "recentGamesPlaceholder",
+      },
+      {
+        displayId: "games",
+        gamesListId: "allGamesList",
+        focusId: "gamesInput",
+        placeholderId: null,
+      },
+      {
+        displayId: "favs",
+        gamesListId: "favGamesList",
+        focusId: "favsInput",
+        placeholderId: "favGamesPlaceholder",
+      },
+      {
+        displayId: "monitor",
+        gamesListId: null,
+        focusId: null,
+        placeholderId: null,
+      },
+      {
+        displayId: "overclock",
+        gamesListId: null,
+        focusId: null,
+        placeholderId: null,
+      },
+      {
+        displayId: "benchmark",
+        gamesListId: null,
+        focusId: null,
+        placeholderId: null,
+      },
+    ];
 
-        switchDisplay("home");
+    buttonConfigs.forEach(
+      ({ displayId, gamesListId, focusId, placeholderId }) => {
+        document
+          .getElementById(displayId + "-btn")
+          .addEventListener("click", async function () {
+            this.appendChild(document.getElementById("indicator"));
+            if (document.getElementById(displayId).style.display !== "flex") {
+              if (focusId) {
+                setTimeout(() => document.getElementById(focusId).focus(), 100);
+              }
+              toggleIndicatorAnim();
+            }
 
-        await findGamesModule
-          .loadGames("recentGamesListMainPage")
-          .catch((err) => {
-            return console.error(err);
+            switchDisplay(displayId);
+
+            if (gamesListId) {
+              await findGamesModule.loadGames(gamesListId).catch(console.error);
+
+              if (
+                placeholderId &&
+                document.getElementById(gamesListId).childNodes.length > 0
+              ) {
+                document.getElementById(placeholderId).style.display = "none";
+              }
+            }
+
+            setActivity(displayId);
           });
+      }
+    );
 
-        setActivity("home");
-      });
-
-    document
-      .getElementById("recent-btn")
-      .addEventListener("click", async function () {
-        this.appendChild(document.getElementById("indicator"));
-        if (recent.style.display !== "flex") {
-          toggleIndicatorAnim();
-        }
-
-        switchDisplay("recent");
-
-        await findGamesModule.loadGames("recentGamesList").catch((err) => {
-          return console.error(err);
+    function switchDisplay(activeSection) {
+      buttonConfigs
+        .map((item) => ({ displayId: item.displayId }))
+        .forEach((section) => {
+          document.getElementById(section.displayId).style.display =
+            section.displayId === activeSection ? "flex" : "none";
         });
-
-        if (document.getElementById("recentGamesList").childNodes.length > 0) {
-          document.getElementById("recentGamesPlaceholder").style.display =
-            "none";
-        }
-
-        setActivity("recent");
-      });
-
-    document
-      .getElementById("games-btn")
-      .addEventListener("click", async function () {
-        this.appendChild(document.getElementById("indicator"));
-
-        if (games.style.display !== "flex") {
-          setTimeout(() => document.getElementById("gamesInput").focus(), 100);
-          toggleIndicatorAnim();
-        }
-
-        switchDisplay("games");
-
-        await findGamesModule.loadGames("allGamesList").catch((err) => {
-          return console.error(err);
-        });
-
-        setActivity("games");
-      });
-
-    document
-      .getElementById("favs-btn")
-      .addEventListener("click", async function () {
-        this.appendChild(document.getElementById("indicator"));
-
-        if (favs.style.display !== "flex") {
-          setTimeout(() => document.getElementById("favsInput").focus(), 100);
-          toggleIndicatorAnim();
-        }
-
-        switchDisplay("favs");
-
-        await findGamesModule.loadGames("favGamesList").catch((err) => {
-          return console.error(err);
-        });
-
-        if (document.getElementById("favGamesList").childNodes.length > 0) {
-          document.getElementById("favGamesPlaceholder").style.display = "none";
-        }
-
-        setActivity("favourites");
-      });
-
-    document
-      .getElementById("messages-btn")
-      .addEventListener("click", async function () {
-        this.appendChild(document.getElementById("indicator"));
-        if (messages.style.display !== "flex") {
-          toggleIndicatorAnim();
-        }
-
-        switchDisplay("messages");
-        setActivity("messages");
-      });
-
-    document
-      .getElementById("activity-btn")
-      .addEventListener("click", async function () {
-        this.appendChild(document.getElementById("indicator"));
-        if (activity.style.display !== "flex") {
-          toggleIndicatorAnim();
-        }
-
-        switchDisplay("activity");
-        setActivity("activity");
-      });
-
-    document
-      .getElementById("friends-btn")
-      .addEventListener("click", async function () {
-        this.appendChild(document.getElementById("indicator"));
-        if (friends.style.display !== "flex") {
-          toggleIndicatorAnim();
-        }
-
-        switchDisplay("friends");
-        setActivity("friends");
-      });
-
-    function switchDisplay(name) {
-      home.style.display = name === "home" ? "flex" : "none";
-      recent.style.display = name === "recent" ? "flex" : "none";
-      games.style.display = name === "games" ? "flex" : "none";
-      favs.style.display = name === "favs" ? "flex" : "none";
-      messages.style.display = name === "messages" ? "flex" : "none";
-      activity.style.display = name === "activity" ? "flex" : "none";
-      friends.style.display = name === "friends" ? "flex" : "none";
-      gameMenu.style.display = name === "gameMenu" ? "flex" : "none";
     }
+
     async function setActivity(tab) {
       const { details, largeText, smallImage, smallText } = selectOption(tab);
       if (timestamp === null) timestamp = Date.now();

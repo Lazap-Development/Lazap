@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { selectOption } from "./modules/rpcOptions.js";
+import { selectOption } from "./misc/rpcOptions.js";
 
 const path = window.__TAURI__.path;
 const invoke = window.__TAURI__.invoke;

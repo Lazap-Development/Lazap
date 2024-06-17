@@ -27,7 +27,11 @@
             <p>Minimize to Tray on Launch</p>
             <div class="btnInput">
               <label class="switch">
-                <input type="checkbox" id="setting-tray_min_launch" />
+                <input
+                  type="checkbox"
+                  id="setting-tray_min_launch"
+                  disabled="readonly"
+                />
                 <div>
                   <span></span>
                 </div>
@@ -200,13 +204,13 @@
           </div>
         </div>
       </div>
-      <div class="settings-footer">Release v0.8.1</div>
+      <div class="settings-footer">Release v0.8.2</div>
     </div>
   </div>
 </template>
 
 <script>
-import { selectOption } from "./modules/rpcOptions.js";
+import { selectOption } from "./misc/rpcOptions.js";
 import { enable, isEnabled, disable } from "tauri-plugin-autostart-api";
 
 export default {

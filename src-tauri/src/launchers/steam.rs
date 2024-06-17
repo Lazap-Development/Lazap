@@ -1,8 +1,8 @@
 use crate::launchers::GameObject;
 use crate::modules::banners;
 use crate::operations::custom_fs::{d_f_exists, read_dir, read_file};
-use serde::{Deserialize, Deserializer};
-use std::{collections::HashMap, fmt};
+use serde::Deserialize;
+use std::collections::HashMap;
 
 #[cfg(target_os = "windows")]
 use std::{os::windows::process::CommandExt, process::Command};
@@ -10,18 +10,19 @@ use std::{os::windows::process::CommandExt, process::Command};
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 use tauri::api::path;
 
-fn blacklist_appid() -> Vec<i32> {
-    return vec![
-        228980, 231350, 1493710, 1391110, 1070560, 1826330, 1113280, 1245040, 1420170, 1580130,
-        1887720, 1628350, 2348590, 2180100,
-    ];
-}
+const BLACKLIST_APPID: &[i32] = &[
+    228980, 231350, 1493710, 1391110, 1070560, 1826330, 1113280, 1245040, 1420170, 1580130,
+    1887720, 1628350, 2348590, 2180100,
+];
 
+#[derive(Deserialize)]
+#[serde(transparent)]
 struct LibraryFolders {
     folders: HashMap<String, Folder>,
 }
 
 #[derive(Deserialize)]
+
 struct Folder {
     path: String,
 }
@@ -54,36 +55,6 @@ struct AppState {
     name: String,
     #[serde(rename = "SizeOnDisk")]
     size_on_disk: String,
-}
-
-impl<'de> Deserialize<'de> for LibraryFolders {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        struct LibraryFoldersVisitor;
-
-        impl<'de> serde::de::Visitor<'de> for LibraryFoldersVisitor {
-            type Value = LibraryFolders;
-
-            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-                formatter.write_str("struct LibraryFolders")
-            }
-
-            fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-            where
-                A: serde::de::MapAccess<'de>,
-            {
-                let mut folders = HashMap::new();
-                while let Some((key, value)) = map.next_entry::<String, Folder>()? {
-                    folders.insert(key, value);
-                }
-                Ok(LibraryFolders { folders })
-            }
-        }
-
-        deserializer.deserialize_map(LibraryFoldersVisitor)
-    }
 }
 
 pub async fn get_installed_games() -> Vec<GameObject> {
@@ -119,9 +90,9 @@ pub async fn get_installed_games() -> Vec<GameObject> {
             let game_file: String = read_file(format!("{}/{}", acf_base_path, acf_file)).unwrap();
             let game_file_parsed: AppState = keyvalues_serde::from_str(&game_file).unwrap();
 
-            if blacklist_appid()
+            if BLACKLIST_APPID
                 .iter()
-                .any(|&item: &i32| item == game_file_parsed.appid.parse::<i32>().unwrap())
+                .any(|&x| x == game_file_parsed.appid.parse::<i32>().unwrap())
             {
                 continue;
             }
