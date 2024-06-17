@@ -8,7 +8,6 @@ import image from "../assets/img/default-game-banner.png";
 let isTyping = false;
 const typeSpeed = 50;
 
-
 // Classes
 class GameElement {
   constructor(data, listID, jsondata, settings, bannerdirarr) {
@@ -84,7 +83,7 @@ class GameElement {
       block = true;
     });
     element.addEventListener("click", async () => {
-      this.handleLaunch();
+      await invoke("handle_launch", { data: this.data });
       storage.addLaunch(this.data.game_id, this.data.launcher_name);
     });
 
@@ -99,8 +98,8 @@ class GameElement {
     }
     element.style.backgroundSize = "cover";
 
-    element.addEventListener("click", () => {
-      this.handleLaunch();
+    element.addEventListener("click", async () => {
+      await invoke("handle_launch", { data: this.data });
       storage.addLaunch(this.data.game_id, this.data.launcher_name);
     });
 
@@ -130,11 +129,11 @@ class GameElement {
       if (!isTyping) {
         isTyping = true;
         gamemenu.style.display = "flex";
-        const gameMenuTitle = document.getElementById("gameMenuTitle")
+        const gameMenuTitle = document.getElementById("gameMenuTitle");
         gameMenuTitle.innerHTML = " ";
         const display_name = this.data.display_name;
         for (let i = 0; i < display_name.length; i++) {
-          setTimeout(function() {
+          setTimeout(function () {
             gameMenuTitle.innerHTML += display_name.charAt(i);
             if (i === display_name.length - 1) {
               isTyping = false; // Reset the flag when typing is finished
@@ -201,145 +200,6 @@ class GameElement {
     element.classList.add("gamebox-icon");
 
     return element;
-  }
-
-  async handleLaunch() {
-    let res;
-    if (os === "win32") {
-      switch (this.data.launcher_name) {
-        case "EpicGames": {
-          res = this.createProcess(
-            `/C start com.epicgames.launcher://apps/${encodeURIComponent(
-              this.data.launch_id
-            )}?action=launch&silent=true`
-          );
-          break;
-        }
-        case "Steam": {
-          res = this.createProcess(`/C start steam://run/${this.data.game_id}`);
-          break;
-        }
-        case "Uplay": {
-          res = this.createProcess(
-            `/C start uplay://launch/${this.data.game_id}/0`
-          );
-          break;
-        }
-        case "Minecraft": {
-          res = this.createProcess(
-            `/C powershell start "${this.data.location}\\${this.data.executable}"`
-          );
-          break;
-        }
-        case "Lunar": {
-          res = this.createProcess(
-            `/C powershell start "${this.data.location}\\${this.data.executable}"`
-          );
-          break;
-        }
-        case "GOG": {
-          res = this.createProcess(`/C start "" ${this.data.launch_id}`);
-          break;
-        }
-        default: {
-          res = this.createProcess(
-            `/C powershell start "${this.data.location}\\${this.data.executable}"`
-          );
-          break;
-        }
-      }
-    } else if (os === "linux") {
-      switch (this.data.launcher_name) {
-        case "Steam": {
-          res = this.createProcess(
-            "steam",
-            `-applaunch ${this.data.game_id} -silent`
-          );
-          break;
-        }
-        case "Minecraft": {
-          res = this.createProcess("minecraft-launcher");
-          break;
-        }
-        case "Lunar": {
-          res = this.createProcess("lunarclient");
-          break;
-        }
-        case "Lutris": {
-          res = this.createProcess(
-            "lutris",
-            `lutris:rungame_id/${this.data.launch_id}`
-          );
-          break;
-        }
-        default: {
-          res = this.createProcess(
-            `"${this.data.location}/${this.data.executable}"`,
-            this.data.args
-          );
-          break;
-        }
-      }
-    }
-    return res;
-  }
-
-  async createProcess(exec, args = "") {
-    // TODO: add back "ALREADY_RUNNING"
-    VisibilityState.bind(this, {
-      launcher_name: this.data.launcher_name,
-      display_name: this.data.display_name,
-    })();
-    invoke("launch_game", { exec, args }).then(() => {
-      VisibilityState.bind(this, {
-        launcher_name: this.data.launcher_name,
-        display_name: this.data.display_name,
-      })();
-    });
-
-    async function VisibilityState() {
-      try {
-        const { tray_min_launch } = await storage.getSettings();
-        if (tray_min_launch === true) {
-          if ((await Window.appWindow.isVisible()) === true) {
-            Window.appWindow.hide();
-            if (!timestamp) timestamp = Date.now();
-            try {
-              await invoke(`set_rpc_activity`, {
-                state: `Launcher: ${this.data.launcher_name}`,
-                details: this.data.display_name,
-                largeImage: this.data.launcher_name.toLowerCase(),
-                largeText: "Lazap",
-                smallImage: "lazap_icon",
-                smallText: "Lazap",
-                timestamp: timestamp,
-              });
-            } catch (error) {
-              console.error(error);
-            }
-          } else {
-            Window.appWindow.show();
-            const rpc = await import("./misc/rpcOptions");
-            const { details, largeText, smallImage, smallText } =
-              rpc.selectOption(rpc.currentRpc);
-            if (timestamp === null) timestamp = Date.now();
-            try {
-              await invoke(`set_rpc_activity`, {
-                details,
-                largeText,
-                smallImage,
-                smallText,
-                timestamp: timestamp === null ? Date.now() : timestamp,
-              });
-            } catch (error) {
-              console.error(error);
-            }
-          }
-        }
-      } catch (e) {
-        return console.error(e);
-      }
-    }
   }
 }
 

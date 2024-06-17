@@ -27,7 +27,11 @@
             <p>Minimize to Tray on Launch</p>
             <div class="btnInput">
               <label class="switch">
-                <input type="checkbox" id="setting-tray_min_launch" />
+                <input
+                  type="checkbox"
+                  id="setting-tray_min_launch"
+                  disabled="readonly"
+                />
                 <div>
                   <span></span>
                 </div>

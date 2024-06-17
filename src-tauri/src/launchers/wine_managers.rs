@@ -91,7 +91,6 @@ async fn get_lutris_games() -> Option<Vec<GameObject>> {
             vec![],
         ))
     }
-
     return Some(all_lutris_games);
 }
 
