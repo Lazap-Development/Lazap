@@ -51,12 +51,13 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
     - uses: actions/checkout@v4
-
+    - name: Enable Corepack
+      run: corepack enable
     - name: setup node
       uses: actions/setup-node@v4
       with:
         node-version: 20
-
+        cache: 'yarn'
     - name: install Rust stable
       uses: dtolnay/rust-toolchain@stable
       with:
