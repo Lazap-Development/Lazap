@@ -194,10 +194,7 @@ pub async fn handle_launch(data: GameObject) -> Result<(), crate::Error> {
                 .wait()?;
         }
         _ => {
-            let command = format!(
-                "powershell start \"{}\"",
-                data.executable
-            );
+            let command = format!("powershell start \"{}\"", data.executable);
             Command::new("cmd")
                 .current_dir(data.location)
                 .args(&["/C", &command])
