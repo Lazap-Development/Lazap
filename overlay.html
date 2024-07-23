@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -7,7 +7,12 @@
     <title>Lazap</title>
   </head>
   <body>
-    <div id="external"></div>
-    <script type="module" src="/src/js/main.js"></script>
+    <div id="app"></div>
+    <script type="module">
+      import { createApp } from "vue";
+      import App from "./src/AppOverlay.vue";
+
+      createApp(App).mount("#app");
+    </script>
   </body>
 </html>

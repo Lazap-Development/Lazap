@@ -155,7 +155,6 @@
         "center": false,
         "visible": false,
         "decorations": false,
-        "url": "external.html",
         "focus": false
       },
       {
@@ -170,8 +169,8 @@
         "decorations": false,
         "focus": true,
         "alwaysOnTop": true,
-        "url": "overlay.html",
-        "skipTaskbar": true
+        "skipTaskbar": true,
+        "url": "overlay.html"
       }
     ]
   }
