@@ -8,7 +8,6 @@ import image from "../assets/img/default-game-banner.png";
 let isTyping = false;
 const typeSpeed = 50;
 
-// Classes
 class GameElement {
   constructor(data, listID, jsondata, settings, bannerdirarr) {
     this.data = data;
