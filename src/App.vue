@@ -10,7 +10,9 @@
     <div class="homebox" id="home">
       <div class="centerchildren">
         <div class="children fadeInUp">
-          <div class="gradient-bg"></div>
+          <div class="gradient-bg">
+            <img class="banner" src="./assets/img/banner.png" />
+          </div>
         </div>
         <div class="children fadeInDown">
           <div class="jump-back">
@@ -633,25 +635,15 @@ body {
   background: rgba(var(--all-color-primary), 0.7);
   border-radius: 20px;
   background-size: 200% 200%;
-  animation: gradientAnimation 20s linear infinite;
+  overflow: hidden;
 }
 
-@keyframes gradientAnimation {
-  0% {
-    background-position: 0% 0%;
-  }
-  25% {
-    background-position: 50% 50%;
-  }
-  50% {
-    background-position: 100% 100%;
-  }
-  75% {
-    background-position: 50% 0%;
-  }
-  100% {
-    background-position: 0% 0%;
-  }
+.gradient-bg  .banner{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  border-radius: 20px;
 }
 
 .jump-back {
