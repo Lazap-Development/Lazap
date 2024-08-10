@@ -10,13 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "tauri-plugin-autostart-api": "https://github.com/tauri-apps/tauri-plugin-autostart#v1",
-    "vue": "^3.4.21"
+    "tauri-plugin-autostart-api": "https://github.com/tauri-apps/tauri-plugin-autostart.git#commit=1e02acce1b4bb5ee461f7670012d7d105a13be4c",
+    "vue": "^3.4.37"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1.5.11",
-    "@vitejs/plugin-vue": "^5.0.4",
-    "vite": "^5.2.0"
+    "@tauri-apps/cli": "^1.6.0",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "vite": "^5.4.0"
   },
   "packageManager": "yarn@4.3.0"
 }
