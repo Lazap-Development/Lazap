@@ -21,7 +21,7 @@
  </p>
 
 <div align="center">
-  <img src="https://github.com/Lazap-Development/Lazap/assets/59381835/ce70f368-de1b-4552-a371-b019bcb4eae1">
+  <img src="https://github.com/user-attachments/assets/ab65fee8-5d8e-4389-8427-84c2829813f3">
 </div>
 
 <br>
