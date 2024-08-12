@@ -84,10 +84,15 @@ yarn tauri dev
 ```
 
 ## 📚 Help & Support
-**Have a question/problem?**<br>
-If you need assist or in need of technical support for your Lazap installation, feel free to file an [issue](https://github.com/Lazap-Development/lazap/issues) so we can assist you.<br><br>
-**Want to help out instead of getting help?** <br>
-Open a [Pull Request](https://github.com/Lazap-Development/Lazap/pulls) and fix some gears, we would love the community's help to improve lazap and make it more user friendly.
+<details>
+  <summary>Have a question/problem?</summary>
+  ▸ If you need assistance or technical support for your Lazap installation, feel free to file an issue so we can assist you.
+</details>
+
+<details>
+  <summary>Want to help out instead of getting help?</summary>
+  ▸ Open a Pull Request and fix some gears! We would love the community's help to improve Lazap and make it more user-friendly.
+</details>
 
 ## ⁉️ FAQ
 
