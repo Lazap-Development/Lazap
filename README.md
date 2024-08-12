@@ -7,8 +7,8 @@
 </h1>
 
 <p align="center">
-  Lazap, a lightweight cross-platform software <br>
-  Unifying games into a single, modern library
+  A lightweight cross-platform software <br>
+  Unifying clients into a singular, modern library
 </p>
 
 <p align="center">
@@ -21,7 +21,7 @@
  </p>
 
 <div align="center">
-  <img src="https://github.com/Lazap-Development/Lazap/assets/59381835/ce70f368-de1b-4552-a371-b019bcb4eae1">
+  <img src="https://github.com/user-attachments/assets/ab65fee8-5d8e-4389-8427-84c2829813f3">
 </div>
 
 <br>
@@ -31,7 +31,7 @@
 ## ✨ Key Features
 - Remarkably lightweight and efficient on hardware resources
 - Compatibility across Windows, Linux, and MacOS platforms
-- Support for Steam, Epic, Ubisoft, R*, Riot, Lutris, and etc
+- Support for clients such as Steam, Epic, Ubisoft, R*, Lutris, etc.
 - Flexibility to add and personalize user-set custom games
 - Modern and Sleek user interface with theming customization
 - Spotify Integration with streamlined music control
@@ -59,7 +59,6 @@ winget install LazapDevelopment.Lazap
 > Execute the `arch` command in a new terminal to confirm your MacOS architecture.
 - Download and install the latest `[x64/aarch64].dmg` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
-
 ## 👾 Development
 
 Lazap is fully open-source and can be compiled from source.
@@ -85,15 +84,29 @@ yarn tauri dev
 ```
 
 ## 📚 Help & Support
-**Have a question/problem?**<br>
-If you need assist or in need of technical support for your Lazap installation, feel free to file an [issue](https://github.com/Lazap-Development/lazap/issues) so we can assist you.<br><br>
-**Want to help out instead of getting help?** <br>
-Open a [Pull Request](https://github.com/Lazap-Development/Lazap/pulls) and fix some gears, we would love the community's help to improve lazap and make it more user friendly.
+<details>
+  <summary>Have a question/problem?</summary>
+  ▸ If you need assistance or technical support for your Lazap installation, feel free to file an issue so we can assist you.
+</details>
+
+<details>
+  <summary>Want to help out instead of getting help?</summary>
+  ▸ Open a Pull Request and fix some gears! We would love the community's help to improve Lazap and make it more user-friendly.
+</details>
 
 ## ⁉️ FAQ
 
-**What is next up for this project?** <br>
-Our current priority is to support as many launchers as possible and optimize the software to its fullest potential. In the future, there is a possibility of the launcher becoming its own store (like steam). 
+<details>
+  <summary>What are the next steps of this project?</summary>
+
+  **Current Priority:**
+  - Support as many launchers as possible.
+  - Optimize the software to its fullest potential.
+
+  **Future Possibility:**
+  - Consider transforming the launcher into its own store (similar to Steam).
+
+</details>
 
 
 ## 🛂 License

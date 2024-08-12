@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "Lazap",
-    "version": "0.8.2"
+    "version": "0.8.3"
   },
   "tauri": {
     "macOSPrivateApi": true,

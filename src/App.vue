@@ -10,11 +10,9 @@
     <div class="homebox" id="home">
       <div class="centerchildren">
         <div class="children fadeInUp">
-          <img
-            class="head-pic"
-            src="./assets/img/main_banner.png"
-            id="head-pic"
-          />
+          <div class="gradient-bg">
+            <img class="banner" src="./assets/img/banner.png" />
+          </div>
         </div>
         <div class="children fadeInDown">
           <div class="jump-back">
@@ -342,17 +340,19 @@ export default {
       document
         .getElementById("removeGame")
         .addEventListener("click", async function () {
-
           const gamemenu = document.getElementById("gameMenu");
           gamemenu.classList.add("active");
-          let isGameMenuAlreadyActive = false
+          let isGameMenuAlreadyActive = false;
           gamemenu.addEventListener("animationend", function () {
-              if (gamemenu.style.display === "flex" && isGameMenuAlreadyActive === false) {
-                gamemenu.classList.remove("active");
-                gamemenu.style.display = "none";
-                isGameMenuAlreadyActive = true;
-              }
-          })
+            if (
+              gamemenu.style.display === "flex" &&
+              isGameMenuAlreadyActive === false
+            ) {
+              gamemenu.classList.remove("active");
+              gamemenu.style.display = "none";
+              isGameMenuAlreadyActive = true;
+            }
+          });
 
           let data = JSON.parse(
             await invoke("read_file", {
@@ -387,19 +387,22 @@ export default {
     })();
 
     document
-        .getElementById("closeMenu")
-        .addEventListener("click", async function () {
-          const gamemenu = document.getElementById("gameMenu");
-          gamemenu.classList.add("active");
-          let isGameMenuAlreadyActive = false
-          gamemenu.addEventListener("animationend", function () {
-              if (gamemenu.style.display === "flex" && isGameMenuAlreadyActive === false) {
-                gamemenu.classList.remove("active");
-                gamemenu.style.display = "none";
-                isGameMenuAlreadyActive = true;
-              }
-          })
+      .getElementById("closeMenu")
+      .addEventListener("click", async function () {
+        const gamemenu = document.getElementById("gameMenu");
+        gamemenu.classList.add("active");
+        let isGameMenuAlreadyActive = false;
+        gamemenu.addEventListener("animationend", function () {
+          if (
+            gamemenu.style.display === "flex" &&
+            isGameMenuAlreadyActive === false
+          ) {
+            gamemenu.classList.remove("active");
+            gamemenu.style.display = "none";
+            isGameMenuAlreadyActive = true;
+          }
         });
+      });
 
     function checkForUpdate() {
       window.__TAURI__.updater
@@ -501,6 +504,7 @@ body {
 .homebox {
   display: flex;
   height: 100%;
+  width: 100%;
   gap: 10px;
 }
 
@@ -612,6 +616,7 @@ body {
 
 .centerchildren {
   display: flex;
+  width: 100%;
   flex-direction: column;
   gap: 10px;
   justify-content: space-between;
@@ -619,16 +624,26 @@ body {
 
 .children {
   height: 100%;
+  width: 100%;
+  gap: 10px;
   justify-content: center;
 }
 
-.head-pic {
+.gradient-bg {
   width: 100%;
   height: 100%;
-  position: relative;
-  object-fit: cover;
+  background: rgba(var(--all-color-primary), 0.7);
   border-radius: 20px;
-  image-rendering: auto;
+  background-size: 200% 200%;
+  overflow: hidden;
+}
+
+.gradient-bg  .banner{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  border-radius: 20px;
 }
 
 .jump-back {
@@ -1069,7 +1084,6 @@ img,
   margin-top: 100px;
 }
 
-
 .gameMenu .gameMenuTitle {
   font-size: 20px;
   color: #cacaca;
@@ -1402,7 +1416,6 @@ img,
     opacity: 0.5;
   }
 }
-
 
 @keyframes closeOverlay {
   0% {
