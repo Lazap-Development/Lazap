@@ -42,22 +42,22 @@
 
 Depending on your operating system, we try to provide as much ease in terms of installation:<br>
 
-- **Windows**:
-  - Download and install the latest `.msi` file from the [releases](https://github.com/Lazap-Development/lazap/releases) section.
-  - Or install via Winget:
-    ```sh
-    winget install LazapDevelopment.Lazap
-    ```
+▸ **Windows**: 
+- Download and install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+- Or install via Winget: 
+```
+winget install LazapDevelopment.Lazap
+```
 
-- **Linux**:
-  - Download and install one of the `.deb`, `.tar.zst`, or `.rpm` files from the [releases](https://github.com/Lazap-Development/lazap/releases) section.
-  - Arch Linux users can also directly install from the maintained `lazap-bin` [AUR](https://aur.archlinux.org/packages/lazap-bin) (Thanks to [@begin-theadventure](https://www.github.com/begin-theadventure)).
-
-- **MacOS**:
-  > **Note:**
-  > Most modern MacOS systems are of `aarch64` (also known as ARM) instead of `x64` architecture.  
-  > Execute the `arch` command in a new terminal to confirm your MacOS architecture.
-  - Download and install the latest `[x64/aarch64].dmg` file from the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+▸ **Linux**: 
+- Download and install one of `.deb`, `.tar.zst`, or `.rpm` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+- Arch Linux users can also directly install from the maintained `lazap-bin` [AUR](https://aur.archlinux.org/packages/lazap-bin) (Thanks to [@begin-theadventure](https://www.github.com/begin-theadventure)).
+  
+▸ **MacOS**: 
+> [!NOTE] 
+> Most modern MacOS systems are of `aarch64` (also known as ARM) instead of `x64` architecture. <br>
+> Execute the `arch` command in a new terminal to confirm your MacOS architecture.
+- Download and install the latest `[x64/aarch64].dmg` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
 ## 👾 Development
 
