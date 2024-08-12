@@ -7,8 +7,8 @@
 </h1>
 
 <p align="center">
-  Lazap, a lightweight cross-platform software <br>
-  Unifying games into a single, modern library
+  A lightweight cross-platform software <br>
+  Unifying clients into a singular, modern library
 </p>
 
 <p align="center">
@@ -31,7 +31,7 @@
 ## ✨ Key Features
 - Remarkably lightweight and efficient on hardware resources
 - Compatibility across Windows, Linux, and MacOS platforms
-- Support for Steam, Epic, Ubisoft, R*, Riot, Lutris, and etc
+- Support for clients such as Steam, Epic, Ubisoft, R*, Lutris, etc.
 - Flexibility to add and personalize user-set custom games
 - Modern and Sleek user interface with theming customization
 - Spotify Integration with streamlined music control
@@ -42,23 +42,22 @@
 
 Depending on your operating system, we try to provide as much ease in terms of installation:<br>
 
-▸ **Windows**: 
-- Download and install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
-- Or install via Winget: 
-```
-winget install LazapDevelopment.Lazap
-```
+- **Windows**:
+  - Download and install the latest `.msi` file from the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+  - Or install via Winget:
+    ```sh
+    winget install LazapDevelopment.Lazap
+    ```
 
-▸ **Linux**: 
-- Download and install one of `.deb`, `.tar.zst`, or `.rpm` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
-- Arch Linux users can also directly install from the maintained `lazap-bin` [AUR](https://aur.archlinux.org/packages/lazap-bin) (Thanks to [@begin-theadventure](https://www.github.com/begin-theadventure)).
-  
-▸ **MacOS**: 
-> [!NOTE] 
-> Most modern MacOS systems are of `aarch64` (also known as ARM) instead of `x64` architecture. <br>
-> Execute the `arch` command in a new terminal to confirm your MacOS architecture.
-- Download and install the latest `[x64/aarch64].dmg` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+- **Linux**:
+  - Download and install one of the `.deb`, `.tar.zst`, or `.rpm` files from the [releases](https://github.com/Lazap-Development/lazap/releases) section.
+  - Arch Linux users can also directly install from the maintained `lazap-bin` [AUR](https://aur.archlinux.org/packages/lazap-bin) (Thanks to [@begin-theadventure](https://www.github.com/begin-theadventure)).
 
+- **MacOS**:
+  > **Note:**
+  > Most modern MacOS systems are of `aarch64` (also known as ARM) instead of `x64` architecture.  
+  > Execute the `arch` command in a new terminal to confirm your MacOS architecture.
+  - Download and install the latest `[x64/aarch64].dmg` file from the [releases](https://github.com/Lazap-Development/lazap/releases) section.
 
 ## 👾 Development
 
@@ -92,8 +91,17 @@ Open a [Pull Request](https://github.com/Lazap-Development/Lazap/pulls) and fix 
 
 ## ⁉️ FAQ
 
-**What is next up for this project?** <br>
-Our current priority is to support as many launchers as possible and optimize the software to its fullest potential. In the future, there is a possibility of the launcher becoming its own store (like steam). 
+<details>
+  <summary>What are the next steps of this project?</summary>
+
+  **Current Priority:**
+  - Support as many launchers as possible.
+  - Optimize the software to its fullest potential.
+
+  **Future Possibility:**
+  - Consider transforming the launcher into its own store (similar to Steam).
+
+</details>
 
 
 ## 🛂 License
