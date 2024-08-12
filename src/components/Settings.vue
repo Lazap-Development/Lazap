@@ -204,7 +204,7 @@
           </div>
         </div>
       </div>
-      <div class="settings-footer">Release v0.8.2</div>
+      <div class="settings-footer">Release v0.8.3</div>
     </div>
   </div>
 </template>
