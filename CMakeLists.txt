@@ -48,6 +48,8 @@ set(EXECUTABLE_NAME ${PROJECT_NAME})
 add_executable(${EXECUTABLE_NAME}
         src/main.cpp
         src/core/application.cpp
+        src/core/clients/steam.cpp
+        src/core/utils/parse_acf.cpp
         src/ui/imgui_layer.cpp
 
         ${imgui_SOURCE_DIR}/imgui.cpp
@@ -78,7 +80,7 @@ target_compile_definitions(${EXECUTABLE_NAME}
 target_include_directories(${EXECUTABLE_NAME}
         PRIVATE
         ${imgui_SOURCE_DIR}/
-        )
+        ${PROJECT_SOURCE_DIR}/include)
 
 # Link against the appropriate libraries
 target_link_libraries(${EXECUTABLE_NAME}

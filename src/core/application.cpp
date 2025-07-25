@@ -2,6 +2,8 @@
 #include "../ui/imgui_layer.h"
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+#include "clients/steam.h"
+#include <vector>
 
 void Application::run() {
   glfwSetErrorCallback([](int error, const char *description) {
@@ -19,6 +21,10 @@ void Application::run() {
 
   ImGuiLayer imgui;
   imgui.init(window);
+
+  Steam steam;
+  std::vector<Game> games = steam.getInstalledGames();
+  imgui.setGames(games);
 
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();

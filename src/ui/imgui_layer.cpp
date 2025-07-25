@@ -11,6 +11,8 @@ void ImGuiLayer::init(GLFWwindow *window) {
   ImGui_ImplOpenGL3_Init("#version 130");
 }
 
+void ImGuiLayer::setGames(const std::vector<Game> &games) { games_ = games; }
+
 void ImGuiLayer::begin() {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
@@ -18,10 +20,12 @@ void ImGuiLayer::begin() {
 }
 
 void ImGuiLayer::render() {
-  ImGui::Begin("Window A", nullptr,
-               ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoDecoration |
-                   ImGuiWindowFlags_NoBackground);
-  ImGui::Text("Lazap be like");
+  ImGui::Begin("Window A", nullptr, ImGuiWindowFlags_NoCollapse);
+
+  for (const auto &game : games_) {
+    ImGui::Text("%s", game.name.c_str());
+  }
+
   ImGui::End();
 }
 
