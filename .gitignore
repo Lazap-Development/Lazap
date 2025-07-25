@@ -40,5 +40,19 @@
 # debug information files
 *.dwo
 
-# CMake build dir
-build
+# Commonly used CMake directories & CMake CPM cache
+build*/
+.cache
+
+# LSP related
+compile_commands.json
+
+# VS code artifacts
+.vscode
+
+# Dear ImGui artifacts
+imgui.ini
+imgui*.ini
+
+## OSX artifacts
+.DS_Store
