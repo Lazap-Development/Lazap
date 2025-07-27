@@ -3,6 +3,7 @@
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "clients/steam.h"
+#include <memory>
 #include <vector>
 
 void Application::run() {
@@ -22,8 +23,15 @@ void Application::run() {
   ImGuiLayer imgui;
   imgui.init(window);
 
-  Steam steam;
-  std::vector<Game> games = steam.getInstalledGames();
+  std::vector<std::unique_ptr<Client>> clients;
+  clients.push_back(std::make_unique<Steam>());
+
+  std::vector<Game> games;
+  for (const auto &client : clients) {
+    std::vector<Game> clientGames = client->getInstalledGames();
+    games.insert(games.end(), clientGames.begin(), clientGames.end());
+  }
+
   imgui.setGames(games);
 
   while (!glfwWindowShouldClose(window)) {

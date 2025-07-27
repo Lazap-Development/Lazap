@@ -3,22 +3,23 @@
 #include <string>
 #include <vector>
 
+#if defined(__linux__) || defined(__APPLE__)
+#define LINUX_OR_APPLE
+#endif
+
 struct Game {
   std::string name;
   std::string installPath;
   std::string bannerUrl;
   std::string version;
-  long long sizeOnDisk;
-  std::string launchCommand;
-
-  std::int16_t appid;
+  std::int64_t sizeOnDisk;
+  std::string launchArgs;
+  std::int32_t appId;
   std::string launcher;
 };
 
 class Client {
 public:
-  virtual ~Client() = default;
-
   virtual std::vector<Game> getInstalledGames() = 0;
   virtual std::string getName() const = 0;
 };

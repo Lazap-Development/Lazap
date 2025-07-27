@@ -1,7 +1,9 @@
 #include "imgui_layer.h"
+#include "../core/utils/launch_manager.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
+#include <thread>
 
 void ImGuiLayer::init(GLFWwindow *window) {
   IMGUI_CHECKVERSION();
@@ -23,7 +25,9 @@ void ImGuiLayer::render() {
   ImGui::Begin("Window A", nullptr, ImGuiWindowFlags_NoCollapse);
 
   for (const auto &game : games_) {
-    ImGui::Text("%s", game.name.c_str());
+    if (ImGui::Button(game.name.c_str())) {
+      LaunchManager::launchGame(game.launcher, game.launchArgs);
+    }
   }
 
   ImGui::End();

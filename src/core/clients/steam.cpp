@@ -67,14 +67,9 @@ std::vector<std::string> getSteamLibraryFolders() {
 
   if (!libraryVDF.empty() && std::filesystem::exists(libraryVDF)) {
     paths = parseLibraryFoldersVDF(libraryVDF);
-    for (auto path : paths) {
-      std::cout << path << std::endl;
-    }
   }
   return paths;
 }
-
-Steam::Steam() {}
 
 std::vector<Game> Steam::getInstalledGames() {
   std::vector<Game> games;
@@ -106,11 +101,15 @@ std::vector<Game> Steam::getInstalledGames() {
         game.installPath = installPath.string();
         game.bannerUrl = "";
         game.version = "unknown";
-
         game.sizeOnDisk = manifest.sizeOnDisk;
-        game.launchCommand = "steam://run/" + std::to_string(manifest.appid);
-        game.appid = manifest.appid;
-        game.launcher = "Steam";
+#ifdef _WIN32
+        game.launchArgs = "steam://run/" + std::to_string(manifest.appid);
+#elif defined(LINUX_OR_APPLE)
+        game.launchArgs =
+            "-silent -applaunch " + std::to_string(manifest.appid);
+#endif
+        game.appId = manifest.appid;
+        game.launcher = "steam";
 
         bool duplicate = false;
         for (const auto &g : games) {
