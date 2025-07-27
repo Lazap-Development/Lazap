@@ -20,6 +20,8 @@ struct Game {
 
 class Client {
 public:
+  virtual ~Client() = default;
+
   virtual std::vector<Game> getInstalledGames() = 0;
   virtual std::string getName() const = 0;
 };
