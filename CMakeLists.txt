@@ -14,7 +14,7 @@ FetchContent_Declare(
 FetchContent_Declare(
         glfw
         GIT_REPOSITORY https://github.com/glfw/glfw
-        GIT_TAG 3.3.2
+        GIT_TAG 3.4
 )
 
 FetchContent_Declare(
@@ -45,12 +45,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Create executable
 set(EXECUTABLE_NAME ${PROJECT_NAME})
 
+file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
+    src/*.cpp
+)
 add_executable(${EXECUTABLE_NAME}
-        src/main.cpp
-        src/core/application.cpp
-        src/core/clients/steam.cpp
-        src/core/utils/parse_acf.cpp
-        src/ui/imgui_layer.cpp
+        ${SRC_FILES} 
 
         ${imgui_SOURCE_DIR}/imgui.cpp
         ${imgui_SOURCE_DIR}/imgui_demo.cpp
