@@ -1,6 +1,5 @@
 #include "steam.h"
-#include "../utils/parse_acf.h"
-#include "vdf_parser.hpp"
+
 #include <filesystem>
 #include <fstream>
 #include <iostream>
@@ -8,6 +7,9 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+
+#include "../utils/parse_acf.h"
+#include "vdf_parser.hpp"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -21,8 +23,7 @@ const std::unordered_set<int> BLACKLIST_APPID = {
 std::vector<std::string> parseLibraryFoldersVDF(const std::string &filepath) {
   std::vector<std::string> paths;
   std::ifstream file(filepath);
-  if (!file.is_open())
-    return paths;
+  if (!file.is_open()) return paths;
 
   tyti::vdf::object root = tyti::vdf::read(file);
 

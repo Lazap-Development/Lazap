@@ -19,7 +19,7 @@ struct Game {
 };
 
 class Client {
-public:
+ public:
   virtual ~Client() = default;
 
   virtual std::vector<Game> getInstalledGames() = 0;

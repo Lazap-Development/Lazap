@@ -1,10 +1,12 @@
 #include "application.h"
+
+#include <memory>
+#include <vector>
+
 #include "../ui/imgui_layer.h"
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "clients/steam.h"
-#include <memory>
-#include <vector>
 
 void Application::run() {
   glfwSetErrorCallback([](int error, const char *description) {

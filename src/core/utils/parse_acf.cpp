@@ -1,11 +1,11 @@
 #include "parse_acf.h"
+
 #include <fstream>
 
 SteamAppManifest parseAcfFile(const std::string &filepath) {
   SteamAppManifest manifest;
   std::ifstream file(filepath);
-  if (!file.is_open())
-    return manifest;
+  if (!file.is_open()) return manifest;
 
   std::string line;
   while (std::getline(file, line)) {

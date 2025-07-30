@@ -1,10 +1,11 @@
 #pragma once
-#include "../core/clients/client.h"
-#include "GLFW/glfw3.h"
 #include <vector>
 
+#include "../core/clients/client.h"
+#include "GLFW/glfw3.h"
+
 class ImGuiLayer {
-public:
+ public:
   void init(GLFWwindow *window);
   void begin();
   void render();
@@ -13,6 +14,6 @@ public:
 
   void setGames(const std::vector<Game> &games);
 
-private:
+ private:
   std::vector<Game> games_;
 };
