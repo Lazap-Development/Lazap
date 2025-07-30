@@ -36,6 +36,8 @@ void Application::run() {
 
   imgui.setGames(games);
 
+  // TODO: Add Addon(s) Instantiations here
+
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
 

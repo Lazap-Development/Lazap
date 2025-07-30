@@ -3,10 +3,6 @@
 #include <string>
 #include <vector>
 
-#if defined(__linux__) || defined(__APPLE__)
-#define LINUX_OR_APPLE
-#endif
-
 struct Game {
   std::string name;
   std::string installPath;
