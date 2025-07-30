@@ -1,37 +1,26 @@
 name: CI
-
-on:
+on: 
   pull_request:
   push:
     branches: [main]
     paths:
-    - '**.rs'
-    - '**.js'
-    - '**.vue'
-    - '**.toml'
-    - '**.yml'
-    - '**.json'
-
+    - '**.c'
+    - '**.cpp'
+    - '**.h'
+    - '**.hpp'
 jobs:
-  check-formatting:
-    name: Check formatting
+  formatting-check:
+    name: Check Formatting
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        path:
+          - 'src'
+          - 'include'
     steps:
-    - uses: actions/checkout@v3
-
-    - uses: hecrj/setup-rust-action@v1
+    - uses: actions/checkout@v4
+    - name: Check C/C++ Formatting
+      uses: jidicula/clang-format-action@v4.15.0
       with:
-        rust-version: nightly
-        components: rustfmt
-    - uses: taiki-e/install-action@v2
-      with:
-        tool: typos-cli
-    - name: Check Rust Formatting
-      run: cd src-tauri && cargo +nightly fmt --all -- --check
-    - name: Run Typos
-      run: typos
-
-    - name: Prettify code
-      uses: creyD/prettier_action@v4.3
-      with:
-        dry: True
+        clang-format-version: '20'
+        check-path: ${{ matrix.path }}
