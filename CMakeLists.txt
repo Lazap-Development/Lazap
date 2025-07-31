@@ -61,13 +61,16 @@ add_executable(${EXECUTABLE_NAME}
         ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
         )
 
+# Get rid of extra terminal window in release build
+set_target_properties(${EXECUTABLE_NAME} PROPERTIES WIN32_EXECUTABLE $<CONFIG:Release>)
+
 # Add options for warning
-if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     target_compile_options(${EXECUTABLE_NAME}
             PRIVATE
             -Wall -Wextra -pedantic
             )
-endif ()
+endif()
 
 # Add a define to use the static version of Glew
 target_compile_definitions(${EXECUTABLE_NAME}
