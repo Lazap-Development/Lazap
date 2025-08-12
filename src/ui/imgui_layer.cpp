@@ -26,7 +26,7 @@ void ImGuiLayer::render() {
 
   for (const auto &game : games_) {
     if (ImGui::Button(game.name.c_str())) {
-      LaunchManager::launchGame(game.launcher, game.launchArgs);
+      LaunchManager::launchGame(game.client, game.executable);
     }
   }
 

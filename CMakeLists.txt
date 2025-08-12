@@ -61,6 +61,18 @@ add_executable(${EXECUTABLE_NAME}
         ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
         )
 
+if(WIN32)
+    set(STEAMAPPINFO_NAME "SteamAppInfo.exe")
+else()
+    set(STEAMAPPINFO_NAME "SteamAppInfo")
+endif()
+
+add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_SOURCE_DIR}/tools/${STEAMAPPINFO_NAME}"
+        "$<TARGET_FILE_DIR:${EXECUTABLE_NAME}>/${STEAMAPPINFO_NAME}"
+)
+
 # Get rid of extra terminal window in release build
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES WIN32_EXECUTABLE $<CONFIG:Release>)
 

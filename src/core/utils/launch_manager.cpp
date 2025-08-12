@@ -3,17 +3,30 @@
 #include <cstdlib>
 #include <thread>
 
-bool LaunchManager::launchGame(const std::string &command,
-                               const std::string &args) {
+bool LaunchManager::launchGame(const ClientType &client,
+                               const std::string &executable) {
 #ifdef _WIN32
-  std::thread([command, args] {
-    std::system(("start " + args).c_str());
+  // Windows - start process via 'start' command in a thread
+  std::thread([executable] {
+    // Wrap in quotes if path contains spaces
+    std::string cmd = "start \"\" \"" + executable + "\"";
+    std::system(cmd.c_str());
   }).detach();
   return true;
 
 #elif defined(__linux__) || defined(__APPLE__)
-  std::thread([command, args] {
-    std::system((command + " " + args).c_str());
+  std::thread([executable] {
+    // Check if executable ends with ".exe"
+    if (executable.size() >= 4 &&
+        executable.compare(executable.size() - 4, 4, ".exe") == 0) {
+      // Could attempt to run with Wine or Proton if available, otherwise
+      // fallback
+      std::string wineCmd = "wine \"" + executable + "\"";
+      std::system(wineCmd.c_str());
+    } else {
+      // Normal executable
+      std::system(("\"" + executable + "\"").c_str());
+    }
   }).detach();
   return true;
 
@@ -21,6 +34,3 @@ bool LaunchManager::launchGame(const std::string &command,
   return false;
 #endif
 }
-
-// TODO: figure out a cross-platform way to detect if game process is running
-bool isRunning() { return true; }
