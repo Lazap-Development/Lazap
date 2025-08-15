@@ -1,4 +1,6 @@
-#include "steam.h"
+#include <clients/steam/steam.h>
+#include <utils/parse_acf.h>
+#include <utils/vdf_parser.h>
 
 #include <filesystem>
 #include <fstream>
@@ -6,10 +8,6 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
-
-#include "../utils/parse_acf.h"
-#include "client.h"
-#include "vdf_parser.hpp"
 
 #ifdef _WIN32
 #include <windows.h>

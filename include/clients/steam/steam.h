@@ -1,8 +1,8 @@
 #pragma once
+#include <clients/client.h>
+
 #include <string>
 #include <vector>
-
-#include "client.h"
 
 class Steam : public Client {
  public:

@@ -1,7 +1,8 @@
 #pragma once
+#include <clients/client.h>
+
 #include <vector>
 
-#include "../core/clients/client.h"
 #include "GLFW/glfw3.h"
 
 class ImGuiLayer {
