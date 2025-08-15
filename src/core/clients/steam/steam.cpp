@@ -9,6 +9,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include "clients/steam/appinfo.h"
+
 #ifdef _WIN32
 #include <windows.h>
 
@@ -16,8 +18,6 @@
 #include <ostream>
 #endif
 
-// Blacklisted App IDs (Steam tools, redistributables, etc.)
-// TODO: Somehow filter tools out of games
 const std::unordered_set<int> BLACKLIST_APPID = {
     228980,   // Steamworks Common Redistributables
     231350,   // VCRUNTIME
@@ -60,10 +60,8 @@ std::vector<std::string> parseLibraryFoldersVDF(const std::string &filepath) {
   return paths;
 }
 
-std::vector<std::string> getSteamLibraryFolders() {
-  std::vector<std::string> paths;
+std::string getSteamInstallPath() {
   std::string steamInstallPath;
-  std::string libraryVDF;
 
 #ifdef _WIN32
   HKEY hKey;
@@ -77,7 +75,6 @@ std::vector<std::string> getSteamLibraryFolders() {
     if (RegQueryValueExA(hKey, "InstallPath", nullptr, &type,
                          (LPBYTE)installPath, &pathSize) == ERROR_SUCCESS) {
       steamInstallPath = std::string(installPath);
-      libraryVDF = steamInstallPath + "\\steamapps\\libraryfolders.vdf";
     }
     RegCloseKey(hKey);
   }
@@ -85,7 +82,6 @@ std::vector<std::string> getSteamLibraryFolders() {
   const char *home = getenv("HOME");
   if (home) {
     steamInstallPath = std::string(home) + "/Library/Application Support/Steam";
-    libraryVDF = steamInstallPath + "/steamapps/libraryfolders.vdf";
   }
 #else  // Linux
   const char *home = getenv("HOME");
@@ -99,14 +95,31 @@ std::vector<std::string> getSteamLibraryFolders() {
       std::string testVDF = path + "/steamapps/libraryfolders.vdf";
       if (std::filesystem::exists(testVDF)) {
         steamInstallPath = path;
-        libraryVDF = testVDF;
         break;
       }
     }
   }
 #endif
 
-  if (!libraryVDF.empty() && std::filesystem::exists(libraryVDF)) {
+  return steamInstallPath;
+}
+
+std::vector<std::string> getSteamLibraryFolders() {
+  std::vector<std::string> paths;
+  std::string steamInstallPath = getSteamInstallPath();
+
+  if (steamInstallPath.empty()) {
+    return paths;
+  }
+
+  std::string libraryVDF;
+#ifdef _WIN32
+  libraryVDF = steamInstallPath + "\\steamapps\\libraryfolders.vdf";
+#else
+  libraryVDF = steamInstallPath + "/steamapps/libraryfolders.vdf";
+#endif
+
+  if (std::filesystem::exists(libraryVDF)) {
     paths = parseLibraryFoldersVDF(libraryVDF);
   } else {
     std::cerr << "Warning: Could not find Steam libraryfolders.vdf"
@@ -114,72 +127,6 @@ std::vector<std::string> getSteamLibraryFolders() {
   }
 
   return paths;
-}
-
-std::string findExecutableForOS(const tyti::vdf::object &root,
-                                const std::string &app_id,
-                                const std::string &desired_os) {
-  std::string appKey = "app_" + app_id;
-
-  auto appIt = root.childs.find(appKey);
-  if (appIt == root.childs.end() || !appIt->second) return "";
-
-  auto &appNode = appIt->second;
-  auto configIt = appNode->childs.find("config");
-  if (configIt == appNode->childs.end() || !configIt->second) return "";
-
-  auto &configNode = configIt->second;
-  auto launchIt = configNode->childs.find("launch");
-  if (launchIt == configNode->childs.end() || !launchIt->second) return "";
-
-  auto &launchNode = launchIt->second;
-
-  for (const auto &[key, child] : launchNode->childs) {
-    if (!child) continue;
-
-    auto execIt = child->attribs.find("executable");
-    if (execIt == child->attribs.end()) continue;
-
-    auto configChildIt = child->childs.find("config");
-    if (configChildIt == child->childs.end() || !configChildIt->second) {
-      // No config child, so return executable immediately
-      return execIt->second;
-    }
-
-    auto &configChild = configChildIt->second;
-    auto osIt = configChild->attribs.find("oslist");
-    if (osIt == configChild->attribs.end()) {
-      // config exists but no oslist, still return executable immediately
-      return execIt->second;
-    }
-
-    // config and oslist exist, return executable only if oslist matches
-    if (osIt->second == desired_os) {
-      return execIt->second;
-    }
-  }
-
-  return "";
-}
-
-std::string normalizeExecutablePath(const std::string &path) {
-#ifdef _WIN32
-  return path;
-#else
-  std::string normalized = path;
-  std::replace(normalized.begin(), normalized.end(), '\\', '/');
-  return normalized;
-#endif
-}
-
-std::string makeExecutablePath(const std::string &installPath,
-                               const std::string &execPath) {
-  if (execPath.empty()) return "";
-
-  std::string normalizedExecPath = normalizeExecutablePath(execPath);
-  std::filesystem::path fullPath =
-      std::filesystem::path(installPath) / normalizedExecPath;
-  return fullPath.string();
 }
 
 std::vector<Game> Steam::getInstalledGames() {
@@ -191,14 +138,22 @@ std::vector<Game> Steam::getInstalledGames() {
     return games;
   }
 
-  std::ifstream ifs("appinfo_text.vdf");
-  tyti::vdf::object root = tyti::vdf::read(ifs);
+  std::string steamInstallPath = getSteamInstallPath();
+  if (steamInstallPath.empty()) {
+    std::cerr << "Error: Could not find Steam installation path" << std::endl;
+    return games;
+  }
 
-  int result = std::system("./SteamAppInfo");
-  if (result != -1) {
-  } else {
-    std::ifstream ifs("appinfo_text.vdf");
-    tyti::vdf::object root = tyti::vdf::read(ifs);
+#ifdef _WIN32
+  std::string appInfoPath = steamInstallPath + "\\appcache\\appinfo.vdf";
+#else
+  std::string appInfoPath = steamInstallPath + "/appcache/appinfo.vdf";
+#endif
+
+  AppInfoParser parser;
+  if (!parser.loadFile(appInfoPath)) {
+    std::cerr << "Warning: Could not load appinfo.vdf from " << appInfoPath
+              << std::endl;
   }
 
   for (const auto &steamPath : steamPaths) {
@@ -237,43 +192,7 @@ std::vector<Game> Steam::getInstalledGames() {
           game.sizeOnDisk = manifest.sizeOnDisk;
           game.appId = manifest.appid;
           game.client = ClientType::Steam;
-
-          std::string current_os;
-#if defined(_WIN32) || defined(_WIN64)
-          current_os = "windows";
-#elif defined(__APPLE__) || defined(__MACH__)
-          current_os = "macos";
-#elif defined(__linux__)
-          current_os = "linux";
-#else
-          current_os = "unknown";
-#endif
-
-          std::string appIdStr = std::to_string(manifest.appid);
-
-          if (current_os == "linux") {
-            std::string exec_path =
-                findExecutableForOS(root, appIdStr, "linux");
-            if (!exec_path.empty()) {
-              game.executable = makeExecutablePath(game.installPath, exec_path);
-            } else {
-              exec_path = findExecutableForOS(root, appIdStr, "windows");
-              if (!exec_path.empty()) {
-                game.executable =
-                    makeExecutablePath(game.installPath, exec_path);
-              } else {
-                game.executable = "";
-              }
-            }
-          } else {
-            std::string exec_path =
-                findExecutableForOS(root, appIdStr, current_os);
-            if (!exec_path.empty()) {
-              game.executable = makeExecutablePath(game.installPath, exec_path);
-            } else {
-              game.executable = "";
-            }
-          }
+          game.executable = parser.getExecutablePath(manifest.appid);
 
           bool duplicate = false;
           for (const auto &g : games) {
@@ -282,8 +201,6 @@ std::vector<Game> Steam::getInstalledGames() {
               break;
             }
           }
-
-          std::cout << game.executable << "\n";
 
           if (!duplicate) {
             games.push_back(std::move(game));
