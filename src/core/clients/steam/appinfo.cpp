@@ -80,14 +80,13 @@ void AppInfoParser::parseStringTable(BinaryReader& reader, size_t offset) {
   }
 }
 
-void AppInfoParser::parseKeyValue(BinaryReader& reader) {
+void AppInfoParser::parseKeyValue(BinaryReader& reader,
+                                  const std::string& parentKey = "") {
   while (reader.canRead(1)) {
     TokenOp op = static_cast<TokenOp>(reader.read<uint8_t>());
-
     if (op == SectionEnd) {
       return;
     }
-
     std::string keyName;
     if (vdf_version >= 0x29) {
       if (!reader.canRead(4)) break;
@@ -101,30 +100,37 @@ void AppInfoParser::parseKeyValue(BinaryReader& reader) {
       keyName = reader.readString();
       if (keyName.empty()) continue;
     }
-
     switch (op) {
-      case SectionBegin:
-        parseKeyValue(reader);
+      case SectionBegin: {
+        if (parentKey == "launch") {
+          // Check if keyName is a number (0, 1, 2, etc.)
+          bool isNumber =
+              !keyName.empty() &&
+              std::all_of(keyName.begin(), keyName.end(), ::isdigit);
+          if (isNumber) {
+            executables.push_back({});
+          }
+        }
+        parseKeyValue(reader, keyName);
         break;
-
+      }
       case String: {
         std::string value = reader.readString();
-        if (keyName == "executable") {
-          executablePath = value;
+        if ((keyName == "executable" || keyName == "oslist" ||
+             keyName == "BetaKey") &&
+            !executables.empty()) {
+          executables.back()[keyName] = value;
         }
         break;
       }
-
       case Int32:
         if (!reader.canRead(4)) return;
         reader.read<uint32_t>();
         break;
-
       case Int64:
         if (!reader.canRead(8)) return;
         reader.read<uint64_t>();
         break;
-
       default:
         return;
     }
@@ -148,7 +154,10 @@ bool AppInfoParser::loadFile(const std::string& filepath) {
   return data.size() >= 8;
 }
 
-std::string AppInfoParser::getExecutablePath(uint32_t targetAppId) {
+std::vector<std::map<std::string, std::string>> AppInfoParser::getLaunchConfig(
+    uint32_t targetAppId) {
+  executables.clear();
+
   BinaryReader reader(data.data(), data.size());
 
   uint32_t version = reader.read<uint32_t>();
@@ -191,12 +200,12 @@ std::string AppInfoParser::getExecutablePath(uint32_t targetAppId) {
     if (appSize > 0 && reader.canRead(appSize)) {
       try {
         parseKeyValue(reader);
-        return executablePath;
+        return executables;
       } catch (...) {
-        return "";
+        return {};
       }
     }
     break;
   }
-  return "";
+  return {};
 }

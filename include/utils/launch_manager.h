@@ -5,7 +5,7 @@
 
 class LaunchManager {
  public:
-  static bool launchGame(const ClientType &client,
-                         const std::string &executable);
+  static bool launch(const ClientType &client, const std::string &installPath,
+                     const std::string &executable);
   static bool isRunning(int pid);
 };

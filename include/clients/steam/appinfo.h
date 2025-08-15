@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -39,12 +40,13 @@ class AppInfoParser {
   std::vector<uint8_t> data;
   uint8_t vdf_version = 0;
   std::vector<const char*> strings;
-  std::string executablePath;
+  std::vector<std::map<std::string, std::string>> executables;
 
   void parseStringTable(BinaryReader& reader, size_t offset);
-  void parseKeyValue(BinaryReader& reader);
+  void parseKeyValue(BinaryReader& reader, const std::string& parentKey);
 
  public:
   bool loadFile(const std::string& filepath);
-  std::string getExecutablePath(uint32_t targetAppId);
+  std::vector<std::map<std::string, std::string>> getLaunchConfig(
+      uint32_t targetAppId);
 };

@@ -1,31 +1,30 @@
 #include <utils/launch_manager.h>
 
 #include <cstdlib>
+#include <filesystem>
 #include <thread>
 
-bool LaunchManager::launchGame(const ClientType &client,
-                               const std::string &executable) {
+bool LaunchManager::launch(const ClientType &client,
+                           const std::string &installPath,
+                           const std::string &executable) {
+  namespace fs = std::filesystem;
+  std::string fullPath = (fs::path(installPath) / executable).string();
+
 #ifdef _WIN32
-  // Windows - start process via 'start' command in a thread
-  std::thread([executable] {
-    // Wrap in quotes if path contains spaces
-    std::string cmd = "start \"\" \"" + executable + "\"";
+  std::thread([fullPath] {
+    std::string cmd = "start \"\" \"" + fullPath + "\"";
     std::system(cmd.c_str());
   }).detach();
   return true;
 
 #elif defined(__linux__) || defined(__APPLE__)
-  std::thread([executable] {
-    // Check if executable ends with ".exe"
-    if (executable.size() >= 4 &&
-        executable.compare(executable.size() - 4, 4, ".exe") == 0) {
-      // Could attempt to run with Wine or Proton if available, otherwise
-      // fallback
-      std::string wineCmd = "wine \"" + executable + "\"";
+  std::thread([fullPath] {
+    if (fullPath.size() >= 4 &&
+        fullPath.compare(fullPath.size() - 4, 4, ".exe") == 0) {
+      std::string wineCmd = "wine \"" + fullPath + "\"";
       std::system(wineCmd.c_str());
     } else {
-      // Normal executable
-      std::system(("\"" + executable + "\"").c_str());
+      std::system(("\"" + fullPath + "\"").c_str());
     }
   }).detach();
   return true;

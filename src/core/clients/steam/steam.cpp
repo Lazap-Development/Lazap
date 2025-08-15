@@ -192,7 +192,41 @@ std::vector<Game> Steam::getInstalledGames() {
           game.sizeOnDisk = manifest.sizeOnDisk;
           game.appId = manifest.appid;
           game.client = ClientType::Steam;
-          game.executable = parser.getExecutablePath(manifest.appid);
+
+          auto executables = parser.getLaunchConfig(manifest.appid);
+          std::string currentOS;
+#ifdef _WIN32
+          currentOS = "windows";
+#elif __linux__
+          currentOS = "linux";
+#elif __APPLE__
+          currentOS = "macos";
+#endif
+
+          std::string fallbackExecutable;
+
+          for (const auto &executable : executables) {
+            auto osIt = executable.find("oslist");
+            auto execIt = executable.find("executable");
+
+            if (execIt == executable.end()) continue;
+            if (osIt != executable.end()) {
+              if (osIt->second == currentOS) {
+                game.executable = execIt->second;
+                break;
+              }
+              if (currentOS == "linux" && osIt->second == "windows" &&
+                  fallbackExecutable.empty()) {
+                fallbackExecutable = execIt->second;
+              }
+            } else if (fallbackExecutable.empty()) {
+              fallbackExecutable = execIt->second;
+            }
+          }
+
+          if (game.executable.empty() && !fallbackExecutable.empty()) {
+            game.executable = fallbackExecutable;
+          }
 
           bool duplicate = false;
           for (const auto &g : games) {
