@@ -4,8 +4,9 @@
 #include <filesystem>
 
 #ifdef _WIN32
-#include <tlhelp32.h>
 #include <windows.h>
+
+#include <tlhelp32.h>
 #else
 #include <signal.h>
 #include <sys/types.h>
