@@ -13,7 +13,7 @@ class ImGuiLayer {
   void end();
   void shutdown();
 
-  void setGames(const std::vector<Game> &games);
+  void setGames(const std::vector<Game> games);
 
  private:
   std::vector<Game> games_;

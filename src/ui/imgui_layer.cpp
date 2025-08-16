@@ -13,7 +13,9 @@ void ImGuiLayer::init(GLFWwindow *window) {
   ImGui_ImplOpenGL3_Init("#version 130");
 }
 
-void ImGuiLayer::setGames(const std::vector<Game> &games) { games_ = games; }
+void ImGuiLayer::setGames(std::vector<Game> games) {
+  games_ = std::move(games);
+}
 
 void ImGuiLayer::begin() {
   ImGui_ImplOpenGL3_NewFrame();
@@ -24,9 +26,15 @@ void ImGuiLayer::begin() {
 void ImGuiLayer::render() {
   ImGui::Begin("Window A", nullptr, ImGuiWindowFlags_NoCollapse);
 
-  for (const auto &game : games_) {
+  for (auto &game : games_) {
     if (ImGui::Button(game.name.c_str())) {
-      LaunchManager::launch(game.client, game.installPath, game.executable);
+      game.launchManager->launch();
+    }
+
+    if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+      if (game.launchManager && game.launchManager->isRunning()) {
+        game.launchManager->kill();
+      }
     }
   }
 

@@ -2,7 +2,6 @@
 
 #include <cstring>
 #include <fstream>
-#include <iostream>
 #include <stdexcept>
 
 BinaryReader::BinaryReader(const uint8_t* data, size_t size)

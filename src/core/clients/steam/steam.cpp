@@ -1,3 +1,4 @@
+#include <clients/steam/appinfo.h>
 #include <clients/steam/steam.h>
 #include <utils/parse_acf.h>
 #include <utils/vdf_parser.h>
@@ -8,8 +9,6 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
-
-#include "clients/steam/appinfo.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -191,7 +190,6 @@ std::vector<Game> Steam::getInstalledGames() {
           game.version = "unknown";
           game.sizeOnDisk = manifest.sizeOnDisk;
           game.appId = manifest.appid;
-          game.client = ClientType::Steam;
 
           auto executables = parser.getLaunchConfig(manifest.appid);
           std::string currentOS;
@@ -228,6 +226,8 @@ std::vector<Game> Steam::getInstalledGames() {
             game.executable = fallbackExecutable;
           }
 
+          game.launchManager = std::make_unique<LaunchManager>(game.installPath,
+                                                               game.executable);
           bool duplicate = false;
           for (const auto &g : games) {
             if (g.appId == game.appId) {

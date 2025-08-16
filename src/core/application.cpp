@@ -31,10 +31,11 @@ void Application::run() {
   std::vector<Game> games;
   for (const auto &client : clients) {
     std::vector<Game> clientGames = client->getInstalledGames();
-    games.insert(games.end(), clientGames.begin(), clientGames.end());
+    games.insert(games.end(), std::make_move_iterator(clientGames.begin()),
+                 std::make_move_iterator(clientGames.end()));
   }
 
-  imgui.setGames(games);
+  imgui.setGames(std::move(games));
 
   // TODO: Add Addon(s) Instantiations here
 
