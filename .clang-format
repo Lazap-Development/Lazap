@@ -259,6 +259,16 @@ RequiresExpressionIndentation: OuterScope
 SeparateDefinitionBlocks: Leave
 ShortNamespaceLines: 1
 SkipMacroDefinitionBody: false
+IncludeCategories:
+  - Regex:           '^<windows\.h>'
+    Priority:        1
+    CaseSensitive:   false
+  - Regex:           '^<tlhelp32\.h>'
+    Priority:        2
+    CaseSensitive:   false
+  - Regex:           '.*'
+    Priority:        3
+    CaseSensitive:   false
 SortIncludes:    CaseSensitive
 SortJavaStaticImport: Before
 SortUsingDeclarations: LexicographicNumeric
