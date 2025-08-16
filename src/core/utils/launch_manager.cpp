@@ -65,8 +65,8 @@ bool LaunchManager::launch() {
   STARTUPINFO si = {sizeof(STARTUPINFO)};
   PROCESS_INFORMATION pi;
 
-  if (!CreateProcess(fullPath.c_str(), NULL, NULL, NULL, FALSE, 0, NULL, NULL,
-                     &si, &pi)) {
+  if (!CreateProcess(fullPath.c_str(), NULL, NULL, NULL, FALSE, 0, NULL,
+                     installPath_.c_str(), &si, &pi)) {
     return false;
   }
   pid_ = pi.dwProcessId;
