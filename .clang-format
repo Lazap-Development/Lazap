@@ -145,20 +145,28 @@ IfMacros:
   - KJ_IF_MAYBE
 IncludeBlocks:   Regroup
 IncludeCategories:
+  - Regex:           '^<windows\.h>'
+    Priority:        0
+    SortPriority:    0
+    CaseSensitive:   false
+  - Regex:           '^<tlhelp32\.h>'
+    Priority:        1
+    SortPriority:    0
+    CaseSensitive:   false
   - Regex:           '^<ext/.*\.h>'
     Priority:        2
     SortPriority:    0
     CaseSensitive:   false
   - Regex:           '^<.*\.h>'
-    Priority:        1
+    Priority:        3
     SortPriority:    0
     CaseSensitive:   false
   - Regex:           '^<.*'
-    Priority:        2
+    Priority:        4
     SortPriority:    0
     CaseSensitive:   false
   - Regex:           '.*'
-    Priority:        3
+    Priority:        5
     SortPriority:    0
     CaseSensitive:   false
 IncludeIsMainRegex: '([-_](test|unittest))?$'
@@ -259,16 +267,7 @@ RequiresExpressionIndentation: OuterScope
 SeparateDefinitionBlocks: Leave
 ShortNamespaceLines: 1
 SkipMacroDefinitionBody: false
-IncludeCategories:
-  - Regex:           '^<windows\.h>'
-    Priority:        1
-    CaseSensitive:   false
-  - Regex:           '^<tlhelp32\.h>'
-    Priority:        2
-    CaseSensitive:   false
-  - Regex:           '.*'
-    Priority:        3
-    CaseSensitive:   false
+
 SortIncludes:    CaseSensitive
 SortJavaStaticImport: Before
 SortUsingDeclarations: LexicographicNumeric
