@@ -21,10 +21,8 @@
  </p>
 
 > [!WARNING]  
-> Lazap is currently undergoing a **major rewrite in C++** to improve performance, stability, and functionality.  
+> Lazap is currently undergoing a **major rewrite in C++** to improve performance, stability, and functionality.
 > The rewrite is being developed in the [`cpp`](https://github.com/Lazap-Development/lazap/tree/cpp) branch. There's currently a PR open for more details: https://github.com/Lazap-Development/Lazap/pull/162
-> 
-> Stay tuned ;)
 
 <div align="center">
   <img src="https://github.com/user-attachments/assets/ab65fee8-5d8e-4389-8427-84c2829813f3">
