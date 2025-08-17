@@ -23,7 +23,14 @@ FetchContent_Declare(
         GIT_TAG v1.92.1
 )
 
-FetchContent_MakeAvailable(glew glfw imgui)
+FetchContent_Declare(
+    glaze
+    GIT_REPOSITORY https://github.com/stephenberry/glaze.git
+    GIT_TAG v5.5.4  
+)
+
+
+FetchContent_MakeAvailable(glew glfw glaze imgui)
 
 # FetchContent_Declare() normally supports EXCLUDE_FROM_ALL but apparently there is a bug
 # See https://gitlab.kitware.com/cmake/cmake/-/issues/20167
@@ -61,6 +68,12 @@ add_executable(${EXECUTABLE_NAME}
         ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
         )
 
+# Extra files needed by Windows OS for the Discord RPC
+if (WIN32)
+  target_sources(${PROJECT_NAME} PRIVATE src/core/addons/discord_rpc/platform/windows.cpp)
+  target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32.lib)
+endif()
+
 # Get rid of extra terminal window in release build
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES WIN32_EXECUTABLE $<CONFIG:Release>)
 
@@ -88,8 +101,8 @@ target_include_directories(${EXECUTABLE_NAME}
 target_link_libraries(${EXECUTABLE_NAME}
         PRIVATE
         glfw
+        glaze::glaze
         libglew_static
         $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
         $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
         )
-

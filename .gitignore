@@ -47,8 +47,9 @@ build*/
 # LSP related
 compile_commands.json
 
-# VS code artifacts
+# VS code and VS2022 artifacts
 .vscode
+.vs
 
 # Dear ImGui artifacts
 imgui.ini
