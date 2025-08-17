@@ -5,7 +5,7 @@
 #include <string>
 
 #include "discord_rpc.h"
-#include "platform/platform.h"
+#include "platform.h"
 #include "serialization.h"
 
 namespace discord {

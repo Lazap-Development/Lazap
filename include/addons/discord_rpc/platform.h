@@ -1,10 +1,55 @@
 #pragma once
+#ifndef DISCORD_PLATFORM_H
+#define DISCORD_PLATFORM_H
+
+#include <cstdint>
+
+#ifdef _WIN32
+
+#define WIN32_LEAN_AND_MEAN
+#define NOMCX
+#define NOSERVICE
+#define NOIME
+#define NOMINMAX
+
+#include <WinSock2.h>
+
+#include <cstddef>
+
+namespace discord::platform {
+size_t getProcessID() noexcept;
+
+class PipeConnection {
+  PipeConnection() noexcept = default;
+
+ public:
+  static PipeConnection& get() noexcept;
+
+  bool open() noexcept;
+  bool close() noexcept;
+
+  bool write(const void* data, size_t length) const noexcept;
+  bool read(void* data, size_t length) noexcept;
+
+  [[nodiscard]] bool isOpen() const noexcept { return m_isOpen; }
+
+ private:
+  HANDLE m_pipe = INVALID_HANDLE_VALUE;
+  bool m_isOpen = false;
+  bool m_useWineFallback = false;
+};
+}  // namespace discord::platform
+
+#else
+// #include "unix.h"
+
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <sys/un.h>
 #include <unistd.h>
 
+#include <cstring>
 #include <string>
 
 namespace discord::platform {
@@ -127,3 +172,7 @@ class PipeConnection {
   bool m_isOpen = false;
 };
 }  // namespace discord::platform
+
+#endif
+
+#endif  // DISCORD_PLATFORM_H

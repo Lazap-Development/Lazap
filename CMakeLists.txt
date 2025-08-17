@@ -68,12 +68,6 @@ add_executable(${EXECUTABLE_NAME}
         ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
         )
 
-# Extra files needed by Windows OS for the Discord RPC
-if (WIN32)
-  target_sources(${PROJECT_NAME} PRIVATE src/core/addons/discord_rpc/platform/windows.cpp)
-  target_link_libraries(${PROJECT_NAME} PRIVATE ws2_32.lib)
-endif()
-
 # Get rid of extra terminal window in release build
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES WIN32_EXECUTABLE $<CONFIG:Release>)
 

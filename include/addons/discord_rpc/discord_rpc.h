@@ -160,6 +160,19 @@ class RPCManager {
   int m_nonce = 1;
   CommandQueue m_commandQueue{};
 };
+
+class RichPresence {
+ public:
+  static void Initialize(const std::string& applicationId);
+  static void UpdatePresence(
+      const std::string& state, const std::string& details,
+      const std::string& imageText = "Lazap Game Launcher",
+      const std::string& imageKey = "lazap");
+  static void Shutdown();
+
+ private:
+  static bool initialized;
+};
 }  // namespace discord
 
 #endif  // DISCORD_RPC_H

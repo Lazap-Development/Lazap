@@ -1,13 +1,48 @@
 #include <addons/discord_rpc/discord_rpc.h>
 
 #ifndef DISCORD_DISABLE_IO_THREAD
+#include <algorithm>
 #include <condition_variable>
+#include <iostream>
+#include <random>
 #include <thread>
 #endif
 
-#include "addons/discord_rpc/backoff.h"
-#include "addons/discord_rpc/platform/platform.h"
+#include "addons/discord_rpc/platform.h"
 #include "addons/discord_rpc/rpc_connection.h"
+
+namespace {
+class Backoff {
+ public:
+  static Backoff& get() noexcept {
+    static Backoff instance;
+    return instance;
+  }
+
+  double rand01() noexcept { return m_distribution(m_generator); }
+
+  void reset() noexcept {
+    m_currentAmount = m_minAmount;
+    m_attempts = 0;
+  }
+
+  int64_t next() noexcept {
+    m_attempts++;
+    auto delay = static_cast<int64_t>(static_cast<double>(m_currentAmount) *
+                                      2.0 * rand01());
+    m_currentAmount = std::min(m_maxAmount, m_currentAmount + delay);
+    return m_currentAmount;
+  }
+
+ private:
+  int64_t m_minAmount = 500;
+  int64_t m_maxAmount = 60000;
+  int64_t m_currentAmount = m_minAmount;
+  int32_t m_attempts = 0;
+  std::mt19937_64 m_generator{std::random_device{}()};
+  std::uniform_real_distribution<> m_distribution{0.0, 1.0};
+};
+}  // anonymous namespace
 
 namespace discord {
 #ifdef DISCORD_DISABLE_IO_THREAD
@@ -188,4 +223,50 @@ void RPCManager::updateReconnectTime() noexcept {
   m_nextConnect = std::chrono::system_clock::now() +
                   std::chrono::milliseconds(Backoff::get().next());
 }
+
+std::time_t startTime;
+bool RichPresence::initialized = false;
+auto& rpcManager = RPCManager::get();
+
+void RichPresence::Initialize(const std::string& applicationId) {
+  if (initialized) return;
+  std::cout << "Initializing Discord Rich Presence...\n";
+
+  rpcManager.setClientID(applicationId)
+      .onReady([](discord::User const& user) {
+        std::cout << "Client Ready! User: " << user.username << "#"
+                  << user.discriminator << " (" << user.id << ")\n";
+      })
+      .onDisconnected([](int errcode, std::string_view message) {
+        std::cout << "Client disconnected: " << errcode << " - " << message;
+      })
+      .onErrored([](int errcode, std::string_view message) {
+        std::cout << "Discord: error with code: " << errcode << message;
+      });
+
+  rpcManager.initialize();
+
+  startTime = std::time(nullptr);
+
+  initialized = true;
+  std::cout << "Discord Rich Presence initialized successfully.\n";
+}
+
+void RichPresence::UpdatePresence(const std::string& state,
+                                  const std::string& details,
+                                  const std::string& imageText,
+                                  const std::string& imageKey) {
+  if (!initialized) return;
+
+  rpcManager.getPresence()
+      .setState(state)
+      .setDetails(details)
+      .setStartTimestamp(startTime)
+      .setLargeImageKey(imageKey)
+      .setLargeImageText(imageText)
+      .setInstance(false)
+      .refresh();
+}
+
+void RichPresence::Shutdown() { rpcManager.shutdown(); }
 }  // namespace discord
