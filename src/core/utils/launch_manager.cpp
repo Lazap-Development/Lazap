@@ -1,5 +1,6 @@
 #include <utils/launch_manager.h>
 
+#include <algorithm>
 #include <cstdlib>
 #include <filesystem>
 
