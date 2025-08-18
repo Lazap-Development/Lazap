@@ -10,6 +10,8 @@
 #include <unordered_set>
 #include <vector>
 
+#include "clients/client.h"
+
 #ifdef _WIN32
 #include <windows.h>
 
@@ -59,7 +61,7 @@ std::vector<std::string> parseLibraryFoldersVDF(const std::string &filepath) {
   return paths;
 }
 
-std::string getSteamInstallPath() {
+std::string Steam::getLocation() {
   std::string steamInstallPath;
 
 #ifdef _WIN32
@@ -82,7 +84,7 @@ std::string getSteamInstallPath() {
   if (home) {
     steamInstallPath = std::string(home) + "/Library/Application Support/Steam";
   }
-#else  // Linux
+#else
   const char *home = getenv("HOME");
   if (home) {
     std::vector<std::string> possiblePaths = {
@@ -103,9 +105,9 @@ std::string getSteamInstallPath() {
   return steamInstallPath;
 }
 
-std::vector<std::string> getSteamLibraryFolders() {
+std::vector<std::string> Steam::getSteamLibraryFolders() const {
   std::vector<std::string> paths;
-  std::string steamInstallPath = getSteamInstallPath();
+  std::string steamInstallPath = getLocation();
 
   if (steamInstallPath.empty()) {
     return paths;
@@ -137,7 +139,7 @@ std::vector<Game> Steam::getInstalledGames() {
     return games;
   }
 
-  std::string steamInstallPath = getSteamInstallPath();
+  std::string steamInstallPath = getLocation();
   if (steamInstallPath.empty()) {
     std::cerr << "Error: Could not find Steam installation path" << std::endl;
     return games;
@@ -161,8 +163,9 @@ std::vector<Game> Steam::getInstalledGames() {
 
     if (!std::filesystem::exists(steamAppsPath) ||
         !std::filesystem::is_directory(steamAppsPath)) {
-      std::cerr << "Warning: Steam apps directory not found: " << steamAppsPath
-                << std::endl;
+      std::cerr
+          << "Warning: Steam directory not found (may be false-positive): "
+          << steamAppsPath << std::endl;
       continue;
     }
 
@@ -185,6 +188,7 @@ std::vector<Game> Steam::getInstalledGames() {
 
           Game game;
           game.name = manifest.name;
+          game.clientType = ClientType::Steam;
           game.installPath = installPath.string();
           game.bannerUrl = "";
           game.version = "unknown";
@@ -226,8 +230,6 @@ std::vector<Game> Steam::getInstalledGames() {
             game.executable = fallbackExecutable;
           }
 
-          game.launchManager = std::make_unique<LaunchManager>(game.installPath,
-                                                               game.executable);
           bool duplicate = false;
           for (const auto &g : games) {
             if (g.appId == game.appId) {
