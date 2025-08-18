@@ -27,13 +27,12 @@ void ImGuiLayer::render() {
   ImGui::Begin("Window A", nullptr, ImGuiWindowFlags_NoCollapse);
 
   for (auto &game : games_) {
-    if (ImGui::Button(game.name.c_str())) {
-      game.launchManager->launch();
-    }
+    LaunchManager lm = LaunchManager(game);
+    if (ImGui::Button(game.name.c_str())) lm.launch();
 
     if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
-      if (game.launchManager && game.launchManager->isRunning()) {
-        game.launchManager->kill();
+      if (lm.isRunning()) {
+        lm.kill();
       }
     }
   }

@@ -1,17 +1,15 @@
-
 #pragma once
-#include <string>
+#include <clients/client.h>
 
 class LaunchManager {
  public:
-  LaunchManager(const std::string &installPath, const std::string &executable);
+  LaunchManager(const Game& game) : game_(game) {}
 
   bool launch();
   bool isRunning();
   bool kill();
 
  private:
-  std::string installPath_;
-  std::string executable_;
+  const Game& game_;
   int pid_ = -1;
 };
