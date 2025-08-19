@@ -29,6 +29,7 @@ enum class ErrorCode : int32_t {
   Success = 0,
   PipeClosed = 1,
   ReadCorrupt = 2,
+  DiscordNotRunning = 3
 };
 
 constexpr ErrorCode toErr(int32_t v) noexcept {
@@ -106,6 +107,10 @@ class Connection {
 
     if (m_state == State::Disconnected &&
         !platform::PipeConnection::get().open()) {
+      m_lastError = ErrorCode::DiscordNotRunning;
+      m_lastErrorMessage =
+          "Discord is not running \nor IPC pipe unavailable \n";
+      sendError();
       return;
     }
 

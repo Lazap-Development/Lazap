@@ -44,6 +44,9 @@
 build*/
 .cache
 
+# CMake generated files
+CMakeSettings.json
+
 # LSP related
 compile_commands.json
 
