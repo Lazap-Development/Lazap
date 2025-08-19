@@ -24,3 +24,40 @@ jobs:
       with:
         clang-format-version: '20'
         check-path: ${{ matrix.path }}
+
+  build:
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Install CMake 4.1
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '4.1'
+      - name: Install deps (Linux)
+        if: runner.os == 'Linux'
+        # Add these in case of RandR errors -> libxinerama-dev libxcursor-dev libxi-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential ninja-build libgl1-mesa-dev
+          sudo apt-get install -y xorg-dev libxrandr-dev
+      - name: Setup msys2
+        uses: msys2/setup-msys2@v2
+        if: runner.os == 'Windows'
+        with:
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+      - name: Setup Ninja (Windows)
+        uses: seanmiddleditch/gha-setup-ninja@v4
+        if: runner.os == 'Windows'
+      - name: Configure CMake
+        run: |
+          cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM="3.5" -DGLFW_BUILD_WAYLAND=OFF
+      - name: Build
+        run: cmake --build build --config Release

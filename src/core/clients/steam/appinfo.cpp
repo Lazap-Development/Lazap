@@ -1,5 +1,6 @@
 #include <clients/steam/appinfo.h>
 
+#include <algorithm>
 #include <cstring>
 #include <fstream>
 #include <stdexcept>

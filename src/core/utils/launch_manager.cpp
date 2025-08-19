@@ -1,5 +1,8 @@
+#include <clients/client.h>
+#include <clients/steam/steam.h>
 #include <utils/launch_manager.h>
 
+#include <algorithm>
 #include <cstdlib>
 #include <filesystem>
 
@@ -13,10 +16,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #endif
-
-LaunchManager::LaunchManager(const std::string& installPath,
-                             const std::string& executable)
-    : installPath_(installPath), executable_(executable) {}
 
 std::string findExecutableIgnoreCase(const std::string& directory,
                                      const std::string& execName) {
@@ -52,10 +51,13 @@ std::string findExecutableIgnoreCase(const std::string& directory,
 
 bool LaunchManager::launch() {
   namespace fs = std::filesystem;
-  std::string fullPath = (fs::path(installPath_) / executable_).string();
+
+  std::string fullPath =
+      (fs::path(game_.installPath) / game_.executable).string();
 
   if (!fs::exists(fullPath)) {
-    std::string foundPath = findExecutableIgnoreCase(installPath_, executable_);
+    std::string foundPath =
+        findExecutableIgnoreCase(game_.installPath, game_.executable);
     if (foundPath.empty()) {
       return false;
     }
@@ -67,7 +69,7 @@ bool LaunchManager::launch() {
   PROCESS_INFORMATION pi;
 
   if (!CreateProcess(fullPath.c_str(), NULL, NULL, NULL, FALSE, 0, NULL,
-                     installPath_.c_str(), &si, &pi)) {
+                     game_.installPath.c_str(), &si, &pi)) {
     return false;
   }
   pid_ = pi.dwProcessId;
@@ -76,8 +78,30 @@ bool LaunchManager::launch() {
 #else
   pid_ = fork();
   if (pid_ == 0) {
-    execl(fullPath.c_str(), fullPath.c_str(), (char*)nullptr);
-    std::_Exit(EXIT_FAILURE);
+    switch (game_.clientType) {
+      case ClientType::Steam: {
+        // TODO: Don't set hardcoded proton path
+        std::string protonPath =
+            "/home/porya/.steam/steam/compatibilitytools.d/Proton-GE "
+            "Latest/proton";
+
+        setenv("STEAM_COMPAT_DATA_PATH",
+               (fs::path(game_.installPath).parent_path().parent_path() /
+                "compatdata" / std::to_string(game_.appId))
+                   .string()
+                   .c_str(),
+               1);
+
+        setenv("STEAM_COMPAT_CLIENT_INSTALL_PATH", Steam::getLocation().c_str(),
+               1);
+
+        chdir(game_.installPath.c_str());
+
+        execl(protonPath.c_str(), protonPath.c_str(), "run", fullPath.c_str(),
+              (char*)nullptr);
+      }
+        std::_Exit(EXIT_FAILURE);
+    }
   } else if (pid_ < 0) {
     return false;
   }
