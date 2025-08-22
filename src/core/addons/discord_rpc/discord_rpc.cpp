@@ -222,12 +222,6 @@ RPCManager& RPCManager::clearPresence() noexcept {
 void RPCManager::updateReconnectTime() noexcept {
   m_nextConnect = std::chrono::system_clock::now() +
                   std::chrono::milliseconds(Backoff::get().next());
-
-  std::cout << "Reconnecting to Discord in "
-            << std::chrono::duration_cast<std::chrono::milliseconds>(
-                   m_nextConnect - std::chrono::system_clock::now())
-                   .count()
-            << " ms\n";
 }
 
 std::time_t startTime;
@@ -238,17 +232,15 @@ void RichPresence::Initialize(const std::string& applicationId) {
   if (initialized) return;
 
   rpcManager.setClientID(applicationId)
-      .onReady([](discord::User const& user) {
-        std::cout << "Client Ready! User: " << user.username << "#"
-                  << user.discriminator << "| User ID: (" << user.id << ")\n";
-      })
+      .onReady(
+          [](discord::User const& user) { std::cout << "Client Ready!\n"; })
       .onDisconnected([](int errcode, std::string_view message) {
         std::cout << "Client disconnected! Code: " << errcode << " - "
-                  << message;
+                  << message << "\n";
       })
       .onErrored([](int errcode, std::string_view message) {
-        std::cout << "Discord: error with code: " << errcode << " - "
-                  << message;
+        std::cout << "Discord: error with code: " << errcode << " - " << message
+                  << "\n";
       })
       .initialize();
 

@@ -108,8 +108,17 @@ class Connection {
     if (m_state == State::Disconnected &&
         !platform::PipeConnection::get().open()) {
       m_lastError = ErrorCode::DiscordNotRunning;
+
+      auto msLeft = std::chrono::duration_cast<std::chrono::milliseconds>(
+                        RPCManager::get().m_nextConnect -
+                        std::chrono::system_clock::now())
+                        .count();
+
       m_lastErrorMessage =
-          "Discord is not running \nor IPC pipe unavailable \n";
+          "Discord is not running or IPC pipe unavailable.\n"
+          "Reconnecting to Discord in " +
+          std::to_string(msLeft) + " ms\n";
+
       sendError();
       return;
     }
