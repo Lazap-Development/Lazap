@@ -23,7 +23,14 @@ FetchContent_Declare(
         GIT_TAG v1.92.1
 )
 
-FetchContent_MakeAvailable(glew glfw imgui)
+FetchContent_Declare(
+    glaze
+    GIT_REPOSITORY https://github.com/stephenberry/glaze.git
+    GIT_TAG v5.5.4  
+)
+
+
+FetchContent_MakeAvailable(glew glfw glaze imgui)
 
 # FetchContent_Declare() normally supports EXCLUDE_FROM_ALL but apparently there is a bug
 # See https://gitlab.kitware.com/cmake/cmake/-/issues/20167
@@ -88,8 +95,8 @@ target_include_directories(${EXECUTABLE_NAME}
 target_link_libraries(${EXECUTABLE_NAME}
         PRIVATE
         glfw
+        glaze::glaze
         libglew_static
         $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
         $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
         )
-

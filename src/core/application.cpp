@@ -7,6 +7,7 @@
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
+#include "addons/discord_rpc/discord_rpc.h"
 
 void Application::run() {
   glfwSetErrorCallback([](int error, const char *description) {
@@ -39,6 +40,9 @@ void Application::run() {
 
   // TODO: Add Addon(s) Instantiations here
 
+  discord::RichPresence::Initialize("932504287337148417");
+  discord::RichPresence::UpdatePresence("Lazap", "In Main Menu");
+
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
 
@@ -55,6 +59,7 @@ void Application::run() {
     glfwSwapBuffers(window);
   }
 
+  discord::RichPresence::Shutdown();
   imgui.shutdown();
   glfwDestroyWindow(window);
   glfwTerminate();
