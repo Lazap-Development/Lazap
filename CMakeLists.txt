@@ -100,3 +100,9 @@ target_link_libraries(${EXECUTABLE_NAME}
         $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
         $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
         )
+
+# Add assets folder to the build
+add_custom_command(
+        TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/src/assets
+)

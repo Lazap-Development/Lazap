@@ -1,5 +1,6 @@
 #include <imgui_layer.h>
 #include <utils/launch_manager.h>
+#include "ui/panel.h"
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -24,20 +25,24 @@ void ImGuiLayer::begin() {
 }
 
 void ImGuiLayer::render() {
-  ImGui::Begin("Window A", nullptr, ImGuiWindowFlags_NoCollapse);
+  // ImGui::Begin("Window A", nullptr, ImGuiWindowFlags_NoCollapse);
 
-  for (auto &game : games_) {
-    LaunchManager lm = LaunchManager(game);
-    if (ImGui::Button(game.name.c_str())) lm.launch();
+  // for (auto &game : games_) {
+  //   LaunchManager lm = LaunchManager(game);
+  //   if (ImGui::Button(game.name.c_str())) lm.launch();
 
-    if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
-      if (lm.isRunning()) {
-        lm.kill();
-      }
-    }
+  //   if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+  //     if (lm.isRunning()) {
+  //       lm.kill();
+  //     }
+  //   }
+  // }
+
+  // ImGui::End();
+
+  for (auto &panel : panels_) {
+    panel->render();
   }
-
-  ImGui::End();
 }
 
 void ImGuiLayer::end() {
@@ -49,4 +54,11 @@ void ImGuiLayer::shutdown() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
+}
+
+void ImGuiLayer::addPanel(std::unique_ptr<ui::Panel> panel) {
+  if (!panel) return;
+  panel->definePointers();
+  panel->init();
+  panels_.push_back(std::move(panel));
 }

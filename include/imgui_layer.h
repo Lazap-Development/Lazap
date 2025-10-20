@@ -1,7 +1,8 @@
 #pragma once
 #include <clients/client.h>
-
+#include <memory>
 #include <vector>
+#include "ui/panel.h"
 
 #include "GLFW/glfw3.h"
 
@@ -14,7 +15,9 @@ class ImGuiLayer {
   void shutdown();
 
   void setGames(const std::vector<Game> games);
+  void addPanel(std::unique_ptr<ui::Panel> panel);
 
  private:
   std::vector<Game> games_;
+  std::vector<std::unique_ptr<ui::Panel>> panels_;
 };
