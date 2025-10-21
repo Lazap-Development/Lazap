@@ -1,10 +1,11 @@
 #pragma once
 #include <clients/client.h>
+
 #include <memory>
 #include <vector>
-#include "ui/panel.h"
 
 #include "GLFW/glfw3.h"
+#include "ui/panel.h"
 
 class ImGuiLayer {
  public:

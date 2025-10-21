@@ -8,8 +8,8 @@
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "addons/discord_rpc/discord_rpc.h"
-#include "ui/panels/left_panel.h"
 #include "ui/panels/game_panel.h"
+#include "ui/panels/left_panel.h"
 
 void Application::run() {
   glfwSetErrorCallback([](int error, const char *description) {

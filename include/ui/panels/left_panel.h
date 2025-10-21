@@ -3,13 +3,13 @@
 
 namespace ui {
 
-  class LeftPanel : public Panel {
-    public:
-      LeftPanel() = default;
-      void init() override;
-      void render() override;
-      void end() override {}
-      void definePointers() override {};
-  };
+class LeftPanel : public Panel {
+ public:
+  LeftPanel() = default;
+  void init() override;
+  void render() override;
+  void end() override {}
+  void definePointers() override {};
+};
 
-} // namespace ui
+}  // namespace ui

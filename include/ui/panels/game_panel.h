@@ -1,22 +1,23 @@
 #pragma once
-#include "ui/panel.h"
 #include <memory>
+
+#include "ui/panel.h"
 
 namespace ui {
 
-	class GamePanel : public Panel {
-		public:
-			GamePanel() = default;
-			void init() override;
-			void render() override;
-			void end() override {}
-			std::vector<Game>* games = nullptr;
-			void definePointers() override;
+class GamePanel : public Panel {
+ public:
+  GamePanel() = default;
+  void init() override;
+  void render() override;
+  void end() override {}
+  std::vector<Game>* games = nullptr;
+  void definePointers() override;
 
-  	protected:
-    	std::vector<Game>* games_ = nullptr;
-  };
+ protected:
+  std::vector<Game>* games_ = nullptr;
+};
 
-  using GamePanelPtr = std::unique_ptr<GamePanel>;
+using GamePanelPtr = std::unique_ptr<GamePanel>;
 
-} //namespace ui
+}  // namespace ui

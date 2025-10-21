@@ -1,10 +1,10 @@
 #include <imgui_layer.h>
 #include <utils/launch_manager.h>
-#include "ui/panel.h"
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
+#include "ui/panel.h"
 
 void ImGuiLayer::init(GLFWwindow *window) {
   IMGUI_CHECKVERSION();
