@@ -42,8 +42,6 @@ void Application::run() {
   imgui.addPanel(std::make_unique<ui::LeftPanel>());
   imgui.addPanel(std::make_unique<ui::GamePanel>());
 
-  // TODO: Add Addon(s) Instantiations here
-
   discord::RichPresence::Initialize("932504287337148417");
   discord::RichPresence::UpdatePresence("Lazap", "In Main Menu");
 

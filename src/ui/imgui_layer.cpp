@@ -5,6 +5,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
 #include "ui/panel.h"
+#include "ui/themes/themes.h"
 
 void ImGuiLayer::init(GLFWwindow *window) {
   IMGUI_CHECKVERSION();
@@ -12,6 +13,8 @@ void ImGuiLayer::init(GLFWwindow *window) {
   ImGui::StyleColorsDark();
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 130");
+
+  Themes::setDefaultDarkColors();
 }
 
 void ImGuiLayer::setGames(std::vector<Game> games) {
