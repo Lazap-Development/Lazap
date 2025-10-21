@@ -8,8 +8,6 @@
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "addons/discord_rpc/discord_rpc.h"
-#include "ui/panels/game_panel.h"
-#include "ui/panels/left_panel.h"
 
 void Application::run() {
   glfwSetErrorCallback([](int error, const char *description) {
@@ -39,8 +37,6 @@ void Application::run() {
   }
 
   imgui.setGames(std::move(games));
-  imgui.addPanel(std::make_unique<ui::LeftPanel>());
-  imgui.addPanel(std::make_unique<ui::GamePanel>());
 
   discord::RichPresence::Initialize("932504287337148417");
   discord::RichPresence::UpdatePresence("Lazap", "In Main Menu");

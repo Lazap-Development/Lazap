@@ -4,7 +4,9 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
-#include "ui/panel.h"
+#include "ui/panel_manager.h"
+#include "ui/panels/game_panel.h"
+#include "ui/panels/left_panel.h"
 #include "ui/themes/themes.h"
 
 void ImGuiLayer::init(GLFWwindow *window) {
@@ -15,6 +17,9 @@ void ImGuiLayer::init(GLFWwindow *window) {
   ImGui_ImplOpenGL3_Init("#version 130");
 
   Themes::setDefaultDarkColors();
+
+  panel_manager_.initPanels();
+  panel_manager_.definePointers();
 }
 
 void ImGuiLayer::setGames(std::vector<Game> games) {
@@ -43,9 +48,7 @@ void ImGuiLayer::render() {
 
   // ImGui::End();
 
-  for (auto &panel : panels_) {
-    panel->render();
-  }
+  panel_manager_.renderPanels();
 }
 
 void ImGuiLayer::end() {
@@ -57,11 +60,4 @@ void ImGuiLayer::shutdown() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
-}
-
-void ImGuiLayer::addPanel(std::unique_ptr<ui::Panel> panel) {
-  if (!panel) return;
-  panel->definePointers();
-  panel->init();
-  panels_.push_back(std::move(panel));
 }
