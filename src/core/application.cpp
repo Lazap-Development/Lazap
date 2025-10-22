@@ -52,7 +52,7 @@ void Application::run() {
 
     imgui.begin();
     imgui.render();
-    imgui.end();
+    imgui.end(window);
 
     glfwSwapBuffers(window);
   }

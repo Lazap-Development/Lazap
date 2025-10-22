@@ -19,10 +19,11 @@ void LeftPanel::render() {
   // ImGui::SetWindowSize(ImVec2(200.0f, 800.0f));
 
   ImGui::Begin("Left Panel", nullptr,
-               ImGuiWindowFlags_NoCollapse |
-                   // ImGuiWindowFlags_NoResize |
-                   // ImGuiWindowFlags_NoMove |
-                   ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar);
+               ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+                   //  ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
+                   ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoDocking |
+                   ImGuiWindowFlags_NoBringToFrontOnFocus |
+                   ImGuiWindowFlags_NoNavFocus);
   ImGui::Button("Home");
   ImGui::Button("Recently Played");
   ImGui::Button("All Games");

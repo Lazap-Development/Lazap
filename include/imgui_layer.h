@@ -12,12 +12,12 @@ class ImGuiLayer {
   void init(GLFWwindow* window);
   void begin();
   void render();
-  void end();
+  void end(GLFWwindow* window);
   void shutdown();
 
   void setGames(const std::vector<Game> games);
 
  private:
   std::vector<Game> games_;
-  ui::PanelManager panel_manager_;
+  std::unique_ptr<ui::PanelManager> panel_manager_;
 };

@@ -7,8 +7,8 @@
 using namespace ui;
 
 void PanelManager::initPanels() {
-  panels_.push_back(new LeftPanel());
-  panels_.push_back(new GamePanel());
+  PanelManager::addPanel(new LeftPanel());
+  PanelManager::addPanel(new GamePanel());
 
   for (auto &panel : panels_) {
     panel->init();
@@ -30,5 +30,3 @@ void PanelManager::definePointers() {
 }
 
 void PanelManager::addPanel(Panel *panel) { panels_.push_back(panel); }
-
-void PanelManager::setGames(std::vector<Game> games) { games_ = games; }

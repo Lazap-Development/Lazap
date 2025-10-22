@@ -23,10 +23,11 @@ void GamePanel::render() {
   // ImGui::SetWindowPos(ImVec2(208.0f, 8.0f));
 
   ImGui::Begin("Game Menu", nullptr,
-               ImGuiWindowFlags_NoCollapse |
-                   // ImGuiWindowFlags_NoResize |
-                   // ImGuiWindowFlags_NoMove |
-                   ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoTitleBar);
+               ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+                   //  ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
+                   ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoDocking |
+                   ImGuiWindowFlags_NoBringToFrontOnFocus |
+                   ImGuiWindowFlags_NoNavFocus);
 
   ImGui::Text("All Games");
   ImGui::Separator();

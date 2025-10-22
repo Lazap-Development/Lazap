@@ -18,6 +18,5 @@ class PanelManager {
 
  private:
   std::vector<Panel *> panels_;
-  std::vector<Game> games_;
 };
 }  // namespace ui
