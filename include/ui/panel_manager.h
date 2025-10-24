@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <vector>
 
 #include "clients/client.h"
@@ -12,11 +13,10 @@ class PanelManager {
   void initPanels();
   void renderPanels();
   void endPanels();
-  void addPanel(Panel *panel);
-  void setGames(std::vector<Game> games);
+  void addPanel(std::unique_ptr<Panel> panel);
   void definePointers();
 
  private:
-  std::vector<Panel *> panels_;
+  std::vector<std::unique_ptr<Panel>> panels_;
 };
 }  // namespace ui

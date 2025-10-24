@@ -7,8 +7,8 @@
 using namespace ui;
 
 void PanelManager::initPanels() {
-  PanelManager::addPanel(new LeftPanel());
-  PanelManager::addPanel(new GamePanel());
+  PanelManager::addPanel(std::make_unique<LeftPanel>());
+  PanelManager::addPanel(std::make_unique<GamePanel>());
 
   for (auto &panel : panels_) {
     panel->init();
@@ -29,4 +29,6 @@ void PanelManager::definePointers() {
   }
 }
 
-void PanelManager::addPanel(Panel *panel) { panels_.push_back(panel); }
+void PanelManager::addPanel(std::unique_ptr<Panel> panel) {
+  panels_.push_back(std::move(panel));
+}
