@@ -1,5 +1,8 @@
+#include <imgui_internal.h>
 #include <imgui_layer.h>
 #include <utils/launch_manager.h>
+
+#include <filesystem>
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -27,49 +30,46 @@ void ImGuiLayer::init(GLFWwindow *window) {
   panel_manager_->definePointers();
 }
 
-void ImGuiLayer::setGames(std::vector<Game> games) {
-  games_ = std::move(games);
-}
-
 void ImGuiLayer::begin() {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
 
   const ImGuiViewport *viewport = ImGui::GetMainViewport();
+  ImGui::DockSpaceOverViewport(viewport->ID);
+
+  static bool first_time = true;
+  if (first_time && !std::filesystem::exists("lazap_imgui.ini")) {
+    createInitialDockLayout();
+    first_time = false;
+    ImGui::SaveIniSettingsToDisk("lazap_imgui.ini");
+  }
   ImGui::SetNextWindowPos(viewport->Pos);
   ImGui::SetNextWindowSize(viewport->Size);
   ImGui::SetNextWindowViewport(viewport->ID);
 
-  ImGuiID dockspace_id = ImGui::GetID("MainWindow");
-  ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+  ImGuiWindowFlags host_flags =
+      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+      ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBringToFrontOnFocus |
+      ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoDocking |
+      ImGuiWindowFlags_NoMove;
+
+  ImGuiStyle &style = ImGui::GetStyle();
+  style.WindowRounding = 0.0f;
+  style.WindowBorderSize = 0.0f;
+  style.WindowPadding = ImVec2(2.0f, 2.0f);
+  ImGui::Begin("HostWindow", nullptr, host_flags);
+  ImGui::End();
 }
 
 void ImGuiLayer::render() {
-  // ImGui::Begin("Window A", nullptr, ImGuiWindowFlags_NoCollapse);
-
-  // for (auto &game : games_) {
-  //   LaunchManager lm = LaunchManager(game);
-  //   if (ImGui::Button(game.name.c_str())) lm.launch();
-
-  //   if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
-  //     if (lm.isRunning()) {
-  //       lm.kill();
-  //     }
-  //   }
-  // }
-
-  // ImGui::End();
-
-  panel_manager_->renderPanels();
+  ImGuiWindowClass window_class;
+  window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar;
+  panel_manager_->renderPanels(&window_class);
 }
 
 void ImGuiLayer::end(GLFWwindow *window) {
   ImGui::Render();
-  int display_w, display_h;
-  glfwGetFramebufferSize(window, &display_w, &display_h);
-  glViewport(0, 0, display_w, display_h);
-  glClear(GL_COLOR_BUFFER_BIT);
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
   GLFWwindow *backup_current_context = glfwGetCurrentContext();
@@ -82,4 +82,28 @@ void ImGuiLayer::shutdown() {
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
+}
+
+void ImGuiLayer::setGames(std::vector<Game> games) {
+  games_ = std::move(games);
+}
+
+static void createInitialDockLayout() {
+  ImGuiID dockspace_id = ImGui::GetMainViewport()->ID;
+
+  ImGui::DockBuilderRemoveNode(dockspace_id);
+  ImGui::DockBuilderAddNode(
+      dockspace_id, ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_NoTabBar |
+                        ImGuiDockNodeFlags_HiddenTabBar |
+                        ImGuiDockNodeFlags_NoWindowMenuButton |
+                        ImGuiDockNodeFlags_NoResize);
+  ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
+
+  ImGuiID left, right;
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.10f, &left,
+                              &right);
+  ImGui::DockBuilderDockWindow("Left Menu", left);
+  ImGui::DockBuilderDockWindow("Library", right);
+
+  ImGui::DockBuilderFinish(dockspace_id);
 }

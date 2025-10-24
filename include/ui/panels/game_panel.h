@@ -7,7 +7,7 @@ namespace ui {
 
 class GamePanel : public Panel {
  public:
-  GamePanel() = default;
+  GamePanel() : Panel("Library") {};
   void init() override;
   void render() override;
   void end() override {}

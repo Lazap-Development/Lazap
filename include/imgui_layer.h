@@ -21,3 +21,5 @@ class ImGuiLayer {
   std::vector<Game> games_;
   std::unique_ptr<ui::PanelManager> panel_manager_;
 };
+
+static void createInitialDockLayout();

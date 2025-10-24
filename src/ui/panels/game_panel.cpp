@@ -9,7 +9,6 @@ using namespace ui;
 
 void GamePanel::init() {
   ImGuiIO& io = ImGui::GetIO();
-  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
   io.Fonts->AddFontFromFileTTF("src/assets/fonts/Nunito-Medium.ttf", 24.0f);
 
   ImGuiStyle& style = ImGui::GetStyle();
@@ -19,15 +18,12 @@ void GamePanel::init() {
 }
 
 void GamePanel::render() {
-  // ImGui::SetWindowSize(ImVec2(400.0f, 800.0f));
-  // ImGui::SetWindowPos(ImVec2(208.0f, 8.0f));
+  if (!visible()) return;
 
-  ImGui::Begin("Game Menu", nullptr,
+  ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
-                   //  ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
-                   ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoDocking |
-                   ImGuiWindowFlags_NoBringToFrontOnFocus |
-                   ImGuiWindowFlags_NoNavFocus);
+                   ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
+                   ImGuiWindowFlags_NoTitleBar);
 
   ImGui::Text("All Games");
   ImGui::Separator();
@@ -36,6 +32,17 @@ void GamePanel::render() {
     ImGui::End();
     return;
   }
+  // for (auto &game : games_) {
+  //   LaunchManager lm = LaunchManager(game);
+  //   if (ImGui::Button(game.name.c_str())) lm.launch();
+
+  //   if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+  //     if (lm.isRunning()) {
+  //       lm.kill();
+  //     }
+  //   }
+  // }
+
   ImGui::End();
 }
 

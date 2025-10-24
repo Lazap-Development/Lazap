@@ -1,5 +1,9 @@
 #include "ui/panel_manager.h"
 
+#include <imgui.h>
+
+#include <algorithm>
+
 #include "clients/client.h"
 #include "ui/panels/game_panel.h"
 #include "ui/panels/left_panel.h"
@@ -15,9 +19,12 @@ void PanelManager::initPanels() {
   }
 }
 
-void PanelManager::renderPanels() {
+void PanelManager::renderPanels(ImGuiWindowClass *window_class) {
   for (auto &panel : panels_) {
-    panel->render();
+    if (panel->visible()) {
+      ImGui::SetNextWindowClass(window_class);  // removes tab bar
+      panel->render();
+    }
   }
 }
 
@@ -31,4 +38,22 @@ void PanelManager::definePointers() {
 
 void PanelManager::addPanel(std::unique_ptr<Panel> panel) {
   panels_.push_back(std::move(panel));
+}
+
+void PanelManager::setPanelVisible(const std::string &name, bool visible) {
+  for (auto &p : panels_) {
+    if (p->name() == name) {
+      p->setVisible(visible);
+      return;
+    }
+  }
+}
+
+bool PanelManager::isPanelVisible(const std::string &name) const {
+  for (const auto &p : panels_) {
+    if (p->name() == name) {
+      return p->visible();
+    }
+  }
+  return false;
 }

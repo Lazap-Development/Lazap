@@ -5,7 +5,7 @@ namespace ui {
 
 class LeftPanel : public Panel {
  public:
-  LeftPanel() = default;
+  LeftPanel() : Panel("Left Menu") {};
   void init() override;
   void render() override;
   void end() override {}

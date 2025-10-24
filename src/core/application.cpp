@@ -16,8 +16,9 @@ void Application::run() {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+  glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
-  GLFWwindow *window = glfwCreateWindow(800, 600, "Lazap", nullptr, nullptr);
+  GLFWwindow *window = glfwCreateWindow(1779, 979, "Lazap", nullptr, nullptr);
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);
 
