@@ -11,11 +11,10 @@ class GamePanel : public Panel {
   void init() override;
   void render() override;
   void end() override {}
-  std::vector<Game>* games = nullptr;
-  void definePointers() override;
+  void setGames(const std::vector<Game>* games);
 
  protected:
-  std::vector<Game>* games_ = nullptr;
+  const std::vector<Game>* games_ = nullptr;
 };
 
 using GamePanelPtr = std::unique_ptr<GamePanel>;

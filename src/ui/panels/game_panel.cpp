@@ -17,6 +17,10 @@ void GamePanel::init() {
   style.FramePadding = ImVec2(8.0f, 6.0f);
 }
 
+void GamePanel::setGames(const std::vector<Game>* games) {
+  games_ = games;
+}
+
 void GamePanel::render() {
   if (!visible()) return;
 
@@ -27,23 +31,20 @@ void GamePanel::render() {
 
   ImGui::Text("All Games");
   ImGui::Separator();
+
   if (!games_) {
     ImGui::TextDisabled("No games available.");
-    ImGui::End();
-    return;
+  } else {
+    for (const auto& game : *games_) {
+      LaunchManager lm = LaunchManager(game);
+      if (ImGui::Button(game.name.c_str())) lm.launch();
+      if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+        if (lm.isRunning()) {
+          lm.kill();
+        }
+      }
+    }
   }
-  // for (auto &game : games_) {
-  //   LaunchManager lm = LaunchManager(game);
-  //   if (ImGui::Button(game.name.c_str())) lm.launch();
-
-  //   if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
-  //     if (lm.isRunning()) {
-  //       lm.kill();
-  //     }
-  //   }
-  // }
 
   ImGui::End();
 }
-
-void GamePanel::definePointers() { games_ = games; }

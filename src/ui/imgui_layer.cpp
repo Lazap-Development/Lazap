@@ -8,8 +8,6 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
 #include "ui/panel_manager.h"
-#include "ui/panels/game_panel.h"
-#include "ui/panels/left_panel.h"
 #include "ui/themes/themes.h"
 
 void ImGuiLayer::init(GLFWwindow *window) {
@@ -27,7 +25,6 @@ void ImGuiLayer::init(GLFWwindow *window) {
 
   panel_manager_ = std::make_unique<ui::PanelManager>();
   panel_manager_->initPanels();
-  panel_manager_->definePointers();
 }
 
 void ImGuiLayer::begin() {
@@ -86,6 +83,7 @@ void ImGuiLayer::shutdown() {
 
 void ImGuiLayer::setGames(std::vector<Game> games) {
   games_ = std::move(games);
+  panel_manager_->setGames(&games_);
 }
 
 static void createInitialDockLayout() {

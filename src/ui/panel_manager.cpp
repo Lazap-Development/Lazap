@@ -2,9 +2,6 @@
 
 #include <imgui.h>
 
-#include <algorithm>
-
-#include "clients/client.h"
 #include "ui/panels/game_panel.h"
 #include "ui/panels/left_panel.h"
 
@@ -30,12 +27,6 @@ void PanelManager::renderPanels(ImGuiWindowClass *window_class) {
 
 void PanelManager::endPanels() { panels_.clear(); }
 
-void PanelManager::definePointers() {
-  for (auto &panel : panels_) {
-    panel->definePointers();
-  }
-}
-
 void PanelManager::addPanel(std::unique_ptr<Panel> panel) {
   panels_.push_back(std::move(panel));
 }
@@ -56,4 +47,13 @@ bool PanelManager::isPanelVisible(const std::string &name) const {
     }
   }
   return false;
+}
+
+void PanelManager::setGames(const std::vector<Game> *games) {
+  for (auto &panel : panels_) {
+    if (auto *gamePanel = dynamic_cast<ui::GamePanel *>(panel.get())) {
+      gamePanel->setGames(games);
+      return;
+    }
+  }
 }

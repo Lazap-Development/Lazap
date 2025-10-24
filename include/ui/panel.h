@@ -14,7 +14,6 @@ class Panel {
   virtual void init() {}
   virtual void render() = 0;
   virtual void end() {}
-  virtual void definePointers() = 0;
 
   const std::string& name() const { return name_; }
   bool visible() const { return visible_; }

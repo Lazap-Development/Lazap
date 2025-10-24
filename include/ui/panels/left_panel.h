@@ -9,7 +9,5 @@ class LeftPanel : public Panel {
   void init() override;
   void render() override;
   void end() override {}
-  void definePointers() override {};
 };
-
 }  // namespace ui
