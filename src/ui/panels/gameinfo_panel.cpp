@@ -1,10 +1,10 @@
-#include "ui/panels/left_panel.h"
+#include "ui/panels/gameinfo_panel.h"
 
 #include "imgui.h"
 
 using namespace ui;
 
-void LeftPanel::init() {
+void GameInfoPanel::init() {
   ImGuiIO& io = ImGui::GetIO();
   io.Fonts->AddFontFromFileTTF("src/assets/fonts/Nunito-Medium.ttf", 36.0f);
 
@@ -14,26 +14,14 @@ void LeftPanel::init() {
   style.FramePadding = ImVec2(8.0f, 6.0f);
 }
 
-void LeftPanel::render() {
+void GameInfoPanel::render() {
   if (!visible()) return;
 
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
-  bool home = ImGui::Button("Home");
-  bool favs = ImGui::Button("Favorites");
-  bool library = ImGui::Button("All Games");
-
-  if (home == true) {
-    view_->MainMenu();
-  }
-  if (favs == true) {
-    view_->Favorites();
-  }
-  if (library == true) {
-    view_->Library();
-  }
+  ImGui::TextDisabled("Work In Progress...");
   ImGui::Separator();
   ImGui::End();
 }

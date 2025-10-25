@@ -7,7 +7,7 @@ namespace ui {
 
 class GamePanel : public Panel {
  public:
-  GamePanel() : Panel("Library") {};
+  GamePanel(const std::string& name) : Panel(name) {};
   void init() override;
   void render() override;
   void end() override {}

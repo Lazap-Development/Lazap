@@ -37,7 +37,7 @@ void ImGuiLayer::begin() {
 
   static bool first_time = true;
   if (first_time && !std::filesystem::exists("lazap_imgui.ini")) {
-    createInitialDockLayout();
+    panel_manager_->view_->MainMenu();
     first_time = false;
     ImGui::SaveIniSettingsToDisk("lazap_imgui.ini");
   }
@@ -61,7 +61,8 @@ void ImGuiLayer::begin() {
 
 void ImGuiLayer::render() {
   ImGuiWindowClass window_class;
-  window_class.DockNodeFlagsOverrideSet = ImGuiDockNodeFlags_NoTabBar;
+  window_class.DockNodeFlagsOverrideSet =
+      ImGuiDockNodeFlags_NoTabBar | ImGuiDockNodeFlags_NoResize;
   panel_manager_->renderPanels(&window_class);
 }
 
@@ -76,6 +77,7 @@ void ImGuiLayer::end(GLFWwindow *window) {
 }
 
 void ImGuiLayer::shutdown() {
+  panel_manager_->endPanels();
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
@@ -84,24 +86,4 @@ void ImGuiLayer::shutdown() {
 void ImGuiLayer::setGames(std::vector<Game> games) {
   games_ = std::move(games);
   panel_manager_->setGames(&games_);
-}
-
-static void createInitialDockLayout() {
-  ImGuiID dockspace_id = ImGui::GetMainViewport()->ID;
-
-  ImGui::DockBuilderRemoveNode(dockspace_id);
-  ImGui::DockBuilderAddNode(
-      dockspace_id, ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_NoTabBar |
-                        ImGuiDockNodeFlags_HiddenTabBar |
-                        ImGuiDockNodeFlags_NoWindowMenuButton |
-                        ImGuiDockNodeFlags_NoResize);
-  ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
-
-  ImGuiID left, right;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.10f, &left,
-                              &right);
-  ImGui::DockBuilderDockWindow("Left Menu", left);
-  ImGui::DockBuilderDockWindow("Library", right);
-
-  ImGui::DockBuilderFinish(dockspace_id);
 }

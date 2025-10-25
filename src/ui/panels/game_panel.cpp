@@ -9,7 +9,7 @@ using namespace ui;
 
 void GamePanel::init() {
   ImGuiIO& io = ImGui::GetIO();
-  io.Fonts->AddFontFromFileTTF("src/assets/fonts/Nunito-Medium.ttf", 24.0f);
+  io.Fonts->AddFontFromFileTTF("src/assets/fonts/Nunito-Medium.ttf", 36.0f);
 
   ImGuiStyle& style = ImGui::GetStyle();
   style.WindowRounding = 8.0f;
@@ -17,9 +17,7 @@ void GamePanel::init() {
   style.FramePadding = ImVec2(8.0f, 6.0f);
 }
 
-void GamePanel::setGames(const std::vector<Game>* games) {
-  games_ = games;
-}
+void GamePanel::setGames(const std::vector<Game>* games) { games_ = games; }
 
 void GamePanel::render() {
   if (!visible()) return;
@@ -29,7 +27,7 @@ void GamePanel::render() {
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
 
-  ImGui::Text("All Games");
+  ImGui::Text(name_.c_str());
   ImGui::Separator();
 
   if (!games_) {
