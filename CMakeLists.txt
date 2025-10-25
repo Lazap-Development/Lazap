@@ -24,13 +24,18 @@ FetchContent_Declare(
 )
 
 FetchContent_Declare(
-    glaze
-    GIT_REPOSITORY https://github.com/stephenberry/glaze.git
-    GIT_TAG v5.5.4  
+        glaze
+        GIT_REPOSITORY https://github.com/stephenberry/glaze.git
+        GIT_TAG v5.5.4  
+)
+FetchContent_Declare(
+        stb
+        URL https://raw.githubusercontent.com/nothings/stb/master/stb_image.h
+        DOWNLOAD_NO_EXTRACT TRUE
 )
 
 
-FetchContent_MakeAvailable(glew glfw glaze imgui)
+FetchContent_MakeAvailable(glew glfw glaze imgui stb)
 
 # FetchContent_Declare() normally supports EXCLUDE_FROM_ALL but apparently there is a bug
 # See https://gitlab.kitware.com/cmake/cmake/-/issues/20167
@@ -89,6 +94,11 @@ target_compile_definitions(${EXECUTABLE_NAME}
 target_include_directories(${EXECUTABLE_NAME}
         PRIVATE
         ${imgui_SOURCE_DIR}/
+        ${PROJECT_SOURCE_DIR}/include)
+
+target_include_directories(${EXECUTABLE_NAME}
+        PRIVATE
+        ${stb_SOURCE_DIR}/
         ${PROJECT_SOURCE_DIR}/include)
 
 # Link against the appropriate libraries

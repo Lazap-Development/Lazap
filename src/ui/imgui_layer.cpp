@@ -24,7 +24,7 @@ void ImGuiLayer::init(GLFWwindow *window) {
   Themes::setDefaultDarkColors();
 
   panel_manager_ = std::make_unique<ui::PanelManager>();
-  panel_manager_->initPanels();
+  panel_manager_->initPanels(window);
 }
 
 void ImGuiLayer::begin() {

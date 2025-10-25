@@ -8,6 +8,7 @@
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "addons/discord_rpc/discord_rpc.h"
+#include "utils/icon_manager.h"
 
 void Application::run() {
   glfwSetErrorCallback([](int error, const char *description) {
@@ -17,6 +18,7 @@ void Application::run() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
   glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+  glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
   GLFWwindow *window = glfwCreateWindow(1779, 979, "Lazap", nullptr, nullptr);
   glfwMakeContextCurrent(window);
@@ -38,6 +40,9 @@ void Application::run() {
   }
 
   imgui.setGames(std::move(games));
+
+  IconManager::LoadAllIcons("src/assets/icons/");
+  IconManager::LoadAllIcons("src/assets/img/");
 
   discord::RichPresence::Initialize("932504287337148417");
   discord::RichPresence::UpdatePresence("Lazap", "In Main Menu");

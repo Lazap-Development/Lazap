@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include "GLFW/glfw3.h"
 #include "panel.h"
 #include "ui/panel.h"
 
@@ -15,7 +16,7 @@ class Views;
 class PanelManager {
  public:
   PanelManager() = default;
-  void initPanels();
+  void initPanels(GLFWwindow* w);
   void renderPanels(ImGuiWindowClass* window_class);
   void endPanels();
   void addPanel(std::unique_ptr<Panel> panel);
