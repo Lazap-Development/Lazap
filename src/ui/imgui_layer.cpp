@@ -3,6 +3,8 @@
 #include <utils/launch_manager.h>
 
 #include <filesystem>
+#include <fstream>
+#include <string>
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -14,9 +16,11 @@ void ImGuiLayer::init(GLFWwindow *window) {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGui::StyleColorsDark();
+
   ImGuiIO &io = ImGui::GetIO();
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
   io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+  io.IniFilename = nullptr;
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 130");
@@ -25,6 +29,23 @@ void ImGuiLayer::init(GLFWwindow *window) {
 
   panel_manager_ = std::make_unique<ui::PanelManager>();
   panel_manager_->initPanels(window);
+
+  std::string IniFilename = "lazap_imgui.ini";
+  if (!std::filesystem::exists(IniFilename)) {
+    panel_manager_->view_->MainMenu();
+    ImGui::SaveIniSettingsToDisk(IniFilename.c_str());
+  } else {
+    std::ifstream file(IniFilename);
+    if (file) {
+      std::string data((std::istreambuf_iterator<char>(file)),
+                       std::istreambuf_iterator<char>());
+      if (!data.empty()) {
+        ImGui::LoadIniSettingsFromMemory(data.c_str(), data.size());
+      }
+    } else {
+      panel_manager_->view_->MainMenu();
+    }
+  }
 }
 
 void ImGuiLayer::begin() {
@@ -34,13 +55,6 @@ void ImGuiLayer::begin() {
 
   const ImGuiViewport *viewport = ImGui::GetMainViewport();
   ImGui::DockSpaceOverViewport(viewport->ID);
-
-  static bool first_time = true;
-  if (first_time && !std::filesystem::exists("lazap_imgui.ini")) {
-    panel_manager_->view_->MainMenu();
-    first_time = false;
-    ImGui::SaveIniSettingsToDisk("lazap_imgui.ini");
-  }
   ImGui::SetNextWindowPos(viewport->Pos);
   ImGui::SetNextWindowSize(viewport->Size);
   ImGui::SetNextWindowViewport(viewport->ID);
