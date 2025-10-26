@@ -5,7 +5,7 @@
 
 class Client;
 
-enum class ClientType { Steam };
+enum class ClientType { Steam, EpicGames };
 
 struct Game {
   std::string name;

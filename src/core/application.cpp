@@ -1,4 +1,5 @@
 #include <application.h>
+#include <clients/epic/epic.h>
 #include <clients/steam/steam.h>
 #include <imgui_layer.h>
 
@@ -31,6 +32,7 @@ void Application::run() {
 
   std::vector<std::unique_ptr<Client>> clients;
   clients.push_back(std::make_unique<Steam>());
+  clients.push_back(std::make_unique<EpicGames>());
 
   std::vector<Game> games;
   for (const auto &client : clients) {
