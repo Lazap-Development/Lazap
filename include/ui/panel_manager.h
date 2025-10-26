@@ -31,6 +31,7 @@ class PanelManager {
   std::vector<std::unique_ptr<Panel>> panels_;
 };
 
+enum class ViewType { None, MainMenu, Library, Favorites, Settings };
 class Views {
  public:
   Views(std::unique_ptr<PanelManager> pm) : panel_manager(std::move(pm)) {}
@@ -39,6 +40,7 @@ class Views {
   void Library();
   void Favorites();
   void Settings();
+  ViewType view;
 
  private:
   std::unique_ptr<PanelManager> panel_manager;

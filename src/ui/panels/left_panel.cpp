@@ -25,13 +25,13 @@ void LeftPanel::render() {
   bool favs = ImGui::Button("Favorites");
   bool library = ImGui::Button("All Games");
 
-  if (home == true) {
+  if (home == true && view_->view != ViewType::MainMenu) {
     view_->MainMenu();
   }
-  if (favs == true) {
+  if (favs == true && view_->view != ViewType::Favorites) {
     view_->Favorites();
   }
-  if (library == true) {
+  if (library == true && view_->view != ViewType::Library) {
     view_->Library();
   }
   ImGui::Separator();

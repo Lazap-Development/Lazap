@@ -80,6 +80,7 @@ ImGuiID Views::ReplaceDockNode() {
 }
 
 void Views::MainMenu() {
+  if (view == ViewType::MainMenu) return;
   ImGuiID dockspace_id = ReplaceDockNode();
 
   ImGuiID titlebar, left, gamesinfo_id, bottom;
@@ -100,9 +101,11 @@ void Views::MainMenu() {
   panel_manager->setPanelVisible("Favorites", false);
   panel_manager->setPanelVisible("Library", false);
   panel_manager->setPanelVisible("Recents", true);
+  view = ViewType::MainMenu;
 }
 
 void Views::Library() {
+  if (view == ViewType::Library) return;
   ImGuiID dockspace_id = ReplaceDockNode();
 
   ImGuiID titlebar, left, right;
@@ -121,9 +124,11 @@ void Views::Library() {
   panel_manager->setPanelVisible("Favorites", false);
   panel_manager->setPanelVisible("Library", true);
   panel_manager->setPanelVisible("Recents", false);
+  view = ViewType::Library;
 }
 
 void Views::Favorites() {
+  if (view == ViewType::Favorites) return;
   ImGuiID dockspace_id = ReplaceDockNode();
 
   ImGuiID titlebar, left, right;
@@ -142,9 +147,11 @@ void Views::Favorites() {
   panel_manager->setPanelVisible("Favorites", true);
   panel_manager->setPanelVisible("Library", false);
   panel_manager->setPanelVisible("Recents", false);
+  view = ViewType::Favorites;
 }
 
 void Views::Settings() {
+  if (view == ViewType::Settings) return;
   ImGuiID dockspace_id = ReplaceDockNode();
 
   ImGuiID titlebar, left, center, right;
@@ -166,4 +173,5 @@ void Views::Settings() {
   panel_manager->setPanelVisible("Favorites", false);
   panel_manager->setPanelVisible("Library", false);
   panel_manager->setPanelVisible("Recents", false);
+  view = ViewType::Settings;
 }

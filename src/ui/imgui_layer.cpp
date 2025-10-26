@@ -29,23 +29,6 @@ void ImGuiLayer::init(GLFWwindow *window) {
 
   panel_manager_ = std::make_unique<ui::PanelManager>();
   panel_manager_->initPanels(window);
-
-  std::string IniFilename = "lazap_imgui.ini";
-  if (!std::filesystem::exists(IniFilename)) {
-    panel_manager_->view_->MainMenu();
-    ImGui::SaveIniSettingsToDisk(IniFilename.c_str());
-  } else {
-    std::ifstream file(IniFilename);
-    if (file) {
-      std::string data((std::istreambuf_iterator<char>(file)),
-                       std::istreambuf_iterator<char>());
-      if (!data.empty()) {
-        ImGui::LoadIniSettingsFromMemory(data.c_str(), data.size());
-      }
-    } else {
-      panel_manager_->view_->MainMenu();
-    }
-  }
 }
 
 void ImGuiLayer::begin() {
@@ -55,6 +38,12 @@ void ImGuiLayer::begin() {
 
   const ImGuiViewport *viewport = ImGui::GetMainViewport();
   ImGui::DockSpaceOverViewport(viewport->ID);
+
+  if (initialized_ == false) {
+    initialized_ = true;
+    panel_manager_->view_->MainMenu();
+  }
+
   ImGui::SetNextWindowPos(viewport->Pos);
   ImGui::SetNextWindowSize(viewport->Size);
   ImGui::SetNextWindowViewport(viewport->ID);
