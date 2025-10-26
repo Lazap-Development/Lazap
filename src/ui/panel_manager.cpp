@@ -19,16 +19,13 @@ void PanelManager::initPanels(GLFWwindow *w) {
   PanelManager::addPanel(std::make_unique<GamePanel>("Favorites"));
   PanelManager::addPanel(std::make_unique<GamePanel>("Recents"));
   PanelManager::addPanel(std::make_unique<GameInfoPanel>());
-
-  for (auto &panel : panels_) {
-    panel->init();
-  }
 }
 
 void PanelManager::renderPanels(ImGuiWindowClass *window_class) {
   for (auto &panel : panels_) {
     if (panel->visible()) {
       ImGui::SetNextWindowClass(window_class);  // removes tab bar
+      panel->init();
       panel->render();
     }
   }
@@ -67,14 +64,11 @@ void PanelManager::setGames(const std::vector<Game> *games) {
 }
 
 ImGuiID Views::ReplaceDockNode() {
-  ImGuiID dockspace_id = ImGui::GetMainViewport()->ID;
+  ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
   ImGui::DockBuilderRemoveNode(dockspace_id);
-  ImGui::DockBuilderAddNode(
-      dockspace_id, ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_NoTabBar |
-                        ImGuiDockNodeFlags_HiddenTabBar |
-                        ImGuiDockNodeFlags_NoWindowMenuButton |
-                        ImGuiDockNodeFlags_NoResize |
-                        ImGuiDockNodeFlags_PassthruCentralNode);
+  ImGui::DockBuilderAddNode(dockspace_id,
+                            ImGuiDockNodeFlags_PassthruCentralNode |
+                                ImGuiDockNodeFlags_NoDockingInCentralNode);
   ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
   return dockspace_id;
 }
@@ -84,7 +78,7 @@ void Views::MainMenu() {
   ImGuiID dockspace_id = ReplaceDockNode();
 
   ImGuiID titlebar, left, gamesinfo_id, bottom;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.04f, &titlebar,
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.05f, &titlebar,
                               &dockspace_id);
   ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.10f, &left,
                               &dockspace_id);
@@ -109,7 +103,7 @@ void Views::Library() {
   ImGuiID dockspace_id = ReplaceDockNode();
 
   ImGuiID titlebar, left, right;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.04f, &titlebar,
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.05f, &titlebar,
                               &dockspace_id);
   ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.10f, &left,
                               &right);
@@ -132,7 +126,7 @@ void Views::Favorites() {
   ImGuiID dockspace_id = ReplaceDockNode();
 
   ImGuiID titlebar, left, right;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.04f, &titlebar,
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.05f, &titlebar,
                               &dockspace_id);
   ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.10f, &left,
                               &right);
@@ -155,7 +149,7 @@ void Views::Settings() {
   ImGuiID dockspace_id = ReplaceDockNode();
 
   ImGuiID titlebar, left, center, right;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.04f, &titlebar,
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.05f, &titlebar,
                               &dockspace_id);
   ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.10f, &left,
                               &dockspace_id);

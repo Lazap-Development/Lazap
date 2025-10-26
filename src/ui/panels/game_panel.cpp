@@ -15,6 +15,7 @@ void GamePanel::init() {
   style.WindowRounding = 8.0f;
   style.FrameRounding = 5.0f;
   style.FramePadding = ImVec2(8.0f, 6.0f);
+  style.Colors[ImGuiCol_Separator] = ImVec4(0, 0, 0, 0);
 }
 
 void GamePanel::setGames(const std::vector<Game>* games) { games_ = games; }

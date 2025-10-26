@@ -9,13 +9,11 @@
 using namespace ui;
 
 void Titlebar::init() {
-  ImGuiIO& io = ImGui::GetIO();
-  io.Fonts->AddFontFromFileTTF("src/assets/fonts/Nunito-Medium.ttf", 36.0f);
-
   ImGuiStyle& style = ImGui::GetStyle();
   style.WindowRounding = 8.0f;
   style.FrameRounding = 5.0f;
-  style.FramePadding = ImVec2(8.0f, 6.0f);
+  style.WindowPadding = ImVec2(0.0f, 5.0f);
+  style.Colors[ImGuiCol_Separator] = ImVec4(0, 0, 0, 0);
 }
 
 void Titlebar::render() {
