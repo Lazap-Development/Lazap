@@ -9,7 +9,7 @@ using namespace ui;
 
 void GamePanel::init() {
   ImGuiIO& io = ImGui::GetIO();
-  io.Fonts->AddFontFromFileTTF("src/assets/fonts/Nunito-Medium.ttf", 36.0f);
+  // io.Fonts->AddFontFromFileTTF("src/assets/fonts/Nunito-Medium.ttf", 36.0f);
 
   ImGuiStyle& style = ImGui::GetStyle();
   style.WindowRounding = 8.0f;
