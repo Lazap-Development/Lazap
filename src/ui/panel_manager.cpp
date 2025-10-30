@@ -64,7 +64,11 @@ void PanelManager::setGames(const std::vector<Game> *games) {
 
 ImGuiID Views::ReplaceDockNode() {
   ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
-
+  ImGui::DockBuilderRemoveNode(dockspace_id);
+  ImGui::DockBuilderAddNode(dockspace_id,
+                            ImGuiDockNodeFlags_PassthruCentralNode |
+                                ImGuiDockNodeFlags_NoDockingInCentralNode);
+  ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
   return dockspace_id;
 }
 
