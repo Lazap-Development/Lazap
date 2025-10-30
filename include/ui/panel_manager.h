@@ -32,18 +32,19 @@ class PanelManager {
 };
 
 enum class ViewType { None, MainMenu, Library, Favorites, Settings };
+
 class Views {
  public:
-  Views(std::unique_ptr<PanelManager> pm) : panel_manager(std::move(pm)) {}
+  explicit Views(PanelManager* pm) : panel_manager(pm) {}
   ImGuiID ReplaceDockNode();
   void MainMenu();
   void Library();
   void Favorites();
   void Settings();
-  ViewType view;
+  ViewType view = ViewType::None;
 
  private:
-  std::unique_ptr<PanelManager> panel_manager;
+  PanelManager* panel_manager;
 };
 
 }  // namespace ui

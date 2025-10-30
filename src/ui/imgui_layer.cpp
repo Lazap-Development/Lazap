@@ -2,10 +2,6 @@
 #include <imgui_layer.h>
 #include <utils/launch_manager.h>
 
-#include <filesystem>
-#include <fstream>
-#include <string>
-
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
@@ -18,7 +14,6 @@ void ImGuiLayer::init(GLFWwindow *window) {
 
   ImGuiIO &io = ImGui::GetIO();
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
   io.IniFilename = nullptr;
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);
@@ -63,7 +58,9 @@ void ImGuiLayer::begin() {
 void ImGuiLayer::render() {
   ImGuiWindowClass window_class;
   window_class.DockNodeFlagsOverrideSet =
-      ImGuiDockNodeFlags_NoTabBar | ImGuiDockNodeFlags_NoResize;
+      ImGuiDockNodeFlags_NoTabBar |
+      (ImGuiDockNodeFlags)ImGuiDockNodeFlags_NoResize;
+
   panel_manager_->renderPanels(&window_class);
 }
 

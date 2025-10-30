@@ -11,20 +11,19 @@
 using namespace ui;
 
 void PanelManager::initPanels(GLFWwindow *w) {
-  view_ =
-      std::make_unique<Views>(std::move(std::unique_ptr<PanelManager>(this)));
-  PanelManager::addPanel(std::make_unique<Titlebar>(w));
-  PanelManager::addPanel(std::make_unique<LeftPanel>(view_.get()));
-  PanelManager::addPanel(std::make_unique<GamePanel>("Library"));
-  PanelManager::addPanel(std::make_unique<GamePanel>("Favorites"));
-  PanelManager::addPanel(std::make_unique<GamePanel>("Recents"));
-  PanelManager::addPanel(std::make_unique<GameInfoPanel>());
+  view_ = std::make_unique<Views>(this);
+  addPanel(std::make_unique<Titlebar>(w));
+  addPanel(std::make_unique<LeftPanel>(view_.get()));
+  addPanel(std::make_unique<GamePanel>("Library"));
+  addPanel(std::make_unique<GamePanel>("Favorites"));
+  addPanel(std::make_unique<GamePanel>("Recents"));
+  addPanel(std::make_unique<GameInfoPanel>());
 }
 
 void PanelManager::renderPanels(ImGuiWindowClass *window_class) {
   for (auto &panel : panels_) {
     if (panel->visible()) {
-      ImGui::SetNextWindowClass(window_class);  // removes tab bar
+      ImGui::SetNextWindowClass(window_class);
       panel->init();
       panel->render();
     }
@@ -65,11 +64,7 @@ void PanelManager::setGames(const std::vector<Game> *games) {
 
 ImGuiID Views::ReplaceDockNode() {
   ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
-  ImGui::DockBuilderRemoveNode(dockspace_id);
-  ImGui::DockBuilderAddNode(dockspace_id,
-                            ImGuiDockNodeFlags_PassthruCentralNode |
-                                ImGuiDockNodeFlags_NoDockingInCentralNode);
-  ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
+
   return dockspace_id;
 }
 
