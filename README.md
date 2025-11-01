@@ -7,5 +7,5 @@
 </h1>
 
 <p align="center">
-  Unify your clients with one modern, cross-platform library.
+  Unify your clients with one fast, modern, cross-platform library.
 </p>
