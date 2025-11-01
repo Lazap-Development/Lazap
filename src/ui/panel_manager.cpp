@@ -18,13 +18,16 @@ void PanelManager::initPanels(GLFWwindow *w) {
   addPanel(std::make_unique<GamePanel>("Favorites"));
   addPanel(std::make_unique<GamePanel>("Recents"));
   addPanel(std::make_unique<GameInfoPanel>());
+
+  for (auto &panel : panels_) {
+    panel->init();
+  }
 }
 
 void PanelManager::renderPanels(ImGuiWindowClass *window_class) {
   for (auto &panel : panels_) {
     if (panel->visible()) {
       ImGui::SetNextWindowClass(window_class);
-      panel->init();
       panel->render();
     }
   }
