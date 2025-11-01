@@ -10,7 +10,6 @@
 #include "ui/panel.h"
 
 namespace ui {
-
 class Views;
 
 class PanelManager {
@@ -20,10 +19,8 @@ class PanelManager {
   void renderPanels(ImGuiWindowClass* window_class);
   void endPanels();
   void addPanel(std::unique_ptr<Panel> panel);
-
   void setPanelVisible(const std::string& name, bool visible);
   bool isPanelVisible(const std::string& name) const;
-
   void setGames(const std::vector<Game>* games);
   std::unique_ptr<Views> view_;
 
@@ -36,7 +33,7 @@ enum class ViewType { None, MainMenu, Library, Favorites, Settings };
 class Views {
  public:
   explicit Views(PanelManager* pm) : panel_manager(pm) {}
-  ImGuiID ReplaceDockNode();
+  void BuildDockLayout();
   void MainMenu();
   void Library();
   void Favorites();
@@ -45,6 +42,7 @@ class Views {
 
  private:
   PanelManager* panel_manager;
+  bool docked_layout_built_ = false;
 };
 
 }  // namespace ui
