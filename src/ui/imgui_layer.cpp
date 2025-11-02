@@ -64,7 +64,7 @@ void ImGuiLayer::render() {
   panel_manager_->renderPanels(&window_class);
 }
 
-void ImGuiLayer::end(GLFWwindow *window) {
+void ImGuiLayer::end() {
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
