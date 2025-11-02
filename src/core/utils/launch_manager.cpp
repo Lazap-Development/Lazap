@@ -58,24 +58,29 @@ bool LaunchManager::launch() {
   if (!fs::exists(fullPath)) {
     std::string foundPath =
         findExecutableIgnoreCase(game_.installPath, game_.executable);
-    if (foundPath.empty()) {
-      return false;
+    if (!foundPath.empty()) {
+      fullPath = foundPath;
     }
-    fullPath = foundPath;
   }
 
 #ifdef _WIN32
   STARTUPINFO si = {sizeof(STARTUPINFO)};
   PROCESS_INFORMATION pi;
 
-  if (!CreateProcess(fullPath.c_str(), NULL, NULL, NULL, FALSE, 0, NULL,
-                     game_.installPath.c_str(), &si, &pi)) {
-    return false;
+  if (!game_.installPath.empty()) {
+    if (!CreateProcess(fullPath.c_str(), NULL, NULL, NULL, FALSE, 0, NULL,
+                       game_.installPath.c_str(), &si, &pi)) {
+      return false;
+    }
+  } else {
+    ShellExecuteA(nullptr, "open", fullPath.c_str(), nullptr, nullptr,
+                  SW_SHOWDEFAULT);
   }
+
   pid_ = pi.dwProcessId;
   CloseHandle(pi.hProcess);
   CloseHandle(pi.hThread);
-#else
+#else  // Linux
   pid_ = fork();
   if (pid_ == 0) {
     switch (game_.clientType) {
@@ -100,6 +105,7 @@ bool LaunchManager::launch() {
         execl(protonPath.c_str(), protonPath.c_str(), "run", fullPath.c_str(),
               (char*)nullptr);
       }
+        // TODO: handle other launcher in linux
         std::_Exit(EXIT_FAILURE);
     }
   } else if (pid_ < 0) {

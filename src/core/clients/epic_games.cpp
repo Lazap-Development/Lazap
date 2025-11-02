@@ -97,6 +97,28 @@ std::string EpicGames::getLocation() {
 #endif
 }
 
+std::string GetEpicLauncherPath() {
+  HKEY hKey;
+  std::string value;
+  const char* subkey = R"(SOFTWARE\WOW6432Node\Epic Games\EpicGamesLauncher)";
+  const char* valueName = "AppDataPath";
+  char data[MAX_PATH];
+  DWORD dataSize = sizeof(data);
+
+  if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, subkey, 0, KEY_READ, &hKey) ==
+      ERROR_SUCCESS) {
+    if (RegQueryValueExA(hKey, valueName, nullptr, nullptr,
+                         reinterpret_cast<LPBYTE>(data),
+                         &dataSize) == ERROR_SUCCESS) {
+      value = std::string(data) +
+              R"(\Launcher\Portal\Binaries\Win64\EpicGamesLauncher.exe)";
+    }
+    RegCloseKey(hKey);
+  }
+
+  return value;
+}
+
 std::vector<Game> EpicGames::getInstalledGames() {
   std::vector<Game> games;
   std::unordered_set<size_t> seenAppIds;
@@ -114,8 +136,9 @@ std::vector<Game> EpicGames::getInstalledGames() {
       Game game;
       game.name = item->displayName;
       game.clientType = ClientType::EpicGames;
-      game.installPath = item->installLocation;
-      game.executable = item->launchExecutable;
+      game.installPath = "";
+      game.executable = "com.epicgames.launcher://apps/" + item->appName +
+                        +"?action=launch&silent=true";
       game.bannerUrl = "";
       game.version = item->appVersionString;
       game.sizeOnDisk = item->installSize;
