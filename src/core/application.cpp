@@ -1,5 +1,5 @@
 #include <application.h>
-#include <clients/epic/epic.h>
+#include <clients/epic_games.h>
 #include <clients/steam/steam.h>
 #include <imgui_layer.h>
 
