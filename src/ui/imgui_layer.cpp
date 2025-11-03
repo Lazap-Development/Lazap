@@ -29,7 +29,7 @@ void ImGuiLayer::init(GLFWwindow *window) {
                         16.0f);
   FontManager::LoadFont("Title", "src/assets/fonts/ArchivoBlack-Regular.ttf",
                         24.0f);
-  FontManager::LoadFont("Game:Title", "src/assets/fonts/Nunito-Semibold.ttf",
+  FontManager::LoadFont("Game:Title", "src/assets/fonts/Nunito-SemiBold.ttf",
                         16.0f);
   FontManager::LoadFont("Game:Time", "src/assets/fonts/RobotoMono-Medium.ttf",
                         10.0f);
