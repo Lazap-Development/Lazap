@@ -22,7 +22,7 @@ void LeftPanel::render() {
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
   ImGui::PopFont();
-  ImGui::PushFont(FontManager::GetFont("Title"));
+  ImGui::PushFont(FontManager::GetFont("Left:Button"));
   bool home = ImGui::Button("Home");
   bool favs = ImGui::Button("Favorites");
   bool library = ImGui::Button("All Games");

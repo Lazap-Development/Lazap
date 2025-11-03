@@ -47,12 +47,7 @@ void Application::run() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-<<<<<<< Updated upstream
   GLFWwindow *window = glfwCreateWindow(1779, 979, "Lazap", nullptr, nullptr);
-=======
-
-  GLFWwindow *window = glfwCreateWindow(1200, 720, "Lazap", nullptr, nullptr);
->>>>>>> Stashed changes
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);
   glewInit();

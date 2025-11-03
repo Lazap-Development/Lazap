@@ -24,6 +24,17 @@ void Titlebar::render() {
       ImGuiDockNodeFlags_NoTabBar | ImGuiDockNodeFlags_NoResize;
   ImGui::SetNextWindowClass(&window_class);
   ImGui::Begin(name().c_str(), nullptr, false);
+
+  // Titlebar background
+  ImDrawList* draw = ImGui::GetForegroundDrawList();
+  ImVec2 pos = ImGui::GetWindowPos();
+  ImVec2 size = ImGui::GetWindowSize();
+  float rounding = 16.0f;
+  float top_padding = 3.0f;
+  draw->AddRectFilled(ImVec2(pos.x, pos.y + top_padding),
+                      ImVec2(pos.x + size.x, pos.y + size.y + top_padding),
+                      IM_COL32(0, 0, 0, 80), rounding);
+
   ImGui::PushStyleColor(ImGuiCol_ChildBg, IM_COL32(30, 30, 30, 255));
   ImGui::Image((void*)(intptr_t)IconManager::GetIcon("lazap"), ImVec2(38, 38));
 

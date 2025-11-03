@@ -8,6 +8,7 @@
 #include "ui/panel_manager.h"
 #include "ui/themes/themes.h"
 #include "utils/font_manager.h"
+#include "utils/icon_manager.h"
 
 void ImGuiLayer::init(GLFWwindow *window) {
   IMGUI_CHECKVERSION();
@@ -24,6 +25,8 @@ void ImGuiLayer::init(GLFWwindow *window) {
                         "src/assets/fonts/ZenDots-Regular.ttf", 64.0f);
   FontManager::LoadFont("GameInfo:Paragraph",
                         "src/assets/fonts/Nunito-Medium.ttf", 16.0f);
+  FontManager::LoadFont("Left:Button", "src/assets/fonts/Oxanium-Regular.ttf",
+                        16.0f);
   FontManager::LoadFont("Title", "src/assets/fonts/ArchivoBlack-Regular.ttf",
                         24.0f);
   FontManager::LoadFont("Game:Title", "src/assets/fonts/Nunito-Semibold.ttf",
@@ -64,13 +67,26 @@ void ImGuiLayer::begin() {
     initialized_ = true;
     panel_manager_->view_->MainMenu();
   }
-  ImGui::DockSpace(ImGui::GetID("MainDockSpace"), ImVec2(0.0f, 0.0f),
-                   ImGuiDockNodeFlags_NoDockingInCentralNode, nullptr);
 
+  ImDrawList *bg = ImGui::GetWindowDrawList();
+  float gameInfoY = viewport->Size.y * .43f;
+  ImVec2 img_pos = ImVec2(0.0f, 0.0f);
+  ImVec2 img_size = ImVec2((float)viewport->Size.x, gameInfoY);
+  bg->AddImage((ImTextureID)(intptr_t)IconManager::GetIcon("banner"), img_pos,
+               img_size, ImVec2(0, 0), ImVec2(1, 1), IM_COL32_WHITE);
+  bg->AddRectFilledMultiColor(img_pos, img_size, IM_COL32(0, 0, 0, 0),
+                              IM_COL32(0, 0, 0, 0), IM_COL32(0, 0, 0, 255),
+                              IM_COL32(0, 0, 0, 255));
+  style.Colors[ImGuiCol_WindowBg].w = 0.0f;
+
+  ImGui::DockSpace(ImGui::GetID("MainDockSpace"), ImVec2(0.0f, 0.0f),
+                   ImGuiDockNodeFlags_None, nullptr);
   ImGui::End();
 }
 
 void ImGuiLayer::render() {
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   ImGuiWindowClass window_class;
   window_class.DockNodeFlagsOverrideSet =
       ImGuiDockNodeFlags_NoTabBar |

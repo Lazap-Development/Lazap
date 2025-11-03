@@ -68,9 +68,7 @@ void PanelManager::setGames(const std::vector<Game> *games) {
 void Views::BuildDockLayout() {
   ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
   ImGui::DockBuilderRemoveNode(dockspace_id);
-  ImGui::DockBuilderAddNode(dockspace_id,
-                            ImGuiDockNodeFlags_PassthruCentralNode |
-                                ImGuiDockNodeFlags_NoDockingInCentralNode);
+  ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_None);
   ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
 
   ImGuiID titlebar, left, gamesinfo_id, bottom;
