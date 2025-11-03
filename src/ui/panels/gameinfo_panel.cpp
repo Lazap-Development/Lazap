@@ -9,12 +9,13 @@ using namespace ui;
 
 void GameInfoPanel::init() {
   ImGuiIO& io = ImGui::GetIO();
-  io.Fonts->AddFontFromFileTTF("src/assets/fonts/Nunito-Medium.ttf", 36.0f);
+  // io.Fonts->AddFontFromFileTTF("src/assets/fonts/Nunito-Medium.ttf", 36.0f);
 
   ImGuiStyle& style = ImGui::GetStyle();
   style.WindowRounding = 8.0f;
   style.FrameRounding = 5.0f;
   style.FramePadding = ImVec2(8.0f, 6.0f);
+  style.Colors[ImGuiCol_Separator] = ImVec4(0, 0, 0, 0);
 }
 
 void GameInfoPanel::render() {
@@ -31,7 +32,6 @@ void GameInfoPanel::render() {
   draw_list->AddImage(
       (void*)(intptr_t)IconManager::GetIcon("banner"), panel_pos,
       ImVec2(panel_pos.x + panel_size.x, panel_pos.y + panel_size.y));
-  ImGui::TextDisabled("Work In Progress...");
   ImGui::Separator();
   ImGui::End();
 }

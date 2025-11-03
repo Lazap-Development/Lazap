@@ -11,14 +11,13 @@
 using namespace ui;
 
 void PanelManager::initPanels(GLFWwindow *w) {
-  view_ =
-      std::make_unique<Views>(std::move(std::unique_ptr<PanelManager>(this)));
-  PanelManager::addPanel(std::make_unique<Titlebar>(w));
-  PanelManager::addPanel(std::make_unique<LeftPanel>(view_.get()));
-  PanelManager::addPanel(std::make_unique<GamePanel>("Library"));
-  PanelManager::addPanel(std::make_unique<GamePanel>("Favorites"));
-  PanelManager::addPanel(std::make_unique<GamePanel>("Recents"));
-  PanelManager::addPanel(std::make_unique<GameInfoPanel>());
+  view_ = std::make_unique<Views>(this);
+  addPanel(std::make_unique<Titlebar>(w));
+  addPanel(std::make_unique<LeftPanel>(view_.get()));
+  addPanel(std::make_unique<GamePanel>("Library"));
+  addPanel(std::make_unique<GamePanel>("Favorites"));
+  addPanel(std::make_unique<GamePanel>("Recents"));
+  addPanel(std::make_unique<GameInfoPanel>());
 
   for (auto &panel : panels_) {
     panel->init();
@@ -28,7 +27,7 @@ void PanelManager::initPanels(GLFWwindow *w) {
 void PanelManager::renderPanels(ImGuiWindowClass *window_class) {
   for (auto &panel : panels_) {
     if (panel->visible()) {
-      ImGui::SetNextWindowClass(window_class);  // removes tab bar
+      ImGui::SetNextWindowClass(window_class);
       panel->render();
     }
   }
@@ -66,35 +65,39 @@ void PanelManager::setGames(const std::vector<Game> *games) {
   }
 }
 
-ImGuiID Views::ReplaceDockNode() {
-  ImGuiID dockspace_id = ImGui::GetMainViewport()->ID;
+void Views::BuildDockLayout() {
+  ImGuiID dockspace_id = ImGui::GetID("MainDockSpace");
   ImGui::DockBuilderRemoveNode(dockspace_id);
-  ImGui::DockBuilderAddNode(
-      dockspace_id, ImGuiDockNodeFlags_DockSpace | ImGuiDockNodeFlags_NoTabBar |
-                        ImGuiDockNodeFlags_HiddenTabBar |
-                        ImGuiDockNodeFlags_NoWindowMenuButton |
-                        ImGuiDockNodeFlags_NoResize |
-                        ImGuiDockNodeFlags_PassthruCentralNode);
+  ImGui::DockBuilderAddNode(dockspace_id,
+                            ImGuiDockNodeFlags_PassthruCentralNode |
+                                ImGuiDockNodeFlags_NoDockingInCentralNode);
   ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
-  return dockspace_id;
-}
-
-void Views::MainMenu() {
-  if (view == ViewType::MainMenu) return;
-  ImGuiID dockspace_id = ReplaceDockNode();
 
   ImGuiID titlebar, left, gamesinfo_id, bottom;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.04f, &titlebar,
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.05f, &titlebar,
                               &dockspace_id);
   ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.10f, &left,
                               &dockspace_id);
   ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.40f, &gamesinfo_id,
                               &bottom);
+
   ImGui::DockBuilderDockWindow("Titlebar", titlebar);
   ImGui::DockBuilderDockWindow("Left Menu", left);
   ImGui::DockBuilderDockWindow("Games Info", gamesinfo_id);
   ImGui::DockBuilderDockWindow("Recents", bottom);
+  ImGui::DockBuilderDockWindow("Library", bottom);
+  ImGui::DockBuilderDockWindow("Favorites", bottom);
+
   ImGui::DockBuilderFinish(dockspace_id);
+}
+
+void Views::MainMenu() {
+  if (view == ViewType::MainMenu) return;
+
+  if (!docked_layout_built_) {
+    BuildDockLayout();
+    docked_layout_built_ = true;
+  }
 
   panel_manager->setPanelVisible("Left Menu", true);
   panel_manager->setPanelVisible("Games Info", true);
@@ -106,18 +109,6 @@ void Views::MainMenu() {
 
 void Views::Library() {
   if (view == ViewType::Library) return;
-  ImGuiID dockspace_id = ReplaceDockNode();
-
-  ImGuiID titlebar, left, right;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.04f, &titlebar,
-                              &dockspace_id);
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.10f, &left,
-                              &right);
-  ImGui::DockBuilderDockWindow("Titlebar", titlebar);
-  ImGui::DockBuilderDockWindow("Left Menu", left);
-  ImGui::DockBuilderDockWindow("Library", right);
-
-  ImGui::DockBuilderFinish(dockspace_id);
 
   panel_manager->setPanelVisible("Left Menu", true);
   panel_manager->setPanelVisible("Games Info", false);
@@ -129,18 +120,6 @@ void Views::Library() {
 
 void Views::Favorites() {
   if (view == ViewType::Favorites) return;
-  ImGuiID dockspace_id = ReplaceDockNode();
-
-  ImGuiID titlebar, left, right;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.04f, &titlebar,
-                              &dockspace_id);
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.10f, &left,
-                              &right);
-  ImGui::DockBuilderDockWindow("Titlebar", titlebar);
-  ImGui::DockBuilderDockWindow("Left Menu", left);
-  ImGui::DockBuilderDockWindow("Favorites", right);
-
-  ImGui::DockBuilderFinish(dockspace_id);
 
   panel_manager->setPanelVisible("Left Menu", true);
   panel_manager->setPanelVisible("Games Info", false);
@@ -148,30 +127,4 @@ void Views::Favorites() {
   panel_manager->setPanelVisible("Library", false);
   panel_manager->setPanelVisible("Recents", false);
   view = ViewType::Favorites;
-}
-
-void Views::Settings() {
-  if (view == ViewType::Settings) return;
-  ImGuiID dockspace_id = ReplaceDockNode();
-
-  ImGuiID titlebar, left, center, right;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.04f, &titlebar,
-                              &dockspace_id);
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.10f, &left,
-                              &dockspace_id);
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.70f, &right,
-                              &center);
-  ImGui::DockBuilderDockWindow("Titlebar", titlebar);
-  ImGui::DockBuilderDockWindow("Left Menu", left);
-  ImGui::DockBuilderDockWindow("Settings", center);
-  ImGui::DockBuilderDockWindow("Library", right);
-
-  ImGui::DockBuilderFinish(dockspace_id);
-
-  panel_manager->setPanelVisible("Left Menu", true);
-  panel_manager->setPanelVisible("Games Info", false);
-  panel_manager->setPanelVisible("Favorites", false);
-  panel_manager->setPanelVisible("Library", false);
-  panel_manager->setPanelVisible("Recents", false);
-  view = ViewType::Settings;
 }

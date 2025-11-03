@@ -12,7 +12,7 @@ class ImGuiLayer {
   void init(GLFWwindow* window);
   void begin();
   void render();
-  void end(GLFWwindow* window);
+  void end();
   void shutdown();
 
   void setGames(const std::vector<Game> games);

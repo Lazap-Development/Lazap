@@ -2,10 +2,6 @@
 #include <imgui_layer.h>
 #include <utils/launch_manager.h>
 
-#include <filesystem>
-#include <fstream>
-#include <string>
-
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
@@ -15,17 +11,13 @@
 void ImGuiLayer::init(GLFWwindow *window) {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGui::StyleColorsDark();
 
   ImGuiIO &io = ImGui::GetIO();
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-  io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
   io.IniFilename = nullptr;
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 130");
-
-  Themes::setDefaultDarkColors();
 
   panel_manager_ = std::make_unique<ui::PanelManager>();
   panel_manager_->initPanels(window);
@@ -37,13 +29,6 @@ void ImGuiLayer::begin() {
   ImGui::NewFrame();
 
   const ImGuiViewport *viewport = ImGui::GetMainViewport();
-  ImGui::DockSpaceOverViewport(viewport->ID);
-
-  if (initialized_ == false) {
-    initialized_ = true;
-    panel_manager_->view_->MainMenu();
-  }
-
   ImGui::SetNextWindowPos(viewport->Pos);
   ImGui::SetNextWindowSize(viewport->Size);
   ImGui::SetNextWindowViewport(viewport->ID);
@@ -59,17 +44,27 @@ void ImGuiLayer::begin() {
   style.WindowBorderSize = 0.0f;
   style.WindowPadding = ImVec2(2.0f, 2.0f);
   ImGui::Begin("HostWindow", nullptr, host_flags);
+  Themes::setDefaultDarkColors();
+  if (initialized_ == false) {
+    initialized_ = true;
+    panel_manager_->view_->MainMenu();
+  }
+  ImGui::DockSpace(ImGui::GetID("MainDockSpace"), ImVec2(0.0f, 0.0f),
+                   ImGuiDockNodeFlags_NoDockingInCentralNode, nullptr);
+
   ImGui::End();
 }
 
 void ImGuiLayer::render() {
   ImGuiWindowClass window_class;
   window_class.DockNodeFlagsOverrideSet =
-      ImGuiDockNodeFlags_NoTabBar | ImGuiDockNodeFlags_NoResize;
+      ImGuiDockNodeFlags_NoTabBar |
+      (ImGuiDockNodeFlags)ImGuiDockNodeFlags_NoResize;
+
   panel_manager_->renderPanels(&window_class);
 }
 
-void ImGuiLayer::end(GLFWwindow *window) {
+void ImGuiLayer::end() {
   ImGui::Render();
   ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

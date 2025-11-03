@@ -9,29 +9,34 @@ FetchContent_Declare(
         glew
         GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
         GIT_TAG glew-cmake-2.2.0
+        GIT_SHALLOW TRUE
 )
 
 FetchContent_Declare(
         glfw
         GIT_REPOSITORY https://github.com/glfw/glfw
         GIT_TAG 3.4
+        GIT_SHALLOW TRUE
 )
 
 FetchContent_Declare(
         imgui
         GIT_REPOSITORY https://github.com/ocornut/imgui
-        GIT_TAG v1.92.1-docking
+        GIT_TAG v1.92.4-docking
+        GIT_SHALLOW TRUE
 )
 
 FetchContent_Declare(
         glaze
         GIT_REPOSITORY https://github.com/stephenberry/glaze.git
         GIT_TAG v5.5.4  
+        GIT_SHALLOW TRUE
 )
 FetchContent_Declare(
         stb
         URL https://raw.githubusercontent.com/nothings/stb/master/stb_image.h
         DOWNLOAD_NO_EXTRACT TRUE
+        GIT_SHALLOW TRUE
 )
 
 
@@ -64,7 +69,7 @@ add_executable(${EXECUTABLE_NAME}
         ${SRC_FILES} 
 
         ${imgui_SOURCE_DIR}/imgui.cpp
-        ${imgui_SOURCE_DIR}/imgui_demo.cpp
+        # ${imgui_SOURCE_DIR}/imgui_demo.cpp
         ${imgui_SOURCE_DIR}/imgui_draw.cpp
         ${imgui_SOURCE_DIR}/imgui_tables.cpp
         ${imgui_SOURCE_DIR}/imgui_widgets.cpp
