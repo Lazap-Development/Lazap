@@ -11,9 +11,34 @@
 #include "GLFW/glfw3.h"
 #include "addons/discord_rpc/discord_rpc.h"
 #include "utils/icon_manager.h"
-#include "utils/runner.h"
+
+double ClockSeconds() {
+  using Clock = std::chrono::high_resolution_clock;
+  using second = std::chrono::duration<double>;
+  static const auto start = Clock::now();
+  return std::chrono::duration_cast<second>(Clock::now() - start).count();
+}
+
+void IdleBySleeping(FpsIdling &ioIdling) {
+  ioIdling.isIdling = false;
+
+  if ((ioIdling.fpsIdle > 0.f) && ioIdling.enableIdling) {
+    double beforeWait = ClockSeconds();
+    double waitTimeout = 1.0 / static_cast<double>(ioIdling.fpsIdle);
+
+    glfwWaitEventsTimeout(waitTimeout);
+
+    double afterWait = ClockSeconds();
+    double waitDuration = afterWait - beforeWait;
+    double waitIdleExpected = 1.0 / ioIdling.fpsIdle;
+
+    ioIdling.isIdling = (waitDuration > waitIdleExpected * 0.9);
+  }
+}
 
 void Application::run() {
+  auto startupBegin = std::chrono::high_resolution_clock::now();
+
   glfwSetErrorCallback([](int error, const char *description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
   });
@@ -22,11 +47,9 @@ void Application::run() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-
   GLFWwindow *window = glfwCreateWindow(1779, 979, "Lazap", nullptr, nullptr);
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);
-
   glewInit();
 
   ImGuiLayer imgui;
@@ -45,36 +68,34 @@ void Application::run() {
   }
 
   imgui.setGames(std::move(games));
-
   IconManager::LoadAllIcons("src/assets/icons/");
   IconManager::LoadAllIcons("src/assets/img/");
 
   discord::RichPresence::Initialize("932504287337148417");
   discord::RichPresence::UpdatePresence("Lazap", "In Main Menu");
 
+  printf("Startup took: %ld ms\n",
+         std::chrono::duration_cast<std::chrono::milliseconds>(
+             std::chrono::high_resolution_clock::now() - startupBegin)
+             .count());
+
   RunnerState runner;
   while (!glfwWindowShouldClose(window)) {
     IdleBySleeping(runner.fpsIdling);
-
     glfwPollEvents();
-
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
-
     glClearColor(0.f, 0.f, 0.f, 0.f);
     glClear(GL_COLOR_BUFFER_BIT);
-
     imgui.begin();
     imgui.render();
     imgui.end();
-
     glfwSwapBuffers(window);
   }
 
   discord::RichPresence::Shutdown();
   imgui.shutdown();
-
   glfwDestroyWindow(window);
   glfwTerminate();
 }
