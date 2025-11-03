@@ -53,6 +53,7 @@ compile_commands.json
 # VS code and VS2022 artifacts
 .vscode
 .vs
+.idea
 
 # Dear ImGui artifacts
 imgui.ini
