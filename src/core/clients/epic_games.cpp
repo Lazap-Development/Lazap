@@ -94,10 +94,12 @@ std::string EpicGames::getLocation() {
       }
     }
   }
+  return "";
 #endif
 }
 
 std::string GetEpicLauncherPath() {
+#ifdef _WIN32
   HKEY hKey;
   std::string value;
   const char* subkey = R"(SOFTWARE\WOW6432Node\Epic Games\EpicGamesLauncher)";
@@ -117,6 +119,9 @@ std::string GetEpicLauncherPath() {
   }
 
   return value;
+#else
+  return "";
+#endif
 }
 
 std::vector<Game> EpicGames::getInstalledGames() {

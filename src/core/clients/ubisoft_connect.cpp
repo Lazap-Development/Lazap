@@ -58,10 +58,8 @@ static std::string queryRegistry(const std::string& command) {
   CloseHandle(pi.hThread);
 
   return output;
-#else
-return "";
-#endif
 }
+#endif
 
 std::string UbisoftConnect::getLocation() {
 #ifdef _WIN32
@@ -151,11 +149,10 @@ std::vector<Game> UbisoftConnect::getInstalledGames() {
       games.push_back(std::move(game));
     }
   }
-
+#endif
   std::cout << "Found " << games.size() << " Ubisoft games." << std::endl;
 
   return games;
 }
-#endif
 
 std::string UbisoftConnect::getName() const { return "Ubisoft Connect"; }
