@@ -3,14 +3,12 @@
 #include <string>
 
 #include "imgui.h"
+#include "utils/font_manager.h"
 #include "utils/launch_manager.h"
 
 using namespace ui;
 
 void GamePanel::init() {
-  ImGuiIO& io = ImGui::GetIO();
-  // io.Fonts->AddFontFromFileTTF("src/assets/fonts/Nunito-Medium.ttf", 36.0f);
-
   ImGuiStyle& style = ImGui::GetStyle();
   style.WindowRounding = 8.0f;
   style.FrameRounding = 5.0f;
@@ -28,11 +26,15 @@ void GamePanel::render() {
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
 
+  ImGui::PushFont(FontManager::GetFont("Title"));
   ImGui::Text(name_.c_str());
+  ImGui::PopFont();
   ImGui::Separator();
 
   if (!games_) {
+    ImGui::PushFont(FontManager::GetFont("Game:Title"));
     ImGui::TextDisabled("No games available.");
+    ImGui::PopFont();
   } else {
     for (const auto& game : *games_) {
       LaunchManager lm = LaunchManager(game);

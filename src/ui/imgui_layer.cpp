@@ -7,6 +7,7 @@
 #include "imgui.h"
 #include "ui/panel_manager.h"
 #include "ui/themes/themes.h"
+#include "utils/font_manager.h"
 
 void ImGuiLayer::init(GLFWwindow *window) {
   IMGUI_CHECKVERSION();
@@ -15,6 +16,20 @@ void ImGuiLayer::init(GLFWwindow *window) {
   ImGuiIO &io = ImGui::GetIO();
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
   io.IniFilename = nullptr;
+
+  FontManager::Init();
+  FontManager::LoadFont("Username", "src/assets/fonts/Oxanium-Regular.ttf",
+                        15.0f);
+  FontManager::LoadFont("GameInfo:Title",
+                        "src/assets/fonts/ZenDots-Regular.ttf", 64.0f);
+  FontManager::LoadFont("GameInfo:Paragraph",
+                        "src/assets/fonts/Nunito-Medium.ttf", 16.0f);
+  FontManager::LoadFont("Title", "src/assets/fonts/ArchivoBlack-Regular.ttf",
+                        24.0f);
+  FontManager::LoadFont("Game:Title", "src/assets/fonts/Nunito-Semibold.ttf",
+                        16.0f);
+  FontManager::LoadFont("Game:Time", "src/assets/fonts/RobotoMono-Medium.ttf",
+                        10.0f);
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 130");

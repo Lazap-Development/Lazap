@@ -3,14 +3,12 @@
 #include "ui/panels/gameinfo_panel.h"
 // clang-format on
 #include "imgui.h"
+#include "utils/font_manager.h"
 #include "utils/icon_manager.h"
 
 using namespace ui;
 
 void GameInfoPanel::init() {
-  ImGuiIO& io = ImGui::GetIO();
-  // io.Fonts->AddFontFromFileTTF("src/assets/fonts/Nunito-Medium.ttf", 36.0f);
-
   ImGuiStyle& style = ImGui::GetStyle();
   style.WindowRounding = 8.0f;
   style.FrameRounding = 5.0f;
@@ -21,10 +19,12 @@ void GameInfoPanel::init() {
 void GameInfoPanel::render() {
   if (!visible()) return;
 
+  ImGui::PushFont(FontManager::GetFont("Title"));
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
+  ImGui::PopFont();
 
   ImDrawList* draw_list = ImGui::GetWindowDrawList();
   ImVec2 panel_pos = ImGui::GetWindowPos();

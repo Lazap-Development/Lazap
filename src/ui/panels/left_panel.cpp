@@ -1,6 +1,7 @@
 #include "ui/panels/left_panel.h"
 
 #include "imgui.h"
+#include "utils/font_manager.h"
 
 using namespace ui;
 
@@ -15,13 +16,17 @@ void LeftPanel::init() {
 void LeftPanel::render() {
   if (!visible()) return;
 
+  ImGui::PushFont(FontManager::GetFont("Title"));
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
+  ImGui::PopFont();
+  ImGui::PushFont(FontManager::GetFont("Title"));
   bool home = ImGui::Button("Home");
   bool favs = ImGui::Button("Favorites");
   bool library = ImGui::Button("All Games");
+  ImGui::PopFont();
 
   if (home == true && view_->view != ViewType::MainMenu) {
     view_->MainMenu();
