@@ -98,32 +98,6 @@ std::string EpicGames::getLocation() {
 #endif
 }
 
-std::string GetEpicLauncherPath() {
-#ifdef _WIN32
-  HKEY hKey;
-  std::string value;
-  const char* subkey = R"(SOFTWARE\WOW6432Node\Epic Games\EpicGamesLauncher)";
-  const char* valueName = "AppDataPath";
-  char data[MAX_PATH];
-  DWORD dataSize = sizeof(data);
-
-  if (RegOpenKeyExA(HKEY_LOCAL_MACHINE, subkey, 0, KEY_READ, &hKey) ==
-      ERROR_SUCCESS) {
-    if (RegQueryValueExA(hKey, valueName, nullptr, nullptr,
-                         reinterpret_cast<LPBYTE>(data),
-                         &dataSize) == ERROR_SUCCESS) {
-      value = std::string(data) +
-              R"(\Launcher\Portal\Binaries\Win64\EpicGamesLauncher.exe)";
-    }
-    RegCloseKey(hKey);
-  }
-
-  return value;
-#else
-  return "";
-#endif
-}
-
 std::vector<Game> EpicGames::getInstalledGames() {
   std::vector<Game> games;
   std::unordered_set<size_t> seenAppIds;
