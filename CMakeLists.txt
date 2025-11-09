@@ -41,15 +41,15 @@ FetchContent_Declare(
         GIT_SHALLOW TRUE
 )
 FetchContent_Declare(
-    lunasvg
-    GIT_REPOSITORY https://github.com/sammycage/lunasvg.git
-    GIT_TAG v3.5.0
+        lunasvg
+        GIT_REPOSITORY https://github.com/sammycage/lunasvg.git
+        GIT_TAG v3.5.0
 )
 
 FetchContent_Declare(
         tomlplusplus
         GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
-        GIT_TAG v3.4.0
+        GIT_TAG e7aaccca3fa3dbde9818ab8313250f3da4976e37
         GIT_SHALLOW TRUE
 )
 
