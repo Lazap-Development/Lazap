@@ -40,6 +40,11 @@ FetchContent_Declare(
         DOWNLOAD_NO_EXTRACT TRUE
         GIT_SHALLOW TRUE
 )
+FetchContent_Declare(
+    lunasvg
+    GIT_REPOSITORY https://github.com/sammycage/lunasvg.git
+    GIT_TAG v3.5.0
+)
 
 FetchContent_Declare(
         tomlplusplus
@@ -48,7 +53,7 @@ FetchContent_Declare(
         GIT_SHALLOW TRUE
 )
 
-FetchContent_MakeAvailable(glew glfw glaze imgui stb tomlplusplus)
+FetchContent_MakeAvailable(glew glfw glaze imgui stb lunasvg tomlplusplus)
 
 # FetchContent_Declare() normally supports EXCLUDE_FROM_ALL but apparently there is a bug
 # See https://gitlab.kitware.com/cmake/cmake/-/issues/20167
@@ -122,6 +127,7 @@ target_link_libraries(${EXECUTABLE_NAME}
         glfw
         glaze::glaze
         libglew_static
+        lunasvg
         $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
         $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
         )

@@ -19,19 +19,10 @@ void GameInfoPanel::init() {
 void GameInfoPanel::render() {
   if (!visible()) return;
 
-  ImGui::PushFont(FontManager::GetFont("Title"));
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
-  ImGui::PopFont();
-
-  // ImDrawList* draw_list = ImGui::GetWindowDrawList();
-  // ImVec2 panel_pos = ImGui::GetWindowPos();
-  // ImVec2 panel_size = ImGui::GetWindowSize();
-  // draw_list->AddImage(
-  //     (void*)(intptr_t)IconManager::GetIcon("banner"), ImVec2(0, 0),
-  //     ImVec2(panel_pos.x + panel_size.x, panel_pos.y + panel_size.y));
   ImGui::Separator();
   ImGui::End();
 }
