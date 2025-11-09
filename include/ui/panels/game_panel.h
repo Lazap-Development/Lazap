@@ -10,7 +10,7 @@ class GamePanel : public Panel {
  public:
   GamePanel(const std::string& name, Storage* storage = nullptr)
       : Panel(name, storage) {}
-  void init() override;
+  void init() {};
   void render() override;
   void end() override {}
   void setGames(const std::vector<Game>* games);

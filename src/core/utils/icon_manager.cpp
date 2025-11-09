@@ -35,16 +35,24 @@ GLuint IconManager::LoadIcon(const std::string& path) {
   return texture_id;
 };
 
-GLuint IconManager::LoadSVG(const std::string& path) {
+GLuint IconManager::LoadSVG(const std::string& path,
+                            const std::string& name = "", uint32_t color = 0) {
   auto svg = lunasvg::Document::loadFromFile(path);
   if (!svg) {
     printf("Failed to load SVG: %s\n", path.c_str());
     return 0;
   }
 
-  auto box = svg->boundingBox();
+  if (name != "") {
+    auto elements = svg->querySelectorAll("#path");
+    for (auto& element : elements) {
+      element.setAttribute("color", "#" + intToHex((color >> 16) & 0xFF) +
+                                        intToHex((color >> 8) & 0xFF) +
+                                        intToHex(color & 0xFF));
+    }
+  }
 
-  auto bitmap = svg->renderToBitmap((int)box.x, (int)box.y);
+  auto bitmap = svg->renderToBitmap((int)svg->height(), (int)svg->width());
   if (!bitmap.valid()) {
     printf("Failed to render SVG: %s\n", path.c_str());
     return 0;
@@ -57,6 +65,10 @@ GLuint IconManager::LoadSVG(const std::string& path) {
                GL_RGBA, GL_UNSIGNED_BYTE, bitmap.data());
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  if (name != "") {
+    icon_cache[name] = texture_id;
+  }
 
   return texture_id;
 }
@@ -100,4 +112,15 @@ void IconManager::ClearCache() {
     glDeleteTextures(1, &texture_id);
   }
   icon_cache.clear();
+}
+
+const std::string intToHex(int num) {
+  if (num == 0) return "0";
+  std::string hexChars = "0123456789ABCDEF";
+  std::string result = "";
+  while (num > 0) {
+    result = hexChars[num % 16] + result;
+    num /= 16;
+  }
+  return result;
 }

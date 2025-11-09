@@ -10,7 +10,7 @@ class Titlebar : public Panel {
  public:
   Titlebar(GLFWwindow* w) : Panel("Titlebar"), window(w) {}
 
-  void init() override;
+  void init() {};
   void render() override;
   void end() override {}
 

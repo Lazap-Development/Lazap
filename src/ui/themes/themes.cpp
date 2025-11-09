@@ -10,7 +10,7 @@ void setDefaultDarkColors() {
   ImVec4 *colors = style.Colors;
 
   // Primary background
-  colors[ImGuiCol_WindowBg] = ImVec4(0.07f, 0.07f, 0.09f, 1.00f);  // #131318
+  colors[ImGuiCol_WindowBg] = ImVec4(0.07f, 0.07f, 0.09f, 0.00f);  // #131318
   colors[ImGuiCol_MenuBarBg] = ImVec4(0.12f, 0.12f, 0.15f, 1.00f);
   colors[ImGuiCol_PopupBg] = ImVec4(0.18f, 0.18f, 0.22f, 1.00f);
 
@@ -20,7 +20,7 @@ void setDefaultDarkColors() {
   colors[ImGuiCol_HeaderActive] = ImVec4(0.25f, 0.25f, 0.35f, 1.00f);
 
   // Buttons
-  colors[ImGuiCol_Button] = ImVec4(0.20f, 0.22f, 0.27f, 1.00f);
+  colors[ImGuiCol_Button] = ImVec4(0.20f, 0.22f, 0.27f, 0.00f);
   colors[ImGuiCol_ButtonHovered] = ImVec4(0.30f, 0.32f, 0.40f, 1.00f);
   colors[ImGuiCol_ButtonActive] = ImVec4(0.35f, 0.38f, 0.50f, 1.00f);
 
@@ -42,8 +42,9 @@ void setDefaultDarkColors() {
   colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.10f, 0.10f, 0.12f, 1.00f);
 
   // Borders
-  colors[ImGuiCol_Border] = ImVec4(0.20f, 0.20f, 0.25f, 0.50f);
+  colors[ImGuiCol_Border] = ImVec4(0.20f, 0.20f, 0.25f, 0.00f);
   colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+  colors[ImGuiCol_Separator] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
 
   // Text
   colors[ImGuiCol_Text] = ImVec4(0.90f, 0.90f, 0.95f, 1.00f);

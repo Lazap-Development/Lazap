@@ -72,7 +72,7 @@ void Views::BuildDockLayout() {
   ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
 
   ImGuiID titlebar, left, gamesinfo_id, bottom;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.05f, &titlebar,
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.0612f, &titlebar,
                               &dockspace_id);
   ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.10f, &left,
                               &dockspace_id);

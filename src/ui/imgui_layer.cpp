@@ -59,19 +59,15 @@ void ImGuiLayer::begin() {
       ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoDocking |
       ImGuiWindowFlags_NoMove;
 
-  ImGuiStyle &style = ImGui::GetStyle();
-  style.WindowRounding = 0.0f;
-  style.WindowBorderSize = 0.0f;
-  style.WindowPadding = ImVec2(2.0f, 2.0f);
-  ImGui::Begin("HostWindow", nullptr, host_flags);
   Themes::setDefaultDarkColors();
+  ImGui::Begin("HostWindow", nullptr, host_flags);
   if (initialized_ == false) {
     initialized_ = true;
     panel_manager_->view_->MainMenu();
   }
 
   ImDrawList *bg = ImGui::GetWindowDrawList();
-  float gameInfoY = viewport->Size.y * .43f;
+  float gameInfoY = viewport->Size.y * 0.436f;
   ImVec2 img_pos = ImVec2(0.0f, 0.0f);
   ImVec2 img_size = ImVec2((float)viewport->Size.x, gameInfoY);
   bg->AddImage((ImTextureID)(intptr_t)IconManager::GetIcon("banner"), img_pos,
@@ -79,7 +75,6 @@ void ImGuiLayer::begin() {
   bg->AddRectFilledMultiColor(img_pos, img_size, IM_COL32(0, 0, 0, 0),
                               IM_COL32(0, 0, 0, 0), IM_COL32(0, 0, 0, 255),
                               IM_COL32(0, 0, 0, 255));
-  style.Colors[ImGuiCol_WindowBg].w = 0.0f;
 
   ImGui::DockSpace(ImGui::GetID("MainDockSpace"), ImVec2(0.0f, 0.0f),
                    ImGuiDockNodeFlags_None, nullptr);
