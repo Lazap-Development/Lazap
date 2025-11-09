@@ -3,12 +3,14 @@
 #include <vector>
 
 #include "clients/client.h"
+#include "storage/storage.h"
 
 namespace ui {
 
 class Panel {
  public:
-  Panel(const std::string& name = "Panel") : name_(name) {}
+  Panel(const std::string& name = "Panel", Storage* storage = nullptr)
+      : name_(name), storage_(storage) {}
   virtual ~Panel() = default;
 
   virtual void init() {}
@@ -21,6 +23,7 @@ class Panel {
 
  protected:
   std::string name_;
+  Storage* storage_;
   bool visible_ = true;
 };
 

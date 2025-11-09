@@ -1,3 +1,4 @@
+
 cmake_minimum_required(VERSION 4.0)
 project(Lazap)
 
@@ -29,9 +30,10 @@ FetchContent_Declare(
 FetchContent_Declare(
         glaze
         GIT_REPOSITORY https://github.com/stephenberry/glaze.git
-        GIT_TAG v5.5.4  
+        GIT_TAG v5.5.4
         GIT_SHALLOW TRUE
 )
+
 FetchContent_Declare(
         stb
         URL https://raw.githubusercontent.com/nothings/stb/master/stb_image.h
@@ -39,8 +41,14 @@ FetchContent_Declare(
         GIT_SHALLOW TRUE
 )
 
+FetchContent_Declare(
+        tomlplusplus
+        GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
+        GIT_TAG v3.4.0
+        GIT_SHALLOW TRUE
+)
 
-FetchContent_MakeAvailable(glew glfw glaze imgui stb)
+FetchContent_MakeAvailable(glew glfw glaze imgui stb tomlplusplus)
 
 # FetchContent_Declare() normally supports EXCLUDE_FROM_ALL but apparently there is a bug
 # See https://gitlab.kitware.com/cmake/cmake/-/issues/20167
@@ -66,7 +74,7 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
     src/*.cpp
 )
 add_executable(${EXECUTABLE_NAME}
-        ${SRC_FILES} 
+        ${SRC_FILES}
 
         ${imgui_SOURCE_DIR}/imgui.cpp
         # ${imgui_SOURCE_DIR}/imgui_demo.cpp
@@ -99,7 +107,9 @@ target_compile_definitions(${EXECUTABLE_NAME}
 target_include_directories(${EXECUTABLE_NAME}
         PRIVATE
         ${imgui_SOURCE_DIR}/
-        ${PROJECT_SOURCE_DIR}/include)
+        ${PROJECT_SOURCE_DIR}/include
+        ${tomlplusplus_SOURCE_DIR}/include
+)
 
 target_include_directories(${EXECUTABLE_NAME}
         PRIVATE

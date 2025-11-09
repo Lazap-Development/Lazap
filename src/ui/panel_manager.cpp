@@ -10,13 +10,13 @@
 
 using namespace ui;
 
-void PanelManager::initPanels(GLFWwindow *w) {
+void PanelManager::initPanels(GLFWwindow *w, Storage &storage) {
   view_ = std::make_unique<Views>(this);
   addPanel(std::make_unique<Titlebar>(w));
   addPanel(std::make_unique<LeftPanel>(view_.get()));
-  addPanel(std::make_unique<GamePanel>("Library"));
-  addPanel(std::make_unique<GamePanel>("Favorites"));
-  addPanel(std::make_unique<GamePanel>("Recents"));
+  addPanel(std::make_unique<GamePanel>("Library", &storage));
+  addPanel(std::make_unique<GamePanel>("Favorites", &storage));
+  addPanel(std::make_unique<GamePanel>("Recents", &storage));
   addPanel(std::make_unique<GameInfoPanel>());
 
   for (auto &panel : panels_) {

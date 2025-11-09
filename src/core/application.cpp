@@ -4,12 +4,15 @@
 #include <clients/ubisoft_connect.h>
 #include <imgui_layer.h>
 
+#include <iostream>
 #include <memory>
+#include <toml++/toml.hpp>
 #include <vector>
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "addons/discord_rpc/discord_rpc.h"
+#include "storage/storage.h"
 #include "utils/icon_manager.h"
 
 double ClockSeconds() {
@@ -52,8 +55,11 @@ void Application::run() {
   glfwSwapInterval(1);
   glewInit();
 
+  Storage storage;
+  storage.initTOML();
+
   ImGuiLayer imgui;
-  imgui.init(window);
+  imgui.init(window, storage);
 
   std::vector<std::unique_ptr<Client>> clients;
   clients.push_back(std::make_unique<Steam>());
@@ -62,9 +68,10 @@ void Application::run() {
 
   std::vector<Game> games;
   for (const auto &client : clients) {
-    std::vector<Game> clientGames = client->getInstalledGames();
-    games.insert(games.end(), std::make_move_iterator(clientGames.begin()),
-                 std::make_move_iterator(clientGames.end()));
+    for (const auto &game : client->getInstalledGames()) {
+      games.push_back(game);
+      storage.insertGameTOML(game.name);
+    }
   }
 
   imgui.setGames(std::move(games));
@@ -82,15 +89,19 @@ void Application::run() {
   RunnerState runner;
   while (!glfwWindowShouldClose(window)) {
     IdleBySleeping(runner.fpsIdling);
+
     glfwPollEvents();
+
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(0.f, 0.f, 0.f, 0.f);
     glClear(GL_COLOR_BUFFER_BIT);
+
     imgui.begin();
     imgui.render();
     imgui.end();
+
     glfwSwapBuffers(window);
   }
 

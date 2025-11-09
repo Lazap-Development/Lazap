@@ -1,13 +1,15 @@
 #pragma once
 #include <memory>
 
+#include "storage/storage.h"
 #include "ui/panel.h"
 
 namespace ui {
 
 class GamePanel : public Panel {
  public:
-  GamePanel(const std::string& name) : Panel(name) {};
+  GamePanel(const std::string& name, Storage* storage = nullptr)
+      : Panel(name, storage) {}
   void init() override;
   void render() override;
   void end() override {}

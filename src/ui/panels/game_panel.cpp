@@ -3,9 +3,10 @@
 #include <string>
 
 #include "imgui.h"
+#include "iostream"
+#include "utils/fnv1a.h"
 #include "utils/font_manager.h"
 #include "utils/launch_manager.h"
-
 using namespace ui;
 
 void GamePanel::init() {
@@ -40,6 +41,20 @@ void GamePanel::render() {
       LaunchManager lm = LaunchManager(game);
       if (ImGui::Button(game.name.c_str())) lm.launch();
       if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+        storage_->updateTOML([game](toml::table& config) {
+          if (config.contains("games")) {
+            auto gamesTable = config["games"].as_table();
+            if (gamesTable->contains(std::to_string(fnv1a::hash(
+                    game.name.c_str(), std::strlen(game.name.c_str()))))) {
+              auto gameTable =
+                  gamesTable
+                      ->at(std::to_string(fnv1a::hash(
+                          game.name.c_str(), std::strlen(game.name.c_str()))))
+                      .as_table();
+              gameTable->insert_or_assign("favourite", toml::value(true));
+            }
+          }
+        });
         if (lm.isRunning()) {
           lm.kill();
         }

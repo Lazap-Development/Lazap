@@ -10,7 +10,7 @@
 #include "utils/font_manager.h"
 #include "utils/icon_manager.h"
 
-void ImGuiLayer::init(GLFWwindow *window) {
+void ImGuiLayer::init(GLFWwindow *window, Storage &storage) {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
 
@@ -38,7 +38,9 @@ void ImGuiLayer::init(GLFWwindow *window) {
   ImGui_ImplOpenGL3_Init("#version 130");
 
   panel_manager_ = std::make_unique<ui::PanelManager>();
-  panel_manager_->initPanels(window);
+  panel_manager_->initPanels(window, storage);
+
+  storage_ = &storage;
 }
 
 void ImGuiLayer::begin() {

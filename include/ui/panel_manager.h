@@ -7,6 +7,7 @@
 
 #include "GLFW/glfw3.h"
 #include "panel.h"
+#include "storage/storage.h"
 #include "ui/panel.h"
 
 namespace ui {
@@ -15,7 +16,7 @@ class Views;
 class PanelManager {
  public:
   PanelManager() = default;
-  void initPanels(GLFWwindow* w);
+  void initPanels(GLFWwindow* w, Storage& storage);
   void renderPanels(ImGuiWindowClass* window_class);
   void endPanels();
   void addPanel(std::unique_ptr<Panel> panel);
