@@ -7,8 +7,8 @@ A native-like attempt to unify your clients with one fast, modern, and cross-pla
 > While these features may or may not return, it'll ensure a more stable and purpose-driven evolution of Lazap.
 
 ## Key Features
-- Lightweight and high-performance
-- Cross-platform: Windows & Linux
+- Lightweight, high-performance, and fast startup
+- Cross-platform: Windows & Linux (Wayland and Xorg)
 - Native-like Support for Steam, Epic, Ubisoft, and Rockstar
 - Modern and Sleek user interface
 
