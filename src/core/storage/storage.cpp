@@ -123,27 +123,42 @@ std::string Storage::getStoragePath() const { return storagePath; }
 bool Storage::initTOML() {
   try {
     std::string filepath = getFilePath(StorageConfig::CONFIG_NAME);
-    if (!fs::exists(filepath)) {
-      std::ofstream file(filepath);
-      if (!file.is_open()) {
+
+    if (fs::exists(filepath)) {
+      try {
+        toml::table config = loadTOML();
+
+        if (!config.contains("globals") || !config.contains("settings") ||
+            !config.contains("games")) {
+          throw std::runtime_error("Missing required sections in config");
+        }
+
         return false;
+      } catch (const toml::parse_error& e) {
+        fs::remove(filepath);
+      } catch (const std::exception& e) {
+        fs::remove(filepath);
       }
-
-      toml::table defaultConfig;
-      toml::table globals;
-      globals.insert("username", "lazap");
-      toml::table settings;
-      toml::table games;
-
-      defaultConfig.insert("globals", globals);
-      defaultConfig.insert("settings", settings);
-      defaultConfig.insert("games", games);
-
-      file << defaultConfig;
-      file.close();
-      return true;
     }
-    return false;
+
+    std::ofstream file(filepath);
+    if (!file.is_open()) {
+      return false;
+    }
+
+    toml::table defaultConfig;
+    toml::table globals;
+    globals.insert("username", "lazap");
+    toml::table settings;
+    toml::table games;
+
+    defaultConfig.insert("globals", globals);
+    defaultConfig.insert("settings", settings);
+    defaultConfig.insert("games", games);
+
+    file << defaultConfig;
+    file.close();
+    return true;
   } catch (const std::exception& e) {
     return false;
   }

@@ -1,10 +1,10 @@
 #include "ui/panels/game_panel.h"
 
 #include "imgui.h"
-#include "iostream"
 #include "utils/fnv1a.h"
 #include "utils/font_manager.h"
 #include "utils/launch_manager.h"
+
 using namespace ui;
 
 void GamePanel::setGames(const std::vector<Game>* games) { games_ = games; }
