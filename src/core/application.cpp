@@ -75,7 +75,6 @@ void Application::run() {
   }
 
   imgui.setGames(std::move(games));
-  IconManager::LoadAllIcons();
 
   discord::RichPresence::Initialize("932504287337148417");
   discord::RichPresence::UpdatePresence("Lazap", "In Main Menu");

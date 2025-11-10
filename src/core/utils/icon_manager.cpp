@@ -32,6 +32,7 @@ GLuint IconManager::LoadIcon(const std::string& path) {
 
   stbi_image_free(data);
 
+  icon_cache[std::filesystem::path(path).stem().string()] = texture_id;
   return texture_id;
 };
 
@@ -68,34 +69,11 @@ GLuint IconManager::LoadSVG(const std::string& path,
 
   if (name != "") {
     icon_cache[name] = texture_id;
+  } else {
+    icon_cache[std::filesystem::path(path).stem().string()] = texture_id;
   }
 
   return texture_id;
-}
-
-void IconManager::LoadAllIcons() {
-  for (const auto& icon_dir :
-       std::filesystem::directory_iterator("src/assets/")) {
-    for (const auto& entry :
-         std::filesystem::directory_iterator(icon_dir.path())) {
-      if (entry.path().extension() == ".png" ||
-          entry.path().extension() == ".svg") {
-        const std::string& name = entry.path().stem().string();
-        if (icon_cache.find(name) != icon_cache.end()) continue;
-
-        GLuint texture_id = 0;
-        if (entry.path().extension() == ".png")
-          texture_id = LoadIcon(entry.path().string());
-        else if (entry.path().extension() == ".svg")
-          texture_id = LoadSVG(entry.path().string());
-
-        if (!texture_id) continue;
-        icon_cache[name] = texture_id;
-      }
-    }
-  }
-  std::cout << "Loaded " << icon_cache.size() << " icons into cache."
-            << std::endl;
 }
 
 GLuint IconManager::GetIcon(const std::string& name) {

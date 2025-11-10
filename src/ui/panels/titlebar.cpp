@@ -8,6 +8,12 @@
 
 using namespace ui;
 
+void Titlebar::init() {
+  IconManager::LoadSVG("src/assets/svg/close.svg", "close", 0xFFFFFFFF);
+  IconManager::LoadSVG("src/assets/svg/minimise.svg", "minimise", 0xFFFFFFFF);
+  IconManager::LoadSVG("src/assets/svg/maximise.svg", "maximise", 0xFFFFFFFF);
+  IconManager::LoadIcon("src/assets/icons/lazap.png");
+}
 void Titlebar::render() {
   ImGui::Begin(name().c_str(), nullptr, false);
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 7));

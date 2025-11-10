@@ -7,9 +7,6 @@
 using namespace ui;
 
 void LeftPanel::init() {
-  IconManager::LoadSVG("src/assets/svg/close.svg", "close", 0xFFFFFFFF);
-  IconManager::LoadSVG("src/assets/svg/minimise.svg", "minimise", 0xFFFFFFFF);
-  IconManager::LoadSVG("src/assets/svg/maximise.svg", "maximise", 0xFFFFFFFF);
   IconManager::LoadSVG("src/assets/svg/home.svg", "home", 0xFFFFFFFF);
   IconManager::LoadSVG("src/assets/svg/library.svg", "library", 0xFFFFFFFF);
   IconManager::LoadSVG("src/assets/svg/heart2.svg", "heart2", 0xFFFFFFFF);
