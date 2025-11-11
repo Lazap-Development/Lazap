@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 
-class IconManager {
+class ImageManager {
  public:
   static unsigned int LoadIcon(const std::string& path);
   static unsigned int LoadSVG(const std::string& path, const std::string& name,

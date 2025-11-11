@@ -4,7 +4,6 @@
 #include <clients/ubisoft_connect.h>
 #include <imgui_layer.h>
 
-#include <iostream>
 #include <memory>
 #include <toml++/toml.hpp>
 #include <vector>
@@ -13,7 +12,6 @@
 #include "GLFW/glfw3.h"
 #include "addons/discord_rpc/discord_rpc.h"
 #include "storage/storage.h"
-#include "utils/icon_manager.h"
 
 double ClockSeconds() {
   using Clock = std::chrono::high_resolution_clock;

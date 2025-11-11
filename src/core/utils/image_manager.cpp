@@ -1,6 +1,6 @@
 // clang-format off
 #include "GL/glew.h"
-#include "utils/icon_manager.h"
+#include "utils/image_manager.h"
 // clang-format on
 
 #include <filesystem>
@@ -13,9 +13,9 @@
 
 #include "stb_image.h"
 
-std::unordered_map<std::string, GLuint> IconManager::icon_cache;
+std::unordered_map<std::string, GLuint> ImageManager::icon_cache;
 
-GLuint IconManager::LoadIcon(const std::string& path) {
+GLuint ImageManager::LoadIcon(const std::string& path) {
   int width, height, channels;
   unsigned char* data = stbi_load(path.c_str(), &width, &height, &channels, 4);
   if (!data) {
@@ -36,8 +36,8 @@ GLuint IconManager::LoadIcon(const std::string& path) {
   return texture_id;
 };
 
-GLuint IconManager::LoadSVG(const std::string& path,
-                            const std::string& name = "", uint32_t color = 0) {
+GLuint ImageManager::LoadSVG(const std::string& path,
+                             const std::string& name = "", uint32_t color = 0) {
   auto svg = lunasvg::Document::loadFromFile(path);
   if (!svg) {
     printf("Failed to load SVG: %s\n", path.c_str());
@@ -76,7 +76,7 @@ GLuint IconManager::LoadSVG(const std::string& path,
   return texture_id;
 }
 
-GLuint IconManager::GetIcon(const std::string& name) {
+GLuint ImageManager::GetIcon(const std::string& name) {
   auto it = icon_cache.find(name);
   if (it != icon_cache.end()) {
     return it->second;
@@ -85,7 +85,7 @@ GLuint IconManager::GetIcon(const std::string& name) {
   }
 }
 
-void IconManager::ClearCache() {
+void ImageManager::ClearCache() {
   for (const auto& [path, texture_id] : icon_cache) {
     glDeleteTextures(1, &texture_id);
   }

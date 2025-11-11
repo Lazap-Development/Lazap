@@ -3,16 +3,15 @@
 #include <GLFW/glfw3.h>
 
 #include "imgui.h"
-#include "imgui_internal.h"
-#include "utils/icon_manager.h"
+#include "utils/image_manager.h"
 
 using namespace ui;
 
 void Titlebar::init() {
-  IconManager::LoadSVG("src/assets/svg/close.svg", "close", 0xFFFFFFFF);
-  IconManager::LoadSVG("src/assets/svg/minimise.svg", "minimise", 0xFFFFFFFF);
-  IconManager::LoadSVG("src/assets/svg/maximise.svg", "maximise", 0xFFFFFFFF);
-  IconManager::LoadIcon("src/assets/icons/lazap.png");
+  ImageManager::LoadSVG("src/assets/svg/close.svg", "close", 0xFFFFFFFF);
+  ImageManager::LoadSVG("src/assets/svg/minimise.svg", "minimise", 0xFFFFFFFF);
+  ImageManager::LoadSVG("src/assets/svg/maximise.svg", "maximise", 0xFFFFFFFF);
+  ImageManager::LoadIcon("src/assets/icons/lazap.png");
 }
 void Titlebar::render() {
   ImGui::Begin(name().c_str(), nullptr, false);
@@ -28,20 +27,20 @@ void Titlebar::render() {
                       ImVec2(pos.x + size.x, pos.y + size.y + top_padding),
                       IM_COL32(0, 0, 0, 80), rounding);
 
-  ImGui::Image(IconManager::GetIcon("lazap"), ImVec2(50, 50));
+  ImGui::Image(ImageManager::GetIcon("lazap"), ImVec2(50, 50));
 
   ImGui::SameLine(ImGui::GetWindowWidth() - 144);
-  if (ImGui::ImageButton("##minimise", IconManager::GetIcon("minimise"),
+  if (ImGui::ImageButton("##minimise", ImageManager::GetIcon("minimise"),
                          ImVec2(24, 24))) {
     glfwIconifyWindow(window);
   }
   ImGui::SameLine();
-  if (ImGui::ImageButton("##maximise", IconManager::GetIcon("maximise"),
+  if (ImGui::ImageButton("##maximise", ImageManager::GetIcon("maximise"),
                          ImVec2(24, 24))) {
     glfwMaximizeWindow(window);
   }
   ImGui::SameLine();
-  if (ImGui::ImageButton("##close", IconManager::GetIcon("close"),
+  if (ImGui::ImageButton("##close", ImageManager::GetIcon("close"),
                          ImVec2(24, 24))) {
     glfwSetWindowShouldClose(window, GLFW_TRUE);
   }

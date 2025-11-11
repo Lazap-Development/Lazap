@@ -2,11 +2,11 @@
 #include "ui/panels/gameinfo_panel.h"
 // clang-format on
 #include "imgui.h"
-#include "utils/icon_manager.h"
+#include "utils/image_manager.h"
 using namespace ui;
 
 void GameInfoPanel::init() {
-  IconManager::LoadIcon("src/assets/img/banner.png");
+  ImageManager::LoadIcon("src/assets/img/banner.png");
 }
 
 void GameInfoPanel::render() {

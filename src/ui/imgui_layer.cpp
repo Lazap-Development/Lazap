@@ -8,7 +8,7 @@
 #include "ui/panel_manager.h"
 #include "ui/themes/themes.h"
 #include "utils/font_manager.h"
-#include "utils/icon_manager.h"
+#include "utils/image_manager.h"
 
 void ImGuiLayer::init(GLFWwindow *window, Storage &storage) {
   IMGUI_CHECKVERSION();
@@ -70,7 +70,7 @@ void ImGuiLayer::begin() {
   float gameInfoY = viewport->Size.y * 0.436f;
   ImVec2 img_pos = ImVec2(0.0f, 0.0f);
   ImVec2 img_size = ImVec2((float)viewport->Size.x, gameInfoY);
-  bg->AddImage((ImTextureID)(intptr_t)IconManager::GetIcon("banner"), img_pos,
+  bg->AddImage((ImTextureID)(intptr_t)ImageManager::GetIcon("banner"), img_pos,
                img_size, ImVec2(0, 0), ImVec2(1, 1), IM_COL32_WHITE);
   bg->AddRectFilledMultiColor(img_pos, img_size, IM_COL32(0, 0, 0, 0),
                               IM_COL32(0, 0, 0, 0), IM_COL32(0, 0, 0, 255),
