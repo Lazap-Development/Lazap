@@ -9,6 +9,8 @@
 #include "GLFW/glfw3.h"
 #include "addons/discord_rpc/discord_rpc.h"
 #include "clients/epic_games.h"
+#include "clients/riot_games.h"
+#include "clients/rockstar_games.h"
 #include "clients/steam/steam.h"
 #include "clients/ubisoft_connect.h"
 #include "storage/storage.h"
@@ -64,6 +66,8 @@ void Application::run() {
   clients.push_back(std::make_unique<Steam>());
   clients.push_back(std::make_unique<EpicGames>());
   clients.push_back(std::make_unique<UbisoftConnect>());
+  clients.push_back(std::make_unique<RockstarGames>());
+  clients.push_back(std::make_unique<RiotGames>());
 
   BannerManager bm;
   std::vector<Game> games;

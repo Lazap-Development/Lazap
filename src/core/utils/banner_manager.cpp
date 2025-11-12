@@ -24,14 +24,14 @@ std::string BannerManager::getBanner(ClientType client,
                          displayName);
     case ClientType::EpicGames:
     case ClientType::UbisoftConnect:
-      // case ClientType::RiotGames:
+    case ClientType::RiotGames:
       return rawgFetchBanner(displayName);
-    // case ClientType::RockstarGames:
-    //  return fetchBanner(
-    //      "https://media-rockstargames-com.akamaized.net/rockstargames-newsite/"
-    //      "img/global/games/fob/640/" +
-    //          gameId + ".jpg",
-    //      displayName);
+    case ClientType::RockstarGames:
+      return fetchBanner(
+          "https://media-rockstargames-com.akamaized.net/rockstargames-newsite/"
+          "img/global/games/fob/640/" +
+              gameId + ".jpg",
+          displayName);
     default:
       return "";
   }
