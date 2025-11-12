@@ -11,6 +11,8 @@
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "addons/discord_rpc/discord_rpc.h"
+#include "clients/riot_games.h"
+#include "clients/rockstar_games.h"
 #include "storage/storage.h"
 
 double ClockSeconds() {
@@ -63,6 +65,8 @@ void Application::run() {
   clients.push_back(std::make_unique<Steam>());
   clients.push_back(std::make_unique<EpicGames>());
   clients.push_back(std::make_unique<UbisoftConnect>());
+  clients.push_back(std::make_unique<RockstarGames>());
+  clients.push_back(std::make_unique<RiotGames>());
 
   std::vector<Game> games;
   for (const auto &client : clients) {

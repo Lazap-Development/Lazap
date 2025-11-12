@@ -26,7 +26,7 @@ static std::string queryRegistry(const std::string& command) {
   si.wShowWindow = SW_HIDE;
 
   HANDLE hReadPipe, hWritePipe;
-  SECURITY_ATTRIBUTES sa = {sizeof(SECURITY_ATTRIBUTES), NULL, TRUE};
+  SECURITY_ATTRIBUTES sa = {sizeof(SECURITY_ATTRIBUTES), nullptr, TRUE};
 
   if (!CreatePipe(&hReadPipe, &hWritePipe, &sa, 0)) return "";
 
@@ -34,8 +34,8 @@ static std::string queryRegistry(const std::string& command) {
   si.hStdError = hWritePipe;
 
   std::string cmdLine = "cmd.exe /C " + command;
-  if (!CreateProcessA(NULL, &cmdLine[0], NULL, NULL, TRUE, CREATE_NO_WINDOW,
-                      NULL, NULL, &si, &pi)) {
+  if (!CreateProcessA(nullptr, &cmdLine[0], nullptr, nullptr, TRUE,
+                      CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi)) {
     CloseHandle(hReadPipe);
     CloseHandle(hWritePipe);
     return "";
@@ -46,7 +46,7 @@ static std::string queryRegistry(const std::string& command) {
   char buffer[4096];
   DWORD bytesRead;
 
-  while (ReadFile(hReadPipe, buffer, sizeof(buffer) - 1, &bytesRead, NULL) &&
+  while (ReadFile(hReadPipe, buffer, sizeof(buffer) - 1, &bytesRead, nullptr) &&
          bytesRead > 0) {
     buffer[bytesRead] = '\0';
     output += buffer;
@@ -65,7 +65,7 @@ std::string UbisoftConnect::getLocation() {
 #ifdef _WIN32
   const char* regPath =
 #ifdef _WIN64
-      "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Ubisoft\\Launcher";
+      R"(HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Ubisoft\Launcher)";
 #else
       "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Launcher";
 #endif
@@ -88,7 +88,7 @@ std::vector<Game> UbisoftConnect::getInstalledGames() {
 #ifdef _WIN32
   const char* regPath =
 #ifdef _WIN64
-      "HKEY_LOCAL_MACHINE\\SOFTWARE\\WOW6432Node\\Ubisoft\\Launcher\\Installs";
+      R"(HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Ubisoft\Launcher\Installs)";
 #else
       "HKEY_LOCAL_MACHINE\\SOFTWARE\\Ubisoft\\Launcher\\Installs";
 #endif
@@ -110,7 +110,7 @@ std::vector<Game> UbisoftConnect::getInstalledGames() {
     line.erase(line.find_last_not_of(" \t\r\n") + 1);
 
     if (line.find("\\Installs\\") != std::string::npos) {
-      size_t pos = line.rfind("\\");
+      size_t pos = line.rfind('\\');
       if (pos != std::string::npos) {
         currentGameId = line.substr(pos + 1);
       }
