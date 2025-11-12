@@ -58,6 +58,9 @@ FetchContent_Declare(
         GIT_TAG v0.27.0
         GIT_SHALLOW TRUE
 )
+set(HTTPLIB_USE_BROTLI_IF_AVAILABLE OFF CACHE BOOL "" FORCE)
+set(HTTPLIB_USE_ZLIB_IF_AVAILABLE OFF CACHE BOOL "" FORCE)
+set(HTTPLIB_USE_ZSTD_IF_AVAILABLE OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(glew glfw glaze imgui stb lunasvg tomlplusplus httplib)
 
@@ -113,6 +116,7 @@ endif()
 target_compile_definitions(${EXECUTABLE_NAME}
         PRIVATE
         GLEW_STATIC
+        _WIN32_WINNT=0x0602
         )
 
 # Set the include path
