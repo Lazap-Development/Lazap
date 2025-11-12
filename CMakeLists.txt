@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 4.0)
 project(Lazap)
 
@@ -53,13 +52,21 @@ FetchContent_Declare(
         GIT_SHALLOW TRUE
 )
 
-FetchContent_MakeAvailable(glew glfw glaze imgui stb lunasvg tomlplusplus)
+FetchContent_Declare(
+        httplib
+        GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
+        GIT_TAG v0.27.0
+        GIT_SHALLOW TRUE
+)
+
+FetchContent_MakeAvailable(glew glfw glaze imgui stb lunasvg tomlplusplus httplib)
 
 # FetchContent_Declare() normally supports EXCLUDE_FROM_ALL but apparently there is a bug
 # See https://gitlab.kitware.com/cmake/cmake/-/issues/20167
 # As a workaround, we exclude the directories manually
 set_property(DIRECTORY ${glew_SOURCE_DIR} PROPERTY EXCLUDE_FROM_ALL YES)
 set_property(DIRECTORY ${glfw_SOURCE_DIR} PROPERTY EXCLUDE_FROM_ALL YES)
+set_property(DIRECTORY ${httplib_SOURCE_DIR} PROPERTY EXCLUDE_FROM_ALL YES)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Configure C++ version
@@ -128,6 +135,7 @@ target_link_libraries(${EXECUTABLE_NAME}
         glaze::glaze
         libglew_static
         lunasvg
+        httplib
         $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
         $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
         )

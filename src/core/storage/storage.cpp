@@ -1,6 +1,7 @@
+// TODO: Use structs for game and mainconf
+
 #include "storage/storage.h"
 
-#include <cstdlib>
 #include <filesystem>
 #include <fstream>
 #include <stdexcept>
@@ -8,41 +9,10 @@
 #include <toml++/impl/table.hpp>
 #include <toml++/toml.hpp>
 
+#include "storage/storage_config.h"
 #include "utils/fnv1a.h"
 
 namespace fs = std::filesystem;
-
-namespace StorageConfig {
-std::string getConfigPath() {
-#ifdef _WIN32
-  const char* appdata = std::getenv("APPDATA");
-  if (appdata) {
-    return std::string(appdata);
-  }
-  return "C:\\ProgramData";
-#else
-  const char* xdg_config = std::getenv("XDG_CONFIG_HOME");
-  if (xdg_config) {
-    return std::string(xdg_config);
-  }
-  const char* home = std::getenv("HOME");
-  if (home) {
-    return std::string(home) + "/.config";
-  }
-  return "/tmp";
-#endif
-}
-
-const std::string CONFIG_DIR = getConfigPath();
-const std::string APP_NAME = "lazap";
-const std::string CONFIG_NAME = "config.toml";
-const std::string STORAGE_DIR = CONFIG_DIR +
-#ifdef _WIN32
-                                "\\" + APP_NAME;
-#else
-                                "/" + APP_NAME;
-#endif
-}  // namespace StorageConfig
 
 Storage::Storage() : storagePath(StorageConfig::STORAGE_DIR) {
   ensureDirectoryExists();
@@ -133,6 +103,28 @@ bool Storage::initTOML() {
           throw std::runtime_error("Missing required sections in config");
         }
 
+        auto gamesTable = config["games"].as_table();
+        if (gamesTable) {
+          for (const auto& [gameId, gameValue] : *gamesTable) {
+            if (!gameValue.is_table()) {
+              throw std::runtime_error("Invalid game entry: not a table");
+            }
+
+            auto gameTable = gameValue.as_table();
+            if (!gameTable->contains("name") ||
+                !gameTable->contains("favourite") ||
+                !gameTable->contains("playtime")) {
+              throw std::runtime_error("Game table is missing required fields");
+            }
+
+            if (!gameTable->at("name").is_string() ||
+                !gameTable->at("favourite").is_boolean() ||
+                !gameTable->at("playtime").is_string()) {
+              throw std::runtime_error("Game table has invalid field types");
+            }
+          }
+        }
+
         return false;
       } catch (const toml::parse_error& e) {
         fs::remove(filepath);
@@ -175,6 +167,7 @@ void Storage::insertGameTOML(const std::string& name) {
     toml::table gameTable;
     gameTable.insert("name", toml::value(name));
     gameTable.insert("favourite", toml::value(false));
+    gameTable.insert("playtime", toml::value("00:00:00"));
 
     gamesTable->insert(
         std::to_string(fnv1a::hash(name.c_str(), std::strlen(name.c_str()))),

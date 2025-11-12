@@ -1,7 +1,4 @@
 #include <application.h>
-#include <clients/epic_games.h>
-#include <clients/steam/steam.h>
-#include <clients/ubisoft_connect.h>
 #include <imgui_layer.h>
 
 #include <memory>
@@ -11,7 +8,11 @@
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 #include "addons/discord_rpc/discord_rpc.h"
+#include "clients/epic_games.h"
+#include "clients/steam/steam.h"
+#include "clients/ubisoft_connect.h"
 #include "storage/storage.h"
+#include "utils/banner_manager.h"
 
 double ClockSeconds() {
   using Clock = std::chrono::high_resolution_clock;
@@ -64,9 +65,12 @@ void Application::run() {
   clients.push_back(std::make_unique<EpicGames>());
   clients.push_back(std::make_unique<UbisoftConnect>());
 
+  BannerManager bm;
   std::vector<Game> games;
   for (const auto &client : clients) {
-    for (const auto &game : client->getInstalledGames()) {
+    for (auto &game : client->getInstalledGames()) {
+      game.bannerUrl = bm.getBanner(client->getType(), game.name,
+                                    std::to_string(game.appId));
       games.push_back(game);
       storage.insertGameTOML(game.name);
     }
