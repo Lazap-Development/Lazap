@@ -11,6 +11,8 @@ FetchContent_Declare(
         GIT_TAG glew-cmake-2.2.0
         GIT_SHALLOW TRUE
 )
+set(glew-cmake_BUILD_SHARED OFF CACHE BOOL "Build the shared glew library" FORCE)
+set(glew-cmake_BUILD_STATIC ON CACHE BOOL "Build the static glew library" FORCE)
 
 FetchContent_Declare(
         glfw
