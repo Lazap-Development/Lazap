@@ -1,25 +1,31 @@
 #include <imgui.h>
 
+#include "battery/embed.hpp"
 #include "utils/font_manager.h"
 
 std::unordered_map<std::string, ImFont*> FontManager::fonts_;
 
-void FontManager::Init() {
+void FontManager::init() {
   ImGuiIO& io = ImGui::GetIO();
-  fonts_["Default"] =
-      io.Fonts->AddFontFromFileTTF("src/assets/fonts/Nunito-Medium.ttf", 16.0f);
+  b::EmbedInternal::EmbeddedFile embed =
+      b::embed<"assets/fonts/Nunito-Medium.ttf">();
+  fonts_["Default"] = io.Fonts->AddFontFromMemoryTTF(
+      (void*)embed.data(), static_cast<int>(embed.size()), 16.0f);
+  ;
 }
 
-void FontManager::Shutdown() {
+void FontManager::shutdown() {
   ImGuiIO& io = ImGui::GetIO();
   io.Fonts->Clear();
   fonts_.clear();
 }
 
-ImFont* FontManager::LoadFont(const std::string& name, const std::string& path,
+ImFont* FontManager::loadFont(const std::string& name,
+                              b::EmbedInternal::EmbeddedFile embed,
                               float size) {
   ImGuiIO& io = ImGui::GetIO();
-  ImFont* font = io.Fonts->AddFontFromFileTTF(path.c_str(), size);
+  ImFont* font = io.Fonts->AddFontFromMemoryTTF(
+      (void*)embed.data(), static_cast<int>(embed.size()), size);
   if (font) {
     fonts_[name] = font;
   } else {
@@ -28,7 +34,7 @@ ImFont* FontManager::LoadFont(const std::string& name, const std::string& path,
   return font;
 }
 
-ImFont* FontManager::GetFont(const std::string& name) {
+ImFont* FontManager::getFont(const std::string& name) {
   auto it = fonts_.find(name);
   if (it != fonts_.end()) {
     return it->second;

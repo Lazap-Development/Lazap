@@ -15,13 +15,13 @@ void GamePanel::render() {
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
 
-  ImGui::PushFont(FontManager::GetFont("Title"));
+  ImGui::PushFont(FontManager::getFont("Title"));
   ImGui::Text(name_.c_str());
   ImGui::PopFont();
   ImGui::Separator();
 
   if (!games_) {
-    ImGui::PushFont(FontManager::GetFont("Game:Title"));
+    ImGui::PushFont(FontManager::getFont("Game:Title"));
     ImGui::TextDisabled("No games available.");
     ImGui::PopFont();
   } else {

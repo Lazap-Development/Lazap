@@ -1,6 +1,5 @@
 #include <imgui_internal.h>
 #include <imgui_layer.h>
-#include <utils/launch_manager.h>
 
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
@@ -18,21 +17,21 @@ void ImGuiLayer::init(GLFWwindow *window, Storage &storage) {
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
   io.IniFilename = nullptr;
 
-  FontManager::Init();
-  FontManager::LoadFont("Username", "src/assets/fonts/Oxanium-Regular.ttf",
-                        15.0f);
-  FontManager::LoadFont("GameInfo:Title",
-                        "src/assets/fonts/ZenDots-Regular.ttf", 64.0f);
-  FontManager::LoadFont("GameInfo:Paragraph",
-                        "src/assets/fonts/Nunito-Medium.ttf", 16.0f);
-  FontManager::LoadFont("Left:Button", "src/assets/fonts/Oxanium-Regular.ttf",
-                        16.0f);
-  FontManager::LoadFont("Title", "src/assets/fonts/ArchivoBlack-Regular.ttf",
-                        24.0f);
-  FontManager::LoadFont("Game:Title", "src/assets/fonts/Nunito-SemiBold.ttf",
-                        16.0f);
-  FontManager::LoadFont("Game:Time", "src/assets/fonts/RobotoMono-Medium.ttf",
-                        10.0f);
+  FontManager::init();
+  FontManager::loadFont("Username",
+                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 15.0f);
+  FontManager::loadFont("GameInfo:Title",
+                        b::embed<"assets/fonts/ZenDots-Regular.ttf">(), 64.0f);
+  FontManager::loadFont("GameInfo:Paragraph",
+                        b::embed<"assets/fonts/Nunito-Medium.ttf">(), 16.0f);
+  FontManager::loadFont("Left:Button",
+                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 16.0f);
+  FontManager::loadFont(
+      "Title", b::embed<"assets/fonts/ArchivoBlack-Regular.ttf">(), 24.0f);
+  FontManager::loadFont("Game:Title",
+                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 16.0f);
+  FontManager::loadFont(
+      "Game:Time", b::embed<"assets/fonts/RobotoMono-Medium.ttf">(), 10.0f);
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 130");
@@ -70,7 +69,7 @@ void ImGuiLayer::begin() {
   float gameInfoY = viewport->Size.y * 0.436f;
   ImVec2 img_pos = ImVec2(0.0f, 0.0f);
   ImVec2 img_size = ImVec2((float)viewport->Size.x, gameInfoY);
-  bg->AddImage((ImTextureID)(intptr_t)ImageManager::GetIcon("banner"), img_pos,
+  bg->AddImage((ImTextureID)(intptr_t)ImageManager::get("banner"), img_pos,
                img_size, ImVec2(0, 0), ImVec2(1, 1), IM_COL32_WHITE);
   bg->AddRectFilledMultiColor(img_pos, img_size, IM_COL32(0, 0, 0, 0),
                               IM_COL32(0, 0, 0, 0), IM_COL32(0, 0, 0, 255),

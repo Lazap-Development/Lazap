@@ -3,14 +3,19 @@
 #include <string>
 #include <unordered_map>
 
+#include "battery/embed.hpp"
+
 class ImageManager {
  public:
-  static unsigned int LoadIcon(const std::string& path);
-  static unsigned int LoadSVG(const std::string& path, const std::string& name,
-                              uint32_t color);
-  static unsigned int GetIcon(const std::string& name);
-  static void ClearCache();
-  static std::unordered_map<std::string, unsigned int> icon_cache;
+  static unsigned int loadPNG(b::EmbedInternal::EmbeddedFile path,
+                              const std::string& id);
+  static unsigned int loadSVG(b::EmbedInternal::EmbeddedFile embed,
+                              const std::string& id, uint32_t color);
+  static unsigned int get(const std::string& name);
+  static void clear();
+
+ private:
+  static std::unordered_map<std::string, unsigned int> cache;
 };
 
 const std::string intToHex(int num);

@@ -63,7 +63,18 @@ FetchContent_Declare(
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries only")
 set(CPR_BUILD_TESTS OFF CACHE BOOL "Disable tests")
 
-FetchContent_MakeAvailable(glew glfw glaze imgui stb lunasvg tomlplusplus cpr)
+# TODO: replace with https://github.com/MaxAkaAltmer/embed
+# Comes with better QOL improvements, no runtime variables, bug fixes, etc...
+FetchContent_Declare(
+  battery-embed
+  GIT_REPOSITORY https://github.com/batterycenter/embed.git
+  GIT_TAG        v1.2.19
+)
+if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+  set(B_PRODUCTION_MODE ON CACHE BOOL "embed: strip all development features such as hot-reload and absolute filepaths" FORCE)
+endif()
+
+FetchContent_MakeAvailable(glew glfw glaze imgui stb lunasvg tomlplusplus cpr battery-embed)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Configure C++ version
@@ -73,6 +84,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 #-----------------------------------------------------------------------------------------------------------------------
+# Strip debug symbols in release
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -s")
+
 # generate the compile_commands.json
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -94,6 +108,15 @@ add_executable(${EXECUTABLE_NAME}
         ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
         ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
         )
+
+
+file(GLOB_RECURSE ASSET_FILES CONFIGURE_DEPENDS
+    "${CMAKE_SOURCE_DIR}/assets/*"
+)
+foreach(ASSET_FILE ${ASSET_FILES})
+    file(RELATIVE_PATH REL_PATH "${CMAKE_SOURCE_DIR}" "${ASSET_FILE}")
+    b_embed(${EXECUTABLE_NAME} "${REL_PATH}" ${EXECUTABLE_NAME})
+endforeach()
 
 # Get rid of extra terminal window in release build
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES WIN32_EXECUTABLE $<CONFIG:Release>)
@@ -132,9 +155,3 @@ target_link_libraries(${EXECUTABLE_NAME}
         $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
         $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
         )
-
-# Add assets folder to the build
-add_custom_command(
-        TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/src/assets $<TARGET_FILE_DIR:${PROJECT_NAME}>/src/assets
-)
