@@ -9,9 +9,12 @@ void FontManager::init() {
   ImGuiIO& io = ImGui::GetIO();
   b::EmbedInternal::EmbeddedFile embed =
       b::embed<"assets/fonts/Nunito-Medium.ttf">();
+
+  ImFontConfig config;
+  config.FontDataOwnedByAtlas = false;
+
   fonts_["Default"] = io.Fonts->AddFontFromMemoryTTF(
-      (void*)embed.data(), static_cast<int>(embed.size()), 16.0f);
-  ;
+      (void*)embed.data(), static_cast<int>(embed.size()), 16.0f, &config);
 }
 
 void FontManager::shutdown() {
@@ -24,12 +27,17 @@ ImFont* FontManager::loadFont(const std::string& name,
                               b::EmbedInternal::EmbeddedFile embed,
                               float size) {
   ImGuiIO& io = ImGui::GetIO();
+
+  ImFontConfig config;
+  config.FontDataOwnedByAtlas = false;
+
   ImFont* font = io.Fonts->AddFontFromMemoryTTF(
-      (void*)embed.data(), static_cast<int>(embed.size()), size);
+      (void*)embed.data(), static_cast<int>(embed.size()), size, &config);
+
   if (font) {
     fonts_[name] = font;
   } else {
-    printf("Unable to load font %s", name.c_str());
+    printf("Unable to load font %s\n", name.c_str());
   }
   return font;
 }
