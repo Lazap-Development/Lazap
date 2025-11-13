@@ -37,8 +37,8 @@ FetchContent_Declare(
         stb
         URL https://raw.githubusercontent.com/nothings/stb/master/stb_image.h
         DOWNLOAD_NO_EXTRACT TRUE
-        GIT_SHALLOW TRUE
 )
+
 FetchContent_Declare(
         lunasvg
         GIT_REPOSITORY https://github.com/sammycage/lunasvg.git
@@ -53,23 +53,15 @@ FetchContent_Declare(
 )
 
 FetchContent_Declare(
-        httplib
-        GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
-        GIT_TAG v0.27.0
+        cpr
+        GIT_REPOSITORY https://github.com/libcpr/cpr.git
+        GIT_TAG 1.12.0
         GIT_SHALLOW TRUE
 )
-set(HTTPLIB_USE_BROTLI_IF_AVAILABLE OFF CACHE BOOL "" FORCE)
-set(HTTPLIB_USE_ZLIB_IF_AVAILABLE OFF CACHE BOOL "" FORCE)
-set(HTTPLIB_USE_ZSTD_IF_AVAILABLE OFF CACHE BOOL "" FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries only")
+set(CPR_BUILD_TESTS OFF CACHE BOOL "Disable tests")
 
-FetchContent_MakeAvailable(glew glfw glaze imgui stb lunasvg tomlplusplus httplib)
-
-# FetchContent_Declare() normally supports EXCLUDE_FROM_ALL but apparently there is a bug
-# See https://gitlab.kitware.com/cmake/cmake/-/issues/20167
-# As a workaround, we exclude the directories manually
-set_property(DIRECTORY ${glew_SOURCE_DIR} PROPERTY EXCLUDE_FROM_ALL YES)
-set_property(DIRECTORY ${glfw_SOURCE_DIR} PROPERTY EXCLUDE_FROM_ALL YES)
-set_property(DIRECTORY ${httplib_SOURCE_DIR} PROPERTY EXCLUDE_FROM_ALL YES)
+FetchContent_MakeAvailable(glew glfw glaze imgui stb lunasvg tomlplusplus cpr)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Configure C++ version
@@ -116,21 +108,16 @@ endif()
 target_compile_definitions(${EXECUTABLE_NAME}
         PRIVATE
         GLEW_STATIC
-        _WIN32_WINNT=0x0602
         )
 
 # Set the include path
 target_include_directories(${EXECUTABLE_NAME}
         PRIVATE
-        ${imgui_SOURCE_DIR}/
         ${PROJECT_SOURCE_DIR}/include
-        ${tomlplusplus_SOURCE_DIR}/include
-)
-
-target_include_directories(${EXECUTABLE_NAME}
-        PRIVATE
+        ${imgui_SOURCE_DIR}/
         ${stb_SOURCE_DIR}/
-        ${PROJECT_SOURCE_DIR}/include)
+        ${tomlplusplus_SOURCE_DIR}/include
+        )
 
 # Link against the appropriate libraries
 target_link_libraries(${EXECUTABLE_NAME}
@@ -139,7 +126,7 @@ target_link_libraries(${EXECUTABLE_NAME}
         glaze::glaze
         libglew_static
         lunasvg
-        httplib
+        cpr::cpr
         $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
         $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
         )

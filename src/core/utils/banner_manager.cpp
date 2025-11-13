@@ -1,6 +1,6 @@
 #include "utils/banner_manager.h"
 
-#include <httplib.h>
+#include <cpr/cpr.h>
 
 #include <filesystem>
 #include <fstream>
@@ -50,17 +50,10 @@ std::string BannerManager::fetchBanner(const std::string& url,
     return filePath;
   }
 
-  size_t pathStart = url.find('/', 8);
-  std::string baseUrl = url.substr(0, pathStart);
-  std::string path = url.substr(pathStart);
+  cpr::Response res = cpr::Get(cpr::Url{url});
 
-  httplib::Client cli(baseUrl);
-  auto res = cli.Get(path.c_str());
-
-  if (!res || res->status != 200) {
-    std::cerr << "HTTP error: "
-              << (res ? std::to_string(res->status) : "connection failed")
-              << std::endl;
+  if (res.status_code != 200) {
+    std::cerr << "HTTP error: " << res.status_code << std::endl;
     return "";
   }
 
@@ -70,7 +63,7 @@ std::string BannerManager::fetchBanner(const std::string& url,
     return "";
   }
 
-  outFile.write(res->body.data(), res->body.size());
+  outFile.write(res.text.data(), res.text.size());
   outFile.close();
 
   return filePath;
@@ -104,32 +97,22 @@ std::string BannerManager::rawgFetchBanner(const std::string& displayName) {
       std::string(apiKey) + "&search=" + searchTerm +
       "&search_exact&search_precise&stores=11";
 
-  size_t pathStart = apiUrl.find('/', 8);
-  std::string baseUrl = apiUrl.substr(0, pathStart);
-  std::string path = apiUrl.substr(pathStart);
+  cpr::Response res = cpr::Get(cpr::Url{apiUrl});
 
-  httplib::Client cli(baseUrl);
-  auto res = cli.Get(path.c_str());
-
-  if (!res || res->status != 200) {
-    std::cerr << "HTTP error: "
-              << (res ? std::to_string(res->status) : "connection failed")
-              << std::endl;
+  if (res.status_code != 200) {
+    std::cerr << "HTTP error: " << res.status_code << std::endl;
     return "";
   }
 
-  std::string backgroundImageUrl = parseRawgResponse(res->body);
+  std::string backgroundImageUrl = parseRawgResponse(res.text);
   if (backgroundImageUrl.empty()) {
     return "";
   }
 
-  httplib::Client imgCli(backgroundImageUrl);
-  auto imgRes = imgCli.Get(backgroundImageUrl.c_str());
+  cpr::Response imgRes = cpr::Get(cpr::Url{backgroundImageUrl});
 
-  if (!imgRes || imgRes->status != 200) {
-    std::cerr << "HTTP error: "
-              << (imgRes ? std::to_string(imgRes->status) : "connection failed")
-              << std::endl;
+  if (imgRes.status_code != 200) {
+    std::cerr << "HTTP error: " << imgRes.status_code << std::endl;
     return "";
   }
 
@@ -139,7 +122,7 @@ std::string BannerManager::rawgFetchBanner(const std::string& displayName) {
     return "";
   }
 
-  outFile.write(imgRes->body.data(), imgRes->body.size());
+  outFile.write(imgRes.text.data(), imgRes.text.size());
   outFile.close();
 
   return filePath;
