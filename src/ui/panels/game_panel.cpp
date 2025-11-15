@@ -7,7 +7,15 @@
 
 using namespace ui;
 
-void GamePanel::setGames(const std::vector<Game>* games) { games_ = games; }
+void GamePanel::setGames(const std::vector<Game>* games) {
+  games_ = games;
+  gameBoxes_.clear();
+  if (games_) {
+    for (const auto& game : *games_) {
+      gameBoxes_.emplace_back(std::make_unique<GameBox>(game, storage_));
+    }
+  }
+}
 
 void GamePanel::init() {
   ImageManager::loadSVG(b::embed<"assets/svg/heart2.svg">(), "heart2",
@@ -24,7 +32,7 @@ void GamePanel::render() {
                    ImGuiWindowFlags_NoTitleBar);
 
   ImGui::PushFont(FontManager::getFont("Title"));
-  ImGui::Text(name_.c_str());
+  ImGui::Text("%s", name_.c_str());
   ImGui::PopFont();
   ImGui::Separator();
 
@@ -40,10 +48,9 @@ void GamePanel::render() {
 
     if (ImGui::BeginTable("games_table", columns,
                           ImGuiTableFlags_SizingFixedFit)) {
-      for (const auto& game : *games_) {
+      for (auto& box : gameBoxes_) {
         ImGui::TableNextColumn();
-        GameBox box(game, storage_);
-        box.render();
+        box->render();
       }
       ImGui::EndTable();
     }

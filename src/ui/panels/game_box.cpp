@@ -14,7 +14,7 @@ void GameBox::render() {
   ImGui::PushID(name_.c_str());
   ImGui::BeginGroup();
 
-  ImGui::Image(ImageManager::loadPNG(game_.bannerUrl), ImVec2(210, 233.1));
+  ImGui::Image(bannerTexture_, ImVec2(210, 233.1));
 
   LaunchManager lm = LaunchManager(game_);
   if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) lm.launch();
@@ -54,7 +54,7 @@ void GameBox::render() {
   ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 6);
   ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 6);
   ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + 154.0f);
-  ImGui::TextWrapped(name_.c_str());
+  ImGui::TextWrapped("%s", name_.c_str());
   ImGui::PopTextWrapPos();
   ImGui::PopFont();
 

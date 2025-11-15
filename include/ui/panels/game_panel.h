@@ -3,6 +3,7 @@
 
 #include "storage/storage.h"
 #include "ui/panel.h"
+#include "ui/panels/game_box.h"
 
 namespace ui {
 
@@ -16,6 +17,7 @@ class GamePanel : public Panel {
   void setGames(const std::vector<Game>* games);
 
  protected:
+  std::vector<std::unique_ptr<GameBox>> gameBoxes_;
   const std::vector<Game>* games_ = nullptr;
 };
 
