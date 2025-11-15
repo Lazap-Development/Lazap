@@ -9,15 +9,12 @@
 #include "utils/launch_manager.h"
 using namespace ui;
 
-void GameBox::init(Game game) {
-  game_ = game;
-  // ImageManager::loadPNG("src/assets/img/banner.png");
-  // FIX: Causes memory leak due to per frame loading under game_panel
-}
-
 void GameBox::render() {
   ImGui::PushID(name_.c_str());
   ImGui::BeginGroup();
+
+  ImGui::Image(ImageManager::get("banner"), ImVec2(210, 233.1));
+
   LaunchManager lm = LaunchManager(game_);
   if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) lm.launch();
   if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
@@ -40,10 +37,6 @@ void GameBox::render() {
     }
   }
 
-  // 154 is the text length for one line
-  // 6 is the padding between elements
-
-  ImGui::Image(ImageManager::get("banner"), ImVec2(210, 233.1));
   ImVec2 min = ImGui::GetItemRectMin();
   ImVec2 max = ImGui::GetItemRectMax();
   bool hover = ImGui::IsItemHovered();

@@ -2,10 +2,8 @@
 
 #include "imgui.h"
 #include "ui/panels/game_box.h"
-#include "utils/fnv1a.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
-#include "utils/launch_manager.h"
 
 using namespace ui;
 
@@ -42,13 +40,10 @@ void GamePanel::render() {
 
     if (ImGui::BeginTable("games_table", columns,
                           ImGuiTableFlags_SizingFixedFit)) {
-      int count = 0;
       for (const auto& game : *games_) {
         ImGui::TableNextColumn();
-        GameBox box(game.name, storage_);
+        GameBox box(game, storage_);
         box.render();
-
-        count++;
       }
       ImGui::EndTable();
     }

@@ -77,13 +77,6 @@ void Application::run() {
       game.bannerUrl = bm.getBanner(client->getType(), game.name,
                                     std::to_string(game.appId));
       games.push_back(game);
-      games.push_back(game);
-      games.push_back(game);
-      games.push_back(game);
-      games.push_back(game);
-      games.push_back(game);
-      games.push_back(game);
-      games.push_back(game);
       storage.insertGameTOML(game.name);
     }
   }

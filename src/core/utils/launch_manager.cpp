@@ -3,6 +3,7 @@
 #include <utils/launch_manager.h>
 
 #include <algorithm>
+#include <cstdio>
 #include <cstdlib>
 #include <filesystem>
 
@@ -50,6 +51,7 @@ std::string findExecutableIgnoreCase(const std::string& directory,
 }
 
 bool LaunchManager::launch() {
+  printf("Attempting to launch %s... \n", game_.name.c_str());
   namespace fs = std::filesystem;
 
   std::string fullPath =
