@@ -72,9 +72,9 @@ void setDefaultDarkColors() {
   style.PopupRounding = 5.0f;
   style.ScrollbarRounding = 5.0f;
 
-  style.WindowPadding = ImVec2(10, 10);
-  style.FramePadding = ImVec2(6, 4);
-  style.ItemSpacing = ImVec2(8, 6);
+  style.WindowPadding = ImVec2(0.0f, 0.0f);
+  style.FramePadding = ImVec2(15, 20);
+  style.ItemSpacing = ImVec2(6, 6);
   style.PopupBorderSize = 0.0f;
 }
 

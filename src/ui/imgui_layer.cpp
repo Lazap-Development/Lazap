@@ -28,10 +28,10 @@ void ImGuiLayer::init(GLFWwindow *window, Storage &storage) {
                         b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 16.0f);
   FontManager::loadFont(
       "Title", b::embed<"assets/fonts/ArchivoBlack-Regular.ttf">(), 24.0f);
-  FontManager::loadFont("Game:Title",
+  FontManager::loadFont("GameBox:Title",
                         b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 16.0f);
   FontManager::loadFont(
-      "Game:Time", b::embed<"assets/fonts/RobotoMono-Medium.ttf">(), 10.0f);
+      "GameBox:Time", b::embed<"assets/fonts/RobotoMono-Medium.ttf">(), 10.0f);
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 130");
@@ -81,6 +81,7 @@ void ImGuiLayer::begin() {
 }
 
 void ImGuiLayer::render() {
+  // ImGui::ShowStyleEditor(&ImGui::GetStyle());
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   ImGuiWindowClass window_class;

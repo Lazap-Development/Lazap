@@ -51,7 +51,8 @@ void Application::run() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-  GLFWwindow *window = glfwCreateWindow(1800, 1000, "Lazap", nullptr, nullptr);
+  GLFWwindow *window =
+      glfwCreateWindow(1200, 2000 / 3, "Lazap", nullptr, nullptr);
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);
   glewInit();
@@ -75,6 +76,13 @@ void Application::run() {
     for (auto &game : client->getInstalledGames()) {
       game.bannerUrl = bm.getBanner(client->getType(), game.name,
                                     std::to_string(game.appId));
+      games.push_back(game);
+      games.push_back(game);
+      games.push_back(game);
+      games.push_back(game);
+      games.push_back(game);
+      games.push_back(game);
+      games.push_back(game);
       games.push_back(game);
       storage.insertGameTOML(game.name);
     }

@@ -1,13 +1,23 @@
 #include "ui/panels/game_panel.h"
 
 #include "imgui.h"
+#include "ui/panels/game_box.h"
 #include "utils/fnv1a.h"
 #include "utils/font_manager.h"
+#include "utils/image_manager.h"
 #include "utils/launch_manager.h"
 
 using namespace ui;
 
 void GamePanel::setGames(const std::vector<Game>* games) { games_ = games; }
+
+void GamePanel::init() {
+  ImageManager::loadSVG(b::embed<"assets/svg/heart2.svg">(), "heart2",
+                        0xFFFFFFFF);
+  ImageManager::loadSVG(b::embed<"assets/svg/recent.svg">(), "recent",
+                        0xA2A2A2FF);
+  ImageManager::loadSVG(b::embed<"assets/svg/play.svg">(), "play", 0xFFFFFFFF);
+}
 
 void GamePanel::render() {
   ImGui::Begin(name_.c_str(), nullptr,
@@ -25,30 +35,23 @@ void GamePanel::render() {
     ImGui::TextDisabled("No games available.");
     ImGui::PopFont();
   } else {
-    for (const auto& game : *games_) {
-      LaunchManager lm = LaunchManager(game);
-      if (ImGui::Button(game.name.c_str())) lm.launch();
-      if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
-        storage_->updateTOML([game](toml::table& config) {
-          if (config.contains("games")) {
-            auto gamesTable = config["games"].as_table();
-            if (gamesTable->contains(std::to_string(fnv1a::hash(
-                    game.name.c_str(), std::strlen(game.name.c_str()))))) {
-              auto gameTable =
-                  gamesTable
-                      ->at(std::to_string(fnv1a::hash(
-                          game.name.c_str(), std::strlen(game.name.c_str()))))
-                      .as_table();
-              gameTable->insert_or_assign("favourite", toml::value(true));
-            }
-          }
-        });
-        if (lm.isRunning()) {
-          lm.kill();
-        }
+    float boxWidth = 210.0f + 12.0f;
+    float panelWidth = ImGui::GetContentRegionAvail().x;
+    int columns = (int)(panelWidth / boxWidth);
+    if (columns < 1) columns = 1;
+
+    if (ImGui::BeginTable("games_table", columns,
+                          ImGuiTableFlags_SizingFixedFit)) {
+      int count = 0;
+      for (const auto& game : *games_) {
+        ImGui::TableNextColumn();
+        GameBox box(game.name, storage_);
+        box.render();
+
+        count++;
       }
+      ImGui::EndTable();
     }
   }
-
   ImGui::End();
 }
