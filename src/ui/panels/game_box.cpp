@@ -7,13 +7,14 @@
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
 #include "utils/launch_manager.h"
+
 using namespace ui;
 
 void GameBox::render() {
   ImGui::PushID(name_.c_str());
   ImGui::BeginGroup();
 
-  ImGui::Image(ImageManager::get("banner"), ImVec2(210, 233.1));
+  ImGui::Image(ImageManager::loadPNG(game_.bannerUrl), ImVec2(210, 233.1));
 
   LaunchManager lm = LaunchManager(game_);
   if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) lm.launch();
