@@ -51,8 +51,18 @@ void Application::run() {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+
+  GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+  const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+
+  int windowWidth = 1200;
+  int windowHeight = 2000 / 3;
+  int windowX = (mode->width - windowWidth) / 2;
+  int windowY = (mode->height - windowHeight) / 2;
+
   GLFWwindow *window =
-      glfwCreateWindow(1200, 2000 / 3, "Lazap", nullptr, nullptr);
+      glfwCreateWindow(windowWidth, windowHeight, "Lazap", nullptr, nullptr);
+  glfwSetWindowPos(window, windowX, windowY);
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);
   glewInit();

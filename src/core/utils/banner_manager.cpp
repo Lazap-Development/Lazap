@@ -6,7 +6,6 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <string_view>
 
 #include "clients/client.h"
 #include "storage/storage_config.h"
@@ -70,13 +69,14 @@ std::string BannerManager::fetchBanner(const std::string& url,
 }
 
 std::string BannerManager::rawgFetchBanner(const std::string& displayName) {
-  std::string_view apiKey = std::getenv("RAWG_API_KEY");
-
-  if (apiKey.empty()) {
+  const char* raw = std::getenv("RAWG_API_KEY");
+  if (!raw) {
     std::cerr << "Error: RAWG_API_KEY environment variable is not set!"
               << std::endl;
     return "";
   }
+
+  std::string apiKey{raw};
 
   std::string bannersDir = StorageConfig::STORAGE_DIR + "/cache/games/banners";
   fs::create_directories(bannersDir);
