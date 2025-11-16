@@ -14,7 +14,30 @@ void GameBox::render() {
   ImGui::PushID(name_.c_str());
   ImGui::BeginGroup();
 
-  ImGui::Image(bannerTexture_, ImVec2(210, 233.1));
+  const ImVec2 displaySize(210.0f, 233.1f);
+  const ImVec2 textureSize(bannerTexture_.width, bannerTexture_.height);
+  const float topOffsetPixels = 10.0f;
+
+  ImVec2 uv0(0.0f, 0.0f);
+  ImVec2 uv1(1.0f, 1.0f);
+
+  if (textureSize.x > 0 && textureSize.y > 0) {
+    float texAspect = textureSize.x / textureSize.y;
+    float dispAspect = displaySize.x / displaySize.y;
+
+    if (texAspect > dispAspect) {
+      float scale = dispAspect / texAspect;
+      float offset = (1.0f - scale) * 0.5f;
+      uv0.x = offset;
+      uv1.x = 1.0f - offset;
+    } else if (texAspect < dispAspect) {
+      float scale = texAspect / dispAspect;
+      uv0.y = topOffsetPixels / textureSize.y;
+      uv1.y = uv0.y + scale;
+    }
+  }
+
+  ImGui::Image(bannerTexture_.id, displaySize, uv0, uv1);
 
   LaunchManager lm = LaunchManager(game_);
   if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) lm.launch();

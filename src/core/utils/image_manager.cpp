@@ -48,7 +48,7 @@ GLuint ImageManager::loadPNG(b::EmbedInternal::EmbeddedFile embed,
   return texture_id;
 }
 
-GLuint ImageManager::loadPNG(const std::string& path) {
+Texture ImageManager::loadPNG(const std::string& path) {
   int width, height, channels;
 
   unsigned char* image_data =
@@ -57,7 +57,7 @@ GLuint ImageManager::loadPNG(const std::string& path) {
   if (!image_data) {
     printf("Failed to load PNG '%s': %s\n", path.c_str(),
            stbi_failure_reason());
-    return 0;
+    return {0, 0, 0};
   }
 
   GLuint texture_id;
@@ -76,7 +76,7 @@ GLuint ImageManager::loadPNG(const std::string& path) {
 
   cache[std::filesystem::path(path).stem().string()] = texture_id;
 
-  return texture_id;
+  return {texture_id, width, height};
 }
 
 GLuint ImageManager::loadSVG(b::EmbedInternal::EmbeddedFile embed,

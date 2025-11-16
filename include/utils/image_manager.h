@@ -1,18 +1,26 @@
 #pragma once
 
+#include <GL/gl.h>
+
 #include <string>
 #include <unordered_map>
 
 #include "battery/embed.hpp"
 
+struct Texture {
+  GLuint id;
+  int width;
+  int height;
+};
+
 class ImageManager {
  public:
-  static unsigned int loadPNG(const std::string& path);
-  static unsigned int loadPNG(b::EmbedInternal::EmbeddedFile path,
-                              const std::string& id);
+  static GLuint loadPNG(b::EmbedInternal::EmbeddedFile path,
+                        const std::string& id);
+  static Texture loadPNG(const std::string& path);
 
-  static unsigned int loadSVG(b::EmbedInternal::EmbeddedFile embed,
-                              const std::string& id, uint32_t color);
+  static GLuint loadSVG(b::EmbedInternal::EmbeddedFile embed,
+                        const std::string& id, uint32_t color);
   static unsigned int get(const std::string& name);
   static void clear();
 

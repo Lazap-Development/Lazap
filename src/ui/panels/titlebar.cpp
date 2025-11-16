@@ -42,10 +42,10 @@ void Titlebar::render() {
   ImGui::SameLine();
   if (ImGui::ImageButton("##maximise", ImageManager::get("maximise"),
                          ImVec2(24, 24))) {
-    if (glfwGetWindowMonitor(window) == nullptr) {
-      glfwMaximizeWindow(window);
-    } else {
+    if (glfwGetWindowAttrib(window, GLFW_MAXIMIZED)) {
       glfwRestoreWindow(window);
+    } else {
+      glfwMaximizeWindow(window);
     }
   }
   ImGui::SameLine();

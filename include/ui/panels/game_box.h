@@ -21,7 +21,7 @@ class GameBox : public Panel {
 
  private:
   Game game_;
-  GLuint bannerTexture_ = 0;
+  Texture bannerTexture_;
 };
 
 }  // namespace ui
