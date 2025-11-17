@@ -16,7 +16,7 @@ void PanelManager::initPanels(GLFWwindow *w, Storage &storage) {
   addPanel(std::make_unique<LeftPanel>(view_.get()));
   addPanel(std::make_unique<GamePanel>("Library", &storage));
   addPanel(std::make_unique<GamePanel>("Favorites", &storage));
-  addPanel(std::make_unique<GamePanel>("Recents", &storage));
+  addPanel(std::make_unique<GamePanel>("Recently Played", &storage));
   addPanel(std::make_unique<GameInfoPanel>());
 
   for (auto &panel : panels_) {
@@ -72,9 +72,9 @@ void Views::BuildDockLayout() {
   ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
 
   ImGuiID titlebar, left, gamesinfo_id, bottom;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.0612f, &titlebar,
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.08f, &titlebar,
                               &dockspace_id);
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.10f, &left,
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.08f, &left,
                               &dockspace_id);
   ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.40f, &gamesinfo_id,
                               &bottom);
@@ -82,7 +82,7 @@ void Views::BuildDockLayout() {
   ImGui::DockBuilderDockWindow("Titlebar", titlebar);
   ImGui::DockBuilderDockWindow("Left Menu", left);
   ImGui::DockBuilderDockWindow("Games Info", gamesinfo_id);
-  ImGui::DockBuilderDockWindow("Recents", bottom);
+  ImGui::DockBuilderDockWindow("Recently Played", bottom);
   ImGui::DockBuilderDockWindow("Library", bottom);
   ImGui::DockBuilderDockWindow("Favorites", bottom);
 
@@ -101,7 +101,7 @@ void Views::MainMenu() {
   panel_manager->setPanelVisible("Games Info", true);
   panel_manager->setPanelVisible("Favorites", false);
   panel_manager->setPanelVisible("Library", false);
-  panel_manager->setPanelVisible("Recents", true);
+  panel_manager->setPanelVisible("Recently Played", true);
   view = ViewType::MainMenu;
 }
 
@@ -112,7 +112,7 @@ void Views::Library() {
   panel_manager->setPanelVisible("Games Info", false);
   panel_manager->setPanelVisible("Favorites", false);
   panel_manager->setPanelVisible("Library", true);
-  panel_manager->setPanelVisible("Recents", false);
+  panel_manager->setPanelVisible("Recently Played", false);
   view = ViewType::Library;
 }
 
@@ -123,6 +123,6 @@ void Views::Favorites() {
   panel_manager->setPanelVisible("Games Info", false);
   panel_manager->setPanelVisible("Favorites", true);
   panel_manager->setPanelVisible("Library", false);
-  panel_manager->setPanelVisible("Recents", false);
+  panel_manager->setPanelVisible("Recently Played", false);
   view = ViewType::Favorites;
 }

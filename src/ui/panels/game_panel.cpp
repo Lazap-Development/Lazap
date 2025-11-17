@@ -30,30 +30,37 @@ void GamePanel::render() {
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
-
   ImGui::PushFont(FontManager::getFont("Title"));
   ImGui::Text("%s", name_.c_str());
   ImGui::PopFont();
   ImGui::Separator();
+
+  ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 15.0f);
 
   if (!games_) {
     ImGui::PushFont(FontManager::getFont("Game:Title"));
     ImGui::TextDisabled("No games available.");
     ImGui::PopFont();
   } else {
-    float boxWidth = 210.0f + 12.0f;
-    float panelWidth = ImGui::GetContentRegionAvail().x;
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10.0f, 10.0f));
+
+    if (name_ == "Recently Played")
+      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 15.0f);
+
+    float boxWidth = 210.0f;
+    float panelWidth = ImGui::GetContentRegionAvail().x + 40;
+
     int columns = (int)(panelWidth / boxWidth);
     if (columns < 1) columns = 1;
-
     if (ImGui::BeginTable("games_table", columns,
-                          ImGuiTableFlags_SizingFixedFit)) {
+                          ImGuiTableFlags_SizingStretchSame)) {
       for (auto& box : gameBoxes_) {
         ImGui::TableNextColumn();
         box->render();
       }
       ImGui::EndTable();
     }
+    ImGui::PopStyleVar();
   }
   ImGui::End();
 }

@@ -27,10 +27,10 @@ void LeftPanel::render() {
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
+                   ImGuiWindowFlags_NoScrollWithMouse |
                    ImGuiWindowFlags_NoTitleBar);
+  ImGui::Dummy(ImVec2(0, 20));
 
-  int y = ImGui::GetMainViewport()->Size.y;
-  ImGui::Dummy(ImVec2(0, 60));
   // ImGui::PushFont(FontManager::getFont("Left:Button"));
   bool home =
       ImGui::ImageButton("Home", ImageManager::get("home"), ImVec2(24, 24));
@@ -39,7 +39,8 @@ void LeftPanel::render() {
   bool library = ImGui::ImageButton("Library", ImageManager::get("library"),
                                     ImVec2(24, 24));
 
-  ImGui::Dummy(ImVec2(0, y - 138 - ImGui::GetCursorPosY()));
+  ImGui::Dummy(ImVec2(0, ImGui::GetContentRegionAvail().y - 150));
+
   bool github =
       ImGui::ImageButton("GitHub", ImageManager::get("github"), ImVec2(24, 24));
   bool settings = ImGui::ImageButton("Settings", ImageManager::get("settings"),
@@ -55,7 +56,6 @@ void LeftPanel::render() {
   if (library == true && view_->view != ViewType::Library) {
     view_->Library();
   }
-
   if (github == true) {
     std::string url = "";
   }

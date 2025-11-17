@@ -21,7 +21,11 @@ void Titlebar::init() {
 }
 
 void Titlebar::render() {
-  ImGui::Begin(name().c_str(), nullptr, false);
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10.0f, 10.0f));
+
+  ImGui::Begin(name().c_str(), nullptr,
+               ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
+                   ImGuiWindowFlags_NoScrollbar);
 
   // Titlebar background
   // ImDrawList* draw = ImGui::GetForegroundDrawList();
@@ -33,15 +37,16 @@ void Titlebar::render() {
   //                     ImVec2(pos.x + size.x, pos.y + size.y + top_padding),
   //                     IM_COL32(0, 0, 0, 80), rounding);
 
-  ImGui::Image(ImageManager::get("lazap"), ImVec2(50, 50));
-  ImGui::SameLine(ImGui::GetWindowWidth() - 144);
+  ImGui::Image(ImageManager::get("lazap"), ImVec2(40, 40));
+  ImGui::SameLine(ImGui::GetContentRegionAvail().x - 130);
+  ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 2.0f));
   if (ImGui::ImageButton("##minimise", ImageManager::get("minimise"),
-                         ImVec2(24, 24))) {
+                         ImVec2(25, 20))) {
     glfwIconifyWindow(window);
   }
   ImGui::SameLine();
   if (ImGui::ImageButton("##maximise", ImageManager::get("maximise"),
-                         ImVec2(24, 24))) {
+                         ImVec2(20, 20))) {
     if (glfwGetWindowAttrib(window, GLFW_MAXIMIZED)) {
       glfwRestoreWindow(window);
     } else {
@@ -50,9 +55,11 @@ void Titlebar::render() {
   }
   ImGui::SameLine();
   if (ImGui::ImageButton("##close", ImageManager::get("close"),
-                         ImVec2(24, 24))) {
+                         ImVec2(20, 20))) {
     glfwSetWindowShouldClose(window, GLFW_TRUE);
   }
-
+  ImGui::PopStyleVar();
   ImGui::End();
+
+  ImGui::PopStyleVar();
 }

@@ -14,82 +14,108 @@ void GameBox::render() {
   ImGui::PushID(name_.c_str());
   ImGui::BeginGroup();
 
-  const ImVec2 displaySize(210.0f, 233.1f);
-  const ImVec2 textureSize(bannerTexture_.width, bannerTexture_.height);
-  const float topOffsetPixels = 10.0f;
+  const float uiScale = ImGui::GetFontSize() / 18.0f;
+  const ImVec2 displaySize(210.0f * uiScale, 233.1f * uiScale);
+  const float cornerRadius = 8.0f * uiScale;
+  const float topOffsetPixels = 10.0f * uiScale;
+  const float padding = 6.0f * uiScale;
+  const float iconSize = 16.0f * uiScale;
+  const float iconSpacing = 6.0f * uiScale;
+  const float playIconSize = 32.0f * uiScale;
 
   ImVec2 uv0(0.0f, 0.0f);
   ImVec2 uv1(1.0f, 1.0f);
 
+  const ImVec2 textureSize(bannerTexture_.width, bannerTexture_.height);
   if (textureSize.x > 0 && textureSize.y > 0) {
-    float texAspect = textureSize.x / textureSize.y;
-    float dispAspect = displaySize.x / displaySize.y;
+    const float texAspect = textureSize.x / textureSize.y;
+    const float dispAspect = displaySize.x / displaySize.y;
 
     if (texAspect > dispAspect) {
-      float scale = dispAspect / texAspect;
-      float offset = (1.0f - scale) * 0.5f;
+      // Texture is wider - crop sides
+      const float scale = dispAspect / texAspect;
+      const float offset = (1.0f - scale) * 0.5f;
       uv0.x = offset;
       uv1.x = 1.0f - offset;
-    } else if (texAspect < dispAspect) {
-      float scale = texAspect / dispAspect;
+    } else {
+      // Texture is taller - crop top/bottom with offset
+      const float scale = texAspect / dispAspect;
       uv0.y = topOffsetPixels / textureSize.y;
       uv1.y = uv0.y + scale;
     }
   }
 
-  ImGui::Image(bannerTexture_.id, displaySize, uv0, uv1);
+  ImDrawList* drawList = ImGui::GetWindowDrawList();
+  const ImVec2 pos = ImGui::GetCursorScreenPos();
+  const ImVec2 end(pos.x + displaySize.x, pos.y + displaySize.y);
 
-  LaunchManager lm = LaunchManager(game_);
-  if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) lm.launch();
+  drawList->AddImageRounded(bannerTexture_.id, pos, end, uv0, uv1,
+                            IM_COL32_WHITE, cornerRadius,
+                            ImDrawFlags_RoundCornersAll);
+
+  ImGui::Dummy(displaySize);
+
+  const bool isHovered = ImGui::IsItemHovered();
+  const ImVec2 itemMin = ImGui::GetItemRectMin();
+  const ImVec2 itemMax = ImGui::GetItemRectMax();
+
+  LaunchManager lm(game_);
+
+  if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+    lm.launch();
+  }
+
   if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
     storage_->updateTOML([this](toml::table& config) {
-      if (config.contains("games")) {
-        auto gamesTable = config["games"].as_table();
-        if (gamesTable->contains(std::to_string(fnv1a::hash(
-                game_.name.c_str(), std::strlen(game_.name.c_str()))))) {
-          auto gameTable =
-              gamesTable
-                  ->at(std::to_string(fnv1a::hash(
-                      game_.name.c_str(), std::strlen(game_.name.c_str()))))
-                  .as_table();
-          gameTable->insert_or_assign("favourite", toml::value(true));
-        }
+      auto games = config["games"].as_table();
+      if (!games) return;
+
+      const std::string key = std::to_string(
+          fnv1a::hash(game_.name.c_str(), std::strlen(game_.name.c_str())));
+
+      if (games->contains(key)) {
+        games->at(key).as_table()->insert_or_assign("favourite", true);
       }
     });
+
     if (lm.isRunning()) {
       lm.kill();
     }
   }
 
-  ImVec2 min = ImGui::GetItemRectMin();
-  ImVec2 max = ImGui::GetItemRectMax();
-  bool hover = ImGui::IsItemHovered();
-  if (hover) {
-    auto* draw = ImGui::GetWindowDrawList();
-    draw->AddRectFilled(min, max, IM_COL32(73, 34, 88, 40));
-    ImVec2 center = ImVec2((min.x + max.x) * 0.5f, (min.y + max.y) * 0.5f);
-    draw->AddImage(ImageManager::get("play"), center,
-                   ImVec2(center.x + 32.0f, center.y + 32.0f), ImVec2(0, 0),
-                   ImVec2(1, 1), IM_COL32(255, 255, 255, 255));
+  if (isHovered) {
+    drawList->AddRectFilled(itemMin, itemMax, IM_COL32(73, 34, 88, 40),
+                            cornerRadius);
+
+    const ImVec2 center((itemMin.x + itemMax.x) * 0.5f,
+                        (itemMin.y + itemMax.y) * 0.5f);
+
+    drawList->AddImage(
+        ImageManager::get("play"),
+        ImVec2(center.x - playIconSize * 0.5f, center.y - playIconSize * 0.5f),
+        ImVec2(center.x + playIconSize * 0.5f, center.y + playIconSize * 0.5f),
+        ImVec2(0, 0), ImVec2(1, 1), IM_COL32_WHITE);
   }
 
   ImGui::PushFont(FontManager::getFont("GameBox:Title"));
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 6);
-  ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 6);
-  ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + 154.0f);
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding);
+  ImGui::SetCursorPosY(ImGui::GetCursorPosY() + padding);
+
+  const float textWrapWidth = 154.0f * uiScale;
+  ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + textWrapWidth);
   ImGui::TextWrapped("%s", name_.c_str());
   ImGui::PopTextWrapPos();
   ImGui::PopFont();
 
-  float iconSize = 16.0f;
-  float spacing = 6.0f;
-  float totalIconsWidth = (iconSize * 2) + (spacing * 2);
-  float cursorX = ImGui::GetCursorPosX() + 210.0f - totalIconsWidth;
+  const float totalIconsWidth = iconSize * 2 + iconSpacing;
+  const float iconStartX =
+      ImGui::GetCursorPosX() + displaySize.x - totalIconsWidth - padding;
 
   ImGui::SameLine();
-  ImGui::SetCursorPosX(cursorX);
+  ImGui::SetCursorPosX(iconStartX);
   ImGui::Image(ImageManager::get("heart2"), ImVec2(iconSize, iconSize));
-  ImGui::SameLine(0, spacing);
+
+  ImGui::SameLine(0, iconSpacing);
   ImGui::Image(ImageManager::get("recent"), ImVec2(iconSize, iconSize));
 
   ImGui::EndGroup();

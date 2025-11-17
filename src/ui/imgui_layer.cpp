@@ -15,6 +15,8 @@ void ImGuiLayer::init(GLFWwindow *window, Storage &storage) {
 
   ImGuiIO &io = ImGui::GetIO();
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+  io.ConfigDpiScaleFonts = true;
+  io.ConfigDpiScaleViewports = true;
   io.IniFilename = nullptr;
 
   FontManager::init();
@@ -23,13 +25,13 @@ void ImGuiLayer::init(GLFWwindow *window, Storage &storage) {
   FontManager::loadFont("GameInfo:Title",
                         b::embed<"assets/fonts/ZenDots-Regular.ttf">(), 64.0f);
   FontManager::loadFont("GameInfo:Paragraph",
-                        b::embed<"assets/fonts/Nunito-Medium.ttf">(), 16.0f);
+                        b::embed<"assets/fonts/Nunito-Medium.ttf">(), 18.0f);
   FontManager::loadFont("Left:Button",
-                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 16.0f);
+                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 18.0f);
   FontManager::loadFont(
       "Title", b::embed<"assets/fonts/ArchivoBlack-Regular.ttf">(), 24.0f);
   FontManager::loadFont("GameBox:Title",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 16.0f);
+                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 18.0f);
   FontManager::loadFont(
       "GameBox:Time", b::embed<"assets/fonts/RobotoMono-Medium.ttf">(), 10.0f);
 
