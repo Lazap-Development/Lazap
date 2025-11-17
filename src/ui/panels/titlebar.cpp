@@ -41,7 +41,7 @@ void Titlebar::render() {
   ImGui::SameLine(ImGui::GetContentRegionAvail().x - 130);
   ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 2.0f));
   if (ImGui::ImageButton("##minimise", ImageManager::get("minimise"),
-                         ImVec2(25, 20))) {
+                         ImVec2(20, 20))) {
     glfwIconifyWindow(window);
   }
   ImGui::SameLine();
