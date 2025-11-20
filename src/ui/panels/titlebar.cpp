@@ -25,41 +25,64 @@ void Titlebar::render() {
 
   ImGui::Begin(name().c_str(), nullptr,
                ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
-                   ImGuiWindowFlags_NoScrollbar);
-
-  // Titlebar background
-  // ImDrawList* draw = ImGui::GetForegroundDrawList();
-  // ImVec2 pos = ImGui::GetWindowPos();
-  // ImVec2 size = ImGui::GetWindowSize();
-  // float rounding = 15.0f;
-  // float top_padding = 7.0f;
-  // draw->AddRectFilled(ImVec2(pos.x, pos.y + top_padding),
-  //                     ImVec2(pos.x + size.x, pos.y + size.y + top_padding),
-  //                     IM_COL32(0, 0, 0, 80), rounding);
+                   ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoDocking |
+                   ImGuiWindowFlags_NoTitleBar);
 
   ImGui::Image(ImageManager::get("lazap"), ImVec2(40, 40));
+
   ImGui::SameLine(ImGui::GetContentRegionAvail().x - 130);
   ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10.0f, 2.0f));
+
+  bool clickedMin = false, clickedMax = false, clickedClose = false;
+
   if (ImGui::ImageButton("##minimise", ImageManager::get("minimise"),
-                         ImVec2(20, 20))) {
-    glfwIconifyWindow(window);
-  }
+                         ImVec2(20, 20)))
+    clickedMin = true;
+
   ImGui::SameLine();
   if (ImGui::ImageButton("##maximise", ImageManager::get("maximise"),
-                         ImVec2(20, 20))) {
-    if (glfwGetWindowAttrib(window, GLFW_MAXIMIZED)) {
+                         ImVec2(20, 20)))
+    clickedMax = true;
+
+  ImGui::SameLine();
+  if (ImGui::ImageButton("##close", ImageManager::get("close"), ImVec2(20, 20)))
+    clickedClose = true;
+
+  ImGui::PopStyleVar();
+
+  if (clickedMin) glfwIconifyWindow(window);
+
+  if (clickedMax) {
+    if (glfwGetWindowAttrib(window, GLFW_MAXIMIZED))
       glfwRestoreWindow(window);
-    } else {
+    else
       glfwMaximizeWindow(window);
+  }
+
+  if (clickedClose) glfwSetWindowShouldClose(window, GLFW_TRUE);
+
+  {
+    ImVec2 pos = ImGui::GetWindowPos();
+    ImVec2 size = ImGui::GetWindowSize();
+    float titlebarHeight = 40.0f;  // Amount of area that drags
+
+    bool hovered = ImGui::IsMouseHoveringRect(
+        pos, ImVec2(pos.x + size.x, pos.y + titlebarHeight));
+
+    bool dragging = hovered && ImGui::IsMouseDown(ImGuiMouseButton_Left);
+
+    // Prevent dragging if mouse is over buttons
+    bool overItem = ImGui::IsAnyItemHovered();
+
+    if (dragging && !overItem) {
+      ImVec2 delta = ImGui::GetIO().MouseDelta;
+
+      int x, y;
+      glfwGetWindowPos(window, &x, &y);
+      glfwSetWindowPos(window, x + (int)delta.x, y + (int)delta.y);
     }
   }
-  ImGui::SameLine();
-  if (ImGui::ImageButton("##close", ImageManager::get("close"),
-                         ImVec2(20, 20))) {
-    glfwSetWindowShouldClose(window, GLFW_TRUE);
-  }
-  ImGui::PopStyleVar();
-  ImGui::End();
 
+  ImGui::End();
   ImGui::PopStyleVar();
 }

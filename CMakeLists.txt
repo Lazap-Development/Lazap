@@ -146,12 +146,17 @@ target_include_directories(${EXECUTABLE_NAME}
 
 # Link against the appropriate libraries
 target_link_libraries(${EXECUTABLE_NAME}
-        PRIVATE
-        glfw
-        glaze::glaze
-        libglew_static
-        lunasvg
-        cpr::cpr
-        $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
-        $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
-        )
+    PRIVATE
+    glfw
+    glaze::glaze
+    libglew_static
+    lunasvg
+    cpr::cpr
+    $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
+    $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
+)
+
+# Only link dwmapi if on Windows
+if(WIN32)
+    target_link_libraries(${EXECUTABLE_NAME} PRIVATE dwmapi)
+endif()

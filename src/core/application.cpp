@@ -1,6 +1,7 @@
 #include <application.h>
 #include <imgui_layer.h>
 
+#include <cstdio>
 #include <memory>
 #include <toml++/toml.hpp>
 #include <vector>
@@ -15,6 +16,18 @@
 #include "clients/ubisoft_connect.h"
 #include "storage/storage.h"
 #include "utils/banner_manager.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+#ifdef _WIN32
+#define _WIN32_WINNT 0x0A00  // Windows 10
+#include <windows.h>
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+#include <dwmapi.h>
+#pragma comment(lib, "dwmapi.lib")
+#endif
 
 double ClockSeconds() {
   using Clock = std::chrono::high_resolution_clock;
@@ -52,6 +65,10 @@ void Application::run() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
+  if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+    glfwWindowHintString(GLFW_WAYLAND_APP_ID, "lazap");
+  }
+
   GLFWmonitor *monitor = glfwGetPrimaryMonitor();
   const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 
@@ -62,6 +79,11 @@ void Application::run() {
 
   GLFWwindow *window =
       glfwCreateWindow(windowWidth, windowHeight, "Lazap", nullptr, nullptr);
+  if (!window) {
+    glfwTerminate();
+    return;
+  }
+
   glfwSetWindowPos(window, windowX, windowY);
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1);
@@ -100,6 +122,19 @@ void Application::run() {
          std::chrono::duration_cast<std::chrono::milliseconds>(
              std::chrono::high_resolution_clock::now() - startupBegin)
              .count());
+
+#ifdef _WIN32
+  // Windows 11 native rounded corners and frame extension
+  HWND hwnd = glfwGetWin32Window(window);
+  SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+
+  MARGINS margins = {1, 1, 1, 1};
+  DwmExtendFrameIntoClientArea(hwnd, &margins);
+
+  DWM_WINDOW_CORNER_PREFERENCE cornerPref = DWMWCP_ROUND;
+  DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPref,
+                        sizeof(cornerPref));
+#endif
 
   RunnerState runner;
   while (!glfwWindowShouldClose(window)) {

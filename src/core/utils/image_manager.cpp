@@ -3,15 +3,14 @@
 #include "utils/image_manager.h"
 // clang-format on
 
+#include <lunasvg.h>
+
 #include <cstdio>
 #include <filesystem>
 #include <string>
 #include <unordered_map>
 
 #include "battery/embed.hpp"
-#define STB_IMAGE_IMPLEMENTATION
-#include <lunasvg.h>
-
 #include "stb_image.h"
 
 std::unordered_map<std::string, GLuint> ImageManager::cache;
