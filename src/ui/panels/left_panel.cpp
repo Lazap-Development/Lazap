@@ -11,6 +11,15 @@
 
 using namespace ui;
 
+void openURL(const std::string& url) {
+#ifdef _WIN32
+  std::string command = "start " + url;
+#elif __linux__
+  std::string command = "xdg-open " + url;
+#endif
+  std::system(command.c_str());
+}
+
 void LeftPanel::init() {
   ImageManager::loadSVG(b::embed<"assets/svg/home.svg">(), "home", 0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/library.svg">(), "library",
@@ -57,7 +66,8 @@ void LeftPanel::render() {
     view_->Library();
   }
   if (github == true) {
-    std::string url = "";
+    std::string url = "https://github.com/Lazap-Development/Lazap";
+    openURL(url);
   }
   if (settings == true) {
   }

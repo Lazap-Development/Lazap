@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.0)
+cmake_minimum_required(VERSION 4.2)
 project(Lazap)
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -8,7 +8,7 @@ include(FetchContent)
 FetchContent_Declare(
         glew
         GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
-        GIT_TAG glew-cmake-2.2.0
+        GIT_TAG 7e8300fa13ff568aa87ed45407c83f8cbe1b2de9
         GIT_SHALLOW TRUE
 )
 set(glew-cmake_BUILD_SHARED OFF CACHE BOOL "Build the shared glew library" FORCE)
@@ -24,7 +24,7 @@ FetchContent_Declare(
 FetchContent_Declare(
         imgui
         GIT_REPOSITORY https://github.com/ocornut/imgui
-        GIT_TAG v1.92.4-docking
+        GIT_TAG v1.92.5-docking
         GIT_SHALLOW TRUE
 )
 
@@ -62,16 +62,22 @@ FetchContent_Declare(
 )
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries only")
 set(CPR_BUILD_TESTS OFF CACHE BOOL "Disable tests")
+find_package(CURL)
+if(CURL_FOUND)
+    set(CPR_USE_SYSTEM_CURL ON)
+else()
+    set(CPR_USE_SYSTEM_CURL OFF)
+endif()
 
 # TODO: replace with https://github.com/MaxAkaAltmer/embed
 # Comes with better QOL improvements, no runtime variables, bug fixes, etc...
 FetchContent_Declare(
   battery-embed
   GIT_REPOSITORY https://github.com/batterycenter/embed.git
-  GIT_TAG        v1.2.19
+  GIT_TAG        465081903d97ff1ed05e1fd5d0b3c8032a4a26a6
 )
-if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-  set(B_PRODUCTION_MODE ON CACHE BOOL "embed: strip all development features such as hot-reload and absolute filepaths" FORCE)
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+  set(B_PRODUCTION_MODE ON CACHE BOOL "Strip all development features such as hot-reload and absolute filepaths" FORCE)
 endif()
 
 FetchContent_MakeAvailable(glew glfw glaze imgui stb lunasvg tomlplusplus cpr battery-embed)
@@ -109,8 +115,7 @@ add_executable(${EXECUTABLE_NAME}
         ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
         )
 
-
-file(GLOB_RECURSE ASSET_FILES CONFIGURE_DEPENDS
+file(GLOB_RECURSE ASSET_FILES 
     "${CMAKE_SOURCE_DIR}/assets/*"
 )
 foreach(ASSET_FILE ${ASSET_FILES})
