@@ -18,7 +18,7 @@ void Titlebar::init() {
                         0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/maximise.svg">(), "maximise",
                         0xFFFFFFFF);
-  ImageManager::loadPNG(b::embed<"assets/icons/lazap.png">(), "lazap");
+  ImageManager::loadPNG(b::embed<"assets/icons/lazap/icon.png">(), "lazap");
 }
 
 void Titlebar::render() {

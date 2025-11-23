@@ -10,10 +10,7 @@ namespace ui {
 
 class GameBox : public Panel {
  public:
-  GameBox(const Game& game, Storage* storage)
-      : Panel(game.name, storage), game_(game) {
-    bannerTexture_ = ImageManager::loadPNG(game_.bannerUrl);
-  }
+  GameBox(const Game& game, Storage* storage);
 
   void render() override;
   void end() override {};

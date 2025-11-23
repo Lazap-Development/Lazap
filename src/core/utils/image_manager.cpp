@@ -47,6 +47,37 @@ GLuint ImageManager::loadPNG(b::EmbedInternal::EmbeddedFile embed,
   return texture_id;
 }
 
+Texture ImageManager::loadPNG(b::EmbedInternal::EmbeddedFile embed) {
+  const auto data = embed.data();
+  const size_t size = embed.size();
+
+  int width, height, channels;
+  unsigned char* image_data = stbi_load_from_memory(
+      reinterpret_cast<const stbi_uc*>(data), static_cast<int>(size), &width,
+      &height, &channels, 4);
+
+  if (!image_data) {
+    printf("Failed to load embedded PNG: %s\n", stbi_failure_reason());
+    return {0, 0, 0};
+  }
+
+  GLuint texture_id;
+  glGenTextures(1, &texture_id);
+  glBindTexture(GL_TEXTURE_2D, texture_id);
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
+               GL_UNSIGNED_BYTE, image_data);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+  stbi_image_free(image_data);
+
+  return {texture_id, width, height};
+}
+
 Texture ImageManager::loadPNG(const std::string& path) {
   int width, height, channels;
 

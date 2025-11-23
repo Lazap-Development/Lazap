@@ -17,6 +17,7 @@ class ImageManager {
  public:
   static GLuint loadPNG(b::EmbedInternal::EmbeddedFile path,
                         const std::string& id);
+  static Texture loadPNG(b::EmbedInternal::EmbeddedFile path);
   static Texture loadPNG(const std::string& path);
 
   static GLuint loadSVG(b::EmbedInternal::EmbeddedFile embed,

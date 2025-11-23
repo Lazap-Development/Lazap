@@ -10,6 +10,14 @@
 
 using namespace ui;
 
+GameBox::GameBox(const Game& game, Storage* storage)
+    : Panel(game.name, storage), game_(game) {
+  bannerTexture_ = game_.bannerUrl.empty()
+                       ? ImageManager::loadPNG(
+                             b::embed<"assets/img/default-game-banner.png">())
+                       : ImageManager::loadPNG(game_.bannerUrl);
+}
+
 void GameBox::render() {
   ImGui::PushID(name_.c_str());
   ImGui::BeginGroup();
