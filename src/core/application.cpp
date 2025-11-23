@@ -72,8 +72,8 @@ void Application::run() {
   GLFWmonitor *monitor = glfwGetPrimaryMonitor();
   const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 
-  int windowWidth = 1200;
-  int windowHeight = 2000 / 3;
+  int windowWidth = 1800;
+  int windowHeight = 1000;
   int windowX = (mode->width - windowWidth) / 2;
   int windowY = (mode->height - windowHeight) / 2;
 

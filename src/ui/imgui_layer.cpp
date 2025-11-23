@@ -20,6 +20,8 @@ void ImGuiLayer::init(GLFWwindow *window, Storage &storage) {
   io.IniFilename = nullptr;
 
   FontManager::init();
+  FontManager::loadFont("Titlebar:Title",
+                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 16.0f);
   FontManager::loadFont("Username",
                         b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 15.0f);
   FontManager::loadFont("GameInfo:Title",
