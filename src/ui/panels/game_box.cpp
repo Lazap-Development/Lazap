@@ -74,13 +74,17 @@ void GameBox::render() {
           fnv1a::hash(game_.name.c_str(), std::strlen(game_.name.c_str())));
 
       if (games->contains(key)) {
-        games->at(key).as_table()->insert_or_assign("favourite", true);
+        auto* table = games->at(key).as_table();
+        bool current = table->get("favourite")->value_or(false);
+        table->insert_or_assign("favourite", !current);
       }
     });
 
     if (lm.isRunning()) {
       lm.kill();
     }
+
+    requestRefresh();
   }
 
   if (isHovered) {

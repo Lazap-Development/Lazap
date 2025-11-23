@@ -23,6 +23,7 @@ class PanelManager {
   void setPanelVisible(const std::string& name, bool visible);
   bool isPanelVisible(const std::string& name) const;
   void setGames(const std::vector<Game>* games);
+  void refreshPanel(const std::string& name);
   std::unique_ptr<Views> view_;
 
  private:

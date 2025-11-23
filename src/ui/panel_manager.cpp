@@ -10,14 +10,26 @@
 
 using namespace ui;
 
+template <typename T, typename... Args>
+std::unique_ptr<T> makePanelWithCB(PanelManager *pm, Args &&...args) {
+  auto panel = std::make_unique<T>(std::forward<Args>(args)...);
+  std::string panelName = panel->getName();
+  panel->setOnRefresh([pm, panelName]() { pm->refreshPanel(panelName); });
+  return panel;
+}
+
 void PanelManager::initPanels(GLFWwindow *w, Storage &storage) {
   view_ = std::make_unique<Views>(this);
+
   addPanel(std::make_unique<Titlebar>(w));
   addPanel(std::make_unique<LeftPanel>(view_.get()));
-  addPanel(std::make_unique<GamePanel>("Library", &storage));
-  addPanel(std::make_unique<GamePanel>("Favorites", &storage));
-  addPanel(std::make_unique<GamePanel>("Recently Played", &storage));
   addPanel(std::make_unique<GameInfoPanel>());
+
+  addPanel(makePanelWithCB<GamePanel>(this, "Library", &view_->view, &storage));
+  addPanel(
+      makePanelWithCB<GamePanel>(this, "Favorites", &view_->view, &storage));
+  addPanel(makePanelWithCB<GamePanel>(this, "Recently Played", &view_->view,
+                                      &storage));
 
   for (auto &panel : panels_) {
     panel->init();
@@ -41,7 +53,7 @@ void PanelManager::addPanel(std::unique_ptr<Panel> panel) {
 
 void PanelManager::setPanelVisible(const std::string &name, bool visible) {
   for (auto &p : panels_) {
-    if (p->name() == name) {
+    if (p->getName() == name) {
       p->setVisible(visible);
       return;
     }
@@ -50,7 +62,7 @@ void PanelManager::setPanelVisible(const std::string &name, bool visible) {
 
 bool PanelManager::isPanelVisible(const std::string &name) const {
   for (const auto &p : panels_) {
-    if (p->name() == name) {
+    if (p->getName() == name) {
       return p->visible();
     }
   }
@@ -61,6 +73,17 @@ void PanelManager::setGames(const std::vector<Game> *games) {
   for (auto &panel : panels_) {
     if (auto *gamePanel = dynamic_cast<ui::GamePanel *>(panel.get())) {
       gamePanel->setGames(games);
+    }
+  }
+}
+
+void PanelManager::refreshPanel(const std::string &name) {
+  for (auto &panel : panels_) {
+    if (panel->getName() == name) {
+      if (auto *gp = dynamic_cast<GamePanel *>(panel.get())) {
+        gp->refresh();
+      }
+      return;
     }
   }
 }
@@ -124,5 +147,8 @@ void Views::Favorites() {
   panel_manager->setPanelVisible("Favorites", true);
   panel_manager->setPanelVisible("Library", false);
   panel_manager->setPanelVisible("Recently Played", false);
+
   view = ViewType::Favorites;
+
+  panel_manager->refreshPanel("Favorites");
 }

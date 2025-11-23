@@ -1,7 +1,9 @@
 #include "ui/panels/game_panel.h"
 
 #include "imgui.h"
+#include "ui/panel_manager.h"
 #include "ui/panels/game_box.h"
+#include "utils/fnv1a.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
 
@@ -10,8 +12,27 @@ using namespace ui;
 void GamePanel::setGames(const std::vector<Game>* games) {
   games_ = games;
   gameBoxes_.clear();
-  if (games_) {
-    for (const auto& game : *games_) {
+
+  if (!games_) return;
+
+  auto toml = storage_->loadTOML();
+  auto* gamesTable = toml["games"].as_table();
+  if (!gamesTable) return;
+
+  for (const auto& game : *games_) {
+    const std::string key = std::to_string(
+        fnv1a::hash(game.name.c_str(), std::strlen(game.name.c_str())));
+
+    auto* entry = gamesTable->get(key);
+    if (!entry || !entry->is_table()) continue;
+
+    bool shouldAdd = true;
+
+    if (*view_ == ViewType::Favorites) {
+      shouldAdd = entry->as_table()->get("favourite")->value_or(false);
+    }
+
+    if (shouldAdd) {
       gameBoxes_.emplace_back(std::make_unique<GameBox>(game, storage_));
     }
   }
@@ -34,8 +55,9 @@ void GamePanel::render() {
   ImGui::Text("%s", name_.c_str());
   ImGui::PopFont();
   ImGui::Separator();
-
   ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 15.0f);
+
+  bool refreshRequested = false;
 
   if (!games_) {
     ImGui::PushFont(FontManager::getFont("Game:Title"));
@@ -44,23 +66,30 @@ void GamePanel::render() {
   } else {
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10.0f, 10.0f));
 
-    if (name_ == "Recently Played")
+    if (*view_ == ViewType::MainMenu)
       ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 15.0f);
 
     float boxWidth = 210.0f;
     float panelWidth = ImGui::GetContentRegionAvail().x + 40;
-
     int columns = (int)(panelWidth / boxWidth);
     if (columns < 1) columns = 1;
+
     if (ImGui::BeginTable("games_table", columns,
                           ImGuiTableFlags_SizingStretchSame)) {
       for (auto& box : gameBoxes_) {
         ImGui::TableNextColumn();
         box->render();
+        if (box->requestRefresh_) {
+          refreshRequested = true;
+          box->requestRefresh_ = false;
+        }
       }
       ImGui::EndTable();
     }
     ImGui::PopStyleVar();
   }
+
   ImGui::End();
+
+  if (refreshRequested && onRefresh_) onRefresh_();
 }

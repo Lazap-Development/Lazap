@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <GL/gl.h>
@@ -18,6 +17,10 @@ class GameBox : public Panel {
 
   void render() override;
   void end() override {};
+
+  void requestRefresh() { requestRefresh_ = true; }
+
+  bool requestRefresh_ = false;
 
  private:
   Game game_;

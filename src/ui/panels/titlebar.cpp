@@ -23,7 +23,7 @@ void Titlebar::init() {
 void Titlebar::render() {
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10.0f, 10.0f));
 
-  ImGui::Begin(name().c_str(), nullptr,
+  ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
                    ImGuiWindowFlags_NoScrollbar);
 
