@@ -1,9 +1,14 @@
 cmake_minimum_required(VERSION 4.0)
-project(Lazap)
+project(Lazap VERSION 0.9.0)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Download dependencies for GitHub
 include(FetchContent)
+
+set(SKIP_INSTALL_ALL ON CACHE BOOL "" FORCE)
+set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+set(LUNASVG_INSTALL OFF CACHE BOOL "" FORCE)
+set(CPR_INSTALL OFF CACHE BOOL "" FORCE)
 
 FetchContent_Declare(
         glew
@@ -114,6 +119,13 @@ add_executable(${EXECUTABLE_NAME}
         ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
         ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
         )
+        
+if(WIN32)
+    set(RESOURCE_FILE "${CMAKE_SOURCE_DIR}/src/resources.rc")
+    if(EXISTS ${RESOURCE_FILE})
+        target_sources(${EXECUTABLE_NAME} PRIVATE ${RESOURCE_FILE})
+    endif()
+endif()
 
 file(GLOB_RECURSE ASSET_FILES 
     "${CMAKE_SOURCE_DIR}/assets/*"
@@ -164,4 +176,32 @@ target_link_libraries(${EXECUTABLE_NAME}
 # Only link dwmapi if on Windows
 if(WIN32)
     target_link_libraries(${EXECUTABLE_NAME} PRIVATE dwmapi)
+endif()
+
+#-----------------------------------------------------------------------------------------------------------------------
+
+if(WIN32)
+install(TARGETS ${EXECUTABLE_NAME} 
+    RUNTIME DESTINATION . 
+    COMPONENT ${PROJECT_NAME}
+)
+
+set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+set(CPACK_PACKAGE_VENDOR "Lazap Development")
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A native-like attempt to unify clients with one fast, modern, and cross-platform solution")
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "${PROJECT_NAME}")
+
+set(CPACK_GENERATOR "WIX")
+set(CPACK_WIX_UPGRADE_GUID "9A72C574-EA60-495B-B6AE-64279086CA62")
+
+set(CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/assets/icons/lazap/icon.ico")
+
+set(CPACK_WIX_SHORTCUTS "DesktopFolder;Lazap")
+set(CPACK_PACKAGE_EXECUTABLES "Lazap" "Lazap")
+
+set(CPACK_COMPONENTS_ALL ${PROJECT_NAME})
+
+include(CPack)
 endif()
