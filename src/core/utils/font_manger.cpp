@@ -23,6 +23,8 @@ void FontManager::shutdown() {
   fonts_.clear();
 }
 
+// TODO: Replace current font loading with dynamic font loading system
+// introduced in 1.92 using flag ImGuiBackendFlags_HasTextures
 ImFont* FontManager::loadFont(const std::string& name,
                               b::EmbedInternal::EmbeddedFile embed,
                               float size) {

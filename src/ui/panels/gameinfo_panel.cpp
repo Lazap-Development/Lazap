@@ -13,10 +13,14 @@ void GameInfoPanel::init() {
 }
 
 void GameInfoPanel::render() {
+  ImVec2 size = ImGui::GetMainViewport()->Size;
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding,
+                      ImVec2(35.0f * size.x / 1800, 0));
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
   ImGui::Separator();
   ImGui::End();
+  ImGui::PopStyleVar();
 }

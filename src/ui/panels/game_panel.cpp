@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include "ui/panel_manager.h"
 #include "ui/panels/game_box.h"
+#include "ui/themes/themes.h"
 #include "utils/fnv1a.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
@@ -47,6 +48,11 @@ void GamePanel::init() {
 }
 
 void GamePanel::render() {
+  ImVec2 size = ImGui::GetMainViewport()->Size;
+  ImGui::PushStyleVar(
+      ImGuiStyleVar_WindowPadding,
+      ImVec2(35.0f * size.x / 1800,
+             *view_ == ViewType::MainMenu ? 0.0f : 37.0f * size.y / 1000));
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
@@ -55,7 +61,7 @@ void GamePanel::render() {
   ImGui::Text("%s", name_.c_str());
   ImGui::PopFont();
   ImGui::Separator();
-  ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 15.0f);
+  // ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 15.0f);
 
   bool refreshRequested = false;
 
@@ -64,11 +70,6 @@ void GamePanel::render() {
     ImGui::TextDisabled("No games available.");
     ImGui::PopFont();
   } else {
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10.0f, 10.0f));
-
-    if (*view_ == ViewType::MainMenu)
-      ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 15.0f);
-
     float boxWidth = 210.0f;
     float panelWidth = ImGui::GetContentRegionAvail().x + 40;
     int columns = (int)(panelWidth / boxWidth);
@@ -86,10 +87,10 @@ void GamePanel::render() {
       }
       ImGui::EndTable();
     }
-    ImGui::PopStyleVar();
   }
 
   ImGui::End();
+  ImGui::PopStyleVar();
 
   if (refreshRequested && onRefresh_) onRefresh_();
 }

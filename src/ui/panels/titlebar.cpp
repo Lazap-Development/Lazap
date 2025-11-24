@@ -6,6 +6,7 @@
 
 #include "ui/panels/titlebar.h"
 
+#include "ui/themes/themes.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
 
@@ -18,7 +19,6 @@ void Titlebar::init() {
                         0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/maximise.svg">(), "maximise",
                         0xFFFFFFFF);
-  ImageManager::loadPNG(b::embed<"assets/icons/lazap/icon.png">(), "lazap");
 }
 
 void Titlebar::render() {
@@ -26,21 +26,26 @@ void Titlebar::render() {
                ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
                    ImGuiWindowFlags_NoScrollbar);
 
+  ImVec2 scale = Themes::getScale(1720, 70);
   ImGui::PushFont(FontManager::getFont("Titlebar:Title"));
-  ImGui::SetCursorPos(
-      ImVec2(ImGui::GetCursorPosX() + 35, ImGui::GetCursorPosY() + 33));
+  ImGui::SetCursorPos(ImVec2((ImGui::GetCursorPosX() + 35) * scale.x,
+                             (ImGui::GetCursorPosY() + 33) * scale.y));
   ImGui::Text("Home");
   ImGui::PopFont();
 
-  ImGui::SameLine(ImGui::GetContentRegionAvail().x - 105);
-  ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(25.0f, 0.0f));
+  ImGui::SameLine(ImGui::GetContentRegionAvail().x - (143 * scale.x));
+  ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(25.0f * scale.x, 0.0f));
+  ImGui::SetCursorPos(
+      ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - (11 * scale.y)));
   if (ImGui::ImageButton("##minimise", ImageManager::get("minimise"),
-                         ImVec2(20, 20))) {
+                         ImVec2(24 * scale.x, 24 * scale.x))) {
     glfwIconifyWindow(window);
   }
   ImGui::SameLine();
+  ImGui::SetCursorPos(
+      ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - (11 * scale.y)));
   if (ImGui::ImageButton("##maximise", ImageManager::get("maximise"),
-                         ImVec2(20, 20))) {
+                         ImVec2(24 * scale.x, 24 * scale.x))) {
     if (glfwGetWindowAttrib(window, GLFW_MAXIMIZED)) {
       glfwRestoreWindow(window);
     } else {
@@ -48,8 +53,10 @@ void Titlebar::render() {
     }
   }
   ImGui::SameLine();
+  ImGui::SetCursorPos(
+      ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - (11 * scale.y)));
   if (ImGui::ImageButton("##close", ImageManager::get("close"),
-                         ImVec2(20, 20))) {
+                         ImVec2(24 * scale.x, 24 * scale.x))) {
     glfwSetWindowShouldClose(window, GLFW_TRUE);
   }
   ImGui::PopStyleVar();

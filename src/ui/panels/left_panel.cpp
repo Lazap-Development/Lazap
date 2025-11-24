@@ -22,6 +22,7 @@ void openURL(const std::string& url) {
 }
 
 void LeftPanel::init() {
+  ImageManager::loadPNG(b::embed<"assets/icons/lazap/icon.png">(), "lazap");
   ImageManager::loadSVG(b::embed<"assets/svg/home.svg">(), "home", 0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/library.svg">(), "library",
                         0xFFFFFFFF);
@@ -40,36 +41,38 @@ void LeftPanel::render() {
                    ImGuiWindowFlags_NoScrollWithMouse |
                    ImGuiWindowFlags_NoTitleBar);
 
-  ImVec2 scale =
-      Themes::getScale(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+  ImVec2 scale = Themes::getScale(80, 1000);
   // Lazap Icon
-  ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(15.0f, 20.0f));
-  ImGui::ImageButton("##lazap", ImageManager::get("lazap"), ImVec2(50, 50));
+  ImGui::PushStyleVar(ImGuiStyleVar_FramePadding,
+                      ImVec2(15.0f * scale.x, 20.0f * scale.y));
+  ImGui::ImageButton("##lazap", ImageManager::get("lazap"),
+                     ImVec2(50 * scale.x, 50 * scale.x));
   ImGui::PopStyleVar();
 
-  int y = ImGui::GetWindowSize().y;
-  ImGui::Dummy(ImVec2(0, y * 0.07219f));
+  ImGui::Dummy(ImVec2(0, ImGui::GetWindowSize().y * 0.07219f * scale.y));
   // Middle Icons
-  ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(25.0f, 0.0f));
-  bool home =
-      ImGui::ImageButton("Home", ImageManager::get("home"), ImVec2(24, 24));
-  ImGui::Dummy(ImVec2(0, 41.71f));
+  ImGui::PushStyleVar(ImGuiStyleVar_FramePadding,
+                      ImVec2(25.0f * scale.x, 0.0f));
+  bool home = ImGui::ImageButton("Home", ImageManager::get("home"),
+                                 ImVec2(24 * scale.x, 24 * scale.x));
+  ImGui::Dummy(ImVec2(0, 41.71f * scale.y));
   bool favs = ImGui::ImageButton("Favorites", ImageManager::get("heart2"),
-                                 ImVec2(24, 24));
-  ImGui::Dummy(ImVec2(0, 41.71f));
+                                 ImVec2(24 * scale.x, 24 * scale.x));
+  ImGui::Dummy(ImVec2(0, 41.71f * scale.y));
   bool library = ImGui::ImageButton("Library", ImageManager::get("library"),
-                                    ImVec2(24, 24));
+                                    ImVec2(24 * scale.x, 24 * scale.x));
   // TODO: Add hover effect and active indicator
 
-  ImGui::Dummy(ImVec2(0, ImGui::GetContentRegionAvail().y - 103.25f));
+  ImGui::Dummy(
+      ImVec2(0, ImGui::GetContentRegionAvail().y - (103.25f * scale.y)));
 
   // Bottom Icons
-  bool github =
-      ImGui::ImageButton("GitHub", ImageManager::get("github"), ImVec2(24, 24));
-  ImGui::Dummy(ImVec2(0, 30.25f));
+  bool github = ImGui::ImageButton("GitHub", ImageManager::get("github"),
+                                   ImVec2(24 * scale.x, 24 * scale.x));
+  ImGui::Dummy(ImVec2(0, 30.25f * scale.y));
   bool settings = ImGui::ImageButton("Settings", ImageManager::get("settings"),
-                                     ImVec2(24, 24));
-  ImGui::Dummy(ImVec2(0, 25.0f));
+                                     ImVec2(24 * scale.x, 24 * scale.x));
+  ImGui::Dummy(ImVec2(0, 25.0f * scale.y));
   ImGui::PopStyleVar();
 
   if (home == true && view_->view != ViewType::MainMenu) {

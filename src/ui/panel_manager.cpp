@@ -100,7 +100,7 @@ void Views::BuildDockLayout() {
                               &dockspace_id);
   ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.07f, &titlebar,
                               &dockspace_id);
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.466f, &gamesinfo_id,
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.396f, &gamesinfo_id,
                               &bottom);
 
   ImGui::DockBuilderDockWindow("Titlebar", titlebar);
