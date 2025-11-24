@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Lazap
+Exec=lazap
+Terminal=false
+Type=Application
+Icon=lazap
+Categories=Game;Utility;

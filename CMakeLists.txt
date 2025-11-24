@@ -102,7 +102,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -s")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Create executable
-set(EXECUTABLE_NAME ${PROJECT_NAME})
+string(TOLOWER "${PROJECT_NAME}" EXECUTABLE_NAME)
 
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
     src/*.cpp
@@ -180,28 +180,50 @@ endif()
 
 #-----------------------------------------------------------------------------------------------------------------------
 
-if(WIN32)
-install(TARGETS ${EXECUTABLE_NAME} 
-    RUNTIME DESTINATION . 
-    COMPONENT ${PROJECT_NAME}
-)
-
 set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
 set(CPACK_PACKAGE_VENDOR "Lazap Development")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
-
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "A native-like attempt to unify clients with one fast, modern, and cross-platform solution")
 set(CPACK_PACKAGE_INSTALL_DIRECTORY "${PROJECT_NAME}")
+set(CPACK_COMPONENTS_ALL "${PROJECT_NAME}App")
 
-set(CPACK_GENERATOR "WIX")
-set(CPACK_WIX_UPGRADE_GUID "9A72C574-EA60-495B-B6AE-64279086CA62")
+if(WIN32)
+    install(TARGETS ${EXECUTABLE_NAME} 
+        RUNTIME DESTINATION . 
+        COMPONENT "${PROJECT_NAME}App"
+    )
 
-set(CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/assets/icons/lazap/icon.ico")
+    set(CPACK_GENERATOR "WIX")
+    set(CPACK_WIX_UPGRADE_GUID "9A72C574-EA60-495B-B6AE-64279086CA62")
+    set(CPACK_WIX_PRODUCT_ICON "${CMAKE_SOURCE_DIR}/assets/icons/lazap/lazap.ico")
+    set(CPACK_WIX_LICENSE_FILE "${CMAKE_SOURCE_DIR}/LICENSE.md")
+    set(CPACK_WIX_SHORTCUTS "DesktopFolder;Lazap")
+    set(CPACK_PACKAGE_EXECUTABLES "${PROJECT_NAME}" "${PROJECT_NAME}")
 
-set(CPACK_WIX_SHORTCUTS "DesktopFolder;Lazap")
-set(CPACK_PACKAGE_EXECUTABLES "Lazap" "Lazap")
+elseif(UNIX AND NOT APPLE)
+    set(MAIN_COMPONENT "${PROJECT_NAME}App")
 
-set(CPACK_COMPONENTS_ALL ${PROJECT_NAME})
+    install(TARGETS ${EXECUTABLE_NAME}
+        RUNTIME DESTINATION bin
+        COMPONENT ${MAIN_COMPONENT}
+    )
+
+    install(FILES ${CMAKE_SOURCE_DIR}/assets/icons/lazap/lazap.desktop
+        DESTINATION share/applications
+        COMPONENT ${MAIN_COMPONENT}
+    )
+
+    install(FILES ${CMAKE_SOURCE_DIR}/assets/icons/lazap/lazap.png
+        DESTINATION share/icons/hicolor/256x256/apps
+        COMPONENT ${MAIN_COMPONENT}
+    )
+
+    set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${PROJECT_NAME};${MAIN_COMPONENT};/")
+
+    set(CPACK_PACKAGE_ICON "lazap.png")
+    set(CPACK_GENERATOR "DEB;RPM;TGZ;AppImage")
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Porya Dashtipour <contact@porya.me>")
+    set(CPACK_RPM_PACKAGE_LICENSE "GPLv3")
+endif()
 
 include(CPack)
-endif()

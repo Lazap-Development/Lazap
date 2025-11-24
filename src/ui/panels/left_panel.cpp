@@ -22,7 +22,7 @@ void openURL(const std::string& url) {
 }
 
 void LeftPanel::init() {
-  ImageManager::loadPNG(b::embed<"assets/icons/lazap/icon.png">(), "lazap");
+  ImageManager::loadPNG(b::embed<"assets/icons/lazap/lazap.png">(), "lazap");
   ImageManager::loadSVG(b::embed<"assets/svg/home.svg">(), "home", 0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/library.svg">(), "library",
                         0xFFFFFFFF);
