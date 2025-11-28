@@ -60,19 +60,6 @@ void Application::run() {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
   });
 
-#if defined(__linux__)
-  const char *session = getenv("XDG_SESSION_TYPE");
-  const char *waylandDisplay = getenv("WAYLAND_DISPLAY");
-
-  if ((session && strcmp(session, "wayland") == 0) || waylandDisplay) {
-    glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
-    printf("Forcing Wayland\n");
-  } else {
-    glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
-    printf("Forcing X11\n");
-  }
-#endif
-
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -89,8 +76,8 @@ void Application::run() {
   float xscale, yscale;
   glfwGetMonitorContentScale(monitor, &xscale, &yscale);
 
-  int windowWidth = 1800 / 1.3 * xscale;
-  int windowHeight = 1000 / 1.3 * yscale;
+  int windowWidth = WINDOW_SIZE[0] / 1.3 * xscale;
+  int windowHeight = WINDOW_SIZE[1] / 1.3 * yscale;
   int windowX = (mode->width - windowWidth) / 2;
   int windowY = (mode->height - windowHeight) / 2;
 

@@ -20,9 +20,10 @@ set(glew-cmake_BUILD_SHARED OFF CACHE BOOL "Build the shared glew library" FORCE
 set(glew-cmake_BUILD_STATIC ON CACHE BOOL "Build the static glew library" FORCE)
 
 FetchContent_Declare(
-    glfw
-    GIT_REPOSITORY https://github.com/p0ryae/glfw.git
-    GIT_TAG drag-window-dev
+        glfw
+        GIT_REPOSITORY https://github.com/envyen/glfw-dev
+        GIT_TAG drag-window-dev
+        GIT_SHALLOW TRUE
 )
 
 FetchContent_Declare(
