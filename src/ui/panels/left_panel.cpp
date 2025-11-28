@@ -88,7 +88,8 @@ void LeftPanel::render() {
     std::string url = "https://github.com/Lazap-Development/Lazap";
     openURL(url);
   }
-  if (settings == true) {
+  if (settings == true && view_->view != ViewType::Settings) {
+    view_->Settings();
   }
   ImGui::Separator();
   ImGui::End();

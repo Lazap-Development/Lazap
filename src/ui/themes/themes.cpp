@@ -82,7 +82,6 @@ void setDefaultDarkColors() {
 ImVec2 getScale(float x, float y) {
   ImVec2 size = ImGui::GetWindowSize();
   ImVec2 scale = ImVec2(size.x / x, size.y / y);
-  // TODO: Take into account the system scaling factor
   return scale;
 }
 

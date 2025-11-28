@@ -3,6 +3,7 @@
 // clang-format on
 #include <imgui.h>
 
+#include "ui/themes/themes.h"
 #include "utils/fnv1a.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
@@ -21,15 +22,17 @@ GameBox::GameBox(const Game& game, Storage* storage)
 void GameBox::render() {
   ImGui::PushID(name_.c_str());
   ImGui::BeginGroup();
+  float r = ImGui::GetWindowSize().y / ImGui::GetMainViewport()->Size.y;
+  ImVec2 scale = Themes::getScale(1685, r < 0.893 ? 532 : 893);
 
-  const float uiScale = ImGui::GetFontSize() / 18.0f;
-  const ImVec2 displaySize(210.0f * uiScale, 233.1f * uiScale);
-  const float cornerRadius = 8.0f * uiScale;
-  const float topOffsetPixels = 10.0f * uiScale;
-  const float padding = 6.0f * uiScale;
-  const float iconSize = 16.0f * uiScale;
-  const float iconSpacing = 6.0f * uiScale;
-  const float playIconSize = 32.0f * uiScale;
+  const ImVec2 displaySize(210.0f * scale.x, 233.1f * scale.y);
+  const float cornerRadius =
+      8.0f * sqrt((pow(scale.x, 2) + pow(scale.y, 2)) * 0.5f);
+  const float topOffsetPixels = 10.0f * scale.y;
+  const float padding = 6.0f;
+  const float iconSize = 16.0f * scale.x;
+  const float iconSpacing = 6.0f * scale.x;
+  const float playIconSize = 32.0f * scale.x;
 
   ImVec2 uv0(0.0f, 0.0f);
   ImVec2 uv1(1.0f, 1.0f);
@@ -110,18 +113,18 @@ void GameBox::render() {
   }
 
   ImGui::PushFont(FontManager::getFont("GameBox:Title"));
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding);
-  ImGui::SetCursorPosY(ImGui::GetCursorPosY() + padding);
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding * scale.x);
+  ImGui::SetCursorPosY(ImGui::GetCursorPosY() + padding * scale.y);
 
-  const float textWrapWidth = 154.0f * uiScale;
+  const float textWrapWidth = 154.0f * scale.x;
   ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + textWrapWidth);
   ImGui::TextWrapped("%s", name_.c_str());
   ImGui::PopTextWrapPos();
   ImGui::PopFont();
 
   const float totalIconsWidth = iconSize * 2 + iconSpacing;
-  const float iconStartX =
-      ImGui::GetCursorPosX() + displaySize.x - totalIconsWidth - padding;
+  const float iconStartX = ImGui::GetCursorPosX() + displaySize.x -
+                           totalIconsWidth - (padding * scale.x);
 
   ImGui::SameLine();
   ImGui::SetCursorPosX(iconStartX);

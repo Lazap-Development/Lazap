@@ -57,11 +57,13 @@ void GamePanel::render() {
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
+  ImVec2 scale =
+      Themes::getScale(1685, *view_ == ViewType::MainMenu ? 340 : 893);
   ImGui::PushFont(FontManager::getFont("Title"));
   ImGui::Text("%s", name_.c_str());
   ImGui::PopFont();
   ImGui::Separator();
-  // ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 15.0f);
+  ImGui::Dummy(ImVec2(0, 30 * scale.y));
 
   bool refreshRequested = false;
 

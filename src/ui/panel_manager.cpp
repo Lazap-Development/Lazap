@@ -31,6 +31,7 @@ void PanelManager::initPanels(GLFWwindow *w, Storage &storage) {
       makePanelWithCB<GamePanel>(this, "Favorites", &view_->view, &storage));
   addPanel(makePanelWithCB<GamePanel>(this, "Recently Played", &view_->view,
                                       &storage));
+  addPanel(std::make_unique<SettingsPanel>());
 
   for (auto &panel : panels_) {
     panel->init();
@@ -137,6 +138,7 @@ void Views::Library() {
   panel_manager->setPanelVisible("Favorites", false);
   panel_manager->setPanelVisible("Library", true);
   panel_manager->setPanelVisible("Recently Played", false);
+  panel_manager->setPanelVisible("Settings", false);
   view = ViewType::Library;
 }
 
@@ -147,7 +149,19 @@ void Views::Favorites() {
   panel_manager->setPanelVisible("Favorites", true);
   panel_manager->setPanelVisible("Library", false);
   panel_manager->setPanelVisible("Recently Played", false);
+  panel_manager->setPanelVisible("Settings", false);
   view = ViewType::Favorites;
 
   panel_manager->refreshPanel("Favorites");
+}
+
+void Views::Settings() {
+  if (view == ViewType::Settings) return;
+
+  panel_manager->setPanelVisible("Games Info", false);
+  panel_manager->setPanelVisible("Favorites", false);
+  panel_manager->setPanelVisible("Library", false);
+  panel_manager->setPanelVisible("Recently Played", false);
+  panel_manager->setPanelVisible("Settings", true);
+  view = ViewType::Settings;
 }

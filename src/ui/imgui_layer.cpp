@@ -38,6 +38,12 @@ ImGuiLayer::ImGuiLayer(GLFWwindow *window, ResizeState *resize_state,
                         b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 18.0f);
   FontManager::loadFont(
       "GameBox:Time", b::embed<"assets/fonts/RobotoMono-Medium.ttf">(), 10.0f);
+  FontManager::loadFont("Settings:Button",
+                        b::embed<"assets/fonts/Nunito-Bold.ttf">(), 13.0f);
+  FontManager::loadFont("Settings:Title",
+                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 20.0f);
+  FontManager::loadFont("Settings:Setting",
+                        b::embed<"assets/fonts/Nunito-Light.ttf">(), 18.0f);
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 130");
