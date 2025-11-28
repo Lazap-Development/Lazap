@@ -9,7 +9,9 @@
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
 
-void ImGuiLayer::init(GLFWwindow *window, Storage &storage) {
+ImGuiLayer::ImGuiLayer(GLFWwindow *window, ResizeState *resize_state,
+                       Storage &storage)
+    : storage_(&storage), resize_state_(resize_state), initialized_(false) {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
 
@@ -42,14 +44,18 @@ void ImGuiLayer::init(GLFWwindow *window, Storage &storage) {
 
   panel_manager_ = std::make_unique<ui::PanelManager>();
   panel_manager_->initPanels(window, storage);
-
-  storage_ = &storage;
 }
 
 void ImGuiLayer::begin() {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
+
+  ImGuiIO &io = ImGui::GetIO();
+  io.ConfigFlags =
+      (resize_state_->isDragging || resize_state_->edge != NONE)
+          ? (io.ConfigFlags | ImGuiConfigFlags_NoMouseCursorChange)
+          : (io.ConfigFlags & ~ImGuiConfigFlags_NoMouseCursorChange);
 
   const ImGuiViewport *viewport = ImGui::GetMainViewport();
   ImGui::SetNextWindowPos(viewport->Pos);

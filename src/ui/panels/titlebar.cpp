@@ -60,5 +60,13 @@ void Titlebar::render() {
     glfwSetWindowShouldClose(window, GLFW_TRUE);
   }
   ImGui::PopStyleVar();
+
+  if (ImGui::IsWindowHovered() &&
+      ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+    if (!ImGui::IsAnyItemHovered()) {
+      glfwDragWindow(window);
+    }
+  }
+
   ImGui::End();
 }

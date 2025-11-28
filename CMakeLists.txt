@@ -20,10 +20,9 @@ set(glew-cmake_BUILD_SHARED OFF CACHE BOOL "Build the shared glew library" FORCE
 set(glew-cmake_BUILD_STATIC ON CACHE BOOL "Build the static glew library" FORCE)
 
 FetchContent_Declare(
-        glfw
-        GIT_REPOSITORY https://github.com/glfw/glfw
-        GIT_TAG 3.4
-        GIT_SHALLOW TRUE
+    glfw
+    GIT_REPOSITORY https://github.com/p0ryae/glfw.git
+    GIT_TAG drag-window-dev
 )
 
 FetchContent_Declare(
@@ -68,11 +67,6 @@ FetchContent_Declare(
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries only")
 set(CPR_BUILD_TESTS OFF CACHE BOOL "Disable tests")
 find_package(CURL)
-if(CURL_FOUND)
-    set(CPR_USE_SYSTEM_CURL ON)
-else()
-    set(CPR_USE_SYSTEM_CURL OFF)
-endif()
 
 # TODO: replace with https://github.com/MaxAkaAltmer/embed
 # Comes with better QOL improvements, no runtime variables, bug fixes, etc...
@@ -208,7 +202,7 @@ elseif(UNIX AND NOT APPLE)
         COMPONENT ${MAIN_COMPONENT}
     )
 
-    install(FILES ${CMAKE_SOURCE_DIR}/assets/icons/lazap/lazap.desktop
+    install(FILES ${CMAKE_SOURCE_DIR}/assets/lazap.desktop
         DESTINATION share/applications
         COMPONENT ${MAIN_COMPONENT}
     )

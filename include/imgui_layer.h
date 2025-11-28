@@ -4,15 +4,14 @@
 #include <memory>
 #include <vector>
 
-#include "GLFW/glfw3.h"
+#include "application.h"
 #include "storage/storage.h"
 #include "ui/panel_manager.h"
 
 class ImGuiLayer {
  public:
-  ImGuiLayer() : storage_(nullptr), initialized_(false) {}
+  ImGuiLayer(GLFWwindow* window, ResizeState* resize_state, Storage& storage);
 
-  void init(GLFWwindow* window, Storage& storage);
   void begin();
   void render();
   void end();
@@ -22,6 +21,7 @@ class ImGuiLayer {
 
  private:
   Storage* storage_;
+  ResizeState* resize_state_;
   std::vector<Game> games_;
   std::unique_ptr<ui::PanelManager> panel_manager_;
   bool initialized_ = false;

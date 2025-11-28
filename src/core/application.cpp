@@ -59,11 +59,26 @@ void Application::run() {
   glfwSetErrorCallback([](int error, const char *description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
   });
+
+#if defined(__linux__)
+  const char *session = getenv("XDG_SESSION_TYPE");
+  const char *waylandDisplay = getenv("WAYLAND_DISPLAY");
+
+  if ((session && strcmp(session, "wayland") == 0) || waylandDisplay) {
+    glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_WAYLAND);
+    printf("Forcing Wayland\n");
+  } else {
+    glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
+    printf("Forcing X11\n");
+  }
+#endif
+
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+  glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
   if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
     glfwWindowHintString(GLFW_WAYLAND_APP_ID, "lazap");
@@ -72,8 +87,8 @@ void Application::run() {
   GLFWmonitor *monitor = glfwGetPrimaryMonitor();
   const GLFWvidmode *mode = glfwGetVideoMode(monitor);
 
-  int windowWidth = 1440;
-  int windowHeight = 800;
+  int windowWidth = 1800 / 1.3;
+  int windowHeight = 1000 / 1.3;
   int windowX = (mode->width - windowWidth) / 2;
   int windowY = (mode->height - windowHeight) / 2;
 
@@ -89,11 +104,22 @@ void Application::run() {
   glfwSwapInterval(1);
   glewInit();
 
+  ResizeState *resizeState = new ResizeState();
+  resizeState->cursorArrow = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+  resizeState->cursorResize_NS = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
+  resizeState->cursorResize_EW = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
+  resizeState->cursorResize_NESW =
+      glfwCreateStandardCursor(GLFW_RESIZE_NESW_CURSOR);
+  resizeState->cursorResize_NWSE =
+      glfwCreateStandardCursor(GLFW_RESIZE_NWSE_CURSOR);
+
+  glfwSetWindowUserPointer(window, resizeState);
+
+  glfwSetMouseButtonCallback(window, WindowCallbacks::mouse_button_callback);
+  glfwSetCursorPosCallback(window, WindowCallbacks::cursor_pos_callback);
+
   Storage storage;
   storage.initTOML();
-
-  ImGuiLayer imgui;
-  imgui.init(window, storage);
 
   std::vector<std::unique_ptr<Client>> clients;
   clients.push_back(std::make_unique<Steam>());
@@ -108,11 +134,12 @@ void Application::run() {
     for (auto &game : client->getInstalledGames()) {
       game.bannerUrl = bm.getBanner(client->getType(), game.name,
                                     std::to_string(game.appId));
-      games.push_back(game);
+      games.push_back(std::move(game));
       storage.insertGameTOML(game.name);
     }
   }
 
+  ImGuiLayer imgui(window, resizeState, storage);
   imgui.setGames(std::move(games));
 
   discord::RichPresence::Initialize("932504287337148417");
@@ -122,6 +149,8 @@ void Application::run() {
          std::chrono::duration_cast<std::chrono::milliseconds>(
              std::chrono::high_resolution_clock::now() - startupBegin)
              .count());
+
+  glfwShowWindow(window);
 
 #ifdef _WIN32
   // Windows 11 native rounded corners and frame extension
@@ -155,8 +184,130 @@ void Application::run() {
     glfwSwapBuffers(window);
   }
 
+  glfwDestroyCursor(resizeState->cursorArrow);
+  glfwDestroyCursor(resizeState->cursorResize_NS);
+  glfwDestroyCursor(resizeState->cursorResize_EW);
+  glfwDestroyCursor(resizeState->cursorResize_NESW);
+  glfwDestroyCursor(resizeState->cursorResize_NWSE);
+  delete resizeState;
+
   discord::RichPresence::Shutdown();
   imgui.shutdown();
   glfwDestroyWindow(window);
   glfwTerminate();
+}
+
+void WindowCallbacks::mouse_button_callback(GLFWwindow *window, int button,
+                                            int action, int mods) {
+  if (button != GLFW_MOUSE_BUTTON_LEFT) return;
+
+  ResizeState *state =
+      static_cast<ResizeState *>(glfwGetWindowUserPointer(window));
+  if (!state) return;
+
+  if (action == GLFW_PRESS && state->edge != NONE) {
+    state->isDragging = true;
+
+    double cursorX, cursorY;
+    glfwGetCursorPos(window, &cursorX, &cursorY);
+
+    int winX, winY;
+    glfwGetWindowPos(window, &winX, &winY);
+
+    state->startScreenX = winX + cursorX;
+    state->startScreenY = winY + cursorY;
+
+    int w, h;
+    glfwGetWindowSize(window, &w, &h);
+    state->startWidth = w;
+    state->startHeight = h;
+    state->startPosX = winX;
+    state->startPosY = winY;
+  } else if (action == GLFW_RELEASE) {
+    state->isDragging = false;
+  }
+}
+
+void WindowCallbacks::cursor_pos_callback(GLFWwindow *window, double xpos,
+                                          double ypos) {
+  ResizeState *state =
+      static_cast<ResizeState *>(glfwGetWindowUserPointer(window));
+  if (!state) return;
+
+  int width, height;
+  glfwGetWindowSize(window, &width, &height);
+
+  int detectedEdge = NONE;
+  const int border = RESIZE_BORDER;
+
+  if (xpos < border) detectedEdge |= LEFT;
+  if (xpos > width - border) detectedEdge |= RIGHT;
+  if (ypos < border) detectedEdge |= TOP;
+  if (ypos > height - border) detectedEdge |= BOTTOM;
+
+  if (!state->isDragging) {
+    state->edge = detectedEdge;
+  }
+
+  if (state->isDragging) {
+    int currentWinX, currentWinY;
+    glfwGetWindowPos(window, &currentWinX, &currentWinY);
+
+    double currentScreenX = currentWinX + xpos;
+    double currentScreenY = currentWinY + ypos;
+    double deltaX = currentScreenX - state->startScreenX;
+    double deltaY = currentScreenY - state->startScreenY;
+
+    int newWidth = state->startWidth;
+    int newHeight = state->startHeight;
+    int newPosX = state->startPosX;
+    int newPosY = state->startPosY;
+
+    if (state->edge & LEFT) {
+      int proposed = state->startWidth - (int)deltaX;
+      if (proposed >= MIN_WINDOW_SIZE[0]) {
+        newWidth = proposed;
+        newPosX += (int)deltaX;
+      } else {
+        newWidth = MIN_WINDOW_SIZE[0];
+        newPosX += state->startWidth - MIN_WINDOW_SIZE[0];
+      }
+    } else if (state->edge & RIGHT) {
+      newWidth = std::max(MIN_WINDOW_SIZE[0], state->startWidth + (int)deltaX);
+    }
+
+    if (state->edge & TOP) {
+      int proposed = state->startHeight - (int)deltaY;
+      if (proposed >= MIN_WINDOW_SIZE[1]) {
+        newHeight = proposed;
+        newPosY += (int)deltaY;
+      } else {
+        newHeight = MIN_WINDOW_SIZE[1];
+        newPosY += state->startHeight - MIN_WINDOW_SIZE[1];
+      }
+    } else if (state->edge & BOTTOM) {
+      newHeight =
+          std::max(MIN_WINDOW_SIZE[1], state->startHeight + (int)deltaY);
+    }
+
+    glfwSetWindowSize(window, newWidth, newHeight);
+    if (state->edge & (LEFT | TOP)) {
+      glfwSetWindowPos(window, newPosX, newPosY);
+    }
+  }
+
+  GLFWcursor *cursor = state->cursorArrow;
+
+  if ((state->edge & TOP && state->edge & LEFT) ||
+      (state->edge & BOTTOM && state->edge & RIGHT))
+    cursor = state->cursorResize_NWSE;
+  else if ((state->edge & TOP && state->edge & RIGHT) ||
+           (state->edge & BOTTOM && state->edge & LEFT))
+    cursor = state->cursorResize_NESW;
+  else if (state->edge & (LEFT | RIGHT))
+    cursor = state->cursorResize_EW;
+  else if (state->edge & (TOP | BOTTOM))
+    cursor = state->cursorResize_NS;
+
+  glfwSetCursor(window, cursor);
 }
