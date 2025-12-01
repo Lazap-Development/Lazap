@@ -26,6 +26,7 @@ class Panel {
   std::string name_;
   Storage* storage_;
   bool visible_ = true;
+  ImVec2 scale_ = ImVec2(0, 0);
 
   std::function<void()> onRefresh_;
 };

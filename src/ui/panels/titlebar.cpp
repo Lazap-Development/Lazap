@@ -26,26 +26,29 @@ void Titlebar::render() {
                ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
                    ImGuiWindowFlags_NoScrollbar);
 
-  ImVec2 scale = Themes::getScale(1720, 70);
+  if (scale_.x == 0) {
+    scale_ = Themes::getScale(1720, 70);
+  }
   ImGui::PushFont(FontManager::getFont("Titlebar:Title"));
-  ImGui::SetCursorPos(ImVec2((ImGui::GetCursorPosX() + 35) * scale.x,
-                             (ImGui::GetCursorPosY() + 33) * scale.y));
+  ImGui::SetCursorPos(ImVec2((ImGui::GetCursorPosX() + 35) * scale_.x,
+                             (ImGui::GetCursorPosY() + 33) * scale_.y));
   ImGui::Text("Home");
   ImGui::PopFont();
 
-  ImGui::SameLine(ImGui::GetContentRegionAvail().x - (143 * scale.x));
-  ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(25.0f * scale.x, 0.0f));
+  ImGui::SameLine(ImGui::GetContentRegionAvail().x - (143 * scale_.x));
+  ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing,
+                      ImVec2(25.0f * scale_.x, 0.0f));
   ImGui::SetCursorPos(
-      ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - (11 * scale.y)));
+      ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - (11 * scale_.y)));
   if (ImGui::ImageButton("##minimise", ImageManager::get("minimise"),
-                         ImVec2(24 * scale.x, 24 * scale.x))) {
+                         ImVec2(24 * scale_.x, 24 * scale_.x))) {
     glfwIconifyWindow(window);
   }
   ImGui::SameLine();
   ImGui::SetCursorPos(
-      ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - (11 * scale.y)));
+      ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - (11 * scale_.y)));
   if (ImGui::ImageButton("##maximise", ImageManager::get("maximise"),
-                         ImVec2(24 * scale.x, 24 * scale.x))) {
+                         ImVec2(24 * scale_.x, 24 * scale_.x))) {
     if (glfwGetWindowAttrib(window, GLFW_MAXIMIZED)) {
       glfwRestoreWindow(window);
     } else {
@@ -54,9 +57,9 @@ void Titlebar::render() {
   }
   ImGui::SameLine();
   ImGui::SetCursorPos(
-      ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - (11 * scale.y)));
+      ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - (11 * scale_.y)));
   if (ImGui::ImageButton("##close", ImageManager::get("close"),
-                         ImVec2(24 * scale.x, 24 * scale.x))) {
+                         ImVec2(24 * scale_.x, 24 * scale_.x))) {
     glfwSetWindowShouldClose(window, GLFW_TRUE);
   }
   ImGui::PopStyleVar();

@@ -41,38 +41,40 @@ void LeftPanel::render() {
                    ImGuiWindowFlags_NoScrollWithMouse |
                    ImGuiWindowFlags_NoTitleBar);
 
-  ImVec2 scale = Themes::getScale(80, 1000);
+  if (scale_.x == 0) {
+    scale_ = Themes::getScale(80, 1000);
+  }
   // Lazap Icon
   ImGui::PushStyleVar(ImGuiStyleVar_FramePadding,
-                      ImVec2(15.0f * scale.x, 20.0f * scale.y));
+                      ImVec2(15.0f * scale_.x, 20.0f * scale_.y));
   ImGui::ImageButton("##lazap", ImageManager::get("lazap"),
-                     ImVec2(50 * scale.x, 50 * scale.x));
+                     ImVec2(50 * scale_.x, 50 * scale_.x));
   ImGui::PopStyleVar();
 
-  ImGui::Dummy(ImVec2(0, ImGui::GetWindowSize().y * 0.07219f * scale.y));
+  ImGui::Dummy(ImVec2(0, ImGui::GetWindowSize().y * 0.07219f * scale_.y));
   // Middle Icons
   ImGui::PushStyleVar(ImGuiStyleVar_FramePadding,
-                      ImVec2(25.0f * scale.x, 0.0f));
+                      ImVec2(25.0f * scale_.x, 0.0f));
   bool home = ImGui::ImageButton("Home", ImageManager::get("home"),
-                                 ImVec2(24 * scale.x, 24 * scale.x));
-  ImGui::Dummy(ImVec2(0, 41.71f * scale.y));
+                                 ImVec2(24 * scale_.x, 24 * scale_.x));
+  ImGui::Dummy(ImVec2(0, 41.71f * scale_.y));
   bool favs = ImGui::ImageButton("Favorites", ImageManager::get("heart2"),
-                                 ImVec2(24 * scale.x, 24 * scale.x));
-  ImGui::Dummy(ImVec2(0, 41.71f * scale.y));
+                                 ImVec2(24 * scale_.x, 24 * scale_.x));
+  ImGui::Dummy(ImVec2(0, 41.71f * scale_.y));
   bool library = ImGui::ImageButton("Library", ImageManager::get("library"),
-                                    ImVec2(24 * scale.x, 24 * scale.x));
+                                    ImVec2(24 * scale_.x, 24 * scale_.x));
   // TODO: Add hover effect and active indicator
 
   ImGui::Dummy(
-      ImVec2(0, ImGui::GetContentRegionAvail().y - (103.25f * scale.y)));
+      ImVec2(0, ImGui::GetContentRegionAvail().y - (103.25f * scale_.y)));
 
   // Bottom Icons
   bool github = ImGui::ImageButton("GitHub", ImageManager::get("github"),
-                                   ImVec2(24 * scale.x, 24 * scale.x));
-  ImGui::Dummy(ImVec2(0, 30.25f * scale.y));
+                                   ImVec2(24 * scale_.x, 24 * scale_.x));
+  ImGui::Dummy(ImVec2(0, 30.25f * scale_.y));
   bool settings = ImGui::ImageButton("Settings", ImageManager::get("settings"),
-                                     ImVec2(24 * scale.x, 24 * scale.x));
-  ImGui::Dummy(ImVec2(0, 25.0f * scale.y));
+                                     ImVec2(24 * scale_.x, 24 * scale_.x));
+  ImGui::Dummy(ImVec2(0, 25.0f * scale_.y));
   ImGui::PopStyleVar();
 
   if (home == true && view_->view != ViewType::MainMenu) {

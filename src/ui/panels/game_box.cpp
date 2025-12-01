@@ -23,16 +23,18 @@ void GameBox::render() {
   ImGui::PushID(name_.c_str());
   ImGui::BeginGroup();
   float r = ImGui::GetWindowSize().y / ImGui::GetMainViewport()->Size.y;
-  ImVec2 scale = Themes::getScale(1685, r < 0.893 ? 532 : 893);
+  if (scale_.x == 0 && scale_.y == 0) {
+    scale_ = Themes::getScale(1685, r < 0.893 ? 532 : 893);
+  }
 
-  const ImVec2 displaySize(210.0f * scale.x, 233.1f * scale.y);
+  const ImVec2 displaySize(210.0f * scale_.x, 233.1f * scale_.y);
   const float cornerRadius =
-      8.0f * sqrt((pow(scale.x, 2) + pow(scale.y, 2)) * 0.5f);
-  const float topOffsetPixels = 10.0f * scale.y;
+      8.0f * sqrt((pow(scale_.x, 2) + pow(scale_.y, 2)) * 0.5f);
+  const float topOffsetPixels = 10.0f * scale_.y;
   const float padding = 6.0f;
-  const float iconSize = 16.0f * scale.x;
-  const float iconSpacing = 6.0f * scale.x;
-  const float playIconSize = 32.0f * scale.x;
+  const float iconSize = 16.0f * scale_.x;
+  const float iconSpacing = 6.0f * scale_.x;
+  const float playIconSize = 32.0f * scale_.x;
 
   ImVec2 uv0(0.0f, 0.0f);
   ImVec2 uv1(1.0f, 1.0f);
@@ -44,15 +46,15 @@ void GameBox::render() {
 
     if (texAspect > dispAspect) {
       // Texture is wider - crop sides
-      const float scale = dispAspect / texAspect;
-      const float offset = (1.0f - scale) * 0.5f;
+      const float scale_ = dispAspect / texAspect;
+      const float offset = (1.0f - scale_) * 0.5f;
       uv0.x = offset;
       uv1.x = 1.0f - offset;
     } else {
       // Texture is taller - crop top/bottom with offset
-      const float scale = texAspect / dispAspect;
+      const float scale_ = texAspect / dispAspect;
       uv0.y = topOffsetPixels / textureSize.y;
-      uv1.y = uv0.y + scale;
+      uv1.y = uv0.y + scale_;
     }
   }
 
@@ -113,10 +115,10 @@ void GameBox::render() {
   }
 
   ImGui::PushFont(FontManager::getFont("GameBox:Title"));
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding * scale.x);
-  ImGui::SetCursorPosY(ImGui::GetCursorPosY() + padding * scale.y);
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding * scale_.x);
+  ImGui::SetCursorPosY(ImGui::GetCursorPosY() + padding * scale_.y);
 
-  const float textWrapWidth = 154.0f * scale.x;
+  const float textWrapWidth = 154.0f * scale_.x;
   ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + textWrapWidth);
   ImGui::TextWrapped("%s", name_.c_str());
   ImGui::PopTextWrapPos();
@@ -124,7 +126,7 @@ void GameBox::render() {
 
   const float totalIconsWidth = iconSize * 2 + iconSpacing;
   const float iconStartX = ImGui::GetCursorPosX() + displaySize.x -
-                           totalIconsWidth - (padding * scale.x);
+                           totalIconsWidth - (padding * scale_.x);
 
   ImGui::SameLine();
   ImGui::SetCursorPosX(iconStartX);

@@ -27,22 +27,24 @@ void SettingsPanel::init() {
 void SettingsPanel::render() {
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(35, 50));
   ImGui::Begin(name_.c_str(), nullptr, false);
-  ImVec2 scale = Themes::getScale(1675, 880);
+  if (scale_.x == 0) {
+    scale_ = Themes::getScale(1675, 880);
+  }
 
-  ImGui::SameLine(0, 10 * scale.x);
+  ImGui::SameLine(0, 10 * scale_.x);
   if (view_ == SettingsView::LauncherConfig) {
     ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.08f, 0.08f, 0.08f, 1.0f));
     ImDrawList* drawlist = ImGui::GetWindowDrawList();
     ImVec2 p = ImGui::GetCursorScreenPos();
     drawlist->AddRectFilled(
-        ImVec2(p.x, p.y), ImVec2(p.x + (143 * scale.x), p.y + (25 * scale.y)),
+        ImVec2(p.x, p.y), ImVec2(p.x + (143 * scale_.x), p.y + (25 * scale_.y)),
         IM_COL32(242, 244, 238, 255), 3.0f,
         ImDrawFlags_RoundCornersTopLeft | ImDrawFlags_RoundCornersTopRight);
     ImGui::PushFont(FontManager::getFont("Settings:Button"));
-    addIcon("config:dark", scale);
+    addIcon("config:dark", scale_);
   } else {
     ImGui::PushFont(FontManager::getFont("Settings:Button"));
-    addIcon("config:white", scale);
+    addIcon("config:white", scale_);
   }
   bool lcbtn = ImGui::Button("Launcher Config");
   if (view_ == SettingsView::LauncherConfig) {
@@ -54,20 +56,20 @@ void SettingsPanel::render() {
   }
 
   ImGui::SameLine();
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (22 * scale.x));
+  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (22 * scale_.x));
   if (view_ == SettingsView::AccountSettings) {
     ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.08f, 0.08f, 0.08f, 1.0f));
     ImDrawList* drawlist = ImGui::GetWindowDrawList();
     ImVec2 p = ImGui::GetCursorScreenPos();
     drawlist->AddRectFilled(
-        ImVec2(p.x, p.y), ImVec2(p.x + (143 * scale.x), p.y + (25 * scale.y)),
+        ImVec2(p.x, p.y), ImVec2(p.x + (143 * scale_.x), p.y + (25 * scale_.y)),
         IM_COL32(242, 244, 238, 255), 3.0f,
         ImDrawFlags_RoundCornersTopLeft | ImDrawFlags_RoundCornersTopRight);
     ImGui::PushFont(FontManager::getFont("Settings:Button"));
-    addIcon("account:dark", scale);
+    addIcon("account:dark", scale_);
   } else {
     ImGui::PushFont(FontManager::getFont("Settings:Button"));
-    addIcon("account:white", scale);
+    addIcon("account:white", scale_);
   }
   bool asbtn = ImGui::Button("Account Settings");
   if (view_ == SettingsView::AccountSettings) {
@@ -79,26 +81,26 @@ void SettingsPanel::render() {
   }
 
   ImDrawList* drawlist = ImGui::GetWindowDrawList();
-  drawlist->AddLine(ImVec2(ImGui::GetCursorScreenPos().x - 10 * scale.x,
-                           ImGui::GetCursorScreenPos().y + 3 * scale.y),
-                    ImVec2(ImGui::GetCursorScreenPos().x + (1605 * scale.x),
-                           ImGui::GetCursorScreenPos().y + (5 * scale.y)),
+  drawlist->AddLine(ImVec2(ImGui::GetCursorScreenPos().x - 10 * scale_.x,
+                           ImGui::GetCursorScreenPos().y + 3 * scale_.y),
+                    ImVec2(ImGui::GetCursorScreenPos().x + (1605 * scale_.x),
+                           ImGui::GetCursorScreenPos().y + (5 * scale_.y)),
                     IM_COL32(242, 244, 238, 255), 2.0f);
 
-  ImGui::Dummy(ImVec2(0, 45 * scale.y));
+  ImGui::Dummy(ImVec2(0, 45 * scale_.y));
   switch (view_) {
     case SettingsView::LauncherConfig:
 
       ImGui::PushFont(FontManager::getFont("Title"));
       ImGui::Image(ImageManager::get("monitor"),
-                   ImVec2(27 * scale.x, 27 * scale.x));
+                   ImVec2(27 * scale_.x, 27 * scale_.x));
       ImGui::SameLine();
       ImGui::Text("General");
       ImGui::PopFont();
-      ImGui::Dummy(ImVec2(0, 23 * scale.y));
+      ImGui::Dummy(ImVec2(0, 23 * scale_.y));
 
       ImGui::PushFont(FontManager::getFont("Settings:Setting"));
-      ImGui::Dummy(ImVec2(35 * scale.x, 0));
+      ImGui::Dummy(ImVec2(35 * scale_.x, 0));
       ImGui::SameLine();
       ImGui::PushID("general_settings");
       ImGui::BeginGroup();
@@ -112,14 +114,14 @@ void SettingsPanel::render() {
       ImGui::EndGroup();
       ImGui::PopID();
 
-      ImGui::Dummy(ImVec2(0, 47 * scale.y));
+      ImGui::Dummy(ImVec2(0, 47 * scale_.y));
       ImGui::PushFont(FontManager::getFont("Title"));
       ImGui::Image(ImageManager::get("appearance"),
-                   ImVec2(27 * scale.x, 27 * scale.x));
+                   ImVec2(27 * scale_.x, 27 * scale_.x));
       ImGui::SameLine();
       ImGui::Text("Appearance");
       ImGui::PopFont();
-      ImGui::Dummy(ImVec2(0, 23 * scale.y));
+      ImGui::Dummy(ImVec2(0, 23 * scale_.y));
 
       ImGui::PushFont(FontManager::getFont("Settings:Setting"));
       ImGui::Dummy(ImVec2(35, 0));
@@ -134,15 +136,15 @@ void SettingsPanel::render() {
       ImGui::EndGroup();
       ImGui::PopID();
 
-      ImGui::Dummy(ImVec2(0, 47 * scale.y));
+      ImGui::Dummy(ImVec2(0, 47 * scale_.y));
       ImGui::PushFont(FontManager::getFont("Title"));
       ImGui::Image(ImageManager::get("link"),
-                   ImVec2(27 * scale.x, 27 * scale.x));
+                   ImVec2(27 * scale_.x, 27 * scale_.x));
       ImGui::SameLine();
       ImGui::Text("Integrations");
       ImGui::PopFont();
 
-      ImGui::Dummy(ImVec2(0, 23 * scale.y));
+      ImGui::Dummy(ImVec2(0, 23 * scale_.y));
       ImGui::PushFont(FontManager::getFont("Settings:Setting"));
       ImGui::Dummy(ImVec2(35, 0));
       ImGui::SameLine();
@@ -156,7 +158,7 @@ void SettingsPanel::render() {
     case SettingsView::AccountSettings:
       ImGui::PushFont(FontManager::getFont("Title"));
       ImGui::Image(ImageManager::get("appearance"),
-                   ImVec2(27 * scale.x, 27 * scale.x));
+                   ImVec2(27 * scale_.x, 27 * scale_.x));
       ImGui::Text("Account Settings");
       ImGui::PopFont();
       ImGui::PushFont(FontManager::getFont("Settings:Setting"));
