@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "GLFW/glfw3.h"
+#include "clients/client.h"
 #include "panel.h"
 #include "storage/storage.h"
 #include "ui/panel.h"

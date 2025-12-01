@@ -1,4 +1,3 @@
-
 #include "ui/themes/themes.h"
 
 #include "imgui.h"
@@ -81,6 +80,11 @@ void setDefaultDarkColors() {
 
 ImVec2 getScale(float x, float y) {
   ImVec2 size = ImGui::GetWindowSize();
+
+  if (size.x > x * 5.0f || size.y > y * 5.0f) {
+    return ImVec2(0.0f, 0.0f);
+  }
+
   ImVec2 scale = ImVec2(size.x / x, size.y / y);
   return scale;
 }

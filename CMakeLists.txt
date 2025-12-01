@@ -67,7 +67,6 @@ FetchContent_Declare(
 )
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries only")
 set(CPR_BUILD_TESTS OFF CACHE BOOL "Disable tests")
-find_package(CURL)
 
 # TODO: replace with https://github.com/MaxAkaAltmer/embed
 # Comes with better QOL improvements, no runtime variables, bug fixes, etc...
@@ -158,15 +157,15 @@ target_include_directories(${EXECUTABLE_NAME}
 
 # Link against the appropriate libraries
 target_link_libraries(${EXECUTABLE_NAME}
-    PRIVATE
-    glfw
-    glaze::glaze
-    libglew_static
-    lunasvg
-    cpr::cpr
-    $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
-    $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
-)
+        PRIVATE
+        glfw
+        glaze::glaze
+        libglew_static
+        lunasvg
+        cpr::cpr
+        $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
+        $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
+        )
 
 # Only link dwmapi if on Windows
 if(WIN32)
@@ -213,6 +212,7 @@ elseif(UNIX AND NOT APPLE)
         COMPONENT ${MAIN_COMPONENT}
     )
 
+    set(CPACK_INSTALLED_DIRECTORIES "")
     set(CPACK_INSTALL_CMAKE_PROJECTS "${CMAKE_BINARY_DIR};${PROJECT_NAME};${MAIN_COMPONENT};/")
 
     set(CPACK_PACKAGE_ICON "lazap.png")
