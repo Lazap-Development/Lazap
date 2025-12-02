@@ -33,9 +33,9 @@ struct RunnerState {
 };
 
 struct WindowCallbacks {
-  static void mouse_button_callback(GLFWwindow* window, int button, int action,
-                                    int mods);
-  static void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos);
+  static void mouseButtonCB(GLFWwindow* window, int button, int action,
+                            int mods);
+  static void cursorPosCB(GLFWwindow* window, double xpos, double ypos);
 };
 
 void IdleBySleeping(FpsIdling& ioIdling);

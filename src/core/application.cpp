@@ -53,6 +53,23 @@ void IdleBySleeping(FpsIdling &ioIdling) {
   }
 }
 
+#ifdef _WIN32
+void UpdateWindowCorners(GLFWwindow *window) {
+  HWND hwnd = glfwGetWin32Window(window);
+
+  WINDOWPLACEMENT placement = {};
+  placement.length = sizeof(WINDOWPLACEMENT);
+  GetWindowPlacement(hwnd, &placement);
+
+  bool isMaximized = (placement.showCmd == SW_SHOWMAXIMIZED);
+
+  DWM_WINDOW_CORNER_PREFERENCE cornerPref =
+      isMaximized ? DWMWCP_DONOTROUND : DWMWCP_ROUND;
+  DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPref,
+                        sizeof(cornerPref));
+}
+#endif
+
 void Application::run() {
   auto startupBegin = std::chrono::high_resolution_clock::now();
 
@@ -104,8 +121,8 @@ void Application::run() {
 
   glfwSetWindowUserPointer(window, resizeState);
 
-  glfwSetMouseButtonCallback(window, WindowCallbacks::mouse_button_callback);
-  glfwSetCursorPosCallback(window, WindowCallbacks::cursor_pos_callback);
+  glfwSetMouseButtonCallback(window, WindowCallbacks::mouseButtonCB);
+  glfwSetCursorPosCallback(window, WindowCallbacks::cursorPosCB);
 
   Storage storage;
   storage.initTOML();
@@ -146,9 +163,6 @@ void Application::run() {
   HWND hwnd = glfwGetWin32Window(window);
   SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
-  MARGINS margins = {1, 1, 1, 1};
-  DwmExtendFrameIntoClientArea(hwnd, &margins);
-
   DWM_WINDOW_CORNER_PREFERENCE cornerPref = DWMWCP_ROUND;
   DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPref,
                         sizeof(cornerPref));
@@ -159,6 +173,10 @@ void Application::run() {
     IdleBySleeping(runner.fpsIdling);
 
     glfwPollEvents();
+
+#ifdef _WIN32
+    UpdateWindowCorners(window);
+#endif
 
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -186,8 +204,8 @@ void Application::run() {
   glfwTerminate();
 }
 
-void WindowCallbacks::mouse_button_callback(GLFWwindow *window, int button,
-                                            int action, int mods) {
+void WindowCallbacks::mouseButtonCB(GLFWwindow *window, int button, int action,
+                                    int mods) {
   if (button != GLFW_MOUSE_BUTTON_LEFT) return;
 
   ResizeState *state =
@@ -217,8 +235,8 @@ void WindowCallbacks::mouse_button_callback(GLFWwindow *window, int button,
   }
 }
 
-void WindowCallbacks::cursor_pos_callback(GLFWwindow *window, double xpos,
-                                          double ypos) {
+void WindowCallbacks::cursorPosCB(GLFWwindow *window, double xpos,
+                                  double ypos) {
   ResizeState *state =
       static_cast<ResizeState *>(glfwGetWindowUserPointer(window));
   if (!state) return;
