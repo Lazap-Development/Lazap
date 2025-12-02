@@ -93,8 +93,15 @@ void Application::run() {
   float xscale, yscale;
   glfwGetMonitorContentScale(monitor, &xscale, &yscale);
 
-  int windowWidth = WINDOW_SIZE[0] / 1.3 * xscale;
-  int windowHeight = WINDOW_SIZE[1] / 1.3 * yscale;
+  float sx = 1.0f, sy = 1.0f;
+
+#ifdef _WIN32
+  sx = xscale;
+  sy = yscale;
+#endif
+
+  int windowWidth = WINDOW_SIZE[0] / 1.3 * sx;
+  int windowHeight = WINDOW_SIZE[1] / 1.3 * sy;
   int windowX = (mode->width - windowWidth) / 2;
   int windowY = (mode->height - windowHeight) / 2;
 
