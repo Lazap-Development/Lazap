@@ -157,12 +157,13 @@ target_include_directories(${EXECUTABLE_NAME}
 
 # Link against the appropriate libraries
 target_link_libraries(${EXECUTABLE_NAME}
-        PRIVATE
+    PRIVATE
         glfw
         glaze::glaze
         libglew_static
         lunasvg
         cpr::cpr
+        unistring 
         $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
         $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
         )
