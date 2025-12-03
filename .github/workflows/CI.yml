@@ -70,11 +70,11 @@ jobs:
       - name: Configure CMake
         if: matrix.os == 'windows-latest'
         shell: msys2 {0}
-        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM="3.5" -DGLFW_BUILD_WAYLAND=OFF
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
       
       - name: Configure CMake
         if: matrix.os != 'windows-latest'
-        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM="3.5" -DGLFW_BUILD_WAYLAND=OFF
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
       
       - name: Build
         run: cmake --build build --config Release
