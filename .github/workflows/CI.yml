@@ -46,9 +46,23 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            build-essential ninja-build \
-            libgl1-mesa-dev xorg-dev libxrandr-dev libwayland-dev \
-            meson libpsl-dev libidn2-dev libnghttp2-dev libunistring-dev
+            build-essential \
+            ninja-build \
+            cmake \
+            git \
+            libgl1-mesa-dev \
+            xorg-dev \
+            libxrandr-dev \
+            libwayland-dev \
+            libxkbcommon-dev \
+            libxkbcommon-x11-dev \
+            wayland-protocols \
+            libwayland-egl-backend-dev \
+            meson \
+            libpsl-dev \
+            libidn2-dev \
+            libnghttp2-dev \
+            libunistring-dev
 
       - name: Setup MSYS2 (Windows)
         if: matrix.os == 'windows-latest'
@@ -70,11 +84,11 @@ jobs:
       - name: Configure CMake
         if: matrix.os == 'windows-latest'
         shell: msys2 {0}
-        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM="3.5" -DGLFW_BUILD_WAYLAND=OFF
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
       
       - name: Configure CMake
         if: matrix.os != 'windows-latest'
-        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_POLICY_VERSION_MINIMUM="3.5" -DGLFW_BUILD_WAYLAND=OFF
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
       
       - name: Build
         run: cmake --build build --config Release
