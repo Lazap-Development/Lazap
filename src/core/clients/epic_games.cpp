@@ -133,6 +133,4 @@ std::vector<Game> EpicGames::getInstalledGames() {
   return games;
 }
 
-std::string EpicGames::getName() const { return "Epic Games"; }
-
 ClientType EpicGames::getType() const { return ClientType::EpicGames; }

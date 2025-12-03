@@ -212,7 +212,7 @@ void Application::run() {
 }
 
 void WindowCallbacks::mouseButtonCB(GLFWwindow *window, int button, int action,
-                                    int mods) {
+                                    int /*mod*/) {
   if (button != GLFW_MOUSE_BUTTON_LEFT) return;
 
   ResizeState *state =

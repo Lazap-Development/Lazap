@@ -204,6 +204,4 @@ std::vector<Game> RockstarGames::getInstalledGames() {
   return games;
 }
 
-std::string RockstarGames::getName() const { return "Rockstar Games"; }
-
 ClientType RockstarGames::getType() const { return ClientType::RockstarGames; }

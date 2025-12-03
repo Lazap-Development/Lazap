@@ -153,6 +153,4 @@ Game RiotGames::parseGameObject(const std::string& launcherPath,
   return g;
 }
 
-std::string RiotGames::getName() const { return "Riot Games"; }
-
 ClientType RiotGames::getType() const { return ClientType::RiotGames; }

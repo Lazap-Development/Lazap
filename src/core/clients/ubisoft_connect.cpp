@@ -155,8 +155,6 @@ std::vector<Game> UbisoftConnect::getInstalledGames() {
   return games;
 }
 
-std::string UbisoftConnect::getName() const { return "Ubisoft Connect"; }
-
 ClientType UbisoftConnect::getType() const {
   return ClientType::UbisoftConnect;
 }

@@ -254,6 +254,4 @@ std::vector<Game> Steam::getInstalledGames() {
   return games;
 }
 
-std::string Steam::getName() const { return "Steam"; }
-
 ClientType Steam::getType() const { return ClientType::Steam; }

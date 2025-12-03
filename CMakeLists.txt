@@ -62,7 +62,7 @@ FetchContent_Declare(
 FetchContent_Declare(
         cpr
         GIT_REPOSITORY https://github.com/libcpr/cpr.git
-        GIT_TAG 1.12.0
+        GIT_TAG 1.14.1
         GIT_SHALLOW TRUE
 )
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build static libraries only")
