@@ -40,11 +40,11 @@ void GamePanel::setGames(const std::vector<Game>* games) {
 }
 
 void GamePanel::init() {
-  ImageManager::loadSVG(b::embed<"assets/svg/heart2.svg">(), "heart2",
+  ImageManager::loadSVG(b::embed("assets/svg/heart2.svg"), "heart2",
                         0xFFFFFFFF);
-  ImageManager::loadSVG(b::embed<"assets/svg/recent.svg">(), "recent",
+  ImageManager::loadSVG(b::embed("assets/svg/recent.svg"), "recent",
                         0xA2A2A2FF);
-  ImageManager::loadSVG(b::embed<"assets/svg/play.svg">(), "play", 0xFFFFFFFF);
+  ImageManager::loadSVG(b::embed("assets/svg/play.svg"), "play", 0xFFFFFFFF);
 }
 
 void GamePanel::render() {

@@ -75,14 +75,13 @@ FetchContent_Declare(tomlplusplus
 
 FetchContent_Declare(cpr
     GIT_REPOSITORY https://github.com/libcpr/cpr.git
-    GIT_TAG        1.14.1
+    GIT_TAG        1.12.0
     GIT_SHALLOW    TRUE
 )
 
-# TODO: replace with https://github.com/MaxAkaAltmer/embed
 FetchContent_Declare(battery-embed
-    GIT_REPOSITORY https://github.com/batterycenter/embed.git
-    GIT_TAG        465081903d97ff1ed05e1fd5d0b3c8032a4a26a6
+    GIT_REPOSITORY https://github.com/MaxAkaAltmer/embed
+    GIT_TAG        df436613cc89b95355c17c205f7b75e68a97ff51
 )
 
 FetchContent_MakeAvailable(glew glfw glaze imgui stb lunasvg tomlplusplus cpr battery-embed)
@@ -150,9 +149,6 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     glaze::glaze
     libglew_static
     lunasvg
-    psl
-    unistring
-    idn2
     cpr::cpr
     $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
     $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>

@@ -23,27 +23,27 @@ ImGuiLayer::ImGuiLayer(GLFWwindow *window, ResizeState *resize_state,
 
   FontManager::init();
   FontManager::loadFont("Titlebar:Title",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 16.0f);
+                        b::embed("assets/fonts/Nunito-SemiBold.ttf"), 16.0f);
   FontManager::loadFont("Username",
-                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 15.0f);
+                        b::embed("assets/fonts/Oxanium-Regular.ttf"), 15.0f);
   FontManager::loadFont("GameInfo:Title",
-                        b::embed<"assets/fonts/ZenDots-Regular.ttf">(), 64.0f);
+                        b::embed("assets/fonts/ZenDots-Regular.ttf"), 64.0f);
   FontManager::loadFont("GameInfo:Paragraph",
-                        b::embed<"assets/fonts/Nunito-Medium.ttf">(), 18.0f);
+                        b::embed("assets/fonts/Nunito-Medium.ttf"), 18.0f);
   FontManager::loadFont("Left:Button",
-                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 18.0f);
+                        b::embed("assets/fonts/Oxanium-Regular.ttf"), 18.0f);
   FontManager::loadFont(
-      "Title", b::embed<"assets/fonts/ArchivoBlack-Regular.ttf">(), 24.0f);
+      "Title", b::embed("assets/fonts/ArchivoBlack-Regular.ttf"), 24.0f);
   FontManager::loadFont("GameBox:Title",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 18.0f);
-  FontManager::loadFont(
-      "GameBox:Time", b::embed<"assets/fonts/RobotoMono-Medium.ttf">(), 10.0f);
+                        b::embed("assets/fonts/Nunito-SemiBold.ttf"), 18.0f);
+  FontManager::loadFont("GameBox:Time",
+                        b::embed("assets/fonts/RobotoMono-Medium.ttf"), 10.0f);
   FontManager::loadFont("Settings:Button",
-                        b::embed<"assets/fonts/Nunito-Bold.ttf">(), 13.0f);
+                        b::embed("assets/fonts/Nunito-Bold.ttf"), 13.0f);
   FontManager::loadFont("Settings:Title",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 20.0f);
+                        b::embed("assets/fonts/Nunito-SemiBold.ttf"), 20.0f);
   FontManager::loadFont("Settings:Setting",
-                        b::embed<"assets/fonts/Nunito-Light.ttf">(), 18.0f);
+                        b::embed("assets/fonts/Nunito-Light.ttf"), 18.0f);
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 130");
