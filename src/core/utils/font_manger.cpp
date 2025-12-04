@@ -8,7 +8,7 @@ std::unordered_map<std::string, ImFont*> FontManager::fonts_;
 void FontManager::init() {
   ImGuiIO& io = ImGui::GetIO();
   b::EmbedInternal::EmbeddedFile embed =
-      b::embed("assets/fonts/Nunito-Medium.ttf");
+      b::embed<"assets/fonts/Nunito-Medium.ttf">();
 
   ImFontConfig config;
   config.FontDataOwnedByAtlas = false;

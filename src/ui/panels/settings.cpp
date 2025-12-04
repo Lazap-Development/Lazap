@@ -9,19 +9,19 @@
 using namespace ui;
 
 void SettingsPanel::init() {
-  ImageManager::loadSVG(b::embed("assets/svg/config.svg"), "config:white",
+  ImageManager::loadSVG(b::embed<"assets/svg/config.svg">(), "config:white",
                         0xFFFFFFFF);
-  ImageManager::loadSVG(b::embed("assets/svg/config.svg"), "config:dark",
+  ImageManager::loadSVG(b::embed<"assets/svg/config.svg">(), "config:dark",
                         0x000000FF);
-  ImageManager::loadSVG(b::embed("assets/svg/account.svg"), "account:white",
+  ImageManager::loadSVG(b::embed<"assets/svg/account.svg">(), "account:white",
                         0xFFFFFFFF);
-  ImageManager::loadSVG(b::embed("assets/svg/account.svg"), "account:dark",
+  ImageManager::loadSVG(b::embed<"assets/svg/account.svg">(), "account:dark",
                         0x000000FF);
-  ImageManager::loadSVG(b::embed("assets/svg/monitor.svg"), "monitor",
+  ImageManager::loadSVG(b::embed<"assets/svg/monitor.svg">(), "monitor",
                         0xFFFFFFFF);
-  ImageManager::loadSVG(b::embed("assets/svg/appearance.svg"), "appearance",
+  ImageManager::loadSVG(b::embed<"assets/svg/appearance.svg">(), "appearance",
                         0xFFFFFFFF);
-  ImageManager::loadSVG(b::embed("assets/svg/link.svg"), "link", 0xFFFFFFFF);
+  ImageManager::loadSVG(b::embed<"assets/svg/link.svg">(), "link", 0xFFFFFFFF);
 }
 
 void SettingsPanel::render() {

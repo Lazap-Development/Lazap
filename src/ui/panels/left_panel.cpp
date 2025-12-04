@@ -17,15 +17,15 @@ void openURL(const std::string& url) {
 }
 
 void LeftPanel::init() {
-  ImageManager::loadPNG(b::embed("assets/icons/lazap/lazap.png"), "lazap");
-  ImageManager::loadSVG(b::embed("assets/svg/home.svg"), "home", 0xFFFFFFFF);
-  ImageManager::loadSVG(b::embed("assets/svg/library.svg"), "library",
+  ImageManager::loadPNG(b::embed<"assets/icons/lazap/lazap.png">(), "lazap");
+  ImageManager::loadSVG(b::embed<"assets/svg/home.svg">(), "home", 0xFFFFFFFF);
+  ImageManager::loadSVG(b::embed<"assets/svg/library.svg">(), "library",
                         0xFFFFFFFF);
-  ImageManager::loadSVG(b::embed("assets/svg/heart2.svg"), "heart2",
+  ImageManager::loadSVG(b::embed<"assets/svg/heart2.svg">(), "heart2",
                         0xFFFFFFFF);
-  ImageManager::loadSVG(b::embed("assets/svg/github.svg"), "github",
+  ImageManager::loadSVG(b::embed<"assets/svg/github.svg">(), "github",
                         0xFFFFFFFF);
-  ImageManager::loadSVG(b::embed("assets/svg/settings.svg"), "settings",
+  ImageManager::loadSVG(b::embed<"assets/svg/settings.svg">(), "settings",
                         0xFFFFFFFF);
 }
 

@@ -72,8 +72,8 @@ FetchContent_Declare(cpr
 )
 
 FetchContent_Declare(battery-embed
-    GIT_REPOSITORY https://github.com/MaxAkaAltmer/embed
-    GIT_TAG        df436613cc89b95355c17c205f7b75e68a97ff51
+    GIT_REPOSITORY https://github.com/batterycenter/embed
+    GIT_TAG        465081903d97ff1ed05e1fd5d0b3c8032a4a26a6
 )
 
 FetchContent_MakeAvailable(

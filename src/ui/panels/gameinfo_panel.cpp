@@ -9,7 +9,7 @@
 using namespace ui;
 
 void GameInfoPanel::init() {
-  ImageManager::loadPNG(b::embed("assets/img/banner.png"), "banner");
+  ImageManager::loadPNG(b::embed<"assets/img/banner.png">(), "banner");
 }
 
 void GameInfoPanel::render() {

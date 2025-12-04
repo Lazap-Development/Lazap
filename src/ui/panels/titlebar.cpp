@@ -9,10 +9,11 @@
 using namespace ui;
 
 void Titlebar::init() {
-  ImageManager::loadSVG(b::embed("assets/svg/close.svg"), "close", 0xFFFFFFFF);
-  ImageManager::loadSVG(b::embed("assets/svg/minimise.svg"), "minimise",
+  ImageManager::loadSVG(b::embed<"assets/svg/close.svg">(), "close",
                         0xFFFFFFFF);
-  ImageManager::loadSVG(b::embed("assets/svg/maximise.svg"), "maximise",
+  ImageManager::loadSVG(b::embed<"assets/svg/minimise.svg">(), "minimise",
+                        0xFFFFFFFF);
+  ImageManager::loadSVG(b::embed<"assets/svg/maximise.svg">(), "maximise",
                         0xFFFFFFFF);
 }
 
