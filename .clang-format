@@ -153,20 +153,28 @@ IncludeCategories:
     Priority:        1
     SortPriority:    0
     CaseSensitive:   false
-  - Regex:           '^<ext/.*\.h>'
+  - Regex:           '^<glad/.*\.h>'
     Priority:        2
     SortPriority:    0
     CaseSensitive:   false
-  - Regex:           '^<.*\.h>'
+  - Regex:           '^<GLFW/.*\.h>'
     Priority:        3
     SortPriority:    0
     CaseSensitive:   false
-  - Regex:           '^<.*'
+  - Regex:           '^<ext/.*\.h>'
     Priority:        4
     SortPriority:    0
     CaseSensitive:   false
-  - Regex:           '.*'
+  - Regex:           '^<.*\.h>'
     Priority:        5
+    SortPriority:    0
+    CaseSensitive:   false
+  - Regex:           '^<.*'
+    Priority:        6
+    SortPriority:    0
+    CaseSensitive:   false
+  - Regex:           '.*'
+    Priority:        7
     SortPriority:    0
     CaseSensitive:   false
 IncludeIsMainRegex: '([-_](test|unittest))?$'

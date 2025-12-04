@@ -1,6 +1,7 @@
 #pragma once
 #include "ui/panel.h"
 #include "ui/panel_manager.h"
+
 namespace ui {
 
 class LeftPanel : public Panel {

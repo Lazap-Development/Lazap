@@ -31,14 +31,6 @@ endif()
 #-----------------------------------------------------------------------------------------------------------------------
 include(FetchContent)
 
-FetchContent_Declare(glew
-    GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
-    GIT_TAG        7e8300fa13ff568aa87ed45407c83f8cbe1b2de9
-    GIT_SHALLOW    TRUE
-)
-set(glew-cmake_BUILD_SHARED OFF CACHE BOOL "Build the shared glew library" FORCE)
-set(glew-cmake_BUILD_STATIC ON CACHE BOOL "Build the static glew library" FORCE)
-
 FetchContent_Declare(glfw
     GIT_REPOSITORY https://github.com/envyen/glfw-dev
     GIT_TAG        drag-window-dev
@@ -84,7 +76,9 @@ FetchContent_Declare(battery-embed
     GIT_TAG        df436613cc89b95355c17c205f7b75e68a97ff51
 )
 
-FetchContent_MakeAvailable(glew glfw glaze imgui stb lunasvg tomlplusplus cpr battery-embed)
+FetchContent_MakeAvailable(
+  glfw imgui glaze stb lunasvg tomlplusplus cpr battery-embed
+)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Target Definition
@@ -128,14 +122,18 @@ endforeach()
 #-----------------------------------------------------------------------------------------------------------------------
 
 # Get rid of extra terminal window in release build (Windows)
-set_target_properties(${EXECUTABLE_NAME} PROPERTIES WIN32_EXECUTABLE $<CONFIG:Release>)
+set_target_properties(${EXECUTABLE_NAME} PROPERTIES
+    WIN32_EXECUTABLE $<CONFIG:Release>
+)
 
 # Compiler Warnings
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   target_compile_options(${EXECUTABLE_NAME} PRIVATE -Wall -Wextra -pedantic)
 endif()
 
-target_compile_definitions(${EXECUTABLE_NAME} PRIVATE GLEW_STATIC)
+set(GLAD_DIR "${CMAKE_SOURCE_DIR}/vendor/glad")
+add_library(glad STATIC "${GLAD_DIR}/src/glad.c")
+target_include_directories(glad PUBLIC "${GLAD_DIR}/include")
 
 target_include_directories(${EXECUTABLE_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/include
@@ -146,17 +144,15 @@ target_include_directories(${EXECUTABLE_NAME} PRIVATE
 
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     glfw
+    glad
     glaze::glaze
-    libglew_static
-    lunasvg
     cpr::cpr
+    lunasvg
+    $<$<PLATFORM_ID:Linux>:X11>
+    $<$<PLATFORM_ID:Windows>:dwmapi>
     $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
     $<$<CXX_COMPILER_ID:MSVC>:opengl32.lib>
 )
-
-if(WIN32)
-  target_link_libraries(${EXECUTABLE_NAME} PRIVATE dwmapi)
-endif()
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Packaging (CPack)
@@ -195,7 +191,7 @@ elseif(UNIX AND NOT APPLE)
     )
 
   install(FILES ${CMAKE_SOURCE_DIR}/assets/icons/lazap/lazap.png
-        DESTINATION share/icons/hicolor/256x256/apps
+        DESTINATION share/icons/hicolor/512x512/apps
         COMPONENT ${MAIN_COMPONENT}
     )
 

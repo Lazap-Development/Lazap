@@ -1,7 +1,4 @@
-// clang-format off
-#include "GL/glew.h"
 #include "utils/image_manager.h"
-// clang-format on
 
 #include <lunasvg.h>
 

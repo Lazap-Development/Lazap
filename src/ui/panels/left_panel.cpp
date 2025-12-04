@@ -1,12 +1,7 @@
-// clang-format off
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <imgui.h>
-// clang-format on
-
 #include "ui/panels/left_panel.h"
 
-#include "imgui.h"
+#include <imgui.h>
+
 #include "ui/themes/themes.h"
 #include "utils/image_manager.h"
 

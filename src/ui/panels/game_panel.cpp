@@ -1,6 +1,7 @@
 #include "ui/panels/game_panel.h"
 
-#include "imgui.h"
+#include <imgui.h>
+
 #include "ui/panel_manager.h"
 #include "ui/panels/game_box.h"
 #include "ui/themes/themes.h"

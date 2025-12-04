@@ -1,6 +1,5 @@
-// clang-format off
 #include "ui/panels/game_box.h"
-// clang-format on
+
 #include <imgui.h>
 
 #include "ui/themes/themes.h"

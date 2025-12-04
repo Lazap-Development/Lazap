@@ -1,11 +1,14 @@
 #pragma once
+#include <glad/glad.h>
+
+#include <GLFW/glfw3.h>
+
 #include <imgui.h>
 
 #include <memory>
 #include <string>
 #include <vector>
 
-#include "GLFW/glfw3.h"
 #include "clients/client.h"
 #include "panel.h"
 #include "storage/storage.h"

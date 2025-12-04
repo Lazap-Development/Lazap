@@ -1,10 +1,6 @@
-// clang-format off
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <imgui.h>
-// clang-format on
-
 #include "ui/panels/titlebar.h"
+
+#include <imgui.h>
 
 #include "ui/themes/themes.h"
 #include "utils/font_manager.h"

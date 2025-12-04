@@ -1,6 +1,7 @@
 #pragma once
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
+#include <glad/glad.h>
+
+#include <GLFW/glfw3.h>
 
 constexpr const int WINDOW_SIZE[2] = {1800, 1000};
 constexpr const int MIN_WINDOW_SIZE[2] = {800, 600};

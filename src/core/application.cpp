@@ -1,19 +1,17 @@
-#include <application.h>
-#include <imgui_layer.h>
+#include "application.h"
 
 #include <cstdio>
 #include <memory>
 #include <toml++/toml.hpp>
 #include <vector>
 
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
 #include "addons/discord_rpc/discord_rpc.h"
 #include "clients/epic_games.h"
 #include "clients/riot_games.h"
 #include "clients/rockstar_games.h"
 #include "clients/steam/steam.h"
 #include "clients/ubisoft_connect.h"
+#include "imgui_layer.h"
 #include "storage/storage.h"
 #include "utils/banner_manager.h"
 
@@ -25,6 +23,7 @@
 #include <windows.h>
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>
+
 #include <dwmapi.h>
 #pragma comment(lib, "dwmapi.lib")
 #endif
@@ -114,8 +113,15 @@ void Application::run() {
 
   glfwSetWindowPos(window, windowX, windowY);
   glfwMakeContextCurrent(window);
+
+  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+    fprintf(stderr, "Failed to initialize GLAD\n");
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    return;
+  }
+
   glfwSwapInterval(1);
-  glewInit();
 
   ResizeState *resizeState = new ResizeState();
   resizeState->cursorArrow = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);

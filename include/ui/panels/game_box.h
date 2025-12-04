@@ -1,7 +1,5 @@
 #pragma once
 
-#include <GL/gl.h>
-
 #include "clients/client.h"
 #include "ui/panel.h"
 #include "utils/image_manager.h"
