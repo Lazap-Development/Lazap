@@ -57,6 +57,16 @@ void PanelManager::setPanelVisible(const std::string &name, bool visible) {
   for (auto &p : panels_) {
     if (p->getName() == name) {
       p->setVisible(visible);
+      if (visible) {
+        for (auto &q : panels_) {
+          if (auto *tb = dynamic_cast<Titlebar *>(q.get())) {
+            if (name == "Recently Played")
+              tb->setTitle("Home");
+            else
+              tb->setTitle(name);
+          }
+        }
+      }
       return;
     }
   }

@@ -28,7 +28,7 @@ void Titlebar::render() {
   ImGui::PushFont(FontManager::getFont("Titlebar:Title"));
   ImGui::SetCursorPos(ImVec2((ImGui::GetCursorPosX() + 35) * scale_.x,
                              (ImGui::GetCursorPosY() + 33) * scale_.y));
-  ImGui::Text("Home");
+  ImGui::Text("%s", title_.c_str());
   ImGui::PopFont();
 
   ImGui::SameLine(ImGui::GetContentRegionAvail().x - (143 * scale_.x));

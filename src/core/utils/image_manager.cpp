@@ -136,6 +136,7 @@ GLuint ImageManager::loadSVG(b::EmbedInternal::EmbeddedFile embed,
     printf("Failed to render SVG: %s\n", id.c_str());
     return 0;
   }
+  bitmap.convertToRGBA();
 
   GLuint texture_id;
   glGenTextures(1, &texture_id);
@@ -167,12 +168,9 @@ void ImageManager::clear() {
 }
 
 const std::string intToHex(int num) {
-  if (num == 0) return "0";
-  std::string hexChars = "0123456789ABCDEF";
-  std::string result = "";
-  while (num > 0) {
-    result = hexChars[num % 16] + result;
-    num /= 16;
-  }
+  const std::string hexChars = "0123456789ABCDEF";
+  std::string result;
+  result += hexChars[(num >> 4) & 0xF];
+  result += hexChars[num & 0xF];
   return result;
 }

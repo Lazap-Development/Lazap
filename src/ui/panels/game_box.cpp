@@ -33,7 +33,7 @@ void GameBox::render() {
       8.0f * sqrt((pow(scale_.x, 2) + pow(scale_.y, 2)) * 0.5f);
   const float topOffsetPixels = 10.0f * scale_.y;
   const float padding = 10.0f;
-  const float iconSize = 16.0f * scale_.x;
+  const float iconSize = 20.0f * scale_.x;
   const float iconSpacing = 6.0f * scale_.x;
   const float playIconSize = 32.0f * scale_.x;
 

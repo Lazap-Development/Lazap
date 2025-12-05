@@ -14,12 +14,14 @@
 using namespace ui;
 
 void GamePanel::init() {
+  ImageManager::loadSVG(b::embed<"assets/svg/heart.svg">(), "heart",
+                        0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/heart2.svg">(), "heart2",
-                        0xFFFFFFFF);
+                        Themes::ACCENT_COLOR);
   ImageManager::loadSVG(b::embed<"assets/svg/heart2-solid.svg">(),
-                        "heart2-solid", 0xFFFFFFFF);
+                        "heart2-solid", Themes::ACCENT_COLOR);
   ImageManager::loadSVG(b::embed<"assets/svg/recent.svg">(), "recent",
-                        0xFFFFFFFF);
+                        Themes::ACCENT_COLOR);
   ImageManager::loadSVG(b::embed<"assets/svg/play.svg">(), "play", 0xFFFFFFFF);
 }
 
@@ -65,11 +67,13 @@ void GamePanel::render() {
   }
 
   ImGui::PushFont(FontManager::getFont("Title"));
-  ImGui::Text("%s", name_.c_str());
+  if (*view_ == ViewType::MainMenu) {
+    ImGui::Text("%s", name_.c_str());
+  }
   ImGui::PopFont();
   ImGui::Separator();
   ImGui::Dummy(
-      ImVec2(0, ((*view_ == ViewType::MainMenu) ? 10.0f : 30.0f) * scale_.y));
+      ImVec2(0, ((*view_ == ViewType::MainMenu) ? 10.0f : 0.0f) * scale_.y));
 
   bool refreshRequested = false;
   if (!games_) {
