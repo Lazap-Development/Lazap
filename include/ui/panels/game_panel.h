@@ -12,13 +12,14 @@ class GamePanel : public Panel {
  public:
   GamePanel(const std::string& name, ViewType* v, Storage* storage = nullptr)
       : Panel(name, storage), view_(v) {}
+
   void init() override;
   void render() override;
   void end() override {}
   void setGames(const std::vector<Game>* games);
   void refresh() { setGames(games_); }
 
- protected:
+ private:
   std::vector<std::unique_ptr<GameBox>> gameBoxes_;
   const std::vector<Game>* games_ = nullptr;
   ViewType* view_ = nullptr;

@@ -39,55 +39,59 @@ void LeftPanel::render() {
   if (scale_.x == 0) {
     scale_ = Themes::getScale(80, 1000);
   }
-  // Lazap Icon
+
+  auto drawIconButton = [&](const char* id, ImTextureID texture,
+                            const ImVec2& size) -> bool {
+    bool clicked = ImGui::ImageButton(id, texture, size);
+    if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+    return clicked;
+  };
+
+  // Top icon
   ImGui::PushStyleVar(ImGuiStyleVar_FramePadding,
                       ImVec2(15.0f * scale_.x, 20.0f * scale_.y));
-  ImGui::ImageButton("##lazap", ImageManager::get("lazap"),
-                     ImVec2(50 * scale_.x, 50 * scale_.x));
+  drawIconButton("##lazap", ImageManager::get("lazap"),
+                 ImVec2(50 * scale_.x, 50 * scale_.x));
   ImGui::PopStyleVar();
 
   ImGui::Dummy(ImVec2(0, ImGui::GetWindowSize().y * 0.07219f * scale_.y));
-  // Middle Icons
+
+  // Middle icons
   ImGui::PushStyleVar(ImGuiStyleVar_FramePadding,
                       ImVec2(25.0f * scale_.x, 0.0f));
-  bool home = ImGui::ImageButton("Home", ImageManager::get("home"),
-                                 ImVec2(24 * scale_.x, 24 * scale_.x));
+  if (drawIconButton("Home", ImageManager::get("home"),
+                     ImVec2(30 * scale_.x, 30 * scale_.x)))
+    if (view_->view != ViewType::MainMenu) view_->MainMenu();
+
   ImGui::Dummy(ImVec2(0, 41.71f * scale_.y));
-  bool favs = ImGui::ImageButton("Favorites", ImageManager::get("heart2"),
-                                 ImVec2(24 * scale_.x, 24 * scale_.x));
+
+  if (drawIconButton("Favorites", ImageManager::get("heart2"),
+                     ImVec2(30 * scale_.x, 30 * scale_.x)))
+    if (view_->view != ViewType::Favorites) view_->Favorites();
+
   ImGui::Dummy(ImVec2(0, 41.71f * scale_.y));
-  bool library = ImGui::ImageButton("Library", ImageManager::get("library"),
-                                    ImVec2(24 * scale_.x, 24 * scale_.x));
-  // TODO: Add hover effect and active indicator
+
+  if (drawIconButton("Library", ImageManager::get("library"),
+                     ImVec2(30 * scale_.x, 30 * scale_.x)))
+    if (view_->view != ViewType::Library) view_->Library();
 
   ImGui::Dummy(
-      ImVec2(0, ImGui::GetContentRegionAvail().y - (103.25f * scale_.y)));
+      ImVec2(0, ImGui::GetContentRegionAvail().y - (115.0f * scale_.y)));
 
-  // Bottom Icons
-  bool github = ImGui::ImageButton("GitHub", ImageManager::get("github"),
-                                   ImVec2(24 * scale_.x, 24 * scale_.x));
+  // Bottom icons
+  if (drawIconButton("GitHub", ImageManager::get("github"),
+                     ImVec2(30 * scale_.x, 30 * scale_.x)))
+    openURL("https://github.com/Lazap-Development/Lazap");
+
   ImGui::Dummy(ImVec2(0, 30.25f * scale_.y));
-  bool settings = ImGui::ImageButton("Settings", ImageManager::get("settings"),
-                                     ImVec2(24 * scale_.x, 24 * scale_.x));
+
+  if (drawIconButton("Settings", ImageManager::get("settings"),
+                     ImVec2(30 * scale_.x, 30 * scale_.x)))
+    if (view_->view != ViewType::Settings) view_->Settings();
+
   ImGui::Dummy(ImVec2(0, 25.0f * scale_.y));
   ImGui::PopStyleVar();
 
-  if (home == true && view_->view != ViewType::MainMenu) {
-    view_->MainMenu();
-  }
-  if (favs == true && view_->view != ViewType::Favorites) {
-    view_->Favorites();
-  }
-  if (library == true && view_->view != ViewType::Library) {
-    view_->Library();
-  }
-  if (github == true) {
-    std::string url = "https://github.com/Lazap-Development/Lazap";
-    openURL(url);
-  }
-  if (settings == true && view_->view != ViewType::Settings) {
-    view_->Settings();
-  }
   ImGui::Separator();
   ImGui::End();
 }

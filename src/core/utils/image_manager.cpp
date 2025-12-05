@@ -114,11 +114,21 @@ GLuint ImageManager::loadSVG(b::EmbedInternal::EmbeddedFile embed,
     return 0;
   }
 
-  auto elements = svg->querySelectorAll("#path");
+  auto elements = svg->querySelectorAll("path");
   for (auto& element : elements) {
-    element.setAttribute("color", "#" + intToHex((color >> 16) & 0xFF) +
-                                      intToHex((color >> 8) & 0xFF) +
-                                      intToHex(color & 0xFF));
+    std::string hexColor = "#" + intToHex((color >> 16) & 0xFF) +
+                           intToHex((color >> 8) & 0xFF) +
+                           intToHex(color & 0xFF);
+
+    auto fillAttr = element.getAttribute("fill");
+    if (!fillAttr.empty() && fillAttr != "none") {
+      element.setAttribute("fill", hexColor);
+    }
+
+    auto strokeAttr = element.getAttribute("stroke");
+    if (!strokeAttr.empty() && strokeAttr != "none") {
+      element.setAttribute("stroke", hexColor);
+    }
   }
 
   auto bitmap = svg->renderToBitmap((int)svg->height(), (int)svg->width());

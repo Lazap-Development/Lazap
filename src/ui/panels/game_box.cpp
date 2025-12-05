@@ -30,7 +30,7 @@ void GameBox::render() {
   const float cornerRadius =
       8.0f * sqrt((pow(scale_.x, 2) + pow(scale_.y, 2)) * 0.5f);
   const float topOffsetPixels = 10.0f * scale_.y;
-  const float padding = 6.0f;
+  const float padding = 10.0f;
   const float iconSize = 16.0f * scale_.x;
   const float iconSpacing = 6.0f * scale_.x;
   const float playIconSize = 32.0f * scale_.x;
@@ -75,6 +75,32 @@ void GameBox::render() {
 
   if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
     lm.launch();
+
+    storage_->updateTOML([this](toml::table& config) {
+      auto games = config["games"].as_table();
+      if (!games) return;
+
+      const std::string key = std::to_string(
+          fnv1a::hash(game_.name.c_str(), std::strlen(game_.name.c_str())));
+
+      if (!games->contains(key)) return;
+
+      auto* table = games->at(key).as_table();
+      if (!table) return;
+
+      // ISO-8601 timestamp
+      char buf[64];
+      std::time_t t = std::time(nullptr);
+      std::tm tm{};
+#ifdef _WIN32
+      localtime_s(&tm, &t);
+#else
+      localtime_r(&t, &tm);
+#endif
+      std::strftime(buf, sizeof(buf), "%Y-%m-%dT%H:%M:%S", &tm);
+
+      table->insert_or_assign("last_launch", std::string(buf));
+    });
   }
 
   if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
@@ -111,25 +137,52 @@ void GameBox::render() {
         ImVec2(center.x - playIconSize * 0.5f, center.y - playIconSize * 0.5f),
         ImVec2(center.x + playIconSize * 0.5f, center.y + playIconSize * 0.5f),
         ImVec2(0, 0), ImVec2(1, 1), IM_COL32_WHITE);
+
+    ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
   }
 
   ImGui::PushFont(FontManager::getFont("GameBox:Title"));
   ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding * scale_.x);
   ImGui::SetCursorPosY(ImGui::GetCursorPosY() + padding * scale_.y);
 
-  const float textWrapWidth = 154.0f * scale_.x;
-  ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + textWrapWidth);
-  ImGui::TextWrapped("%s", name_.c_str());
-  ImGui::PopTextWrapPos();
+  const float totalIconsWidth = iconSize * 2 + iconSpacing;
+  const float availableTextWidth = displaySize.x - (padding * scale_.x * 2) -
+                                   totalIconsWidth - (iconSpacing * 2);
+
+  std::string displayName = name_;
+  ImVec2 textSize = ImGui::CalcTextSize(displayName.c_str());
+
+  while (textSize.x > availableTextWidth && displayName.length() > 3) {
+    displayName = displayName.substr(0, displayName.length() - 4) + "...";
+    textSize = ImGui::CalcTextSize(displayName.c_str());
+  }
+
+  ImGui::Text("%s", displayName.c_str());
   ImGui::PopFont();
 
-  const float totalIconsWidth = iconSize * 2 + iconSpacing;
   const float iconStartX = ImGui::GetCursorPosX() + displaySize.x -
                            totalIconsWidth - (padding * scale_.x);
 
+  auto toml = storage_->loadTOML();
+  auto* gamesTable = toml["games"].as_table();
+  bool isFavourite = false;
+
+  if (gamesTable) {
+    const std::string key = std::to_string(
+        fnv1a::hash(game_.name.c_str(), std::strlen(game_.name.c_str())));
+
+    if (gamesTable->contains(key)) {
+      auto* table = gamesTable->at(key).as_table();
+      if (table) {
+        isFavourite = table->get("favourite")->value_or(false);
+      }
+    }
+  }
+
   ImGui::SameLine();
   ImGui::SetCursorPosX(iconStartX);
-  ImGui::Image(ImageManager::get("heart2"), ImVec2(iconSize, iconSize));
+  ImGui::Image(ImageManager::get(isFavourite ? "heart2-solid" : "heart2"),
+               ImVec2(iconSize, iconSize));
 
   ImGui::SameLine(0, iconSpacing);
   ImGui::Image(ImageManager::get("recent"), ImVec2(iconSize, iconSize));

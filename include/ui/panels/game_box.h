@@ -15,6 +15,8 @@ class GameBox : public Panel {
 
   void requestRefresh() { requestRefresh_ = true; }
 
+  const Game& getGame() const { return game_; }
+
   bool requestRefresh_ = false;
 
  private:

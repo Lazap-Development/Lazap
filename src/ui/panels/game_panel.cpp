@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 
+#include <algorithm>
+
 #include "ui/panel_manager.h"
 #include "ui/panels/game_box.h"
 #include "ui/themes/themes.h"
@@ -11,10 +13,19 @@
 
 using namespace ui;
 
+void GamePanel::init() {
+  ImageManager::loadSVG(b::embed<"assets/svg/heart2.svg">(), "heart2",
+                        0xFFFFFFFF);
+  ImageManager::loadSVG(b::embed<"assets/svg/heart2-solid.svg">(),
+                        "heart2-solid", 0xFFFFFFFF);
+  ImageManager::loadSVG(b::embed<"assets/svg/recent.svg">(), "recent",
+                        0xFFFFFFFF);
+  ImageManager::loadSVG(b::embed<"assets/svg/play.svg">(), "play", 0xFFFFFFFF);
+}
+
 void GamePanel::setGames(const std::vector<Game>* games) {
   games_ = games;
   gameBoxes_.clear();
-
   if (!games_) return;
 
   auto toml = storage_->loadTOML();
@@ -24,12 +35,10 @@ void GamePanel::setGames(const std::vector<Game>* games) {
   for (const auto& game : *games_) {
     const std::string key = std::to_string(
         fnv1a::hash(game.name.c_str(), std::strlen(game.name.c_str())));
-
     auto* entry = gamesTable->get(key);
     if (!entry || !entry->is_table()) continue;
 
     bool shouldAdd = true;
-
     if (*view_ == ViewType::Favorites) {
       shouldAdd = entry->as_table()->get("favourite")->value_or(false);
     }
@@ -38,14 +47,6 @@ void GamePanel::setGames(const std::vector<Game>* games) {
       gameBoxes_.emplace_back(std::make_unique<GameBox>(game, storage_));
     }
   }
-}
-
-void GamePanel::init() {
-  ImageManager::loadSVG(b::embed<"assets/svg/heart2.svg">(), "heart2",
-                        0xFFFFFFFF);
-  ImageManager::loadSVG(b::embed<"assets/svg/recent.svg">(), "recent",
-                        0xA2A2A2FF);
-  ImageManager::loadSVG(b::embed<"assets/svg/play.svg">(), "play", 0xFFFFFFFF);
 }
 
 void GamePanel::render() {
@@ -58,39 +59,86 @@ void GamePanel::render() {
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
+
   if (scale_.x == 0) {
     scale_ = Themes::getScale(1685, *view_ == ViewType::MainMenu ? 340 : 893);
   }
+
   ImGui::PushFont(FontManager::getFont("Title"));
   ImGui::Text("%s", name_.c_str());
   ImGui::PopFont();
   ImGui::Separator();
-  ImGui::Dummy(ImVec2(0, 30 * scale_.y));
+  ImGui::Dummy(
+      ImVec2(0, ((*view_ == ViewType::MainMenu) ? 10.0f : 30.0f) * scale_.y));
 
   bool refreshRequested = false;
-
   if (!games_) {
     ImGui::PushFont(FontManager::getFont("Game:Title"));
     ImGui::TextDisabled("No games available.");
     ImGui::PopFont();
   } else {
+    std::vector<std::pair<size_t, std::string>> boxIndicesWithTimestamp;
+
+    if (*view_ == ViewType::MainMenu) {
+      auto toml = storage_->loadTOML();
+      auto* gamesTable = toml["games"].as_table();
+
+      if (gamesTable) {
+        for (size_t i = 0; i < gameBoxes_.size(); ++i) {
+          auto& box = gameBoxes_[i];
+          const std::string gameName = box->getGame().name;
+          const std::string key =
+              std::to_string(fnv1a::hash(gameName.c_str(), gameName.length()));
+
+          auto* entry = gamesTable->get(key);
+          if (entry && entry->is_table()) {
+            std::string timestamp = entry->as_table()
+                                        ->get("last_launch")
+                                        ->value_or(std::string(""));
+
+            if (!timestamp.empty()) {
+              boxIndicesWithTimestamp.emplace_back(i, timestamp);
+            }
+          }
+        }
+
+        std::sort(
+            boxIndicesWithTimestamp.begin(), boxIndicesWithTimestamp.end(),
+            [](const auto& a, const auto& b) { return a.second > b.second; });
+      }
+    } else {
+      for (size_t i = 0; i < gameBoxes_.size(); ++i) {
+        boxIndicesWithTimestamp.emplace_back(i, "");
+      }
+    }
+
     float boxWidth = 210.0f;
-    float panelWidth = ImGui::GetContentRegionAvail().x + 40;
+    float panelWidth = ImGui::GetContentRegionAvail().x + 125;
     int columns = (int)(panelWidth / boxWidth);
     if (columns < 1) columns = 1;
 
+    int itemsToShow =
+        (*view_ == ViewType::MainMenu) ? 6 : boxIndicesWithTimestamp.size();
+
+    ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 15.0f));
+
     if (ImGui::BeginTable("games_table", columns,
                           ImGuiTableFlags_SizingStretchSame)) {
-      for (auto& box : gameBoxes_) {
+      int count = 0;
+      for (const auto& [index, timestamp] : boxIndicesWithTimestamp) {
+        if (count >= itemsToShow) break;
         ImGui::TableNextColumn();
-        box->render();
-        if (box->requestRefresh_) {
+        gameBoxes_[index]->render();
+        if (gameBoxes_[index]->requestRefresh_) {
           refreshRequested = true;
-          box->requestRefresh_ = false;
+          gameBoxes_[index]->requestRefresh_ = false;
         }
+        count++;
       }
       ImGui::EndTable();
     }
+
+    ImGui::PopStyleVar();
   }
 
   ImGui::End();

@@ -113,13 +113,15 @@ bool Storage::initTOML() {
             auto gameTable = gameValue.as_table();
             if (!gameTable->contains("name") ||
                 !gameTable->contains("favourite") ||
-                !gameTable->contains("playtime")) {
+                !gameTable->contains("playtime") ||
+                !gameTable->contains("last_launch")) {
               throw std::runtime_error("Game table is missing required fields");
             }
 
             if (!gameTable->at("name").is_string() ||
                 !gameTable->at("favourite").is_boolean() ||
-                !gameTable->at("playtime").is_string()) {
+                !gameTable->at("playtime").is_string() ||
+                !gameTable->at("last_launch").is_string()) {
               throw std::runtime_error("Game table has invalid field types");
             }
           }
@@ -168,6 +170,7 @@ void Storage::insertGameTOML(const std::string& name) {
     gameTable.insert("name", toml::value(name));
     gameTable.insert("favourite", toml::value(false));
     gameTable.insert("playtime", toml::value("00:00:00"));
+    gameTable.insert("last_launch", toml::value(""));
 
     gamesTable->insert(
         std::to_string(fnv1a::hash(name.c_str(), std::strlen(name.c_str()))),

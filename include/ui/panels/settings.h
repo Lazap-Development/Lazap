@@ -14,6 +14,7 @@ enum class SettingsView {
 class SettingsPanel : public Panel {
  public:
   SettingsPanel() : Panel("Settings") {};
+
   void init() override;
   void render() override;
   void end() override {};
