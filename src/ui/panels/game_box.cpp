@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 
+#include <ctime>
+
 #include "ui/themes/themes.h"
 #include "utils/fnv1a.h"
 #include "utils/font_manager.h"
