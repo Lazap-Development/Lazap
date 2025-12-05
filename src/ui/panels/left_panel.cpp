@@ -1,6 +1,9 @@
 #include "ui/panels/left_panel.h"
 
 #include <imgui.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 #include "ui/themes/themes.h"
 #include "utils/image_manager.h"
@@ -9,8 +12,6 @@ using namespace ui;
 
 void openURL(const std::string& url) {
 #ifdef _WIN32
-#include <windows.h>
-
   ShellExecuteA(NULL, "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
 #elif __linux__
   std::system(("xdg-open " + url).c_str());
