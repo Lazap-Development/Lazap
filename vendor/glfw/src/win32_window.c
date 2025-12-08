@@ -54,7 +54,7 @@ static DWORD getWindowStyle(const _GLFWwindow* window)
         else
             style |= WS_POPUP;
             
-        if (window->resizable)
+        if (window->resizable && window->decorated)
             style |= WS_MAXIMIZEBOX | WS_THICKFRAME;
     }
 
