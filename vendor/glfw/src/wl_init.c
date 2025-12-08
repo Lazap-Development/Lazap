@@ -397,7 +397,7 @@ static void createKeyTables(void)
 
 static GLFWbool loadCursorTheme(void)
 {
-    int cursorSize = 16;
+    int cursorSize = 24;
 
     const char* sizeString = getenv("XCURSOR_SIZE");
     if (sizeString)
@@ -408,7 +408,15 @@ static GLFWbool loadCursorTheme(void)
             cursorSize = (int) cursorSizeLong;
     }
 
+    // wl_cursor_theme_load does not handle default themes gracefully, and its fallback doesn't include common cursors
+    // So need to find the actual system cursor theme ourselves
+    // If not, DO notify user that they might need to fix their system to supply the default theme to XCURSOR_THEME
     const char* themeName = getenv("XCURSOR_THEME");
+    if (!themeName || strlen(themeName) == 0)
+    {
+        _glfwInputError(GLFW_PLATFORM_ERROR,
+                        "Wayland: Failed to identify default cursor theme - trying fallback");
+    }
 
     _glfw.wl.cursorTheme = wl_cursor_theme_load(themeName, cursorSize, _glfw.wl.shm);
     if (!_glfw.wl.cursorTheme)
@@ -426,7 +434,6 @@ static GLFWbool loadCursorTheme(void)
     _glfw.wl.cursorTimerfd = timerfd_create(CLOCK_MONOTONIC, TFD_CLOEXEC | TFD_NONBLOCK);
     return GLFW_TRUE;
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 //////                       GLFW platform API                      //////

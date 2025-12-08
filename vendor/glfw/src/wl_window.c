@@ -2890,105 +2890,142 @@ GLFWbool _glfwCreateCursorWayland(_GLFWcursor* cursor,
 
 GLFWbool _glfwCreateStandardCursorWayland(_GLFWcursor* cursor, int shape)
 {
-    const char* name = NULL;
+    const int fallbackCount = 4;
+    const char* names[fallbackCount];
+    memset(names, 0, sizeof(names));
 
     // Try the XDG names first
+    // then fall back to the core X11 names
+    // then fall back to XDG alternatives
+    // - e.g. observed cases without any ns/ew cursor, only n/s/e/w specific
+    //        although they often look like normal ns/ew cursors (double arrow)
     switch (shape)
     {
         case GLFW_ARROW_CURSOR:
-            name = "default";
+            names[0] = "default";
+            names[1] = "left_ptr"; // X11
             break;
         case GLFW_IBEAM_CURSOR:
-            name = "text";
+            names[0] = "text";
+            names[1] = "xterm"; // X11
             break;
         case GLFW_CROSSHAIR_CURSOR:
-            name = "crosshair";
+            names[0] = "crosshair";
+            names[1] = "cross";
             break;
         case GLFW_POINTING_HAND_CURSOR:
-            name = "pointer";
+            names[0] = "pointer";
+            names[1] = "hand2"; // X11
             break;
         case GLFW_RESIZE_EW_CURSOR:
-            name = "ew-resize";
+            names[0] = "ew-resize";
+            names[1] = "sb_h_double_arrow"; // X11
+            names[2] = "h_double_arrow"; // X11?
+            names[3] = "e-resize"; // Often the same, and only option on KWin+Breeze
             break;
         case GLFW_RESIZE_NS_CURSOR:
-            name = "ns-resize";
+            names[0] = "ns-resize";
+            names[1] = "sb_v_double_arrow"; // X11
+            names[2] = "v_double_arrow"; // X11?
+            names[3] = "s-resize"; // Often the same, and only option on KWin+Breeze
             break;
         case GLFW_RESIZE_NWSE_CURSOR:
-            name = "nwse-resize";
+            names[0] = "nwse-resize";
+            names[1] = "se-resize"; // Often the same
+            names[2] = "size_fdiag"; // X11?
             break;
         case GLFW_RESIZE_NESW_CURSOR:
-            name = "nesw-resize";
+            names[0] = "nesw-resize";
+            names[1] = "sw-resize"; // Often the same
+            names[2] = "size_bdiag"; // X11?
             break;
         case GLFW_RESIZE_ALL_CURSOR:
-            name = "all-scroll";
+            names[0] = "all-scroll";
+            names[1] = "fleur"; // X11
+            break;
+        case GLFW_RESIZE_N_CURSOR:
+            names[0] = "n-resize";
+            names[1] = "ns-resize"; // Often the same
+            names[2] = "top_side"; // Different, but close
+            break;
+        case GLFW_RESIZE_S_CURSOR:
+            names[0] = "s-resize";
+            names[1] = "ns-resize"; // Often the same
+            names[2] = "bottom_side"; // Different, but close
+            break;
+        case GLFW_RESIZE_E_CURSOR:
+            names[0] = "e-resize";
+            names[1] = "ew-resize"; // Often the same
+            names[2] = "right_side"; // Different, but close
+            break;
+        case GLFW_RESIZE_W_CURSOR:
+            names[0] = "w-resize";
+            names[1] = "ew-resize"; // Often the same
+            names[2] = "left_side"; // Different, but close
+            break;
+        case GLFW_RESIZE_NW_CURSOR:
+            names[0] = "nw-resize";
+            names[1] = "nwse-resize"; // Often the same
+            names[2] = "top_left_corner"; // Different, but close
+            break;
+        case GLFW_RESIZE_SE_CURSOR:
+            names[0] = "se-resize";
+            names[1] = "nwse-resize"; // Often the same
+            names[2] = "bottom_right_corner"; // Different, but close
+            break;
+        case GLFW_RESIZE_NE_CURSOR:
+            names[0] = "ne-resize";
+            names[1] = "nesw-resize"; // Often the same
+            names[2] = "top_right_corner"; // Different, but close
+            break;
+        case GLFW_RESIZE_SW_CURSOR:
+            names[0] = "sw-resize";
+            names[1] = "nesw-resize"; // Often the same
+            names[2] = "bottom_left_corner"; // Different, but close
+            break;
+        case GLFW_RESIZE_COL_CURSOR:
+            names[0] = "col-resize";
+            names[1] = "split_h";
+            names[2] = "ew-resize"; // Different, but close
+            names[3] = "e-resize"; // Different, but close
+            break;
+        case GLFW_RESIZE_ROW_CURSOR:
+            names[0] = "row-resize";
+            names[1] = "split_v";
+            names[2] = "ns-resize"; // Different, but close
+            names[3] = "s-resize"; // Different, but close
             break;
         case GLFW_NOT_ALLOWED_CURSOR:
-            name = "not-allowed";
+            names[0] = "not-allowed";
+            names[1] = "crossed-circle";
+            names[2] = "forbidden"; // Different, but close
+            break;
+        default:
+            names[0] = "unknown";
             break;
     }
 
-    cursor->wl.cursor = wl_cursor_theme_get_cursor(_glfw.wl.cursorTheme, name);
+    int index = -1;
+    while (!cursor->wl.cursor && ++index < fallbackCount && names[index])
+    {
+        cursor->wl.cursor = wl_cursor_theme_get_cursor(_glfw.wl.cursorTheme, names[index]);
+    }
+    if (!cursor->wl.cursor)
+    {
+        _glfwInputError(GLFW_CURSOR_UNAVAILABLE,
+                        "Wayland: Failed to create standard cursor \"%s\"",
+                        names[0]);
+        return GLFW_FALSE;
+    }
 
     if (_glfw.wl.cursorThemeHiDPI)
     {
         cursor->wl.cursorHiDPI =
-            wl_cursor_theme_get_cursor(_glfw.wl.cursorThemeHiDPI, name);
-    }
-
-    if (!cursor->wl.cursor)
-    {
-        // Fall back to the core X11 names
-        switch (shape)
-        {
-            case GLFW_ARROW_CURSOR:
-                name = "left_ptr";
-                break;
-            case GLFW_IBEAM_CURSOR:
-                name = "xterm";
-                break;
-            case GLFW_CROSSHAIR_CURSOR:
-                name = "crosshair";
-                break;
-            case GLFW_POINTING_HAND_CURSOR:
-                name = "hand2";
-                break;
-            case GLFW_RESIZE_EW_CURSOR:
-                name = "sb_h_double_arrow";
-                break;
-            case GLFW_RESIZE_NS_CURSOR:
-                name = "sb_v_double_arrow";
-                break;
-            case GLFW_RESIZE_ALL_CURSOR:
-                name = "fleur";
-                break;
-            default:
-                _glfwInputError(GLFW_CURSOR_UNAVAILABLE,
-                                "Wayland: Standard cursor shape unavailable");
-                return GLFW_FALSE;
-        }
-
-        cursor->wl.cursor = wl_cursor_theme_get_cursor(_glfw.wl.cursorTheme, name);
-        if (!cursor->wl.cursor)
-        {
-            _glfwInputError(GLFW_CURSOR_UNAVAILABLE,
-                            "Wayland: Failed to create standard cursor \"%s\"",
-                            name);
-            return GLFW_FALSE;
-        }
-
-        if (_glfw.wl.cursorThemeHiDPI)
-        {
-            if (!cursor->wl.cursorHiDPI)
-            {
-                cursor->wl.cursorHiDPI =
-                    wl_cursor_theme_get_cursor(_glfw.wl.cursorThemeHiDPI, name);
-            }
-        }
+            wl_cursor_theme_get_cursor(_glfw.wl.cursorThemeHiDPI, names[index]);
     }
 
     return GLFW_TRUE;
 }
-
 void _glfwDestroyCursorWayland(_GLFWcursor* cursor)
 {
     // If it's a standard cursor we don't need to do anything here

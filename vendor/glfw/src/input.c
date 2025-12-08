@@ -886,7 +886,17 @@ GLFWAPI GLFWcursor* glfwCreateStandardCursor(int shape)
         shape != GLFW_RESIZE_NWSE_CURSOR &&
         shape != GLFW_RESIZE_NESW_CURSOR &&
         shape != GLFW_RESIZE_ALL_CURSOR &&
-        shape != GLFW_NOT_ALLOWED_CURSOR)
+        shape != GLFW_NOT_ALLOWED_CURSOR &&
+        shape != GLFW_RESIZE_N_CURSOR &&
+        shape != GLFW_RESIZE_S_CURSOR &&
+        shape != GLFW_RESIZE_E_CURSOR &&
+        shape != GLFW_RESIZE_W_CURSOR &&
+        shape != GLFW_RESIZE_NW_CURSOR &&
+        shape != GLFW_RESIZE_SE_CURSOR &&
+        shape != GLFW_RESIZE_NE_CURSOR &&
+        shape != GLFW_RESIZE_SW_CURSOR &&
+        shape != GLFW_RESIZE_COL_CURSOR &&
+        shape != GLFW_RESIZE_ROW_CURSOR)
     {
         _glfwInputError(GLFW_INVALID_ENUM, "Invalid standard cursor 0x%08X", shape);
         return NULL;

@@ -1285,6 +1285,56 @@ extern "C" {
  *  cursor themes.
  */
 #define GLFW_NOT_ALLOWED_CURSOR     0x0003600A
+/*! @brief The top resize/move arrow shape.
+ *
+ *  The top resize/move shape.  This shape may fall back to GLFW_RESIZE_NS_CURSOR on unsupported platforms.
+ */
+#define GLFW_RESIZE_N_CURSOR     0x0003600B
+/*! @brief The south resize/move arrow shape.
+ *
+ *  The south resize/move shape.  This shape may fall back to GLFW_RESIZE_NS_CURSOR on unsupported platforms.
+ */
+#define GLFW_RESIZE_S_CURSOR     0x0003600C
+/*! @brief The east resize/move arrow shape.
+ *
+ *  The east resize/move shape.  This shape may fall back to GLFW_RESIZE_EW_CURSOR on unsupported platforms.
+ */
+#define GLFW_RESIZE_E_CURSOR     0x0003600D
+/*! @brief The west resize/move arrow shape.
+ *
+ *  The west resize/move shape.  This shape may fall back to GLFW_RESIZE_EW_CURSOR on unsupported platforms.
+ */
+#define GLFW_RESIZE_W_CURSOR     0x0003600E
+/*! @brief The top-left resize/move arrow shape.
+ *
+ *  The top-left resize/move shape.  This shape may fall back to GLFW_RESIZE_NWSE_CURSOR on unsupported platforms.
+ */
+#define GLFW_RESIZE_NW_CURSOR     0x0003600F
+/*! @brief The bottom-right resize/move arrow shape.
+ *
+ *  The bottom-right resize/move shape.  This shape may fall back to GLFW_RESIZE_NWSE_CURSOR on unsupported platforms.
+ */
+#define GLFW_RESIZE_SE_CURSOR     0x0003601F
+/*! @brief The top-right resize/move arrow shape.
+ *
+ *  The top-right resize/move shape.  This shape may fall back to GLFW_RESIZE_NESW_CURSOR on unsupported platforms.
+ */
+#define GLFW_RESIZE_NE_CURSOR     0x0003602F
+/*! @brief The bottom-left resize/move arrow shape.
+ *
+ *  The bottom-left resize/move shape.  This shape may fall back to GLFW_RESIZE_NESW_CURSOR on unsupported platforms.
+ */
+#define GLFW_RESIZE_SW_CURSOR     0x0003603F
+/*! @brief The column/vertical divider move shape.
+ *
+ *  The column/vertical divider move shape.  This shape may fall back to GLFW_RESIZE_EW_CURSOR on unsupported platforms.
+ */
+#define GLFW_RESIZE_COL_CURSOR     0x0003604F
+/*! @brief The row/horizontal divider move shape.
+ *
+ *  The row/horizontal divider move shape.  This shape may fall back to GLFW_RESIZE_NS_CURSOR on unsupported platforms.
+ */
+#define GLFW_RESIZE_ROW_CURSOR     0x0003605F
 /*! @brief Legacy name for compatibility.
  *
  *  This is an alias for compatibility with earlier versions.

@@ -3074,6 +3074,36 @@ GLFWbool _glfwCreateStandardCursorX11(_GLFWcursor* cursor, int shape)
                 case GLFW_RESIZE_ALL_CURSOR:
                     name = "all-scroll";
                     break;
+                case GLFW_RESIZE_N_CURSOR:
+                    name = "n-resize";
+                    break;
+                case GLFW_RESIZE_S_CURSOR:
+                    name = "s-resize";
+                    break;
+                case GLFW_RESIZE_E_CURSOR:
+                    name = "e-resize";
+                    break;
+                case GLFW_RESIZE_W_CURSOR:
+                    name = "w-resize";
+                    break;
+                case GLFW_RESIZE_NW_CURSOR:
+                    name = "nw-resize";
+                    break;
+                case GLFW_RESIZE_SE_CURSOR:
+                    name = "se-resize";
+                    break;
+                case GLFW_RESIZE_NE_CURSOR:
+                    name = "ne-resize";
+                    break;
+                case GLFW_RESIZE_SW_CURSOR:
+                    name = "sw-resize";
+                    break;
+                case GLFW_RESIZE_COL_CURSOR:
+                    name = "col-resize";
+                    break;
+                case GLFW_RESIZE_ROW_CURSOR:
+                    name = "row-resize";
+                    break;
                 case GLFW_NOT_ALLOWED_CURSOR:
                     name = "not-allowed";
                     break;
@@ -3109,7 +3139,22 @@ GLFWbool _glfwCreateStandardCursorX11(_GLFWcursor* cursor, int shape)
             case GLFW_RESIZE_EW_CURSOR:
                 native = XC_sb_h_double_arrow;
                 break;
-            case GLFW_RESIZE_NS_CURSOR:
+            case GLFW_RESIZE_N_CURSOR:
+                native = XC_sb_v_double_arrow;
+                break;
+            case GLFW_RESIZE_S_CURSOR:
+                native = XC_sb_v_double_arrow;
+                break;
+            case GLFW_RESIZE_E_CURSOR:
+                native = XC_sb_h_double_arrow;
+                break;
+            case GLFW_RESIZE_W_CURSOR:
+                native = XC_sb_h_double_arrow;
+                break;
+            case GLFW_RESIZE_COL_CURSOR:
+                native = XC_sb_h_double_arrow;
+                break;
+            case GLFW_RESIZE_ROW_CURSOR:
                 native = XC_sb_v_double_arrow;
                 break;
             case GLFW_RESIZE_ALL_CURSOR:

@@ -2364,6 +2364,36 @@ GLFWbool _glfwCreateStandardCursorWin32(_GLFWcursor* cursor, int shape)
         case GLFW_RESIZE_ALL_CURSOR:
             id = OCR_SIZEALL;
             break;
+        case GLFW_RESIZE_N_CURSOR:
+            id = OCR_SIZENS;
+            break;
+        case GLFW_RESIZE_S_CURSOR:
+            id = OCR_SIZENS;
+            break;
+        case GLFW_RESIZE_E_CURSOR:
+            id = OCR_SIZEWE;
+            break;
+        case GLFW_RESIZE_W_CURSOR:
+            id = OCR_SIZEWE;
+            break;
+        case GLFW_RESIZE_NW_CURSOR:
+            id = OCR_SIZENWSE;
+            break;
+        case GLFW_RESIZE_SE_CURSOR:
+            id = OCR_SIZENWSE;
+            break;
+        case GLFW_RESIZE_NE_CURSOR:
+            id = OCR_SIZENESW;
+            break;
+        case GLFW_RESIZE_SW_CURSOR:
+            id = OCR_SIZENESW;
+            break;
+        case GLFW_RESIZE_COL_CURSOR:
+            id = OCR_SIZEWE;
+            break;
+        case GLFW_RESIZE_ROW_CURSOR:
+            id = OCR_SIZENS;
+            break;
         case GLFW_NOT_ALLOWED_CURSOR:
             id = OCR_NO;
             break;
