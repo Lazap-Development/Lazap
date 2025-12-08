@@ -2596,6 +2596,30 @@ void _glfwDragWindowWayland(_GLFWwindow* window)
 
 void _glfwResizeWindowWayland(_GLFWwindow* window, int border)
 {
+    struct xdg_toplevel* toplevel =
+        window->wl.libdecor.frame ?
+        libdecor_frame_get_xdg_toplevel(window->wl.libdecor.frame) :
+        window->wl.xdg.toplevel;
+    
+    if (!toplevel)
+    {
+        _glfwInputError(GLFW_PLATFORM_ERROR,
+                        "Wayland: Cannot resize window: xdg_toplevel not created yet");
+        return;
+    }
+    if (!_glfw.wl.seat)
+    {
+        _glfwInputError(GLFW_PLATFORM_ERROR,
+                        "Wayland: Cannot resize window: no valid seat");
+        return;
+    }
+    if (_glfw.wl.serial == 0)
+    {
+        _glfwInputError(GLFW_PLATFORM_ERROR,
+                        "Wayland: Cannot resize window: no valid serial");
+        return;
+    }
+    
     int wlBorder;
     switch (border)
     {
@@ -2622,11 +2646,13 @@ void _glfwResizeWindowWayland(_GLFWwindow* window, int border)
             break;
         case GLFW_WINDOW_BOTTOMRIGHT:
             wlBorder = WL_SHELL_SURFACE_RESIZE_BOTTOM_RIGHT;
-			break;
-		default:
-			assert(GLFW_FALSE);
+            break;
+        default:
+            _glfwInputError(GLFW_INVALID_ENUM, "Invalid border parameter");
+            return;
     }
-    xdg_toplevel_resize(window->wl.xdg.toplevel, _glfw.wl.seat, _glfw.wl.serial, wlBorder);
+    
+    xdg_toplevel_resize(toplevel, _glfw.wl.seat, _glfw.wl.serial, wlBorder);
 }
 
 void _glfwSetWindowMonitorWayland(_GLFWwindow* window,
