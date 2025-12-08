@@ -10,7 +10,7 @@
 
 class ImGuiLayer {
  public:
-  ImGuiLayer(GLFWwindow* window, ResizeState* resize_state, Storage& storage);
+  ImGuiLayer(GLFWwindow* window, Storage& storage);
 
   void begin();
   void render();
@@ -21,7 +21,6 @@ class ImGuiLayer {
 
  private:
   Storage* storage_;
-  ResizeState* resize_state_;
   std::vector<Game> games_;
   std::unique_ptr<ui::PanelManager> panel_manager_;
   bool initialized_ = false;

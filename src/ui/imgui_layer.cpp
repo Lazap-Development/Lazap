@@ -9,9 +9,8 @@
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
 
-ImGuiLayer::ImGuiLayer(GLFWwindow *window, ResizeState *resize_state,
-                       Storage &storage)
-    : storage_(&storage), resize_state_(resize_state), initialized_(false) {
+ImGuiLayer::ImGuiLayer(GLFWwindow *window, Storage &storage)
+    : storage_(&storage), initialized_(false) {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
 
@@ -56,12 +55,6 @@ void ImGuiLayer::begin() {
   ImGui_ImplOpenGL3_NewFrame();
   ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
-
-  ImGuiIO &io = ImGui::GetIO();
-  io.ConfigFlags =
-      (resize_state_->isDragging || resize_state_->edge != NONE)
-          ? (io.ConfigFlags | ImGuiConfigFlags_NoMouseCursorChange)
-          : (io.ConfigFlags & ~ImGuiConfigFlags_NoMouseCursorChange);
 
   const ImGuiViewport *viewport = ImGui::GetMainViewport();
   ImGui::SetNextWindowPos(viewport->Pos);

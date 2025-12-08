@@ -31,12 +31,6 @@ endif()
 #-----------------------------------------------------------------------------------------------------------------------
 include(FetchContent)
 
-FetchContent_Declare(glfw
-    GIT_REPOSITORY https://github.com/envyen/glfw-dev
-    GIT_TAG        drag-window-dev
-    GIT_SHALLOW    TRUE
-)
-
 FetchContent_Declare(imgui
     GIT_REPOSITORY https://github.com/ocornut/imgui
     GIT_TAG        v1.92.5-docking
@@ -77,7 +71,7 @@ FetchContent_Declare(battery-embed
 )
 
 FetchContent_MakeAvailable(
-  glfw imgui glaze stb lunasvg tomlplusplus cpr battery-embed
+  imgui glaze stb lunasvg tomlplusplus cpr battery-embed
 )
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -134,6 +128,8 @@ endif()
 set(GLAD_DIR "${CMAKE_SOURCE_DIR}/vendor/glad")
 add_library(glad STATIC "${GLAD_DIR}/src/glad.c")
 target_include_directories(glad PUBLIC "${GLAD_DIR}/include")
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/vendor/glfw)
 
 target_include_directories(${EXECUTABLE_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/include
