@@ -116,15 +116,21 @@ void GamePanel::render() {
       }
     }
 
-    float boxWidth = 210.0f;
-    float panelWidth = ImGui::GetContentRegionAvail().x + 125;
-    int columns = (int)(panelWidth / boxWidth);
+    float boxWidth = 210.0f * scale_.x;
+    float panelWidth = ImGui::GetContentRegionAvail().x;
+
+    float horizontalSpacing = 16.0f;
+    float verticalSpacing = 16.0f;
+
+    int columns = (int)((panelWidth + horizontalSpacing) /
+                        (boxWidth + horizontalSpacing));
     if (columns < 1) columns = 1;
 
     int itemsToShow =
         (*view_ == ViewType::MainMenu) ? 6 : boxIndicesWithTimestamp.size();
 
-    ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 15.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_CellPadding,
+                        ImVec2(horizontalSpacing / 2.0f, verticalSpacing));
 
     if (ImGui::BeginTable("games_table", columns,
                           ImGuiTableFlags_SizingStretchSame)) {

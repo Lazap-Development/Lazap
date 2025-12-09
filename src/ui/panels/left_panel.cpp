@@ -33,10 +33,8 @@ void LeftPanel::init() {
 
 void LeftPanel::render() {
   ImGui::Begin(name_.c_str(), nullptr,
-               ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
-                   ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
-                   ImGuiWindowFlags_NoScrollWithMouse |
-                   ImGuiWindowFlags_NoTitleBar);
+               ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
+                   ImGuiWindowFlags_NoScrollbar);
 
   if (scale_.x == 0) {
     scale_ = Themes::getScale(80, 1000);

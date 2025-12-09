@@ -111,6 +111,9 @@ void Application::run() {
     return;
   }
 
+  glfwSetWindowSizeLimits(window, MIN_WINDOW_SIZE[0], MIN_WINDOW_SIZE[1],
+                          GLFW_DONT_CARE, GLFW_DONT_CARE);
+
   glfwSetWindowPos(window, windowX, windowY);
   glfwMakeContextCurrent(window);
 
