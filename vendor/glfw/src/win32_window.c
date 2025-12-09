@@ -54,7 +54,7 @@ static DWORD getWindowStyle(const _GLFWwindow* window)
         else
             style |= WS_POPUP;
             
-        if (window->resizable && window->decorated)
+        if (window->resizable)
             style |= WS_MAXIMIZEBOX | WS_THICKFRAME;
     }
 
@@ -1146,7 +1146,28 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             return TRUE;
         }
 
+        case WM_NCCALCSIZE:
+        {
+            // Remove the non-client area (title bar/borders) while keeping WS_THICKFRAME
+            // A workaround for white stripe shown at top of non-decorated windows
+            if (window->decorated == GLFW_FALSE && wParam == TRUE)
+            {
+                // Returning 0 indicates that the client area covers the entire window
+                // Removes the entire standard non-client frame (including the white strip).
+                return 0;
+            }
+            break;
+        }
+
         case WM_NCACTIVATE:
+        {
+            // Prevent Windows from painting the non-client border on focus change
+            if (window->decorated == GLFW_FALSE)
+                return 0;
+
+            break;
+        }
+
         case WM_NCPAINT:
         {
             // Prevent title bar from being drawn after restoring a minimized
@@ -1867,6 +1888,12 @@ void _glfwResizeWindowWin32(_GLFWwindow* window, int border)
             assert(GLFW_FALSE);
             return;
     }
+
+    // Force cursor update for the resize border
+    SendMessage(window->win32.handle, WM_SETCURSOR, 
+                (WPARAM)window->win32.handle, 
+                MAKELPARAM(wBorder, WM_MOUSEMOVE));
+    
     ReleaseCapture();
     SendMessage(window->win32.handle, WM_NCLBUTTONDOWN, wBorder, 0);
 
