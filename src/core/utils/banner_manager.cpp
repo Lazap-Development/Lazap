@@ -52,13 +52,14 @@ std::string BannerManager::fetchBanner(const std::string& url,
   cpr::Response res = cpr::Get(cpr::Url{url});
 
   if (res.status_code != 200) {
-    std::cerr << "HTTP error: " << res.status_code << std::endl;
+    std::cerr << "[Banner MGR] HTTP error: " << res.status_code << std::endl;
     return "";
   }
 
   std::ofstream outFile(filePath, std::ios::binary);
   if (!outFile) {
-    std::cerr << "Failed to create file: " << filePath << std::endl;
+    std::cerr << "[Banner MGR] Failed to create file: " << filePath
+              << std::endl;
     return "";
   }
 
@@ -71,8 +72,9 @@ std::string BannerManager::fetchBanner(const std::string& url,
 std::string BannerManager::rawgFetchBanner(const std::string& displayName) {
   const char* raw = std::getenv("RAWG_API_KEY");
   if (!raw) {
-    std::cerr << "Error: RAWG_API_KEY environment variable is not set!"
-              << std::endl;
+    std::cerr
+        << "[Banner MGR] WARN: RAWG_API_KEY environment variable is not set!"
+        << std::endl;
     return "";
   }
 
@@ -112,13 +114,14 @@ std::string BannerManager::rawgFetchBanner(const std::string& displayName) {
   cpr::Response imgRes = cpr::Get(cpr::Url{backgroundImageUrl});
 
   if (imgRes.status_code != 200) {
-    std::cerr << "HTTP error: " << imgRes.status_code << std::endl;
+    std::cerr << "[Banner MGR] HTTP error: " << imgRes.status_code << std::endl;
     return "";
   }
 
   std::ofstream outFile(filePath, std::ios::binary);
   if (!outFile) {
-    std::cerr << "Failed to create file: " << filePath << std::endl;
+    std::cerr << "[Banner MGR] Failed to create file: " << filePath
+              << std::endl;
     return "";
   }
 

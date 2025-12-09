@@ -232,15 +232,16 @@ void RichPresence::Initialize(const std::string& applicationId) {
   if (initialized) return;
 
   rpcManager.setClientID(applicationId)
-      .onReady(
-          [](discord::User const& user) { std::cout << "Client Ready!\n"; })
+      .onReady([](const discord::User& user) {
+        std::cout << "[Discord RPC] Client ready!\n";
+      })
       .onDisconnected([](int errcode, std::string_view message) {
-        std::cout << "Client disconnected! Code: " << errcode << " - "
-                  << message << "\n";
+        std::cout << "[Discord RPC] Disconnected — Code: " << errcode
+                  << ", Message: " << message << "\n";
       })
       .onErrored([](int errcode, std::string_view message) {
-        std::cout << "Discord: error with code: " << errcode << " - " << message
-                  << "\n";
+        std::cout << "[Discord RPC] Error — Code: " << errcode
+                  << ", Message: " << message << "\n";
       })
       .initialize();
 
