@@ -4,7 +4,6 @@
 #include <memory>
 #include <vector>
 
-#include "application.h"
 #include "storage/storage.h"
 #include "ui/panel_manager.h"
 

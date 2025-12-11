@@ -1,10 +1,15 @@
 #pragma once
+#include <glad/glad.h>
+
 #include <string>
 
+#include "GLFW/glfw3.h"
 #include "imgui.h"
 #include "storage/storage.h"
 
 namespace ui {
+
+static constexpr float SCALE_FACTOR = 0.8f;
 
 class Panel {
  public:
@@ -21,6 +26,15 @@ class Panel {
   void setVisible(bool v) { visible_ = v; }
 
   void setOnRefresh(std::function<void()> cb) { onRefresh_ = cb; }
+
+  static ImVec2 getScale() {
+    ImGuiIO& io = ImGui::GetIO();
+    if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
+      return ImVec2(SCALE_FACTOR, SCALE_FACTOR);
+    }
+    return ImVec2(io.DisplayFramebufferScale.x * SCALE_FACTOR,
+                  io.DisplayFramebufferScale.y * SCALE_FACTOR);
+  }
 
  protected:
   std::string name_;

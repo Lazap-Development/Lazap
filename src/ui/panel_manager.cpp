@@ -39,10 +39,27 @@ void PanelManager::initPanels(GLFWwindow *w, Storage &storage) {
 }
 
 void PanelManager::renderPanels(ImGuiWindowClass *window_class) {
+  const float fixed_width = 60.0f;
+
+  auto enforceLeftPanelWidth = [fixed_width]() {
+    ImGuiWindow *left_window = ImGui::FindWindowByName("Left Menu");
+    if (left_window && left_window->DockNode) {
+      ImGuiDockNode *dock_node = left_window->DockNode;
+      dock_node->Size.x = fixed_width;
+      dock_node->SizeRef.x = fixed_width;
+    }
+  };
+
+  enforceLeftPanelWidth();
+
   for (auto &panel : panels_) {
     if (panel->visible()) {
       ImGui::SetNextWindowClass(window_class);
       panel->render();
+
+      if (panel->getName() == "Left Menu") {
+        enforceLeftPanelWidth();
+      }
     }
   }
 }
@@ -107,11 +124,11 @@ void Views::BuildDockLayout() {
   ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
 
   ImGuiID titlebar, left, gamesinfo_id, bottom;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.0445f, &left,
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.0f, &left,
                               &dockspace_id);
   ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.07f, &titlebar,
                               &dockspace_id);
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.396f, &gamesinfo_id,
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.25f, &gamesinfo_id,
                               &bottom);
 
   ImGui::DockBuilderDockWindow("Titlebar", titlebar);

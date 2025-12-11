@@ -27,9 +27,8 @@ void SettingsPanel::init() {
 void SettingsPanel::render() {
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(35, 50));
   ImGui::Begin(name_.c_str(), nullptr, false);
-  if (scale_.x == 0) {
-    scale_ = Themes::getScale(1675, 880);
-  }
+
+  scale_ = getScale();
 
   // Menu buttons
   ImGui::SameLine();

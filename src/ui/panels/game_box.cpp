@@ -4,7 +4,6 @@
 
 #include <ctime>
 
-#include "ui/themes/themes.h"
 #include "utils/fnv1a.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
@@ -23,10 +22,8 @@ GameBox::GameBox(const Game& game, Storage* storage)
 void GameBox::render() {
   ImGui::PushID(name_.c_str());
   ImGui::BeginGroup();
-  float r = ImGui::GetWindowSize().y / ImGui::GetMainViewport()->Size.y;
-  if (scale_.x == 0 && scale_.y == 0) {
-    scale_ = Themes::getScale(1685, r < 0.893 ? 532 : 893);
-  }
+
+  scale_ = getScale();
 
   const ImVec2 displaySize(210.0f * scale_.x, 233.1f * scale_.y);
   const float cornerRadius =

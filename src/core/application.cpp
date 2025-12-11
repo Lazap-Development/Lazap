@@ -83,6 +83,8 @@ void Application::run() {
   glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
   glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
+  glfwWindowHint(GLFW_SAMPLES, 4);
+
   if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
     glfwWindowHintString(GLFW_WAYLAND_APP_ID, "lazap");
   }
@@ -101,8 +103,6 @@ void Application::run() {
 
   int windowWidth = WINDOW_SIZE[0] / 1.3 * sx;
   int windowHeight = WINDOW_SIZE[1] / 1.3 * sy;
-  int windowX = (mode->width - windowWidth) / 2;
-  int windowY = (mode->height - windowHeight) / 2;
 
   GLFWwindow *window =
       glfwCreateWindow(windowWidth, windowHeight, "Lazap", nullptr, nullptr);
@@ -114,8 +114,15 @@ void Application::run() {
   glfwSetWindowSizeLimits(window, MIN_WINDOW_SIZE[0], MIN_WINDOW_SIZE[1],
                           GLFW_DONT_CARE, GLFW_DONT_CARE);
 
-  glfwSetWindowPos(window, windowX, windowY);
+  if (glfwGetPlatform() != GLFW_PLATFORM_WAYLAND) {
+    int windowX = (mode->width - windowWidth) / 2;
+    int windowY = (mode->height - windowHeight) / 2;
+
+    glfwSetWindowPos(window, windowX, windowY);
+  }
+
   glfwMakeContextCurrent(window);
+  glfwSetMouseButtonCallback(window, WindowCallbacks::mouseButtonCB);
 
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     fprintf(stderr, "Failed to initialize GLAD\n");
@@ -124,9 +131,9 @@ void Application::run() {
     return;
   }
 
-  glfwSwapInterval(1);
+  glEnable(GL_MULTISAMPLE);
 
-  glfwSetMouseButtonCallback(window, WindowCallbacks::mouseButtonCB);
+  glfwSwapInterval(1);
 
   Storage storage;
   storage.initTOML();

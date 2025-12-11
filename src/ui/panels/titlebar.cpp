@@ -22,9 +22,8 @@ void Titlebar::render() {
                ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
                    ImGuiWindowFlags_NoScrollbar);
 
-  if (scale_.x == 0) {
-    scale_ = Themes::getScale(1720, 70);
-  }
+  scale_ = getScale();
+
   ImGui::PushFont(FontManager::getFont("Titlebar:Title"));
   ImGui::SetCursorPos(ImVec2((ImGui::GetCursorPosX() + 35) * scale_.x,
                              (ImGui::GetCursorPosY() + 33) * scale_.y));

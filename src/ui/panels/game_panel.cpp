@@ -55,16 +55,14 @@ void GamePanel::render() {
   ImVec2 size = ImGui::GetMainViewport()->Size;
   ImGui::PushStyleVar(
       ImGuiStyleVar_WindowPadding,
-      ImVec2(35.0f * size.x / 1800,
-             *view_ == ViewType::MainMenu ? 0.0f : 37.0f * size.y / 1000));
+      ImVec2(40.0, *view_ == ViewType::MainMenu ? 100.0f * size.y / 1000
+                                                : 25.0f * size.y));
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
                    ImGuiWindowFlags_NoTitleBar);
 
-  if (scale_.x == 0) {
-    scale_ = Themes::getScale(1685, *view_ == ViewType::MainMenu ? 340 : 893);
-  }
+  scale_ = getScale();
 
   ImGui::PushFont(FontManager::getFont("Title"));
   if (*view_ == ViewType::MainMenu) {

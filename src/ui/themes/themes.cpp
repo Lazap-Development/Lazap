@@ -1,5 +1,7 @@
 #include "ui/themes/themes.h"
 
+#include <cstdio>
+
 #include "imgui.h"
 
 namespace Themes {
@@ -76,17 +78,6 @@ void setDefaultDarkColors() {
   style.FramePadding = ImVec2(0, 0);
   style.ItemSpacing = ImVec2(0, 0);
   style.PopupBorderSize = 0.0f;
-}
-
-ImVec2 getScale(float x, float y) {
-  ImVec2 size = ImGui::GetWindowSize();
-
-  if (size.x > x * 5.0f || size.y > y * 5.0f) {
-    return ImVec2(0.0f, 0.0f);
-  }
-
-  ImVec2 scale = ImVec2(size.x / x, size.y / y);
-  return scale;
 }
 
 }  // namespace Themes
