@@ -32,13 +32,13 @@ void SettingsPanel::render() {
 
   // Menu buttons
   ImGui::SameLine();
-  addMenuButton("Launcher Config", ImVec2(143 * scale_.x, 32 * scale_.y),
+  addMenuButton("Launcher Config", ImVec2(143 * scale_.x, 25 * scale_.y),
                 view_ == SettingsView::LauncherConfig);
 
-  ImGui::SameLine();
-  ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (22 * scale_.x));
-  addMenuButton("Account Settings", ImVec2(143 * scale_.x, 30 * scale_.y),
-                view_ == SettingsView::AccountSettings);
+  // ImGui::SameLine();
+  // ImGui::SetCursorPosX(ImGui::GetCursorPosX() + (22 * scale_.x));
+  // addMenuButton("Account Settings", ImVec2(143 * scale_.x, 25 * scale_.y),
+  //               view_ == SettingsView::AccountSettings);
 
   // Separator line
   ImDrawList* drawlist = ImGui::GetWindowDrawList();
@@ -66,16 +66,9 @@ void SettingsPanel::render() {
       ImGui::PopFont();
 
       ImGui::Dummy(ImVec2(0, 47 * scale_.y));
-      addSection("Appearance", "appearance");
-      // ImGui::PushFont(FontManager::getFont("Title"));
-      // ImGui::Image(ImageManager::get("appearance"),
-      //              ImVec2(27 * scale_.x, 27 * scale_.x));
-      // ImGui::SameLine();
-      // ImGui::Text("Appearance");
-      // ImGui::PopFont();
-      ImGui::Dummy(ImVec2(0, 23 * scale_.y));
 
-      ImGui::Dummy(ImVec2(35, 0));
+      addSection("Appearance", "appearance");
+      ImGui::Dummy(ImVec2(35 * scale_.x, 23 * scale_.y));
       ImGui::SameLine();
       ImGui::PushFont(FontManager::getFont("Settings:Setting"));
       ImGui::PushID("appearance_settings");
@@ -89,17 +82,10 @@ void SettingsPanel::render() {
       ImGui::PopID();
 
       ImGui::Dummy(ImVec2(0, 47 * scale_.y));
-      addSection("Integrations", "link");
-      // ImGui::PushFont(FontManager::getFont("Title"));
-      // ImGui::Image(ImageManager::get("link"),
-      //              ImVec2(27 * scale_.x, 27 * scale_.x));
-      // ImGui::SameLine();
-      // ImGui::Text("Integrations");
-      // ImGui::PopFont();
-      ImGui::Dummy(ImVec2(0, 23 * scale_.y));
 
+      addSection("Integrations", "link");
+      ImGui::Dummy(ImVec2(35 * scale_.x, 23 * scale_.y));
       ImGui::PushFont(FontManager::getFont("Settings:Setting"));
-      ImGui::Dummy(ImVec2(35, 0));
       ImGui::SameLine();
       ImGui::PushID("integration_settings");
       ImGui::BeginGroup();
@@ -108,18 +94,18 @@ void SettingsPanel::render() {
       ImGui::EndGroup();
       ImGui::PopID();
       break;
-    case SettingsView::AccountSettings:
-      ImGui::PushFont(FontManager::getFont("Title"));
-      ImGui::Image(ImageManager::get("appearance"),
-                   ImVec2(27 * scale_.x, 27 * scale_.x));
-      ImGui::Text("Account Settings");
-      ImGui::PopFont();
-      ImGui::PushFont(FontManager::getFont("Settings:Setting"));
-      ImGui::Dummy(ImVec2(0, 10));
-      ImGui::Text("Username: ");
-      // ImGui::InputText("##username", &username_buffer_);
-      ImGui::PopFont();
-      break;
+    // case SettingsView::AccountSettings:
+    //   ImGui::PushFont(FontManager::getFont("Title"));
+    //   ImGui::Image(ImageManager::get("appearance"),
+    //                ImVec2(27 * scale_.x, 27 * scale_.x));
+    //   ImGui::Text("Account Settings");
+    //   ImGui::PopFont();
+    //   ImGui::PushFont(FontManager::getFont("Settings:Setting"));
+    //   ImGui::Dummy(ImVec2(0, 10));
+    //   ImGui::Text("Username: ");
+    //   // ImGui::InputText("##username", &username_buffer_);
+    //   ImGui::PopFont();
+    //   break;
     default:
       view_ = SettingsView::LauncherConfig;
       break;
@@ -182,34 +168,161 @@ void SettingsPanel::addSection(const std::string& title,
 }
 
 void SettingsPanel::addOption(const std::string& label, InputType input) {
-  ImGui::BeginChild(label.c_str(), ImVec2(740 * scale_.x, 45 * scale_.y), false,
-                    ImGuiWindowFlags_NoDecoration);
-  ImGui::Text(label.c_str());
-  ImGui::SameLine(
-      0, ImGui::GetContentRegionAvail().x -
-             (ImGui::GetWindowSize().x - 740 * scale_.x - 40 * scale_.x));
+  ImGui::PushID(label.c_str());
+  ImGui::BeginChild("row", ImVec2(0, 40 * scale_.y), false);
+  if (ImGui::BeginTable("option_table", 2, ImGuiTableFlags_SizingFixedFit,
+                        ImVec2(590, 0))) {
+    ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthStretch);
+    ImGui::TableSetupColumn("Widget", ImGuiTableColumnFlags_WidthFixed,
+                            110 * scale_.x);
 
-  std::string id = (label).c_str();
-  std::replace(id.begin(), id.end(), ' ', '-');
-  switch (input) {
-    case InputType::Toggle:
-      ImGui::Checkbox(id.c_str(), nullptr);
-      break;
-    case InputType::ColorPicker:
-      static float c[3] = {0, 0, 0};
-      ImGui::ColorPicker3(id.c_str(), c);
-      break;
-    case InputType::ImagePicker:
-      if (ImGui::Button(id.c_str(), ImVec2(110, 30))) {
-        // File dialog handling
-      }
-      break;
-    case InputType::IntTextbox:
-      ImGui::SliderFloat(id.c_str(), nullptr, 0.0f, 100.0f);
-      break;
-    case InputType::StringTextbox:
-      ImGui::InputText(id.c_str(), "Username", 32);
-      break;
+    ImGui::TableNextRow();
+    ImGui::TableSetColumnIndex(0);
+    ImGui::AlignTextToFramePadding();
+    ImGui::Text("%s", label.c_str());
+    ImGui::TableSetColumnIndex(1);
+
+    float widthAvailable = ImGui::GetColumnWidth();
+    switch (input) {
+      case InputType::Toggle: {
+        float widthNeeded = 40 * scale_.x;
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
+                             (widthAvailable - widthNeeded));
+        bool v = true;
+        ToggleButton("##toggle", &v, ImVec2(40 * scale_.x, 22 * scale_.y));
+      } break;
+
+      case InputType::ColorPicker: {
+        float widthNeeded = 110 * scale_.x;
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
+                             (widthAvailable - widthNeeded));
+        float c[3];
+        ColorBox(label.c_str(), c, ImVec2(110 * scale_.x, 30 * scale_.y));
+      } break;
+
+      case InputType::ImagePicker: {
+        float widthNeeded = 110 * scale_.x;
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
+                             (widthAvailable - widthNeeded));
+        if (FilePickerButton(label.c_str(),
+                             ImVec2(110 * scale_.x, 30 * scale_.y))) {
+          // Open file dialog
+        }
+      } break;
+
+      case InputType::IntTextbox: {
+        float widthNeeded = 92 * scale_.x;
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
+                             (widthAvailable - widthNeeded));
+        float n = 0.0f;
+        ImGui::SetNextItemWidth(80 * scale_.x);
+        NumberBox(label.c_str(), &n, 92);
+      } break;
+
+      case InputType::StringTextbox: {
+        float widthNeeded = 490 * scale_.x;
+        ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
+                             (widthAvailable - widthNeeded));
+        char s;
+        ImGui::SetNextItemWidth(250 * scale_.x);
+        ImGui::InputText("##text", &s, 32);
+      } break;
+    }
+
+    ImGui::EndTable();
   }
+
   ImGui::EndChild();
+  ImGui::PopID();
+}
+
+bool SettingsPanel::ToggleButton(const char* id, bool* v, const ImVec2& size) {
+  float height = size.y;
+  float width = size.x;
+  float radius = height * 0.5f;
+
+  ImVec2 pos = ImGui::GetCursorScreenPos();
+  ImDrawList* draw = ImGui::GetWindowDrawList();
+
+  ImGui::InvisibleButton(id, ImVec2(width, height));
+  bool toggled = ImGui::IsItemClicked();
+
+  if (toggled) *v = !*v;
+
+  float t = *v ? 1.0f : 0.0f;
+
+  ImU32 col_bg = *v ? IM_COL32(0, 200, 90, 255)   // ON
+                    : IM_COL32(80, 80, 80, 255);  // OFF
+
+  ImU32 col_knob = IM_COL32(255, 255, 255, 255);
+
+  // Draw track
+  draw->AddRectFilled(pos, ImVec2(pos.x + width, pos.y + height), col_bg,
+                      radius);
+
+  // Draw knob
+  float knob_x = pos.x + t * (width - height);
+  draw->AddCircleFilled(ImVec2(knob_x + radius, pos.y + radius), radius - 1.5f,
+                        col_knob);
+
+  return toggled;
+}
+
+bool SettingsPanel::ColorBox(const char* id, float color[3], ImVec2 size) {
+  ImVec2 pos = ImGui::GetCursorScreenPos();
+  ImDrawList* draw = ImGui::GetWindowDrawList();
+
+  ImGui::InvisibleButton(id, size);
+
+  draw->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y),
+                      ImGui::ColorConvertFloat4ToU32(
+                          ImVec4(color[0], color[1], color[2], 1.0f)),
+                      4.0f);
+
+  draw->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y),
+                IM_COL32(255, 255, 255, 255), 4.0f, 0, 1.0f);
+
+  if (ImGui::IsItemClicked()) ImGui::OpenPopup(id);
+
+  bool changed = false;
+  if (ImGui::BeginPopup(id)) {
+    changed = ImGui::ColorPicker3(
+        "##picker", color,
+        ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoAlpha);
+    ImGui::EndPopup();
+  }
+  return changed;
+}
+
+bool SettingsPanel::FilePickerButton(const char* label, const ImVec2& size) {
+  ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.20f, 0.22f, 0.27f, 1.0f));
+  ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
+                        ImVec4(0.30f, 0.32f, 0.40f, 1.0f));
+  ImGui::PushStyleColor(ImGuiCol_ButtonActive,
+                        ImVec4(0.35f, 0.38f, 0.50f, 1.0f));
+
+  bool pressed = ImGui::Button(label, size);
+
+  ImGui::PopStyleColor(3);
+
+  return pressed;
+}
+
+bool SettingsPanel::NumberBox(const char* id, float* value, float width) {
+  ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f);
+  ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(6, 4));
+
+  ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.15f, 0.15f, 0.18f, 1.0f));
+  ImGui::PushStyleColor(ImGuiCol_FrameBgHovered,
+                        ImVec4(0.20f, 0.20f, 0.25f, 1.0f));
+  ImGui::PushStyleColor(ImGuiCol_FrameBgActive,
+                        ImVec4(0.22f, 0.22f, 0.27f, 1.0f));
+
+  ImGui::PushItemWidth(width);
+  bool changed = ImGui::InputFloat(id, value, 0.0f, 0.0f, "%.2f");
+  ImGui::PopItemWidth();
+
+  ImGui::PopStyleColor(3);
+  ImGui::PopStyleVar(2);
+  return changed;
 }
