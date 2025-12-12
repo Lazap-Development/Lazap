@@ -56,7 +56,7 @@ void GamePanel::render() {
   ImGui::PushStyleVar(
       ImGuiStyleVar_WindowPadding,
       ImVec2(40.0, *view_ == ViewType::MainMenu ? 100.0f * size.y / 1000
-                                                : 25.0f * size.y));
+                                                : 25.0f * size.y / 1000));
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
@@ -124,24 +124,18 @@ void GamePanel::render() {
                         (boxWidth + horizontalSpacing));
     if (columns < 1) columns = 1;
 
-    int itemsToShow =
-        (*view_ == ViewType::MainMenu) ? 6 : boxIndicesWithTimestamp.size();
-
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding,
                         ImVec2(horizontalSpacing / 2.0f, verticalSpacing));
 
     if (ImGui::BeginTable("games_table", columns,
                           ImGuiTableFlags_SizingStretchSame)) {
-      int count = 0;
       for (const auto& [index, timestamp] : boxIndicesWithTimestamp) {
-        if (count >= itemsToShow) break;
         ImGui::TableNextColumn();
         gameBoxes_[index]->render();
         if (gameBoxes_[index]->requestRefresh_) {
           refreshRequested = true;
           gameBoxes_[index]->requestRefresh_ = false;
         }
-        count++;
       }
       ImGui::EndTable();
     }
