@@ -103,6 +103,18 @@ bool Storage::initTOML() {
           throw std::runtime_error("Missing required sections in config");
         }
 
+        auto settingsTable = config["settings"].as_table();
+        if (settingsTable) {
+          if (!settingsTable->contains("quit_tray_min") ||
+              !settingsTable->contains("auto_start") ||
+              !settingsTable->contains("check_updates") ||
+              !settingsTable->contains("launcher_icons") ||
+              !settingsTable->contains("discord_rpc")) {
+            throw std::runtime_error(
+                "Settings table is missing required fields");
+          }
+        }
+
         auto gamesTable = config["games"].as_table();
         if (gamesTable) {
           for (const auto& [gameId, gameValue] : *gamesTable) {
@@ -143,7 +155,14 @@ bool Storage::initTOML() {
     toml::table defaultConfig;
     toml::table globals;
     globals.insert("username", "lazap");
+
     toml::table settings;
+    settings.insert("quit_tray_min", false);
+    settings.insert("auto_start", false);
+    settings.insert("check_updates", false);
+    settings.insert("launcher_icons", false);
+    settings.insert("discord_rpc", true);
+
     toml::table games;
 
     defaultConfig.insert("globals", globals);

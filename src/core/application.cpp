@@ -138,6 +138,13 @@ void Application::run() {
   Storage storage;
   storage.initTOML();
 
+  bool discordRpc = true;
+  auto toml = storage.loadTOML();
+  auto *settingsTable = toml["settings"].as_table();
+  if (settingsTable) {
+    discordRpc = settingsTable->get("discord_rpc")->value_or(false);
+  }
+
   std::vector<std::unique_ptr<Client>> clients;
   clients.push_back(std::make_unique<Steam>());
   clients.push_back(std::make_unique<EpicGames>());
@@ -159,8 +166,10 @@ void Application::run() {
   ImGuiLayer imgui(window, storage);
   imgui.setGames(std::move(games));
 
-  discord::RichPresence::Initialize("932504287337148417");
-  discord::RichPresence::UpdatePresence("Lazap", "In Main Menu");
+  if (discordRpc) {
+    discord::RichPresence::Initialize("932504287337148417");
+    discord::RichPresence::UpdatePresence("Lazap", "In Main Menu");
+  }
 
   printf("Startup took: %ld ms\n",
          std::chrono::duration_cast<std::chrono::milliseconds>(
@@ -202,7 +211,9 @@ void Application::run() {
     glfwSwapBuffers(window);
   }
 
-  discord::RichPresence::Shutdown();
+  if (discordRpc) {
+    discord::RichPresence::Shutdown();
+  }
   imgui.shutdown();
   glfwDestroyWindow(window);
   glfwTerminate();

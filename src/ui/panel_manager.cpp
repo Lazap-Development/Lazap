@@ -31,7 +31,7 @@ void PanelManager::initPanels(GLFWwindow *w, Storage &storage) {
       makePanelWithCB<GamePanel>(this, "Favorites", &view_->view, &storage));
   addPanel(makePanelWithCB<GamePanel>(this, "Recently Played", &view_->view,
                                       &storage));
-  addPanel(std::make_unique<SettingsPanel>());
+  addPanel(std::make_unique<SettingsPanel>(&storage));
 
   for (auto &panel : panels_) {
     panel->init();

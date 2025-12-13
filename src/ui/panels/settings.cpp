@@ -22,6 +22,36 @@ void SettingsPanel::init() {
   ImageManager::loadSVG(b::embed<"assets/svg/appearance.svg">(), "appearance",
                         0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/link.svg">(), "link", 0xFFFFFFFF);
+
+  loadSettings();
+}
+
+void SettingsPanel::loadSettings() {
+  auto toml = storage_->loadTOML();
+  auto* settingsTable = toml["settings"].as_table();
+
+  if (settingsTable) {
+    quitTrayMin_ = settingsTable->get("quit_tray_min")->value_or(false);
+    autoStart_ = settingsTable->get("auto_start")->value_or(false);
+    checkUpdates_ = settingsTable->get("check_updates")->value_or(true);
+    launcherIcons_ = settingsTable->get("launcher_icons")->value_or(true);
+    discordRpc_ = settingsTable->get("discord_rpc")->value_or(false);
+  }
+}
+
+void SettingsPanel::saveSettings() {
+  storage_->updateTOML([this](toml::table& config) {
+    if (!config.contains("settings")) {
+      config.insert("settings", toml::table{});
+    }
+    auto settingsTable = config["settings"].as_table();
+
+    settingsTable->insert_or_assign("quit_tray_min", quitTrayMin_);
+    settingsTable->insert_or_assign("auto_start", autoStart_);
+    settingsTable->insert_or_assign("check_updates", checkUpdates_);
+    settingsTable->insert_or_assign("launcher_icons", launcherIcons_);
+    settingsTable->insert_or_assign("discord_rpc", discordRpc_);
+  });
 }
 
 void SettingsPanel::render() {
@@ -58,9 +88,18 @@ void SettingsPanel::render() {
       ImGui::PushFont(FontManager::getFont("Settings:Setting"));
       ImGui::PushID("general_settings");
       ImGui::BeginGroup();
-      addOption("Minimize to tray on quit", InputType::Toggle);
-      addOption("Launch at startup", InputType::Toggle);
-      addOption("Automatically check for updates", InputType::Toggle);
+
+      if (addOption("Minimize to tray on quit", InputType::Toggle,
+                    &quitTrayMin_)) {
+        saveSettings();
+      }
+      if (addOption("Launch at startup", InputType::Toggle, &autoStart_)) {
+        saveSettings();
+      }
+      if (addOption("Check for updates", InputType::Toggle, &checkUpdates_)) {
+        saveSettings();
+      }
+
       ImGui::EndGroup();
       ImGui::PopID();
       ImGui::PopFont();
@@ -73,10 +112,15 @@ void SettingsPanel::render() {
       ImGui::PushFont(FontManager::getFont("Settings:Setting"));
       ImGui::PushID("appearance_settings");
       ImGui::BeginGroup();
-      addOption("Accent color", InputType::ColorPicker);
-      addOption("Background Image", InputType::ImagePicker);
-      addOption("Background Image opacity", InputType::IntTextbox);
-      addOption("Show launcher icons", InputType::Toggle);
+      addOption("Accent color", InputType::ColorPicker, nullptr);
+      addOption("Background Image", InputType::ImagePicker, nullptr);
+      addOption("Background Image opacity", InputType::IntTextbox, nullptr);
+
+      if (addOption("Show launcher icons", InputType::Toggle,
+                    &launcherIcons_)) {
+        saveSettings();
+      }
+
       ImGui::PopFont();
       ImGui::EndGroup();
       ImGui::PopID();
@@ -89,7 +133,12 @@ void SettingsPanel::render() {
       ImGui::SameLine();
       ImGui::PushID("integration_settings");
       ImGui::BeginGroup();
-      addOption("Discord Rich Presence(RPC)", InputType::Toggle);
+
+      if (addOption("Discord Rich Presence(RPC)", InputType::Toggle,
+                    &discordRpc_)) {
+        saveSettings();
+      }
+
       ImGui::PopFont();
       ImGui::EndGroup();
       ImGui::PopID();
@@ -163,13 +212,17 @@ void SettingsPanel::addSection(const std::string& title,
   ImGui::Dummy(ImVec2(8 * scale_.x, 0));
   ImGui::Image(ImageManager::get(icon), ImVec2(27 * scale_.x, 27 * scale_.x));
   ImGui::SameLine();
-  ImGui::Text(title.c_str());
+  ImGui::Text("%s", title.c_str());
   ImGui::PopFont();
 }
 
-void SettingsPanel::addOption(const std::string& label, InputType input) {
+bool SettingsPanel::addOption(const std::string& label, InputType input,
+                              bool* value) {
   ImGui::PushID(label.c_str());
   ImGui::BeginChild("row", ImVec2(0, 40 * scale_.y), false);
+
+  bool changed = false;
+
   if (ImGui::BeginTable("option_table", 2, ImGuiTableFlags_SizingFixedFit,
                         ImVec2(590, 0))) {
     ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthStretch);
@@ -188,8 +241,10 @@ void SettingsPanel::addOption(const std::string& label, InputType input) {
         float widthNeeded = 40 * scale_.x;
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
-        bool v = true;
-        ToggleButton("##toggle", &v, ImVec2(40 * scale_.x, 22 * scale_.y));
+        if (value) {
+          changed = ToggleButton("##toggle", value,
+                                 ImVec2(40 * scale_.x, 22 * scale_.y));
+        }
       } break;
 
       case InputType::ColorPicker: {
@@ -234,6 +289,8 @@ void SettingsPanel::addOption(const std::string& label, InputType input) {
 
   ImGui::EndChild();
   ImGui::PopID();
+
+  return changed;
 }
 
 bool SettingsPanel::ToggleButton(const char* id, bool* v, const ImVec2& size) {
