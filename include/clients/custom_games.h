@@ -9,7 +9,7 @@ class CustomGames : public Client {
  public:
   explicit CustomGames(Storage& storage);
   std::vector<Game> getInstalledGames() override;
-  bool addCustomGame(const std::string& location,
+  bool addCustomGame(const std::string& location, const std::string& gameName,
                      const std::string& bannerPath = "");
   ClientType getType() const override;
 

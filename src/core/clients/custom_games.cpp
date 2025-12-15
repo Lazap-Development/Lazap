@@ -46,12 +46,12 @@ std::vector<Game> CustomGames::getInstalledGames() {
 
       auto gameTable = gameValue.as_table();
 
-      auto displayName = gameTable->at("name").value<std::string>();
+      auto gameName = gameTable->at("name").value<std::string>();
       auto executable = gameTable->at("executable").value<std::string>();
       auto location = gameTable->at("location").value<std::string>();
       auto bannerPath = gameTable->at("banner_path").value<std::string>();
 
-      if (!displayName || !executable || !location) {
+      if (!gameName || !executable || !location) {
         std::cerr << "Warning: Incomplete custom game entry: " << gameIdStr
                   << std::endl;
         continue;
@@ -60,7 +60,7 @@ std::vector<Game> CustomGames::getInstalledGames() {
       fs::path execPath = fs::path(*location) / *executable;
 
       Game game;
-      game.name = *displayName;
+      game.name = *gameName;
       game.clientType = ClientType::CustomGames;
       game.installPath = *location;
       game.executable = execPath.string();
@@ -70,7 +70,7 @@ std::vector<Game> CustomGames::getInstalledGames() {
       try {
         game.appId = std::stoull(std::string(gameIdStr));
       } catch (...) {
-        game.appId = fnv1a::hash(displayName->c_str(), displayName->length());
+        game.appId = fnv1a::hash(gameName->c_str(), gameName->length());
       }
       if (fs::exists(game.executable)) {
         games.push_back(std::move(game));
@@ -89,6 +89,7 @@ std::vector<Game> CustomGames::getInstalledGames() {
 }
 
 bool CustomGames::addCustomGame(const std::string& location,
+                                const std::string& gameName,
                                 const std::string& bannerPath) {
   if (!fs::exists(location)) {
     std::cerr << "Error: Executable path does not exist: " << location
@@ -99,9 +100,6 @@ bool CustomGames::addCustomGame(const std::string& location,
   try {
     std::string executable = extractExecutableName(location);
     std::string installLocation = extractLocation(location);
-
-    std::filesystem::path pathObj(installLocation);
-    std::string gameName = pathObj.filename().string();
 
     size_t gameId = fnv1a::hash(gameName.c_str(), gameName.length());
     std::string gameIdStr = std::to_string(gameId);
