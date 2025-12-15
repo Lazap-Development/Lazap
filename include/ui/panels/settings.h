@@ -41,7 +41,7 @@ class SettingsPanel : public Panel {
   void addIcon(const std::string& icon);
   void addSection(const std::string& title, const std::string& icon);
   bool addOption(const std::string& label, InputType input, bool* value);
-  bool ToggleButton(const char* label, bool* v, const ImVec2& size);
+  bool ToggleButton(const char* label, bool* v);
   bool ColorBox(const char* id, float color[3], ImVec2 size);
   bool FilePickerButton(const char* label, const ImVec2& size);
   bool NumberBox(const char* id, float* value, float width);
