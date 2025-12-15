@@ -72,32 +72,35 @@ void SettingsPanel::render() {
 
   // Separator line
   ImDrawList* drawlist = ImGui::GetWindowDrawList();
-  drawlist->AddLine(ImVec2(ImGui::GetCursorScreenPos().x - 10 * scale_.x,
-                           ImGui::GetCursorScreenPos().y + 3 * scale_.y),
-                    ImVec2(ImGui::GetCursorScreenPos().x + (1605 * scale_.x),
-                           ImGui::GetCursorScreenPos().y + (5 * scale_.y)),
-                    IM_COL32(242, 244, 238, 255), 2.0f);
+  drawlist->AddLine(
+      ImVec2(ImGui::GetCursorScreenPos().x - 10 * scale_.x,
+             ImGui::GetCursorScreenPos().y + 3 * scale_.y),
+      ImVec2(ImGui::GetCursorScreenPos().x +
+                 (ImGui::GetContentRegionAvail().x - 70 * scale_.x),
+             ImGui::GetCursorScreenPos().y + (5 * scale_.y)),
+      IM_COL32(242, 244, 238, 255), 2.0f);
 
   // Settings
   ImGui::Dummy(ImVec2(0, 45 * scale_.y));
   switch (view_) {
     case SettingsView::LauncherConfig:
       addSection("General", "monitor");
-      ImGui::Dummy(ImVec2(35 * scale_.x, 23 * scale_.y));
-      ImGui::SameLine();
       ImGui::PushFont(FontManager::getFont("Settings:Setting"));
       ImGui::PushID("general_settings");
       ImGui::BeginGroup();
 
       if (addOption("Minimize to tray on quit", InputType::Toggle,
                     &quitTrayMin_)) {
-        saveSettings();
+        // saveSettings();
+        ImGui::OpenPopup("Coming Soon");
       }
       if (addOption("Launch at startup", InputType::Toggle, &autoStart_)) {
-        saveSettings();
+        // saveSettings();
+        ImGui::OpenPopup("Coming Soon");
       }
       if (addOption("Check for updates", InputType::Toggle, &checkUpdates_)) {
-        saveSettings();
+        // saveSettings();
+        ImGui::OpenPopup("Coming Soon");
       }
 
       ImGui::EndGroup();
@@ -107,18 +110,18 @@ void SettingsPanel::render() {
       ImGui::Dummy(ImVec2(0, 47 * scale_.y));
 
       addSection("Appearance", "appearance");
-      ImGui::Dummy(ImVec2(35 * scale_.x, 23 * scale_.y));
-      ImGui::SameLine();
       ImGui::PushFont(FontManager::getFont("Settings:Setting"));
       ImGui::PushID("appearance_settings");
       ImGui::BeginGroup();
       addOption("Accent color", InputType::ColorPicker, nullptr);
       addOption("Background Image", InputType::ImagePicker, nullptr);
-      addOption("Background Image opacity", InputType::IntTextbox, nullptr);
+      addOption("Background Image Opacity", InputType::IntTextbox, nullptr);
 
       if (addOption("Show launcher icons", InputType::Toggle,
                     &launcherIcons_)) {
-        saveSettings();
+        // saveSettings();
+        ImGui::OpenPopup("Coming Soon");
+        ImGui::EndPopup();
       }
 
       ImGui::PopFont();
@@ -128,9 +131,7 @@ void SettingsPanel::render() {
       ImGui::Dummy(ImVec2(0, 47 * scale_.y));
 
       addSection("Integrations", "link");
-      ImGui::Dummy(ImVec2(35 * scale_.x, 23 * scale_.y));
       ImGui::PushFont(FontManager::getFont("Settings:Setting"));
-      ImGui::SameLine();
       ImGui::PushID("integration_settings");
       ImGui::BeginGroup();
 
@@ -211,20 +212,24 @@ void SettingsPanel::addSection(const std::string& title,
   ImGui::PushFont(FontManager::getFont("Title"));
   ImGui::Dummy(ImVec2(8 * scale_.x, 0));
   ImGui::Image(ImageManager::get(icon), ImVec2(27 * scale_.x, 27 * scale_.x));
-  ImGui::SameLine();
+  ImGui::SameLine(0, 8 * scale_.x);
   ImGui::Text("%s", title.c_str());
   ImGui::PopFont();
+  ImGui::Dummy(ImVec2(0, 18.5 * scale_.y));
+  ImGui::Dummy(ImVec2(35 * scale_.x, 0));
+  ImGui::SameLine();
 }
 
 bool SettingsPanel::addOption(const std::string& label, InputType input,
                               bool* value) {
   ImGui::PushID(label.c_str());
-  ImGui::BeginChild("row", ImVec2(0, 40 * scale_.y), false);
+  ImGui::BeginChild("row", ImVec2(0, 39 * scale_.y), false);
+  ImGui::Dummy(ImVec2(0, 4.5 * scale_.y));
 
   bool changed = false;
 
   if (ImGui::BeginTable("option_table", 2, ImGuiTableFlags_SizingFixedFit,
-                        ImVec2(590, 0))) {
+                        ImVec2(590 * scale_.x, 0))) {
     ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthStretch);
     ImGui::TableSetupColumn("Widget", ImGuiTableColumnFlags_WidthFixed,
                             110 * scale_.x);
@@ -242,8 +247,7 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
         if (value) {
-          changed = ToggleButton("##toggle", value,
-                                 ImVec2(40 * scale_.x, 22 * scale_.y));
+          changed = ToggleButton("##toggle", value);
         }
       } break;
 
@@ -256,6 +260,7 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
       } break;
 
       case InputType::ImagePicker: {
+        ImGui::PushFont(FontManager::getFont("Settings:Option"));
         float widthNeeded = 110 * scale_.x;
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
@@ -263,6 +268,7 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
                              ImVec2(110 * scale_.x, 30 * scale_.y))) {
           // Open file dialog
         }
+        ImGui::PopFont();
       } break;
 
       case InputType::IntTextbox: {
@@ -270,8 +276,9 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
         float n = 0.0f;
-        ImGui::SetNextItemWidth(80 * scale_.x);
-        NumberBox(label.c_str(), &n, 92);
+        ImGui::PushFont(FontManager::getFont("Settings:Option"));
+        NumberBox(label.c_str(), &n, 92 * scale_.x);
+        ImGui::PopFont();
       } break;
 
       case InputType::StringTextbox: {
@@ -293,10 +300,10 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
   return changed;
 }
 
-bool SettingsPanel::ToggleButton(const char* id, bool* v, const ImVec2& size) {
-  float height = size.y;
-  float width = size.x;
-  float radius = height * 0.5f;
+bool SettingsPanel::ToggleButton(const char* id, bool* v) {
+  float height = 20 * scale_.y;
+  float width = 40 * scale_.x;
+  float radius = 14.67f * scale_.y * 0.5f;
 
   ImVec2 pos = ImGui::GetCursorScreenPos();
   ImDrawList* draw = ImGui::GetWindowDrawList();
@@ -308,19 +315,19 @@ bool SettingsPanel::ToggleButton(const char* id, bool* v, const ImVec2& size) {
 
   float t = *v ? 1.0f : 0.0f;
 
-  ImU32 col_bg = *v ? IM_COL32(0, 200, 90, 255)   // ON
-                    : IM_COL32(80, 80, 80, 255);  // OFF
+  ImU32 col_bg = *v ? IM_COL32(20, 174, 92, 255)     // ON
+                    : IM_COL32(162, 162, 162, 105);  // OFF
 
-  ImU32 col_knob = IM_COL32(255, 255, 255, 255);
+  ImU32 col_knob = IM_COL32(242, 244, 238, 255);
 
   // Draw track
-  draw->AddRectFilled(pos, ImVec2(pos.x + width, pos.y + height), col_bg,
-                      radius);
+  draw->AddRectFilled(pos, ImVec2(pos.x + width, pos.y + height), col_bg, 50);
 
   // Draw knob
-  float knob_x = pos.x + t * (width - height);
-  draw->AddCircleFilled(ImVec2(knob_x + radius, pos.y + radius), radius - 1.5f,
-                        col_knob);
+  float knob_x = pos.x + t * (width - height) + 2.67f * scale_.x;
+  draw->AddCircleFilled(
+      ImVec2(knob_x + radius, pos.y + 2.67 * scale_.y + radius), radius,
+      col_knob);
 
   return toggled;
 }
@@ -367,19 +374,12 @@ bool SettingsPanel::FilePickerButton(const char* label, const ImVec2& size) {
 
 bool SettingsPanel::NumberBox(const char* id, float* value, float width) {
   ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f);
-  ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(6, 4));
-
-  ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.15f, 0.15f, 0.18f, 1.0f));
-  ImGui::PushStyleColor(ImGuiCol_FrameBgHovered,
-                        ImVec4(0.20f, 0.20f, 0.25f, 1.0f));
-  ImGui::PushStyleColor(ImGuiCol_FrameBgActive,
-                        ImVec4(0.22f, 0.22f, 0.27f, 1.0f));
+  ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 3.5f));
 
   ImGui::PushItemWidth(width);
   bool changed = ImGui::InputFloat(id, value, 0.0f, 0.0f, "%.2f");
   ImGui::PopItemWidth();
 
-  ImGui::PopStyleColor(3);
   ImGui::PopStyleVar(2);
   return changed;
 }
