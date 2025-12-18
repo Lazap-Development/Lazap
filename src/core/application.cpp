@@ -16,6 +16,9 @@
 #include "utils/banner_manager.h"
 
 #define STB_IMAGE_IMPLEMENTATION
+#include <iostream>
+
+#include "clients/custom_games.h"
 #include "stb_image.h"
 
 #ifdef _WIN32
@@ -151,6 +154,7 @@ void Application::run() {
   clients.push_back(std::make_unique<UbisoftConnect>());
   clients.push_back(std::make_unique<RockstarGames>());
   clients.push_back(std::make_unique<RiotGames>());
+  clients.push_back(std::make_unique<CustomGames>(storage));
 
   BannerManager bm;
   std::vector<Game> games;

@@ -10,7 +10,8 @@ enum class ClientType {
   EpicGames,
   UbisoftConnect,
   RockstarGames,
-  RiotGames
+  RiotGames,
+  CustomGames
 };
 
 struct Game {
