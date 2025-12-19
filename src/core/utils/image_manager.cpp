@@ -12,8 +12,8 @@
 
 std::unordered_map<std::string, GLuint> ImageManager::cache;
 
-GLuint ImageManager::loadPNG(b::EmbedInternal::EmbeddedFile embed,
-                             const std::string& id) {
+Texture ImageManager::loadPNG(b::EmbedInternal::EmbeddedFile embed,
+                              const std::string& id) {
   const auto data = embed.data();
   const size_t size = embed.size();
 
@@ -24,7 +24,9 @@ GLuint ImageManager::loadPNG(b::EmbedInternal::EmbeddedFile embed,
 
   if (!image_data) {
     printf("Failed to load icon: %s\n", stbi_failure_reason());
-    return 0;
+    return {};
+  } else if (cache.find(id) != cache.end()) {
+    return {cache[id], width, height};
   }
 
   GLuint texture_id;
@@ -41,37 +43,6 @@ GLuint ImageManager::loadPNG(b::EmbedInternal::EmbeddedFile embed,
 
   cache[id] = texture_id;
 
-  return texture_id;
-}
-
-Texture ImageManager::loadPNG(b::EmbedInternal::EmbeddedFile embed) {
-  const auto data = embed.data();
-  const size_t size = embed.size();
-
-  int width, height, channels;
-  unsigned char* image_data = stbi_load_from_memory(
-      reinterpret_cast<const stbi_uc*>(data), static_cast<int>(size), &width,
-      &height, &channels, 4);
-
-  if (!image_data) {
-    printf("Failed to load embedded PNG: %s\n", stbi_failure_reason());
-    return {0, 0, 0};
-  }
-
-  GLuint texture_id;
-  glGenTextures(1, &texture_id);
-  glBindTexture(GL_TEXTURE_2D, texture_id);
-
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA,
-               GL_UNSIGNED_BYTE, image_data);
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-  stbi_image_free(image_data);
-
   return {texture_id, width, height};
 }
 
@@ -85,6 +56,9 @@ Texture ImageManager::loadPNG(const std::string& path) {
     printf("Failed to load PNG '%s': %s\n", path.c_str(),
            stbi_failure_reason());
     return {0, 0, 0};
+  } else if (cache.find(std::filesystem::path(path).stem().string()) !=
+             cache.end()) {
+    return {cache[std::filesystem::path(path).stem().string()], width, height};
   }
 
   GLuint texture_id;

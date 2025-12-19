@@ -15,7 +15,8 @@ GameBox::GameBox(const Game& game, Storage* storage)
     : Panel(game.name, storage), game_(game) {
   bannerTexture_ = game_.bannerUrl.empty()
                        ? ImageManager::loadPNG(
-                             b::embed<"assets/img/default-game-banner.png">())
+                             b::embed<"assets/img/default-game-banner.png">(),
+                             "default-game-banner")
                        : ImageManager::loadPNG(game_.bannerUrl);
 }
 

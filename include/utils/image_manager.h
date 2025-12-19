@@ -15,14 +15,13 @@ struct Texture {
 
 class ImageManager {
  public:
-  static GLuint loadPNG(b::EmbedInternal::EmbeddedFile path,
-                        const std::string& id);
-  static Texture loadPNG(b::EmbedInternal::EmbeddedFile path);
+  static Texture loadPNG(b::EmbedInternal::EmbeddedFile path,
+                         const std::string& id);
   static Texture loadPNG(const std::string& path);
 
   static GLuint loadSVG(b::EmbedInternal::EmbeddedFile embed,
                         const std::string& id, uint32_t color);
-  static unsigned int get(const std::string& name);
+  static GLuint get(const std::string& name);
   static void clear();
 
  private:
