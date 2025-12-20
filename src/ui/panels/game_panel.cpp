@@ -4,6 +4,7 @@
 
 #include <algorithm>
 
+#include "clients/custom_games.h"
 #include "ui/panel_manager.h"
 #include "ui/panels/game_box.h"
 #include "ui/themes/themes.h"
@@ -23,6 +24,9 @@ void GamePanel::init() {
   ImageManager::loadSVG(b::embed<"assets/svg/recent.svg">(), "recent",
                         Themes::ACCENT_COLOR);
   ImageManager::loadSVG(b::embed<"assets/svg/play.svg">(), "play", 0xFFFFFFFF);
+  FontManager::loadFont("CustomGame:Plus",
+                        b::embed<"assets/fonts/Oxanium-ExtraLight.ttf">(),
+                        64.0f);
 }
 
 void GamePanel::setGames(const std::vector<Game>* games) {
@@ -136,6 +140,31 @@ void GamePanel::render() {
           gameBoxes_[index]->requestRefresh_ = false;
         }
       }
+
+      if (*view_ == ViewType::Library) {
+        ImGui::TableNextColumn();
+        ImDrawList* draw = ImGui::GetWindowDrawList();
+        ImVec2 pos = ImGui::GetCursorScreenPos();
+        ImVec2 size = ImVec2(210 * scale_.x, 233.1 * scale_.y);
+        draw->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y),
+                      IM_COL32(173, 173, 173, 255), 5.25f, 0, 1.0f);
+        ImGui::InvisibleButton("hitbox", size);
+        if (ImGui::IsItemClicked()) {
+          printf("Clicked");
+          ImGui::OpenPopup("custom_game_dialog");
+        }
+        ImGui::PushFont(FontManager::getFont("CustomGame:Plus"));
+        ImVec2 text_size = ImGui::CalcTextSize("+");
+        ImGui::SetCursorPos(
+            ImVec2(pos.x + ((size.x - text_size.x) / 2),
+                   pos.y + ((size.y - text_size.y) / 2) - size.y));
+        ImGui::Dummy(ImVec2(0, 80 * scale_.y * 2));
+        ImGui::Dummy(ImVec2(86 * scale_.x, 0));
+        ImGui::SameLine();
+        ImGui::Text("+");
+        ImGui::PopFont();
+        GamePanel::OpenCustomGameDialog();
+      }
       ImGui::EndTable();
     }
 
@@ -146,4 +175,36 @@ void GamePanel::render() {
   ImGui::PopStyleVar();
 
   if (refreshRequested && onRefresh_) onRefresh_();
+}
+
+void GamePanel::OpenCustomGameDialog() {
+  if (ImGui::BeginPopupModal(
+          "custom_game_dialog", nullptr,
+          ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize)) {
+    char customGameName_[128] = "";
+    char location_[512] = "";
+    char banner_[512] = "";
+    ImGui::Text("Add New Game");
+    ImGui::Text("Game Name");
+    ImGui::InputText("##game_name", customGameName_,
+                     IM_ARRAYSIZE(customGameName_));
+    ImGui::Text("Enter file path (.exe)");
+    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 110 * scale_.x);
+    ImGui::Button("Select file");
+    ImGui::InputText("##game_exe", location_, IM_ARRAYSIZE(location_));
+    ImGui::Text("Choose game banner (optional)");
+    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 110 * scale_.x);
+    ImGui::Button("Select file");
+    ImGui::ImageButton("##banner", ImageManager::get("new_banner"),
+                       ImVec2(460, 200));
+    if (ImGui::Button("Cancel")) {
+      ImGui::CloseCurrentPopup();
+    }
+    if (ImGui::Button("Add Game")) {
+      CustomGames custom(*storage_);
+      custom.addCustomGame(location_, customGameName_, banner_);
+      ImGui::CloseCurrentPopup();
+    }
+    ImGui::EndPopup();
+  }
 }

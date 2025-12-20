@@ -160,8 +160,9 @@ void Application::run() {
   std::vector<Game> games;
   for (const auto &client : clients) {
     for (auto &game : client->getInstalledGames()) {
-      game.bannerUrl = bm.getBanner(client->getType(), game.name,
-                                    std::to_string(game.appId));
+      if (game.bannerUrl.empty())
+        game.bannerUrl = bm.getBanner(client->getType(), game.name,
+                                      std::to_string(game.appId));
       storage.insertGameTOML(game.name);
       games.push_back(std::move(game));
     }
