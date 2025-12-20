@@ -53,11 +53,11 @@ void LeftPanel::render() {
     if (isActive) {
       ImDrawList* drawList = ImGui::GetWindowDrawList();
       ImVec2 windowPos = ImGui::GetWindowPos();
-      ImVec2 rectMin = ImVec2(windowPos.x + cursorPos.x - 45.0f * scale_.x,
-                              windowPos.y + cursorPos.y - 12.0f * scale_.y);
+      ImVec2 rectMin = ImVec2(windowPos.x + cursorPos.x - 38.0f * scale_.x,
+                              windowPos.y + cursorPos.y - 12.5f * scale_.y);
       ImVec2 rectMax =
-          ImVec2(windowPos.x + cursorPos.x + size.x + 45.0f * scale_.x,
-                 windowPos.y + cursorPos.y + size.y + 12.0f * scale_.y);
+          ImVec2(windowPos.x + cursorPos.x + size.x + 38.0f * scale_.x,
+                 windowPos.y + cursorPos.y + size.y + 12.5f * scale_.y);
 
       drawList->AddRectFilled(
           rectMin, rectMax, Themes::ACCENT_COLOR_IMGUI,
@@ -115,7 +115,7 @@ void LeftPanel::render() {
                      ImVec2(30 * scale_.x, 30 * scale_.x), false))
     openURL("https://github.com/Lazap-Development/Lazap");
 
-  ImGui::Dummy(ImVec2(0, 40.0f * scale_.y));
+  ImGui::Dummy(ImVec2(0, 30.0f * scale_.y));
 
   if (drawIconButton("Settings", ImageManager::get("settings"),
                      ImageManager::get("settings-black"),
@@ -123,9 +123,7 @@ void LeftPanel::render() {
                      view_->view == ViewType::Settings))
     if (view_->view != ViewType::Settings) view_->Settings();
 
-  ImGui::Dummy(ImVec2(0, 42.0f * scale_.y));
   ImGui::PopStyleVar();
 
-  ImGui::Separator();
   ImGui::End();
 }

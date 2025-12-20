@@ -22,5 +22,6 @@ class ImGuiLayer {
   Storage* storage_;
   std::vector<Game> games_;
   std::unique_ptr<ui::PanelManager> panel_manager_;
+  void renderBackground(const ImGuiViewport* viewport);
   bool initialized_ = false;
 };

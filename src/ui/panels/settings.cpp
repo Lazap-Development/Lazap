@@ -90,17 +90,23 @@ void SettingsPanel::render() {
       ImGui::BeginGroup();
 
       if (addOption("Minimize to tray on quit", InputType::Toggle,
-                    &quitTrayMin_)) {
+                    &quitTrayMin_, true)) {
         // saveSettings();
         ImGui::OpenPopup("Coming Soon");
       }
-      if (addOption("Launch at startup", InputType::Toggle, &autoStart_)) {
+      if (addOption("Launch at startup", InputType::Toggle, &autoStart_,
+                    true)) {
         // saveSettings();
         ImGui::OpenPopup("Coming Soon");
       }
-      if (addOption("Check for updates", InputType::Toggle, &checkUpdates_)) {
+      if (addOption("Check for updates", InputType::Toggle, &checkUpdates_,
+                    true)) {
         // saveSettings();
         ImGui::OpenPopup("Coming Soon");
+      }
+      if (ImGui::BeginPopup("Coming Soon", ImGuiWindowFlags_NoMove)) {
+        ImGui::Text("This feature is coming soon!");
+        ImGui::EndPopup();
       }
 
       ImGui::EndGroup();
@@ -117,10 +123,13 @@ void SettingsPanel::render() {
       addOption("Background Image", InputType::ImagePicker, nullptr);
       addOption("Background Image Opacity", InputType::IntTextbox, nullptr);
 
-      if (addOption("Show launcher icons", InputType::Toggle,
-                    &launcherIcons_)) {
+      if (addOption("Show launcher icons", InputType::Toggle, &launcherIcons_,
+                    true)) {
         // saveSettings();
         ImGui::OpenPopup("Coming Soon");
+      }
+      if (ImGui::BeginPopup("Coming Soon", ImGuiWindowFlags_NoMove)) {
+        ImGui::Text("This feature is coming soon!");
         ImGui::EndPopup();
       }
 
@@ -221,7 +230,7 @@ void SettingsPanel::addSection(const std::string& title,
 }
 
 bool SettingsPanel::addOption(const std::string& label, InputType input,
-                              bool* value) {
+                              bool* value, bool disabled) {
   ImGui::PushID(label.c_str());
   ImGui::BeginChild("row", ImVec2(0, 39 * scale_.y), false);
   ImGui::Dummy(ImVec2(0, 4.5 * scale_.y));
@@ -247,7 +256,7 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
         if (value) {
-          changed = ToggleButton("##toggle", value);
+          changed = ToggleButton("##toggle", value, disabled);
         }
       } break;
 
@@ -255,8 +264,9 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
         float widthNeeded = 110 * scale_.x;
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
-        float c[3];
-        ColorBox(label.c_str(), c, ImVec2(110 * scale_.x, 30 * scale_.y));
+        ImVec4 c = ImGui::GetStyleColorVec4(Themes::ACCENT_COLOR_IMGUI);
+        float color[3] = {c.x * 255, c.y * 255, c.z * 255};
+        ColorBox(label.c_str(), color, ImVec2(110 * scale_.x, 30 * scale_.y));
       } break;
 
       case InputType::ImagePicker: {
@@ -300,7 +310,7 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
   return changed;
 }
 
-bool SettingsPanel::ToggleButton(const char* id, bool* v) {
+bool SettingsPanel::ToggleButton(const char* id, bool* v, bool disabled) {
   float height = 20 * scale_.y;
   float width = 40 * scale_.x;
   float radius = 14.67f * scale_.y * 0.5f;
@@ -311,7 +321,7 @@ bool SettingsPanel::ToggleButton(const char* id, bool* v) {
   ImGui::InvisibleButton(id, ImVec2(width, height));
   bool toggled = ImGui::IsItemClicked();
 
-  if (toggled) *v = !*v;
+  if (toggled && !disabled) *v = !*v;
 
   float t = *v ? 1.0f : 0.0f;
 
@@ -349,10 +359,12 @@ bool SettingsPanel::ColorBox(const char* id, float color[3], ImVec2 size) {
   if (ImGui::IsItemClicked()) ImGui::OpenPopup(id);
 
   bool changed = false;
-  if (ImGui::BeginPopup(id)) {
+  if (ImGui::BeginPopup(id, ImGuiWindowFlags_NoMove)) {
     changed = ImGui::ColorPicker3(
         "##picker", color,
-        ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoAlpha);
+        ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoAlpha |
+            ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_PickerHueBar |
+            ImGuiColorEditFlags_NoSmallPreview);
     ImGui::EndPopup();
   }
   return changed;

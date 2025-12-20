@@ -55,8 +55,7 @@ void GamePanel::render() {
   ImVec2 size = ImGui::GetMainViewport()->Size;
   ImGui::PushStyleVar(
       ImGuiStyleVar_WindowPadding,
-      ImVec2(40.0, *view_ == ViewType::MainMenu ? 100.0f * size.y / 1000
-                                                : 25.0f * size.y / 1000));
+      ImVec2(40.0, *view_ == ViewType::MainMenu ? 0 : 25.0f * size.y / 1000));
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
