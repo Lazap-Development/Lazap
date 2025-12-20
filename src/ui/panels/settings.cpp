@@ -264,8 +264,7 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
         float widthNeeded = 110 * scale_.x;
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
-        ImVec4 c = ImGui::GetStyleColorVec4(Themes::ACCENT_COLOR_IMGUI);
-        float color[3] = {c.x * 255, c.y * 255, c.z * 255};
+        float color[3] = {0, 0, 0};
         ColorBox(label.c_str(), color, ImVec2(110 * scale_.x, 30 * scale_.y));
       } break;
 

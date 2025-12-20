@@ -3,6 +3,7 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
+#include "addons/discord_rpc/discord_rpc.h"
 #include "ui/panels/game_panel.h"
 #include "ui/panels/gameinfo_panel.h"
 #include "ui/panels/left_panel.h"
@@ -156,6 +157,7 @@ void Views::MainMenu() {
   panel_manager->setPanelVisible("Recently Played", true);
   panel_manager->setPanelVisible("Settings", false);
   view = ViewType::MainMenu;
+  discord::RichPresence::UpdatePresence("Lazap", "In Main Menu");
 }
 
 void Views::Library() {
@@ -167,6 +169,7 @@ void Views::Library() {
   panel_manager->setPanelVisible("Recently Played", false);
   panel_manager->setPanelVisible("Settings", false);
   view = ViewType::Library;
+  discord::RichPresence::UpdatePresence("Lazap", "In Library");
 }
 
 void Views::Favorites() {
@@ -178,6 +181,7 @@ void Views::Favorites() {
   panel_manager->setPanelVisible("Recently Played", false);
   panel_manager->setPanelVisible("Settings", false);
   view = ViewType::Favorites;
+  discord::RichPresence::UpdatePresence("Lazap", "Browsing Favourites");
 
   panel_manager->refreshPanel("Favorites");
 }
@@ -191,4 +195,5 @@ void Views::Settings() {
   panel_manager->setPanelVisible("Recently Played", false);
   panel_manager->setPanelVisible("Settings", true);
   view = ViewType::Settings;
+  discord::RichPresence::UpdatePresence("Lazap", "In Settings");
 }
