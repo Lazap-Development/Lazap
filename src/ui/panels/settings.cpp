@@ -36,6 +36,7 @@ void SettingsPanel::loadSettings() {
   checkUpdates_ = settings->get("check_updates")->value_or(true);
   launcherIcons_ = settings->get("launcher_icons")->value_or(true);
   discordRpc_ = settings->get("discord_rpc")->value_or(false);
+  customTitlebar_ = settings->get("custom_titlebar")->value_or(true);
 
   const uint32_t col =
       settings->get("accent_color")->value_or(Themes::ACCENT_COLOR);
@@ -44,6 +45,8 @@ void SettingsPanel::loadSettings() {
 
   Themes::ACCENT_COLOR_IMGUI =
       IM_COL32((col >> 16) & 0xFF, (col >> 8) & 0xFF, col & 0xFF, 255);
+
+  titlebar_->setCustomTitlebar(customTitlebar_);
 
   Themes::setDefaultDarkColors();
 }
@@ -60,6 +63,7 @@ void SettingsPanel::saveSettings() {
     settingsTable->insert_or_assign("check_updates", checkUpdates_);
     settingsTable->insert_or_assign("launcher_icons", launcherIcons_);
     settingsTable->insert_or_assign("discord_rpc", discordRpc_);
+    settingsTable->insert_or_assign("custom_titlebar", customTitlebar_);
   });
 }
 
@@ -98,17 +102,17 @@ void SettingsPanel::render() {
       ImGui::PushID("general_settings");
       ImGui::BeginGroup();
 
-      if (addOption("Minimize to tray on quit", InputType::Toggle,
+      if (addOption("Minimize to Tray on Exit", InputType::Toggle,
                     &quitTrayMin_, true)) {
         // saveSettings();
         ImGui::OpenPopup("Coming Soon");
       }
-      if (addOption("Launch at startup", InputType::Toggle, &autoStart_,
+      if (addOption("Launch at Startup", InputType::Toggle, &autoStart_,
                     true)) {
         // saveSettings();
         ImGui::OpenPopup("Coming Soon");
       }
-      if (addOption("Check for updates", InputType::Toggle, &checkUpdates_,
+      if (addOption("Check for Updates", InputType::Toggle, &checkUpdates_,
                     true)) {
         // saveSettings();
         ImGui::OpenPopup("Coming Soon");
@@ -128,15 +132,23 @@ void SettingsPanel::render() {
       ImGui::PushFont(FontManager::getFont("Settings:Setting"));
       ImGui::PushID("appearance_settings");
       ImGui::BeginGroup();
-      addOption("Accent color", InputType::ColorPicker, nullptr);
+      addOption("Accent Color", InputType::ColorPicker, nullptr);
       addOption("Background Image", InputType::ImagePicker, nullptr);
       addOption("Background Image Opacity", InputType::IntTextbox, nullptr);
 
-      if (addOption("Show launcher icons", InputType::Toggle, &launcherIcons_,
+      if (addOption("Enable Launcher Icons", InputType::Toggle, &launcherIcons_,
                     true)) {
         // saveSettings();
         ImGui::OpenPopup("Coming Soon");
       }
+
+#ifdef __linux__
+      if (addOption("Custom Titlebar", InputType::Toggle, &customTitlebar_)) {
+        saveSettings();
+        titlebar_->setCustomTitlebar(customTitlebar_);
+      }
+#endif
+
       if (ImGui::BeginPopup("Coming Soon", ImGuiWindowFlags_NoMove)) {
         ImGui::Text("This feature is coming soon!");
         ImGui::EndPopup();

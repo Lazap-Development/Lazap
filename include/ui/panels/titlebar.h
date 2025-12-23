@@ -16,8 +16,11 @@ class Titlebar : public Panel {
   void end() override {}
 
   void setTitle(const std::string& text) { title_ = text; }
+  void setCustomTitlebar(bool enabled) { customTitlebar_ = enabled; }
 
  private:
+  bool customTitlebar_ = true;
+
   std::string title_ = "Home";
   GLFWwindow* window;
 };

@@ -216,7 +216,6 @@ void GamePanel::render() {
                       IM_COL32(173, 173, 173, 255), 5.25f, 0, 1.0f);
         ImGui::InvisibleButton("hitbox", size);
         if (ImGui::IsItemClicked()) {
-          printf("Clicked");
           ImGui::OpenPopup("custom_game_dialog");
         }
         ImGui::PushFont(FontManager::getFont("CustomGame:Plus"));

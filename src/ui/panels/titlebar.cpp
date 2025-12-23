@@ -2,7 +2,6 @@
 
 #include <imgui.h>
 
-#include "ui/themes/themes.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
 
@@ -30,34 +29,36 @@ void Titlebar::render() {
   ImGui::Text("%s", title_.c_str());
   ImGui::PopFont();
 
-  ImGui::SameLine(ImGui::GetContentRegionAvail().x - (143 * scale_.x));
-  ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing,
-                      ImVec2(25.0f * scale_.x, 0.0f));
-  ImGui::SetCursorPos(
-      ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - (11 * scale_.y)));
-  if (ImGui::ImageButton("##minimise", ImageManager::get("minimise"),
-                         ImVec2(24 * scale_.x, 24 * scale_.x))) {
-    glfwIconifyWindow(window);
-  }
-  ImGui::SameLine();
-  ImGui::SetCursorPos(
-      ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - (11 * scale_.y)));
-  if (ImGui::ImageButton("##maximise", ImageManager::get("maximise"),
-                         ImVec2(24 * scale_.x, 24 * scale_.x))) {
-    if (glfwGetWindowAttrib(window, GLFW_MAXIMIZED)) {
-      glfwRestoreWindow(window);
-    } else {
-      glfwMaximizeWindow(window);
+  if (customTitlebar_) {
+    ImGui::SameLine(ImGui::GetContentRegionAvail().x - (143 * scale_.x));
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing,
+                        ImVec2(25.0f * scale_.x, 0.0f));
+    ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX(),
+                               ImGui::GetCursorPosY() - (11 * scale_.y)));
+    if (ImGui::ImageButton("##minimise", ImageManager::get("minimise"),
+                           ImVec2(24 * scale_.x, 24 * scale_.x))) {
+      glfwIconifyWindow(window);
     }
+    ImGui::SameLine();
+    ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX(),
+                               ImGui::GetCursorPosY() - (11 * scale_.y)));
+    if (ImGui::ImageButton("##maximise", ImageManager::get("maximise"),
+                           ImVec2(24 * scale_.x, 24 * scale_.x))) {
+      if (glfwGetWindowAttrib(window, GLFW_MAXIMIZED)) {
+        glfwRestoreWindow(window);
+      } else {
+        glfwMaximizeWindow(window);
+      }
+    }
+    ImGui::SameLine();
+    ImGui::SetCursorPos(ImVec2(ImGui::GetCursorPosX(),
+                               ImGui::GetCursorPosY() - (11 * scale_.y)));
+    if (ImGui::ImageButton("##close", ImageManager::get("close"),
+                           ImVec2(24 * scale_.x, 24 * scale_.x))) {
+      glfwSetWindowShouldClose(window, GLFW_TRUE);
+    }
+    ImGui::PopStyleVar();
   }
-  ImGui::SameLine();
-  ImGui::SetCursorPos(
-      ImVec2(ImGui::GetCursorPosX(), ImGui::GetCursorPosY() - (11 * scale_.y)));
-  if (ImGui::ImageButton("##close", ImageManager::get("close"),
-                         ImVec2(24 * scale_.x, 24 * scale_.x))) {
-    glfwSetWindowShouldClose(window, GLFW_TRUE);
-  }
-  ImGui::PopStyleVar();
 
   if (ImGui::IsWindowHovered() &&
       ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {

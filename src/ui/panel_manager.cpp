@@ -23,7 +23,9 @@ std::unique_ptr<T> makePanelWithCB(PanelManager *pm, Args &&...args) {
 void PanelManager::initPanels(GLFWwindow *w, Storage &storage) {
   view_ = std::make_unique<Views>(this);
 
-  addPanel(std::make_unique<Titlebar>(w));
+  auto titlebar = std::make_unique<Titlebar>(w);
+  Titlebar *titlebarPtr = titlebar.get();
+  addPanel(std::move(titlebar));
   addPanel(std::make_unique<LeftPanel>(view_.get()));
   addPanel(std::make_unique<GameInfoPanel>());
 
@@ -32,7 +34,7 @@ void PanelManager::initPanels(GLFWwindow *w, Storage &storage) {
       makePanelWithCB<GamePanel>(this, "Favorites", &view_->view, &storage));
   addPanel(makePanelWithCB<GamePanel>(this, "Recently Played", &view_->view,
                                       &storage));
-  addPanel(std::make_unique<SettingsPanel>(&storage));
+  addPanel(std::make_unique<SettingsPanel>(&storage, titlebarPtr));
 
   for (auto &panel : panels_) {
     panel->init();

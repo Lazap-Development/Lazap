@@ -1,9 +1,8 @@
 #pragma once
 #include <imgui.h>
 
-#include <memory>
-
 #include "ui/panel.h"
+#include "ui/panels/titlebar.h"
 
 namespace ui {
 enum class SettingsView {
@@ -21,7 +20,8 @@ enum class InputType {
 
 class SettingsPanel : public Panel {
  public:
-  SettingsPanel(Storage* storage) : Panel("Settings", storage) {}
+  SettingsPanel(Storage* storage, Titlebar* titlebar)
+      : Panel("Settings", storage), titlebar_(titlebar) {}
 
   void init() override;
   void render() override;
@@ -32,7 +32,10 @@ class SettingsPanel : public Panel {
   bool autoStart_ = false;
   bool checkUpdates_ = true;
   bool launcherIcons_ = true;
+  bool customTitlebar_ = true;
   bool discordRpc_ = false;
+
+  Titlebar* titlebar_;
 
   void loadSettings();
   void saveSettings();
