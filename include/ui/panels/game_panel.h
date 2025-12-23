@@ -23,6 +23,8 @@ class GamePanel : public Panel {
   std::vector<std::unique_ptr<GameBox>> gameBoxes_;
   const std::vector<Game>* games_ = nullptr;
   ViewType* view_ = nullptr;
+  char searchBuffer_[128];
+
   void OpenCustomGameDialog();
 };
 

@@ -3,6 +3,7 @@
 #include <imgui.h>
 
 #include <algorithm>
+#include <cstring>
 
 #include "clients/custom_games.h"
 #include "ui/panel_manager.h"
@@ -15,6 +16,9 @@
 using namespace ui;
 
 void GamePanel::init() {
+  ImageManager::loadSVG(b::embed<"assets/svg/search.svg">(), "search",
+                        0xFFFFFFFF);
+
   ImageManager::loadSVG(b::embed<"assets/svg/heart.svg">(), "heart",
                         0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/heart2.svg">(), "heart2",
@@ -24,9 +28,12 @@ void GamePanel::init() {
   ImageManager::loadSVG(b::embed<"assets/svg/recent.svg">(), "recent",
                         Themes::ACCENT_COLOR);
   ImageManager::loadSVG(b::embed<"assets/svg/play.svg">(), "play", 0xFFFFFFFF);
+
   FontManager::loadFont("CustomGame:Plus",
                         b::embed<"assets/fonts/Oxanium-ExtraLight.ttf">(),
                         64.0f);
+
+  std::memset(searchBuffer_, 0, sizeof(searchBuffer_));
 }
 
 void GamePanel::setGames(const std::vector<Game>* games) {
@@ -76,6 +83,45 @@ void GamePanel::render() {
   ImGui::Dummy(
       ImVec2(0, ((*view_ == ViewType::MainMenu) ? 10.0f : 0.0f) * scale_.y));
 
+  if (*view_ != ViewType::MainMenu) {
+    ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+    ImGuiStyle& style = ImGui::GetStyle();
+    ImVec2 oldPadding = style.FramePadding;
+    ImVec2 cursorPos = ImGui::GetCursorScreenPos();
+
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 0));
+    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, IM_COL32(0, 0, 0, 0));
+    ImGui::PushStyleColor(ImGuiCol_FrameBgActive, IM_COL32(0, 0, 0, 0));
+
+    ImVec2 newPadding = ImVec2(38, 8);
+    style.FramePadding = newPadding;
+
+    ImGui::InputTextWithHint("##search", "Search...", searchBuffer_,
+                             IM_ARRAYSIZE(searchBuffer_));
+
+    ImVec2 itemSize = ImGui::GetItemRectSize();
+
+    ImVec2 iconPos =
+        ImVec2(cursorPos.x + 15, cursorPos.y + (itemSize.y - 12) / 2);
+    ImGui::SetCursorScreenPos(iconPos);
+    ImGui::Image(ImageManager::get("search"), ImVec2(12, 12));
+
+    ImGui::PopStyleColor(3);
+
+    float borderThickness = 2.0f;
+    ImU32 borderColor = IM_COL32(162, 162, 162, 105);
+    ImVec2 borderMin =
+        ImVec2(cursorPos.x - borderThickness, cursorPos.y - borderThickness);
+    ImVec2 borderMax = ImVec2(cursorPos.x + itemSize.x + borderThickness,
+                              cursorPos.y + itemSize.y + borderThickness);
+    ImGui::GetWindowDrawList()->AddRect(borderMin, borderMax, borderColor, 5.0f,
+                                        0, borderThickness);
+
+    style.FramePadding = oldPadding;
+    ImGui::PopItemWidth();
+    ImGui::Dummy(ImVec2(0, 30.0f * scale_.y));
+  }
+
   bool refreshRequested = false;
   if (!games_) {
     ImGui::PushFont(FontManager::getFont("Game:Title"));
@@ -83,6 +129,19 @@ void GamePanel::render() {
     ImGui::PopFont();
   } else {
     std::vector<std::pair<size_t, std::string>> boxIndicesWithTimestamp;
+
+    auto matchesSearch = [this](const std::string& gameName) -> bool {
+      if (std::strlen(searchBuffer_) == 0) return true;
+
+      std::string lowerName = gameName;
+      std::string lowerSearch = searchBuffer_;
+      std::transform(lowerName.begin(), lowerName.end(), lowerName.begin(),
+                     ::tolower);
+      std::transform(lowerSearch.begin(), lowerSearch.end(),
+                     lowerSearch.begin(), ::tolower);
+
+      return lowerName.find(lowerSearch) != std::string::npos;
+    };
 
     if (*view_ == ViewType::MainMenu) {
       auto toml = storage_->loadTOML();
@@ -92,6 +151,9 @@ void GamePanel::render() {
         for (size_t i = 0; i < gameBoxes_.size(); ++i) {
           auto& box = gameBoxes_[i];
           const std::string gameName = box->getGame().name;
+
+          if (!matchesSearch(gameName)) continue;
+
           const std::string key =
               std::to_string(fnv1a::hash(gameName.c_str(), gameName.length()));
 
@@ -113,6 +175,10 @@ void GamePanel::render() {
       }
     } else {
       for (size_t i = 0; i < gameBoxes_.size(); ++i) {
+        const std::string gameName = gameBoxes_[i]->getGame().name;
+
+        if (!matchesSearch(gameName)) continue;
+
         boxIndicesWithTimestamp.emplace_back(i, "");
       }
     }
@@ -121,7 +187,7 @@ void GamePanel::render() {
     float panelWidth = ImGui::GetContentRegionAvail().x;
 
     float horizontalSpacing = 16.0f;
-    float verticalSpacing = 16.0f;
+    float verticalSpacing = 14.0f;
 
     int columns = (int)((panelWidth + horizontalSpacing) /
                         (boxWidth + horizontalSpacing));

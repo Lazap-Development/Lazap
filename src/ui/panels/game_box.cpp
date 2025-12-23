@@ -150,14 +150,23 @@ void GameBox::render() {
                                    totalIconsWidth - (iconSpacing * 2);
 
   std::string displayName = name_;
-  ImVec2 textSize = ImGui::CalcTextSize(displayName.c_str());
 
-  while (textSize.x > availableTextWidth && displayName.length() > 3) {
-    displayName = displayName.substr(0, displayName.length() - 4) + "...";
-    textSize = ImGui::CalcTextSize(displayName.c_str());
+  const float lineHeight = ImGui::GetTextLineHeightWithSpacing();
+  ImVec2 textSize = ImGui::CalcTextSize(displayName.c_str(), nullptr, false,
+                                        availableTextWidth);
+
+  while (textSize.y > lineHeight * 2.0f && displayName.length() > 3) {
+    displayName = displayName.substr(0, displayName.length() - 1);
+    std::string test = displayName + "...";
+    textSize =
+        ImGui::CalcTextSize(test.c_str(), nullptr, false, availableTextWidth);
   }
 
-  ImGui::Text("%s", displayName.c_str());
+  if (displayName.length() < name_.length()) displayName += "...";
+
+  ImGui::PushTextWrapPos(ImGui::GetCursorPosX() + availableTextWidth);
+  ImGui::TextWrapped("%s", displayName.c_str());
+  ImGui::PopTextWrapPos();
   ImGui::PopFont();
 
   const float iconStartX = ImGui::GetCursorPosX() + displaySize.x -
