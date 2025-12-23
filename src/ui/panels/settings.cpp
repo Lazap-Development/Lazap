@@ -27,16 +27,25 @@ void SettingsPanel::init() {
 }
 
 void SettingsPanel::loadSettings() {
-  auto toml = storage_->loadTOML();
-  auto* settingsTable = toml["settings"].as_table();
+  const toml::table toml = storage_->loadTOML();
+  const toml::table* settings = toml["settings"].as_table();
+  if (!settings) return;
 
-  if (settingsTable) {
-    quitTrayMin_ = settingsTable->get("quit_tray_min")->value_or(false);
-    autoStart_ = settingsTable->get("auto_start")->value_or(false);
-    checkUpdates_ = settingsTable->get("check_updates")->value_or(true);
-    launcherIcons_ = settingsTable->get("launcher_icons")->value_or(true);
-    discordRpc_ = settingsTable->get("discord_rpc")->value_or(false);
-  }
+  quitTrayMin_ = settings->get("quit_tray_min")->value_or(false);
+  autoStart_ = settings->get("auto_start")->value_or(false);
+  checkUpdates_ = settings->get("check_updates")->value_or(true);
+  launcherIcons_ = settings->get("launcher_icons")->value_or(true);
+  discordRpc_ = settings->get("discord_rpc")->value_or(false);
+
+  const uint32_t col =
+      settings->get("accent_color")->value_or(Themes::ACCENT_COLOR);
+
+  Themes::ACCENT_COLOR = col;
+
+  Themes::ACCENT_COLOR_IMGUI =
+      IM_COL32((col >> 16) & 0xFF, (col >> 8) & 0xFF, col & 0xFF, 255);
+
+  Themes::setDefaultDarkColors();
 }
 
 void SettingsPanel::saveSettings() {
@@ -261,11 +270,30 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
       } break;
 
       case InputType::ColorPicker: {
-        float widthNeeded = 110 * scale_.x;
+        float widthNeeded = 110.0f * scale_.x;
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
-        float color[3] = {0, 0, 0};
-        ColorBox(label.c_str(), color, ImVec2(110 * scale_.x, 30 * scale_.y));
+
+        float col[3] = {((Themes::ACCENT_COLOR >> 16) & 0xFF) / 255.0f,
+                        ((Themes::ACCENT_COLOR >> 8) & 0xFF) / 255.0f,
+                        (Themes::ACCENT_COLOR & 0xFF) / 255.0f};
+
+        if (ColorBox(label.c_str(), col,
+                     ImVec2(widthNeeded, 30.0f * scale_.y))) {
+          uint8_t r = static_cast<uint8_t>(col[0] * 255.0f);
+          uint8_t g = static_cast<uint8_t>(col[1] * 255.0f);
+          uint8_t b = static_cast<uint8_t>(col[2] * 255.0f);
+
+          Themes::ACCENT_COLOR =
+              (uint32_t(r) << 16) | (uint32_t(g) << 8) | uint32_t(b);
+          Themes::ACCENT_COLOR_IMGUI = IM_COL32(r, g, b, 255);
+
+          storage_->updateTOML([](toml::table& config) {
+            if (auto settings = config["settings"].as_table()) {
+              settings->insert_or_assign("accent_color", Themes::ACCENT_COLOR);
+            }
+          });
+        }
       } break;
 
       case InputType::ImagePicker: {

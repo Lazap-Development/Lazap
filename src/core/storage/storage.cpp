@@ -10,6 +10,7 @@
 #include <toml++/toml.hpp>
 
 #include "storage/storage_config.h"
+#include "ui/themes/themes.h"
 #include "utils/fnv1a.h"
 
 namespace fs = std::filesystem;
@@ -109,7 +110,8 @@ bool Storage::initTOML() {
               !settingsTable->contains("auto_start") ||
               !settingsTable->contains("check_updates") ||
               !settingsTable->contains("launcher_icons") ||
-              !settingsTable->contains("discord_rpc")) {
+              !settingsTable->contains("discord_rpc") ||
+              !settingsTable->contains("accent_color")) {
             throw std::runtime_error(
                 "Settings table is missing required fields");
           }
@@ -162,6 +164,7 @@ bool Storage::initTOML() {
     settings.insert("check_updates", false);
     settings.insert("launcher_icons", false);
     settings.insert("discord_rpc", true);
+    settings.insert("accent_color", Themes::ACCENT_COLOR);
 
     toml::table games;
 
