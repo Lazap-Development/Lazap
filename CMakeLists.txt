@@ -55,7 +55,7 @@ FetchContent_Declare(lunasvg
 
 FetchContent_Declare(tomlplusplus
     GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
-    GIT_TAG        e7aaccca3fa3dbde9818ab8313250f3da4976e37
+    GIT_TAG        7807a314ad1c0c9c227d9dbd68f23f187163372e
     GIT_SHALLOW    TRUE
 )
 
