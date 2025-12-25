@@ -126,6 +126,8 @@ void Application::run() {
 
   glfwMakeContextCurrent(window);
   glfwSetMouseButtonCallback(window, WindowCallbacks::mouseButtonCB);
+  glfwSetWindowCloseCallback(
+      window, [](GLFWwindow *w) { glfwSetWindowShouldClose(w, GLFW_TRUE); });
 
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     fprintf(stderr, "Failed to initialize GLAD\n");

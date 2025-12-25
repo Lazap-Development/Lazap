@@ -4,10 +4,12 @@
 
 #include <algorithm>
 #include <cstring>
+#include <unordered_set>
 
 #include "clients/custom_games.h"
+#include "ui/cmps/addgame_dialog.h"
+#include "ui/cmps/game_box.h"
 #include "ui/panel_manager.h"
-#include "ui/panels/game_box.h"
 #include "ui/themes/themes.h"
 #include "utils/fnv1a.h"
 #include "utils/font_manager.h"
@@ -33,6 +35,8 @@ void GamePanel::init() {
                         b::embed<"assets/fonts/Oxanium-ExtraLight.ttf">(),
                         64.0f);
 
+  addGameDialog_ = std::make_unique<AddGameDialog>(storage_);
+
   std::memset(searchBuffer_, 0, sizeof(searchBuffer_));
 }
 
@@ -45,9 +49,44 @@ void GamePanel::setGames(const std::vector<Game>* games) {
   auto* gamesTable = toml["games"].as_table();
   if (!gamesTable) return;
 
+  // Store app IDs of games already processed from games_
+  std::unordered_set<uint64_t> processedGameIds;
+
+  // Process regular games (Steam/Epic)
   for (const auto& game : *games_) {
     const std::string key = std::to_string(
         fnv1a::hash(game.name.c_str(), std::strlen(game.name.c_str())));
+    auto* entry = gamesTable->get(key);
+    if (!entry || !entry->is_table()) continue;
+
+    bool shouldAdd = true;
+    if (*view_ == ViewType::Favorites) {
+      shouldAdd = entry->as_table()->get("favourite")->value_or(false);
+    }
+
+    if (shouldAdd) {
+      gameBoxes_.emplace_back(std::make_unique<GameBox>(game, storage_));
+      processedGameIds.insert(game.appId);
+    }
+  }
+
+  // Load custom games - only add if not already in games_
+  CustomGames customGames(*storage_);
+  std::vector<Game> customGamesList = customGames.getInstalledGames();
+
+  for (const auto& game : customGamesList) {
+    // Skip if already added from games_
+    if (processedGameIds.count(game.appId) > 0) continue;
+
+    const std::string key = std::to_string(game.appId);
+
+    // Create entry in games table if it doesn't exist
+    if (!gamesTable->contains(key)) {
+      toml::table newEntry;
+      newEntry.insert("favourite", false);
+      gamesTable->insert(key, newEntry);
+    }
+
     auto* entry = gamesTable->get(key);
     if (!entry || !entry->is_table()) continue;
 
@@ -85,14 +124,11 @@ void GamePanel::render() {
 
   if (*view_ != ViewType::MainMenu) {
     ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+    ImGui::PushFont(FontManager::getFont("GameBox:Title"));
+
     ImGuiStyle& style = ImGui::GetStyle();
     ImVec2 oldPadding = style.FramePadding;
     ImVec2 cursorPos = ImGui::GetCursorScreenPos();
-
-    ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 0, 0));
-    ImGui::PushStyleColor(ImGuiCol_FrameBgHovered, IM_COL32(0, 0, 0, 0));
-    ImGui::PushStyleColor(ImGuiCol_FrameBgActive, IM_COL32(0, 0, 0, 0));
-
     ImVec2 newPadding = ImVec2(38, 8);
     style.FramePadding = newPadding;
 
@@ -101,23 +137,15 @@ void GamePanel::render() {
 
     ImVec2 itemSize = ImGui::GetItemRectSize();
 
+    Themes::drawInputBorder();
+
     ImVec2 iconPos =
         ImVec2(cursorPos.x + 15, cursorPos.y + (itemSize.y - 12) / 2);
     ImGui::SetCursorScreenPos(iconPos);
     ImGui::Image(ImageManager::get("search"), ImVec2(12, 12));
 
-    ImGui::PopStyleColor(3);
-
-    float borderThickness = 2.0f;
-    ImU32 borderColor = IM_COL32(162, 162, 162, 105);
-    ImVec2 borderMin =
-        ImVec2(cursorPos.x - borderThickness, cursorPos.y - borderThickness);
-    ImVec2 borderMax = ImVec2(cursorPos.x + itemSize.x + borderThickness,
-                              cursorPos.y + itemSize.y + borderThickness);
-    ImGui::GetWindowDrawList()->AddRect(borderMin, borderMax, borderColor, 5.0f,
-                                        0, borderThickness);
-
     style.FramePadding = oldPadding;
+    ImGui::PopFont();
     ImGui::PopItemWidth();
     ImGui::Dummy(ImVec2(0, 30.0f * scale_.y));
   }
@@ -213,23 +241,41 @@ void GamePanel::render() {
         ImVec2 pos = ImGui::GetCursorScreenPos();
         ImVec2 size = ImVec2(210 * scale_.x, 233.1 * scale_.y);
         draw->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y),
-                      IM_COL32(173, 173, 173, 255), 5.25f, 0, 1.0f);
+                      IM_COL32(162, 162, 162, 175), 5.25f, 0, 2.0f);
         ImGui::InvisibleButton("hitbox", size);
-        if (ImGui::IsItemClicked()) {
-          ImGui::OpenPopup("custom_game_dialog");
+
+        if (ImGui::IsItemHovered()) {
+          ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
         }
+
+        if (ImGui::IsItemClicked()) {
+          addGameDialog_->open();
+        }
+
+        if (addGameDialog_) {
+          addGameDialog_->render();
+          if (addGameDialog_->requestRefresh_) {
+            refreshRequested = true;
+            addGameDialog_->requestRefresh_ = false;
+          }
+        }
+
+        if (ImGui::IsItemClicked()) {
+          addGameDialog_->open();
+        }
+
         ImGui::PushFont(FontManager::getFont("CustomGame:Plus"));
         ImVec2 text_size = ImGui::CalcTextSize("+");
         ImGui::SetCursorPos(
             ImVec2(pos.x + ((size.x - text_size.x) / 2),
                    pos.y + ((size.y - text_size.y) / 2) - size.y));
-        ImGui::Dummy(ImVec2(0, 80 * scale_.y * 2));
+        ImGui::Dummy(ImVec2(0, 82 * scale_.y * 2));
         ImGui::Dummy(ImVec2(86 * scale_.x, 0));
         ImGui::SameLine();
         ImGui::Text("+");
         ImGui::PopFont();
-        GamePanel::OpenCustomGameDialog();
       }
+
       ImGui::EndTable();
     }
 
@@ -240,36 +286,4 @@ void GamePanel::render() {
   ImGui::PopStyleVar();
 
   if (refreshRequested && onRefresh_) onRefresh_();
-}
-
-void GamePanel::OpenCustomGameDialog() {
-  if (ImGui::BeginPopupModal(
-          "custom_game_dialog", nullptr,
-          ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoResize)) {
-    char customGameName_[128] = "";
-    char location_[512] = "";
-    char banner_[512] = "";
-    ImGui::Text("Add New Game");
-    ImGui::Text("Game Name");
-    ImGui::InputText("##game_name", customGameName_,
-                     IM_ARRAYSIZE(customGameName_));
-    ImGui::Text("Enter file path (.exe)");
-    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 110 * scale_.x);
-    ImGui::Button("Select file");
-    ImGui::InputText("##game_exe", location_, IM_ARRAYSIZE(location_));
-    ImGui::Text("Choose game banner (optional)");
-    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 110 * scale_.x);
-    ImGui::Button("Select file");
-    ImGui::ImageButton("##banner", ImageManager::get("new_banner"),
-                       ImVec2(460, 200));
-    if (ImGui::Button("Cancel")) {
-      ImGui::CloseCurrentPopup();
-    }
-    if (ImGui::Button("Add Game")) {
-      CustomGames custom(*storage_);
-      custom.addCustomGame(location_, customGameName_, banner_);
-      ImGui::CloseCurrentPopup();
-    }
-    ImGui::EndPopup();
-  }
 }

@@ -2,9 +2,10 @@
 #include <memory>
 
 #include "storage/storage.h"
+#include "ui/cmps/addgame_dialog.h"
+#include "ui/cmps/game_box.h"
 #include "ui/panel.h"
 #include "ui/panel_manager.h"
-#include "ui/panels/game_box.h"
 
 namespace ui {
 
@@ -21,11 +22,10 @@ class GamePanel : public Panel {
 
  private:
   std::vector<std::unique_ptr<GameBox>> gameBoxes_;
+  std::unique_ptr<AddGameDialog> addGameDialog_;
   const std::vector<Game>* games_ = nullptr;
   ViewType* view_ = nullptr;
   char searchBuffer_[128];
-
-  void OpenCustomGameDialog();
 };
 
 using GamePanelPtr = std::unique_ptr<GamePanel>;

@@ -1,4 +1,4 @@
-#include "ui/panels/game_box.h"
+#include "ui/cmps/game_box.h"
 
 #include <imgui.h>
 

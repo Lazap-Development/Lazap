@@ -131,6 +131,14 @@ target_include_directories(glad PUBLIC "${GLAD_DIR}/include")
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/vendor/glfw)
 
+set(TINYFD_DIR "${CMAKE_SOURCE_DIR}/vendor/tinyfiledialogs")
+add_library(tinyfiledialogs STATIC
+    "${TINYFD_DIR}/tinyfiledialogs.c"
+)
+target_include_directories(tinyfiledialogs PUBLIC
+    "${TINYFD_DIR}"
+)
+
 target_include_directories(${EXECUTABLE_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${imgui_SOURCE_DIR}/
@@ -144,6 +152,7 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     glaze::glaze
     cpr::cpr
     lunasvg
+    tinyfiledialogs
     $<$<PLATFORM_ID:Linux>:X11>
     $<$<PLATFORM_ID:Windows>:dwmapi>
     $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>

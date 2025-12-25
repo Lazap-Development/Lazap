@@ -6,14 +6,28 @@
 
 namespace Themes {
 
+void drawInputBorder(float thickness, float rounding) {
+  ImVec2 itemMin = ImGui::GetItemRectMin();
+  ImVec2 itemMax = ImGui::GetItemRectMax();
+  ImU32 borderColor = IM_COL32(162, 162, 162, 105);
+
+  ImVec2 borderMin = ImVec2(itemMin.x - thickness, itemMin.y - thickness);
+  ImVec2 borderMax = ImVec2(itemMax.x + thickness, itemMax.y + thickness);
+
+  ImGui::GetWindowDrawList()->AddRect(borderMin, borderMax, borderColor,
+                                      rounding, 0, thickness);
+}
+
 void setDefaultDarkColors() {
   ImGuiStyle &style = ImGui::GetStyle();
   ImVec4 *colors = style.Colors;
 
   // Primary background
-  colors[ImGuiCol_WindowBg] = ImVec4(0.07f, 0.07f, 0.09f, 0.00f);  // #131318
-  colors[ImGuiCol_MenuBarBg] = ImVec4(0.12f, 0.12f, 0.15f, 1.00f);
-  colors[ImGuiCol_PopupBg] = ImVec4(0.18f, 0.18f, 0.22f, 1.00f);
+  constexpr float C = 8.0f / 255.0f;  // #080808
+
+  colors[ImGuiCol_WindowBg] = ImVec4(C, C, C, 0.00f);
+  colors[ImGuiCol_MenuBarBg] = ImVec4(C, C, C, 1.00f);
+  colors[ImGuiCol_PopupBg] = ImVec4(C, C, C, 1.00f);
 
   // Headers
   colors[ImGuiCol_Header] = ImVec4(0.18f, 0.18f, 0.22f, 1.00f);
@@ -26,9 +40,9 @@ void setDefaultDarkColors() {
   colors[ImGuiCol_ButtonActive] = ImVec4(0.35f, 0.38f, 0.50f, 0.00f);
 
   // Frame BG
-  colors[ImGuiCol_FrameBg] = ImVec4(0.15f, 0.15f, 0.18f, 1.00f);
-  colors[ImGuiCol_FrameBgHovered] = ImVec4(0.22f, 0.22f, 0.27f, 1.00f);
-  colors[ImGuiCol_FrameBgActive] = ImVec4(0.25f, 0.25f, 0.30f, 1.00f);
+  colors[ImGuiCol_FrameBg] = ImVec4(C, C, C, 1.00f);
+  colors[ImGuiCol_FrameBgHovered] = ImVec4(C, C, C, 1.00f);
+  colors[ImGuiCol_FrameBgActive] = ImVec4(C, C, C, 1.00f);
 
   // Tabs
   colors[ImGuiCol_Tab] = ImVec4(0.18f, 0.18f, 0.22f, 1.00f);
