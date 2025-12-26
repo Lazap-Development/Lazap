@@ -81,8 +81,9 @@ void AddGameDialog::render() {
     ImGui::InputText("##filepath", filePath_, IM_ARRAYSIZE(filePath_));
     ImGui::PopStyleVar();
     Themes::drawInputBorder();
-    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 90);
-    if (ImGui::Button("Select File", ImVec2(150, 0))) {
+    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 95);
+    if (PillButton("Select File##executable", ImageManager::get("upload"),
+                   ImVec2(90.0f, 24.0f), ImVec2(12.0f, 12.0f))) {
       const char* path = tinyfd_openFileDialog("Select Game Executable", "", 0,
                                                nullptr, nullptr, 0);
       if (path) {
@@ -95,8 +96,10 @@ void AddGameDialog::render() {
     ImGui::Dummy(ImVec2(0, 15));
     ImGui::PushFont(FontManager::getFont("Dialog:Paragraph"));
     ImGui::Text("Choose Game Banner (Optional)");
-    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 90);
-    if (ImGui::Button("Select File##banner", ImVec2(150, 0))) {
+    ImGui::PopFont();
+    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 95);
+    if (PillButton("Select File##banner", ImageManager::get("upload"),
+                   ImVec2(90.0f, 24.0f), ImVec2(12.0f, 12.0f))) {
       const char* filters[] = {"*.png"};
       const char* path = tinyfd_openFileDialog("Select Banner Image", "", 1,
                                                filters, "Image files", 0);
