@@ -1,5 +1,7 @@
 #pragma once
 
+#include <GLFW/glfw3native.h>
+
 #include <imgui.h>
 
 #include "ui/panel.h"
@@ -11,7 +13,8 @@ class AddGameDialog : public Panel {
  public:
   AddGameDialog(Storage* storage);
 
-  void render() override;
+  void render() override {};
+  void render(GLFWwindow* window);
   void end() override {};
 
   void open();

@@ -1,5 +1,7 @@
 #include "ui/cmps/addgame_dialog.h"
 
+#include <GLFW/glfw3native.h>
+
 #include <imgui.h>
 #include <tinyfiledialogs.h>
 
@@ -34,7 +36,7 @@ void AddGameDialog::close() {
   ImGui::CloseCurrentPopup();
 }
 
-void AddGameDialog::render() {
+void AddGameDialog::render(GLFWwindow* window) {
   if (isOpen_) {
     ImGui::OpenPopup("Add New Game");
     isOpen_ = false;
@@ -49,9 +51,9 @@ void AddGameDialog::render() {
       ImGuiWindowFlags_NoMove;
 
   bool open = true;
-  if (ImGui::BeginPopupModal(name_.c_str(), &open, flags)) {
-    const char* title = name_.c_str();
+  if (ImGui::BeginPopupModal("Add New Game", &open, flags)) {
     ImGui::PushFont(FontManager::getFont("Dialog:Title"));
+    const char* title = "Add New Game";
     float windowWidth = ImGui::GetWindowWidth();
     float textWidth = ImGui::CalcTextSize(title).x;
     ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
@@ -81,15 +83,17 @@ void AddGameDialog::render() {
     ImGui::InputText("##filepath", filePath_, IM_ARRAYSIZE(filePath_));
     ImGui::PopStyleVar();
     Themes::drawInputBorder();
-    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 60);
+    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 95);
     if (PillButton("Select File##executable", ImageManager::get("upload"),
                    ImVec2(90.0f, 24.0f), ImVec2(12.0f, 12.0f))) {
+      glfwIconifyWindow(window);
       const char* path = tinyfd_openFileDialog("Select Game Executable", "", 0,
                                                nullptr, nullptr, 0);
       if (path) {
         std::strncpy(filePath_, path, IM_ARRAYSIZE(filePath_));
         filePath_[IM_ARRAYSIZE(filePath_) - 1] = '\0';
       }
+      glfwRestoreWindow(window);
     }
     if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
@@ -97,9 +101,10 @@ void AddGameDialog::render() {
     ImGui::PushFont(FontManager::getFont("Dialog:Paragraph"));
     ImGui::Text("Choose Game Banner (Optional)");
     ImGui::PopFont();
-    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 60);
+    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 95);
     if (PillButton("Select File##banner", ImageManager::get("upload"),
                    ImVec2(90.0f, 24.0f), ImVec2(12.0f, 12.0f))) {
+      glfwIconifyWindow(window);
       const char* filters[] = {"*.png"};
       const char* path = tinyfd_openFileDialog("Select Banner Image", "", 1,
                                                filters, "Image files", 0);
@@ -108,6 +113,7 @@ void AddGameDialog::render() {
         std::strncpy(bannerPath_, path, IM_ARRAYSIZE(bannerPath_));
         bannerPath_[IM_ARRAYSIZE(bannerPath_) - 1] = '\0';
       }
+      glfwRestoreWindow(window);
     }
     if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
@@ -123,22 +129,24 @@ void AddGameDialog::render() {
       ImGui::Image(bannerTexture_.id, ImVec2(displayWidth, displayHeight));
     }
 
+    ImGui::PopFont();
+
     float btnHeight = 35.0f;
-    float bottomPadding = 40.0f;
+    float bottomPadding = 30.0f;
     ImGui::SetCursorPosY(ImGui::GetWindowHeight() - btnHeight - bottomPadding);
     float btnWidth = 225.0f;
     float spacing = 10.0f;
     float totalWidth = btnWidth * 2 + spacing;
     ImGui::SetCursorPosX((ImGui::GetWindowWidth() - totalWidth) * 0.5f);
 
+    ImGui::PushFont(FontManager::getFont("Dialog:Button"));
+
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
                           ImVec4(0.9f, 0.3f, 0.3f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonActive,
                           ImVec4(0.7f, 0.1f, 0.1f, 1.0f));
-    ImGui::PushFont(FontManager::getFont("Dialog:Button"));
     if (ImGui::Button("Cancel", ImVec2(btnWidth, 35))) close();
-    ImGui::PopFont();
     if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
     ImGui::PopStyleColor(3);
 
@@ -153,7 +161,6 @@ void AddGameDialog::render() {
     ImGui::PushStyleColor(ImGuiCol_ButtonActive,
                           ImVec4(accentColor.x * 0.85f, accentColor.y * 0.85f,
                                  accentColor.z * 0.85f, accentColor.w));
-    ImGui::PushFont(FontManager::getFont("Dialog:Button"));
     if (ImGui::Button("Add Game", ImVec2(btnWidth, 35))) {
       if (std::strlen(gameName_) > 0 && std::strlen(filePath_) > 0) {
         CustomGames customGames(*storage_);
@@ -162,7 +169,6 @@ void AddGameDialog::render() {
       }
       close();
     }
-    ImGui::PopFont();
     if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
     ImGui::PopStyleColor(3);
 
@@ -202,12 +208,7 @@ bool AddGameDialog::PillButton(const char* label, ImTextureID icon, ImVec2 size,
   dl->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y), border, rounding, 0,
               borderThickness);
   ImVec2 iconS(iconSize.x, iconSize.y);
-
-  const char* hashPos = std::strstr(label, "##");
-  std::string displayText =
-      hashPos ? std::string(label, hashPos - label) : std::string(label);
-
-  ImVec2 textSize = ImGui::CalcTextSize(displayText.c_str());
+  ImVec2 textSize = ImGui::CalcTextSize(label);
 
   float spacing = 8.0f;
   float contentWidth = iconS.x + spacing + textSize.x;
@@ -222,7 +223,8 @@ bool AddGameDialog::PillButton(const char* label, ImTextureID icon, ImVec2 size,
                  pos.y + (size.y - textSize.y) * 0.5f);
 
   ImGui::PushFont(FontManager::getFont("Settings:Option"));
-  dl->AddText(textPos, text, displayText.c_str());
+  dl->AddText(textPos, text,
+              label);  // TODO: Remove the ## part from text to display
   ImGui::PopFont();
 
   return ImGui::IsItemClicked();

@@ -31,11 +31,12 @@ void PanelManager::initPanels(GLFWwindow *w, Storage &storage) {
   addPanel(std::make_unique<LeftPanel>(view_.get()));
   addPanel(std::make_unique<GameInfoPanel>());
 
-  addPanel(makePanelWithCB<GamePanel>(this, "Library", &view_->view, &storage));
   addPanel(
-      makePanelWithCB<GamePanel>(this, "Favorites", &view_->view, &storage));
+      makePanelWithCB<GamePanel>(this, "Library", &view_->view, &storage, w));
+  addPanel(makePanelWithCB<GamePanel>(this, "Favorites", &view_->view, &storage,
+                                      nullptr));
   addPanel(makePanelWithCB<GamePanel>(this, "Recently Played", &view_->view,
-                                      &storage));
+                                      &storage, nullptr));
   addPanel(std::make_unique<SettingsPanel>(&storage, titlebarPtr));
 
   for (auto &panel : panels_) {
