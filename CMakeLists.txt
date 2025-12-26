@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 4.1)
-project(Lazap VERSION 0.9.0)
+project(Lazap VERSION 0.10.0)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Options & Configuration
