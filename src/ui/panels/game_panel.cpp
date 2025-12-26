@@ -250,7 +250,7 @@ void GamePanel::render() {
         }
 
         if (addGameDialog_) {
-          addGameDialog_->render();
+          addGameDialog_->render(window_);
           if (addGameDialog_->requestRefresh_) {
             refreshRequested = true;
             addGameDialog_->requestRefresh_ = false;

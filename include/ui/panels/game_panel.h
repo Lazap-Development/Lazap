@@ -11,8 +11,9 @@ namespace ui {
 
 class GamePanel : public Panel {
  public:
-  GamePanel(const std::string& name, ViewType* v, Storage* storage = nullptr)
-      : Panel(name, storage), view_(v) {}
+  GamePanel(const std::string& name, ViewType* v, Storage* storage = nullptr,
+            GLFWwindow* window = nullptr)
+      : Panel(name, storage), view_(v), window_(window) {}
 
   void init() override;
   void render() override;
@@ -26,6 +27,7 @@ class GamePanel : public Panel {
   const std::vector<Game>* games_ = nullptr;
   ViewType* view_ = nullptr;
   char searchBuffer_[128];
+  GLFWwindow* window_ = nullptr;
 };
 
 using GamePanelPtr = std::unique_ptr<GamePanel>;
