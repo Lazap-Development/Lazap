@@ -5,7 +5,7 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
 #include "ui/panel_manager.h"
-#include "ui/themes/themes.h"
+#include "ui/theme.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
 
@@ -37,7 +37,7 @@ ImGuiLayer::ImGuiLayer(GLFWwindow *window, Storage &storage)
   FontManager::loadFont(
       "Title", b::embed<"assets/fonts/ArchivoBlack-Regular.ttf">(), 24.0f);
   FontManager::loadFont("GameBox:Title",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 18.0f);
+                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 17.0f);
   FontManager::loadFont(
       "GameBox:Time", b::embed<"assets/fonts/RobotoMono-Medium.ttf">(), 10.0f);
 

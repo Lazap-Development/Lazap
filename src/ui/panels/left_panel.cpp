@@ -4,7 +4,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif
-#include "ui/themes/themes.h"
+#include "ui/theme.h"
 #include "utils/image_manager.h"
 
 using namespace ui;

@@ -1,6 +1,4 @@
-#include "ui/themes/themes.h"
-
-#include <cstdio>
+#include "ui/theme.h"
 
 #include "imgui.h"
 
@@ -43,6 +41,9 @@ void setDefaultDarkColors() {
   colors[ImGuiCol_FrameBg] = ImVec4(C, C, C, 1.00f);
   colors[ImGuiCol_FrameBgHovered] = ImVec4(C, C, C, 1.00f);
   colors[ImGuiCol_FrameBgActive] = ImVec4(C, C, C, 1.00f);
+
+  // Modal
+  colors[ImGuiCol_ModalWindowDimBg] = ImVec4(C, C, C, 0.40f);
 
   // Tabs
   colors[ImGuiCol_Tab] = ImVec4(0.18f, 0.18f, 0.22f, 1.00f);

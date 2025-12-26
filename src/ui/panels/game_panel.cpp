@@ -10,7 +10,7 @@
 #include "ui/cmps/addgame_dialog.h"
 #include "ui/cmps/game_box.h"
 #include "ui/panel_manager.h"
-#include "ui/themes/themes.h"
+#include "ui/theme.h"
 #include "utils/fnv1a.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
@@ -49,10 +49,8 @@ void GamePanel::setGames(const std::vector<Game>* games) {
   auto* gamesTable = toml["games"].as_table();
   if (!gamesTable) return;
 
-  // Store app IDs of games already processed from games_
   std::unordered_set<uint64_t> processedGameIds;
 
-  // Process regular games (Steam/Epic)
   for (const auto& game : *games_) {
     const std::string key = std::to_string(
         fnv1a::hash(game.name.c_str(), std::strlen(game.name.c_str())));
@@ -70,17 +68,14 @@ void GamePanel::setGames(const std::vector<Game>* games) {
     }
   }
 
-  // Load custom games - only add if not already in games_
   CustomGames customGames(*storage_);
   std::vector<Game> customGamesList = customGames.getInstalledGames();
 
   for (const auto& game : customGamesList) {
-    // Skip if already added from games_
     if (processedGameIds.count(game.appId) > 0) continue;
 
     const std::string key = std::to_string(game.appId);
 
-    // Create entry in games table if it doesn't exist
     if (!gamesTable->contains(key)) {
       toml::table newEntry;
       newEntry.insert("favourite", false);
@@ -105,7 +100,7 @@ void GamePanel::render() {
   ImVec2 size = ImGui::GetMainViewport()->Size;
   ImGui::PushStyleVar(
       ImGuiStyleVar_WindowPadding,
-      ImVec2(40.0, *view_ == ViewType::MainMenu ? 0 : 25.0f * size.y / 1000));
+      ImVec2(30.0, *view_ == ViewType::MainMenu ? 0 : 25.0f * size.y / 1000));
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoScrollbar |
@@ -214,7 +209,7 @@ void GamePanel::render() {
     float boxWidth = 210.0f * scale_.x;
     float panelWidth = ImGui::GetContentRegionAvail().x;
 
-    float horizontalSpacing = 16.0f;
+    float horizontalSpacing = 12.0f;
     float verticalSpacing = 14.0f;
 
     int columns = (int)((panelWidth + horizontalSpacing) /
@@ -240,8 +235,10 @@ void GamePanel::render() {
         ImDrawList* draw = ImGui::GetWindowDrawList();
         ImVec2 pos = ImGui::GetCursorScreenPos();
         ImVec2 size = ImVec2(210 * scale_.x, 233.1 * scale_.y);
+
         draw->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y),
-                      IM_COL32(162, 162, 162, 175), 5.25f, 0, 2.0f);
+                      IM_COL32(162, 162, 162, 120), 5.25f, 0, 2.0f);
+
         ImGui::InvisibleButton("hitbox", size);
 
         if (ImGui::IsItemHovered()) {
@@ -260,19 +257,11 @@ void GamePanel::render() {
           }
         }
 
-        if (ImGui::IsItemClicked()) {
-          addGameDialog_->open();
-        }
-
         ImGui::PushFont(FontManager::getFont("CustomGame:Plus"));
         ImVec2 text_size = ImGui::CalcTextSize("+");
-        ImGui::SetCursorPos(
-            ImVec2(pos.x + ((size.x - text_size.x) / 2),
-                   pos.y + ((size.y - text_size.y) / 2) - size.y));
-        ImGui::Dummy(ImVec2(0, 82 * scale_.y * 2));
-        ImGui::Dummy(ImVec2(86 * scale_.x, 0));
-        ImGui::SameLine();
-        ImGui::Text("+");
+        ImVec2 text_pos = ImVec2(pos.x + (size.x - text_size.x) * 0.5f,
+                                 pos.y + (size.y - text_size.y) * 0.5f);
+        draw->AddText(text_pos, IM_COL32(162, 162, 162, 255), "+");
         ImGui::PopFont();
       }
 

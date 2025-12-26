@@ -10,7 +10,7 @@
 #include <toml++/toml.hpp>
 
 #include "storage/storage_config.h"
-#include "ui/themes/themes.h"
+#include "ui/theme.h"
 #include "utils/fnv1a.h"
 
 namespace fs = std::filesystem;

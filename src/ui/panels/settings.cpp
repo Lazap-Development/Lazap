@@ -2,7 +2,7 @@
 
 #include <imgui.h>
 
-#include "ui/themes/themes.h"
+#include "ui/theme.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
 
