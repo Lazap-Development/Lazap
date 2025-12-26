@@ -50,11 +50,11 @@ ImGuiLayer::ImGuiLayer(GLFWwindow *window, Storage &storage)
 
   FontManager::loadFont("Dialog:Title",
                         b::embed<"assets/fonts/ArchivoBlack-Regular.ttf">(),
-                        32.0f);
+                        27.0f);
   FontManager::loadFont("Dialog:Button",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 20.0f);
+                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 15.0f);
   FontManager::loadFont("Dialog:Paragraph",
-                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 16.0f);
+                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 15.0f);
 
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 130");

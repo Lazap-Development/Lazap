@@ -45,12 +45,11 @@ void AddGameDialog::render() {
 
   ImGuiWindowFlags flags =
       ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
-      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar;
+      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar |
+      ImGuiWindowFlags_NoMove;
 
   bool open = true;
   if (ImGui::BeginPopupModal("Add New Game", &open, flags)) {
-    ImGui::PushFont(FontManager::getFont("Dialog:Paragraph"));
-
     ImGui::PushFont(FontManager::getFont("Dialog:Title"));
     const char* title = "Add New Game";
     float windowWidth = ImGui::GetWindowWidth();
@@ -61,7 +60,9 @@ void AddGameDialog::render() {
 
     ImGui::Dummy(ImVec2(0, 50));
 
+    ImGui::PushFont(FontManager::getFont("Dialog:Paragraph"));
     ImGui::Text("Game Name");
+    ImGui::PopFont();
     ImGui::Dummy(ImVec2(0, 5));
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 8));
@@ -71,16 +72,16 @@ void AddGameDialog::render() {
 
     ImGui::Dummy(ImVec2(0, 15));
 
+    ImGui::PushFont(FontManager::getFont("Dialog:Paragraph"));
     ImGui::Text("Enter Executable Path");
+    ImGui::PopFont();
     ImGui::Dummy(ImVec2(0, 5));
     ImGui::SetNextItemWidth(-170);
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 8));
     ImGui::InputText("##filepath", filePath_, IM_ARRAYSIZE(filePath_));
     ImGui::PopStyleVar();
     Themes::drawInputBorder();
-    ImGui::SameLine();
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
-                         ImGui::GetContentRegionAvail().x - 115);
+    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 90);
     if (ImGui::Button("Select File", ImVec2(150, 0))) {
       const char* path = tinyfd_openFileDialog("Select Game Executable", "", 0,
                                                nullptr, nullptr, 0);
@@ -92,10 +93,9 @@ void AddGameDialog::render() {
     if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
     ImGui::Dummy(ImVec2(0, 15));
+    ImGui::PushFont(FontManager::getFont("Dialog:Paragraph"));
     ImGui::Text("Choose Game Banner (Optional)");
-    ImGui::SameLine();
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
-                         ImGui::GetContentRegionAvail().x - 115);
+    ImGui::SameLine(ImGui::GetContentRegionAvail().x - 90);
     if (ImGui::Button("Select File##banner", ImVec2(150, 0))) {
       const char* filters[] = {"*.png"};
       const char* path = tinyfd_openFileDialog("Select Banner Image", "", 1,
@@ -163,8 +163,6 @@ void AddGameDialog::render() {
     if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
     ImGui::PopStyleColor(3);
 
-    ImGui::PopFont();
-
     ImVec2 pos = ImGui::GetWindowPos();
     ImVec2 size = ImGui::GetWindowSize();
     ImGui::GetForegroundDrawList()->AddRect(
@@ -175,4 +173,50 @@ void AddGameDialog::render() {
   }
 
   ImGui::PopStyleVar();
+}
+
+bool AddGameDialog::PillButton(const char* label, ImTextureID icon, ImVec2 size,
+                               ImVec2 iconSize) {
+  ImVec2 pos = ImGui::GetCursorScreenPos();
+
+  ImGui::InvisibleButton(label, size);
+  // bool hovered = ImGui::IsItemHovered();
+  bool held = ImGui::IsItemActive();
+
+  ImDrawList* dl = ImGui::GetWindowDrawList();
+
+  ImU32 bg = held ? IM_COL32(95, 96, 104, 1)
+                  //  : hovered ? IM_COL32(135, 136, 145, 255)
+                  : IM_COL32(118, 119, 128, 1);
+
+  ImU32 border = IM_COL32(162, 162, 162, 105);
+  ImU32 text = IM_COL32(162, 162, 162, 105);
+
+  float rounding = 4.0f;
+  float borderThickness = 1.0f;
+
+  dl->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bg, rounding);
+  dl->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y), border, rounding, 0,
+              borderThickness);
+  ImVec2 iconS(iconSize.x, iconSize.y);
+  ImVec2 textSize = ImGui::CalcTextSize(label);
+
+  float spacing = 8.0f;
+  float contentWidth = iconS.x + spacing + textSize.x;
+
+  ImVec2 contentStart(pos.x + (size.x - contentWidth) * 0.5f,
+                      pos.y + (size.y - iconS.y) * 0.5f);
+
+  dl->AddImage(icon, contentStart,
+               ImVec2(contentStart.x + iconS.x, contentStart.y + iconS.y));
+
+  ImVec2 textPos(contentStart.x + iconS.x + spacing,
+                 pos.y + (size.y - textSize.y) * 0.5f);
+
+  ImGui::PushFont(FontManager::getFont("Settings:Option"));
+  dl->AddText(textPos, text,
+              label);  // TODO: Remove the ## part from text to display
+  ImGui::PopFont();
+
+  return ImGui::IsItemClicked();
 }

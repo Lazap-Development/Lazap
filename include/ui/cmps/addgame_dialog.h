@@ -20,6 +20,8 @@ class AddGameDialog : public Panel {
 
   void requestRefresh() { requestRefresh_ = true; }
   bool requestRefresh_ = false;
+  bool PillButton(const char* label, ImTextureID icon, ImVec2 size,
+                  ImVec2 iconSize = ImVec2(16, 16));
 
  private:
   bool isOpen_ = false;

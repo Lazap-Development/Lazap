@@ -22,6 +22,8 @@ void SettingsPanel::init() {
   ImageManager::loadSVG(b::embed<"assets/svg/appearance.svg">(), "appearance",
                         0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/link.svg">(), "link", 0xFFFFFFFF);
+  ImageManager::loadSVG(b::embed<"assets/svg/upload.svg">(), "upload",
+                        0xA2A2A2);
 
   loadSettings();
 }
