@@ -18,8 +18,9 @@ Before submitting a Pull Request (PR), please carefully review these guidelines 
 
 4. **Compatibility**
    - Ensure compatibility with current (non-deprecated) versions of:
-     - Node.js
-     - Dependencies
+     - CMake
+     - MinGW (or MSVC)
+     - Meson
      - Other external dependencies
 
 5. **Versioning**
