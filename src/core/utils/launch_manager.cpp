@@ -2,9 +2,6 @@
 #include <clients/steam/steam.h>
 #include <utils/launch_manager.h>
 
-#include <algorithm>
-#include <cstdio>
-#include <cstdlib>
 #include <filesystem>
 
 #ifdef _WIN32

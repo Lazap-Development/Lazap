@@ -2,9 +2,6 @@
 
 #include <imgui.h>
 
-#include <algorithm>
-#include <cstring>
-
 #include "ui/cmps/addgame_dialog.h"
 #include "ui/cmps/game_box.h"
 #include "ui/panel_manager.h"

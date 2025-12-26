@@ -2,8 +2,6 @@
 
 #include <imgui.h>
 
-#include <ctime>
-
 #include "utils/fnv1a.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"

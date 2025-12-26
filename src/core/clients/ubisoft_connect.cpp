@@ -1,15 +1,8 @@
 ﻿#include <clients/ubisoft_connect.h>
 
-#include <algorithm>
 #include <filesystem>
-#include <fstream>
 #include <iostream>
-#include <map>
-#include <optional>
 #include <regex>
-#include <sstream>
-#include <string>
-#include <vector>
 
 #include "clients/client.h"
 

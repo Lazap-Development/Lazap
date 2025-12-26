@@ -1,11 +1,9 @@
 #include "application.h"
 
-#include <cstdio>
-#include <memory>
 #include <toml++/toml.hpp>
-#include <vector>
 
 #include "addons/discord_rpc/discord_rpc.h"
+#include "clients/custom_games.h"
 #include "clients/epic_games.h"
 #include "clients/riot_games.h"
 #include "clients/rockstar_games.h"
@@ -14,12 +12,6 @@
 #include "imgui_layer.h"
 #include "storage/storage.h"
 #include "utils/banner_manager.h"
-
-#define STB_IMAGE_IMPLEMENTATION
-#include <iostream>
-
-#include "clients/custom_games.h"
-#include "stb_image.h"
 
 #ifdef _WIN32
 #define _WIN32_WINNT 0x0A00  // Windows 10

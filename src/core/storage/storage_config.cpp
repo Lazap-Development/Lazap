@@ -1,6 +1,5 @@
 #include "storage/storage_config.h"
 
-#include <cstdlib>
 #include <string>
 
 namespace StorageConfig {
