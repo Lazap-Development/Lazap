@@ -4,9 +4,7 @@
 
 #include <algorithm>
 #include <cstring>
-#include <unordered_set>
 
-#include "clients/custom_games.h"
 #include "ui/cmps/addgame_dialog.h"
 #include "ui/cmps/game_box.h"
 #include "ui/panel_manager.h"
@@ -49,40 +47,11 @@ void GamePanel::setGames(const std::vector<Game>* games) {
   auto* gamesTable = toml["games"].as_table();
   if (!gamesTable) return;
 
-  std::unordered_set<uint64_t> processedGameIds;
-
   for (const auto& game : *games_) {
     const std::string key = std::to_string(
         fnv1a::hash(game.name.c_str(), std::strlen(game.name.c_str())));
     auto* entry = gamesTable->get(key);
-    if (!entry || !entry->is_table()) continue;
 
-    bool shouldAdd = true;
-    if (*view_ == ViewType::Favorites) {
-      shouldAdd = entry->as_table()->get("favourite")->value_or(false);
-    }
-
-    if (shouldAdd) {
-      gameBoxes_.emplace_back(std::make_unique<GameBox>(game, storage_));
-      processedGameIds.insert(game.appId);
-    }
-  }
-
-  CustomGames customGames(*storage_);
-  std::vector<Game> customGamesList = customGames.getInstalledGames();
-
-  for (const auto& game : customGamesList) {
-    if (processedGameIds.count(game.appId) > 0) continue;
-
-    const std::string key = std::to_string(game.appId);
-
-    if (!gamesTable->contains(key)) {
-      toml::table newEntry;
-      newEntry.insert("favourite", false);
-      gamesTable->insert(key, newEntry);
-    }
-
-    auto* entry = gamesTable->get(key);
     if (!entry || !entry->is_table()) continue;
 
     bool shouldAdd = true;
@@ -253,6 +222,7 @@ void GamePanel::render() {
           addGameDialog_->render();
           if (addGameDialog_->requestRefresh_) {
             refreshRequested = true;
+            needGamesReload_ = true;
             addGameDialog_->requestRefresh_ = false;
           }
         }
@@ -274,5 +244,8 @@ void GamePanel::render() {
   ImGui::End();
   ImGui::PopStyleVar();
 
-  if (refreshRequested && onRefresh_) onRefresh_();
+  if (refreshRequested && onRefresh_) {
+    onRefresh_(needGamesReload_);
+    needGamesReload_ = false;
+  }
 }

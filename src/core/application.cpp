@@ -126,8 +126,6 @@ void Application::run() {
 
   glfwMakeContextCurrent(window);
   glfwSetMouseButtonCallback(window, WindowCallbacks::mouseButtonCB);
-  glfwSetWindowCloseCallback(
-      window, [](GLFWwindow *w) { glfwSetWindowShouldClose(w, GLFW_TRUE); });
 
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     fprintf(stderr, "Failed to initialize GLAD\n");
@@ -159,19 +157,29 @@ void Application::run() {
   clients.push_back(std::make_unique<CustomGames>(storage));
 
   BannerManager bm;
-  std::vector<Game> games;
-  for (const auto &client : clients) {
-    for (auto &game : client->getInstalledGames()) {
-      if (game.bannerUrl.empty())
-        game.bannerUrl = bm.getBanner(client->getType(), game.name,
-                                      std::to_string(game.appId));
-      storage.insertGameTOML(game.name);
-      games.push_back(std::move(game));
+  auto loadAllGames = [&clients, &bm, &storage]() -> std::vector<Game> {
+    std::vector<Game> games;
+    for (const auto &client : clients) {
+      for (auto &game : client->getInstalledGames()) {
+        if (game.bannerUrl.empty())
+          game.bannerUrl = bm.getBanner(client->getType(), game.name,
+                                        std::to_string(game.appId));
+        storage.insertGameTOML(game.name);
+        games.push_back(std::move(game));
+      }
     }
-  }
+    return games;
+  };
+
+  std::vector<Game> games = loadAllGames();
 
   ImGuiLayer imgui(window, storage);
   imgui.setGames(std::move(games));
+
+  imgui.setOnGamesReload([&imgui, &loadAllGames]() {
+    std::vector<Game> reloadedGames = loadAllGames();
+    imgui.setGames(std::move(reloadedGames));
+  });
 
   if (discordRpc) {
     discord::RichPresence::Initialize("932504287337148417");

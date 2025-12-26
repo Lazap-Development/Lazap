@@ -27,11 +27,13 @@ class PanelManager {
   void setPanelVisible(const std::string& name, bool visible);
   bool isPanelVisible(const std::string& name) const;
   void setGames(const std::vector<Game>* games);
-  void refreshPanel(const std::string& name);
+  void setOnGamesReload(std::function<void()> callback);
+  void refreshPanel(const std::string& name, const bool reloadGames);
   std::unique_ptr<Views> view_;
 
  private:
   std::vector<std::unique_ptr<Panel>> panels_;
+  std::function<void()> onGamesReload_;
 };
 
 enum class ViewType { None, MainMenu, Library, Favorites, Settings };

@@ -26,6 +26,7 @@ class GamePanel : public Panel {
   const std::vector<Game>* games_ = nullptr;
   ViewType* view_ = nullptr;
   char searchBuffer_[128];
+  bool needGamesReload_ = false;
 };
 
 using GamePanelPtr = std::unique_ptr<GamePanel>;

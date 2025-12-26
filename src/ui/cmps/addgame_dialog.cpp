@@ -1,11 +1,11 @@
 #include "ui/cmps/addgame_dialog.h"
 
 #include <imgui.h>
+#include <tinyfiledialogs.h>
 
 #include <cstring>
 
 #include "clients/custom_games.h"
-#include "tinyfiledialogs.h"
 #include "ui/theme.h"
 #include "utils/font_manager.h"
 

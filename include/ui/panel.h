@@ -25,7 +25,7 @@ class Panel {
   bool visible() const { return visible_; }
   void setVisible(bool v) { visible_ = v; }
 
-  void setOnRefresh(std::function<void()> cb) { onRefresh_ = cb; }
+  void setOnRefresh(std::function<void(const bool)> cb) { onRefresh_ = cb; }
 
   static ImVec2 getScale() {
     ImGuiIO& io = ImGui::GetIO();
@@ -42,7 +42,7 @@ class Panel {
   bool visible_ = true;
   ImVec2 scale_ = ImVec2(0, 0);
 
-  std::function<void()> onRefresh_;
+  std::function<void(const bool)> onRefresh_;
 };
 
 }  // namespace ui

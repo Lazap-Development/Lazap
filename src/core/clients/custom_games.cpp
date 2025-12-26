@@ -1,7 +1,6 @@
 #include <clients/custom_games.h>
 
 #include <filesystem>
-#include <fstream>
 #include <iostream>
 #include <string>
 #include <toml++/toml.hpp>
@@ -98,26 +97,34 @@ bool CustomGames::addCustomGame(const std::string& location,
   }
 
   try {
-    std::string executable = extractExecutableName(location);
-    std::string installLocation = extractLocation(location);
-
     size_t gameId = fnv1a::hash(gameName.c_str(), gameName.length());
     std::string gameIdStr = std::to_string(gameId);
 
     storage_.updateTOML([&](toml::table& config) {
-      if (!config.contains("custom_games")) {
+      if (!config.contains("custom_games"))
         config.insert("custom_games", toml::table{});
-      }
-
       auto customGamesTable = config["custom_games"].as_table();
 
-      toml::table gameTable;
-      gameTable.insert("name", gameName);
-      gameTable.insert("executable", toml::value(executable));
-      gameTable.insert("location", toml::value(installLocation));
-      gameTable.insert("banner_path", toml::value(bannerPath));
+      toml::table customEntry;
+      customEntry.insert("name", gameName);
+      customEntry.insert("executable",
+                         toml::value(extractExecutableName(location)));
+      customEntry.insert("location", toml::value(extractLocation(location)));
+      customEntry.insert("banner_path", toml::value(bannerPath));
+      customGamesTable->insert(gameIdStr, customEntry);
 
-      customGamesTable->insert(gameIdStr, gameTable);
+      if (!config.contains("games")) {
+        config.insert("games", toml::table{});
+      }
+      auto gamesTable = config["games"].as_table();
+      if (gamesTable && !gamesTable->contains(gameIdStr)) {
+        toml::table meta;
+        meta.insert("name", gameName);
+        meta.insert("favourite", false);
+        meta.insert("playtime", "00:00:00");
+        meta.insert("last_launch", "");
+        gamesTable->insert(gameIdStr, meta);
+      }
     });
 
     std::cout << "Successfully added custom game: " << gameName << std::endl;

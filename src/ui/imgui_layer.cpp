@@ -127,6 +127,13 @@ void ImGuiLayer::setGames(std::vector<Game> games) {
   panel_manager_->setGames(&games_);
 }
 
+void ImGuiLayer::setOnGamesReload(std::function<void()> callback) {
+  onGamesReload_ = callback;
+  if (panel_manager_) {
+    panel_manager_->setOnGamesReload(callback);
+  }
+}
+
 void ImGuiLayer::renderBackground(const ImGuiViewport *viewport) {
   if (panel_manager_->view_->view == ui::ViewType::MainMenu) {
     ImDrawList *bg = ImGui::GetWindowDrawList();

@@ -16,7 +16,9 @@ template <typename T, typename... Args>
 std::unique_ptr<T> makePanelWithCB(PanelManager *pm, Args &&...args) {
   auto panel = std::make_unique<T>(std::forward<Args>(args)...);
   std::string panelName = panel->getName();
-  panel->setOnRefresh([pm, panelName]() { pm->refreshPanel(panelName); });
+  panel->setOnRefresh([pm, panelName](const bool reloadGames) {
+    pm->refreshPanel(panelName, reloadGames);
+  });
   return panel;
 }
 
@@ -109,7 +111,13 @@ void PanelManager::setGames(const std::vector<Game> *games) {
   }
 }
 
-void PanelManager::refreshPanel(const std::string &name) {
+void PanelManager::setOnGamesReload(std::function<void()> callback) {
+  onGamesReload_ = callback;
+}
+
+void PanelManager::refreshPanel(const std::string &name, bool reloadGames) {
+  if (reloadGames && onGamesReload_) onGamesReload_();
+
   for (auto &panel : panels_) {
     if (panel->getName() == name) {
       if (auto *gp = dynamic_cast<GamePanel *>(panel.get())) {
@@ -185,7 +193,7 @@ void Views::Favorites() {
   view = ViewType::Favorites;
   discord::RichPresence::UpdatePresence("Lazap", "Browsing Favourites");
 
-  panel_manager->refreshPanel("Favorites");
+  panel_manager->refreshPanel("Favorites", false);
 }
 
 void Views::Settings() {
