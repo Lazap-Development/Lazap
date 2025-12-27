@@ -90,7 +90,6 @@ jobs:
       
       - name: Build (Windows)
         if: matrix.os == 'windows-latest'
-        shell: msys2 {0}
         run: cmake --build build --config Release
       
       - name: Package (Linux)
@@ -100,7 +99,6 @@ jobs:
       
       - name: Package (Windows)
         if: matrix.os == 'windows-latest'
-        shell: msys2 {0}
         run: cmake --build build --target package
       
       - name: Upload Artifacts (Linux)
