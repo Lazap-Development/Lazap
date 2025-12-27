@@ -2,6 +2,7 @@
 
 #include <filesystem>
 #include <iostream>
+#include <map>
 #include <regex>
 
 #include "clients/client.h"
