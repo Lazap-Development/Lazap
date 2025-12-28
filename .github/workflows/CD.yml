@@ -1,0 +1,168 @@
+name: CD
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: 'Platform'
+        required: true
+        type: choice
+        options:
+          - 'all'
+          - 'ubuntu-latest'
+          - 'windows-latest'
+        default: 'all'
+        
+jobs:
+  build:
+    name: CD on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ${{ github.event.inputs.platform == 'all' && fromJSON('["ubuntu-latest", "windows-latest"]') || fromJSON(format('["{0}"]', github.event.inputs.platform)) }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      
+      - name: Setup CMake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '4.2'
+      
+      - name: Install dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            ninja-build \
+            cmake \
+            git \
+            libgl1-mesa-dev \
+            xorg-dev \
+            libxrandr-dev \
+            libwayland-dev \
+            libxkbcommon-dev \
+            libxkbcommon-x11-dev \
+            wayland-protocols \
+            libwayland-egl-backend-dev \
+            meson \
+            libpsl-dev \
+            libidn2-dev \
+            libnghttp2-dev \
+            libunistring-dev \
+            rpm \
+            patchelf \
+            libfuse2
+          wget -q https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x appimagetool-x86_64.AppImage
+          sudo mv appimagetool-x86_64.AppImage /usr/local/bin/appimagetool
+      
+      - name: Setup MSVC (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: TheMrMilchmann/setup-msvc-dev@v4
+        with:
+          arch: x64
+      
+      - name: Install meson
+        if: matrix.os == 'windows-latest'
+        run: |
+          pip install meson
+      
+      - name: Configure (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+      
+      - name: Configure (Windows)
+        if: matrix.os == 'windows-latest'
+        run: >
+          cmake -B build
+          -G Ninja 
+          -DCMAKE_BUILD_TYPE=Release
+          -DCMAKE_C_COMPILER=cl
+          -DCMAKE_CXX_COMPILER=cl
+
+      - name: Build (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: cmake --build build --config Release
+      
+      - name: Build (Windows)
+        if: matrix.os == 'windows-latest'
+        run: cmake --build build --config Release
+      
+      - name: Package (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: cmake --build build --target package
+      
+      - name: Package (Windows)
+        if: matrix.os == 'windows-latest'
+        run: cmake --build build --target package
+      
+      - name: Upload Artifacts (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: lazap-${{ matrix.os }}
+          path: |
+            build/*.deb
+            build/*.rpm
+            build/*.tar.gz
+            build/*.AppImage
+      
+      - name: Upload Artifacts (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: lazap-${{ matrix.os }}
+          path: build/*.msi
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      
+      - name: Download Linux artifacts
+        if: github.event.inputs.platform == 'ubuntu-latest' || github.event.inputs.platform == 'all'
+        uses: actions/download-artifact@v4
+        with:
+          name: lazap-ubuntu-latest
+          path: artifacts/linux
+      
+      - name: Download Windows artifacts
+        if: github.event.inputs.platform == 'windows-latest' || github.event.inputs.platform == 'all'
+        uses: actions/download-artifact@v4
+        with:
+          name: lazap-windows-latest
+          path: artifacts/windows
+
+      - name: Display structure of downloaded files
+        run: ls -R artifacts
+        
+      - name: Get CMake Project Version
+        id: cmake_version
+        uses: DarwinInnovation/cmake-project-version-action@v1.0
+        with:
+          path: '.'
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.cmake_version.outputs.version }}
+          name: v${{ steps.cmake_version.outputs.version }}
+          draft: true
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            artifacts/linux/*.deb
+            artifacts/linux/*.rpm
+            artifacts/linux/*.tar.gz
+            artifacts/linux/*.AppImage
+            artifacts/windows/*.msi

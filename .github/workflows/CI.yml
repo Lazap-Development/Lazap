@@ -1,37 +1,94 @@
 name: CI
-
-on:
+on: 
   pull_request:
   push:
     branches: [main]
     paths:
-    - '**.rs'
-    - '**.js'
-    - '**.vue'
-    - '**.toml'
-    - '**.yml'
-    - '**.json'
+      - '**.c'
+      - '**.cpp'
+      - '**.h'
+      - '**.hpp'
 
 jobs:
-  check-formatting:
-    name: Check formatting
+  formatting-check:
+    name: Check Formatting
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        path:
+          - 'src'
+          - 'include'
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - name: Check C/C++ Formatting
+        uses: jidicula/clang-format-action@v4.15.0
+        with:
+          clang-format-version: '20'
+          check-path: ${{ matrix.path }}
 
-    - uses: hecrj/setup-rust-action@v1
-      with:
-        rust-version: nightly
-        components: rustfmt
-    - uses: taiki-e/install-action@v2
-      with:
-        tool: typos-cli
-    - name: Check Rust Formatting
-      run: cd src-tauri && cargo +nightly fmt --all -- --check
-    - name: Run Typos
-      run: typos
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-    - name: Prettify code
-      uses: creyD/prettier_action@v4.3
-      with:
-        dry: True
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '4.1'
+
+      - name: Install dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            ninja-build \
+            cmake \
+            git \
+            libgl1-mesa-dev \
+            xorg-dev \
+            libxrandr-dev \
+            libwayland-dev \
+            libxkbcommon-dev \
+            libxkbcommon-x11-dev \
+            wayland-protocols \
+            libwayland-egl-backend-dev \
+            meson \
+            libpsl-dev \
+            libidn2-dev \
+            libnghttp2-dev \
+            libunistring-dev
+
+      - name: Setup MSYS2 (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-nghttp2
+            mingw-w64-x86_64-libpsl
+            mingw-w64-x86_64-libidn2
+            mingw-w64-x86_64-meson
+
+      - name: Setup Ninja (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: seanmiddleditch/gha-setup-ninja@v4
+
+      - name: Configure CMake
+        if: matrix.os == 'windows-latest'
+        shell: msys2 {0}
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+      
+      - name: Configure CMake
+        if: matrix.os != 'windows-latest'
+        run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+      
+      - name: Build
+        run: cmake --build build --config Release
