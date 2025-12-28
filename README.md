@@ -25,7 +25,7 @@ Depending on your operating system, we try to provide as much ease in terms of i
 
 ▸ **Windows**: 
 - Download and install the latest `.msi` file in the [releases](https://github.com/Lazap-Development/lazap/releases) section.
-- Or install via Winget: 
+- Or install via WinGet (updates may lag behind GitHub releases):
 ```
 winget install LazapDevelopment.Lazap
 ```
@@ -39,4 +39,4 @@ winget install LazapDevelopment.Lazap
   - `AppImage` *(universal Linux, no installation required)*
 - Arch Linux users can also directly install from the maintained `lazap-bin`
   [AUR](https://aur.archlinux.org/packages/lazap-bin)
-  *(Arch-based distros like Manjaro, EndeavourOS)* (Thanks to [@begin-theadventure])
+  *(Arch-based distros like Manjaro, EndeavourOS)* (Thanks to [@begin-theadventure](https://github.com/begin-theadventure))
