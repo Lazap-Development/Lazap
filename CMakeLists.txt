@@ -9,8 +9,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Static linking to avoid runtime dependencies (vcruntime)
-if(WIN32 AND MSVC) 
-  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") 
+if(WIN32 AND MSVC)
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 
 # Strip debug symbols in release
@@ -38,13 +38,13 @@ include(FetchContent)
 
 FetchContent_Declare(imgui
     GIT_REPOSITORY https://github.com/ocornut/imgui
-    GIT_TAG        v1.92.5-docking
+    GIT_TAG        v1.92.8-docking
     GIT_SHALLOW    TRUE
 )
 
 FetchContent_Declare(glaze
     GIT_REPOSITORY https://github.com/stephenberry/glaze.git
-    GIT_TAG        v5.5.4
+    GIT_TAG        v7.7.0
     GIT_SHALLOW    TRUE
 )
 
@@ -60,8 +60,8 @@ FetchContent_Declare(lunasvg
 
 FetchContent_Declare(tomlplusplus
     GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
-    GIT_TAG        7807a314ad1c0c9c227d9dbd68f23f187163372e
-    GIT_SHALLOW    TRUE
+    GIT_TAG        a43ad3787293f4a46b1d70c0924b5a25d10e79fc
+    GIT_SHALLOW    FALSE
 )
 
 FetchContent_Declare(cpr
