@@ -62,7 +62,8 @@ jobs:
             libpsl-dev \
             libidn2-dev \
             libnghttp2-dev \
-            libunistring-dev
+            libunistring-dev \
+            libnotify-dev
 
       - name: Setup MSYS2 (Windows)
         if: matrix.os == 'windows-latest'
