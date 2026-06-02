@@ -52,6 +52,7 @@ jobs:
             libnghttp2-dev \
             libnotify-dev \
             libunistring-dev \
+            libnotify-dev \
             rpm \
             patchelf \
             libfuse2
