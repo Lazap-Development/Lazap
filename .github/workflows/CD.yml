@@ -52,6 +52,9 @@ jobs:
             libnghttp2-dev \
             libunistring-dev \
             libnotify-dev \
+            libqt5svg5-dev \
+            qtbase5-dev \
+            qttools5-dev \
             rpm \
             patchelf \
             libfuse2
