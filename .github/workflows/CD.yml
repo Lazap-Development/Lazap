@@ -50,6 +50,7 @@ jobs:
             libpsl-dev \
             libidn2-dev \
             libnghttp2-dev \
+            libnotify-dev \
             libunistring-dev \
             rpm \
             patchelf \
