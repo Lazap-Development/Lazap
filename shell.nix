@@ -3,6 +3,7 @@
 }:
 let
   inherit (pkgs) lib;
+  qt = pkgs.qt5;
 in
 
 pkgs.mkShell {
@@ -37,6 +38,16 @@ pkgs.mkShell {
     curl.dev
     openssl.dev
     zlib
+
+    # Desktop notifications
+    libnotify
+    glib
+    sysprof
+
+    # System tray
+    qt.qtbase
+    qt.qttools
+    qt.qtwayland
   ];
 
   # Make Nix store .so files visible to the dynamic linker at runtime
@@ -46,6 +57,10 @@ pkgs.mkShell {
       wayland
       libGL
       libxkbcommon
+      libnotify
+      glib
+      qt.qtbase
+      qt.qtwayland
     ]
   );
 
