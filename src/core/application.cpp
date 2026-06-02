@@ -1,4 +1,4 @@
-// TODO: Stop app from starting multiple instances 
+// TODO: Stop app from starting multiple instances
 
 #include "application.h"
 
@@ -187,15 +187,14 @@ void Application::run() {
          std::chrono::duration_cast<std::chrono::milliseconds>(
              std::chrono::high_resolution_clock::now() - startupBegin)
              .count());
-  
+
   if (systemTray) {
     TrayManager::init(window);
-    glfwSetWindowCloseCallback(window, [](GLFWwindow* win) {
+    glfwSetWindowCloseCallback(window, [](GLFWwindow *win) {
       if (TrayManager::shouldQuit()) {
         glfwSetWindowShouldClose(win, GLFW_TRUE);
         TrayManager::shutdown();
-      }
-      else {
+      } else {
         glfwSetWindowShouldClose(win, GLFW_FALSE);
         TrayManager::minimize();
       }
@@ -217,7 +216,8 @@ void Application::run() {
 #endif
 
   RunnerState runner;
-  while (systemTray ? !TrayManager::shouldQuit() : !glfwWindowShouldClose(window)) {
+  while (systemTray ? !TrayManager::shouldQuit()
+                    : !glfwWindowShouldClose(window)) {
     if (glfwWindowShouldClose(window)) {
       glfwSetWindowShouldClose(window, GLFW_FALSE);
       TrayManager::minimize();
@@ -225,7 +225,7 @@ void Application::run() {
     if (systemTray) TrayManager::update();
 
     IdleBySleeping(runner.fpsIdling);
-    
+
     glfwPollEvents();
     if (TrayManager::isWindowHidden()) {
       continue;
@@ -247,7 +247,7 @@ void Application::run() {
 
     glfwSwapBuffers(window);
   }
-  
+
   if (discordRpc) {
     discord::RichPresence::Shutdown();
   }
