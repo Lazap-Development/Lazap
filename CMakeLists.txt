@@ -53,6 +53,12 @@ FetchContent_Declare(stb
     DOWNLOAD_NO_EXTRACT  TRUE
 )
 
+FetchContent_Declare(tray
+    GIT_REPOSITORY  https://github.com/LizardByte/tray.git
+    GIT_TAG         df9af119085e2cd3f1a9e88e4cc865963879d468
+    GIT_SHALLOW     TRUE
+)
+
 FetchContent_Declare(lunasvg
     GIT_REPOSITORY https://github.com/sammycage/lunasvg.git
     GIT_TAG        v3.5.0
@@ -76,7 +82,7 @@ FetchContent_Declare(battery-embed
 )
 
 FetchContent_MakeAvailable(
-  imgui glaze stb lunasvg tomlplusplus cpr battery-embed
+  imgui glaze stb tray lunasvg tomlplusplus cpr battery-embed
 )
 
 #-----------------------------------------------------------------------------------------------------------------------
@@ -148,6 +154,7 @@ target_include_directories(${EXECUTABLE_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${imgui_SOURCE_DIR}/
     ${stb_SOURCE_DIR}/
+    ${tray_SOURCE_DIR}/src
     ${tomlplusplus_SOURCE_DIR}/include
 )
 
@@ -157,6 +164,7 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     glaze::glaze
     cpr::cpr
     lunasvg
+    tray::tray
     tinyfiledialogs
     $<$<PLATFORM_ID:Linux>:X11>
     $<$<PLATFORM_ID:Windows>:dwmapi>

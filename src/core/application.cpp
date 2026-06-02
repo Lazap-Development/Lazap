@@ -1,3 +1,5 @@
+// TODO: Stop app from starting multiple instances 
+
 #include "application.h"
 
 #include <toml++/toml.hpp>
@@ -12,6 +14,7 @@
 #include "imgui_layer.h"
 #include "storage/storage.h"
 #include "utils/banner_manager.h"
+#include "utils/tray_manager.h"
 
 #ifdef _WIN32
 #define _WIN32_WINNT 0x0A00  // Windows 10
@@ -134,10 +137,12 @@ void Application::run() {
   storage.initTOML();
 
   bool discordRpc = true;
+  bool systemTray = false;
   auto toml = storage.loadTOML();
   auto *settingsTable = toml["settings"].as_table();
   if (settingsTable) {
     discordRpc = settingsTable->get("discord_rpc")->value_or(false);
+    systemTray = settingsTable->get("quit_tray_min")->value_or(false);
   }
 
   std::vector<std::unique_ptr<Client>> clients;
@@ -182,6 +187,20 @@ void Application::run() {
          std::chrono::duration_cast<std::chrono::milliseconds>(
              std::chrono::high_resolution_clock::now() - startupBegin)
              .count());
+  
+  if (systemTray) {
+    TrayManager::init(window);
+    glfwSetWindowCloseCallback(window, [](GLFWwindow* win) {
+      if (TrayManager::shouldQuit()) {
+        glfwSetWindowShouldClose(win, GLFW_TRUE);
+        TrayManager::shutdown();
+      }
+      else {
+        glfwSetWindowShouldClose(win, GLFW_FALSE);
+        TrayManager::minimize();
+      }
+    });
+  }
 
   glfwShowWindow(window);
 
@@ -193,13 +212,24 @@ void Application::run() {
   DWM_WINDOW_CORNER_PREFERENCE cornerPref = DWMWCP_ROUND;
   DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPref,
                         sizeof(cornerPref));
+  glfwIconifyWindow(window);
+  glfwRestoreWindow(window);
 #endif
 
   RunnerState runner;
-  while (!glfwWindowShouldClose(window)) {
-    IdleBySleeping(runner.fpsIdling);
+  while (systemTray ? !TrayManager::shouldQuit() : !glfwWindowShouldClose(window)) {
+    if (glfwWindowShouldClose(window)) {
+      glfwSetWindowShouldClose(window, GLFW_FALSE);
+      TrayManager::minimize();
+    }
+    if (systemTray) TrayManager::update();
 
+    IdleBySleeping(runner.fpsIdling);
+    
     glfwPollEvents();
+    if (TrayManager::isWindowHidden()) {
+      continue;
+    }
 
 #ifdef _WIN32
     UpdateWindowCorners(window);
@@ -217,7 +247,7 @@ void Application::run() {
 
     glfwSwapBuffers(window);
   }
-
+  
   if (discordRpc) {
     discord::RichPresence::Shutdown();
   }

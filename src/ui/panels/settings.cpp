@@ -105,9 +105,9 @@ void SettingsPanel::render() {
       ImGui::BeginGroup();
 
       if (addOption("Minimize to Tray on Exit", InputType::Toggle,
-                    &quitTrayMin_, true)) {
-        // saveSettings();
-        ImGui::OpenPopup("Coming Soon");
+                    &quitTrayMin_)) {
+        saveSettings();
+        ImGui::OpenPopup("Restart");
       }
       if (addOption("Launch at Startup", InputType::Toggle, &autoStart_,
                     true)) {
@@ -121,6 +121,10 @@ void SettingsPanel::render() {
       }
       if (ImGui::BeginPopup("Coming Soon", ImGuiWindowFlags_NoMove)) {
         ImGui::Text("This feature is coming soon!");
+        ImGui::EndPopup();
+      }
+      if (ImGui::BeginPopup("Restart", ImGuiWindowFlags_NoMove)) {
+        ImGui::Text("Restart the app to apply this change");
         ImGui::EndPopup();
       }
 
