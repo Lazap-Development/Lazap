@@ -2,7 +2,10 @@
 
 #include <imgui.h>
 
+#include <filesystem>
+
 #include "ui/theme.h"
+#include "utils/autostart.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
 
@@ -34,7 +37,7 @@ void SettingsPanel::loadSettings() {
   if (!settings) return;
 
   quitTrayMin_ = settings->get("quit_tray_min")->value_or(false);
-  autoStart_ = settings->get("auto_start")->value_or(false);
+  autoStart_ = Autostart::shortcutExists();
   checkUpdates_ = settings->get("check_updates")->value_or(true);
   launcherIcons_ = settings->get("launcher_icons")->value_or(true);
   discordRpc_ = settings->get("discord_rpc")->value_or(false);
@@ -109,10 +112,12 @@ void SettingsPanel::render() {
         saveSettings();
         ImGui::OpenPopup("Restart");
       }
-      if (addOption("Launch at Startup", InputType::Toggle, &autoStart_,
-                    true)) {
-        // saveSettings();
-        ImGui::OpenPopup("Coming Soon");
+      if (addOption("Launch at Startup", InputType::Toggle, &autoStart_)) {
+        saveSettings();
+        if (autoStart_)
+          Autostart::createShortcut();
+        else
+          Autostart::deleteShortcut();
       }
       if (addOption("Check for Updates", InputType::Toggle, &checkUpdates_,
                     true)) {
