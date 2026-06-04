@@ -1,6 +1,8 @@
 #include <imgui_internal.h>
 #include <imgui_layer.h>
 
+#include <filesystem>
+
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
@@ -56,6 +58,11 @@ ImGuiLayer::ImGuiLayer(GLFWwindow *window, Storage &storage)
   FontManager::loadFont("Dialog:Paragraph",
                         b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 15.0f);
 
+  if (storage.exists("custom_bg.png")) {
+    ImageManager::loadPNG(
+        (std::filesystem::path(storage.getStoragePath()) / "custom_bg.png")
+            .string());
+  }
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 130");
 
@@ -146,5 +153,15 @@ void ImGuiLayer::renderBackground(const ImGuiViewport *viewport) {
     bg->AddRectFilledMultiColor(img_pos, img_size, IM_COL32(0, 0, 0, 0),
                                 IM_COL32(0, 0, 0, 0), IM_COL32(0, 0, 0, 255),
                                 IM_COL32(0, 0, 0, 255));
+  } else if (storage_->exists("custom_bg.png")) {
+    ImDrawList *bg = ImGui::GetWindowDrawList();
+    bg->AddImage((ImTextureID)(intptr_t)ImageManager::get("custom_bg"),
+                 ImVec2(0, 0), viewport->Size, ImVec2(0, 0), ImVec2(1, 1),
+                 IM_COL32_WHITE);
+    bg->AddRectFilledMultiColor(ImVec2(0, 0), viewport->Size,
+                                IM_COL32(0, 0, 0, 255 * Themes::BG_OPACITY),
+                                IM_COL32(0, 0, 0, 255 * Themes::BG_OPACITY),
+                                IM_COL32(0, 0, 0, 255 * Themes::BG_OPACITY),
+                                IM_COL32(0, 0, 0, 255 * Themes::BG_OPACITY));
   }
 }

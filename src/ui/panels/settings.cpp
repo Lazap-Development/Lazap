@@ -1,6 +1,7 @@
 #include "ui/panels/settings.h"
 
 #include <imgui.h>
+#include <tinyfiledialogs.h>
 
 #include <filesystem>
 
@@ -45,8 +46,10 @@ void SettingsPanel::loadSettings() {
 
   const uint32_t col =
       settings->get("accent_color")->value_or(Themes::ACCENT_COLOR);
+  const float bgOpacity = settings->get("bg_opacity")->value_or(0.8);
 
   Themes::ACCENT_COLOR = col;
+  Themes::BG_OPACITY = bgOpacity > 0.8 ? 0.8 : bgOpacity;
 
   Themes::ACCENT_COLOR_IMGUI =
       IM_COL32((col >> 16) & 0xFF, (col >> 8) & 0xFF, col & 0xFF, 255);
@@ -124,14 +127,6 @@ void SettingsPanel::render() {
         // saveSettings();
         ImGui::OpenPopup("Coming Soon");
       }
-      if (ImGui::BeginPopup("Coming Soon", ImGuiWindowFlags_NoMove)) {
-        ImGui::Text("This feature is coming soon!");
-        ImGui::EndPopup();
-      }
-      if (ImGui::BeginPopup("Restart", ImGuiWindowFlags_NoMove)) {
-        ImGui::Text("Restart the app to apply this change");
-        ImGui::EndPopup();
-      }
 
       ImGui::EndGroup();
       ImGui::PopID();
@@ -162,6 +157,10 @@ void SettingsPanel::render() {
 
       if (ImGui::BeginPopup("Coming Soon", ImGuiWindowFlags_NoMove)) {
         ImGui::Text("This feature is coming soon!");
+        ImGui::EndPopup();
+      }
+      if (ImGui::BeginPopup("Restart", ImGuiWindowFlags_NoMove)) {
+        ImGui::Text("Restart the app to apply this change");
         ImGui::EndPopup();
       }
 
@@ -326,7 +325,25 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
                              (widthAvailable - widthNeeded));
         if (FilePickerButton(label.c_str(),
                              ImVec2(110 * scale_.x, 30 * scale_.y))) {
-          // Open file dialog
+          glfwIconifyWindow(window_);
+          const char* filters[] = {"*.png"};
+          const char* path = tinyfd_openFileDialog("Select Banner Image", "", 1,
+                                                   filters, "Image files", 0);
+          if (path) {
+            if (storage_->exists("custom_bg.png")) {
+              ImageManager::remove("custom_bg");
+            }
+            std::filesystem::copy_file(
+                path,
+                std::filesystem::path(storage_->getStoragePath()) /
+                    "custom_bg.png",
+                std::filesystem::copy_options::overwrite_existing);
+            ImageManager::loadPNG(
+                (std::filesystem::path(storage_->getStoragePath()) /
+                 "custom_bg.png")
+                    .string());
+          }
+          glfwRestoreWindow(window_);
         }
         ImGui::PopFont();
       } break;
@@ -335,10 +352,18 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
         float widthNeeded = 92 * scale_.x;
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
-        float n = 0.0f;
+        float n = Themes::BG_OPACITY;
         ImGui::PushFont(FontManager::getFont("Settings:Option"));
-        NumberBox(label.c_str(), &n, 92 * scale_.x);
+        if (NumberBox(label.c_str(), &n, 92 * scale_.x)) {
+          Themes::BG_OPACITY = n;
+        }
         ImGui::PopFont();
+
+        storage_->updateTOML([](toml::table& config) {
+          if (auto settings = config["settings"].as_table()) {
+            settings->insert_or_assign("bg_opacity", Themes::BG_OPACITY);
+          }
+        });
       } break;
 
       case InputType::StringTextbox: {
@@ -441,6 +466,10 @@ bool SettingsPanel::NumberBox(const char* id, float* value, float width) {
   ImGui::PushItemWidth(width);
   bool changed = ImGui::InputFloat(id, value, 0.0f, 0.0f, "%.2f");
   ImGui::PopItemWidth();
+
+  if (changed && *value > 0.8) {
+    *value = 0.8;
+  }
 
   ImGui::PopStyleVar(2);
   return changed;

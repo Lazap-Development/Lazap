@@ -20,8 +20,8 @@ enum class InputType {
 
 class SettingsPanel : public Panel {
  public:
-  SettingsPanel(Storage* storage, Titlebar* titlebar)
-      : Panel("Settings", storage), titlebar_(titlebar) {}
+  SettingsPanel(Storage* storage, Titlebar* titlebar, GLFWwindow* win)
+      : Panel("Settings", storage), titlebar_(titlebar), window_(win) {}
 
   void init() override;
   void render() override;
@@ -36,6 +36,7 @@ class SettingsPanel : public Panel {
   bool discordRpc_ = false;
 
   Titlebar* titlebar_;
+  GLFWwindow* window_;
 
   void loadSettings();
   void saveSettings();

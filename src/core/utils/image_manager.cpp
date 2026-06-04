@@ -140,6 +140,15 @@ void ImageManager::clear() {
   cache.clear();
 }
 
+void ImageManager::remove(const std::string& name) {
+  auto it = cache.find(name);
+  if (it != cache.end()) {
+    GLuint texture_id = it->second;
+    glDeleteTextures(1, &texture_id);
+    cache.erase(it);
+  }
+}
+
 const std::string intToHex(int num) {
   const std::string hexChars = "0123456789ABCDEF";
   std::string result;
