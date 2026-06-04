@@ -24,7 +24,7 @@ static GLFWwindow* win = nullptr;
 static bool quit = false;
 static bool hidden = false;
 
-static void restore(struct tray_menu* item) {
+static void restore(struct tray_menu*) {
   if (win) {
     glfwShowWindow(win);
     glfwRestoreWindow(win);
@@ -33,7 +33,7 @@ static void restore(struct tray_menu* item) {
   }
 }
 
-static void on_quit_clicked(struct tray_menu* item) {
+static void on_quit_clicked(struct tray_menu*) {
   quit = true;
   glfwSetWindowShouldClose(win, GLFW_TRUE);
   glfwPostEmptyEvent();
@@ -41,17 +41,54 @@ static void on_quit_clicked(struct tray_menu* item) {
 }
 
 static struct tray tray = {
-    .icon = "/assets/icons/lazap/lazap.ico",
+    .icon = nullptr,
     .tooltip = "Lazap",
+    .notification_icon = nullptr,
+    .notification_text = nullptr,
+    .notification_title = nullptr,
+    .notification_cb = nullptr,
+    .cb = nullptr,
+    .menu = nullptr,
+    .iconPathCount = 0,
+};
+
+static struct tray_menu menu[] = {
+    {.text = "Restore App",
+     .disabled = 0,
+     .checked = 0,
+     .checkbox = 0,
+     .cb = restore,
+     .context = nullptr,
+     .submenu = nullptr},
+    {.text = "-",
+     .disabled = 0,
+     .checked = 0,
+     .checkbox = 0,
+     .cb = nullptr,
+     .context = nullptr,
+     .submenu = nullptr},
+    {.text = "Quit",
+     .disabled = 0,
+     .checked = 0,
+     .checkbox = 0,
+     .cb = on_quit_clicked,
+     .context = nullptr,
+     .submenu = nullptr},
 };
 
 void init(GLFWwindow* window) {
   win = window;
   quit = false;
 
+#ifdef _WIN32
   std::filesystem::path iconPath =
       std::filesystem::temp_directory_path() / "lazap_tray.ico";
   const auto file = b::embed<"assets/icons/lazap/lazap.ico">();
+#else
+  std::filesystem::path iconPath =
+      std::filesystem::temp_directory_path() / "lazap_tray.png";
+  const auto file = b::embed<"assets/icons/lazap/lazap.png">();
+#endif
 
   std::ofstream out(iconPath, std::ios::binary);
   out.write(reinterpret_cast<const char*>(file.data()), file.size());
@@ -62,11 +99,6 @@ void init(GLFWwindow* window) {
 #else
   tray.icon = strdup(iconPath.string().c_str());
 #endif
-
-  static struct tray_menu menu[] = {{.text = "Restore App", .cb = restore},
-                                    {.text = "-"},
-                                    {.text = "Quit", .cb = on_quit_clicked},
-                                    {.text = nullptr}};
 
   tray.menu = menu;
 
