@@ -6,6 +6,7 @@
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
+#include "misc/freetype/imgui_freetype.h"
 #include "ui/panel_manager.h"
 #include "ui/theme.h"
 #include "utils/font_manager.h"
@@ -21,6 +22,7 @@ ImGuiLayer::ImGuiLayer(GLFWwindow *window, Storage &storage)
   io.ConfigDpiScaleFonts = true;
   io.ConfigDpiScaleViewports = true;
   io.IniFilename = nullptr;
+  io.Fonts->SetFontLoader(ImGuiFreeType::GetFontLoader());
 
   FontManager::init();
   FontManager::loadFont("Titlebar:Title",

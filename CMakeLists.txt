@@ -84,6 +84,7 @@ FetchContent_Declare(battery-embed
 FetchContent_MakeAvailable(
   imgui glaze stb tray lunasvg tomlplusplus cpr battery-embed
 )
+find_package(Freetype REQUIRED)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Target Definition
@@ -101,6 +102,7 @@ add_executable(${EXECUTABLE_NAME}
     ${imgui_SOURCE_DIR}/imgui_draw.cpp
     ${imgui_SOURCE_DIR}/imgui_tables.cpp
     ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/misc/freetype/imgui_freetype.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
 )
@@ -166,6 +168,7 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     lunasvg
     tray::tray
     tinyfiledialogs
+    Freetype::Freetype
     $<$<PLATFORM_ID:Linux>:X11>
     $<$<PLATFORM_ID:Windows>:dwmapi>
     $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
