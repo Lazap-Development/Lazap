@@ -66,7 +66,8 @@ jobs:
             libnotify-dev \
             libqt5svg5-dev \
             qtbase5-dev \
-            qttools5-dev
+            qttools5-dev \
+            libfreetype6
 
       - name: Setup MSYS2 (Windows)
         if: matrix.os == 'windows-latest'
@@ -80,6 +81,7 @@ jobs:
             mingw-w64-x86_64-libpsl
             mingw-w64-x86_64-libidn2
             mingw-w64-x86_64-meson
+            mingw-w64-x86_64-freetype
 
       - name: Setup Ninja (Windows)
         if: matrix.os == 'windows-latest'
