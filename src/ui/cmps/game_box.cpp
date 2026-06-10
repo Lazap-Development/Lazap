@@ -141,7 +141,7 @@ void GameBox::render() {
     ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
   }
 
-  ImGui::PushFont(FontManager::getFont("GameBox:Title"));
+  ImGui::PushFont(FontManager::getFont("Nunito-SB"), 17.0f);
   ImGui::SetCursorPosX(ImGui::GetCursorPosX() + padding * scale_.x);
   ImGui::SetCursorPosY(ImGui::GetCursorPosY() + padding * scale_.y);
 

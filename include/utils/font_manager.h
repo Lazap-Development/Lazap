@@ -11,7 +11,8 @@ class FontManager {
   static void init();
   static void shutdown();
   static ImFont* loadFont(const std::string& name,
-                          b::EmbedInternal::EmbeddedFile embed, float size);
+                          b::EmbedInternal::EmbeddedFile embed,
+                          float size = 16.0f);
   static ImFont* getFont(const std::string& name);
 
  private:

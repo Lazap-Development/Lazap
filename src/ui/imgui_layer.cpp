@@ -25,40 +25,21 @@ ImGuiLayer::ImGuiLayer(GLFWwindow *window, Storage &storage)
   io.Fonts->SetFontLoader(ImGuiFreeType::GetFontLoader());
 
   FontManager::init();
-  FontManager::loadFont("Titlebar:Title",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 16.0f);
+  FontManager::loadFont("Nunito-SB",
+                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">());
+  FontManager::loadFont("ArchivoBlack-R",
+                        b::embed<"assets/fonts/ArchivoBlack-Regular.ttf">());
+  // FontManager::loadFont(
+  //     "GameBox:Time",
+  //     b::embed<"assets/fonts/RobotoMono-Medium.ttf">(), 10.0f);
 
-  FontManager::loadFont("Username",
-                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 15.0f);
-
-  FontManager::loadFont("GameInfo:Title",
-                        b::embed<"assets/fonts/ZenDots-Regular.ttf">(), 64.0f);
-  FontManager::loadFont("GameInfo:Paragraph",
-                        b::embed<"assets/fonts/Nunito-Medium.ttf">(), 18.0f);
-
-  FontManager::loadFont("Left:Button",
-                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 18.0f);
-  FontManager::loadFont(
-      "Title", b::embed<"assets/fonts/ArchivoBlack-Regular.ttf">(), 24.0f);
-  FontManager::loadFont("GameBox:Title",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 17.0f);
-  FontManager::loadFont(
-      "GameBox:Time", b::embed<"assets/fonts/RobotoMono-Medium.ttf">(), 10.0f);
-
-  FontManager::loadFont("Settings:Button",
-                        b::embed<"assets/fonts/Nunito-Bold.ttf">(), 13.0f);
-  FontManager::loadFont("Settings:Setting",
-                        b::embed<"assets/fonts/Nunito-Light.ttf">(), 18.0f);
-  FontManager::loadFont("Settings:Option",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 13.0f);
-
-  FontManager::loadFont("Dialog:Title",
-                        b::embed<"assets/fonts/ArchivoBlack-Regular.ttf">(),
-                        27.0f);
-  FontManager::loadFont("Dialog:Button",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 15.0f);
-  FontManager::loadFont("Dialog:Paragraph",
-                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 15.0f);
+  FontManager::loadFont("Nunito-B", b::embed<"assets/fonts/Nunito-Bold.ttf">());
+  FontManager::loadFont("Nunito-L",
+                        b::embed<"assets/fonts/Nunito-Light.ttf">());
+  FontManager::loadFont("Oxanium-R",
+                        b::embed<"assets/fonts/Oxanium-Regular.ttf">());
+  FontManager::loadFont("Oxanium-EL",
+                        b::embed<"assets/fonts/Oxanium-ExtraLight.ttf">());
 
   if (storage.exists("custom_bg.png")) {
     ImageManager::loadPNG(

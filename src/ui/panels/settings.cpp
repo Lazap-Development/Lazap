@@ -106,7 +106,7 @@ void SettingsPanel::render() {
   switch (view_) {
     case SettingsView::LauncherConfig:
       addSection("General", "monitor");
-      ImGui::PushFont(FontManager::getFont("Settings:Setting"));
+      ImGui::PushFont(FontManager::getFont("Nunito-L"), 18.0f);
       ImGui::PushID("general_settings");
       ImGui::BeginGroup();
 
@@ -135,7 +135,7 @@ void SettingsPanel::render() {
       ImGui::Dummy(ImVec2(0, 47 * scale_.y));
 
       addSection("Appearance", "appearance");
-      ImGui::PushFont(FontManager::getFont("Settings:Setting"));
+      ImGui::PushFont(FontManager::getFont("Nunito-L"), 18.0f);
       ImGui::PushID("appearance_settings");
       ImGui::BeginGroup();
       addOption("Accent Color", InputType::ColorPicker, nullptr);
@@ -171,7 +171,7 @@ void SettingsPanel::render() {
       ImGui::Dummy(ImVec2(0, 47 * scale_.y));
 
       addSection("Integrations", "link");
-      ImGui::PushFont(FontManager::getFont("Settings:Setting"));
+      ImGui::PushFont(FontManager::getFont("Nunito-L"), 18.0f);
       ImGui::PushID("integration_settings");
       ImGui::BeginGroup();
 
@@ -185,12 +185,12 @@ void SettingsPanel::render() {
       ImGui::PopID();
       break;
     // case SettingsView::AccountSettings:
-    //   ImGui::PushFont(FontManager::getFont("Title"));
+    //   ImGui::PushFont(FontManager::getFont("ArchivoBlack-R"), 24.0f);
     //   ImGui::Image(ImageManager::get("appearance"),
     //                ImVec2(27 * scale_.x, 27 * scale_.x));
     //   ImGui::Text("Account Settings");
     //   ImGui::PopFont();
-    //   ImGui::PushFont(FontManager::getFont("Settings:Setting"));
+    //   ImGui::PushFont(FontManager::getFont("Nunito-L"), 18.0f);
     //   ImGui::Dummy(ImVec2(0, 10));
     //   ImGui::Text("Username: ");
     //   // ImGui::InputText("##username", &username_buffer_);
@@ -221,7 +221,7 @@ bool SettingsPanel::addMenuButton(const std::string& label, ImVec2 size,
     addIcon(view_ == SettingsView::AccountSettings ? "config:white"
                                                    : "account:white");
   }
-  ImGui::PushFont(FontManager::getFont("Settings:Button"));
+  ImGui::PushFont(FontManager::getFont("Nunito-B"), 13.0f);
   ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10 * scale_.x, 0));
   bool btn = ImGui::Button(label.c_str());
   ImGui::PopStyleVar();
@@ -249,7 +249,7 @@ void SettingsPanel::addIcon(const std::string& icon) {
 
 void SettingsPanel::addSection(const std::string& title,
                                const std::string& icon) {
-  ImGui::PushFont(FontManager::getFont("Title"));
+  ImGui::PushFont(FontManager::getFont("ArchivoBlack-R"), 24.0f);
   ImGui::Dummy(ImVec2(8 * scale_.x, 0));
   ImGui::Image(ImageManager::get(icon), ImVec2(27 * scale_.x, 27 * scale_.x));
   ImGui::SameLine(0, 8 * scale_.x);
@@ -319,7 +319,7 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
       } break;
 
       case InputType::ImagePicker: {
-        ImGui::PushFont(FontManager::getFont("Settings:Option"));
+        ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13.0f);
         float widthNeeded = 110 * scale_.x;
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
@@ -353,7 +353,7 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
         float n = Themes::BG_OPACITY;
-        ImGui::PushFont(FontManager::getFont("Settings:Option"));
+        ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13.0f);
         if (NumberBox(label.c_str(), &n, 92 * scale_.x)) {
           Themes::BG_OPACITY = n;
         }
