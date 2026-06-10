@@ -14,6 +14,8 @@ void Titlebar::init() {
                         0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/maximise.svg">(), "maximise",
                         0xFFFFFFFF);
+  GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+  glfwGetMonitorContentScale(monitor, &xs_, &ys_);
 }
 
 void Titlebar::render() {
@@ -21,9 +23,18 @@ void Titlebar::render() {
                ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
                    ImGuiWindowFlags_NoScrollbar);
 
+  size_ = ImGui::GetWindowSize();
   scale_ = getScale();
 
-  ImGui::PushFont(FontManager::getFont("Titlebar:Title"));
+#ifdef _WIN32
+  float x, y;
+  GLFWmonitor* m = glfwGetPrimaryMonitor();
+  glfwGetMonitorContentScale(m, &x, &y);
+  x /= 1.25;
+#else
+  float x = 1;
+#endif
+  ImGui::PushFont(FontManager::getFont("Titlebar:Title"), 16.0f / x);
   ImGui::SetCursorPos(ImVec2((ImGui::GetCursorPosX() + 35) * scale_.x,
                              (ImGui::GetCursorPosY() + 33) * scale_.y));
   ImGui::Text("%s", title_.c_str());

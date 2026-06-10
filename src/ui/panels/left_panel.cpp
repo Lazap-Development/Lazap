@@ -36,19 +36,26 @@ void LeftPanel::init() {
                         0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/settings.svg">(), "settings-black",
                         0xFF000000);
+  GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+  glfwGetMonitorContentScale(monitor, &xs_, &ys_);
 }
 
 void LeftPanel::render() {
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
                    ImGuiWindowFlags_NoScrollbar);
+  if (size_.y == 0) {
+    size_.y = 1;
+  } else if (size_.x == 0) {
+    size_ = ImGui::GetWindowSize();
+  }
 
   scale_ = getScale();
 
   auto drawIconButton = [&](const char* id, ImTextureID texture,
                             ImTextureID activeTexture, const ImVec2& size,
                             bool isActive) -> bool {
-    ImVec2 cursorPos = ImGui::GetCursorPos();
+    ImVec2 cursorPos = ImGui::GetCursorScreenPos();
 
     if (isActive) {
       ImDrawList* drawList = ImGui::GetWindowDrawList();
@@ -59,9 +66,8 @@ void LeftPanel::render() {
           ImVec2(windowPos.x + cursorPos.x + size.x + 38.0f * scale_.x,
                  windowPos.y + cursorPos.y + size.y + 12.5f * scale_.y);
 
-      drawList->AddRectFilled(
-          rectMin, rectMax, Themes::ACCENT_COLOR_IMGUI,
-          12.0f * sqrt((pow(scale_.x, 2) + pow(scale_.y, 2)) * 0.5f));
+      drawList->AddRectFilled(rectMin, rectMax, Themes::ACCENT_COLOR_IMGUI,
+                              12.0f * scale_.x);
     }
 
     bool clicked =
