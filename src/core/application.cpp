@@ -24,6 +24,12 @@
 
 #include <dwmapi.h>
 #pragma comment(lib, "dwmapi.lib")
+
+GLFWcursor *WindowCallbacks::cursor_nwse = nullptr;
+GLFWcursor *WindowCallbacks::cursor_nesw = nullptr;
+GLFWcursor *WindowCallbacks::cursor_h = nullptr;
+GLFWcursor *WindowCallbacks::cursor_v = nullptr;
+bool WindowCallbacks::hovered_;
 #endif
 
 double ClockSeconds() {
@@ -121,6 +127,10 @@ void Application::run() {
 
   glfwMakeContextCurrent(window);
   glfwSetMouseButtonCallback(window, WindowCallbacks::mouseButtonCB);
+#ifdef _WIN32
+  WindowCallbacks::initCursors();
+  glfwSetCursorPosCallback(window, WindowCallbacks::cursorPosCB);
+#endif
 
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     fprintf(stderr, "Failed to initialize GLAD\n");
@@ -293,3 +303,41 @@ void WindowCallbacks::mouseButtonCB(GLFWwindow *window, int button, int action,
     }
   }
 }
+
+#ifdef _WIN32
+void WindowCallbacks::cursorPosCB(GLFWwindow *window, double xpos,
+                                  double ypos) {
+  int w, h;
+  glfwGetWindowSize(window, &w, &h);
+
+  int zone = GetResizeZone(xpos, ypos, w, h, 10);
+
+  switch (zone) {
+    case 1:
+    case 4:
+      glfwSetCursor(window, WindowCallbacks::cursor_nwse);
+      hovered_ = true;
+      break;
+    case 2:
+    case 3:
+      glfwSetCursor(window, WindowCallbacks::cursor_nesw);
+      hovered_ = true;
+      break;
+    case 5:
+    case 6:
+      glfwSetCursor(window, WindowCallbacks::cursor_h);
+      hovered_ = true;
+      break;
+    case 7:
+    case 8:
+      glfwSetCursor(window, WindowCallbacks::cursor_v);
+      hovered_ = true;
+      break;
+    default:
+      if (hovered_ == true) {
+        glfwSetCursor(window, NULL);
+        hovered_ = false;
+      }
+  }
+}
+#endif
