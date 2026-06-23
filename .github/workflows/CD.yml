@@ -62,11 +62,6 @@ jobs:
           wget -q https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
           chmod +x appimagetool-x86_64.AppImage
           sudo mv appimagetool-x86_64.AppImage /usr/local/bin/appimagetool
-
-      - name: Install dependencies (windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          vcpkg install freetype:x64-windows
       
       - name: Setup MSVC (Windows)
         if: matrix.os == 'windows-latest'
@@ -83,15 +78,28 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         shell: bash
         run: cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
-      
+
+      - name: Update vcpkg (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: |
+          cd $VCPKG_INSTALLATION_ROOT
+          git fetch --all
+          git checkout master
+          git pull
+
       - name: Configure (Windows)
         if: matrix.os == 'windows-latest'
-        run: >
-          cmake -B build
-          -G Ninja 
-          -DCMAKE_BUILD_TYPE=Release
-          -DCMAKE_C_COMPILER=cl
-          -DCMAKE_CXX_COMPILER=cl
+        shell: powershell
+        run: |
+          $vcpkgToolchain = "$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake"
+
+          cmake -B build -G Ninja `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_C_COMPILER=cl `
+            -DCMAKE_CXX_COMPILER=cl `
+            -DVCPKG_TARGET_TRIPLET=x64-windows-static `
+            -DCMAKE_TOOLCHAIN_FILE="$vcpkgToolchain"
 
       - name: Build (Linux)
         if: matrix.os == 'ubuntu-latest'
