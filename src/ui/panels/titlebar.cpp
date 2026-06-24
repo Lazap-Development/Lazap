@@ -30,7 +30,7 @@ void Titlebar::render() {
   float x, y;
   GLFWmonitor* m = glfwGetPrimaryMonitor();
   glfwGetMonitorContentScale(m, &x, &y);
-  x /= 1.25;
+  x /= scale_.x * 1.25;
 #else
   float x = 1;
 #endif

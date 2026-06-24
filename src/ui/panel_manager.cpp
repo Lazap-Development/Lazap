@@ -142,12 +142,15 @@ void Views::BuildDockLayout() {
   ImGui::DockBuilderRemoveNode(dockspace_id);
   ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_None);
   ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
+  GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+  float xs_, ys_;
+  glfwGetMonitorContentScale(monitor, &xs_, &ys_);
 
   ImGuiID titlebar, left, gamesinfo_id, bottom;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.0445f, &left,
-                              &dockspace_id);
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.07f, &titlebar,
-                              &dockspace_id);
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.0445f * xs_ * 0.8,
+                              &left, &dockspace_id);
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.07f * ys_ * 0.8,
+                              &titlebar, &dockspace_id);
   ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.426f, &gamesinfo_id,
                               &bottom);
 
