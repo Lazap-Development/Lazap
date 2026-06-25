@@ -122,10 +122,9 @@ void SettingsPanel::render() {
         else
           Autostart::deleteShortcut();
       }
-      if (addOption("Check for Updates", InputType::Toggle, &checkUpdates_,
-                    true)) {
-        // saveSettings();
-        ImGui::OpenPopup("Coming Soon");
+      if (addOption("Check for Updates", InputType::Toggle, &checkUpdates_)) {
+        saveSettings();
+        ImGui::OpenPopup("Restart");
       }
 
       ImGui::EndGroup();

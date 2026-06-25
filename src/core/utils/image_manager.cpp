@@ -7,6 +7,8 @@
 
 #include "battery/embed.hpp"
 #define STB_IMAGE_IMPLEMENTATION
+#include <format>
+
 #include "stb_image.h"
 
 std::unordered_map<std::string, GLuint> ImageManager::cache;

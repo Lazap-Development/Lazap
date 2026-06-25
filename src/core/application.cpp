@@ -15,6 +15,7 @@
 #include "storage/storage.h"
 #include "utils/banner_manager.h"
 #include "utils/tray_manager.h"
+#include "utils/update_manager.h"
 
 #ifdef _WIN32
 #define _WIN32_WINNT 0x0A00  // Windows 10
@@ -28,6 +29,7 @@
 GLFWcursor *WindowCallbacks::cursor_nwse = nullptr;
 GLFWcursor *WindowCallbacks::cursor_nesw = nullptr;
 GLFWcursor *WindowCallbacks::cursor_h = nullptr;
+
 GLFWcursor *WindowCallbacks::cursor_v = nullptr;
 bool WindowCallbacks::hovered_;
 #endif
@@ -147,12 +149,14 @@ void Application::run() {
   storage.initTOML();
 
   bool discordRpc = true;
+  bool checkForUpdates = true;
   bool systemTray = false;
   auto toml = storage.loadTOML();
   auto *settingsTable = toml["settings"].as_table();
   if (settingsTable) {
     discordRpc = settingsTable->get("discord_rpc")->value_or(false);
     systemTray = settingsTable->get("quit_tray_min")->value_or(false);
+    checkForUpdates = settingsTable->get("check_updates")->value_or(false);
   }
 
   std::vector<std::unique_ptr<Client>> clients;
@@ -192,6 +196,8 @@ void Application::run() {
     discord::RichPresence::Initialize("932504287337148417");
     discord::RichPresence::UpdatePresence("Lazap", "In Main Menu");
   }
+
+  if (checkForUpdates) Updater::checkForUpdates();
 
   printf("Startup took: %ld ms\n",
          std::chrono::duration_cast<std::chrono::milliseconds>(
