@@ -147,10 +147,12 @@ void Views::BuildDockLayout() {
   glfwGetMonitorContentScale(monitor, &xs_, &ys_);
 
   ImGuiID titlebar, left, gamesinfo_id, bottom;
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.0445f * xs_ * 0.8,
-                              &left, &dockspace_id);
-  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.07f * ys_ * 0.8,
-                              &titlebar, &dockspace_id);
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left,
+                              0.0445f * xs_ * (xs_ > 1 ? 0.75 : 1), &left,
+                              &dockspace_id);
+  ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up,
+                              0.07f * ys_ * (ys_ > 1 ? 0.75 : 1), &titlebar,
+                              &dockspace_id);
   ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Up, 0.426f, &gamesinfo_id,
                               &bottom);
 

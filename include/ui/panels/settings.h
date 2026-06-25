@@ -34,6 +34,7 @@ class SettingsPanel : public Panel {
   bool launcherIcons_ = true;
   bool customTitlebar_ = true;
   bool discordRpc_ = false;
+  bool isEditing_ = false;
 
   Titlebar* titlebar_;
   GLFWwindow* window_;
@@ -54,3 +55,5 @@ class SettingsPanel : public Panel {
 };
 
 }  // namespace ui
+
+std::string rgbToHex(int r, int g, int b);

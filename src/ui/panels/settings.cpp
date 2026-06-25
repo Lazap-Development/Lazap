@@ -27,7 +27,7 @@ void SettingsPanel::init() {
                         0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/link.svg">(), "link", 0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/upload.svg">(), "upload",
-                        0xA2A2A2);
+                        0xA2A2A268);
 
   loadSettings();
 }
@@ -349,12 +349,12 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
       } break;
 
       case InputType::IntTextbox: {
-        float widthNeeded = 92 * scale_.x;
+        float widthNeeded = 40 * scale_.x;
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
         float n = Themes::BG_OPACITY;
         ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13.0f);
-        if (NumberBox(label.c_str(), &n, 92 * scale_.x)) {
+        if (NumberBox(label.c_str(), &n, widthNeeded)) {
           Themes::BG_OPACITY = n;
         }
         ImGui::PopFont();
@@ -419,17 +419,28 @@ bool SettingsPanel::ToggleButton(const char* id, bool* v, bool disabled) {
 
 bool SettingsPanel::ColorBox(const char* id, float color[3], ImVec2 size) {
   ImVec2 pos = ImGui::GetCursorScreenPos();
+  ImVec2 p = ImGui::GetCursorPos();
   ImDrawList* draw = ImGui::GetWindowDrawList();
 
   ImGui::InvisibleButton(id, size);
 
-  draw->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y),
-                      ImGui::ColorConvertFloat4ToU32(
-                          ImVec4(color[0], color[1], color[2], 1.0f)),
-                      4.0f);
-
+  draw->AddRectFilled(
+      ImVec2(pos.x + 6 * scale_.x, pos.y + 7 * scale_.y),
+      ImVec2(pos.x + (20 + 6) * scale_.x, pos.y + (15 + 7) * scale_.y),
+      ImGui::ColorConvertFloat4ToU32(
+          ImVec4(color[0], color[1], color[2], 1.0f)),
+      4.0f);
+  std::string hexColor =
+      rgbToHex(color[0] * 255, color[1] * 255, color[2] * 255);
+  std::transform(hexColor.begin(), hexColor.end(), hexColor.begin(), ::toupper);
+  ImGui::SetCursorPos(ImVec2(p.x + 36 * scale_.x, p.y + 7 * scale_.y));
+  ImGui::PushStyleColor(ImGuiCol_Text, 0xA2A2A268);
+  ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13);
+  ImGui::Text("%s", hexColor.c_str());
+  ImGui::PopFont();
+  ImGui::PopStyleColor();
   draw->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y),
-                IM_COL32(255, 255, 255, 255), 4.0f, 0, 1.0f);
+                IM_COL32(162, 162, 162, 104), 4.0f, 0, 1.0f);
 
   if (ImGui::IsItemClicked()) ImGui::OpenPopup(id);
 
@@ -452,7 +463,24 @@ bool SettingsPanel::FilePickerButton(const char* label, const ImVec2& size) {
   ImGui::PushStyleColor(ImGuiCol_ButtonActive,
                         ImVec4(0.35f, 0.38f, 0.50f, 1.0f));
 
-  bool pressed = ImGui::Button(label, size);
+  ImVec2 pos = ImGui::GetCursorScreenPos();
+  ImVec2 p = ImGui::GetCursorPos();
+  ImDrawList* draw = ImGui::GetWindowDrawList();
+
+  bool pressed = ImGui::InvisibleButton(label, size);
+
+  ImGui::SetCursorPos(ImVec2(p.x + 16 * scale_.x, p.y + 7 * scale_.y));
+  ImGui::Image(ImageManager::get("upload"),
+               ImVec2(13 * scale_.x, 13 * scale_.y));
+  ImGui::SetCursorPos(ImVec2(p.x + 36 * scale_.x, p.y + 7 * scale_.y));
+  ImGui::PushStyleColor(ImGuiCol_Text, 0xA2A2A268);
+  ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13);
+  ImGui::Text("Select File");
+  ImGui::PopFont();
+  ImGui::PopStyleColor();
+
+  draw->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y),
+                IM_COL32(162, 162, 162, 104), 4.0f, 0, 1.0f);
 
   ImGui::PopStyleColor(3);
 
@@ -460,17 +488,67 @@ bool SettingsPanel::FilePickerButton(const char* label, const ImVec2& size) {
 }
 
 bool SettingsPanel::NumberBox(const char* id, float* value, float width) {
-  ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f);
-  ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 3.5f));
+  ImVec2 pos = ImGui::GetCursorScreenPos();
+  ImVec2 p = ImGui::GetCursorPos();
+  ImDrawList* draw = ImGui::GetWindowDrawList();
+  static char buf[32];
 
-  ImGui::PushItemWidth(width);
-  bool changed = ImGui::InputFloat(id, value, 0.0f, 0.0f, "%.2f");
-  ImGui::PopItemWidth();
+  isEditing_ = isEditing_ == true
+                   ? true
+                   : ImGui::InvisibleButton(id, ImVec2(width, 30 * scale_.y));
 
-  if (changed && *value > 0.8) {
-    *value = 0.8;
+  std::string display = std::to_string(int(*value * 100)) + "%";
+  ImVec2 textSize = ImGui::CalcTextSize(display.c_str());
+
+  if (!isEditing_) {
+    ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13);
+    draw->AddText(ImVec2(pos.x + (width - textSize.x) * 0.5f,
+                         pos.y + (30 * scale_.y - textSize.y) * 0.5f),
+                  0xA2A2A268, display.c_str());
+    ImGui::PopFont();
+  } else {
+    sprintf(buf, "%d%%", static_cast<int>(*value * 100.0f));
+    ImGui::SetCursorScreenPos(
+        ImVec2(pos.x + (width - textSize.x) * 0.5f,
+               pos.y + (30 * scale_.y - textSize.y) * 0.5f));
+    ImGui::SetNextItemWidth(width);
+
+    ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13);
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0));
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(162.0 / 255.0, 162.0 / 255.0,
+                                                162.0 / 255.0, 104.0 / 255.0));
+    ImGui::SetKeyboardFocusHere();
+    if (ImGui::InputText("##edit", buf, 32,
+                         ImGuiInputTextFlags_EnterReturnsTrue)) {
+      try {
+        std::string s = buf;
+        s.erase(std::remove(s.begin(), s.end(), '%'), s.end());
+        float val = std::stof(buf);
+        *value = std::clamp(val, 0.0f, 80.0f) / 100;
+        isEditing_ = false;
+      } catch (std::exception) {
+      }
+    }
+    ImGui::PopStyleColor(2);
+    ImGui::PopFont();
+
+    if (ImGui::IsItemDeactivatedAfterEdit()) {
+      isEditing_ = false;
+    }
   }
 
-  ImGui::PopStyleVar(2);
-  return changed;
+  draw->AddRect(pos, ImVec2(pos.x + width, pos.y + 30 * scale_.y),
+                IM_COL32(162, 162, 162, 104), 4.0f, 0, 1.0f);
+
+  return isEditing_;
+}
+
+std::string rgbToHex(int r, int g, int b) {
+  std::stringstream ss;
+
+  ss << "#" << std::hex << std::setfill('0') << std::setw(2) << r << std::hex
+     << std::setfill('0') << std::setw(2) << g << std::hex << std::setfill('0')
+     << std::setw(2) << b;
+
+  return ss.str();
 }
