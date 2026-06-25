@@ -6,7 +6,7 @@
 #endif
 #include "ui/theme.h"
 #include "utils/image_manager.h"
-#include  "utils/update_manager.h"
+#include "utils/update_manager.h"
 
 using namespace ui;
 
@@ -34,7 +34,7 @@ void LeftPanel::init() {
   ImageManager::loadSVG(b::embed<"assets/svg/github.svg">(), "github",
                         0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/download.svg">(), "download",
-                      0x99FF66B2);
+                        0x99FF66B2);
   ImageManager::loadSVG(b::embed<"assets/svg/settings.svg">(), "settings",
                         0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/settings.svg">(), "settings-black",
@@ -118,18 +118,17 @@ void LeftPanel::render() {
   // Bottom icons
   if (Updater::hasUpdate) {
     ImGui::Dummy(
-    ImVec2(0, ImGui::GetContentRegionAvail().y - (180.0f * scale_.y)));
+        ImVec2(0, ImGui::GetContentRegionAvail().y - (180.0f * scale_.y)));
 
     if (drawIconButton("Update", ImageManager::get("download"),
-                 ImageManager::get("download"),
-                 ImVec2(30 * scale_.x, 30 * scale_.x), false))
+                       ImageManager::get("download"),
+                       ImVec2(30 * scale_.x, 30 * scale_.x), false))
       openURL(Updater::url);
 
     ImGui::Dummy(ImVec2(0, 30.0f * scale_.y));
-  }
-  else {
+  } else {
     ImGui::Dummy(
-    ImVec2(0, ImGui::GetContentRegionAvail().y - (125.0f * scale_.y)));
+        ImVec2(0, ImGui::GetContentRegionAvail().y - (125.0f * scale_.y)));
   }
 
   if (drawIconButton("GitHub", ImageManager::get("github"),

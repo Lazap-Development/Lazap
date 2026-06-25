@@ -124,7 +124,6 @@ void SettingsPanel::render() {
       }
       if (addOption("Check for Updates", InputType::Toggle, &checkUpdates_)) {
         saveSettings();
-        ImGui::OpenPopup("Restart");
       }
 
       ImGui::EndGroup();
@@ -531,7 +530,7 @@ bool SettingsPanel::NumberBox(const char* id, float* value, float width) {
     ImGui::PopStyleColor(2);
     ImGui::PopFont();
 
-    if (ImGui::IsItemDeactivatedAfterEdit()) {
+    if (ImGui::IsItemDeactivatedAfterEdit() || ImGui::IsItemDeactivated()) {
       isEditing_ = false;
     }
   }
