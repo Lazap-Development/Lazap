@@ -1,8 +1,12 @@
 #include "ui/panels/settings.h"
 
 #include <imgui.h>
+#include <tinyfiledialogs.h>
+
+#include <filesystem>
 
 #include "ui/theme.h"
+#include "utils/autostart.h"
 #include "utils/font_manager.h"
 #include "utils/image_manager.h"
 
@@ -23,7 +27,7 @@ void SettingsPanel::init() {
                         0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/link.svg">(), "link", 0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/upload.svg">(), "upload",
-                        0xA2A2A2);
+                        0xA2A2A268);
 
   loadSettings();
 }
@@ -34,7 +38,7 @@ void SettingsPanel::loadSettings() {
   if (!settings) return;
 
   quitTrayMin_ = settings->get("quit_tray_min")->value_or(false);
-  autoStart_ = settings->get("auto_start")->value_or(false);
+  autoStart_ = Autostart::shortcutExists();
   checkUpdates_ = settings->get("check_updates")->value_or(true);
   launcherIcons_ = settings->get("launcher_icons")->value_or(true);
   discordRpc_ = settings->get("discord_rpc")->value_or(false);
@@ -42,8 +46,10 @@ void SettingsPanel::loadSettings() {
 
   const uint32_t col =
       settings->get("accent_color")->value_or(Themes::ACCENT_COLOR);
+  const float bgOpacity = settings->get("bg_opacity")->value_or(0.8);
 
   Themes::ACCENT_COLOR = col;
+  Themes::BG_OPACITY = bgOpacity > 0.8 ? 0.8 : bgOpacity;
 
   Themes::ACCENT_COLOR_IMGUI =
       IM_COL32((col >> 16) & 0xFF, (col >> 8) & 0xFF, col & 0xFF, 255);
@@ -100,28 +106,24 @@ void SettingsPanel::render() {
   switch (view_) {
     case SettingsView::LauncherConfig:
       addSection("General", "monitor");
-      ImGui::PushFont(FontManager::getFont("Settings:Setting"));
+      ImGui::PushFont(FontManager::getFont("Nunito-L"), 18.0f);
       ImGui::PushID("general_settings");
       ImGui::BeginGroup();
 
       if (addOption("Minimize to Tray on Exit", InputType::Toggle,
-                    &quitTrayMin_, true)) {
-        // saveSettings();
-        ImGui::OpenPopup("Coming Soon");
+                    &quitTrayMin_)) {
+        saveSettings();
+        ImGui::OpenPopup("Restart");
       }
-      if (addOption("Launch at Startup", InputType::Toggle, &autoStart_,
-                    true)) {
-        // saveSettings();
-        ImGui::OpenPopup("Coming Soon");
+      if (addOption("Launch at Startup", InputType::Toggle, &autoStart_)) {
+        saveSettings();
+        if (autoStart_)
+          Autostart::createShortcut();
+        else
+          Autostart::deleteShortcut();
       }
-      if (addOption("Check for Updates", InputType::Toggle, &checkUpdates_,
-                    true)) {
-        // saveSettings();
-        ImGui::OpenPopup("Coming Soon");
-      }
-      if (ImGui::BeginPopup("Coming Soon", ImGuiWindowFlags_NoMove)) {
-        ImGui::Text("This feature is coming soon!");
-        ImGui::EndPopup();
+      if (addOption("Check for Updates", InputType::Toggle, &checkUpdates_)) {
+        saveSettings();
       }
 
       ImGui::EndGroup();
@@ -131,7 +133,7 @@ void SettingsPanel::render() {
       ImGui::Dummy(ImVec2(0, 47 * scale_.y));
 
       addSection("Appearance", "appearance");
-      ImGui::PushFont(FontManager::getFont("Settings:Setting"));
+      ImGui::PushFont(FontManager::getFont("Nunito-L"), 18.0f);
       ImGui::PushID("appearance_settings");
       ImGui::BeginGroup();
       addOption("Accent Color", InputType::ColorPicker, nullptr);
@@ -155,6 +157,10 @@ void SettingsPanel::render() {
         ImGui::Text("This feature is coming soon!");
         ImGui::EndPopup();
       }
+      if (ImGui::BeginPopup("Restart", ImGuiWindowFlags_NoMove)) {
+        ImGui::Text("Restart the app to apply this change");
+        ImGui::EndPopup();
+      }
 
       ImGui::PopFont();
       ImGui::EndGroup();
@@ -163,7 +169,7 @@ void SettingsPanel::render() {
       ImGui::Dummy(ImVec2(0, 47 * scale_.y));
 
       addSection("Integrations", "link");
-      ImGui::PushFont(FontManager::getFont("Settings:Setting"));
+      ImGui::PushFont(FontManager::getFont("Nunito-L"), 18.0f);
       ImGui::PushID("integration_settings");
       ImGui::BeginGroup();
 
@@ -177,12 +183,12 @@ void SettingsPanel::render() {
       ImGui::PopID();
       break;
     // case SettingsView::AccountSettings:
-    //   ImGui::PushFont(FontManager::getFont("Title"));
+    //   ImGui::PushFont(FontManager::getFont("ArchivoBlack-R"), 24.0f);
     //   ImGui::Image(ImageManager::get("appearance"),
     //                ImVec2(27 * scale_.x, 27 * scale_.x));
     //   ImGui::Text("Account Settings");
     //   ImGui::PopFont();
-    //   ImGui::PushFont(FontManager::getFont("Settings:Setting"));
+    //   ImGui::PushFont(FontManager::getFont("Nunito-L"), 18.0f);
     //   ImGui::Dummy(ImVec2(0, 10));
     //   ImGui::Text("Username: ");
     //   // ImGui::InputText("##username", &username_buffer_);
@@ -213,7 +219,7 @@ bool SettingsPanel::addMenuButton(const std::string& label, ImVec2 size,
     addIcon(view_ == SettingsView::AccountSettings ? "config:white"
                                                    : "account:white");
   }
-  ImGui::PushFont(FontManager::getFont("Settings:Button"));
+  ImGui::PushFont(FontManager::getFont("Nunito-B"), 13.0f);
   ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10 * scale_.x, 0));
   bool btn = ImGui::Button(label.c_str());
   ImGui::PopStyleVar();
@@ -241,7 +247,7 @@ void SettingsPanel::addIcon(const std::string& icon) {
 
 void SettingsPanel::addSection(const std::string& title,
                                const std::string& icon) {
-  ImGui::PushFont(FontManager::getFont("Title"));
+  ImGui::PushFont(FontManager::getFont("ArchivoBlack-R"), 24.0f);
   ImGui::Dummy(ImVec2(8 * scale_.x, 0));
   ImGui::Image(ImageManager::get(icon), ImVec2(27 * scale_.x, 27 * scale_.x));
   ImGui::SameLine(0, 8 * scale_.x);
@@ -311,25 +317,51 @@ bool SettingsPanel::addOption(const std::string& label, InputType input,
       } break;
 
       case InputType::ImagePicker: {
-        ImGui::PushFont(FontManager::getFont("Settings:Option"));
+        ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13.0f);
         float widthNeeded = 110 * scale_.x;
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
         if (FilePickerButton(label.c_str(),
                              ImVec2(110 * scale_.x, 30 * scale_.y))) {
-          // Open file dialog
+          glfwIconifyWindow(window_);
+          const char* filters[] = {"*.png"};
+          const char* path = tinyfd_openFileDialog("Select Banner Image", "", 1,
+                                                   filters, "Image files", 0);
+          if (path) {
+            if (storage_->exists("custom_bg.png")) {
+              ImageManager::remove("custom_bg");
+            }
+            std::filesystem::copy_file(
+                path,
+                std::filesystem::path(storage_->getStoragePath()) /
+                    "custom_bg.png",
+                std::filesystem::copy_options::overwrite_existing);
+            ImageManager::loadPNG(
+                (std::filesystem::path(storage_->getStoragePath()) /
+                 "custom_bg.png")
+                    .string());
+          }
+          glfwRestoreWindow(window_);
         }
         ImGui::PopFont();
       } break;
 
       case InputType::IntTextbox: {
-        float widthNeeded = 92 * scale_.x;
+        float widthNeeded = 40 * scale_.x;
         ImGui::SetCursorPosX(ImGui::GetCursorPosX() +
                              (widthAvailable - widthNeeded));
-        float n = 0.0f;
-        ImGui::PushFont(FontManager::getFont("Settings:Option"));
-        NumberBox(label.c_str(), &n, 92 * scale_.x);
+        float n = Themes::BG_OPACITY;
+        ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13.0f);
+        if (NumberBox(label.c_str(), &n, widthNeeded)) {
+          Themes::BG_OPACITY = n;
+        }
         ImGui::PopFont();
+
+        storage_->updateTOML([](toml::table& config) {
+          if (auto settings = config["settings"].as_table()) {
+            settings->insert_or_assign("bg_opacity", Themes::BG_OPACITY);
+          }
+        });
       } break;
 
       case InputType::StringTextbox: {
@@ -385,17 +417,28 @@ bool SettingsPanel::ToggleButton(const char* id, bool* v, bool disabled) {
 
 bool SettingsPanel::ColorBox(const char* id, float color[3], ImVec2 size) {
   ImVec2 pos = ImGui::GetCursorScreenPos();
+  ImVec2 p = ImGui::GetCursorPos();
   ImDrawList* draw = ImGui::GetWindowDrawList();
 
   ImGui::InvisibleButton(id, size);
 
-  draw->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y),
-                      ImGui::ColorConvertFloat4ToU32(
-                          ImVec4(color[0], color[1], color[2], 1.0f)),
-                      4.0f);
-
+  draw->AddRectFilled(
+      ImVec2(pos.x + 6 * scale_.x, pos.y + 7 * scale_.y),
+      ImVec2(pos.x + (20 + 6) * scale_.x, pos.y + (15 + 7) * scale_.y),
+      ImGui::ColorConvertFloat4ToU32(
+          ImVec4(color[0], color[1], color[2], 1.0f)),
+      4.0f);
+  std::string hexColor =
+      rgbToHex(color[0] * 255, color[1] * 255, color[2] * 255);
+  std::transform(hexColor.begin(), hexColor.end(), hexColor.begin(), ::toupper);
+  ImGui::SetCursorPos(ImVec2(p.x + 36 * scale_.x, p.y + 7 * scale_.y));
+  ImGui::PushStyleColor(ImGuiCol_Text, 0xA2A2A268);
+  ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13);
+  ImGui::Text("%s", hexColor.c_str());
+  ImGui::PopFont();
+  ImGui::PopStyleColor();
   draw->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y),
-                IM_COL32(255, 255, 255, 255), 4.0f, 0, 1.0f);
+                IM_COL32(162, 162, 162, 104), 4.0f, 0, 1.0f);
 
   if (ImGui::IsItemClicked()) ImGui::OpenPopup(id);
 
@@ -418,7 +461,24 @@ bool SettingsPanel::FilePickerButton(const char* label, const ImVec2& size) {
   ImGui::PushStyleColor(ImGuiCol_ButtonActive,
                         ImVec4(0.35f, 0.38f, 0.50f, 1.0f));
 
-  bool pressed = ImGui::Button(label, size);
+  ImVec2 pos = ImGui::GetCursorScreenPos();
+  ImVec2 p = ImGui::GetCursorPos();
+  ImDrawList* draw = ImGui::GetWindowDrawList();
+
+  bool pressed = ImGui::InvisibleButton(label, size);
+
+  ImGui::SetCursorPos(ImVec2(p.x + 16 * scale_.x, p.y + 7 * scale_.y));
+  ImGui::Image(ImageManager::get("upload"),
+               ImVec2(13 * scale_.x, 13 * scale_.y));
+  ImGui::SetCursorPos(ImVec2(p.x + 36 * scale_.x, p.y + 7 * scale_.y));
+  ImGui::PushStyleColor(ImGuiCol_Text, 0xA2A2A268);
+  ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13);
+  ImGui::Text("Select File");
+  ImGui::PopFont();
+  ImGui::PopStyleColor();
+
+  draw->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y),
+                IM_COL32(162, 162, 162, 104), 4.0f, 0, 1.0f);
 
   ImGui::PopStyleColor(3);
 
@@ -426,13 +486,67 @@ bool SettingsPanel::FilePickerButton(const char* label, const ImVec2& size) {
 }
 
 bool SettingsPanel::NumberBox(const char* id, float* value, float width) {
-  ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f);
-  ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 3.5f));
+  ImVec2 pos = ImGui::GetCursorScreenPos();
+  ImVec2 p = ImGui::GetCursorPos();
+  ImDrawList* draw = ImGui::GetWindowDrawList();
+  static char buf[32];
 
-  ImGui::PushItemWidth(width);
-  bool changed = ImGui::InputFloat(id, value, 0.0f, 0.0f, "%.2f");
-  ImGui::PopItemWidth();
+  isEditing_ = isEditing_ == true
+                   ? true
+                   : ImGui::InvisibleButton(id, ImVec2(width, 30 * scale_.y));
 
-  ImGui::PopStyleVar(2);
-  return changed;
+  std::string display = std::to_string(int(*value * 100)) + "%";
+  ImVec2 textSize = ImGui::CalcTextSize(display.c_str());
+
+  if (!isEditing_) {
+    ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13);
+    draw->AddText(ImVec2(pos.x + (width - textSize.x) * 0.5f,
+                         pos.y + (30 * scale_.y - textSize.y) * 0.5f),
+                  0xA2A2A268, display.c_str());
+    ImGui::PopFont();
+  } else {
+    sprintf(buf, "%d%%", static_cast<int>(*value * 100.0f));
+    ImGui::SetCursorScreenPos(
+        ImVec2(pos.x + (width - textSize.x) * 0.5f,
+               pos.y + (30 * scale_.y - textSize.y) * 0.5f));
+    ImGui::SetNextItemWidth(width);
+
+    ImGui::PushFont(FontManager::getFont("Nunito-SB"), 13);
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0, 0, 0, 0));
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(162.0 / 255.0, 162.0 / 255.0,
+                                                162.0 / 255.0, 104.0 / 255.0));
+    ImGui::SetKeyboardFocusHere();
+    if (ImGui::InputText("##edit", buf, 32,
+                         ImGuiInputTextFlags_EnterReturnsTrue)) {
+      try {
+        std::string s = buf;
+        s.erase(std::remove(s.begin(), s.end(), '%'), s.end());
+        float val = std::stof(buf);
+        *value = std::clamp(val, 0.0f, 80.0f) / 100;
+        isEditing_ = false;
+      } catch (std::exception) {
+      }
+    }
+    ImGui::PopStyleColor(2);
+    ImGui::PopFont();
+
+    if (ImGui::IsItemDeactivatedAfterEdit() || ImGui::IsItemDeactivated()) {
+      isEditing_ = false;
+    }
+  }
+
+  draw->AddRect(pos, ImVec2(pos.x + width, pos.y + 30 * scale_.y),
+                IM_COL32(162, 162, 162, 104), 4.0f, 0, 1.0f);
+
+  return isEditing_;
+}
+
+std::string rgbToHex(int r, int g, int b) {
+  std::stringstream ss;
+
+  ss << "#" << std::hex << std::setfill('0') << std::setw(2) << r << std::hex
+     << std::setfill('0') << std::setw(2) << g << std::hex << std::setfill('0')
+     << std::setw(2) << b;
+
+  return ss.str();
 }

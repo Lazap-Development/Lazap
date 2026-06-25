@@ -50,7 +50,7 @@ void AddGameDialog::render(GLFWwindow* window) {
 
   bool open = true;
   if (ImGui::BeginPopupModal(name_.c_str(), &open, flags)) {
-    ImGui::PushFont(FontManager::getFont("Dialog:Title"));
+    ImGui::PushFont(FontManager::getFont("ArchivoBlack-R"), 27.0f);
     const char* title = name_.c_str();
     float windowWidth = ImGui::GetWindowWidth();
     float textWidth = ImGui::CalcTextSize(title).x;
@@ -60,7 +60,7 @@ void AddGameDialog::render(GLFWwindow* window) {
 
     ImGui::Dummy(ImVec2(0, 50));
 
-    ImGui::PushFont(FontManager::getFont("Dialog:Paragraph"));
+    ImGui::PushFont(FontManager::getFont("Oxanium-R"), 15.0f);
     ImGui::Text("Game Name");
     ImGui::PopFont();
     ImGui::Dummy(ImVec2(0, 5));
@@ -72,7 +72,7 @@ void AddGameDialog::render(GLFWwindow* window) {
 
     ImGui::Dummy(ImVec2(0, 15));
 
-    ImGui::PushFont(FontManager::getFont("Dialog:Paragraph"));
+    ImGui::PushFont(FontManager::getFont("Oxanium-R"), 15.0f);
     ImGui::Text("Enter Executable Path");
     ImGui::PopFont();
     ImGui::Dummy(ImVec2(0, 5));
@@ -96,7 +96,7 @@ void AddGameDialog::render(GLFWwindow* window) {
     if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
     ImGui::Dummy(ImVec2(0, 15));
-    ImGui::PushFont(FontManager::getFont("Dialog:Paragraph"));
+    ImGui::PushFont(FontManager::getFont("Oxanium-R"), 15.0f);
     ImGui::Text("Choose Game Banner (Optional)");
     ImGui::PopFont();
     ImGui::SameLine(ImGui::GetContentRegionAvail().x - 60);
@@ -140,7 +140,7 @@ void AddGameDialog::render(GLFWwindow* window) {
                           ImVec4(0.9f, 0.3f, 0.3f, 1.0f));
     ImGui::PushStyleColor(ImGuiCol_ButtonActive,
                           ImVec4(0.7f, 0.1f, 0.1f, 1.0f));
-    ImGui::PushFont(FontManager::getFont("Dialog:Button"));
+    ImGui::PushFont(FontManager::getFont("Nunito-SB"), 15.0f);
     if (ImGui::Button("Cancel", ImVec2(btnWidth, 35))) close();
     ImGui::PopFont();
     if (ImGui::IsItemHovered()) ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
@@ -157,7 +157,7 @@ void AddGameDialog::render(GLFWwindow* window) {
     ImGui::PushStyleColor(ImGuiCol_ButtonActive,
                           ImVec4(accentColor.x * 0.85f, accentColor.y * 0.85f,
                                  accentColor.z * 0.85f, accentColor.w));
-    ImGui::PushFont(FontManager::getFont("Dialog:Button"));
+    ImGui::PushFont(FontManager::getFont("Nunito-SB"), 15.0f);
     if (ImGui::Button("Add Game", ImVec2(btnWidth, 35))) {
       if (std::strlen(gameName_) > 0 && std::strlen(filePath_) > 0) {
         CustomGames customGames(*storage_);
@@ -225,7 +225,7 @@ bool AddGameDialog::PillButton(const char* label, ImTextureID icon, ImVec2 size,
   ImVec2 textPos(contentStart.x + iconS.x + spacing,
                  pos.y + (size.y - textSize.y) * 0.5f);
 
-  ImGui::PushFont(FontManager::getFont("Settings:Option"));
+  ImGui::PushFont(FontManager::getFont("Nunito-SB"), 18.0f);
   dl->AddText(textPos, text, displayText.c_str());
   ImGui::PopFont();
 

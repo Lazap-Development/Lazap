@@ -109,6 +109,7 @@ bool Storage::initTOML() {
               !settingsTable->contains("launcher_icons") ||
               !settingsTable->contains("discord_rpc") ||
               !settingsTable->contains("accent_color") ||
+              !settingsTable->contains("bg_opacity") ||
               !settingsTable->contains("custom_titlebar")) {
             throw std::runtime_error(
                 "Settings table is missing required fields");
@@ -163,6 +164,7 @@ bool Storage::initTOML() {
     settings.insert("launcher_icons", false);
     settings.insert("discord_rpc", true);
     settings.insert("accent_color", Themes::ACCENT_COLOR);
+    settings.insert("bg_opacity", Themes::BG_OPACITY);
     settings.insert("custom_titlebar", true);
 
     toml::table games;

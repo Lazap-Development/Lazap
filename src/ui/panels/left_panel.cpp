@@ -6,6 +6,7 @@
 #endif
 #include "ui/theme.h"
 #include "utils/image_manager.h"
+#include "utils/update_manager.h"
 
 using namespace ui;
 
@@ -32,23 +33,32 @@ void LeftPanel::init() {
                         0xFF000000);
   ImageManager::loadSVG(b::embed<"assets/svg/github.svg">(), "github",
                         0xFFFFFFFF);
+  ImageManager::loadSVG(b::embed<"assets/svg/download.svg">(), "download",
+                        0x99FF66B2);
   ImageManager::loadSVG(b::embed<"assets/svg/settings.svg">(), "settings",
                         0xFFFFFFFF);
   ImageManager::loadSVG(b::embed<"assets/svg/settings.svg">(), "settings-black",
                         0xFF000000);
+  GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+  glfwGetMonitorContentScale(monitor, &xs_, &ys_);
 }
 
 void LeftPanel::render() {
   ImGui::Begin(name_.c_str(), nullptr,
                ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse |
                    ImGuiWindowFlags_NoScrollbar);
+  if (size_.y == 0) {
+    size_.y = 1;
+  } else if (size_.x == 0) {
+    size_ = ImGui::GetWindowSize();
+  }
 
   scale_ = getScale();
 
   auto drawIconButton = [&](const char* id, ImTextureID texture,
                             ImTextureID activeTexture, const ImVec2& size,
                             bool isActive) -> bool {
-    ImVec2 cursorPos = ImGui::GetCursorPos();
+    ImVec2 cursorPos = ImGui::GetCursorScreenPos();
 
     if (isActive) {
       ImDrawList* drawList = ImGui::GetWindowDrawList();
@@ -59,9 +69,8 @@ void LeftPanel::render() {
           ImVec2(windowPos.x + cursorPos.x + size.x + 38.0f * scale_.x,
                  windowPos.y + cursorPos.y + size.y + 12.5f * scale_.y);
 
-      drawList->AddRectFilled(
-          rectMin, rectMax, Themes::ACCENT_COLOR_IMGUI,
-          12.0f * sqrt((pow(scale_.x, 2) + pow(scale_.y, 2)) * 0.5f));
+      drawList->AddRectFilled(rectMin, rectMax, Themes::ACCENT_COLOR_IMGUI,
+                              12.0f * scale_.x);
     }
 
     bool clicked =
@@ -106,10 +115,22 @@ void LeftPanel::render() {
                      view_->view == ViewType::Library))
     if (view_->view != ViewType::Library) view_->Library();
 
-  ImGui::Dummy(
-      ImVec2(0, ImGui::GetContentRegionAvail().y - (125.0f * scale_.y)));
-
   // Bottom icons
+  if (Updater::hasUpdate) {
+    ImGui::Dummy(
+        ImVec2(0, ImGui::GetContentRegionAvail().y - (180.0f * scale_.y)));
+
+    if (drawIconButton("Update", ImageManager::get("download"),
+                       ImageManager::get("download"),
+                       ImVec2(30 * scale_.x, 30 * scale_.x), false))
+      openURL(Updater::url);
+
+    ImGui::Dummy(ImVec2(0, 30.0f * scale_.y));
+  } else {
+    ImGui::Dummy(
+        ImVec2(0, ImGui::GetContentRegionAvail().y - (125.0f * scale_.y)));
+  }
+
   if (drawIconButton("GitHub", ImageManager::get("github"),
                      ImageManager::get("github"),
                      ImVec2(30 * scale_.x, 30 * scale_.x), false))

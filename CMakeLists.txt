@@ -9,8 +9,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Static linking to avoid runtime dependencies (vcruntime)
-if(WIN32 AND MSVC) 
-  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") 
+if(WIN32 AND MSVC)
+  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif()
 
 # Strip debug symbols in release
@@ -38,19 +38,25 @@ include(FetchContent)
 
 FetchContent_Declare(imgui
     GIT_REPOSITORY https://github.com/ocornut/imgui
-    GIT_TAG        v1.92.5-docking
+    GIT_TAG        v1.92.8-docking
     GIT_SHALLOW    TRUE
 )
 
 FetchContent_Declare(glaze
     GIT_REPOSITORY https://github.com/stephenberry/glaze.git
-    GIT_TAG        v5.5.4
+    GIT_TAG        v7.7.0
     GIT_SHALLOW    TRUE
 )
 
 FetchContent_Declare(stb
     URL                  https://raw.githubusercontent.com/nothings/stb/master/stb_image.h
     DOWNLOAD_NO_EXTRACT  TRUE
+)
+
+FetchContent_Declare(tray
+    GIT_REPOSITORY  https://github.com/LizardByte/tray.git
+    GIT_TAG         df9af119085e2cd3f1a9e88e4cc865963879d468
+    GIT_SHALLOW     TRUE
 )
 
 FetchContent_Declare(lunasvg
@@ -60,8 +66,8 @@ FetchContent_Declare(lunasvg
 
 FetchContent_Declare(tomlplusplus
     GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
-    GIT_TAG        7807a314ad1c0c9c227d9dbd68f23f187163372e
-    GIT_SHALLOW    TRUE
+    GIT_TAG        a43ad3787293f4a46b1d70c0924b5a25d10e79fc
+    GIT_SHALLOW    FALSE
 )
 
 FetchContent_Declare(cpr
@@ -76,8 +82,9 @@ FetchContent_Declare(battery-embed
 )
 
 FetchContent_MakeAvailable(
-  imgui glaze stb lunasvg tomlplusplus cpr battery-embed
+  imgui glaze stb tray lunasvg tomlplusplus cpr battery-embed
 )
+find_package(Freetype REQUIRED)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Target Definition
@@ -95,6 +102,7 @@ add_executable(${EXECUTABLE_NAME}
     ${imgui_SOURCE_DIR}/imgui_draw.cpp
     ${imgui_SOURCE_DIR}/imgui_tables.cpp
     ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/misc/freetype/imgui_freetype.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
 )
@@ -148,6 +156,7 @@ target_include_directories(${EXECUTABLE_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/include
     ${imgui_SOURCE_DIR}/
     ${stb_SOURCE_DIR}/
+    ${tray_SOURCE_DIR}/src
     ${tomlplusplus_SOURCE_DIR}/include
 )
 
@@ -157,7 +166,9 @@ target_link_libraries(${EXECUTABLE_NAME} PRIVATE
     glaze::glaze
     cpr::cpr
     lunasvg
+    tray::tray
     tinyfiledialogs
+    Freetype::Freetype
     $<$<PLATFORM_ID:Linux>:X11>
     $<$<PLATFORM_ID:Windows>:dwmapi>
     $<$<AND:$<CXX_COMPILER_ID:GNU>,$<PLATFORM_ID:Windows>>:opengl32.a>
