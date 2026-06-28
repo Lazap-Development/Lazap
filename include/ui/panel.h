@@ -27,18 +27,21 @@ class Panel {
 
   void setOnRefresh(std::function<void(const bool)> cb) { onRefresh_ = cb; }
 
-  static ImVec2 getScale() {
+  ImVec2 getScale() {
     ImGuiIO& io = ImGui::GetIO();
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    glfwGetMonitorContentScale(monitor, &xs_, &ys_);
     if (glfwGetPlatform() == GLFW_PLATFORM_WAYLAND) {
       return ImVec2(SCALE_FACTOR, SCALE_FACTOR);
     }
-    return ImVec2(io.DisplayFramebufferScale.x * SCALE_FACTOR,
-                  io.DisplayFramebufferScale.y * SCALE_FACTOR);
+    return ImVec2(io.DisplayFramebufferScale.x * SCALE_FACTOR * xs_,
+                  io.DisplayFramebufferScale.y * SCALE_FACTOR * ys_);
   }
 
  protected:
   std::string name_;
   Storage* storage_;
+  float xs_, ys_;
   bool visible_ = true;
   ImVec2 scale_ = ImVec2(0, 0);
 

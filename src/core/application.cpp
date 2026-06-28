@@ -1,3 +1,5 @@
+// TODO: Stop app from starting multiple instances
+
 #include "application.h"
 
 #include <toml++/toml.hpp>
@@ -12,6 +14,8 @@
 #include "imgui_layer.h"
 #include "storage/storage.h"
 #include "utils/banner_manager.h"
+#include "utils/tray_manager.h"
+#include "utils/update_manager.h"
 
 #ifdef _WIN32
 #define _WIN32_WINNT 0x0A00  // Windows 10
@@ -21,6 +25,13 @@
 
 #include <dwmapi.h>
 #pragma comment(lib, "dwmapi.lib")
+
+GLFWcursor *WindowCallbacks::cursor_nwse = nullptr;
+GLFWcursor *WindowCallbacks::cursor_nesw = nullptr;
+GLFWcursor *WindowCallbacks::cursor_h = nullptr;
+
+GLFWcursor *WindowCallbacks::cursor_v = nullptr;
+bool WindowCallbacks::hovered_;
 #endif
 
 double ClockSeconds() {
@@ -118,6 +129,10 @@ void Application::run() {
 
   glfwMakeContextCurrent(window);
   glfwSetMouseButtonCallback(window, WindowCallbacks::mouseButtonCB);
+#ifdef _WIN32
+  WindowCallbacks::initCursors();
+  glfwSetCursorPosCallback(window, WindowCallbacks::cursorPosCB);
+#endif
 
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     fprintf(stderr, "Failed to initialize GLAD\n");
@@ -134,10 +149,14 @@ void Application::run() {
   storage.initTOML();
 
   bool discordRpc = true;
+  bool checkForUpdates = true;
+  bool systemTray = false;
   auto toml = storage.loadTOML();
   auto *settingsTable = toml["settings"].as_table();
   if (settingsTable) {
     discordRpc = settingsTable->get("discord_rpc")->value_or(false);
+    systemTray = settingsTable->get("quit_tray_min")->value_or(false);
+    checkForUpdates = settingsTable->get("check_updates")->value_or(false);
   }
 
   std::vector<std::unique_ptr<Client>> clients;
@@ -178,10 +197,25 @@ void Application::run() {
     discord::RichPresence::UpdatePresence("Lazap", "In Main Menu");
   }
 
+  if (checkForUpdates) Updater::checkForUpdates();
+
   printf("Startup took: %ld ms\n",
          std::chrono::duration_cast<std::chrono::milliseconds>(
              std::chrono::high_resolution_clock::now() - startupBegin)
              .count());
+
+  if (systemTray) {
+    TrayManager::init(window);
+    glfwSetWindowCloseCallback(window, [](GLFWwindow *win) {
+      if (TrayManager::shouldQuit()) {
+        glfwSetWindowShouldClose(win, GLFW_TRUE);
+        TrayManager::shutdown();
+      } else {
+        glfwSetWindowShouldClose(win, GLFW_FALSE);
+        TrayManager::minimize();
+      }
+    });
+  }
 
   glfwShowWindow(window);
 
@@ -193,13 +227,25 @@ void Application::run() {
   DWM_WINDOW_CORNER_PREFERENCE cornerPref = DWMWCP_ROUND;
   DwmSetWindowAttribute(hwnd, DWMWA_WINDOW_CORNER_PREFERENCE, &cornerPref,
                         sizeof(cornerPref));
+  glfwIconifyWindow(window);
+  glfwRestoreWindow(window);
 #endif
 
   RunnerState runner;
-  while (!glfwWindowShouldClose(window)) {
+  while (systemTray ? !TrayManager::shouldQuit()
+                    : !glfwWindowShouldClose(window)) {
+    if (glfwWindowShouldClose(window)) {
+      glfwSetWindowShouldClose(window, GLFW_FALSE);
+      TrayManager::minimize();
+    }
+    if (systemTray) TrayManager::update();
+
     IdleBySleeping(runner.fpsIdling);
 
     glfwPollEvents();
+    if (TrayManager::isWindowHidden()) {
+      continue;
+    }
 
 #ifdef _WIN32
     UpdateWindowCorners(window);
@@ -263,3 +309,41 @@ void WindowCallbacks::mouseButtonCB(GLFWwindow *window, int button, int action,
     }
   }
 }
+
+#ifdef _WIN32
+void WindowCallbacks::cursorPosCB(GLFWwindow *window, double xpos,
+                                  double ypos) {
+  int w, h;
+  glfwGetWindowSize(window, &w, &h);
+
+  int zone = GetResizeZone(xpos, ypos, w, h, 10);
+
+  switch (zone) {
+    case 1:
+    case 4:
+      glfwSetCursor(window, WindowCallbacks::cursor_nwse);
+      hovered_ = true;
+      break;
+    case 2:
+    case 3:
+      glfwSetCursor(window, WindowCallbacks::cursor_nesw);
+      hovered_ = true;
+      break;
+    case 5:
+    case 6:
+      glfwSetCursor(window, WindowCallbacks::cursor_h);
+      hovered_ = true;
+      break;
+    case 7:
+    case 8:
+      glfwSetCursor(window, WindowCallbacks::cursor_v);
+      hovered_ = true;
+      break;
+    default:
+      if (hovered_ == true) {
+        glfwSetCursor(window, NULL);
+        hovered_ = false;
+      }
+  }
+}
+#endif

@@ -7,6 +7,8 @@
 
 #include "battery/embed.hpp"
 #define STB_IMAGE_IMPLEMENTATION
+#include <format>
+
 #include "stb_image.h"
 
 std::unordered_map<std::string, GLuint> ImageManager::cache;
@@ -89,13 +91,25 @@ GLuint ImageManager::loadSVG(b::EmbedInternal::EmbeddedFile embed,
 
   auto elements = svg->querySelectorAll("path");
   for (auto& element : elements) {
-    std::string hexColor = "#" + intToHex((color >> 16) & 0xFF) +
-                           intToHex((color >> 8) & 0xFF) +
-                           intToHex(color & 0xFF);
+    uint32_t r = (color >> 16) & 0xFF;
+    uint32_t g = (color >> 8) & 0xFF;
+    uint32_t b = color & 0xFF;
+    uint32_t a = (color >> 24) & 0xFF;
+
+    if (a == 0) a = 255;
+
+    std::string hexColor = "#" + intToHex(r) + intToHex(g) + intToHex(b);
+    float opacity = static_cast<float>(a) / 255.0f;
 
     auto fillAttr = element.getAttribute("fill");
     if (!fillAttr.empty() && fillAttr != "none") {
       element.setAttribute("fill", hexColor);
+    }
+
+    auto fillOpaAttr = element.getAttribute("fill-opacity");
+    if (!fillOpaAttr.empty() && fillOpaAttr != "none") {
+      std::string val = std::format("{:.2f}", opacity);
+      element.setAttribute("fill-opacity", val);
     }
 
     auto strokeAttr = element.getAttribute("stroke");
@@ -138,6 +152,15 @@ void ImageManager::clear() {
     glDeleteTextures(1, &texture_id);
   }
   cache.clear();
+}
+
+void ImageManager::remove(const std::string& name) {
+  auto it = cache.find(name);
+  if (it != cache.end()) {
+    GLuint texture_id = it->second;
+    glDeleteTextures(1, &texture_id);
+    cache.erase(it);
+  }
 }
 
 const std::string intToHex(int num) {
