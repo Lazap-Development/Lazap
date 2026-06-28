@@ -421,6 +421,7 @@ bool SettingsPanel::ColorBox(const char* id, float color[3], ImVec2 size) {
   ImDrawList* draw = ImGui::GetWindowDrawList();
 
   ImGui::InvisibleButton(id, size);
+  bool clicked = ImGui::IsItemClicked();
 
   draw->AddRectFilled(
       ImVec2(pos.x + 6 * scale_.x, pos.y + 7 * scale_.y),
@@ -440,7 +441,7 @@ bool SettingsPanel::ColorBox(const char* id, float color[3], ImVec2 size) {
   draw->AddRect(pos, ImVec2(pos.x + size.x, pos.y + size.y),
                 IM_COL32(162, 162, 162, 104), 4.0f, 0, 1.0f);
 
-  if (ImGui::IsItemClicked()) ImGui::OpenPopup(id);
+  if (clicked) ImGui::OpenPopup(id);
 
   bool changed = false;
   if (ImGui::BeginPopup(id, ImGuiWindowFlags_NoMove)) {
@@ -487,7 +488,6 @@ bool SettingsPanel::FilePickerButton(const char* label, const ImVec2& size) {
 
 bool SettingsPanel::NumberBox(const char* id, float* value, float width) {
   ImVec2 pos = ImGui::GetCursorScreenPos();
-  ImVec2 p = ImGui::GetCursorPos();
   ImDrawList* draw = ImGui::GetWindowDrawList();
   static char buf[32];
 

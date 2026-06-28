@@ -91,17 +91,15 @@ GLuint ImageManager::loadSVG(b::EmbedInternal::EmbeddedFile embed,
 
   auto elements = svg->querySelectorAll("path");
   for (auto& element : elements) {
-    int alpha = (color) & 0xFF;
-    std::string hexColor;
-    if (alpha != 0) {
-      hexColor = "#" + intToHex((color >> 24) & 0xFF) +
-                 intToHex((color >> 16) & 0xFF) + intToHex((color >> 8) & 0xFF);
-    } else {
-      hexColor = "#" + intToHex((color >> 16) & 0xFF) +
-                 intToHex((color >> 8) & 0xFF) + intToHex((color) & 0xFF);
-    }
+    uint32_t r = (color >> 16) & 0xFF;
+    uint32_t g = (color >> 8) & 0xFF;
+    uint32_t b = color & 0xFF;
+    uint32_t a = (color >> 24) & 0xFF;
 
-    float opacity = static_cast<float>(alpha) / 255.0f;
+    if (a == 0) a = 255;
+
+    std::string hexColor = "#" + intToHex(r) + intToHex(g) + intToHex(b);
+    float opacity = static_cast<float>(a) / 255.0f;
 
     auto fillAttr = element.getAttribute("fill");
     if (!fillAttr.empty() && fillAttr != "none") {

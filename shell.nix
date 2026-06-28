@@ -48,6 +48,9 @@ pkgs.mkShell {
     qt.qtbase
     qt.qttools
     qt.qtwayland
+
+    # GTK Popup
+    yad
   ];
 
   # Make Nix store .so files visible to the dynamic linker at runtime

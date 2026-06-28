@@ -18,6 +18,7 @@ void GamePanel::init() {
 
   ImageManager::loadSVG(b::embed<"assets/svg/heart.svg">(), "heart",
                         0xFFFFFFFF);
+
   ImageManager::loadSVG(b::embed<"assets/svg/heart2.svg">(), "heart2",
                         Themes::ACCENT_COLOR);
   ImageManager::loadSVG(b::embed<"assets/svg/heart2-solid.svg">(),
@@ -81,7 +82,7 @@ void GamePanel::render() {
 
   if (*view_ != ViewType::MainMenu) {
     ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-    ImGui::PushFont(FontManager::getFont("Nunito-SB"), 17.0f);
+    ImGui::PushFont(FontManager::getFont("Nunito-SB"), 20.0f);
 
     ImGuiStyle& style = ImGui::GetStyle();
     ImVec2 oldPadding = style.FramePadding;
