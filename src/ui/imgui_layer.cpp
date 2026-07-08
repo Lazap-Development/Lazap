@@ -1,9 +1,12 @@
 #include <imgui_internal.h>
 #include <imgui_layer.h>
 
+#include <filesystem>
+
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
 #include "imgui.h"
+#include "misc/freetype/imgui_freetype.h"
 #include "ui/panel_manager.h"
 #include "ui/theme.h"
 #include "utils/font_manager.h"
@@ -19,43 +22,30 @@ ImGuiLayer::ImGuiLayer(GLFWwindow *window, Storage &storage)
   io.ConfigDpiScaleFonts = true;
   io.ConfigDpiScaleViewports = true;
   io.IniFilename = nullptr;
+  io.Fonts->SetFontLoader(ImGuiFreeType::GetFontLoader());
 
   FontManager::init();
-  FontManager::loadFont("Titlebar:Title",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 16.0f);
+  FontManager::loadFont("Nunito-SB",
+                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">());
+  FontManager::loadFont("ArchivoBlack-R",
+                        b::embed<"assets/fonts/ArchivoBlack-Regular.ttf">());
+  // FontManager::loadFont(
+  //     "GameBox:Time",
+  //     b::embed<"assets/fonts/RobotoMono-Medium.ttf">(), 10.0f);
 
-  FontManager::loadFont("Username",
-                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 15.0f);
+  FontManager::loadFont("Nunito-B", b::embed<"assets/fonts/Nunito-Bold.ttf">());
+  FontManager::loadFont("Nunito-L",
+                        b::embed<"assets/fonts/Nunito-Light.ttf">());
+  FontManager::loadFont("Oxanium-R",
+                        b::embed<"assets/fonts/Oxanium-Regular.ttf">());
+  FontManager::loadFont("Oxanium-EL",
+                        b::embed<"assets/fonts/Oxanium-ExtraLight.ttf">());
 
-  FontManager::loadFont("GameInfo:Title",
-                        b::embed<"assets/fonts/ZenDots-Regular.ttf">(), 64.0f);
-  FontManager::loadFont("GameInfo:Paragraph",
-                        b::embed<"assets/fonts/Nunito-Medium.ttf">(), 18.0f);
-
-  FontManager::loadFont("Left:Button",
-                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 18.0f);
-  FontManager::loadFont(
-      "Title", b::embed<"assets/fonts/ArchivoBlack-Regular.ttf">(), 24.0f);
-  FontManager::loadFont("GameBox:Title",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 17.0f);
-  FontManager::loadFont(
-      "GameBox:Time", b::embed<"assets/fonts/RobotoMono-Medium.ttf">(), 10.0f);
-
-  FontManager::loadFont("Settings:Button",
-                        b::embed<"assets/fonts/Nunito-Bold.ttf">(), 13.0f);
-  FontManager::loadFont("Settings:Setting",
-                        b::embed<"assets/fonts/Nunito-Light.ttf">(), 18.0f);
-  FontManager::loadFont("Settings:Option",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 13.0f);
-
-  FontManager::loadFont("Dialog:Title",
-                        b::embed<"assets/fonts/ArchivoBlack-Regular.ttf">(),
-                        27.0f);
-  FontManager::loadFont("Dialog:Button",
-                        b::embed<"assets/fonts/Nunito-SemiBold.ttf">(), 15.0f);
-  FontManager::loadFont("Dialog:Paragraph",
-                        b::embed<"assets/fonts/Oxanium-Regular.ttf">(), 15.0f);
-
+  if (storage.exists("custom_bg.png")) {
+    ImageManager::loadPNG(
+        (std::filesystem::path(storage.getStoragePath()) / "custom_bg.png")
+            .string());
+  }
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init("#version 130");
 
@@ -146,5 +136,15 @@ void ImGuiLayer::renderBackground(const ImGuiViewport *viewport) {
     bg->AddRectFilledMultiColor(img_pos, img_size, IM_COL32(0, 0, 0, 0),
                                 IM_COL32(0, 0, 0, 0), IM_COL32(0, 0, 0, 255),
                                 IM_COL32(0, 0, 0, 255));
+  } else if (storage_->exists("custom_bg.png")) {
+    ImDrawList *bg = ImGui::GetWindowDrawList();
+    bg->AddImage((ImTextureID)(intptr_t)ImageManager::get("custom_bg"),
+                 ImVec2(0, 0), viewport->Size, ImVec2(0, 0), ImVec2(1, 1),
+                 IM_COL32_WHITE);
+    bg->AddRectFilledMultiColor(ImVec2(0, 0), viewport->Size,
+                                IM_COL32(0, 0, 0, 255 * Themes::BG_OPACITY),
+                                IM_COL32(0, 0, 0, 255 * Themes::BG_OPACITY),
+                                IM_COL32(0, 0, 0, 255 * Themes::BG_OPACITY),
+                                IM_COL32(0, 0, 0, 255 * Themes::BG_OPACITY));
   }
 }

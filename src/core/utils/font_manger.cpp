@@ -23,8 +23,6 @@ void FontManager::shutdown() {
   fonts_.clear();
 }
 
-// TODO: Replace current font loading with dynamic font loading system
-// introduced in 1.92 using flag ImGuiBackendFlags_HasTextures
 ImFont* FontManager::loadFont(const std::string& name,
                               b::EmbedInternal::EmbeddedFile embed,
                               float size) {
@@ -33,9 +31,8 @@ ImFont* FontManager::loadFont(const std::string& name,
   ImFontConfig config;
   config.FontDataOwnedByAtlas = false;
 
-  // TODO: if dyanmic font added, get rid of scale factor?
   ImFont* font = io.Fonts->AddFontFromMemoryTTF(
-      (void*)embed.data(), static_cast<int>(embed.size()), size * 1.1, &config);
+      (void*)embed.data(), static_cast<int>(embed.size()), size, &config);
 
   if (font) {
     fonts_[name] = font;

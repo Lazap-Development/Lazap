@@ -18,6 +18,7 @@ void GamePanel::init() {
 
   ImageManager::loadSVG(b::embed<"assets/svg/heart.svg">(), "heart",
                         0xFFFFFFFF);
+
   ImageManager::loadSVG(b::embed<"assets/svg/heart2.svg">(), "heart2",
                         Themes::ACCENT_COLOR);
   ImageManager::loadSVG(b::embed<"assets/svg/heart2-solid.svg">(),
@@ -25,10 +26,6 @@ void GamePanel::init() {
   ImageManager::loadSVG(b::embed<"assets/svg/recent.svg">(), "recent",
                         Themes::ACCENT_COLOR);
   ImageManager::loadSVG(b::embed<"assets/svg/play.svg">(), "play", 0xFFFFFFFF);
-
-  FontManager::loadFont("CustomGame:Plus",
-                        b::embed<"assets/fonts/Oxanium-ExtraLight.ttf">(),
-                        64.0f);
 
   addGameDialog_ = std::make_unique<AddGameDialog>(storage_);
 
@@ -74,7 +71,7 @@ void GamePanel::render() {
 
   scale_ = getScale();
 
-  ImGui::PushFont(FontManager::getFont("Title"));
+  ImGui::PushFont(FontManager::getFont("ArchivoBlack-R"), 24.0f);
   if (*view_ == ViewType::MainMenu) {
     ImGui::Text("%s", name_.c_str());
   }
@@ -85,7 +82,7 @@ void GamePanel::render() {
 
   if (*view_ != ViewType::MainMenu) {
     ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-    ImGui::PushFont(FontManager::getFont("GameBox:Title"));
+    ImGui::PushFont(FontManager::getFont("Nunito-SB"), 20.0f);
 
     ImGuiStyle& style = ImGui::GetStyle();
     ImVec2 oldPadding = style.FramePadding;
@@ -113,7 +110,7 @@ void GamePanel::render() {
 
   bool refreshRequested = false;
   if (!games_) {
-    ImGui::PushFont(FontManager::getFont("Game:Title"));
+    ImGui::PushFont(FontManager::getFont("Nunito-SB"), 17.0f);
     ImGui::TextDisabled("No games available.");
     ImGui::PopFont();
   } else {
@@ -224,7 +221,7 @@ void GamePanel::render() {
           }
         }
 
-        ImGui::PushFont(FontManager::getFont("CustomGame:Plus"));
+        ImGui::PushFont(FontManager::getFont("Oxanium-EL"), 64.0f);
         ImVec2 text_size = ImGui::CalcTextSize("+");
         ImVec2 text_pos = ImVec2(pos.x + (size.x - text_size.x) * 0.5f,
                                  pos.y + (size.y - text_size.y) * 0.5f);

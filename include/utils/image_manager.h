@@ -22,6 +22,7 @@ class ImageManager {
   static GLuint loadSVG(b::EmbedInternal::EmbeddedFile embed,
                         const std::string& id, uint32_t color);
   static GLuint get(const std::string& name);
+  static void remove(const std::string& name);
   static void clear();
 
  private:
